@@ -1,0 +1,545 @@
+.TH koios 1 2016-May "linux" "heatherly custom tools manual"
+
+.SH NAME
+koios-polos (northern axis) \- c unit testing metaprogram and mini-language
+
+.SH IMAGERY (see HERITAGE at bottom for more)
+koios, northern star, is the axis around which all consellations revolve
+
+.SH SUMMARY
+koios (pronounced key-oh-s) is a light, clean, simple, and fast c unit testing
+metaprogram that reads a scripting mini-language input file and creates a c
+source file to conduct the unit testing as output.
+
+.SH SYNOPSIS
+
+.B koios [BASENAME]
+.nf
+which is the primary production version
+
+.B koios_debug [URGENTS] [BASENAME]
+.nf
+which can perform all koios actions, but with debugging and tracing
+
+.SH OPTIONS
+koios only accepts a single option, BASENAME, which is the program to be unit
+tested's executable name.  technically, it can be any name, but using it this
+way is cleanest and easiest to remember.
+
+.SH FILES
+.B [BASENAME].unit
+, a 7bit safe, human-readable ascii text file that contains the unit testing
+scripts.  its structure is described below in the STRUCTURE section.
+
+.B [BASENAME]_unit.c
+, a 7bit safe, human-readable ascii text file contained the resulting
+c source code to be linked to your program, compiled, and executed as
+described in the COMPILING and EXECUTION sections.
+
+.SH STRUCTURE
+
+.B file level
+   -- contains all unit tests required to verify a program or module
+   -- technically, there can be more that one unit test file, if required
+   -- complicated programs may have one file per module or source file
+   -- best case is to keep the scripts in a single, version controlled file
+
+.B preparation (see PREPARATION)
+   -- very first in the file and simply allows local header inclusion
+
+.B general file formatting
+   -- only pure ascii text (7bit safe)
+   -- one script record per line, terminated with a newline
+   -- empty/blank lines are allowed anywhere to help readability
+   -- comments start with a hash (#) in the first character
+   -- all other lines will be interpreted as script records
+
+.B fields
+   -- each unit testing record is broken into 3 to 7 fields
+   -- fields are separated by the ascii "field separator" character (31)
+   -- fields may have leading and trailing spaces (which will be trimmed)
+   -- best case is to use a columar format and indentation for readability
+
+.B script level (see SCRIPTS)
+   -- highest level structure in unit testing
+   -- groups conditions into independent, runable chunks for ease of testing
+   -- does no actual testing, this is simply a helpful organizing level
+   -- produces reporting output to help visually review the unit test
+   -- each script will produce summary numbers on successes and failures
+   -- there may be one or more scripts in the file
+
+.B conditions (see CONDITIONS)
+   -- middle level structure in unit testing
+   -- groups tests into logical blocks to verify a single objective
+   -- does no actual testing, this is simply a helpful organizing level
+   -- produces reporting output to help visually review the unit test
+   -- each condition will produce summary numbers on successes and failures
+   -- there may be one or more conditions in each script
+
+.B steps
+   -- bottom level structure in unit testing
+   -- there may be one or more steps in each condition
+   -- can be tests which execute functions directly (see TESTS)
+   -- can be tests which compare to custom formatted strings (see CUSTOM)
+   -- can be verification, or grey box testing (see GETTING)
+   -- can be modification, also grey box testing (see SETTING)
+   -- can be direct code injection (see CODE)
+   -- can be system() calls to verify results (see SYSTEM)
+   -- can be inserting records into stdin for later reading (see LOAD)
+   -- can reverse the interpretation of pass and fail (see MODE)
+
+.SH FIELDS
+the field meanings in the file a "almost" totally standard.  the few exceptions
+will be pointed out in the individual sections
+
+.B verb
+, 4-5 character label identifying the action of the script record
+
+.B vers
+, 3 character label to tell koios how the record is formatted.  examples are
+v21, v20, and v19.
+
+.B desc
+, text field used literally to label output in the unit test.  while the fields
+can be relatively long, only the first 40-60 characters are used in the output.
+the trailing characters are truncated.
+
+.B func
+, the method/function to be called by the unit test.  this must be exactly right
+or it will fail.
+
+.B args
+, the method/function arguments exactly as you would normally represent them.
+you can use quoted strings, quoted characters, pointers, integers, reals, etc.
+the key is you can also use local variables defined in "code" records.
+
+.B test
+, there are a large number of tests to compare the expected and actual results.
+all these tests are defined in the man page for yVAR.
+
+.B expe
+, expected results as a string, so no quoting required.  if the test is
+for integers or reals, the unit test will automatically convert using atoi,
+atof respectively.
+
+.SH SCRIPTS
+it is way beyond the scope of this man page to describe current thinking
+and best practices around the grouping of conditions into scripts.  but
+this section will describe the formatting of a script record and the output
+it produces.
+
+.B fields (4)...
+   1) verb    : SCRP
+   2) vers    : (see FIELDS)
+   3) desc    : (see FIELDS)
+   4) func    : list just the major functions under review
+
+.B sample script records...
+   -- please replace double pipes (||) with the field sperator char (31)
+   -- >> is used here as a line continuation symbol to show in man pages
+
+   SCRP   || v20 || verify cronpulse operations            || >>
+          >> BASE_timestamp, BASE_lastpulse                ||
+
+.B sample output at the start of a script...
+   -- a stark separator/divider is show to help visual review
+   -- description and function fields are displayed (will trunc to fit)
+   -- a consecutive script number is assigned to help selective execution
+   -- source script line number is shown at the right to speed updates
+
+   ===[[ NEW SCRIPT ]]======================================================
+   SCRP [01] verify cronpulse operations ============================ [0019]
+     focus : BASE_timestamp, BASE_lastpulse                                 
+
+.B sample output at the end of a script...
+   -- a summary line is printed at the end with useful numbers
+
+   PRCS   step=43    [[ pass=43    fail=0     badd=0     void=0    ]]
+
+.SH CONDITIONS
+as with scripts, it is way beyond the scope of this man page to describe current
+thinking and best practices around the grouping of tests into conditions.
+but this section will describe the formatting of a condition record and the
+output it produces.
+
+.B fields (3)...
+   1) verb    : COND
+   2) vers    : (see FIELDS)
+   3) desc    : (see FIELDS)
+
+.B sample script records...
+   -- please replace double pipes (||) with the field sperator char (31)
+   -- >> is used here as a line continuation symbol to show in man pages
+
+   COND   || v20 || test the cron ending time (cronwatch file)      ||
+
+.B sample output at the start of a condition...
+   -- the description is displayed on the single line (will trunc to fit)
+   -- a consecutive condition number is assigned to help later review
+   -- source condition line number is shown at the right to speed updates
+
+   COND [008] test the cron ending time (cronwatch file) -- -- -- - [0294]
+
+.B sample output at the end of a condition...
+   -- a summary line is printed at the end with useful numbers
+
+   DNOC   step=1     [[ pass=1     fail=0     badd=0     void=0    ]]
+
+.SH TESTS
+a test record executes a function and validates the return value against
+an expected result.
+
+.B fields (7)...
+   1) verb    : exec
+   2) vers    : (see FIELDS)
+   3) desc    : (see FIELDS)
+   4) func    : (see FIELDS)
+   5) args    : (see FIELDS)
+   6) test    : (see FIELDS)
+   7) expe    : (see FIELDS)
+
+.B sample script records...
+   -- please replace double pipes (||) with the field sperator char (31)
+   -- >> is used here as a line continuation symbol to show in man pages
+
+   exec   || v20 || call the crontab name validation             || >>
+          >> BASE_name      || "root.my_crontab"           , '-' || >>
+          >> i_equal        || 0                                 ||
+
+.B sample output...
+   -- the description is displayed on the single line (will trunc to fit)
+   -- arguments with double quotes are shown with tilda's instead
+   -- a consecutive condition number is assigned to help later review
+   -- source test line number is shown at the right to speed updates
+
+   a ) PASS   : call the crontab name validation  .  .  .  .  .  .  [0348]
+       method : BASE_name (~root.my_crontab~           , '-')
+       test   : i_equal        (@ 0 msecs with rc = 21) 
+       expect : 0>>
+       actual : 0>>
+
+.SH GETTING
+getting is exactly the same as a "test" except is calls a unit test accessor
+specifically used for greybox testing, i.e., limited access to internal state.
+this ability is critical as most functions alter "something" like a method,
+rather than only return a value like a function.
+
+technically, this verb is not required and the information below simply
+communicates how i personally conduct greybox testing.
+
+use general "questions" so that the unit test is not dependent on internal
+data representation or variable naming.
+
+.B fields (7)...
+   1) verb    : get
+   -- rest are the same as in TEST section
+
+.B sample script records...
+   -- same as in TEST section
+
+.B sample output...
+   -- same as in TEST section
+
+.B accessor questions...
+   -- i personally call the accessors by the module the support
+   -- i label them as a "getter", but you can call them anything you wish
+   -- they take at least one string value, which is the question
+   -- accessor code in a single function and indenpendent of the code
+   -- the function included in the source code of the program itself
+
+   prototype   : char   *BASE_getter   (char *a_question);
+
+   sample call : BASE_getter ("sched_hrs");
+
+.B global return value...
+   -- use a single, globale, medium length c-string
+   -- write answers from the accessor into a c-string
+   -- name is anything you wish, i chose the name and length below
+
+   char   *unit_answer   [1000];
+
+.B answer formatting and sample output...
+   -- make the answers unique to verify  the right accessor was used
+   -- i chose to write formatted text into the strings
+   -- i simply use snprintf to encase the value in the string
+   -- do not make the strings reporting quality, only unique
+
+   LIST hours       : [_____1__________________]
+
+   LIST running     :    3 line,    2 fast,    0 proc
+
+   LIST controls    : imp 0, mon -, cat -, del y, ski y, kil y
+
+.B sample script records...
+   -- please replace double pipes (||) with the field sperator char (31)
+   -- >> is used here as a line continuation symbol to show in man pages
+
+   get    || v20 || check hours                                || >>
+          >> LIST_getter  || "sched_hrs"    , cfile_1st->tail  || >>
+          >> s_equal      || LIST hours       : [_____1__________________]
+
+.B sample output...
+   -- the description is displayed on the single line (will trunc to fit)
+   -- arguments with double quotes are shown with tilda's instead
+   -- a consecutive condition number is assigned to help later review
+   -- source test line number is shown at the right to speed updates
+
+   l ) PASS   : check hours   (cursory)  .  .  .  .  .  .  .  .  .  [1316]
+       method : LIST_unit (~sched_hrs~    , cfile_1st->tail)
+       test   : s_equal        (@ 0 msecs with rc = 10) 
+       expect : LIST hours       : [_____1__________________]>>
+       actual : LIST hours       : [_____1__________________]>>
+
+.SH SETTING
+if changing internal state is required to properly test a program, i use
+specific "setter" functions rather than change variables directly.  again,
+this allows the program and data representation to change while not effecting
+the unit test.
+
+technically, this verb is not required and the information below simply
+communicates how i personally conduct greybox testing.
+
+.B fields (7)...
+   1) verb    : set
+   -- rest are the same as in TEST section
+
+.B sample script records...
+   -- same as in TEST section
+
+.B sample output...
+   -- same as in TEST section
+
+.B example...
+   -- for instance, sometimes i wish to reroute files to /tmp
+
+   char       /*----: set up program test file locations --------------*/
+   PROG_testfiles     (void)
+   {
+      snprintf (my.name_pulser , 200, "%s%s", "/tmp/" , FILE_PULSE);
+      snprintf (my.name_watcher, 200, "%s%s", "/tmp/" , FILE_WATCH);
+      snprintf (my.name_locker , 200, "%s%s", "/tmp/" , FILE_LOCK);
+      snprintf (my.name_exec   , 200, "%s%s", "/tmp/" , FILE_EXEC);
+      snprintf (my.name_status , 200, "%s%s", "/tmp/" , FILE_STATUS);
+      return 0;
+   }
+
+.SH CUSTOM
+to allow for compound and/or complicated expect strings, there is a global
+string called CUSTOM.  actually, any string variable can be used, CUSTOM is
+simply defined to make it easier.
+
+.B add string to CUSTOM...
+   -- first, sprintf is used to populate CUSTOM with a string
+
+   code   || v21 || create a custom file expect string  || - - - || >>
+          >> sprintf (CUSTOM, "LIST file list   : >>
+          >> n=%4d, f=%4d, b=%4d, h=%-10p, t=%p", >>
+          >> 2, 2, 2, cfile_1st, cfile_2nd);   ||
+
+.B using string for a test...
+   -- expect string has CUSTOM with double square brackets surrounding
+   -- actually any string variable can be within the brackets
+   -- this can be used with exec, get, and set
+
+   get    || v21 || review the file list                       || >>
+          >> LIST_unit    || "files"        , NULL             || >>
+          >> s_equal      || [[ CUSTOM ]]                      ||
+
+.SH CODE
+in order to test, i always need some variables to hold values, pointers, etc.
+to easily do this without a crazy number of script commands, i have simply
+included a "code" script option to directly add code to the test.
+
+.B fields (7)...
+   1) verb    : exec
+   2) vers    : (see FIELDS)
+   3) desc    : (see FIELDS)
+   4) func    : blank
+   5) code    : see sample script records below
+
+.B sample script records...
+   -- please replace double pipes (||) with the field sperator char (31)
+   -- >> is used here as a line continuation symbol to show in man pages
+
+   code   || v21 || holder for broken-down time         || - - - || >>
+          >> struct tm *curr_time = NULL;                        ||
+
+.B sample output...
+   -- the description is displayed on the single line (will trunc to fit)
+   -- a consecutive test number is assigned to help later review
+   -- source test line number is shown at the right to speed updates
+   -- these do not count as test steps in the totals
+
+   b ) CODE   : holder for broken-down time  .  .  .  .  .  .  .  . [0023]
+       code   : struct tm *curr_time = NULL;                                          
+
+.SH LOAD
+if the program or a function reads data from stdin, the following verb will
+load values for reading.
+
+.B fields (7)...
+   1) verb    : exec
+   2) vers    : (see FIELDS)
+   3) desc    : (see FIELDS)
+   4) func    : blank
+   5) payload : see script records below
+
+.B sample script records...
+   -- please replace double pipes (||) with the field sperator char (31)
+   -- >> is used here as a line continuation symbol to show in man pages
+
+   load   || v21 || add a basic line to stdin           || - - -          || >>
+          >> * * * * * /bin/true > /dev/null                     ||
+
+.B sample output...
+   -- the description is displayed on the single line (will trunc to fit)
+   -- a consecutive test number is assigned to help later review
+   -- source test line number is shown at the right to speed updates
+   -- these do not count as test steps in the totals
+
+   a ) CODE   : add a basic line to stdin  .  .  .  .  .  .  .  .   [1000]
+       load   : * * * * * /bin/true > /dev/null
+
+.SH SYSTEM
+sometimes the only way to verify a function is to understand its impact on
+the linux environment itself.  there are many ways to accomplish this, but
+one easy way is to run a system() call.
+
+.B fields (7)...
+   1) verb    : exec
+   2) vers    : (see FIELDS)
+   3) desc    : (see FIELDS)
+   4) func    : blank
+   5) payload : shell code
+
+.B sample script records...
+   -- please replace double pipes (||) with the field sperator char (31)
+   -- >> is used here as a line continuation symbol to show in man pages
+
+   sys    || v21 || get the filesystem owner            || - - - ||
+          >> ls -l /tmp/themis/etc/themis.conf | cut -d' ' -f 3  ||
+
+.B sample output...
+   -- the description is displayed on the single line (will trunc to fit)
+   -- a consecutive test number is assigned to help later review
+   -- source test line number is shown at the right to speed updates
+   -- these do not count as test steps in the totals
+
+   d ) CODE   : get the filesystem perms  .  .  .  .  .  .  .  .  . [0453]
+       sys    : ls -l /tmp/themis | grep etc | cut -d' ' -f 1
+
+.SH MODE
+rarely, but critically, sometimes it is valuable to force a failure just
+to be sure of the results.  by this i mean, is the code just always labeling
+everything a pass?  i am a little paranoid sometimes ;))
+
+do not forget to turn the mode back to normal after testing.
+
+.B fields (7)...
+   1) verb    : mode
+   2) vers    : (see FIELDS)
+   3) desc    : blank
+   4) func    : blank
+   5) mode    : see below
+
+.B sample script records...
+   -- please replace double pipes (||) with the field sperator char (31)
+   -- >> is used here as a line continuation symbol to show in man pages
+   -- ther are only two options, "FORCED_FAIL" and "PASSING"
+
+   mode   || v21 || set to failure mode                 || - - - || >>
+          >>  "FORCED_FAIL"                                      ||
+
+   mode   || v21 || set to normal mode                  || - - - || >>
+          >>  "PASSING"                                          ||
+
+.B effect...
+   -- the shell pipeline is routed into the global yUNIT_systext
+   -- you can the compare and test this value as you wish
+
+.B sample output...
+   -- the description is displayed on the single line (will trunc to fit)
+   -- a consecutive test number is assigned to help later review
+   -- source test line number is shown at the right to speed updates
+   -- these do not count as test steps in the totals
+
+   b ) MODE   : ENABLE FORCED FAILURE (pass=fail, fail=pass) .  .   [0530]
+
+.SH PREPARATION
+in order to properly compile, the unit test must have access to all local
+headers.  this is a very easy, one-time step for the whole file, not script
+by script.
+
+.B sample script records...
+   -- please replace double pipes (||) with the field sperator char (31)
+   -- >> is used here as a line continuation symbol to show in man pages
+   -- both lines below are required
+
+   PREP   || v20 || include the prototype headers                ||
+
+   incl   || v20 || include crond header           || khronos.h  ||
+
+.B effect...
+   -- "PREP" simply inserts some comments in the code
+   -- "incl" intserts a #include directive in the code
+
+.B sample output...
+   -- none
+
+.SH COMPILING
+to work properly, the main function of the c program must be placed in
+a separate source file.  i call mine by the [BASENAME]_main.c.  the unit
+test creates its own main function within [BASENAME]_unit.c.  all program
+modules (except main) need to be linked against [BASENAME]_unit.c to create
+an executable.  i name the resulting executable [BASENAME]_unit.
+
+.SH EXECUTING
+the resulting [BASENAME]_unit executable has several options build in.
+
+.B @@quiet
+, no output only a return code : neg = fail, pos = warn, 0 = pass
+
+.B @@test
+, only a single line of summary numbers indicating pass/fail
+
+.B @@scrp
+, shows summary and script level output.  no step details
+
+.B @@cond
+, shows summary, script, and condition output. no step details.
+
+.B @@step
+, shows summary, script, and condition, and step output. no details.
+
+.B @@full
+, shows all output.  this is the default.
+
+.B --console
+, show plain text without terminal color codes.
+
+.B --eterm
+, show output with embedded eterm, 256 color terminal color codes.
+
+.B <nn>
+, two digits with a leading zero if required to make two.  this
+causes the unit test to only run the script by that number.
+
+.B <nnn>
+, three digits with a leading zeros if required to make three.  this causes
+the unit test to only show the condition by that number.  sometimes this
+makes it easier to find in the output.
+
+.SH AUTHOR
+rsheatherly can be reached at jelloskrike at gmail dot com
+
+.SH HERITAGE
+koios-polos (northern axis) is one of the original twelve greek titan-gods and
+the archetype of the inquisitive and questioning mind.  when the titans
+overthrew the protogenos (primeval gods), koios was the god that held ouranos
+(sky) by the northern pole of the world.  koios is the god of the axis of heaven
+around which the constellations revolved and of the heavenly oracles.  he was
+also husband to phoebe who presided over the earth oracles.
+
+.SH COLOPHON
+this page is part of a documentation package mean to make the use of the
+heatherly tools easier and faster
