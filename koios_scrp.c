@@ -330,7 +330,17 @@ SCRP_vers19        (void)
          break;
       }
       strltrim (p, ySTR_BOTH, LEN_RECD);
-      if (p[0] == '-')  p[0] = '\0';
+      /*---(clear spacer bars)-----------*/
+      if (p[0] == '-') {
+         switch (p[1]) {
+         case ' '  :   /* catches "- - - - - - -" lines */
+         case '-'  :   /* catches "-------------" lines */
+         case '\0' :   /* catches "-" placeholder lines */
+            p[0] = '\0';
+            break;
+         }
+      }
+      /*---(handle fields)---------------*/
       switch (i) {
       case  2 :   if (my.spec == 'p') {
                      strncpy (my.code      , p, LEN_RECD);

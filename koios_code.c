@@ -530,6 +530,10 @@ CODE_write         (void)
                    CODE_exec   ();
                 }
                 break;
+   case 's'  :  if      (strcmp (my.verb, "set"    ) == 0) {
+                   CODE_exec   ();
+                }
+                break;
    default   : CODE_unknown ();
                break;
    }

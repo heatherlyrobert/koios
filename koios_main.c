@@ -63,24 +63,24 @@ main               (int argc, char *argv[])
       /*---(debugging output)------------*/
       ++x_lines;
       /*> printf (".");                                                               <*/
-      printf ("\n");
-      printf ("recd = %s\n", my.recd);
-      printf ("   line = %d\n", my.n_line);
-      printf ("   last = %s\n", my.last);
-      printf ("   verb = %s\n", my.verb);
-      printf ("   spec = %c\n", my.spec);
-      printf ("   vers = %s\n", my.vers);
-      printf ("   desc = %s\n", my.desc);
-      printf ("   meth = %s\n", my.meth);
-      printf ("   args = %s\n", my.args);
-      printf ("   test = %s\n", my.test);
-      printf ("   expe = %s\n", my.expe);
-      printf ("   type = %c\n", my.type);
-      printf ("   retn = %s\n", my.retn);
-      printf ("   code = %s\n", my.code);
-      printf ("   disp = %s\n", my.disp);
-      printf ("   syst = %s\n", my.syst);
-      printf ("   load = %s\n", my.load);
+      /*> printf ("\n");                                                              <* 
+       *> printf ("recd = %s\n", my.recd);                                            <* 
+       *> printf ("   line = %d\n", my.n_line);                                       <* 
+       *> printf ("   last = %s\n", my.last);                                         <* 
+       *> printf ("   verb = %s\n", my.verb);                                         <* 
+       *> printf ("   spec = %c\n", my.spec);                                         <* 
+       *> printf ("   vers = %s\n", my.vers);                                         <* 
+       *> printf ("   desc = %s\n", my.desc);                                         <* 
+       *> printf ("   meth = %s\n", my.meth);                                         <* 
+       *> printf ("   args = %s\n", my.args);                                         <* 
+       *> printf ("   test = %s\n", my.test);                                         <* 
+       *> printf ("   expe = %s\n", my.expe);                                         <* 
+       *> printf ("   type = %c\n", my.type);                                         <* 
+       *> printf ("   retn = %s\n", my.retn);                                         <* 
+       *> printf ("   code = %s\n", my.code);                                         <* 
+       *> printf ("   disp = %s\n", my.disp);                                         <* 
+       *> printf ("   syst = %s\n", my.syst);                                         <* 
+       *> printf ("   load = %s\n", my.load);                                         <*/
    }
    /*> printf ("\ndone\n");                                                           <*/
    DEBUG_TOPS  yLOG_break   ();
