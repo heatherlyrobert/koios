@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.6g"
-#define     KOIOS_VER_TXT    "fixed gyges unit test issue in v19 parsing code"
+#define     KOIOS_VER_NUM    "0.6h"
+#define     KOIOS_VER_TXT    "fixed gyges unit test issue with point and unknown"
 
 
 

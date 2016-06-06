@@ -193,7 +193,7 @@ CODE_scrp          (void)
 char
 CODE_sect          (void)
 {
-   fprintf (my.file_code, "   yUNIT_section (my_unit, \"%s\");\n", my.desc);
+   fprintf (my.file_code, "   yUNIT_sect    (my_unit, \"%s\");\n", my.desc);
    fprintf (my.file_code, "\n");
    return 0;
 }
@@ -321,7 +321,10 @@ VOID_void          (char *a_one, int a_two)
 char
 CODE_unknown       (void)
 {
-   fprintf (my.file_code, "         yUNIT_unknown (my_unit, 1489,   4, \"\", \"\", \"\", \"\", \"\", \"\");\n");
+   CODE_prefix  ("yUNIT_unknown");
+   fprintf (my.file_code, "\"%s\", "           , my.test);
+   fprintf (my.file_code, "\"%s\", "           , my.expe);
+   fprintf (my.file_code, "\"\");\n"           );
    fprintf (my.file_code, "\n");
    return 0;
 }
@@ -409,39 +412,21 @@ CODE_exec          (void)
    case 's' :      /* pure strings       */
       CODE_prefix  ("yUNIT_string"  );
       CODE_suffix  ();
-      /*> fprintf (my.file_code, "\"%s\", "           , my.test);                     <* 
-       *> if (strncmp (my.expe, "[[ ", 3) == 0) {                                     <* 
-       *>    fprintf (my.file_code, "%s, "               , my.expe);                  <* 
-       *> } else {                                                                    <* 
-       *>    fprintf (my.file_code, "\"%s\", "           , my.expe);                  <* 
-       *> }                                                                           <* 
-       *> fprintf (my.file_code, "%s (%s));\n"        , my.meth, my.syst);            <*/
       break;
    case 'i' :      /* pure integers      */
       CODE_prefix  ("yUNIT_int"     );
       CODE_suffix  ();
-      /*> fprintf (my.file_code, "\"%s\", "           , my.test);                     <* 
-       *> if (strcmp (my.expe, "[[ CUSTOM ]]") == 0) {                                <* 
-       *>    fprintf (my.file_code, "%s, "               , "yUNIT_custom");           <* 
-       *> } else {                                                                    <* 
-       *>    fprintf (my.file_code, "\"%s\", "           , my.expe);                  <* 
-       *> }                                                                           <* 
-       *> fprintf (my.file_code, "%s (%s));\n"        , my.meth, my.syst);            <*/
       break;
    case 'p' :      /* numerics in string */
       CODE_prefix  ("yUNIT_point"   );
-      CODE_suffix  ();
+      fprintf (my.file_code, "\"%s\", "           , my.test);
+      fprintf (my.file_code, "%s, "               , my.expe);
+      fprintf (my.file_code, "%s (%s));\n"        , my.meth, my.syst);
+      /*> CODE_suffix  ();                                                            <*/
       break;
    case 'u' :      /* numerics in string */
       CODE_prefix  ("yUNIT_round"   );
       CODE_suffix  ();
-      /*> fprintf (my.file_code, "\"%s\", "           , my.test);                     <* 
-       *> if (strcmp (my.expe, "[[ CUSTOM ]]") == 0) {                                <* 
-       *>    fprintf (my.file_code, "%s, "               , "yUNIT_custom");           <* 
-       *> } else {                                                                    <* 
-       *>    fprintf (my.file_code, "\"%s\", "           , my.expe);                  <* 
-       *> }                                                                           <* 
-       *> fprintf (my.file_code, "%s (%s));\n"        , my.meth, my.syst);            <*/
       break;
    case 'e' :      /* echo   (REMOVED)     */
    case 'c' :      /* custom (REMOVED)     */
@@ -499,7 +484,7 @@ CODE_write         (void)
                 }
                 else if (strcmp (my.verb, "SECT"   ) == 0) {
                    CODE_main   ();
-                   CODE_scrp   ();
+                   CODE_sect   ();
                 }
                 break;
    case 'G'  :  if      (strcmp (my.verb, "GROUP"  ) == 0) {
@@ -534,8 +519,9 @@ CODE_write         (void)
                    CODE_exec   ();
                 }
                 break;
-   default   : CODE_unknown ();
-               break;
+   case '#'  :  break;
+   default   :  CODE_unknown ();
+                break;
    }
    return 0;
 }
