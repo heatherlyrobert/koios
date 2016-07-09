@@ -378,6 +378,25 @@ CODE_suffix        (void)
 }
 
 char
+CODE_echo          (void)
+{
+   /*---(counters)-----------------------*/
+   ++(my.nstep);
+   ++(my.cstep);
+   /*---(fix strings)--------------------*/
+   CODE_display ();
+   fprintf (my.file_code, "         ");
+   fprintf (my.file_code, "yUNIT_string  (my_unit, ");
+   fprintf (my.file_code, "%4i, %3i, \"%s\", "  , my.n_line , my.cstep, my.desc);
+   fprintf (my.file_code, "\"%s\", \"%s\", "    , "echo"  , my.disp);
+   fprintf (my.file_code, "\"%s\", "           , my.test);
+   fprintf (my.file_code, "\"%s\", "           , my.expe);
+   fprintf (my.file_code, "%s);"               , my.code);
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char
 CODE_exec          (void)
 {
    /*---(design notes)-------------------*/
@@ -509,6 +528,9 @@ CODE_write         (void)
                 break;
    case 'e'  :  if      (strcmp (my.verb, "exec"   ) == 0) {
                    CODE_exec   ();
+                }
+                else if (strcmp (my.verb, "echo"   ) == 0) {
+                   CODE_echo   ();
                 }
                 break;
    case 'g'  :  if      (strcmp (my.verb, "get"    ) == 0) {

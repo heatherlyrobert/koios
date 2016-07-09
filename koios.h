@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.6h"
-#define     KOIOS_VER_TXT    "fixed gyges unit test issue with point and unknown"
+#define     KOIOS_VER_NUM    "0.9a"
+#define     KOIOS_VER_TXT    "added script conversion option and base code"
 
 
 
@@ -197,13 +197,16 @@ struct cGLOBALS
 {
    /*---(general)---------------*/
    char        version     [LEN_STR ];      /* program version info           */
+   char        run_type;                    /* unit test code or conversion   */
    /*---(file names)------------*/
    char        name_base   [LEN_FILE];      /* base name of files             */
    char        name_scrp   [LEN_FILE];      /* name of input script file      */
    char        name_code   [LEN_FILE];      /* name of output code file       */
+   char        name_conv   [LEN_FILE];      /* name of output script file     */
    /*---(file handles)----------*/
    FILE       *file_scrp;                   /* pointer to input script file   */
    FILE       *file_code;                   /* pointer to output code file    */
+   FILE       *file_conv;                   /* pointer to output script file  */
    /*---(counters)--------------*/
    int         n_line;                      /* file   all lines               */
    int         n_comment;                   /* file   comment lines           */
@@ -320,6 +323,11 @@ char        CODE_exec          (void);
 char        CODE_unknown       (void);
 char        CODE_suffix        (void);
 char        CODE_end           (void);
+
+/*===[[ CONV ]]===============================================================*/
+char        CONV_open          (void);
+char        CONV_close         (void);
+char        CONV_write         (void);
 
 void        VOID_void          (char *a_one, int a_two);
 

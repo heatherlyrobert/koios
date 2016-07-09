@@ -17,6 +17,7 @@ tVERB       g_verbs [MAX_VERB] = {
    { "exec"         , "function execution"                    , 'f',  0,  0 },
    { "get"          , "unit test getter call"                 , 'f',  0,  0 },
    { "set"          , "unit test setter call"                 , 'f',  0,  0 },
+   { "echo"         , "test a variable directly"              , 'f',  0,  0 },
    /* --------------   --------------------------------------- */
    { "mode"         , "set pass or forced_fail mode"          , 'p',  0,  0 },
    { "code"         , "insert c code"                         , 'p',  0,  0 },
@@ -182,7 +183,7 @@ SCRP_vers21        (void)
       }
       strltrim (p, ySTR_BOTH, LEN_RECD);
       /*---(clear spacer bars)-----------*/
-      if (p[0] == '-') {
+      if (p[0] == '-') {  /* begin careful to avoid negative numbers ;)) */
          switch (p[1]) {
          case ' '  :   /* catches "- - - - - - -" lines */
          case '-'  :   /* catches "-------------" lines */
@@ -439,7 +440,12 @@ SCRP_parse         (void)
       my.spec    = g_verbs [i].spec;
       break;
    }
-   --rce;  if (my.indx == -1) {
+   --rce;  if (p [0] == '#') {
+      DEBUG_INPT   yLOG_note    ("comment not in column one");
+      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      return rce;
+   }
+   --rce;  if (my.indx == -1 || p [0] == '#') {
       DEBUG_INPT   yLOG_note    ("verb not found");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       printf ("VERB? : <<%s>>\n", my.recd);

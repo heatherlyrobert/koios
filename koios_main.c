@@ -32,34 +32,42 @@ main               (int argc, char *argv[])
       PROG_end     ();
       return rc;
    }
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
 
 
    printf ("base name = %s\n", my.name_base);
    printf ("scrp name = %s\n", my.name_scrp);
    printf ("code name = %s\n", my.name_code);
+   printf ("conv name = %s\n", my.name_conv);
    /*> return 0;                                                                      <*/
 
 
    /*---(open files)---------------------*/
    if (rc == 0)  rc = SCRP_open      ();
-   if (rc == 0)  rc = CODE_open      ();
-   if (rc == 0)  rc = CODE_begin     ();
+   if (my.run_type == 'u') {
+      if (rc == 0)  rc = CODE_open      ();
+      if (rc == 0)  rc = CODE_begin     ();
+   } else if (my.run_type == 'c') {
+      if (rc == 0)  rc = CONV_open      ();
+      if (rc == 0)  rc = CONV_begin     ();
+   }
    if (rc != 0) {
       PROG_end     ();
       return rc;
    }
    /*---(main-loop)----------------------*/
-   DEBUG_TOPS  yLOG_note    ("entering main processing loop");
-   DEBUG_TOPS  yLOG_break   ();
+   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
+   DEBUG_TOPS   yLOG_note    ("entering main processing loop");
+   DEBUG_TOPS   yLOG_break   ();
    while (1) {
       /*---(read and parse)--------------*/
       rc = SCRP_read   ();
       if (rc < 0) break;
       rc = SCRP_parse  ();
-      /*> if (rc < 0) continue;                                                       <*/
+      if (rc < 0) continue;
+      DEBUG_TOPS   yLOG_note    ("writing output");
       /*---(write code)------------------*/
-      rc = CODE_write  ();
+      if      (my.run_type == 'u')   rc = CODE_write  ();
+      else if (my.run_type == 'c')   rc = CONV_write  ();
       /*---(debugging output)------------*/
       ++x_lines;
       /*> printf (".");                                                               <*/
@@ -87,8 +95,13 @@ main               (int argc, char *argv[])
    DEBUG_TOPS  yLOG_note    ("exiting main processing loop");
    /*---(close files)--------------------*/
    rc = SCRP_close     ();
-   rc = CODE_end       ();
-   rc = CODE_close     ();
+   if (my.run_type == 'u') { 
+      rc = CODE_end       ();
+      rc = CODE_close     ();
+   } else if (my.run_type == 'c') {
+      rc = CONV_end       ();
+      rc = CONV_close     ();
+   }
    /*---(summary)------------------------*/
    printf ("\n");
    printf ("reading script...\n");

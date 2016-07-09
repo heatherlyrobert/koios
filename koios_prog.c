@@ -238,10 +238,11 @@ PROG_init          (void)
    /*---(header)-------------------------*/
    DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
    /*---(files)--------------------------*/
-   strlcpy  (my.name_code, "", LEN_FILE);
    strlcpy  (my.name_scrp, "", LEN_FILE);
    strlcpy  (my.name_code, "", LEN_FILE);
+   strlcpy  (my.name_conv, "", LEN_FILE);
    my.driver    = '-';
+   my.run_type  = 'u';
    strlcpy  (my.last     , "", LEN_FILE);
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
@@ -266,22 +267,19 @@ PROG_args          (int argc, char *argv[])
       DEBUG_ARGS  yLOG_info    ("cli arg", a);
       ++x_args;
       strncpy (my.name_base, argv[i], LEN_FILE);
-      /*> if   ((strncmp(a, "-i"        ,10) == 0) ||                                 <* 
-       *>       (strncmp(a, "--input"   ,10) == 0)) {                                 <* 
-       *>    ++i;                                                                     <* 
-       *>    strncpy (my.name_scrp, argv[i], LEN_FILE);                               <* 
-       *> }                                                                           <*/
-      /*> else if ((strncmp(a, "-o"        ,10) == 0) ||                              <* 
-       *>       (strncmp(a, "--output"  ,10) == 0)) {                                 <* 
-       *>    ++i;                                                                     <* 
-       *>    strncpy (o_name, argv[i], LEN_FILE);                                      <* 
-       *> }                                                                           <*/
+      if      (strncmp (a, "--conv"    ,10) == 0) {
+         my.run_type = 'c';
+      }
+      else if (strncmp (a, "--unit"    ,10) == 0) {
+         my.run_type = 'u';
+      }
    }
    DEBUG_ARGS  yLOG_value  ("entries"   , x_total);
    DEBUG_ARGS  yLOG_value  ("arguments" , x_args);
    if (x_args == 0) {
       DEBUG_ARGS  yLOG_note   ("no arguments identified");
    }
+   DEBUG_ARGS  yLOG_char   ("run_type"  , my.run_type);
    DEBUG_ARGS  yLOG_info   ("basename"  , my.name_base);
    /*---(complete)-----------------------*/
    DEBUG_TOPS  yLOG_exit  (__FUNCTION__);
@@ -301,6 +299,7 @@ PROG_begin         (void)
    }
    snprintf (my.name_scrp, LEN_FILE, "%s.unit"      , my.name_base);
    snprintf (my.name_code, LEN_FILE, "%s_unit.c"    , my.name_base);
+   snprintf (my.name_conv, LEN_FILE, "%s.unit.new"  , my.name_base);
    /*> snprintf (my.name_code, LEN_FILE, "%s_unit.c.new", my.name_base);              <*/
    my.n_line    = 0;
    my.n_comment = 0;
