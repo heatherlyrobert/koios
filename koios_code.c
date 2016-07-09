@@ -514,7 +514,7 @@ CODE_write         (void)
                    CODE_cond   ();
                 }
                 break;
-   case 'm'  :  if      (strcmp (my.verb, "MODE"   ) == 0) {
+   case 'm'  :  if      (strcmp (my.verb, "mode"   ) == 0) {
                    CODE_mode   ();
                 }
                 break;

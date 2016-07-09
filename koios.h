@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9a"
-#define     KOIOS_VER_TXT    "added script conversion option and base code"
+#define     KOIOS_VER_NUM    "0.9b"
+#define     KOIOS_VER_TXT    "script conversion option is done, but not tested"
 
 
 
