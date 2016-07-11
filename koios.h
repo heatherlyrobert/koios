@@ -16,7 +16,7 @@
  *   base_system   : gnu/linux   (powerful, ubiquitous, technical, and hackable)
  *   lang_name     : gnu/ansi-c  (right, just, best, standard, and everlasting)
  *   dependencies  : yVAR only (for var testing)
- *   size          : small       (less than 1,000 slocL)
+ *   size          : small       (less than 2,000 slocL)
  *
  *   author        : heatherly
  *   created       : 2014-mar
@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9b"
-#define     KOIOS_VER_TXT    "script conversion option is done, but not tested"
+#define     KOIOS_VER_NUM    "0.9c"
+#define     KOIOS_VER_TXT    "let args field expand when needed for gyges testing"
 
 
 

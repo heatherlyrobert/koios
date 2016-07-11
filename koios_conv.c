@@ -36,7 +36,7 @@ CONV_begin         (void)
    fprintf (my.file_conv, "#!/usr/local/bin/koios\n");
    fprintf (my.file_conv, "#   koios-polos (northern axis) -- c unit testing metaprogram and mini-language\n");
    fprintf (my.file_conv, "#   program under test  : %s\n", my.name_base);
-   fprintf (my.file_conv, "#   auto-generated script file from a previous version\n");
+   fprintf (my.file_conv, "#   auto-generated script file converted from a previous script version\n");
    fprintf (my.file_conv, "#   updated to the most recent version (v21)\n");
    my.nscrp = my.cscrp = 0;
    my.ncond = my.ccond = 0;
@@ -165,7 +165,7 @@ static void  o___STEPS___________o () { return; }
 char
 CONV_exec          (void)
 {
-   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  %-20.20s  %-70.70s  %-10.10s  %-70.70s \n", my.verb, "v21", my.desc, my.meth, my.args, my.test, my.expe);
+   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  %-20.20s  %-70s  %-10.10s  %-70.70s \n", my.verb, "v21", my.desc, my.meth, my.args, my.test, my.expe);
    return 0;
 }
 
