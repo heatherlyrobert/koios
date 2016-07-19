@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9c"
-#define     KOIOS_VER_TXT    "let args field expand when needed for gyges testing"
+#define     KOIOS_VER_NUM    "0.9d"
+#define     KOIOS_VER_TXT    "fix the verbosity handling when requesting @@cond"
 
 
 

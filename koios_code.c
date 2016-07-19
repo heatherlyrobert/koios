@@ -78,6 +78,7 @@ CODE_begin         (void)
    fprintf (my.file_code, "\n");
    fprintf (my.file_code, "void  *my_unit = NULL;            /* set up for the unit test                 */\n");
    fprintf (my.file_code, "char   eterm   = 'y';             /* handle console vs eterm                  */\n");
+   fprintf (my.file_code, "int    g_noisy = 0;               /* how loud things should be                */\n");
    fprintf (my.file_code, "char   CUSTOM  [2000];            /* holder for custom expect strings         */\n");
    fprintf (my.file_code, "\n\n\n");
    my.nscrp = my.cscrp = 0;
@@ -135,6 +136,7 @@ CODE_main          (void)
    fprintf (my.file_code, "   }\n");
    fprintf (my.file_code, "   /* printf(\"verbosity = %%d\\n\", v); */\n");
    fprintf (my.file_code, "   my_unit = yUNIT_unit(\"MyTest\", v, eterm);\n");
+   fprintf (my.file_code, "   g_noisy = v;\n");
    fprintf (my.file_code, "   \n");
    my.driver = 'y';
    return 0;
@@ -165,7 +167,8 @@ CODE_scrp          (void)
    if (my.cscrp >  0) {
       if (my.ccond > 0) {
          fprintf (my.file_code, "      yUNIT_dnoc     (my_unit);\n");
-         fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, 3);\n");
+         /*> fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, g_noisy);\n");   <*/
+         fprintf (my.file_code, "      yUNIT_noisy  (my_unit, g_noisy);\n");
          fprintf (my.file_code, "\n");
       }
       fprintf (my.file_code, "      /*---(script done)---------------------*/\n");
@@ -203,7 +206,8 @@ CODE_group         (void)
 {
    if (my.ccond > 0) {
       fprintf (my.file_code, "      yUNIT_dnoc    (my_unit);\n");
-      fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, 3);\n");
+      /*> fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, g_noisy);\n");   <*/
+      fprintf (my.file_code, "      yUNIT_noisy  (my_unit, g_noisy);\n");
       fprintf (my.file_code, "\n");
    }
    fprintf (my.file_code, "      /*---(group)---------------------------*/\n");
@@ -217,7 +221,8 @@ CODE_cond          (void)
 {
    if (my.ccond > 0 && strcmp (my.last, "GROUP") != 0) {
       fprintf (my.file_code, "      yUNIT_dnoc    (my_unit);\n");
-      fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, 3);\n");
+      /*> fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, g_noisy);\n");   <*/
+      fprintf (my.file_code, "      yUNIT_noisy  (my_unit, g_noisy);\n");
       fprintf (my.file_code, "\n");
    }
    ++(my.ncond);
@@ -466,7 +471,8 @@ CODE_end           (void)
 {
    if (my.ccond > 0) {
       fprintf (my.file_code, "      yUNIT_dnoc   (my_unit);\n");
-      fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, 3);\n");
+      /*> fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, g_noisy);\n");   <*/
+      fprintf (my.file_code, "      yUNIT_noisy  (my_unit, g_noisy);\n");
       fprintf (my.file_code, "\n");
    }
    if (my.cscrp > 0) {
