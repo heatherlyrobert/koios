@@ -323,7 +323,7 @@ PROG_end           (void)
 {
    DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
-   yLOG_end     ();
+   if (debug.logger >= 0)  yLOG_end     ();
    return 0;
 }
 

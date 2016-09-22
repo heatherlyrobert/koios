@@ -79,6 +79,7 @@ CODE_begin         (void)
    fprintf (my.file_code, "void  *my_unit = NULL;            /* set up for the unit test                 */\n");
    fprintf (my.file_code, "char   eterm   = 'y';             /* handle console vs eterm                  */\n");
    fprintf (my.file_code, "int    g_noisy = 0;               /* how loud things should be                */\n");
+   fprintf (my.file_code, "char   g_debug [100];             /* display debugging info                   */\n");
    fprintf (my.file_code, "char   CUSTOM  [2000];            /* holder for custom expect strings         */\n");
    fprintf (my.file_code, "\n\n\n");
    my.nscrp = my.cscrp = 0;
@@ -229,6 +230,8 @@ CODE_cond          (void)
    ++(my.ccond);
    fprintf (my.file_code, "      /*---(condition)-----------------------*/\n");
    fprintf (my.file_code, "      if (x_cond == %i) yUNIT_noisy  (my_unit, 5);\n", my.ccond);
+   fprintf (my.file_code, "      DEBUG_TOPS    yLOG_break   ();\n");
+   fprintf (my.file_code, "      DEBUG_TOPS    yLOG_note    (\"COND=%2.2d.%3.3d, line=%5.5d, %s\");\n", my.cscrp, my.ccond, my.n_line, my.desc);
    fprintf (my.file_code, "      yUNIT_cond    (my_unit, %4i, %3i, \"%s\");\n", my.n_line, my.ccond, my.desc);
    fprintf (my.file_code, "\n");
    my.cstep = 0;
@@ -390,6 +393,7 @@ CODE_echo          (void)
    ++(my.cstep);
    /*---(fix strings)--------------------*/
    CODE_display ();
+   /*---(actual)-------------------------*/
    fprintf (my.file_code, "         ");
    fprintf (my.file_code, "yUNIT_string  (my_unit, ");
    fprintf (my.file_code, "%4i, %3i, \"%s\", "  , my.n_line , my.cstep, my.desc);
@@ -425,6 +429,11 @@ CODE_exec          (void)
    ++(my.cstep);
    /*---(fix strings)--------------------*/
    CODE_display ();
+   /*---(debugging)----------------------*/
+   if (strcmp (my.verb, "exec"   ) == 0) {
+      fprintf (my.file_code, "         DEBUG_TOPS    yLOG_break   ();\n");
+      fprintf (my.file_code, "         DEBUG_TOPS    yLOG_note    (\"STEP=%2.2d.%3.3d.%2.2d, line=%5.5d, %s\");\n", my.cscrp, my.ccond, my.cstep, my.n_line, my.desc);
+   }
    /*---(handle return values)-----------*/
    switch (my.test [0]) {
    case 'v' :      /* pure voids         */

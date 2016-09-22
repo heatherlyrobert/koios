@@ -36,8 +36,11 @@ main               (int argc, char *argv[])
 
    printf ("base name = %s\n", my.name_base);
    printf ("scrp name = %s\n", my.name_scrp);
-   printf ("code name = %s\n", my.name_code);
-   printf ("conv name = %s\n", my.name_conv);
+   if (my.run_type == 'u') {
+      printf ("code name = %s\n", my.name_code);
+   } else {
+      printf ("conv name = %s\n", my.name_conv);
+   }
    /*> return 0;                                                                      <*/
 
 
