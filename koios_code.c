@@ -231,7 +231,7 @@ CODE_cond          (void)
    fprintf (my.file_code, "      /*---(condition)-----------------------*/\n");
    fprintf (my.file_code, "      if (x_cond == %i) yUNIT_noisy  (my_unit, 5);\n", my.ccond);
    fprintf (my.file_code, "      DEBUG_TOPS    yLOG_break   ();\n");
-   fprintf (my.file_code, "      DEBUG_TOPS    yLOG_note    (\"COND=%2.2d.%3.3d, line=%5.5d, %s\");\n", my.cscrp, my.ccond, my.n_line, my.desc);
+   fprintf (my.file_code, "      DEBUG_TOPS    yLOG_unitcond (%d, %d, %d, \"%s\");\n", my.cscrp, my.ccond, my.n_line, my.desc);
    fprintf (my.file_code, "      yUNIT_cond    (my_unit, %4i, %3i, \"%s\");\n", my.n_line, my.ccond, my.desc);
    fprintf (my.file_code, "\n");
    my.cstep = 0;
@@ -431,8 +431,8 @@ CODE_exec          (void)
    CODE_display ();
    /*---(debugging)----------------------*/
    if (strcmp (my.verb, "exec"   ) == 0) {
-      fprintf (my.file_code, "         DEBUG_TOPS    yLOG_break   ();\n");
-      fprintf (my.file_code, "         DEBUG_TOPS    yLOG_note    (\"STEP=%2.2d.%3.3d.%2.2d, line=%5.5d, %s\");\n", my.cscrp, my.ccond, my.cstep, my.n_line, my.desc);
+      fprintf (my.file_code, "         DEBUG_TOPS    yLOG_break    ();\n");
+      fprintf (my.file_code, "         DEBUG_TOPS    yLOG_unitstep (%d, %d, %d, %d, \"%s\");\n", my.cscrp, my.ccond, my.cstep, my.n_line, my.desc);
    }
    /*---(handle return values)-----------*/
    switch (my.test [0]) {
