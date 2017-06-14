@@ -48,17 +48,20 @@ very technical, well-versed, power user.
 
 .B accepted functionality (a).  
    -- use the universal condition and step analogy
-   -- group conditions into scripts and sections
+   -- group conditions into sections, scripts, and groups
    -- allow multiple testing files for complicated programs
    -- allow individual scripts to be uniquely run
    -- provide detailed pass/fail feedback on all steps
    -- collect and report statistics for conditions and scripts
-   -- allow very selective verbosity levels
-   -- build grey-box accessors into programs
+
+.B new functionality (n).  
+   -- built in, standard format grey-box accessors
+   -- allow very selective verbosity levels in output
 
 .B rejected functionality (r).  
    -- no commercial software
    -- no major libraries
+   -- avoid pointer references and cleverness
 
 .B as always, all my applications must (#).  
    -- run on any linux box from raspberry to cray
@@ -77,21 +80,61 @@ very technical, well-versed, power user.
    -- operate using modes and windows/panels like vi/vim
    -- follow the yVIKEYS standard to the letter
 
+.SH BATCH INPUT and OUTPUT
+koios is a batch program with no interactive component.  as such, is is
+critical to understand the input and output expectatons.
 
+.B [BASENAME].unit
+, a 7bit safe, human-readable ascii text file that contains the unit testing
+meta-language describing the unit test.  its structure and contests are
+described in the koios(5) man section.
 
+.B [BASENAME]_unit.c
+, a 7bit safe, human-readable ascii text file contained the resulting
+c source code to be linked to your program, compiled, and executed as
+described in the koios(1) man section.
 
-
-
-.SH AUTHOR
-rsheatherly can be reached at jelloskrike at gmail dot com
+.B [BASENAME].unit.new
+, a 7bit safe, human-readable ascii text file that contains the unit testing
+meta-language describing the unit test.  the contents have simply be updated
+to the latest formatting standard.
 
 .SH HERITAGE
-koios-polos (northern axis) is one of the original twelve greek titan-gods and
-the archetype of the inquisitive and questioning mind.  when the titans
-overthrew the protogenos (primeval gods), koios was the god that held ouranos
-(sky) by the northern pole of the world.  koios is the god of the axis of heaven
-around which the constellations revolved and of the heavenly oracles.  he was
-also husband to phoebe who presided over the earth oracles.
+.B background.  
+koios-polos (north star) is one of the original twelve greek titans, extremely
+wise, intelligent, and capable of predicting the future (prophecy). when the
+titans overthrew the protogenos (primeval gods), koios was the god that held
+ouranos (sky) by the northern pole of the world.  koios is the god of the axis
+of heaven around which the constellations revolved and of the heavenly oracles.
+
+.B appearance.  
+koios is twenty feet tall, has eyes and hair of blue-white, and wears a bears
+head helm and black armor with a diamond in the breast plate.
+
+.B parentage.  
+he is the second son of ouranos (father-sky) and gaia (mother-earth).
+
+.B why use this imagery.  
+unit testing is named after koios as the titan of the questioning mind and
+prophecy since it will seek to determine an applications fitness to run
+in production.
+
+.SH BUGS and CONCERNS
+koios depends on proper formatting of the input meta-language file.  if the
+file lacks a double quote or delimiter in the correct place, the resulting
+errors when compiling the c source for the unit test can be difficult to
+track down.
+
+.SH SEE ALSO
+this documentation is layered to provide easier navigation.
+   koios (7), decision rationale, objectives, and overview
+   koios (5), structure of unit testing meta-language file
+   koios (1), initiation, options, and structure
+   yUNIT, unit testing support library
+   yVAR, data comparison support library
+
+.SH AUTHOR
+rsheatherly  can be reached at jelloshrke at gmail dot com
 
 .SH COLOPHON
 this page is part of a documentation package mean to make the use of the

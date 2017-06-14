@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9j"
-#define     KOIOS_VER_TXT    "update to using yURG library"
+#define     KOIOS_VER_NUM    "0.9k"
+#define     KOIOS_VER_TXT    "cleaned up man pages for sections 1 and 7"
 
 
 

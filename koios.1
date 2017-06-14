@@ -30,6 +30,11 @@ into a c source file.  second is for the compilied unit test itself.
 koios is simple, efficient, and direct; and, it only has a very limited
 run-time configuration with only three options.
 
+when run and provided a <basename>, koios reads <basename>.unit which
+contains the meta-language describing the unit testing.  koios then produces
+<basename>_unit.c which is the c source code for compilation.  if run in update
+mode, it produces <basename>.unit.new.
+
 .B <basename>
 .RS 8
 base unit test file name with no ".unit" extention (required).
@@ -47,18 +52,6 @@ update unit test input to latest standard and send to stdout.
 
 the --create and --update options are mutually exclusive.
 
-.SH UNIT TESTING RUNTIME OPTIONS
-koios is simple, efficient, and direct; and, it only has a very limited
-run-time configuration with only three options.
-
-
-
-
-.B unittest.  
-unit tests provide two main types of options -- verbosity and execution.
-
-
-
 .SH COMPILING
 to work properly, the main function of the c program must be placed in
 a separate source file.  i call mine by the [BASENAME]_main.c.  the unit
@@ -66,61 +59,143 @@ test creates its own main function within [BASENAME]_unit.c.  all program
 modules (except main) need to be linked against [BASENAME]_unit.c to create
 an executable.  i name the resulting executable [BASENAME]_unit.
 
-.SH EXECUTING
-the resulting [BASENAME]_unit executable has several options build in.
+.SH UNIT TESTING RUNTIME OPTIONS
+.SS overview
+after compilation, the resulting unit testing programs have a short list of
+options primarily focused on which parts of the file to run (execution scope),
+how verbose the output (execution verbosity), color formatting, and whether
+to provide inforation on the test vs execute it (information only).
 
-.B @@quiet
-, no output only a return code : neg = fail, pos = warn, 0 = pass
+.SS execution scope
+when running the unit test program, you may run one of three scopes as shown
+below.  it is very common to run a single script, but it can be dangerous to
+run a single condition as it may only be valid in the context of the script.
 
-.B @@test
-, only a single line of summary numbers indicating pass/fail
-
-.B --list-scrp
-, shows a list of script headers for reference (no execution).
-
-.B --list-cond
-, shows a list of condition headers for all scripts (no execution).
-
-.B <nn> --list-cond
-, with script number it will only show for that script.
-
-.B --scrp
-, shows summary and script level output.  no step details
-
-.B @@cond
-, shows summary, script, and condition output. no step details.
-
-.B @@step
-, shows summary, script, and condition, and step output. no details.
-
-.B @@full
-, shows all output.  this is the default.
-
-.B --console
-, show plain text without terminal color codes.
-
-.B --eterm
-, show output with embedded eterm, 256 color terminal color codes.
+.B --all
+.RS 8
+run all contained scipts and conditions (default)
+.RE
 
 .B <nn>
-, two digits with a leading zero if required to make two.  this
-causes the unit test to only run the script by that number.
+.RS 8
+run all conditions in script <nn> (two digits 00 to 99)
+.RE
 
-.B <nnn>
-, three digits with a leading zeros if required to make three.  this causes
-the unit test to only show the condition by that number.  sometimes this
-makes it easier to find in the output.
+.B <nn>.<nnn> (<nn>-<nnn>)
+.RS 8
+run condition <nnn> in script <nn> (three digits 000 to 999)
+.RE
+
+.SS execution verbosity
+a full unit test produces a great deal of output, tracking every script,
+condition, and step.  sometimes the tester wishes to focus the output a litter
+finer.  the options below start with none and each new option is cumulative,
+i.e., the option below includes all above.
+
+.B --show-none, --quiet
+.RS 8
+no output only, just a return code, neg=fail vs zero/pos=pass
+.RE
+
+.B --show-summ
+.RS 8
+one line with test level summary numbers
+.RE
+
+.B --show-scrp
+.RS 8
+one line of stats per test and script
+.RE
+
+.B --show-cond
+.RS 8
+one line of stats per test, script, and condition
+.RE
+
+.B --show-step
+.RS 8
+one line of stats per test, script, condition, and step
+.RE
+
+.B --show-full
+.RS 8
+show all including actual vs expected comparision (default)
+.RE
+
+.SS color formatting
+unit test output is formatted to display in a 80 column terminal using 7bit-safe
+ascii characters only so this framework is as portable as possible.  but,
+coloration is useful in its normal execution environment of a color eterm/aterm.
+
+.B --eterm
+.RS 8
+colorize output for a 16 color terminal emulator
+.RE
+
+.B --console
+.RS 8
+do not colorize output so it cn run in a console session
+.RE
+
+.SS information only
+it is often important to get an overview or retrieve reference/index numbers
+for a particular script or condition.  the following options enable that.
+
+.B --list-scrp
+.RS 8
+display list of all available script headers
+.RE
+
+.B --list-cond
+.RS 8
+display list of all script and condition headers
+.RE
+
+.B <nn> --list-cond
+.RS 8
+display list of condition headers for script <nn>
+.RE
+
+.SH DEBUGGING URGENTS
+.SS overview
+koios and the produced unit tests run using the standard yURG library and
+supports all the included debugging commands.
+
+.SS koios_debug
+koios is a simple filter/translation program and so the most important urgents
+for koios itself are for reading input and writing output.
+
+.B @i, @@inpt
+.RS 8
+details of the lines read from the input file
+.RE
+
+.B @o, @@outp
+.RS 8
+details of the lines written to the output file
+.RE
+
+.SS unit test programs
+each unit test program automatically log all if used in debug mode rather
+that requiring urgents.  there are a couple unique logging formats for scripts
+and conditions that make them easy to locate by searching for their numbers.
+
+.SH BUGS and CONCERNS
+koios depends on proper formatting of the input meta-language file.  if the
+file lacks a double quote or delimiter in the correct place, the resulting
+errors when compiling the c source for the unit test can be difficult to
+track down.
+
+.SH SEE ALSO
+this documentation is layered to provide easier navigation.
+   koios (7), decision rationale, objectives, and overview
+   koios (5), structure of unit testing meta-language file
+   koios (1), initiation, options, and structure
+   yUNIT, unit testing support library
+   yVAR, data comparison support library
 
 .SH AUTHOR
-rsheatherly can be reached at jelloskrike at gmail dot com
-
-.SH HERITAGE
-koios-polos (northern axis) is one of the original twelve greek titan-gods and
-the archetype of the inquisitive and questioning mind.  when the titans
-overthrew the protogenos (primeval gods), koios was the god that held ouranos
-(sky) by the northern pole of the world.  koios is the god of the axis of heaven
-around which the constellations revolved and of the heavenly oracles.  he was
-also husband to phoebe who presided over the earth oracles.
+rsheatherly  can be reached at jelloshrke at gmail dot com
 
 .SH COLOPHON
 this page is part of a documentation package mean to make the use of the
