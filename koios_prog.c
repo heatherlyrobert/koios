@@ -267,12 +267,8 @@ PROG_args          (int argc, char *argv[])
       DEBUG_ARGS  yLOG_info    ("cli arg", a);
       ++x_args;
       strncpy (my.name_base, argv[i], LEN_FILE);
-      if      (strncmp (a, "--conv"    ,10) == 0) {
-         my.run_type = 'c';
-      }
-      else if (strncmp (a, "--unit"    ,10) == 0) {
-         my.run_type = 'u';
-      }
+      if      (strncmp (a, "--convert"    , 10) == 0)    my.run_type = 'c';
+      else if (strncmp (a, "--unittest"   , 10) == 0)    my.run_type = 'u';
    }
    DEBUG_ARGS  yLOG_value  ("entries"   , x_total);
    DEBUG_ARGS  yLOG_value  ("arguments" , x_args);

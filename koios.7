@@ -1,0 +1,98 @@
+.TH koios 7 2016-May "linux" "heatherly custom tools manual"
+
+.SH NAME
+koios_polos \- decision rationale, objectives, and overview
+
+.SH IMAGERY (see HERITAGE at bottom for more)
+northern star (polos), the axis around which all consellations revolve
+
+.SH SUMMARY
+koios (pronounced key-oh-s) is a light, clean, simple, and fast c unit testing
+metaprogram that reads a scripting mini-language file as input and creates a c
+source file to conduct the unit testing as output.
+
+.SH SCOPE, REASONING and DECISION
+
+.B subject/definition (D).  
+unit testing is a software verification and assurance method in which a
+programmer tests if individual units (functions) of source code are fit for
+use and remain so.
+
+.B importance/priority (I).  
+unit testing is the most fundamental and important layer upon which all
+other testing rests.  it drives reliable build automation, refactoring,
+and regression testing.
+
+.B situation (S).  
+unit testing is a universal, fundamental, and critical need which is widely
+recognized.  there are many competing freeware and commercial unit testing
+frameworks available across all platforms.
+
+.B complication (C).  
+these frameworks are often awkward, changing, partial, and inflexible as unit
+testing is both universally accepted and universally negnected.  they are
+marketed and unevenly utilized.
+
+.B problem/question (Q).  
+i need to have a rapidly adapting and evolving tool that both drives and
+supports my learning in this crutial area.  i don't want to just understand,
+i want to own this area.
+
+.B solution/answer (A).  
+build several intelocking tools to provide a complete unit testing solution
+-- koios to generate c unit tests, yUNIT to guide them, and yVAR to compare
+expected and actuals.
+
+.B target user (T).  
+very technical, well-versed, power user.
+
+.B accepted functionality (a).  
+   -- use the universal condition and step analogy
+   -- group conditions into scripts and sections
+   -- allow multiple testing files for complicated programs
+   -- allow individual scripts to be uniquely run
+   -- provide detailed pass/fail feedback on all steps
+   -- collect and report statistics for conditions and scripts
+   -- allow very selective verbosity levels
+   -- build grey-box accessors into programs
+
+.B rejected functionality (r).  
+   -- no commercial software
+   -- no major libraries
+
+.B as always, all my applications must (#).  
+   -- run on any linux box from raspberry to cray
+   -- stay focused, small, tight, reliable, and secure
+   -- forgo sloppy, kitchen-sink languages, like python, java, or perl
+   -- stay away from dependency on external code libraries, like boost
+   -- only human-readable, 7-bit safe, ascii streams (not database)
+   -- have dedicated, maintained, automated unit testing
+   -- all tables must be self describing with labels and queries
+   -- all data structures must include dumps, reports, and audits
+   -- provide extensive logging and tracing for debugging
+   -- use secure communications between systems where required
+   -- clean, clean code so i can maintain after long absences
+   -- no international, multi-lang, multi-byte support (freaking ever)
+   -- one-hundred percent keyboard driven and centric
+   -- operate using modes and windows/panels like vi/vim
+   -- follow the yVIKEYS standard to the letter
+
+
+
+
+
+
+.SH AUTHOR
+rsheatherly can be reached at jelloskrike at gmail dot com
+
+.SH HERITAGE
+koios-polos (northern axis) is one of the original twelve greek titan-gods and
+the archetype of the inquisitive and questioning mind.  when the titans
+overthrew the protogenos (primeval gods), koios was the god that held ouranos
+(sky) by the northern pole of the world.  koios is the god of the axis of heaven
+around which the constellations revolved and of the heavenly oracles.  he was
+also husband to phoebe who presided over the earth oracles.
+
+.SH COLOPHON
+this page is part of a documentation package mean to make the use of the
+heatherly tools easier and faster

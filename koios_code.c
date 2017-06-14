@@ -126,11 +126,13 @@ CODE_main          (void)
    fprintf (my.file_code, "      a = argv[i];\n");
    fprintf (my.file_code, "      l = strlen(a);\n");
    fprintf (my.file_code, "      if      (strcmp(a, \"--quiet\") == 0 || strcmp(a, \"-q\") == 0)   v = 0;\n");
-   fprintf (my.file_code, "      else if (strcmp(a, \"--test\")  == 0 || strcmp(a, \"-t\") == 0)   v = 1;\n");
-   fprintf (my.file_code, "      else if (strcmp(a, \"--list-only\")  == 0)                        x_exec = 0;\n");
-   fprintf (my.file_code, "      else if (strcmp(a, \"--scrp\")  == 0)                             v = 2;\n");
-   fprintf (my.file_code, "      else if (strcmp(a, \"--cond\")  == 0)                             v = 3;\n");
-   fprintf (my.file_code, "      else if (strcmp(a, \"--step\")  == 0)                             v = 4;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--show-test\")  == 0 || strcmp(a, \"-t\") == 0)   v = 1;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--show-scrp\")  == 0)                        v = 2;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--show-cond\")  == 0)                        v = 3;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--show-step\")  == 0)                        v = 4;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--list-scrp\")  == 0)                      { x_exec = 0; v = 2; }\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--list-cond\")  == 0)                      { x_exec = 0; v = 3; }\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--list-step\")  == 0)                      { x_exec = 0; v = 4; }\n");
    fprintf (my.file_code, "      else if (strcmp(a, \"--full\")  == 0 || strcmp(a, \"-f\") == 0)   v = 5;\n");
    fprintf (my.file_code, "      else if (strcmp(a, \"--help\")  == 0 || strcmp(a, \"-h\") == 0)   usage();\n");
    fprintf (my.file_code, "      else if (strcmp(a, \"--console\")  == 0)   eterm = '-';\n");
