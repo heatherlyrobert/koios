@@ -22,38 +22,41 @@ which is the primary production version
 which can perform all production actions, but with debugging and tracing
 
 .SH OPTIONS
-koios is simple, efficient, and direct, therefore it has a very limited
-option set.
+there are two levels of options in the heatherly unit testing framework.
+the first is for koios which converts the unit testing meta-language input file
+into a c source file.  second is for the compilied unit test itself.
+
+.SH KOIOS RUNTIME OPTIONS
+koios is simple, efficient, and direct; and, it only has a very limited
+run-time configuration with only three options.
 
 .B <basename>
 .RS 8
-base unit test file name with no ".unit" extention.
+base unit test file name with no ".unit" extention (required).
 .RE
 
-.B --convert
+.B --create
 .RS 8
-updates the unit test file format to the latest standard.
+creates unit testing c source file for compilation (default).
 .RE
 
-.B --unittest
+.B --update
 .RS 8
-creates the unit testing c source file for later compilation.
+update unit test input to latest standard and send to stdout.
 .RE
 
+the --create and --update options are mutually exclusive.
 
-koios only accepts a single option, BASENAME, which is the program to be unit
-tested's executable name.  technically, it can be any name, but using it this
-way is cleanest and easiest to remember.
+.SH UNIT TESTING RUNTIME OPTIONS
+koios is simple, efficient, and direct; and, it only has a very limited
+run-time configuration with only three options.
 
-.SH FILES
-.B [BASENAME].unit
-, a 7bit safe, human-readable ascii text file that contains the unit testing
-scripts.  its structure is described below in the STRUCTURE section.
 
-.B [BASENAME]_unit.c
-, a 7bit safe, human-readable ascii text file contained the resulting
-c source code to be linked to your program, compiled, and executed as
-described in the COMPILING and EXECUTION sections.
+
+
+.B unittest.  
+unit tests provide two main types of options -- verbosity and execution.
+
 
 
 .SH COMPILING
@@ -75,11 +78,8 @@ the resulting [BASENAME]_unit executable has several options build in.
 .B --list-scrp
 , shows a list of script headers for reference (no execution).
 
-.B <nn> --list-scrp
-, with script number it will only show for that script.
-
 .B --list-cond
-, shows a list of condition headers for reference (no execution).
+, shows a list of condition headers for all scripts (no execution).
 
 .B <nn> --list-cond
 , with script number it will only show for that script.

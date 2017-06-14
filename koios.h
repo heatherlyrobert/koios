@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9i"
-#define     KOIOS_VER_TXT    "updated a lot of the manual entries"
+#define     KOIOS_VER_NUM    "0.9j"
+#define     KOIOS_VER_TXT    "update to using yURG library"
 
 
 
@@ -102,77 +102,13 @@
 /*===[[ CUSTOM LIBRARIES ]]===================================================*/
 #include    <yLOG.h>         /* CUSTOM : heatherly program logging            */
 #include    <ySTR.h>         /* CUSTOM : heatherly safer string handling      */
+#include    <yURG.h>         /* CUSTOM : heatherly urgent processing          */
 
 
 
-/*===[[ DEBUGGING SETUP ]]====================================================*/
-/* this is my latest standard format, vars, and urgents                       */
-/* v3.0b : added signal handling                                (2014-feb-01) */
-struct cDEBUG
-{
-   /*---(handle)-------------------------*/
-   int         logger;                 /* log file so that we don't close it  */
-   /*---(overall)------------------------*/  /* abcdefghi_kl__opq_stu__x__    */
-   /* f = full urgents turns on all standard urgents                          */
-   /* k = kitchen sink and turns everything, i mean everything on             */
-   /* q = quiet turns all urgents off including the log itself                */
-   char        tops;                   /* t) broad structure and context      */
-   char        summ;                   /* s) statistics and analytical output */
-   /*---(startup/shutdown)---------------*/
-   char        args;                   /* a) command line args and urgents    */
-   char        conf;                   /* c) configuration handling           */
-   char        prog;                   /* p) program setup and teardown       */
-   /*---(file processing)----------------*/
-   char        inpt;                   /* i) text/data file input             */
-   char        inpt_mas;               /* I) text/data file input   (mas/more)*/
-   char        outp;                   /* o) text/data file output            */
-   char        outp_mas;               /* O) text/data file output  (mas/more)*/
-   /*---(event handling)-----------------*/
-   char        loop;                   /* l) main program event loop          */
-   char        loop_mas;               /* L) main program event loop (mas/more*/
-   char        user;                   /* u) user input and handling          */
-   char        apis;                   /* z) interprocess communication       */
-   char        sign;                   /* x) os signal handling               */
-   char        scrp;                   /* b) scripts and batch operations     */
-   char        hist;                   /* h) history, undo, redo              */
-   /*---(program)------------------------*/
-   char        graf;                   /* g) grahpics, drawing, and display   */
-   char        data;                   /* d) complex data structure handling  */
-   char        envi;                   /* e) environment/filesystem           */
-   char        envi_mas;               /* E) environment/filesystem (mas/more)*/
-   /*---(specific)-----------------------*/
-};
-typedef     struct      cDEBUG      tDEBUG;
-extern      tDEBUG      debug;
-/*---(debug names for code)---------------------*/
-/*
- *   using these names is critical as all lines with "DEBUG_" are swept out of
- *   the file for the production version.  follow the standard and its
- *   automagic.  be careful to not use code blocks with them as the resulting
- *   production code will then not compile, i.e., when the "DEBUG_" line is
- *   removed in the make process.
- *
- */
-#define     DEBUG_TOPS          if (debug.tops      == 'y')
-#define     DEBUG_SUMM          if (debug.summ      == 'y')
-#define     DEBUG_ARGS          if (debug.args      == 'y')
-#define     DEBUG_CONF          if (debug.conf      == 'y')
-#define     DEBUG_PROG          if (debug.prog      == 'y')
-#define     DEBUG_INPT          if (debug.inpt      == 'y')
-#define     DEBUG_INPTM         if (debug.inpt_mas  == 'y')
-#define     DEBUG_OUTP          if (debug.outp      == 'y')
-#define     DEBUG_OUTPM         if (debug.outp_mas  == 'y')
-#define     DEBUG_LOOP          if (debug.loop      == 'y')
-#define     DEBUG_LOOPM         if (debug.loop_mas  == 'y')
-#define     DEBUG_USER          if (debug.user      == 'y')
-#define     DEBUG_APIS          if (debug.apis      == 'y')
-#define     DEBUG_SIGN          if (debug.sign      == 'y')
-#define     DEBUG_SCRP          if (debug.scrp      == 'y')
-#define     DEBUG_HIST          if (debug.hist      == 'y')
-#define     DEBUG_GRAF          if (debug.graf      == 'y')
-#define     DEBUG_DATA          if (debug.data      == 'y')
-#define     DEBUG_ENVI          if (debug.envi      == 'y')
-#define     DEBUG_ENVIM         if (debug.envi_mas  == 'y')
+#define     G_RUN_CREATE    'c'
+#define     G_RUN_UPDATE    'u'
+
 
 
 

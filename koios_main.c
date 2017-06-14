@@ -23,12 +23,12 @@ main               (int argc, char *argv[])
    int         x_lines     = 0;
 
    /*---(initialize)---------------------*/
-   if (rc == 0)  rc = PROG_logger (argc, argv);
-   if (rc == 0)  rc = PROG_init   ();
-   if (rc == 0)  rc = PROG_urgs   (argc, argv);
-   if (rc == 0)  rc = PROG_args   (argc, argv);
-   if (rc == 0)  rc = PROG_begin  ();
-   if (rc != 0) {
+   if (rc >= 0)  rc = yURG_logger  (argc, argv);
+   if (rc >= 0)  rc = PROG_init    ();
+   if (rc >= 0)  rc = yURG_urgs    (argc, argv);
+   if (rc >= 0)  rc = PROG_args    (argc, argv);
+   if (rc >= 0)  rc = PROG_begin   ();
+   if (rc <  0)  {
       PROG_end     ();
       return rc;
    }
@@ -36,7 +36,7 @@ main               (int argc, char *argv[])
 
    printf ("base name = %s\n", my.name_base);
    printf ("scrp name = %s\n", my.name_scrp);
-   if (my.run_type == 'u') {
+   if (my.run_type == G_RUN_CREATE) {
       printf ("code name = %s\n", my.name_code);
    } else {
       printf ("conv name = %s\n", my.name_conv);
@@ -46,10 +46,10 @@ main               (int argc, char *argv[])
 
    /*---(open files)---------------------*/
    if (rc == 0)  rc = SCRP_open      ();
-   if (my.run_type == 'u') {
+   if (my.run_type == G_RUN_CREATE) {
       if (rc == 0)  rc = CODE_open      ();
       if (rc == 0)  rc = CODE_begin     ();
-   } else if (my.run_type == 'c') {
+   } else if (my.run_type == G_RUN_UPDATE) {
       if (rc == 0)  rc = CONV_open      ();
       if (rc == 0)  rc = CONV_begin     ();
    }
@@ -69,8 +69,8 @@ main               (int argc, char *argv[])
       if (rc < 0) continue;
       DEBUG_TOPS   yLOG_note    ("writing output");
       /*---(write code)------------------*/
-      if      (my.run_type == 'u')   rc = CODE_write  ();
-      else if (my.run_type == 'c')   rc = CONV_write  ();
+      if      (my.run_type == G_RUN_CREATE)   rc = CODE_write  ();
+      else if (my.run_type == G_RUN_UPDATE)   rc = CONV_write  ();
       /*---(debugging output)------------*/
       ++x_lines;
       /*> printf (".");                                                               <*/
@@ -98,10 +98,10 @@ main               (int argc, char *argv[])
    DEBUG_TOPS  yLOG_note    ("exiting main processing loop");
    /*---(close files)--------------------*/
    rc = SCRP_close     ();
-   if (my.run_type == 'u') { 
+   if (my.run_type == G_RUN_CREATE) { 
       rc = CODE_end       ();
       rc = CODE_close     ();
-   } else if (my.run_type == 'c') {
+   } else if (my.run_type == G_RUN_UPDATE) {
       rc = CONV_end       ();
       rc = CONV_close     ();
    }
