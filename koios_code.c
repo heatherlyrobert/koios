@@ -118,24 +118,34 @@ CODE_main          (void)
    fprintf (my.file_code, "   int       i         = 0;       /* loop iterator -- args   */\n");
    fprintf (my.file_code, "   int       v         = 5;       /* verbosity level         */\n");
    fprintf (my.file_code, "   int       l         = 0;       /* length of argument      */\n");
+   fprintf (my.file_code, "   int       x_exec    = 1;       /* run                     */\n");
    fprintf (my.file_code, "   int       x_scrp    = 0;       /* script                  */\n");
    fprintf (my.file_code, "   int       x_cond    = 0;       /* condition               */\n");
+   fprintf (my.file_code, "   char      x_temp    [10];      /* temp string             */\n");
    fprintf (my.file_code, "   for (i = 0; i < argc; ++i) {\n");
    fprintf (my.file_code, "      a = argv[i];\n");
    fprintf (my.file_code, "      l = strlen(a);\n");
-   fprintf (my.file_code, "      if      (strcmp(a, \"@@quiet\") == 0 || strcmp(a, \"@q\") == 0)   v = 0;\n");
-   fprintf (my.file_code, "      else if (strcmp(a, \"@@test\")  == 0 || strcmp(a, \"@t\") == 0)   v = 1;\n");
-   fprintf (my.file_code, "      else if (strcmp(a, \"@@scrp\")  == 0)                           v = 2;\n");
-   fprintf (my.file_code, "      else if (strcmp(a, \"@@cond\")  == 0)                           v = 3;\n");
-   fprintf (my.file_code, "      else if (strcmp(a, \"@@step\")  == 0)                           v = 4;\n");
-   fprintf (my.file_code, "      else if (strcmp(a, \"@@full\")  == 0 || strcmp(a, \"@f\") == 0)   v = 5;\n");
-   fprintf (my.file_code, "      else if (strcmp(a, \"@@help\")  == 0 || strcmp(a, \"@h\") == 0)   usage();\n");
+   fprintf (my.file_code, "      if      (strcmp(a, \"--quiet\") == 0 || strcmp(a, \"-q\") == 0)   v = 0;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--test\")  == 0 || strcmp(a, \"-t\") == 0)   v = 1;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--list-only\")  == 0)                        x_exec = 0;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--scrp\")  == 0)                             v = 2;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--cond\")  == 0)                             v = 3;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--step\")  == 0)                             v = 4;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--full\")  == 0 || strcmp(a, \"-f\") == 0)   v = 5;\n");
+   fprintf (my.file_code, "      else if (strcmp(a, \"--help\")  == 0 || strcmp(a, \"-h\") == 0)   usage();\n");
    fprintf (my.file_code, "      else if (strcmp(a, \"--console\")  == 0)   eterm = '-';\n");
    fprintf (my.file_code, "      else if (strcmp(a, \"--eterm\")    == 0)   eterm = 'y';\n");
-   fprintf (my.file_code, "      else if (l == 2)      x_scrp = atoi(a);\n");
-   fprintf (my.file_code, "      else if (l == 3)    { x_cond = atoi(a); v = 3; }\n");
+   fprintf (my.file_code, "      else if (l == 2) {\n");
+   fprintf (my.file_code, "          x_scrp = atoi(a);\n");
+   fprintf (my.file_code, "      }\n");
+   fprintf (my.file_code, "      else if (l == 6 && (a[2] == '.' || a[2] == '-'))    {\n");
+   fprintf (my.file_code, "          sprintf (x_temp, \"%%c%%c\", a[0], a[1]);\n");
+   fprintf (my.file_code, "          x_scrp = atoi (x_temp);\n");
+   fprintf (my.file_code, "          sprintf (x_temp, \"%%c%%c%%c\", a[3], a[4], a[5]);\n");
+   fprintf (my.file_code, "          x_cond = atoi (x_temp);\n");
+   fprintf (my.file_code, "          v = 3;\n");
+   fprintf (my.file_code, "      }\n");
    fprintf (my.file_code, "   }\n");
-   fprintf (my.file_code, "   /* printf(\"verbosity = %%d\\n\", v); */\n");
    fprintf (my.file_code, "   my_unit = yUNIT_unit(\"MyTest\", v, eterm);\n");
    fprintf (my.file_code, "   g_noisy = v;\n");
    fprintf (my.file_code, "   \n");
@@ -167,13 +177,12 @@ CODE_scrp          (void)
    /*---(close last script)--------------*/
    if (my.cscrp >  0) {
       if (my.ccond > 0) {
-         fprintf (my.file_code, "      yUNIT_dnoc     (my_unit);\n");
-         /*> fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, g_noisy);\n");   <*/
+         fprintf (my.file_code, "      if (x_exec == 1)  yUNIT_dnoc     (my_unit);\n");
          fprintf (my.file_code, "      yUNIT_noisy  (my_unit, g_noisy);\n");
          fprintf (my.file_code, "\n");
       }
       fprintf (my.file_code, "      /*---(script done)---------------------*/\n");
-      fprintf (my.file_code, "      yUNIT_prcs    (my_unit);\n");
+      fprintf (my.file_code, "      if (x_exec == 1)  yUNIT_prcs    (my_unit);\n");
       fprintf (my.file_code, "   }\n");
       fprintf (my.file_code, "\n");
    }
@@ -206,8 +215,7 @@ char
 CODE_group         (void)
 {
    if (my.ccond > 0) {
-      fprintf (my.file_code, "      yUNIT_dnoc    (my_unit);\n");
-      /*> fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, g_noisy);\n");   <*/
+      fprintf (my.file_code, "      if (x_exec == 1)  yUNIT_dnoc    (my_unit);\n");
       fprintf (my.file_code, "      yUNIT_noisy  (my_unit, g_noisy);\n");
       fprintf (my.file_code, "\n");
    }
@@ -221,15 +229,14 @@ char
 CODE_cond          (void)
 {
    if (my.ccond > 0 && strcmp (my.last, "GROUP") != 0) {
-      fprintf (my.file_code, "      yUNIT_dnoc    (my_unit);\n");
-      /*> fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, g_noisy);\n");   <*/
+      fprintf (my.file_code, "      if (x_exec == 1)  yUNIT_dnoc    (my_unit);\n");
       fprintf (my.file_code, "      yUNIT_noisy  (my_unit, g_noisy);\n");
       fprintf (my.file_code, "\n");
    }
    ++(my.ncond);
    ++(my.ccond);
    fprintf (my.file_code, "      /*---(condition)-----------------------*/\n");
-   fprintf (my.file_code, "      if (x_cond == %i) yUNIT_noisy  (my_unit, 5);\n", my.ccond);
+   fprintf (my.file_code, "      if (x_scrp == %i && x_cond == %i) yUNIT_noisy  (my_unit, 5);\n", my.cscrp, my.ccond);
    fprintf (my.file_code, "      DEBUG_TOPS    yLOG_unitcond (%d, %d, %d, \"%s\");\n", my.cscrp, my.ccond, my.n_line, my.desc);
    fprintf (my.file_code, "      yUNIT_cond    (my_unit, %4i, %3i, \"%s\");\n", my.n_line, my.ccond, my.desc);
    fprintf (my.file_code, "\n");
@@ -242,7 +249,7 @@ CODE_mode          (void)
 {
    ++(my.nstep);
    ++(my.cstep);
-   fprintf (my.file_code, "         yUNIT_mode    (my_unit, %4i, %3i, %s);\n", my.n_line, my.cstep, my.args);
+   fprintf (my.file_code, "         if (x_exec == 1)  yUNIT_mode    (my_unit, %4i, %3i, %s);\n", my.n_line, my.cstep, my.args);
    fprintf (my.file_code, "\n");
    return 0;
 }
@@ -283,7 +290,7 @@ CODE_code          (void)
    CODE_display ();
    /*---(write)--------------------------*/
    fprintf (my.file_code, "         %s\n",  my.syst);
-   fprintf (my.file_code, "         yUNIT_code    (my_unit, %4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cstep, my.desc, my.disp);
+   fprintf (my.file_code, "         if (x_exec == 1)  yUNIT_code    (my_unit, %4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cstep, my.desc, my.disp);
    fprintf (my.file_code, "\n");
    /*---(complete)-----------------------*/
    return 0;
@@ -298,7 +305,7 @@ CODE_load          (void)
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(write)--------------------------*/
-   fprintf (my.file_code, "         yUNIT_load    (my_unit, %4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cstep, my.desc, my.load);
+   fprintf (my.file_code, "         if (x_exec == 1)  yUNIT_load    (my_unit, %4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cstep, my.desc, my.load);
    fprintf (my.file_code, "\n");
    /*---(complete)-----------------------*/
    return 0;
@@ -313,7 +320,7 @@ CODE_sys           (void)
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(write)--------------------------*/
-   fprintf (my.file_code, "         yUNIT_sys     (my_unit, %4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cstep, my.desc, my.disp);
+   fprintf (my.file_code, "         if (x_exec == 1)  yUNIT_sys     (my_unit, %4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cstep, my.desc, my.disp);
    fprintf (my.file_code, "\n");
    /*---(complete)-----------------------*/
    return 0;
@@ -477,21 +484,21 @@ char
 CODE_end           (void)
 {
    if (my.ccond > 0) {
-      fprintf (my.file_code, "      yUNIT_dnoc   (my_unit);\n");
-      /*> fprintf (my.file_code, "      if (x_cond != 0) yUNIT_noisy  (my_unit, g_noisy);\n");   <*/
+      fprintf (my.file_code, "      if (x_exec == 1)  yUNIT_dnoc   (my_unit);\n");
       fprintf (my.file_code, "      yUNIT_noisy  (my_unit, g_noisy);\n");
       fprintf (my.file_code, "\n");
    }
    if (my.cscrp > 0) {
       fprintf (my.file_code, "      /*---(script done)---------------------*/\n");
-      fprintf (my.file_code, "      yUNIT_prcs   (my_unit);\n");
+      fprintf (my.file_code, "      if (x_exec == 1)  yUNIT_prcs   (my_unit);\n");
       fprintf (my.file_code, "   }\n");
    }
    fprintf (my.file_code, "\n\n\n");
    fprintf (my.file_code, "   /*========================---------------------============================*/\n");
    fprintf (my.file_code, "   /*===----                        WRAP-UP                            ----===*/\n");
    fprintf (my.file_code, "   /*========================---------------------============================*/\n");
-   fprintf (my.file_code, "   return yUNIT_tinu (my_unit);\n");
+   fprintf (my.file_code, "   if (x_exec == 1)  return yUNIT_tinu (my_unit);\n");
+   fprintf (my.file_code, "   else              return 0;\n");
    fprintf (my.file_code, "}\n");
    fprintf (my.file_code, "\n");
    fprintf (my.file_code, "/*============================== end-of-file =================================*/\n");

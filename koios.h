@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9g"
-#define     KOIOS_VER_TXT    "added break lines to yLOG unit testing steps and conds"
+#define     KOIOS_VER_NUM    "0.9h"
+#define     KOIOS_VER_TXT    "added the ability to list scripts"
 
 
 
