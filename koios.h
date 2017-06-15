@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9l"
-#define     KOIOS_VER_TXT    "lengthened expected in input and created statistics function"
+#define     KOIOS_VER_NUM    "0.9m"
+#define     KOIOS_VER_TXT    "added argument check and exit on bad argument"
 
 
 
