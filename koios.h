@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9m"
-#define     KOIOS_VER_TXT    "added argument check and exit on bad argument"
+#define     KOIOS_VER_NUM    "0.9n"
+#define     KOIOS_VER_TXT    "fixed issue of koios not including debugging in unit test"
 
 
 

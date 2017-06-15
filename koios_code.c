@@ -272,7 +272,7 @@ CODE_cond          (void)
    ++(my.ccond);
    fprintf (my.file_code, "      /*---(condition)-----------------------*/\n");
    fprintf (my.file_code, "      if (x_scrp == %i && x_cond == %i) yUNIT_noisy  (my_unit, 5);\n", my.cscrp, my.ccond);
-   fprintf (my.file_code, "      DEBUG_TOPS    yLOG_unitcond (%d, %d, %d, \"%s\");\n", my.cscrp, my.ccond, my.n_line, my.desc);
+   fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitcond (%d, %d, %d, \"%s\");\n", "DEB", "yL", my.cscrp, my.ccond, my.n_line, my.desc);
    fprintf (my.file_code, "      yUNIT_cond    (my_unit, %4i, %3i, \"%s\");\n", my.n_line, my.ccond, my.desc);
    fprintf (my.file_code, "\n");
    my.cstep = 0;
@@ -472,7 +472,7 @@ CODE_exec          (void)
    CODE_display ();
    /*---(debugging)----------------------*/
    if (strcmp (my.verb, "exec"   ) == 0) {
-      fprintf (my.file_code, "         DEBUG_TOPS    yLOG_unitstep (%d, %d, %d, %d, \"%s\");\n", my.cscrp, my.ccond, my.cstep, my.n_line, my.desc);
+      fprintf (my.file_code, "         %sUG_TOPS    %sOG_unitstep (%d, %d, %d, %d, \"%s\");\n", "DEB", "yL", my.cscrp, my.ccond, my.cstep, my.n_line, my.desc);
    }
    /*---(handle return values)-----------*/
    switch (my.test [0]) {
