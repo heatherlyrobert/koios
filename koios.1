@@ -1,7 +1,7 @@
 .TH koios 1 2016-May "linux" "heatherly custom tools manual"
 
 .SH NAME
-koios_polos \- sweet c unit testing metaprogram and mini-language
+koios_polos \- customized c unit testing meta-program and mini-language
 
 .SH IMAGERY (see HERITAGE at bottom for more)
 northern star (polos), the axis around which all consellations revolve
@@ -156,6 +156,11 @@ display list of all script and condition headers
 display list of condition headers for script <nn>
 .RE
 
+.B --list-stats
+.RS 8
+display list of all record types in unit test
+.RE
+
 .SH DEBUGGING URGENTS
 .SS overview
 koios and the produced unit tests run using the standard yURG library and
@@ -179,6 +184,27 @@ details of the lines written to the output file
 each unit test program automatically log all if used in debug mode rather
 that requiring urgents.  there are a couple unique logging formats for scripts
 and conditions that make them easy to locate by searching for their numbers.
+
+debugging is not turned on from command line urgents.  to enable debugging,
+the program or library, the unit test script must run a specific start up
+and shutdown function.  there are standards for including this in program
+files.
+
+.B PROG_testquiet
+.RS 8
+runs logger, init, urgs, args, and begin with no logging
+.RE
+
+.B PROG_testloud
+.RS 8
+runs logger, init, urgs, args, and begin with @@kitchen
+.RE
+
+.B PROG_testend
+.RS 8
+run end as well as shuts down logging
+.RE
+
 
 .SH BUGS and CONCERNS
 koios depends on proper formatting of the input meta-language file.  if the

@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9k"
-#define     KOIOS_VER_TXT    "cleaned up man pages for sections 1 and 7"
+#define     KOIOS_VER_NUM    "0.9l"
+#define     KOIOS_VER_TXT    "lengthened expected in input and created statistics function"
 
 
 
@@ -241,6 +241,7 @@ char        SCRP_vers21        (void);
 char        SCRP_vers20        (void);
 char        SCRP_vers19        (void);
 char        SCRP_verbs         (void);
+char        SCRP_verbcode      (void);
 
 /*===[[ CODE ]]===============================================================*/
 char        CODE_open          (void);

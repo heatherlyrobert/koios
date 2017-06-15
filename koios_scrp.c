@@ -8,11 +8,11 @@ tVERB       g_verbs [MAX_VERB] = {
    { "PREP"         , "preparation before testing"            , '-',  0,  0 },
    { "incl"         , "c header inclusion"                    , '-',  0,  0 },
    /* --------------   --------------------------------------- */
-   { "SCRP"         , "test script"                           , '-',  0,  0 },
    { "SECT"         , "grouping of scripts"                   , '-',  0,  0 },
+   { "SCRP"         , "test script"                           , '-',  0,  0 },
    /* --------------   --------------------------------------- */
-   { "COND"         , "test condition"                        , '-',  0,  0 },
    { "GROUP"        , "grouping of conditions"                , '-',  0,  0 },
+   { "COND"         , "test condition"                        , '-',  0,  0 },
    /* --------------   --------------------------------------- */
    { "exec"         , "function execution"                    , 'f',  0,  0 },
    { "get"          , "unit test getter call"                 , 'f',  0,  0 },
@@ -515,6 +515,28 @@ SCRP_verbs         (void)
    }
    printf  ("   %-10s  %4d\n", "TOTAL"   , c);
    printf  ("   %-10s  %4d\n", "concerns", my.n_recd - c);
+   return 0;
+}
+
+char         /*--> close script file ---------------------[ ------ [ ------ ]-*/
+SCRP_verbcode      (void)
+{
+   int         i           = 0;
+   int         c           = 0;
+   fprintf (my.file_code, "\n\n\n");
+   fprintf (my.file_code, "char\n");
+   fprintf (my.file_code, "stats ()\n");
+   fprintf (my.file_code, "{\n");
+   fprintf (my.file_code, "   printf (\"koios, record type summary\\n\");\n");
+   for (i = 0; i < MAX_VERB; ++i) {
+      fprintf (my.file_code, "   printf (\"%-10.10s = %5d   %s\\n\");\n", g_verbs [i].name, g_verbs [i].total, g_verbs [i].desc);
+      c += g_verbs [i].total;
+      if (g_verbs [i].name [0] == '-') break;
+   }
+   fprintf (my.file_code, "   printf (\"%-10.10s = %5d   %s\\n\");\n", "TOTAL"         , c                , "sum of all verbs");
+   fprintf (my.file_code, "   printf (\"%-10.10s = %5d   %s\\n\");\n", "concerns"      , my.n_recd - c    , "records with troubles");
+   fprintf (my.file_code, "   exit (0);\n");
+   fprintf (my.file_code, "}\n");
    return 0;
 }
 

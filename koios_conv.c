@@ -34,7 +34,7 @@ char
 CONV_begin         (void)
 {
    fprintf (my.file_conv, "#!/usr/local/bin/koios\n");
-   fprintf (my.file_conv, "#   koios-polos (northern axis) -- c unit testing metaprogram and mini-language\n");
+   fprintf (my.file_conv, "#   koios-polos (north star) -- customized c unit testing meta-program and mini-language\n");
    fprintf (my.file_conv, "#   program under test  : %s\n", my.name_base);
    fprintf (my.file_conv, "#   auto-generated script file converted from a previous script version\n");
    fprintf (my.file_conv, "#   updated to the most recent version (v21)\n");
@@ -76,8 +76,8 @@ CONV_header        (void)
 {
    /*---(output)-------------------------*/
    fprintf (my.file_conv, "\n\n\n");
-   fprintf (my.file_conv, "#23456789-12  123  123456789-123456789-123456789-12345  123456789-123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-  -  123456789-123456789- \n");
-   fprintf (my.file_conv, "#==(verb)===  ver  ===========(description)===========  =====(function)=====  ========================(arguments)===================================  ==(test)==  ==========================(results)===================================  t  ========(var)======= \n");
+   fprintf (my.file_conv, "#23456789-12  123  123456789-123456789-123456789-12345  123456789-123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  -  123456789-123456789- \n");
+   fprintf (my.file_conv, "#==(verb)===  ver  ===========(description)===========  =====(function)=====  ========================(arguments)===================================  ==(test)==  ==========================(results)=================================================================  t  ========(var)======= \n");
    return 0;
 }
 
@@ -85,14 +85,14 @@ char
 CONV_prep          (void)
 {
    CONV_header ();
-   fprintf (my.file_conv, "PREP          %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc);
+   fprintf (my.file_conv, "PREP          %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc);
    return 0;
 }
 
 char
 CONV_incl          (void)
 {
-   fprintf (my.file_conv, "   incl       %3s  %-35.35s  %-20.20s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc, my.meth);
+   fprintf (my.file_conv, "   incl       %3s  %-35.35s  %-20.20s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc, my.meth);
    return 0;
 }
 
@@ -111,7 +111,7 @@ CONV_scrp          (void)
    my.ncond = 0;
    /*---(output)-------------------------*/
    CONV_header ();
-   fprintf (my.file_conv, "SCRP          %3s  %-59.59s  %-70.70s  ((%02d.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc, my.meth, my.nscrp);
+   fprintf (my.file_conv, "SCRP          %3s  %-59.59s  %-70.70s  ((%02d.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc, my.meth, my.nscrp);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -121,7 +121,7 @@ CONV_sect          (void)
 {
    /*---(output)-------------------------*/
    CONV_header ();
-   fprintf (my.file_conv, "SECT          %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc);
+   fprintf (my.file_conv, "SECT          %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -138,7 +138,7 @@ CONV_group         (void)
 {
    /*---(output)-------------------------*/
    fprintf (my.file_conv, "\n");
-   fprintf (my.file_conv, "   GROUP      %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc);
+   fprintf (my.file_conv, "   GROUP      %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -150,7 +150,7 @@ CONV_cond          (void)
    ++(my.ncond);
    /*---(output)-------------------------*/
    fprintf (my.file_conv, "\n");
-   fprintf (my.file_conv, "   COND       %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%02d.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc, my.nscrp, my.ncond);
+   fprintf (my.file_conv, "   COND       %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%02d.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc, my.nscrp, my.ncond);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -165,21 +165,21 @@ static void  o___STEPS___________o () { return; }
 char
 CONV_exec          (void)
 {
-   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  %-20.20s  %-70s  %-10.10s  %-70.70s \n", my.verb, "v21", my.desc, my.meth, my.args, my.test, my.expe);
+   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  %-20.20s  %-70s  %-10.10s  %-100.100s \n", my.verb, "v21", my.desc, my.meth, my.args, my.test, my.expe);
    return 0;
 }
 
 char
 CONV_code          (void)
 {
-   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  - - - - - - - - - -   %-158s \n", my.verb, "v21", my.desc, my.code);
+   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  - - - - - - - - - -   %-188s \n", my.verb, "v21", my.desc, my.code);
    return 0;
 }
 
 char
 CONV_echo          (void)
 {
-   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  - - - - - - - - - -   %-70.70s  %-10.10s  %-70.70s \n", my.verb, "v21", my.desc, my.args, my.test, my.expe);
+   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  - - - - - - - - - -   %-70.70s  %-10.10s  %-100.100s \n", my.verb, "v21", my.desc, my.args, my.test, my.expe);
    return 0;
 }
 
