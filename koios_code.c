@@ -421,7 +421,11 @@ CODE_suffix        (void)
       fprintf (my.file_code, "\"%s\", "           , my.expe);
    }
    /*---(wrap-up)------------------------*/
-   fprintf (my.file_code, "%s (%s));\n"        , my.meth, my.syst);
+   if (strcmp (my.retn, "") == 0) {
+      fprintf (my.file_code, "%s (%s));\n"     , my.meth, my.syst);
+   } else {
+      fprintf (my.file_code, "%s = %s (%s));\n", my.retn, my.meth, my.syst);
+   }
    /*---(complet)------------------------*/
    return 0;
 }
@@ -494,8 +498,11 @@ CODE_exec          (void)
       CODE_prefix  ("yUNIT_point"   );
       fprintf (my.file_code, "\"%s\", "           , my.test);
       fprintf (my.file_code, "%s, "               , my.expe);
-      fprintf (my.file_code, "%s (%s));\n"        , my.meth, my.syst);
-      /*> CODE_suffix  ();                                                            <*/
+      if (strcmp (my.retn, "") == 0) {
+         fprintf (my.file_code, "%s (%s));\n"     , my.meth, my.syst);
+      } else {
+         fprintf (my.file_code, "%s = %s (%s));\n", my.retn, my.meth, my.syst);
+      }
       break;
    case 'u' :      /* numerics in string */
       CODE_prefix  ("yUNIT_round"   );

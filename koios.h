@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9o"
-#define     KOIOS_VER_TXT    "changed upgrade fields to allow greater space if needed"
+#define     KOIOS_VER_NUM    "0.9p"
+#define     KOIOS_VER_TXT    "added return variable code for exec (awesome handy)"
 
 
 
