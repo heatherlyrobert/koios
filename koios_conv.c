@@ -165,7 +165,7 @@ static void  o___STEPS___________o () { return; }
 char
 CONV_exec          (void)
 {
-   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  %-20.20s  %-70s  %-10.10s  %-100.100s \n", my.verb, "v21", my.desc, my.meth, my.args, my.test, my.expe);
+   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  %-20.20s  %-70s  %-10.10s  %-100s \n", my.verb, "v21", my.desc, my.meth, my.args, my.test, my.expe);
    return 0;
 }
 
@@ -179,7 +179,7 @@ CONV_code          (void)
 char
 CONV_echo          (void)
 {
-   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  - - - - - - - - - -   %-70.70s  %-10.10s  %-100.100s \n", my.verb, "v21", my.desc, my.args, my.test, my.expe);
+   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  - - - - - - - - - -   %-70s  %-10.10s  %-100s \n", my.verb, "v21", my.desc, my.args, my.test, my.expe);
    return 0;
 }
 

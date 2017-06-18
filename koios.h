@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9n"
-#define     KOIOS_VER_TXT    "fixed issue of koios not including debugging in unit test"
+#define     KOIOS_VER_NUM    "0.9o"
+#define     KOIOS_VER_TXT    "changed upgrade fields to allow greater space if needed"
 
 
 
