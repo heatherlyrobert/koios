@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9p"
-#define     KOIOS_VER_TXT    "added return variable code for exec (awesome handy)"
+#define     KOIOS_VER_NUM    "0.9q"
+#define     KOIOS_VER_TXT    "added return variable code for integer and string too"
 
 
 
@@ -100,6 +100,7 @@
 #include    <string.h>       /* C_ANSI : printf, snprintf, fgets, fopen, ...  */
 
 /*===[[ CUSTOM LIBRARIES ]]===================================================*/
+#include    <yUNIT.h>        /* CUSTOM : heatherly unit testing               */
 #include    <yLOG.h>         /* CUSTOM : heatherly program logging            */
 #include    <ySTR.h>         /* CUSTOM : heatherly safer string handling      */
 #include    <yURG.h>         /* CUSTOM : heatherly urgent processing          */

@@ -424,9 +424,18 @@ CODE_suffix        (void)
    if (strcmp (my.retn, "") == 0) {
       fprintf (my.file_code, "%s (%s));\n"     , my.meth, my.syst);
    } else {
-      fprintf (my.file_code, "%s = %s (%s));\n", my.retn, my.meth, my.syst);
+      switch (my.type) {
+      case 'i' :
+      case 'p' :
+         fprintf (my.file_code, "%s = %s (%s));\n", my.retn, my.meth, my.syst);
+         break;
+      case 's' :
+         fprintf (my.file_code, "%s (%s));\n"     , my.meth, my.syst);
+         fprintf (my.file_code, "         strcpy (%s, %s);\n", my.retn, yUNIT_s_rc);
+         break;
+      }
    }
-   /*---(complet)------------------------*/
+   /*---(complete)-----------------------*/
    return 0;
 }
 
@@ -494,7 +503,7 @@ CODE_exec          (void)
       CODE_prefix  ("yUNIT_int"     );
       CODE_suffix  ();
       break;
-   case 'p' :      /* numerics in string */
+   case 'p' :      /* pointers */
       CODE_prefix  ("yUNIT_point"   );
       fprintf (my.file_code, "\"%s\", "           , my.test);
       fprintf (my.file_code, "%s, "               , my.expe);
@@ -508,8 +517,6 @@ CODE_exec          (void)
       CODE_prefix  ("yUNIT_round"   );
       CODE_suffix  ();
       break;
-   case 'e' :      /* echo   (REMOVED)     */
-   case 'c' :      /* custom (REMOVED)     */
    default  :
       CODE_prefix  ("yUNIT_removed" );
       fprintf (my.file_code, "\"%s\", \"%s\");"   , my.test, my.expe);

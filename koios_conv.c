@@ -165,7 +165,9 @@ static void  o___STEPS___________o () { return; }
 char
 CONV_exec          (void)
 {
-   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  %-20.20s  %-70s  %-10.10s  %-100s \n", my.verb, "v21", my.desc, my.meth, my.args, my.test, my.expe);
+   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  %-20.20s  %-70s  %-10.10s  %-100s ", my.verb, "v21", my.desc, my.meth, my.args, my.test, my.expe);
+   if (strcmp (my.retn, "") == 0)  fprintf (my.file_conv, "\n"); 
+   else                            fprintf (my.file_conv, " %c  %-20.20s \n", my.type, my.retn); 
    return 0;
 }
 
