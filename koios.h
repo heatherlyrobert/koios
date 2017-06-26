@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9q"
-#define     KOIOS_VER_TXT    "added return variable code for integer and string too"
+#define     KOIOS_VER_NUM    "0.9r"
+#define     KOIOS_VER_TXT    "solid rewrite to allow echo to do numbers and strings"
 
 
 
@@ -256,10 +256,11 @@ char        CODE_sect          (void);
 char        CODE_scrp          (void);
 char        CODE_group         (void);
 char        CODE_cond          (void);
-char        CODE_prefix        (char *a_func);
+char        CODE_prefix        (char a_type);
+char        CODE_expe_var      (char a_type);
+char        CODE_suffix        (char a_type);
 char        CODE_exec          (void);
 char        CODE_unknown       (void);
-char        CODE_suffix        (void);
 char        CODE_end           (void);
 
 /*===[[ CONV ]]===============================================================*/

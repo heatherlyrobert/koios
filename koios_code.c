@@ -368,10 +368,50 @@ VOID_void          (char *a_one, int a_two)
 }
 
 char
+CODE_prefix        (char a_test)
+{
+   /*---(locals)-----------+-----------+-*/
+   char        x_func      [LEN_STR]   = "";
+   /*---(pre-work for void)--------------*/
+   if (a_test == 'v') {
+      fprintf (my.file_code, "         ");
+      fprintf (my.file_code, "%-13s (%s);\n"     , my.meth , my.args);
+   }
+   /*---(determine function)-------------*/
+   switch (a_test) {
+   case 'v'  : strlcpy (x_func, "yUNIT_void"     , LEN_STR);    break;
+   case 's'  : strlcpy (x_func, "yUNIT_string"   , LEN_STR);    break;
+   case 'u'  : strlcpy (x_func, "yUNIT_round"    , LEN_STR);    break;
+   case 'i'  : strlcpy (x_func, "yUNIT_int"      , LEN_STR);    break;
+   case 'r'  : strlcpy (x_func, "yUNIT_real"     , LEN_STR);    break;
+   case 'p'  : strlcpy (x_func, "yUNIT_point"    , LEN_STR);    break;
+   case '-'  : strlcpy (x_func, "yUNIT_unknown"  , LEN_STR);    break;
+   default   : strlcpy (x_func, "yUNIT_removed"  , LEN_STR);    break;
+   }
+   /*---(write prefix)-------------------*/
+   fprintf (my.file_code, "         ");
+   fprintf (my.file_code, "%-13s (my_unit, "     , x_func);
+   fprintf (my.file_code, "%4i, %3i, "           , my.n_line, my.cstep);
+   fprintf (my.file_code, "\"%s\", "             , my.desc);
+   fprintf (my.file_code, "\"%s\", \"%s\", "     , my.meth  , my.disp);
+   /*---(write test)---------------------*/
+   switch (a_test) {
+   case 'v' :    /* pure void        */
+      fprintf (my.file_code, "\"%s\");\n"        , my.test);
+      break;
+   default  :    /* all others       */
+      fprintf (my.file_code, "\"%s\", "          , my.test);
+      break;
+      return 0;
+   }
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char
 CODE_unknown       (void)
 {
-   CODE_prefix  ("yUNIT_unknown");
-   fprintf (my.file_code, "\"%s\", "           , my.test);
+   CODE_prefix  ('-');
    fprintf (my.file_code, "\"%s\", "           , my.expe);
    fprintf (my.file_code, "\"\");\n"           );
    fprintf (my.file_code, "\n");
@@ -379,59 +419,68 @@ CODE_unknown       (void)
 }
 
 char
-CODE_prefix        (char *a_func)
+CODE_expe_var      (char a_test)
 {
-   fprintf (my.file_code, "         ");
-   fprintf (my.file_code, "%-13s (my_unit, "   , a_func);
-   fprintf (my.file_code, "%4i, %3i, \"%s\", "  , my.n_line , my.cstep, my.desc);
-   fprintf (my.file_code, "\"%s\", \"%s\", "    , my.meth , my.disp);
+   /*---(locals)-----------+-----------+-*/
+   char       *p           = NULL;
+   char       *q           = " ";
+   char       *r           = NULL;
+   char        x_var       [LEN_STR ];
+   char       *x_expe      = NULL;
+   /*---(defense)------------------------*/
+   if (a_test == 'v')    return 0;
+   /*---(normal)-------------------------*/
+   if (strncmp (my.expe, "[[ ", 3) != 0) {
+      switch (a_test) {
+      case 's' : case 'u' :      /* stringish   */
+         fprintf (my.file_code, "\"%s\", " , my.expe);
+         break;
+      case 'i' : case 'p' :      /* numberish   */
+         fprintf (my.file_code, "%s, "     , my.expe);
+         break;
+      default  :
+         fprintf (my.file_code, "\"%s\");\n"         , my.expe);
+         break;
+      }
+      return 0;
+   }
+   /*---(check for var)------------------*/
+   else {
+      strlcpy (x_var, my.expe + 3, LEN_STR);
+      x_expe = x_var;
+      p = strtok_r (x_var, q, &r);
+      if (p == NULL) fprintf (my.file_code, "\"%s\", " , "unknown");
+      else           fprintf (my.file_code, "%s, "     , x_expe);
+   }
+   /*---(complete)-----------------------*/
    return 0;
 }
 
 char
-CODE_suffix        (void)
+CODE_suffix        (char a_test)
 {
-   /*---(locals)-----------+-----------+-*/
-   char       *p;
-   char       *q           = " ";
-   char        x_var       [LEN_STR ];
-   /*---(prepare)------------------------*/
-   fprintf (my.file_code, "\"%s\", "           , my.test);
-   /*---(look for custom var)------------*/
-   if (strcmp (my.expe, "[[ CUSTOM ]]") == 0) {
-      fprintf (my.file_code, "CUSTOM, ");
+   /*---(defense)------------------------*/
+   if (a_test == 'v')    return 0;
+   /*---(handle echos)-------------------*/
+   if (strcmp (my.meth, "echo") == 0) {
+      fprintf (my.file_code, "%s);\n"      , my.syst);
    }
-   /*---(look for other var)-------------*/
-   else if (strncmp (my.expe, "[[ ", 3) == 0) {
-      strlcpy (x_var, my.expe, LEN_STR);
-      p = strtok (x_var, q);
-      if (p == NULL) {
-         fprintf (my.file_code, "\"%s\", "           , my.expe);
-      } else {
-         p = strtok (NULL , q);
-         if (p == NULL) {
-            fprintf (my.file_code, "\"%s\", "           , my.expe);
-         } else {
-            fprintf (my.file_code, "%s, "               , p);
-         }
-      }
+   /*---(check for simple end)-----------*/
+   else if (strcmp (my.retn, "") == 0) {
+      fprintf (my.file_code, "%s (%s));\n" , my.meth, my.syst);
    }
-   /*---(default is literal string)------*/
+   /*---(handle return variables)--------*/
    else {
-      fprintf (my.file_code, "\"%s\", "           , my.expe);
-   }
-   /*---(wrap-up)------------------------*/
-   if (strcmp (my.retn, "") == 0) {
-      fprintf (my.file_code, "%s (%s));\n"     , my.meth, my.syst);
-   } else {
       switch (my.type) {
-      case 'i' :
-      case 'p' :
+      case 'i' : case 'p' :
          fprintf (my.file_code, "%s = %s (%s));\n", my.retn, my.meth, my.syst);
          break;
-      case 's' :
+      case 's' : case 'u' :
          fprintf (my.file_code, "%s (%s));\n"     , my.meth, my.syst);
          fprintf (my.file_code, "         strcpy (%s, %s);\n", my.retn, yUNIT_s_rc);
+         break;
+      default  :
+         fprintf (my.file_code, "%s (%s));\n"     , my.meth, my.syst);
          break;
       }
    }
@@ -442,19 +491,20 @@ CODE_suffix        (void)
 char
 CODE_echo          (void)
 {
+   char        x_test      = '-';
    /*---(counters)-----------------------*/
    ++(my.nstep);
    ++(my.cstep);
    /*---(fix strings)--------------------*/
    CODE_display ();
-   /*---(actual)-------------------------*/
-   fprintf (my.file_code, "         ");
-   fprintf (my.file_code, "yUNIT_string  (my_unit, ");
-   fprintf (my.file_code, "%4i, %3i, \"%s\", "  , my.n_line , my.cstep, my.desc);
-   fprintf (my.file_code, "\"%s\", \"%s\", "    , "echo"  , my.disp);
-   fprintf (my.file_code, "\"%s\", "           , my.test);
-   fprintf (my.file_code, "\"%s\", "           , my.expe);
-   fprintf (my.file_code, "%s);"               , my.code);
+   /*---(handle return values)-----------*/
+   strlcpy (my.meth, "echo", LEN_STR);
+   x_test = my.test [0];
+   CODE_prefix    (x_test);
+   CODE_expe_var  (x_test);
+   CODE_suffix    (x_test);
+   /*---(finish)-------------------------*/
+   fprintf (my.file_code, "\n");
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -478,6 +528,7 @@ CODE_exec          (void)
     *
     *
     */
+   char        x_test      = '-';
    /*---(counters)-----------------------*/
    ++(my.nstep);
    ++(my.cstep);
@@ -488,41 +539,10 @@ CODE_exec          (void)
       fprintf (my.file_code, "         %sUG_TOPS    %sOG_unitstep (%d, %d, %d, %d, \"%s\");\n", "DEB", "yL", my.cscrp, my.ccond, my.cstep, my.n_line, my.desc);
    }
    /*---(handle return values)-----------*/
-   switch (my.test [0]) {
-   case 'v' :      /* pure voids         */
-      fprintf (my.file_code, "         ");
-      fprintf (my.file_code, "%-13s (%s);\n"      , my.meth , my.args);
-      CODE_prefix  ("yUNIT_void"    );
-      fprintf (my.file_code, "\"%s\");\n"         , my.test);
-      break;
-   case 's' :      /* pure strings       */
-      CODE_prefix  ("yUNIT_string"  );
-      CODE_suffix  ();
-      break;
-   case 'i' :      /* pure integers      */
-      CODE_prefix  ("yUNIT_int"     );
-      CODE_suffix  ();
-      break;
-   case 'p' :      /* pointers */
-      CODE_prefix  ("yUNIT_point"   );
-      fprintf (my.file_code, "\"%s\", "           , my.test);
-      fprintf (my.file_code, "%s, "               , my.expe);
-      if (strcmp (my.retn, "") == 0) {
-         fprintf (my.file_code, "%s (%s));\n"     , my.meth, my.syst);
-      } else {
-         fprintf (my.file_code, "%s = %s (%s));\n", my.retn, my.meth, my.syst);
-      }
-      break;
-   case 'u' :      /* numerics in string */
-      CODE_prefix  ("yUNIT_round"   );
-      CODE_suffix  ();
-      break;
-   default  :
-      CODE_prefix  ("yUNIT_removed" );
-      fprintf (my.file_code, "\"%s\", \"%s\");"   , my.test, my.expe);
-      fprintf (my.file_code, "\n");
-      break; 
-   }
+   x_test = my.test [0];
+   CODE_prefix    (x_test);
+   CODE_expe_var  (x_test);
+   CODE_suffix    (x_test);
    /*---(finish)-------------------------*/
    fprintf (my.file_code, "\n");
    /*---(complete)-----------------------*/
