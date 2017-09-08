@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9r"
-#define     KOIOS_VER_TXT    "solid rewrite to allow echo to do numbers and strings"
+#define     KOIOS_VER_NUM    "0.9t"
+#define     KOIOS_VER_TXT    "updated man files"
 
 
 

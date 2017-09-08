@@ -72,7 +72,9 @@ PROG_args          (int argc, char *argv[])
       ++x_args;
       strncpy (my.name_base, argv[i], LEN_FILE);
       if      (strncmp (a, "--create"     , 10) == 0)    my.run_type = G_RUN_CREATE;
+      else if (strncmp (a, "--compile"    , 10) == 0)    my.run_type = G_RUN_CREATE;
       else if (strncmp (a, "--update"     , 10) == 0)    my.run_type = G_RUN_UPDATE;
+      else if (strncmp (a, "--convert"    , 10) == 0)    my.run_type = G_RUN_UPDATE;
    }
    DEBUG_ARGS  yLOG_value  ("entries"   , x_total);
    DEBUG_ARGS  yLOG_value  ("arguments" , x_args);

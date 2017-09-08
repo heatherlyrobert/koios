@@ -28,26 +28,29 @@ into a c source file.  second is for the compilied unit test itself.
 
 .SH KOIOS RUNTIME OPTIONS
 koios is simple, efficient, and direct; and, it only has a very limited
-run-time configuration with only three options.  it has no configuration file.
+run-time configuration with only two options.  it has no configuration file.
 
-when run and provided a <basename>, koios reads <basename>.unit which
+when run in --create mode and provided a <basename>, koios reads <basename>.unit which
 contains the meta-language describing the unit testing.  koios then produces
-<basename>_unit.c which is the c source code for compilation.  if run in update
-mode, it produces <basename>.unit.new.
+<basename>_unit.c which is the c source code for compilation.
+
+when run in --update mode and provided a <basename>, it produces
+<basename>.unit.new that contains the unit test meta-language updated to the
+most recent version.
 
 .B <basename>
 .RS 8
 base unit test file name with no ".unit" extention (required).
 .RE
 
-.B --create
+.B --create, --compile
 .RS 8
 creates unit testing c source file for compilation (default).
 .RE
 
-.B --update
+.B --update, --convert
 .RS 8
-update unit test input to latest standard and send to stdout.
+update unit test input to latest standard.
 .RE
 
 the --create and --update options are mutually exclusive.
@@ -88,7 +91,7 @@ run condition <nnn> in script <nn> (three digits 000 to 999)
 
 .SS execution verbosity
 a full unit test produces a great deal of output, tracking every script,
-condition, and step.  sometimes the tester wishes to focus the output a litter
+condition, and step.  sometimes the tester wishes to focus the output a little
 finer.  the options below start with none and each new option is cumulative,
 i.e., the option below includes all above.
 
@@ -123,8 +126,8 @@ show all including actual vs expected comparision (default)
 .RE
 
 .SS color formatting
-unit test output is formatted to display in a 80 column terminal using 7bit-safe
-ascii characters only so this framework is as portable as possible.  but,
+unit test output is formatted to display in a 80 column terminal using only
+7bit-safe ascii characters so this framework is as portable as possible.  but,
 coloration is useful in its normal execution environment of a color eterm/aterm.
 
 .B --eterm
@@ -134,7 +137,7 @@ colorize output for a 16 color terminal emulator
 
 .B --console
 .RS 8
-do not colorize output so it cn run in a console session
+do not colorize output so it can run in a console session
 .RE
 
 .SS information only
@@ -204,7 +207,6 @@ runs logger, init, urgs, args, and begin with @@kitchen
 .RS 8
 runs end as well as shuts down logging
 .RE
-
 
 .SH BUGS and CONCERNS
 koios depends on proper formatting of the input meta-language file.  if the

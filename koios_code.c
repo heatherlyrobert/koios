@@ -374,7 +374,7 @@ CODE_prefix        (char a_test)
    char        x_func      [LEN_STR]   = "";
    /*---(pre-work for void)--------------*/
    if (a_test == 'v') {
-      fprintf (my.file_code, "         ");
+      fprintf (my.file_code, "         if (x_exec == 1)  ");
       fprintf (my.file_code, "%-13s (%s);\n"     , my.meth , my.args);
    }
    /*---(determine function)-------------*/
@@ -389,7 +389,7 @@ CODE_prefix        (char a_test)
    default   : strlcpy (x_func, "yUNIT_removed"  , LEN_STR);    break;
    }
    /*---(write prefix)-------------------*/
-   fprintf (my.file_code, "         ");
+   fprintf (my.file_code, "         if (x_exec == 1)  ");
    fprintf (my.file_code, "%-13s (my_unit, "     , x_func);
    fprintf (my.file_code, "%4i, %3i, "           , my.n_line, my.cstep);
    fprintf (my.file_code, "\"%s\", "             , my.desc);
@@ -432,10 +432,10 @@ CODE_expe_var      (char a_test)
    /*---(normal)-------------------------*/
    if (strncmp (my.expe, "[[ ", 3) != 0) {
       switch (a_test) {
-      case 's' : case 'u' :      /* stringish   */
+      case 's' : case 'u' :                 /* stringish   */
          fprintf (my.file_code, "\"%s\", " , my.expe);
          break;
-      case 'i' : case 'p' :      /* numberish   */
+      case 'i' : case 'p' : case 'r' :      /* numberish   */
          fprintf (my.file_code, "%s, "     , my.expe);
          break;
       default  :
@@ -472,12 +472,12 @@ CODE_suffix        (char a_test)
    /*---(handle return variables)--------*/
    else {
       switch (my.type) {
-      case 'i' : case 'p' :
+      case 'i' : case 'p' : case 'r' :
          fprintf (my.file_code, "%s = %s (%s));\n", my.retn, my.meth, my.syst);
          break;
       case 's' : case 'u' :
          fprintf (my.file_code, "%s (%s));\n"     , my.meth, my.syst);
-         fprintf (my.file_code, "         strcpy (%s, %s);\n", my.retn, yUNIT_s_rc);
+         fprintf (my.file_code, "         if (x_exec == 1)  strcpy (%s, %s);\n", my.retn, yUNIT_s_rc);
          break;
       default  :
          fprintf (my.file_code, "%s (%s));\n"     , my.meth, my.syst);
@@ -496,7 +496,9 @@ CODE_echo          (void)
    ++(my.nstep);
    ++(my.cstep);
    /*---(fix strings)--------------------*/
+   /*> strlcpy (my.code, my.expe, LEN_RECD);                                          <*/
    CODE_display ();
+   /*> strlcpy (my.expe, my.syst, LEN_RECD);                                          <*/
    /*---(handle return values)-----------*/
    strlcpy (my.meth, "echo", LEN_STR);
    x_test = my.test [0];
