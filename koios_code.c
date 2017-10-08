@@ -295,22 +295,51 @@ CODE_display       (void)
    /*---(locals)-----------+-----------+-*/
    int         i           = 0;
    int         x_len       = 0;
+   char        t           [10]        = "";
    /*---(fix delimiters)-----------------*/
+   printf ("CODE_display ------------------------------\n");
+   printf ("my.code <<%s>>\n", my.code);
    x_len = strlen (my.code);
+   printf ("length  %d\n", x_len);
    strlcpy (my.disp, my.code, LEN_RECD);
-   strlcpy (my.syst, my.code, LEN_RECD);
-   strlcpy (my.load, my.code, LEN_RECD);
+   strlcpy (my.syst, ""     , LEN_RECD);
+   strlcpy (my.load, ""     , LEN_RECD);
    for (i = 0; i < x_len; ++i) {
-      if (my.code [i] == 29) {
-         my.disp [i]  = '|';
-         my.syst [i]  = 31;
-         my.load [i]  = 31;
-      }
-      if (my.code [i] == '"') {
-         my.disp [i]  = '~';
-         my.load [i]  = '~';
+      switch ((unsigned char) my.code [i]) {
+      case  G_KEY_GROUP   :
+         my.disp [i]  = G_KEY_PIPE;
+         sprintf (t, "%c", G_KEY_FIELD);
+         strlcat (my.syst, t, 2000);
+         strlcat (my.load, t, 2000);
+         break;
+      case  G_KEY_DQUOTE  :
+         my.disp [i]  = G_KEY_TILDA;
+         sprintf (t, "%c", G_KEY_DQUOTE);
+         strlcat (my.syst, t, 2000);
+         sprintf (t, "%c", G_KEY_TILDA);
+         strlcat (my.load, t, 2000);
+         break;
+      case  G_CHAR_RETURN :
+         sprintf (t, "\\n");
+         strlcat (my.syst, t, 2000);
+         strlcat (my.load, t, 2000);
+         break;
+      case  G_CHAR_ESCAPE :
+         sprintf (t, "\\e");
+         strlcat (my.syst, t, 2000);
+         strlcat (my.load, t, 2000);
+         break;
+      default  :
+         my.disp [i]  = my.code [i];
+         sprintf (t, "%c", my.code [i]);
+         strlcat (my.syst, t, 2000);
+         strlcat (my.load, t, 2000);
+         break;
       }
    }
+   printf ("my.disp <<%s>>\n", my.disp);
+   printf ("my.syst <<%s>>\n", my.syst);
+   printf ("my.load <<%s>>\n", my.load);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -496,9 +525,7 @@ CODE_echo          (void)
    ++(my.nstep);
    ++(my.cstep);
    /*---(fix strings)--------------------*/
-   /*> strlcpy (my.code, my.expe, LEN_RECD);                                          <*/
    CODE_display ();
-   /*> strlcpy (my.expe, my.syst, LEN_RECD);                                          <*/
    /*---(handle return values)-----------*/
    strlcpy (my.meth, "echo", LEN_STR);
    x_test = my.test [0];

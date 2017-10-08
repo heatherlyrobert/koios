@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9t"
-#define     KOIOS_VER_TXT    "updated man files"
+#define     KOIOS_VER_NUM    "0.9u"
+#define     KOIOS_VER_TXT    "interpret special return and escape characters from input"
 
 
 
