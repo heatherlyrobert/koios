@@ -21,7 +21,7 @@ tVERB       g_verbs [MAX_VERB] = {
    /* --------------   --------------------------------------- */
    { "mode"         , "set pass or forced_fail mode"          , 'p',  0,  0 },
    { "code"         , "insert c code"                         , 'p',  0,  0 },
-   { "load"         , "place data into stdin"                 , 'p',  0,  0 },
+   { "load"         , "place data into stdin"                 , 'P',  0,  0 },
    { "sys"          , "execute shell code"                    , 'p',  0,  0 },
    /* --------------   --------------------------------------- */
    { "----"         , "end-of-entries"                        , '-',  0,  0 },
@@ -202,7 +202,7 @@ SCRP_vers21        (void)
                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
                   }
                   break;
-      case  4 :   if (my.spec == 'p') {
+      case  4 :   if (my.spec == 'P' || my.spec == 'p') {
                      strncpy (my.code      , p, LEN_RECD);
                      DEBUG_INPT   yLOG_info    ("code"      , my.code);
                   } else {
@@ -227,7 +227,8 @@ SCRP_vers21        (void)
       }
       /*---(stop parsing summ records)---*/
       if (i >= 3 && my.spec == '-')  break;  /* organization types  */
-      if (i >= 4 && my.spec == 'p')  break;  /* code/load/sys types */
+      if (i >= 4 && my.spec == 'P')  break;  /* load type           */
+      if (i >= 4 && my.spec == 'p')  break;  /* code/sys types      */
    } 
    return 0;
 }

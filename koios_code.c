@@ -369,7 +369,7 @@ CODE_load          (void)
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(write)--------------------------*/
-   fprintf (my.file_code, "         if (x_exec == 1)  yUNIT_load    (my_unit, %4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cstep, my.desc, my.load);
+   fprintf (my.file_code, "         if (x_exec == 1)  yUNIT_load    (my_unit, %4i, %3i, \"%s\", \"%s\", \"%s\");\n", my.n_line, my.cstep, my.desc, my.meth, my.load);
    fprintf (my.file_code, "\n");
    /*---(complete)-----------------------*/
    return 0;
