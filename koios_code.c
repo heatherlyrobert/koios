@@ -301,9 +301,13 @@ CODE_display       (void)
    printf ("my.code <<%s>>\n", my.code);
    x_len = strlen (my.code);
    printf ("length  %d\n", x_len);
-   strlcpy (my.disp, my.code, LEN_RECD);
+   /*---(prepare)------------------------*/
+   x_len = strlen (my.code);
+   printf ("length  %d\n", x_len);
+   strlcpy (my.disp, my.code , LEN_RECD);
    strlcpy (my.syst, ""     , LEN_RECD);
    strlcpy (my.load, ""     , LEN_RECD);
+   /*---(cleanse)------------------------*/
    for (i = 0; i < x_len; ++i) {
       switch ((unsigned char) my.code [i]) {
       case  G_KEY_GROUP   :
@@ -337,6 +341,7 @@ CODE_display       (void)
          break;
       }
    }
+   /*---(display)------------------------*/
    printf ("my.disp <<%s>>\n", my.disp);
    printf ("my.syst <<%s>>\n", my.syst);
    printf ("my.load <<%s>>\n", my.load);
@@ -363,14 +368,35 @@ CODE_code          (void)
 char
 CODE_load          (void)
 {
+   /*---(locals)-----------+-----------+-*/
+   int         x_len       = 0;
+   char       *p           = NULL;
+   char       *q           = " ";
+   char       *r           = NULL;
+   char        x_temp      [LEN_STR ];
+   char       *x_var       = NULL;
    /*---(counters)-----------------------*/
    ++(my.nstep);
    ++(my.cstep);
    /*---(fix strings)--------------------*/
    CODE_display ();
+   fprintf (my.file_code, "         if (x_exec == 1)  yUNIT_load    (my_unit, %4i, %3i, \"%s\", \"%s\", ", my.n_line, my.cstep, my.desc, my.meth);
+   /*---(check for var)------------------*/
+   x_len = strlen (my.load);
+   if        (x_len <= 7) {
+      fprintf (my.file_code, "\"%s\"", my.load);
+   } else if (strncmp (my.code, "[[ ", 3) != 0) {
+      fprintf (my.file_code, "\"%s\"", my.load);
+   } else {
+      strlcpy (x_temp, my.load + 3, LEN_STR);
+      x_var = x_temp;
+      p = strtok_r (x_temp, q, &r);
+      if (p == NULL) fprintf (my.file_code, "\"%s\"" , "unknown");
+      else           fprintf (my.file_code, "%s" , x_var);
+   }
    /*---(write)--------------------------*/
-   fprintf (my.file_code, "         if (x_exec == 1)  yUNIT_load    (my_unit, %4i, %3i, \"%s\", \"%s\", \"%s\");\n", my.n_line, my.cstep, my.desc, my.meth, my.load);
-   fprintf (my.file_code, "\n");
+   /*> fprintf (my.file_code, "         if (x_exec == 1)  yUNIT_load    (my_unit, %4i, %3i, \"%s\", \"%s\", \"%s\");\n", my.n_line, my.cstep, my.desc, my.meth, my.load);   <*/
+   fprintf (my.file_code, ");\n\n");
    /*---(complete)-----------------------*/
    return 0;
 }

@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9v"
-#define     KOIOS_VER_TXT    "added load types to handle stdin, ncurses, and STDIN"
+#define     KOIOS_VER_NUM    "0.9w"
+#define     KOIOS_VER_TXT    "updated load to handle string variables as input"
 
 
 
