@@ -44,6 +44,7 @@ PROG_init          (void)
    /*---(files)--------------------------*/
    strlcpy  (my.name_scrp, "", LEN_FILE);
    strlcpy  (my.name_code, "", LEN_FILE);
+   strlcpy  (my.name_main, "", LEN_FILE);
    strlcpy  (my.name_conv, "", LEN_FILE);
    my.driver    = '-';
    my.run_type  = G_RUN_CREATE;
@@ -99,10 +100,10 @@ PROG_begin         (void)
       DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
       return -1;
    }
-   snprintf (my.name_scrp, LEN_FILE, "%s.unit"      , my.name_base);
-   snprintf (my.name_code, LEN_FILE, "%s_unit.c"    , my.name_base);
-   snprintf (my.name_conv, LEN_FILE, "%s.unit.new"  , my.name_base);
-   /*> snprintf (my.name_code, LEN_FILE, "%s_unit.c.new", my.name_base);              <*/
+   snprintf (my.name_scrp, LEN_FILE, "%s.unit"        , my.name_base);
+   snprintf (my.name_code, LEN_FILE, "%s_unit.c"      , my.name_base);
+   snprintf (my.name_main, LEN_FILE, "%s_main_unit.c" , my.name_base);
+   snprintf (my.name_conv, LEN_FILE, "%s.unit.new"    , my.name_base);
    my.n_line    = 0;
    my.n_comment = 0;
    my.n_empty   = 0;

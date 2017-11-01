@@ -38,6 +38,7 @@ main               (int argc, char *argv[])
    printf ("scrp name = %s\n", my.name_scrp);
    if (my.run_type == G_RUN_CREATE) {
       printf ("code name = %s\n", my.name_code);
+      printf ("main name = %s\n", my.name_main);
    } else {
       printf ("conv name = %s\n", my.name_conv);
    }

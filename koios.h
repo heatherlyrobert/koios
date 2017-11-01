@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "0.9w"
-#define     KOIOS_VER_TXT    "updated load to handle string variables as input"
+#define     KOIOS_VER_NUM    "1.0a"
+#define     KOIOS_VER_TXT    "restructuring output code into script functions (more flexible)"
 
 
 
@@ -139,10 +139,12 @@ struct cGLOBALS
    char        name_base   [LEN_FILE];      /* base name of files             */
    char        name_scrp   [LEN_FILE];      /* name of input script file      */
    char        name_code   [LEN_FILE];      /* name of output code file       */
+   char        name_main   [LEN_FILE];      /* name of output main file       */
    char        name_conv   [LEN_FILE];      /* name of output script file     */
    /*---(file handles)----------*/
    FILE       *file_scrp;                   /* pointer to input script file   */
    FILE       *file_code;                   /* pointer to output code file    */
+   FILE       *file_main;                   /* pointer to output main file    */
    FILE       *file_conv;                   /* pointer to output script file  */
    /*---(counters)--------------*/
    int         n_line;                      /* file   all lines               */

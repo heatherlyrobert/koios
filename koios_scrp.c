@@ -524,9 +524,8 @@ SCRP_verbcode      (void)
 {
    int         i           = 0;
    int         c           = 0;
-   fprintf (my.file_code, "\n\n\n");
    fprintf (my.file_code, "char\n");
-   fprintf (my.file_code, "stats ()\n");
+   fprintf (my.file_code, "UNIT_stats (void)\n");
    fprintf (my.file_code, "{\n");
    fprintf (my.file_code, "   printf (\"koios, record type summary\\n\");\n");
    for (i = 0; i < MAX_VERB; ++i) {
