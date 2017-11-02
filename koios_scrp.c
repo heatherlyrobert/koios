@@ -10,9 +10,11 @@ tVERB       g_verbs [MAX_VERB] = {
    /* --------------   --------------------------------------- */
    { "SECT"         , "grouping of scripts"                   , '-',  0,  0 },
    { "SCRP"         , "test script"                           , '-',  0,  0 },
+   { "SHARED"       , "shared code between scripts"           , '-',  0,  0 },
    /* --------------   --------------------------------------- */
    { "GROUP"        , "grouping of conditions"                , '-',  0,  0 },
    { "COND"         , "test condition"                        , '-',  0,  0 },
+   { "USE_SHARE"    , "inclusion of shared code"              , '-',  0,  0 },
    /* --------------   --------------------------------------- */
    { "exec"         , "function execution"                    , 'f',  0,  0 },
    { "get"          , "unit test getter call"                 , 'f',  0,  0 },

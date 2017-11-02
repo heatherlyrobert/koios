@@ -13,6 +13,16 @@ tTEST       g_tests [MAX_TEST] = {
 
 
 
+char        CODE_cond_end      (void);
+
+char        s_shared      = '-';         /* flag for shared code or not    */
+int         s_share_cnt   [26];          /* count of cond in each share    */
+
+/*====================------------------------------------====================*/
+/*===----                       general functions                      ----===*/
+/*====================------------------------------------====================*/
+static void  o___OVERALL_________o () { return; }
+
 char         /*--> open code file ------------------------[ leaf   [ ------ ]-*/
 CODE_open          (void)
 {
@@ -68,6 +78,7 @@ CODE_close         (void)
 char
 CODE_begin         (void)
 {
+   int         i           = 0;
    /*---(create header)------------------*/
    fprintf (my.file_code, "/*============================================================================*/\n");
    fprintf (my.file_code, "/*=========================== beginning-of-file ==============================*/\n");
@@ -95,6 +106,7 @@ CODE_begin         (void)
    fprintf (my.file_code, "int         g_exec      =    1;          /* run scripts                              */\n");
    fprintf (my.file_code, "int         g_scrp      =    0;          /* script selected for focus                */\n");
    fprintf (my.file_code, "int         g_cond      =    0;          /* condition selected for focus             */\n");
+   fprintf (my.file_code, "int         g_offset    =    0;          /* shared code condition offset             */\n");
    fprintf (my.file_code, "char        g_debug     [100];           /* display debugging info                   */\n");
    fprintf (my.file_code, "char        CUSTOM      [2000];          /* holder for custom expect strings         */\n");
    fprintf (my.file_code, "\n\n\n");
@@ -104,9 +116,11 @@ CODE_begin         (void)
    fprintf (my.file_code, "char        UNIT_stats        (void);\n");
    fprintf (my.file_code, "\n\n\n");
    /*---(initialize variables)-----------*/
-   my.nscrp = my.cscrp = 0;
-   my.ncond = my.ccond = 0;
-   my.nstep = my.cstep = 0;
+   my.nscrp  = my.cscrp = 0;
+   my.ncond  = my.ccond = 0;
+   my.nstep  = my.cstep = 0;
+   s_shared = '-';
+   for (i = 0; i < 26; ++i)  s_share_cnt [i] = 0;
    /*---(open main function)-------------*/
    fprintf (my.file_main, "int\n");
    fprintf (my.file_main, "main (int a_argc, char *a_argv[])\n");
@@ -238,32 +252,56 @@ CODE_incl          (void)
    return 0;
 }
 
+
+
+/*====================------------------------------------====================*/
+/*===----                      script level verbs                      ----===*/
+/*====================------------------------------------====================*/
+static void  o___SCRP____________o () { return; }
+
 char
-CODE_scrp          (void)
+CODE_scrp_end        (void)
 {
-   /*---(close script function)----------*/
-   if (my.cscrp >  0) {
-      if (my.ccond > 0) {
-         fprintf (my.file_code, "   if (g_exec == 1)  yUNIT_dnoc     (my_unit);\n");
-         fprintf (my.file_code, "   yUNIT_noisy  (my_unit, g_noisy);\n");
-         fprintf (my.file_code, "\n");
+   /*---(close final condition)----------*/
+   if (s_shared != '-' || my.cscrp >  0) {
+      CODE_cond_end ();
+   }
+   /*---(end share)----------------------*/
+   if (s_shared != '-') {
+      s_share_cnt [s_shared] = my.ccond;
+   }
+   /*---(close script/share)-------------*/
+   if (s_shared != '-' || my.cscrp >  0) {
+      if (s_shared == '-') {
+         fprintf (my.file_code, "   /*---(script done)---------------------*/\n");
+         fprintf (my.file_code, "   if (g_exec == 1)  yUNIT_prcs    (my_unit);\n");
       }
-      fprintf (my.file_code, "   /*---(script done)---------------------*/\n");
-      fprintf (my.file_code, "   if (g_exec == 1)  yUNIT_prcs    (my_unit);\n");
       fprintf (my.file_code, "   /*---(complete)-----------------------*/\n");
       fprintf (my.file_code, "   return 0;\n");
       fprintf (my.file_code, "}\n");
       fprintf (my.file_code, "\n");
    }
+   /*---(initialize vars)----------------*/
+   s_shared = '-';
+   my.ccond  = 0;
+   my.cstep  = 0;
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char
+CODE_scrp          (void)
+{
+   /*---(end last script)----------------*/
+   CODE_scrp_end ();
    /*---(counters)-----------------------*/
    ++(my.nscrp);
    ++(my.cscrp);
-   my.ccond = 0;
-   my.cstep = 0;
    /*---(open script function)-----------*/
    fprintf (my.file_code, "char\n");
    fprintf (my.file_code, "UNIT_script%02d (void)\n", my.cscrp);
    fprintf (my.file_code, "{\n");
+   fprintf (my.file_code, "   g_offset = 0;\n");
    fprintf (my.file_code, "   yUNIT_scrp    (my_unit, %4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cscrp, my.meth, my.desc);
    fprintf (my.file_code, "\n");
    /*---(function call to main)----------*/
@@ -272,44 +310,100 @@ CODE_scrp          (void)
    return 0;
 }
 
+char         /*-> common shared code between scripts ---[ ------ [----------]-*/
+CODE_shared          (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   /*---(end last script)----------------*/
+   CODE_scrp_end ();
+   /*---(defense)------------------------*/
+   --rce;  if (my.desc [0] != '(')  return rce;
+   --rce;  if (my.desc [2] != ')')  return rce;
+   --rce;  if (strchr ("ABCDEFGHIJZLMNOPQRSTUVWXYZ", my.desc [1]) == NULL)  return rce;
+   /*---(counters)-----------------------*/
+   s_shared = my.desc [1];
+   s_share_cnt [s_shared] = 0;
+   /*---(open script function)-----------*/
+   fprintf (my.file_code, "char\n");
+   fprintf (my.file_code, "UNIT_shared_%c (void)\n", my.desc [1]);
+   fprintf (my.file_code, "{\n");
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
 char
 CODE_sect          (void)
 {
-   fprintf (my.file_main, "   yUNIT_sect    (my_unit, \"%s\");\n", my.desc);
+   /*---(add section)--------------------*/
+   fprintf (my.file_main, "   if (g_scrp ==  0)  yUNIT_sect    (my_unit, \"%s\");\n", my.desc);
+   /*---(complete)-----------------------*/
    return 0;
 }
 
 char
 CODE_group         (void)
 {
-   if (my.ccond > 0) {
-      fprintf (my.file_code, "   if (g_exec == 1)  yUNIT_dnoc    (my_unit);\n");
-      fprintf (my.file_code, "   yUNIT_noisy  (my_unit, g_noisy);\n");
-      fprintf (my.file_code, "\n");
-   }
+   CODE_cond_end ();
    fprintf (my.file_code, "   /*---(group)---------------------------*/\n");
    fprintf (my.file_code, "   yUNIT_group   (my_unit, \"%s\");\n", my.desc);
    fprintf (my.file_code, "\n");
    return 0;
 }
 
+
+
+/*====================------------------------------------====================*/
+/*===----                       condition level                        ----===*/
+/*====================------------------------------------====================*/
+static void  o___COND____________o () { return; }
+
+char
+CODE_cond_end      (void)
+{
+   if (strcmp (my.last, "GROUP") != 0 && strcmp (my.last, "USE_SHARE") != 0) {
+      if (my.ccond > 0) {
+         fprintf (my.file_code, "   if (g_exec == 1)  yUNIT_dnoc    (my_unit);\n");
+         fprintf (my.file_code, "   yUNIT_noisy  (my_unit, g_noisy);\n");
+      }
+   }
+   fprintf (my.file_code, "\n");
+}
+
 char
 CODE_cond          (void)
 {
-   if (my.ccond > 0 && strcmp (my.last, "GROUP") != 0) {
-      fprintf (my.file_code, "   if (g_exec == 1)  yUNIT_dnoc    (my_unit);\n");
-      fprintf (my.file_code, "   yUNIT_noisy  (my_unit, g_noisy);\n");
-      fprintf (my.file_code, "\n");
-   }
+   CODE_cond_end ();
    ++(my.ncond);
    ++(my.ccond);
    fprintf (my.file_code, "   /*---(cond #%03d)-----------------------*/\n", my.ccond);
-   fprintf (my.file_code, "   if (g_cond == %i) yUNIT_noisy  (my_unit, 5);\n", my.ccond);
-   fprintf (my.file_code, "   %sUG_TOPS    %sOG_unitcond (%d, %d, %d, \"%s\");\n", "DEB", "yL", my.cscrp, my.ccond, my.n_line, my.desc);
-   fprintf (my.file_code, "   yUNIT_cond    (my_unit, %4i, %3i, \"%s\");\n", my.n_line, my.ccond, my.desc);
+   fprintf (my.file_code, "   if (g_cond == g_offset + %i) yUNIT_noisy  (my_unit, 5);\n", my.ccond);
+   fprintf (my.file_code, "   %sUG_TOPS    %sOG_unitcond (%d, g_offset + %d, %d, \"%s\");\n", "DEB", "yL", my.cscrp, my.ccond, my.n_line, my.desc);
+   fprintf (my.file_code, "   yUNIT_cond    (my_unit, %4i, g_offset + %3i, \"%s\");\n", my.n_line, my.ccond, my.desc);
    my.cstep = 0;
    return 0;
 }
+
+char
+CODE_use           (void)
+{
+   char        rce         =  -10;
+   CODE_cond_end ();
+   --rce;  if (strchr ("ABCDEFGHIJZLMNOPQRSTUVWXYZ", my.desc [0]) == NULL)  return rce;
+   fprintf (my.file_code, "   g_offset = %d;\n", my.ccond);
+   fprintf (my.file_code, "   UNIT_shared_%c ();\n", my.desc [0]);
+   fprintf (my.file_code, "   g_offset = 0;\n");
+   my.ncond += s_share_cnt [my.desc [0]];
+   my.ccond += s_share_cnt [my.desc [0]];
+   return 0;
+}
+
+
+
+/*====================------------------------------------====================*/
+/*===----                       step level verbs                       ----===*/
+/*====================------------------------------------====================*/
+static void  o___STEP____________o () { return; }
 
 char
 CODE_mode          (void)
@@ -627,7 +721,7 @@ CODE_exec          (void)
     *>    fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (%d, %d, %d, %d, \"%s\");\n", "DEB", "yL", my.cscrp, my.ccond, my.cstep, my.n_line, my.desc);   <* 
     *> }                                                                                                                                                           <*/
    fprintf (my.file_code, "      /*---(step)------------------------*/\n");
-   fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (%d, %d, %d, %d, \"%s\");\n", "DEB", "yL", my.cscrp, my.ccond, my.cstep, my.n_line, my.desc);
+   fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (%d, g_offset + %d, %d, %d, \"%s\");\n", "DEB", "yL", my.cscrp, my.ccond, my.cstep, my.n_line, my.desc);
    /*---(handle return values)-----------*/
    x_test = my.test [0];
    CODE_prefix    (x_test);
@@ -644,16 +738,7 @@ CODE_end           (void)
 {
    char        x_recd      [LEN_RECD];
    int         x_len       = 0;             /* input record length            */
-   if (my.ccond > 0) {
-      fprintf (my.file_code, "   if (g_exec == 1)  yUNIT_dnoc   (my_unit);\n");
-      fprintf (my.file_code, "   yUNIT_noisy  (my_unit, g_noisy);\n");
-      fprintf (my.file_code, "\n");
-   }
-   if (my.cscrp > 0) {
-      fprintf (my.file_code, "   /*---(script done)---------------------*/\n");
-      fprintf (my.file_code, "   if (g_exec == 1)  yUNIT_prcs   (my_unit);\n");
-      fprintf (my.file_code, "}\n");
-   }
+   CODE_scrp_end ();
    fprintf (my.file_code, "\n");
    SCRP_verbcode ();
    fprintf (my.file_main, "   /*---(complete)-----------------------*/\n");
@@ -679,55 +764,63 @@ char
 CODE_write         (void)
 {
    switch (my.verb [0]) {
-   case 'P'  :  if      (strcmp (my.verb, "PREP"   ) == 0) {
+   case 'P'  :  if      (strcmp (my.verb, "PREP"     ) == 0) {
                    CODE_prep   ();
                 }
                 break;
-   case 'i'  :  if      (strcmp (my.verb, "incl"   ) == 0) {
+   case 'i'  :  if      (strcmp (my.verb, "incl"     ) == 0) {
                    CODE_incl   ();
                 }
                 break;
-   case 'S'  :  if      (strcmp (my.verb, "SCRP"   ) == 0) {
+   case 'S'  :  if      (strcmp (my.verb, "SCRP"     ) == 0) {
                    CODE_main   ();
                    CODE_scrp   ();
                 }
-                else if (strcmp (my.verb, "SECT"   ) == 0) {
+                else if (strcmp (my.verb, "SECT"     ) == 0) {
                    CODE_main   ();
                    CODE_sect   ();
                 }
+                else if (strcmp (my.verb, "SHARED"   ) == 0) {
+                   CODE_main   ();
+                   CODE_shared ();
+                }
                 break;
-   case 'G'  :  if      (strcmp (my.verb, "GROUP"  ) == 0) {
+   case 'G'  :  if      (strcmp (my.verb, "GROUP"    ) == 0) {
                    CODE_group  ();
                 }
                 break;
-   case 'C'  :  if      (strcmp (my.verb, "COND"   ) == 0) {
+   case 'C'  :  if      (strcmp (my.verb, "COND"     ) == 0) {
                    CODE_cond   ();
                 }
                 break;
-   case 'm'  :  if      (strcmp (my.verb, "mode"   ) == 0) {
+   case 'U'  :  if      (strcmp (my.verb, "USE_SHARE") == 0) {
+                   CODE_use    ();
+                }
+                break;
+   case 'm'  :  if      (strcmp (my.verb, "mode"     ) == 0) {
                    CODE_mode   ();
                 }
                 break;
-   case 'c'  :  if      (strcmp (my.verb, "code"   ) == 0) {
+   case 'c'  :  if      (strcmp (my.verb, "code"     ) == 0) {
                    CODE_code   ();
                 }
                 break;
-   case 'l'  :  if      (strcmp (my.verb, "load"   ) == 0) {
+   case 'l'  :  if      (strcmp (my.verb, "load"     ) == 0) {
                    CODE_load   ();
                 }
                 break;
-   case 'e'  :  if      (strcmp (my.verb, "exec"   ) == 0) {
+   case 'e'  :  if      (strcmp (my.verb, "exec"     ) == 0) {
                    CODE_exec   ();
                 }
-                else if (strcmp (my.verb, "echo"   ) == 0) {
+                else if (strcmp (my.verb, "echo"     ) == 0) {
                    CODE_echo   ();
                 }
                 break;
-   case 'g'  :  if      (strcmp (my.verb, "get"    ) == 0) {
+   case 'g'  :  if      (strcmp (my.verb, "get"      ) == 0) {
                    CODE_exec   ();
                 }
                 break;
-   case 's'  :  if      (strcmp (my.verb, "set"    ) == 0) {
+   case 's'  :  if      (strcmp (my.verb, "set"      ) == 0) {
                    CODE_exec   ();
                 }
                 break;
