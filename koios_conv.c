@@ -2,6 +2,9 @@
 #include    "koios.h"        /* LOCAL  : main header                          */
 
 
+static char s_shared      = '-';         /* flag for shared code or not    */
+
+
 
 /*====================------------------------------------====================*/
 /*===----                       general functions                      ----===*/
@@ -109,6 +112,7 @@ CONV_scrp          (void)
    /*---(counters)-----------------------*/
    ++(my.nscrp);
    my.ncond = 0;
+   s_shared = '-';
    /*---(output)-------------------------*/
    CONV_header ();
    fprintf (my.file_conv, "SCRP          %3s  %-59.59s  %-70.70s  ((%02d.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc, my.meth, my.nscrp);
@@ -119,9 +123,25 @@ CONV_scrp          (void)
 char         /*--> write a section entry -----------------[--------[--------]-*/
 CONV_sect          (void)
 {
+   /*---(counters)-----------------------*/
+   my.ncond = 0;
+   s_shared = '-';
    /*---(output)-------------------------*/
    CONV_header ();
    fprintf (my.file_conv, "SECT          %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc);
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char         /*-> write a shared entry -----------------[ ------ [----------]-*/
+CONV_shared        (void)
+{
+   /*---(counters)-----------------------*/
+   my.ncond = 0;
+   s_shared = my.desc [1];
+   /*---(output)-------------------------*/
+   CONV_header ();
+   fprintf (my.file_conv, "SHARED        %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%c%c.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc, s_shared, s_shared);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -150,7 +170,21 @@ CONV_cond          (void)
    ++(my.ncond);
    /*---(output)-------------------------*/
    fprintf (my.file_conv, "\n");
-   fprintf (my.file_conv, "   COND       %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%02d.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc, my.nscrp, my.ncond);
+   if (s_shared == '-') {
+      fprintf (my.file_conv, "   COND       %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%02d.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc, my.nscrp, my.ncond);
+   } else {
+      fprintf (my.file_conv, "   COND       %3s  %-59.59s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%c%c.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc, s_shared, s_shared, my.ncond);
+   }
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char         /*--> write a condition entry ---------------[--------[--------]-*/
+CONV_use           (void)
+{
+   /*---(output)-------------------------*/
+   fprintf (my.file_conv, "\n");
+   fprintf (my.file_conv, "   USE_SHARE  %3s  %c  - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%02d.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc [0], my.nscrp);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -197,53 +231,60 @@ CONV_write         (void)
 {
    DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
    switch (my.verb [0]) {
-   case 'P'  :  if      (strcmp (my.verb, "PREP"   ) == 0) {
+   case 'P'  :  if      (strcmp (my.verb, "PREP"     ) == 0) {
                    CONV_prep   ();
                 }
                 break;
-   case 'i'  :  if      (strcmp (my.verb, "incl"   ) == 0) {
+   case 'i'  :  if      (strcmp (my.verb, "incl"     ) == 0) {
                    CONV_incl   ();
                 }
                 break;
-   case 'S'  :  if      (strcmp (my.verb, "SCRP"   ) == 0) {
+   case 'S'  :  if      (strcmp (my.verb, "SCRP"     ) == 0) {
                    CONV_scrp   ();
                 }
-                else if (strcmp (my.verb, "SECT"   ) == 0) {
+                else if (strcmp (my.verb, "SECT"     ) == 0) {
                    CONV_sect   ();
                 }
+                else if (strcmp (my.verb, "SHARED"   ) == 0) {
+                   CONV_shared ();
+                }
                 break;
-   case 'G'  :  if      (strcmp (my.verb, "GROUP"  ) == 0) {
+   case 'G'  :  if      (strcmp (my.verb, "GROUP"    ) == 0) {
                    CONV_group  ();
                 }
                 break;
-   case 'C'  :  if      (strcmp (my.verb, "COND"   ) == 0) {
+   case 'C'  :  if      (strcmp (my.verb, "COND"     ) == 0) {
                    CONV_cond   ();
                 }
                 break;
-   case 'e'  :  if      (strcmp (my.verb, "exec"   ) == 0) {
+   case 'U'  :  if      (strcmp (my.verb, "USE_SHARE") == 0) {
+                   CONV_use    ();
+                }
+                break;
+   case 'e'  :  if      (strcmp (my.verb, "exec"     ) == 0) {
                    CONV_exec   ();
                 }
-                else if (strcmp (my.verb, "echo"   ) == 0) {
+                else if (strcmp (my.verb, "echo"     ) == 0) {
                    CONV_echo   ();
                 }
                 break;
-   case 'g'  :  if      (strcmp (my.verb, "get"    ) == 0) {
+   case 'g'  :  if      (strcmp (my.verb, "get"      ) == 0) {
                    CONV_exec   ();
                 }
                 break;
-   case 's'  :  if      (strcmp (my.verb, "set"    ) == 0) {
+   case 's'  :  if      (strcmp (my.verb, "set"      ) == 0) {
                    CONV_exec   ();
                 }
                 break;
-   case 'c'  :  if      (strcmp (my.verb, "code"   ) == 0) {
+   case 'c'  :  if      (strcmp (my.verb, "code"     ) == 0) {
                    CONV_code   ();
                 }
                 break;
-   case 'l'  :  if      (strcmp (my.verb, "load"   ) == 0) {
+   case 'l'  :  if      (strcmp (my.verb, "load"     ) == 0) {
                    CONV_code   ();
                 }
                 break;
-   case 'm'  :  if      (strcmp (my.verb, "mode"   ) == 0) {
+   case 'm'  :  if      (strcmp (my.verb, "mode"     ) == 0) {
                    CONV_code   ();
                 }
                 break;

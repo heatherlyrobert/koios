@@ -15,8 +15,8 @@ tTEST       g_tests [MAX_TEST] = {
 
 char        CODE_cond_end      (void);
 
-char        s_shared      = '-';         /* flag for shared code or not    */
-int         s_share_cnt   [26];          /* count of cond in each share    */
+static char s_shared      = '-';         /* flag for shared code or not    */
+static int  s_share_cnt   [26];          /* count of cond in each share    */
 
 /*====================------------------------------------====================*/
 /*===----                       general functions                      ----===*/
@@ -303,6 +303,7 @@ CODE_scrp          (void)
    fprintf (my.file_code, "{\n");
    fprintf (my.file_code, "   g_offset = 0;\n");
    fprintf (my.file_code, "   yUNIT_scrp    (my_unit, %4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cscrp, my.meth, my.desc);
+   fprintf (my.file_code, "   if (g_exec ==  0 && g_noisy == 2)  return 0;\n");
    fprintf (my.file_code, "\n");
    /*---(function call to main)----------*/
    fprintf (my.file_main, "   if (g_scrp ==  0 || g_scrp == %2i)  UNIT_script%02d ();\n", my.cscrp, my.cscrp);
@@ -522,7 +523,6 @@ CODE_load          (void)
       else           fprintf (my.file_code, "%s" , x_var);
    }
    /*---(write)--------------------------*/
-   /*> fprintf (my.file_code, "         if (g_exec == 1)  yUNIT_load    (my_unit, %4i, %3i, \"%s\", \"%s\", \"%s\");\n", my.n_line, my.cstep, my.desc, my.meth, my.load);   <*/
    fprintf (my.file_code, ");\n");
    /*---(complete)-----------------------*/
    return 0;

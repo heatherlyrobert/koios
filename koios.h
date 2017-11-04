@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "1.0b"
-#define     KOIOS_VER_TXT    "added shared code verbs and capability (tested on gyges)"
+#define     KOIOS_VER_NUM    "1.0c"
+#define     KOIOS_VER_TXT    "added shared code verbs to converter"
 
 
 
