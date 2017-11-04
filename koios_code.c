@@ -107,6 +107,7 @@ CODE_begin         (void)
    fprintf (my.file_code, "int         g_scrp      =    0;          /* script selected for focus                */\n");
    fprintf (my.file_code, "int         g_cond      =    0;          /* condition selected for focus             */\n");
    fprintf (my.file_code, "int         g_offset    =    0;          /* shared code condition offset             */\n");
+   fprintf (my.file_code, "int         g_origin    =    0;          /* shared code scription offset             */\n");
    fprintf (my.file_code, "char        g_debug     [100];           /* display debugging info                   */\n");
    fprintf (my.file_code, "char        CUSTOM      [2000];          /* holder for custom expect strings         */\n");
    fprintf (my.file_code, "\n\n\n");
@@ -301,7 +302,8 @@ CODE_scrp          (void)
    fprintf (my.file_code, "char\n");
    fprintf (my.file_code, "UNIT_script%02d (void)\n", my.cscrp);
    fprintf (my.file_code, "{\n");
-   fprintf (my.file_code, "   g_offset = 0;\n");
+   fprintf (my.file_code, "   g_offset  = 0;\n");
+   fprintf (my.file_code, "   g_origin  = %d;\n", my.cscrp);
    fprintf (my.file_code, "   yUNIT_scrp    (my_unit, %4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cscrp, my.meth, my.desc);
    fprintf (my.file_code, "   if (g_exec ==  0 && g_noisy == 2)  return 0;\n");
    fprintf (my.file_code, "\n");
@@ -379,7 +381,7 @@ CODE_cond          (void)
    ++(my.ccond);
    fprintf (my.file_code, "   /*---(cond #%03d)-----------------------*/\n", my.ccond);
    fprintf (my.file_code, "   if (g_cond == g_offset + %i) yUNIT_noisy  (my_unit, 5);\n", my.ccond);
-   fprintf (my.file_code, "   %sUG_TOPS    %sOG_unitcond (%d, g_offset + %d, %d, \"%s\");\n", "DEB", "yL", my.cscrp, my.ccond, my.n_line, my.desc);
+   fprintf (my.file_code, "   %sUG_TOPS    %sOG_unitcond (g_origin, g_offset + %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.n_line, my.desc);
    fprintf (my.file_code, "   yUNIT_cond    (my_unit, %4i, g_offset + %3i, \"%s\");\n", my.n_line, my.ccond, my.desc);
    my.cstep = 0;
    return 0;
@@ -718,10 +720,10 @@ CODE_exec          (void)
    CODE_display ();
    /*---(debugging)----------------------*/
    /*> if (strcmp (my.verb, "exec"   ) == 0) {                                                                                                                     <* 
-    *>    fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (%d, %d, %d, %d, \"%s\");\n", "DEB", "yL", my.cscrp, my.ccond, my.cstep, my.n_line, my.desc);   <* 
+    *>    fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (g_origin, %d, %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.cstep, my.n_line, my.desc);   <* 
     *> }                                                                                                                                                           <*/
    fprintf (my.file_code, "      /*---(step)------------------------*/\n");
-   fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (%d, g_offset + %d, %d, %d, \"%s\");\n", "DEB", "yL", my.cscrp, my.ccond, my.cstep, my.n_line, my.desc);
+   fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (g_origin, g_offset + %d, %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.cstep, my.n_line, my.desc);
    /*---(handle return values)-----------*/
    x_test = my.test [0];
    CODE_prefix    (x_test);
