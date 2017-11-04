@@ -722,12 +722,8 @@ CODE_exec          (void)
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(debugging)----------------------*/
-   if (strcmp (my.verb, "get"    ) != 0) {
-      fprintf (my.file_code, "      /*---(step)------------------------*/\n");
-      fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (g_origin, g_offset + %d, %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.cstep, my.n_line, my.desc);
-   } else {
-      fprintf (my.file_code, "      /*---(get)-------------------------*/\n");
-   }
+   fprintf (my.file_code, "      /*---(step)------------------------*/\n");
+   fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (g_origin, g_offset + %d, %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.cstep, my.n_line, my.desc);
    /*---(handle return values)-----------*/
    x_test = my.test [0];
    CODE_prefix    (x_test);

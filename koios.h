@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "1.0e"
-#define     KOIOS_VER_TXT    "lots of readability modifications"
+#define     KOIOS_VER_NUM    "1.0f"
+#define     KOIOS_VER_TXT    "fixed debug statements after log close (with yLOG)"
 
 
 
