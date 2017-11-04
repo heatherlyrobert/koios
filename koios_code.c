@@ -302,11 +302,13 @@ CODE_scrp          (void)
    fprintf (my.file_code, "char\n");
    fprintf (my.file_code, "UNIT_script%02d (void)\n", my.cscrp);
    fprintf (my.file_code, "{\n");
+   fprintf (my.file_code, "   /*---(locals)-----------+-----+-----+-*/\n");
    fprintf (my.file_code, "   g_offset  = 0;\n");
    fprintf (my.file_code, "   g_origin  = %d;\n", my.cscrp);
+   fprintf (my.file_code, "\n");
+   fprintf (my.file_code, "   /*---(script header)------------------*/\n");
    fprintf (my.file_code, "   yUNIT_scrp    (my_unit, %4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cscrp, my.meth, my.desc);
    fprintf (my.file_code, "   if (g_exec ==  0 && g_noisy == 2)  return 0;\n");
-   fprintf (my.file_code, "\n");
    /*---(function call to main)----------*/
    fprintf (my.file_main, "   if (g_scrp ==  0 || g_scrp == %2i)  UNIT_script%02d ();\n", my.cscrp, my.cscrp);
    /*---(complete)-----------------------*/
@@ -350,7 +352,6 @@ CODE_group         (void)
    CODE_cond_end ();
    fprintf (my.file_code, "   /*---(group)---------------------------*/\n");
    fprintf (my.file_code, "   yUNIT_group   (my_unit, \"%s\");\n", my.desc);
-   fprintf (my.file_code, "\n");
    return 0;
 }
 
@@ -366,6 +367,7 @@ CODE_cond_end      (void)
 {
    if (strcmp (my.last, "GROUP") != 0 && strcmp (my.last, "USE_SHARE") != 0) {
       if (my.ccond > 0) {
+         fprintf (my.file_code, "      /*---(done)------------------------*/\n");
          fprintf (my.file_code, "   if (g_exec == 1)  yUNIT_dnoc    (my_unit);\n");
          fprintf (my.file_code, "   yUNIT_noisy  (my_unit, g_noisy);\n");
       }
@@ -393,6 +395,7 @@ CODE_use           (void)
    char        rce         =  -10;
    CODE_cond_end ();
    --rce;  if (strchr ("ABCDEFGHIJZLMNOPQRSTUVWXYZ", my.desc [0]) == NULL)  return rce;
+   fprintf (my.file_code, "   /*---(shared code)-----------------------*/\n");
    fprintf (my.file_code, "   g_offset = %d;\n", my.ccond);
    fprintf (my.file_code, "   UNIT_shared_%c ();\n", my.desc [0]);
    fprintf (my.file_code, "   g_offset = 0;\n");
@@ -719,11 +722,12 @@ CODE_exec          (void)
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(debugging)----------------------*/
-   /*> if (strcmp (my.verb, "exec"   ) == 0) {                                                                                                                     <* 
-    *>    fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (g_origin, %d, %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.cstep, my.n_line, my.desc);   <* 
-    *> }                                                                                                                                                           <*/
-   fprintf (my.file_code, "      /*---(step)------------------------*/\n");
-   fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (g_origin, g_offset + %d, %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.cstep, my.n_line, my.desc);
+   if (strcmp (my.verb, "get"    ) != 0) {
+      fprintf (my.file_code, "      /*---(step)------------------------*/\n");
+      fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (g_origin, g_offset + %d, %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.cstep, my.n_line, my.desc);
+   } else {
+      fprintf (my.file_code, "      /*---(get)-------------------------*/\n");
+   }
    /*---(handle return values)-----------*/
    x_test = my.test [0];
    CODE_prefix    (x_test);
