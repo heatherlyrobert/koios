@@ -36,18 +36,15 @@ main               (int argc, char *argv[])
 
    printf ("base name = %s\n", my.name_base);
    printf ("scrp name = %s\n", my.name_scrp);
-   if (my.run_type == G_RUN_CREATE) {
+   if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
       printf ("code name = %s\n", my.name_code);
       printf ("main name = %s\n", my.name_main);
    } else {
       printf ("conv name = %s\n", my.name_conv);
    }
-   /*> return 0;                                                                      <*/
-
-
    /*---(open files)---------------------*/
    if (rc == 0)  rc = SCRP_open      ();
-   if (my.run_type == G_RUN_CREATE) {
+   if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
       if (rc == 0)  rc = CODE_open      ();
       if (rc == 0)  rc = CODE_begin     ();
    } else if (my.run_type == G_RUN_UPDATE) {
@@ -71,35 +68,16 @@ main               (int argc, char *argv[])
       DEBUG_TOPS   yLOG_note    ("writing output");
       /*---(write code)------------------*/
       if      (my.run_type == G_RUN_CREATE)   rc = CODE_write  ();
+      else if (my.run_type == G_RUN_DEBUG )   rc = CODE_write  ();
       else if (my.run_type == G_RUN_UPDATE)   rc = CONV_write  ();
       /*---(debugging output)------------*/
       ++x_lines;
-      /*> printf (".");                                                               <*/
-      /*> printf ("\n");                                                              <* 
-       *> printf ("recd = %s\n", my.recd);                                            <* 
-       *> printf ("   line = %d\n", my.n_line);                                       <* 
-       *> printf ("   last = %s\n", my.last);                                         <* 
-       *> printf ("   verb = %s\n", my.verb);                                         <* 
-       *> printf ("   spec = %c\n", my.spec);                                         <* 
-       *> printf ("   vers = %s\n", my.vers);                                         <* 
-       *> printf ("   desc = %s\n", my.desc);                                         <* 
-       *> printf ("   meth = %s\n", my.meth);                                         <* 
-       *> printf ("   args = %s\n", my.args);                                         <* 
-       *> printf ("   test = %s\n", my.test);                                         <* 
-       *> printf ("   expe = %s\n", my.expe);                                         <* 
-       *> printf ("   type = %c\n", my.type);                                         <* 
-       *> printf ("   retn = %s\n", my.retn);                                         <* 
-       *> printf ("   code = %s\n", my.code);                                         <* 
-       *> printf ("   disp = %s\n", my.disp);                                         <* 
-       *> printf ("   syst = %s\n", my.syst);                                         <* 
-       *> printf ("   load = %s\n", my.load);                                         <*/
    }
-   /*> printf ("\ndone\n");                                                           <*/
    DEBUG_TOPS  yLOG_break   ();
    DEBUG_TOPS  yLOG_note    ("exiting main processing loop");
    /*---(close files)--------------------*/
    rc = SCRP_close     ();
-   if (my.run_type == G_RUN_CREATE) { 
+   if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) { 
       rc = CODE_end       ();
       rc = CODE_close     ();
    } else if (my.run_type == G_RUN_UPDATE) {

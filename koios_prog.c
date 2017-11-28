@@ -74,6 +74,7 @@ PROG_args          (int argc, char *argv[])
       strncpy (my.name_base, argv[i], LEN_FILE);
       if      (strncmp (a, "--create"     , 10) == 0)    my.run_type = G_RUN_CREATE;
       else if (strncmp (a, "--compile"    , 10) == 0)    my.run_type = G_RUN_CREATE;
+      else if (strncmp (a, "--debug"      , 10) == 0)    my.run_type = G_RUN_DEBUG;
       else if (strncmp (a, "--update"     , 10) == 0)    my.run_type = G_RUN_UPDATE;
       else if (strncmp (a, "--convert"    , 10) == 0)    my.run_type = G_RUN_UPDATE;
    }

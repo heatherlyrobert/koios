@@ -7,6 +7,7 @@ tVERB       g_verbs [MAX_VERB] = {
    /* --------------   ---------------------------------------   -  */
    { "PREP"         , "preparation before testing"            , '-',  0,  0 },
    { "incl"         , "c header inclusion"                    , '-',  0,  0 },
+   { "#>save"       , "script internal comments"              , 'c',  0,  0 },
    /* --------------   --------------------------------------- */
    { "SECT"         , "grouping of scripts"                   , '-',  0,  0 },
    { "SCRP"         , "test script"                           , '-',  0,  0 },
@@ -128,14 +129,14 @@ SCRP_read          (void)
       /*---(filter)----------------------*/
       x_len = strlen (x_recd);
       x_recd [--x_len] = '\0';
-      if (x_recd [0] == '#') {
-         DEBUG_INPT   yLOG_note    ("comment, skipping");
-         ++my.n_comment;
-         continue;
-      }
       if (x_recd [0] == '\0') {
          DEBUG_INPT   yLOG_note    ("empyt, skipping");
          ++my.n_empty;
+         continue;
+      }
+      if (x_recd [0] == '#' && x_recd [1] != '>') {
+         DEBUG_INPT   yLOG_note    ("comment, skipping");
+         ++my.n_comment;
          continue;
       }
       DEBUG_INPT   yLOG_value   ("length"    , x_len);
@@ -396,7 +397,7 @@ SCRP_parse         (void)
    }
    DEBUG_INPT   yLOG_info    ("record"    , my.recd);
    DEBUG_INPT   yLOG_value   ("length"    , my.len);
-   --rce;  if (my.len      <   50) {
+   --rce;  if (my.len < 50 && my.recd [0] != '#') {
       DEBUG_INPT   yLOG_note    ("my.len too short");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
@@ -423,6 +424,11 @@ SCRP_parse         (void)
    }
    DEBUG_INPT   yLOG_value   ("verb"      , p);
    sprintf (x_temp, " %s ", p);
+   --rce;  if (p [0] == '#' && p [1] != '>') {
+      DEBUG_INPT   yLOG_note    ("comment not in column one");
+      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      return rce;
+   }
    DEBUG_INPT   yLOG_note    ("search for verb");
    my.indx = -1;
    for (i = 0; i < MAX_VERB; ++i) {
@@ -430,7 +436,7 @@ SCRP_parse         (void)
          my.indx    = i;
          ++g_verbs [i].count;
          ++g_verbs [i].total;
-         printf ("VERB? : <<%s>>\n", my.recd);
+         printf ("VERB? : %s <<%s>>\n", p, my.recd);
          break;
       }
       if (g_verbs [i].name [0] != p[0])          continue;
@@ -443,20 +449,15 @@ SCRP_parse         (void)
       my.spec    = g_verbs [i].spec;
       break;
    }
-   --rce;  if (p [0] == '#') {
-      DEBUG_INPT   yLOG_note    ("comment not in column one");
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return rce;
-   }
-   --rce;  if (my.indx == -1 || p [0] == '#') {
+   --rce;  if (my.indx == -1) {
       DEBUG_INPT   yLOG_note    ("verb not found");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      printf ("VERB? : <<%s>>\n", my.recd);
+      printf ("VERB? : %s <<%s>>\n", p, my.recd);
       return rce;
    }
    /*---(read version)-------------------*/
    p = strtok (NULL  , q);
-   --rce;  if (p == NULL) {
+   --rce;  if (p == NULL && my.spec != 'c') {
       DEBUG_INPT   yLOG_note    ("strtok came up empty");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
@@ -466,7 +467,7 @@ SCRP_parse         (void)
    if      (strcmp (p, "v21") == 0) {
       strncpy (my.vers      , p    , LEN_STR);
       DEBUG_INPT   yLOG_info    ("vers"      , my.vers);
-      SCRP_vers21  ();
+      if (my.spec != 'c')  SCRP_vers21  ();
    }
    else if (strcmp (p, "v20") == 0) {
       strncpy (my.vers      , p    , LEN_STR);

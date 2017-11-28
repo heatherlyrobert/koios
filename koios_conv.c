@@ -99,6 +99,13 @@ CONV_incl          (void)
    return 0;
 }
 
+char
+CONV_comment       (void)
+{
+   fprintf (my.file_conv, "%s\n", my.recd);
+   return 0;
+}
+
 
 
 /*====================------------------------------------====================*/
@@ -287,6 +294,8 @@ CONV_write         (void)
    case 'm'  :  if      (strcmp (my.verb, "mode"     ) == 0) {
                    CONV_code   ();
                 }
+                break;
+   case '#'  :  CONV_comment ();
                 break;
    }
    /*---(complete)-----------------------*/

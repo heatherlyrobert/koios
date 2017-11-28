@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "1.0f"
-#define     KOIOS_VER_TXT    "fixed debug statements after log close (with yLOG)"
+#define     KOIOS_VER_NUM    "1.0g"
+#define     KOIOS_VER_TXT    "updated to handle script comments"
 
 
 
@@ -108,6 +108,7 @@
 
 
 #define     G_RUN_CREATE    'c'
+#define     G_RUN_DEBUG     'd'
 #define     G_RUN_UPDATE    'u'
 
 
@@ -269,6 +270,7 @@ char        CODE_end           (void);
 char        CONV_open          (void);
 char        CONV_close         (void);
 char        CONV_write         (void);
+char        CONV_comment       (void);
 
 void        VOID_void          (char *a_one, int a_two);
 

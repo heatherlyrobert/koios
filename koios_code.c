@@ -383,7 +383,9 @@ CODE_cond          (void)
    ++(my.ccond);
    fprintf (my.file_code, "   /*---(cond #%03d)-----------------------*/\n", my.ccond);
    fprintf (my.file_code, "   if (g_cond == g_offset + %i) yUNIT_noisy  (my_unit, 5);\n", my.ccond);
-   fprintf (my.file_code, "   %sUG_TOPS    %sOG_unitcond (g_origin, g_offset + %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.n_line, my.desc);
+   if (my.run_type == G_RUN_DEBUG) {
+      fprintf (my.file_code, "   %sUG_TOPS    %sOG_unitcond (g_origin, g_offset + %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.n_line, my.desc);
+   }
    fprintf (my.file_code, "   yUNIT_cond    (my_unit, %4i, g_offset + %3i, \"%s\");\n", my.n_line, my.ccond, my.desc);
    my.cstep = 0;
    return 0;
@@ -723,7 +725,9 @@ CODE_exec          (void)
    CODE_display ();
    /*---(debugging)----------------------*/
    fprintf (my.file_code, "      /*---(step)------------------------*/\n");
-   fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (g_origin, g_offset + %d, %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.cstep, my.n_line, my.desc);
+   if (my.run_type == G_RUN_DEBUG) {
+      fprintf (my.file_code, "      %sUG_TOPS    %sOG_unitstep (g_origin, g_offset + %d, %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.cstep, my.n_line, my.desc);
+   }
    /*---(handle return values)-----------*/
    x_test = my.test [0];
    CODE_prefix    (x_test);
