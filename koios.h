@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "1.0g"
-#define     KOIOS_VER_TXT    "updated to handle script comments"
+#define     KOIOS_VER_NUM    "1.0h"
+#define     KOIOS_VER_TXT    "changed to produce non-debugging versions too"
 
 
 

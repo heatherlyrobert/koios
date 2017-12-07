@@ -687,13 +687,14 @@ CODE_echo          (void)
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(handle return values)-----------*/
+   fprintf (my.file_code, "      /*---(step)------------------------*/\n");
    strlcpy (my.meth, "echo", LEN_STR);
    x_test = my.test [0];
    CODE_prefix    (x_test);
    CODE_expe_var  (x_test);
    CODE_suffix    (x_test);
    /*---(finish)-------------------------*/
-   fprintf (my.file_code, "\n");
+   /*> fprintf (my.file_code, "\n");                                                  <*/
    /*---(complete)-----------------------*/
    return 0;
 }
