@@ -62,7 +62,7 @@ SCRP_clear         (void)
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
    /*---(save value)---------------------*/
-   strlcpy (my.last, my.verb, LEN_STR);
+   strlcpy (my.last, my.verb, LEN_LABEL);
    /*---(input vars)---------------------*/
    my.verb        [0] = '\0';
    my.spec            = '-';
@@ -95,7 +95,6 @@ SCRP_read          (void)
    char        x_recd      [LEN_RECD];
    int         x_len       = 0;             /* input record length            */
    char        x_temp      [20];
-   int         i           = 0;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
    DEBUG_INPT   yLOG_point   ("*scrp"     , my.file_scrp);
@@ -127,7 +126,7 @@ SCRP_read          (void)
       ++my.n_line;
       DEBUG_INPT   yLOG_value   ("line#"     , my.n_line);
       /*---(filter)----------------------*/
-      x_len = strlen (x_recd);
+      x_len = strllen (x_recd, LEN_RECD);
       x_recd [--x_len] = '\0';
       if (x_recd [0] == '\0') {
          DEBUG_INPT   yLOG_note    ("empyt, skipping");
@@ -146,6 +145,8 @@ SCRP_read          (void)
          printf ("SHORT : <<%s>>\n", x_recd);
          continue;
       }
+      /*---(translate delayed chars)-----*/
+      strlundelay (x_recd, LEN_RECD);
       /*---(copy)------------------------*/
       DEBUG_INPT   yLOG_note    ("save copy of source record");
       strlcpy (my.recd, x_recd, LEN_RECD);
@@ -197,34 +198,34 @@ SCRP_vers21        (void)
       }
       /*---(handle fields)---------------*/
       switch (i) {
-      case  2 :   strncpy (my.desc      , p, LEN_STR);
+      case  2 :   strlcpy (my.desc      , p, LEN_DESC );
                   DEBUG_INPT   yLOG_info    ("desc"      , my.desc);
                   break;
       case  3 :   if (my.spec != 'p') {
-                     strncpy (my.meth      , p, LEN_STR);
+                     strlcpy (my.meth      , p, LEN_DESC );
                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
                   }
                   break;
       case  4 :   if (my.spec == 'P' || my.spec == 'p') {
-                     strncpy (my.code      , p, LEN_RECD);
+                     strlcpy (my.code      , p, LEN_RECD);
                      DEBUG_INPT   yLOG_info    ("code"      , my.code);
                   } else {
-                     strncpy (my.args      , p, LEN_STR);
-                     strncpy (my.code      , p, LEN_STR);
+                     strlcpy (my.args      , p, LEN_STR);
+                     strlcpy (my.code      , p, LEN_STR);
                      DEBUG_INPT   yLOG_info    ("args"      , my.args);
                   }
                   break;
-      case  5 :   strncpy (my.test      , p, LEN_STR);
+      case  5 :   strlcpy (my.test      , p, LEN_LABEL);
                   DEBUG_INPT   yLOG_info    ("test"      , my.test);
                   break;
-      case  6 :   strncpy (my.expe      , p, LEN_STR);
+      case  6 :   strlcpy (my.expe      , p, LEN_OUT  );
                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
                   break;
       case  7 :   my.type      = p [0];
                   if (my.type == '\0')  my.type = '-';
                   DEBUG_INPT   yLOG_char    ("type"      , my.type);
                   break;
-      case  8 :   strncpy (my.retn      , p, LEN_STR);
+      case  8 :   strlcpy (my.retn      , p, LEN_STR);
                   DEBUG_INPT   yLOG_info    ("retn"      , my.retn);
                   break;
       }
@@ -275,32 +276,32 @@ SCRP_vers20        (void)
       }
       /*---(handle fields)---------------*/
       switch (i) {
-      case  2 :   strncpy (my.desc      , p, LEN_STR);
+      case  2 :   strlcpy (my.desc      , p, LEN_DESC );
                   DEBUG_INPT   yLOG_info    ("desc"      , my.desc);
                   break;
       case  3 :   if (my.spec == 'p') {
-                     strncpy (my.code      , p, LEN_RECD);
+                     strlcpy (my.code      , p, LEN_RECD);
                      DEBUG_INPT   yLOG_info    ("code"      , my.code);
                   } else {
-                     strncpy (my.meth      , p, LEN_STR);
+                     strlcpy (my.meth      , p, LEN_DESC );
                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
                   }
                   break;
-      case  4 :   strncpy (my.args      , p, LEN_STR);
-                  strncpy (my.code      , p, LEN_STR);
+      case  4 :   strlcpy (my.args      , p, LEN_STR);
+                  strlcpy (my.code      , p, LEN_STR);
                   DEBUG_INPT   yLOG_info    ("args"      , my.args);
                   break;
-      case  5 :   strncpy (my.test      , p, LEN_STR);
+      case  5 :   strlcpy (my.test      , p, LEN_LABEL);
                   DEBUG_INPT   yLOG_info    ("test"      , my.test);
                   break;
-      case  6 :   strncpy (my.expe      , p, LEN_STR);
+      case  6 :   strlcpy (my.expe      , p, LEN_OUT  );
                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
                   break;
       case  7 :   my.type      = p [0];
                   if (my.type == '\0')  my.type = '-';
                   DEBUG_INPT   yLOG_char    ("type"      , my.type);
                   break;
-      case  8 :   strncpy (my.retn      , p, LEN_STR);
+      case  8 :   strlcpy (my.retn      , p, LEN_STR);
                   DEBUG_INPT   yLOG_info    ("retn"      , my.retn);
                   break;
       }
@@ -348,21 +349,21 @@ SCRP_vers19        (void)
       /*---(handle fields)---------------*/
       switch (i) {
       case  2 :   if (my.spec == 'p') {
-                     strncpy (my.code      , p, LEN_RECD);
+                     strlcpy (my.code      , p, LEN_RECD);
                      DEBUG_INPT   yLOG_info    ("code"      , my.code);
                   } else {
-                     strncpy (my.meth      , p, LEN_STR);
+                     strlcpy (my.meth      , p, LEN_DESC );
                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
                   }
                   break;
-      case  3 :   strncpy (my.args      , p, LEN_STR);
-                  strncpy (my.code      , p, LEN_STR);
+      case  3 :   strlcpy (my.args      , p, LEN_STR);
+                  strlcpy (my.code      , p, LEN_STR);
                   DEBUG_INPT   yLOG_info    ("args"      , my.args);
                   break;
-      case  4 :   strncpy (my.test      , p, LEN_STR);
+      case  4 :   strlcpy (my.test      , p, LEN_LABEL);
                   DEBUG_INPT   yLOG_info    ("test"      , my.test);
                   break;
-      case  5 :   strncpy (my.expe      , p, LEN_STR);
+      case  5 :   strlcpy (my.expe      , p, LEN_OUT  );
                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
                   break;
       }
@@ -442,7 +443,7 @@ SCRP_parse         (void)
       if (g_verbs [i].name [0] != p[0])          continue;
       if (strcmp (g_verbs [i].name, p) != 0)     continue;
       DEBUG_INPT   yLOG_note    ("verb found, save");
-      strcpy (my.verb, g_verbs [i].name);
+      strlcpy (my.verb, g_verbs [i].name, LEN_LABEL);
       my.indx    = i;
       ++g_verbs [i].count;
       ++g_verbs [i].total;
@@ -465,19 +466,19 @@ SCRP_parse         (void)
    strltrim (p, ySTR_BOTH, LEN_RECD);
    if (p[0] == '-')  p[0] = '\0';
    if      (strcmp (p, "v21") == 0) {
-      strncpy (my.vers      , p    , LEN_STR);
+      strlcpy (my.vers      , p    , LEN_LABEL);
       DEBUG_INPT   yLOG_info    ("vers"      , my.vers);
       if (my.spec != 'c')  SCRP_vers21  ();
    }
    else if (strcmp (p, "v20") == 0) {
-      strncpy (my.vers      , p    , LEN_STR);
+      strlcpy (my.vers      , p    , LEN_LABEL);
       DEBUG_INPT   yLOG_info    ("vers"      , my.vers);
       SCRP_vers20  ();
    }
    else                             {
-      strncpy (my.vers      , "v19", LEN_STR);
+      strlcpy (my.vers      , "v19", LEN_LABEL);
       DEBUG_INPT   yLOG_info    ("vers"      , my.vers);
-      strncpy (my.desc      , p    , LEN_STR);
+      strlcpy (my.desc      , p    , LEN_DESC );
       DEBUG_INPT   yLOG_info    ("desc"      , my.desc);
       SCRP_vers19  ();
    }

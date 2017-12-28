@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "1.0h"
-#define     KOIOS_VER_TXT    "changed to produce non-debugging versions too"
+#define     KOIOS_VER_NUM    "1.0i"
+#define     KOIOS_VER_TXT    "now handles delayed backslash/quote to help with unit testing"
 
 
 
@@ -124,9 +124,12 @@
  *   incorrect, or ill-intensioned.  just my perspective.
  *
  */
+#define     LEN_LABEL     20   /* short label                   */
+#define     LEN_DESC     100   /* description                   */
 #define     LEN_STR      200   /* normal, generic string        */
+#define     LEN_OUT      500   /* output fields (act, exp)      */
 #define     LEN_FILE     500   /* fully qualified file names    */
-#define     LEN_RECD    2000   /* input script record length    */
+#define     LEN_RECD    1500   /* input script record length    */
 #define     LEN_UNIT     200   /* unit test return string       */
 
 
@@ -134,14 +137,14 @@ typedef     struct cGLOBALS     tGLOBALS;
 struct cGLOBALS
 {
    /*---(general)---------------*/
-   char        version     [LEN_STR ];      /* program version info           */
+   char        version     [LEN_STR  ];     /* program version info           */
    char        run_type;                    /* unit test code or conversion   */
    /*---(file names)------------*/
-   char        name_base   [LEN_FILE];      /* base name of files             */
-   char        name_scrp   [LEN_FILE];      /* name of input script file      */
-   char        name_code   [LEN_FILE];      /* name of output code file       */
-   char        name_main   [LEN_FILE];      /* name of output main file       */
-   char        name_conv   [LEN_FILE];      /* name of output script file     */
+   char        name_base   [LEN_FILE ];     /* base name of files             */
+   char        name_scrp   [LEN_FILE ];     /* name of input script file      */
+   char        name_code   [LEN_FILE ];     /* name of output code file       */
+   char        name_main   [LEN_FILE ];     /* name of output main file       */
+   char        name_conv   [LEN_FILE ];     /* name of output script file     */
    /*---(file handles)----------*/
    FILE       *file_scrp;                   /* pointer to input script file   */
    FILE       *file_code;                   /* pointer to output code file    */
@@ -160,27 +163,27 @@ struct cGLOBALS
    int         ccond;                       /* current condition number       */
    int         cstep;                       /* current step number            */
    /*---(script)---------------*/
-   char        recd        [LEN_RECD];      /* script record                  */
+   char        recd        [LEN_RECD ];     /* script record                  */
    int         len;                         /* record length                  */
    char        status;                      /* record processing status       */
    int         indx;                        /* verb index in tVERB structure  */
-   char        verb        [LEN_STR ];      /* verb                           */
-   char        last        [LEN_STR ];      /* last verb used                 */
+   char        verb        [LEN_LABEL];     /* verb                           */
+   char        last        [LEN_LABEL];     /* last verb used                 */
    char        spec;                        /* specialty verb (y/n)           */
-   char        vers        [LEN_STR ];      /* version number                 */
-   char        desc        [LEN_STR ];      /* descriptive text               */
-   char        meth        [LEN_STR ];      /* function/method name           */
-   char        args        [LEN_STR ];      /* function/method args           */
-   char        test        [LEN_STR ];      /* test type for yVAR             */
-   char        expe        [LEN_STR ];      /* expected results               */
+   char        vers        [LEN_LABEL];     /* version number                 */
+   char        desc        [LEN_DESC ];     /* descriptive text               */
+   char        meth        [LEN_DESC ];     /* function/method name           */
+   char        args        [LEN_STR  ];     /* function/method args           */
+   char        test        [LEN_LABEL];     /* test type for yVAR             */
+   char        expe        [LEN_OUT  ];     /* expected results               */
    char        type;
-   char        retn        [LEN_STR ];      /* return variable                */
-   char        code        [LEN_RECD];      /* code/load/sys string           */
-   char        refn        [LEN_STR ];      /* test reference number          */
+   char        retn        [LEN_STR  ];     /* return variable                */
+   char        code        [LEN_RECD ];     /* code/load/sys string           */
+   char        refn        [LEN_LABEL];     /* test reference number          */
    /*---(working)---------------*/
-   char        disp        [LEN_RECD];      /* display ver " = ~, 1D = |      */
-   char        syst        [LEN_RECD];      /* system ver  " = ", 1D = 1F     */
-   char        load        [LEN_RECD];      /* load ver    " = ~, 1D = 1F     */
+   char        disp        [LEN_RECD ];     /* display ver " = ~, 1D = |      */
+   char        syst        [LEN_RECD ];     /* system ver  " = ", 1D = 1F     */
+   char        load        [LEN_RECD ];     /* load ver    " = ~, 1D = 1F     */
    /*---(flag)------------------*/
    char        driver;                      /* has main/driver been written   */
    /*---(debug/test)------------*/

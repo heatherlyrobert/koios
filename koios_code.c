@@ -635,7 +635,7 @@ CODE_expe_var      (char a_test)
    }
    /*---(check for var)------------------*/
    else {
-      strlcpy (x_var, my.expe + 3, LEN_STR);
+      strlcpy (x_var, my.expe + 3, LEN_OUT  );
       x_expe = x_var;
       p = strtok_r (x_var, q, &r);
       if (p == NULL) fprintf (my.file_code, "\"%s\", " , "unknown");
@@ -688,7 +688,7 @@ CODE_echo          (void)
    CODE_display ();
    /*---(handle return values)-----------*/
    fprintf (my.file_code, "      /*---(step)------------------------*/\n");
-   strlcpy (my.meth, "echo", LEN_STR);
+   strlcpy (my.meth, "echo", LEN_DESC );
    x_test = my.test [0];
    CODE_prefix    (x_test);
    CODE_expe_var  (x_test);

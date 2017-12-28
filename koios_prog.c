@@ -42,13 +42,13 @@ PROG_init          (void)
    /*---(header)-------------------------*/
    DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
    /*---(files)--------------------------*/
-   strlcpy  (my.name_scrp, "", LEN_FILE);
-   strlcpy  (my.name_code, "", LEN_FILE);
-   strlcpy  (my.name_main, "", LEN_FILE);
-   strlcpy  (my.name_conv, "", LEN_FILE);
+   strlcpy  (my.name_scrp, "", LEN_FILE );
+   strlcpy  (my.name_code, "", LEN_FILE );
+   strlcpy  (my.name_main, "", LEN_FILE );
+   strlcpy  (my.name_conv, "", LEN_FILE );
    my.driver    = '-';
    my.run_type  = G_RUN_CREATE;
-   strlcpy  (my.last     , "", LEN_FILE);
+   strlcpy  (my.last     , "", LEN_LABEL);
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    return 0;
