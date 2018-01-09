@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "1.0i"
-#define     KOIOS_VER_TXT    "now handles delayed backslash/quote to help with unit testing"
+#define     KOIOS_VER_NUM    "1.0j"
+#define     KOIOS_VER_TXT    "widened the function column to hangle long library function names"
 
 
 
@@ -129,7 +129,7 @@
 #define     LEN_STR      200   /* normal, generic string        */
 #define     LEN_OUT      500   /* output fields (act, exp)      */
 #define     LEN_FILE     500   /* fully qualified file names    */
-#define     LEN_RECD    1500   /* input script record length    */
+#define     LEN_RECD    5000   /* input script record length    */
 #define     LEN_UNIT     200   /* unit test return string       */
 
 
