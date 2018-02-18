@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "1.0j"
-#define     KOIOS_VER_TXT    "widened the function column to hangle long library function names"
+#define     KOIOS_VER_NUM    "1.0k"
+#define     KOIOS_VER_TXT    "re-routed output to file in yUNIT, had to rename here"
 
 
 

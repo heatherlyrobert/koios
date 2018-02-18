@@ -131,7 +131,7 @@ CODE_begin         (void)
    fprintf (my.file_main, "   /*---(prepare)------------------------*/\n");
    fprintf (my.file_main, "   rc = UNIT_args (a_argc, a_argv);\n");
    fprintf (my.file_main, "   if (rc < 0)  return -1;\n");
-   fprintf (my.file_main, "   my_unit = yUNIT_unit(\"MyTest\", g_noisy, eterm);\n");
+   fprintf (my.file_main, "   my_unit = yUNIT_unit(\"%s\", g_noisy, eterm);\n", my.name_base);
    fprintf (my.file_main, "   /*---(scripts)------------------------*/\n");
    return 0;
 }
