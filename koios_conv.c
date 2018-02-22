@@ -215,14 +215,14 @@ CONV_exec          (void)
 char
 CONV_code          (void)
 {
-   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  - - - - - - - - - -   %-188s \n", my.verb, "v21", my.desc, my.code);
+   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  - - - - - - - - - - - - -   %-188s \n", my.verb, "v21", my.desc, my.code);
    return 0;
 }
 
 char
 CONV_echo          (void)
 {
-   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  - - - - - - - - - -   %-70s  %-10.10s  %-100s \n", my.verb, "v21", my.desc, my.args, my.test, my.expe);
+   fprintf (my.file_conv, "     %-4.4s     %3s  %-35.35s  - - - - - - - - - - - - -   %-70s  %-10.10s  %-100s \n", my.verb, "v21", my.desc, my.args, my.test, my.expe);
    return 0;
 }
 

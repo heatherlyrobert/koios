@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "1.0k"
-#define     KOIOS_VER_TXT    "re-routed output to file in yUNIT, had to rename here"
+#define     KOIOS_VER_NUM    "1.0l"
+#define     KOIOS_VER_TXT    "updated code/echo to new format, method field was too short"
 
 
 
