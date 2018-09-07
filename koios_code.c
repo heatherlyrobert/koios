@@ -444,6 +444,14 @@ CODE_display       (void)
    /*---(cleanse)------------------------*/
    for (i = 0; i < x_len; ++i) {
       switch ((unsigned char) my.code [i]) {
+      case  G_CHAR_FIELD  :
+      case  G_KEY_FIELD   :
+         my.disp [i]  = G_CHAR_FIELD;
+         sprintf (t, "%c", G_KEY_FIELD);
+         strlcat (my.syst, t, 2000);
+         strlcat (my.load, t, 2000);
+         break;
+      case  G_CHAR_GROUP  :
       case  G_KEY_GROUP   :
          my.disp [i]  = G_KEY_PIPE;
          sprintf (t, "%c", G_KEY_FIELD);
@@ -519,10 +527,13 @@ CODE_load          (void)
    /*---(check for var)------------------*/
    x_len = strlen (my.load);
    if        (x_len <= 7) {
+      /*> printf ("small one\n");                                                     <*/
       fprintf (my.file_code, "\"%s\"", my.load);
    } else if (strncmp (my.code, "[[ ", 3) != 0) {
+      /*> printf ("longer, not-variable one\n");                                      <*/
       fprintf (my.file_code, "\"%s\"", my.load);
    } else {
+      /*> printf ("variable one\n");                                                  <*/
       strlcpy (x_temp, my.load + 3, LEN_STR);
       x_var = x_temp;
       p = strtok_r (x_temp, q, &r);
