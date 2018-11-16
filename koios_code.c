@@ -273,6 +273,10 @@ CODE_scrp_end        (void)
    }
    /*---(close script/share)-------------*/
    if (s_shared != '-' || my.cscrp >  0) {
+      if (s_shared != '-') {
+         fprintf (my.file_code, "   /*---(shared done)---------------------*/\n");
+         fprintf (my.file_code, "   if (g_exec == 1)  yUNIT_share_foot (my_unit, '%c');\n", s_shared);
+      }
       if (s_shared == '-') {
          fprintf (my.file_code, "   /*---(script done)---------------------*/\n");
          fprintf (my.file_code, "   if (g_exec == 1)  yUNIT_prcs    (my_unit);\n");
@@ -333,6 +337,8 @@ CODE_shared          (void)
    fprintf (my.file_code, "char\n");
    fprintf (my.file_code, "UNIT_shared_%c (void)\n", my.desc [1]);
    fprintf (my.file_code, "{\n");
+   fprintf (my.file_code, "    yUNIT_share_head (my_unit, \"%s\");\n", my.desc);
+   fprintf (my.file_code, "\n");
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -453,7 +459,7 @@ CODE_display       (void)
          break;
       case  G_CHAR_GROUP  :
       case  G_KEY_GROUP   :
-         my.disp [i]  = G_KEY_PIPE;
+         my.disp [i]  = G_CHAR_GROUP;
          sprintf (t, "%c", G_KEY_FIELD);
          strlcat (my.syst, t, 2000);
          strlcat (my.load, t, 2000);

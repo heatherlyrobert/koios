@@ -90,8 +90,8 @@
 
 /*===[[ VERSIONING ]]=========================================================*/
 /* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "1.0m"
-#define     KOIOS_VER_TXT    "load verb was not converting properly (fixed)"
+#define     KOIOS_VER_NUM    "1.0n"
+#define     KOIOS_VER_TXT    "added visual markers at beg/end of shared code"
 
 
 
