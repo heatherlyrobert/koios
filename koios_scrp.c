@@ -7,7 +7,7 @@ tVERB       g_verbs [MAX_VERB] = {
    /* --------------   ---------------------------------------   -  */
    { "PREP"         , "preparation before testing"            , '-',  0,  0 },
    { "incl"         , "c header inclusion"                    , '-',  0,  0 },
-   { "#>save"       , "script internal comments"              , 'c',  0,  0 },
+   { "#>"           , "script internal comments"              , 'c',  0,  0 },
    /* --------------   --------------------------------------- */
    { "SECT"         , "grouping of scripts"                   , '-',  0,  0 },
    { "SCRP"         , "test script"                           , '-',  0,  0 },
@@ -45,7 +45,7 @@ SCRP_open          (void)
    my.file_scrp = fopen (my.name_scrp, "r");
    DEBUG_INPT   yLOG_point   ("file*"     , my.file_scrp);
    --rce;  if (my.file_scrp == NULL) {
-      DEBUG_TOPS   yLOG_fatal   ("scrp file" , "can not open script file");
+      DEBUG_TOPS   yLOG_fatal   ("scrp file, can not open script file");
       DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
       return rce;
    }
@@ -100,7 +100,7 @@ SCRP_read          (void)
    DEBUG_INPT   yLOG_point   ("*scrp"     , my.file_scrp);
    /*---(defense)------------------------*/
    --rce;  if (my.file_scrp == NULL) {
-      DEBUG_INPT   yLOG_fatal   ("scrp file" , "file not open");
+      DEBUG_INPT   yLOG_fatal   ("scrp file, file not open");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
@@ -407,6 +407,11 @@ SCRP_parse         (void)
    DEBUG_INPT   yLOG_note    ("create a copy of source record");
    strlcpy (x_recd, my.recd, LEN_RECD);
    DEBUG_INPT   yLOG_info    ("x_recd"    , x_recd);
+   if (x_recd [0] == '#' && x_recd [1] == '>') {
+      DEBUG_INPT   yLOG_note    ("found saved record/comment");
+      strlcpy (my.verb, "#>", LEN_LABEL);
+      return 0;
+   }
    /*---(get recd type)------------------*/
    p = strtok (x_recd, q);
    DEBUG_INPT   yLOG_point   ("*p"        , p);
@@ -423,7 +428,8 @@ SCRP_parse         (void)
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
-   DEBUG_INPT   yLOG_value   ("verb"      , p);
+   DEBUG_INPT   yLOG_point   ("verb"      , p);
+   DEBUG_INPT   yLOG_info    ("verb"      , p);
    sprintf (x_temp, " %s ", p);
    --rce;  if (p [0] == '#' && p [1] != '>') {
       DEBUG_INPT   yLOG_note    ("comment not in column one");

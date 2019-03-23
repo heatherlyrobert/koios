@@ -1,10 +1,36 @@
 /*===============================[[ beg code ]]===============================*/
 
+
+/*===[[ HEADER ]]=============================================================*/
+/*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
+
+#define     P_FOCUS     "PS (programming support)"
+#define     P_NICHE     "st (string testing)"
+#define     P_PURPOSE   "provide simple unit testing framework for writing scripts"
+
+#define     P_NAMESAKE  "koios-polos (axis of heaven)"
+#define     P_HERITAGE  "titan god of intelligence, farsight, and the inquisive mind"
+#define     P_IMAGERY   "north star, to the ancients was dra in constellation dracos"
+
+#define     P_SYSTEM    "gnu/linux   (powerful, ubiquitous, technical, and hackable)"
+#define     P_LANGUAGE  "ansi-c      (wicked, limitless, universal, and everlasting)"
+#define     P_CODESIZE  "small       (appoximately 1,000 slocl)"
+
+#define     P_AUTHOR    "heatherlyrobert"
+#define     P_CREATED   "2014-03"
+#define     P_DEPENDS   "none"
+
+#define     P_VERMAJOR  "1.Xx production"
+#define     P_VERMINOR  "1.1x tune for a wide variety for applications"
+#define     P_VERNUM    "1.1b"
+#define     P_VERTXT    "fixed bug in saved macro/comment verb type"
+
+
 /*===[[ HEADER ]]=============================================================*/
 
 /*   focus         : (PS) programming support
  *   niche         : (st) software testing
- *   application   : koios       (titan-god of inquisitive, questioning mind)
+ *   heritage      : koios (titan-god of the inquisitive and questioning mind)
  *   purpose       : provide consistent automated unit testing framework
  *
  *   base_system   : gnu/linux   (powerful, ubiquitous, technical, and hackable)

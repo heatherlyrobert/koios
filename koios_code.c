@@ -35,7 +35,7 @@ CODE_open          (void)
    my.file_code = fopen (my.name_code, "w");
    DEBUG_OUTP   yLOG_point   ("file*"     , my.file_code);
    --rce;  if (my.file_code == NULL) {
-      DEBUG_TOPS   yLOG_fatal   ("scrp file" , "can not open script file");
+      DEBUG_TOPS   yLOG_fatal   ("scrp file, can not open script file");
       DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
       return rce;
    }
@@ -45,7 +45,7 @@ CODE_open          (void)
    my.file_main = fopen (my.name_main, "w");
    DEBUG_OUTP   yLOG_point   ("file*"     , my.file_main);
    --rce;  if (my.file_main == NULL) {
-      DEBUG_TOPS   yLOG_fatal   ("scrp file" , "can not open main file");
+      DEBUG_TOPS   yLOG_fatal   ("scrp file, can not open main file");
       DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
       return rce;
    }

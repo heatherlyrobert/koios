@@ -127,7 +127,7 @@ PROG_end           (void)
 {
    DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
-   yLOG_end     ();
+   yLOGS_end     ();
    return 0;
 }
 

@@ -23,7 +23,7 @@ CONV_open          (void)
    my.file_conv = fopen (my.name_conv, "w");
    DEBUG_OUTP   yLOG_point   ("file*"     , my.file_conv);
    --rce;  if (my.file_conv == NULL) {
-      DEBUG_TOPS   yLOG_fatal   ("scrp file" , "can not open output script file");
+      DEBUG_TOPS   yLOG_fatal   ("scrp file, can not open output script file");
       DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
       return rce;
    }
