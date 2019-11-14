@@ -10,7 +10,7 @@
 
 #define     P_NAMESAKE  "koios-polos (axis of heaven)"
 #define     P_HERITAGE  "titan god of intelligence, farsight, and the inquisive mind"
-#define     P_IMAGERY   "north star, to the ancients was dra in constellation dracos"
+#define     P_IMAGERY   "very tall, dark armor, with blue-white eyes, hair, and beard"
 
 #define     P_SYSTEM    "gnu/linux   (powerful, ubiquitous, technical, and hackable)"
 #define     P_LANGUAGE  "ansi-c      (wicked, limitless, universal, and everlasting)"
@@ -21,9 +21,9 @@
 #define     P_DEPENDS   "none"
 
 #define     P_VERMAJOR  "1.Xx production"
-#define     P_VERMINOR  "1.1x tune for a wide variety for applications"
-#define     P_VERNUM    "1.1b"
-#define     P_VERTXT    "fixed bug in saved macro/comment verb type"
+#define     P_VERMINOR  "1.2x get unit testing in here to prove changes"
+#define     P_VERNUM    "1.2a"
+#define     P_VERTXT    "very good start on SCRP unit testing"
 
 
 /*===[[ HEADER ]]=============================================================*/
@@ -259,10 +259,9 @@ char        PROG_args          (int  a_argc, char *a_argv[]);
 char        PROG_begin         (void);
 char        PROG_end           (void);
 /*---(unittest)------------*/
-char        PROG_testfiles     (void);
-char        PROG_testquiet     (void);
-char        PROG_testloud      (void);
-char        PROG_testend       (void);
+char        PROG__unit_quiet   (void);
+char        PROG__unit_loud    (void);
+char        PROG__unit_end     (void);
 
 /*===[[ SCRP ]]===============================================================*/
 char        SCRP_open          (void);
@@ -275,6 +274,7 @@ char        SCRP_vers20        (void);
 char        SCRP_vers19        (void);
 char        SCRP_verbs         (void);
 char        SCRP_verbcode      (void);
+char*       SCRP__unit              (char *a_question, int a_num);
 
 /*===[[ CODE ]]===============================================================*/
 char        CODE_open          (void);

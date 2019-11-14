@@ -3,6 +3,13 @@
 
 
 
+static  char  s_ditto    = '-';
+static  char  s_dittoing = '-';
+static  FILE *s_file_save;
+static  FILE *s_file_ditto;
+static  int   s_lineno   =   0;
+
+
 tVERB       g_verbs [MAX_VERB] = {
    /* --------------   ---------------------------------------   -  */
    { "PREP"         , "preparation before testing"            , '-',  0,  0 },
@@ -15,6 +22,7 @@ tVERB       g_verbs [MAX_VERB] = {
    /* --------------   --------------------------------------- */
    { "GROUP"        , "grouping of conditions"                , '-',  0,  0 },
    { "COND"         , "test condition"                        , '-',  0,  0 },
+   { "DITTO"        , "repeated test condition"               , '-',  0,  0 },
    { "USE_SHARE"    , "inclusion of shared code"              , '-',  0,  0 },
    /* --------------   --------------------------------------- */
    { "exec"         , "function execution"                    , 'f',  0,  0 },
@@ -33,6 +41,102 @@ tVERB       g_verbs [MAX_VERB] = {
 
 
 
+/*====================------------------------------------====================*/
+/*===----                    for ditting lines                         ----===*/
+/*====================------------------------------------====================*/
+static void      o___DITTOING________________o (void) {;}
+
+char
+SCRP_ditto_beg     (char a_mark)
+{
+   /*---(locals)-----------+-----------+-*/
+   char        rce         = -10;           /* return code for errors         */
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_enter   (__FUNCTION__);
+   /*---(save mark)----------------------*/
+   s_ditto      = a_mark;
+   /*---(reopen file)--------------------*/
+   s_file_ditto = fopen (my.name_scrp, "r");
+   DEBUG_INPT   yLOG_point   ("refile*"   , s_file_ditto);
+   --rce;  if (my.file_scrp == NULL) {
+      DEBUG_TOPS   yLOG_fatal   ("scrp file, can not open script file");
+      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(swap files)---------------------*/
+   DEBUG_INPT   yLOG_note    ("swap file for script");
+   s_file_save  = my.file_scrp;
+   my.file_scrp = s_file_ditto;
+   s_lineno     = 0;
+   /*---(complete)-----------------------*/
+   DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+char
+SCRP_ditto_check   (char *a_recd)
+{
+   /*---(locals)-----------+-----------+-*/
+   char        rce         =  -10;
+   char       *p           = NULL;
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(find cond lines)----------------*/
+   p = strstr (a_recd, "COND (");
+   DEBUG_INPT   yLOG_spoint  (p);
+   --rce;  if (p == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_INPT   yLOG_sint    (p - a_recd);
+   --rce;  if (p - a_recd > 5) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(find our cond)------------------*/
+   DEBUG_INPT   yLOG_schar   (s_ditto);
+   DEBUG_INPT   yLOG_schar   (p [6]);
+   --rce;  if (p [6] != s_ditto) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   return 1;
+}
+
+char
+SCRP_ditto_end     (void)
+{
+   /*---(locals)-----------+-----------+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_enter   (__FUNCTION__);
+   /*---(reset ditto)--------------------*/
+   s_ditto = '-';
+   /*---(swap files)---------------------*/
+   DEBUG_INPT   yLOG_note    ("swap file for script");
+   my.file_scrp = s_file_save;
+   /*---(close detail report)------------*/
+   DEBUG_INPT   yLOG_point   ("file_ditto", s_file_ditto);
+   rc = fclose (s_file_ditto);
+   --rce;  if (rc != 0) {
+      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+
+
+/*====================------------------------------------====================*/
+/*===----                      reading the file                        ----===*/
+/*====================------------------------------------====================*/
+static void      o___READING_________________o (void) {;}
+
 char         /*--> open script file ----------------------[ leaf   [ ------ ]-*/
 SCRP_open          (void)
 {
@@ -46,10 +150,11 @@ SCRP_open          (void)
    DEBUG_INPT   yLOG_point   ("file*"     , my.file_scrp);
    --rce;  if (my.file_scrp == NULL) {
       DEBUG_TOPS   yLOG_fatal   ("scrp file, can not open script file");
-      DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_note    ("script file open");
+   my.n_line = 0;
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -123,27 +228,35 @@ SCRP_read          (void)
          DEBUG_INPT   yLOG_exit    (__FUNCTION__);
          return rce;
       }
-      ++my.n_line;
+      if (s_ditto == '-') ++my.n_line;
+      else                ++s_lineno;
       DEBUG_INPT   yLOG_value   ("line#"     , my.n_line);
       /*---(filter)----------------------*/
       x_len = strllen (x_recd, LEN_RECD);
       x_recd [--x_len] = '\0';
       if (x_recd [0] == '\0') {
-         DEBUG_INPT   yLOG_note    ("empyt, skipping");
-         ++my.n_empty;
+         DEBUG_INPT   yLOG_note    ("empty, skipping");
+         if (s_ditto != '-')  SCRP_ditto_end ();
+         else                 ++my.n_empty;
          continue;
       }
       if (x_recd [0] == '#' && x_recd [1] != '>') {
          DEBUG_INPT   yLOG_note    ("comment, skipping");
-         ++my.n_comment;
+         if (s_ditto != '-')  SCRP_ditto_end ();
+         else                 ++my.n_comment;
          continue;
       }
       DEBUG_INPT   yLOG_value   ("length"    , x_len);
       if (x_len <= 10)  {
          DEBUG_INPT   yLOG_note    ("too short, skipping");
-         ++my.n_short;
-         printf ("SHORT : <<%s>>\n", x_recd);
+         if (s_ditto != '-')  SCRP_ditto_end ();
+         else                 ++my.n_short;
          continue;
+      }
+      /*---(handle ditto)----------------*/
+      if (s_ditto != '-' && s_dittoing == '-') {
+         rc = SCRP_ditto_check (x_recd);
+         if (rc < 1)  continue;
       }
       /*---(translate delayed chars)-----*/
       strlundelay (x_recd, LEN_RECD);
@@ -447,7 +560,7 @@ SCRP_parse         (void)
          break;
       }
       if (g_verbs [i].name [0] != p[0])          continue;
-      if (strcmp (g_verbs [i].name, p) != 0)     continue;
+      if (strncmp (g_verbs [i].name, p, 4) != 0) continue;
       DEBUG_INPT   yLOG_note    ("verb found, save");
       strlcpy (my.verb, g_verbs [i].name, LEN_LABEL);
       my.indx    = i;
@@ -458,9 +571,21 @@ SCRP_parse         (void)
    }
    --rce;  if (my.indx == -1) {
       DEBUG_INPT   yLOG_note    ("verb not found");
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       printf ("VERB? : %s <<%s>>\n", p, my.recd);
       return rce;
+   }
+   /*---(check for ditto)----------------*/
+   --rce;  if (strcmp ("DITTO", g_verbs [i].name) == 0) {
+      DEBUG_INPT   yLOG_note    ("found a ditto condition");
+      x_len = strlen (p);
+      if (p != 9) {
+         DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
+         return rce;
+      }
+      SCRP_ditto_beg (p [7]);
+      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      return 0;
    }
    /*---(read version)-------------------*/
    p = strtok (NULL  , q);
@@ -493,6 +618,7 @@ SCRP_parse         (void)
    return 0;
 }
 
+
 char         /*--> close script file ---------------------[ ------ [ ------ ]-*/
 SCRP_close         (void)
 {
@@ -503,10 +629,16 @@ SCRP_close         (void)
    DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
    /*---(close detail report)------------*/
    DEBUG_INPT   yLOG_point   ("*file_scrp", my.file_scrp);
-   rc = fclose (my.file_scrp);
-   --rce;  if (rc != 0) {
+   --rce;  if (my.file_scrp == NULL) {
+      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   rc = fclose (my.file_scrp);
+   --rce;  if (rc != 0) {
+      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   my.file_scrp = NULL;
    /*---(terminate logging)--------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    /*---(complete)-----------------------*/
@@ -553,48 +685,45 @@ SCRP_verbcode      (void)
 
 
 /*====================------------------------------------====================*/
-/*===----                    unit testing accessor                     ----===*/
+/*===----                         unit testing                         ----===*/
 /*====================------------------------------------====================*/
-static void      o___UNITTEST________________o (void) {;}
+static void      o___UNITTEST________________o (void) {;};
 
-/*> char             /+ [------] unit test setter --------------------------------+/   <* 
- *> SCRP_setter        (char *a_variable, char *a_value)                               <* 
- *> {                                                                                  <* 
- *> }                                                                                  <*/
-
-/*> char*            /+ [------] unit test accessor ------------------------------+/                                             <* 
- *> SCRP_getter        (char *a_question, int a_num)                                                                             <* 
- *> {                                                                                                                            <* 
- *>    /+---(prepare)------------------------+/                                                                                  <* 
- *>    strlcpy  (my.answer, "SCRP_unit        : question not understood", LEN_UNIT);                                             <* 
- *>    /+---(fields)-------------------------+/                                                                                  <* 
- *>    if        (strncmp (a_question, "record"         , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_record      : %3d:%.35s"     , my.len                , my.recd      );            <* 
- *>    } else if (strncmp (a_question, "verb"           , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_verb        : %3d:%.35s (%c)", strlen (my.verb      ), my.verb      , my.abbr);   <* 
- *>    } else if (strncmp (a_question, "desc"           , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_desc        : %3d:%.35s"     , strlen (my.desc      ), my.desc      );            <* 
- *>    } else if (strncmp (a_question, "machine"        , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_machine     : %3d:%.35s"     , strlen (my.machine   ), my.machine   );            <* 
- *>    } else if (strncmp (a_question, "target"         , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_target      : %3d:%.35s"     , strlen (my.target    ), my.target    );            <* 
- *>    } else if (strncmp (a_question, "importance"     , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_importance  : %3d:%.35s"     , strlen (my.importance), my.importance);            <* 
- *>    } else if (strncmp (a_question, "users"          , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_users       : %3d:%.35s"     , strlen (my.users     ), my.users     );            <* 
- *>    } else if (strncmp (a_question, "own"            , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_own         : %3d:%.35s"     , strlen (my.own       ), my.own       );            <* 
- *>    } else if (strncmp (a_question, "grp"            , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_grp         : %3d:%.35s"     , strlen (my.grp       ), my.grp       );            <* 
- *>    } else if (strncmp (a_question, "perms"          , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_perms       : %3d:%.35s"     , strlen (my.perms     ), my.perms     );            <* 
- *>    } else if (strncmp (a_question, "test"           , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_test        : %3d:%.35s"     , strlen (my.test      ), my.test      );            <* 
- *>    } else if (strncmp (a_question, "source"         , 20)   == 0) {                                                          <* 
- *>       snprintf (my.answer, LEN_UNIT, "SCRP_source      : %3d:%.35s"     , strlen (my.source    ), my.source    );            <* 
- *>    }                                                                                                                         <* 
- *>    /+---(complete)-----------------------+/                                                                                  <* 
- *>    return my.answer;                                                                                                         <* 
- *> }                                                                                                                            <*/
+char*      /*----: unit testing accessor for clean validation interface ------*/
+SCRP__unit              (char *a_question, int a_num)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   int         i           =    0;
+   char        t           [LEN_RECD ];
+   /*---(preprare)-----------------------*/
+   strlcpy  (my.answer, "SCRP unit      : question not understood", LEN_STR);
+   if      (strcmp (a_question, "file"      ) == 0) {
+      sprintf (my.answer, "SCRP file      : %-35.35s %p", my.name_scrp, my.file_scrp);
+   }
+   else if (strcmp (a_question, "recd"      ) == 0) {
+      strlcpy    (t, my.recd, LEN_RECD);
+      strlencode (t, ySTR_NONE, LEN_RECD);
+      sprintf (my.answer, "SCRP recd      : %2d %3d[%.40s]", my.n_line, strlen (t), t);
+   }
+   else if (strcmp (a_question, "verb"      ) == 0) {
+      sprintf (my.answer, "SCRP verb      : %-10.10s/%.30s", my.verb, my.desc);
+   }
+   else if (strcmp (a_question, "call"      ) == 0) {
+      sprintf (my.answer, "SCRP call      : %-20.20s (%.20s)", my.meth, my.args);
+   }
+   else if (strcmp (a_question, "test"      ) == 0) {
+      sprintf (my.answer, "SCRP test      : %-10.10s/%.30s", my.test, my.retn);
+   }
+   else if (strcmp (a_question, "retn"      ) == 0) {
+      sprintf (my.answer, "SCRP retn      : %c         /%.30s", my.type, my.retn);
+   }
+   else if (strcmp (a_question, "code"      ) == 0) {
+      strlcpy    (t, my.code, LEN_RECD);
+      strlencode (t, ySTR_NONE, LEN_RECD);
+      sprintf (my.answer, "SCRP code      : %3d[%.40s]", strlen (t), t);
+   }
+   /*---(complete)-----------------------*/
+   return my.answer;
+}
 
 /*===============================[[ end code ]]===============================*/

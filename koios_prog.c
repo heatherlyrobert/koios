@@ -138,19 +138,8 @@ PROG_end           (void)
 /*====================------------------------------------====================*/
 static void      o___UNITTEST________________o (void) {;}
 
-char       /*----: set up program test file locations ------------------------*/
-PROG_testfiles     (void)
-{
-   /*> snprintf (my.name_root   , LEN_FILE, "%s"    , DIR_TEST);                           <* 
-    *> snprintf (my.name_conf   , LEN_FILE, "%s%s%s", DIR_TEST , DIR_ETC  , FILE_CONF );   <* 
-    *> snprintf (my.name_full   , LEN_FILE, "%s%s%s", DIR_TEST , DIR_YHIST, FILE_FULL );   <* 
-    *> snprintf (my.name_summ   , LEN_FILE, "%s%s%s", DIR_TEST , DIR_YHIST, FILE_SUMM );   <* 
-    *> snprintf (my.name_warn   , LEN_FILE, "%s%s%s", DIR_TEST , DIR_YHIST, FILE_WARN );   <*/
-   return 0;
-}
-
 char       /*----: set up program urgents/debugging --------------------------*/
-PROG_testquiet     (void)
+PROG__unit_quiet   (void)
 {
    char       *x_args [1]  = { "koios" };
    yURG_logger    (1, x_args);
@@ -162,7 +151,7 @@ PROG_testquiet     (void)
 }
 
 char       /*----: set up program urgents/debugging --------------------------*/
-PROG_testloud      (void)
+PROG__unit_loud    (void)
 {
    char       *x_args [2]  = { "koios_unit", "@@kitchen"    };
    yURG_logger    (1, x_args);
@@ -174,7 +163,7 @@ PROG_testloud      (void)
 }
 
 char       /*----: set up program urgents/debugging --------------------------*/
-PROG_testend       (void)
+PROG__unit_end     (void)
 {
    PROG_end       ();
    return 0;
