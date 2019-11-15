@@ -22,8 +22,8 @@
 
 #define     P_VERMAJOR  "1.Xx production"
 #define     P_VERMINOR  "1.2x get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2a"
-#define     P_VERTXT    "very good start on SCRP unit testing"
+#define     P_VERNUM    "1.2b"
+#define     P_VERTXT    "script file is unit tested pretty well, including ditto verb"
 
 
 /*===[[ HEADER ]]=============================================================*/
@@ -264,6 +264,9 @@ char        PROG__unit_loud    (void);
 char        PROG__unit_end     (void);
 
 /*===[[ SCRP ]]===============================================================*/
+char        SCRP_ditto__clear       (void);
+char        SCRP_ditto__set         (char a_mark);
+char        SCRP_ditto__check       (char *a_verb);
 char        SCRP_open          (void);
 char        SCRP_close         (void);
 char        SCRP_clear         (void);

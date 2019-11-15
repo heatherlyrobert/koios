@@ -3,12 +3,13 @@
 
 
 
-static  char  s_ditto    = '-';
+static  int   s_ditto    = -1;
 static  char  s_dittoing = '-';
 static  FILE *s_file_save;
 static  FILE *s_file_ditto;
 static  int   s_lineno   =   0;
 
+static  int   s_dittos [26] = { -1 };
 
 tVERB       g_verbs [MAX_VERB] = {
    /* --------------   ---------------------------------------   -  */
@@ -26,8 +27,7 @@ tVERB       g_verbs [MAX_VERB] = {
    { "USE_SHARE"    , "inclusion of shared code"              , '-',  0,  0 },
    /* --------------   --------------------------------------- */
    { "exec"         , "function execution"                    , 'f',  0,  0 },
-   { "get"          , "unit test getter call"                 , 'f',  0,  0 },
-   { "set"          , "unit test setter call"                 , 'f',  0,  0 },
+   { "get"          , "unit test accessor retrieval"          , 'f',  0,  0 },
    { "echo"         , "test a variable directly"              , 'f',  0,  0 },
    /* --------------   --------------------------------------- */
    { "mode"         , "set pass or forced_fail mode"          , 'p',  0,  0 },
@@ -47,14 +47,61 @@ tVERB       g_verbs [MAX_VERB] = {
 static void      o___DITTOING________________o (void) {;}
 
 char
-SCRP_ditto_beg     (char a_mark)
+SCRP_ditto__clear       (void)
+{
+   int         i           =    0;
+   for (i = 0; i < 26; ++i) {
+      s_dittos [i] = -1;
+   }
+   return 0;
+}
+
+char
+SCRP_ditto__set         (char a_mark)
+{
+   char        rce         =  -10;
+   --rce;  if (s_file_ditto != NULL)          return rce;
+   --rce;  if (a_mark < 'A' || a_mark > 'Z')  return rce;
+   s_dittos [a_mark - 'A'] = my.n_line;
+   return 0;
+}
+
+char
+SCRP_ditto_beg          (char *a_verb)
 {
    /*---(locals)-----------+-----------+-*/
-   char        rce         = -10;           /* return code for errors         */
+   char        rce         =  -10;
+   char       *p           = NULL;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
+   /*---(defense)------------------------*/
+   DEBUG_INPT   yLOG_spoint  (a_verb);
+   --rce;  if (a_verb == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(parse ditto line)---------------*/
+   p = strstr (a_verb, "DITTO (");
+   DEBUG_INPT   yLOG_spoint  (p);
+   --rce;  if (p == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_INPT   yLOG_sint    (p - a_verb);
+   --rce;  if (p - a_verb > 20) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
    /*---(save mark)----------------------*/
-   s_ditto      = a_mark;
+   --rce;  if (p [7] < 'A' || p [7] > 'Z') {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (s_dittos [p [7] - 'A'] < 1) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   s_ditto      = p [7] - 'A';
    /*---(reopen file)--------------------*/
    s_file_ditto = fopen (my.name_scrp, "r");
    DEBUG_INPT   yLOG_point   ("refile*"   , s_file_ditto);
@@ -68,45 +115,49 @@ SCRP_ditto_beg     (char a_mark)
    s_file_save  = my.file_scrp;
    my.file_scrp = s_file_ditto;
    s_lineno     = 0;
+   s_dittoing   = 'y';
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
 char
-SCRP_ditto_check   (char *a_recd)
+SCRP_ditto__check       (char *a_verb)
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         =  -10;
+   char        rc          =    0;
    char       *p           = NULL;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(defense)------------------------*/
+   DEBUG_INPT   yLOG_spoint  (a_verb);
+   --rce;  if (a_verb == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
    /*---(find cond lines)----------------*/
-   p = strstr (a_recd, "COND (");
+   p = strstr (a_verb, "COND (");
    DEBUG_INPT   yLOG_spoint  (p);
    --rce;  if (p == NULL) {
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_INPT   yLOG_sint    (p - a_recd);
-   --rce;  if (p - a_recd > 5) {
+   DEBUG_INPT   yLOG_sint    (p - a_verb);
+   --rce;  if (p - a_verb > 20) {
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(find our cond)------------------*/
-   DEBUG_INPT   yLOG_schar   (s_ditto);
    DEBUG_INPT   yLOG_schar   (p [6]);
-   --rce;  if (p [6] != s_ditto) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
+   rc = SCRP_ditto__set (p [6]);
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
-   return 1;
+   return rc;
 }
 
 char
-SCRP_ditto_end     (void)
+SCRP_ditto_end          (void)
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         =  -10;
@@ -114,7 +165,8 @@ SCRP_ditto_end     (void)
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
    /*---(reset ditto)--------------------*/
-   s_ditto = '-';
+   s_ditto    = -1;
+   s_dittoing = '-';
    /*---(swap files)---------------------*/
    DEBUG_INPT   yLOG_note    ("swap file for script");
    my.file_scrp = s_file_save;
@@ -125,6 +177,10 @@ SCRP_ditto_end     (void)
       DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   /*---(null closed pointers)-----------*/
+   s_file_ditto = NULL;
+   s_file_save  = NULL;
+   s_lineno     = 0;
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -155,6 +211,7 @@ SCRP_open          (void)
    }
    DEBUG_INPT   yLOG_note    ("script file open");
    my.n_line = 0;
+   SCRP_ditto__clear ();
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -228,35 +285,33 @@ SCRP_read          (void)
          DEBUG_INPT   yLOG_exit    (__FUNCTION__);
          return rce;
       }
-      if (s_ditto == '-') ++my.n_line;
-      else                ++s_lineno;
+      if (s_dittoing == '-') ++my.n_line;
+      else  {
+         ++s_lineno;
+         if (s_lineno <  s_dittos [s_ditto]) continue;
+      }
       DEBUG_INPT   yLOG_value   ("line#"     , my.n_line);
       /*---(filter)----------------------*/
       x_len = strllen (x_recd, LEN_RECD);
       x_recd [--x_len] = '\0';
       if (x_recd [0] == '\0') {
          DEBUG_INPT   yLOG_note    ("empty, skipping");
-         if (s_ditto != '-')  SCRP_ditto_end ();
-         else                 ++my.n_empty;
+         if (s_dittoing != '-')  SCRP_ditto_end ();
+         else                    ++my.n_empty;
          continue;
       }
       if (x_recd [0] == '#' && x_recd [1] != '>') {
          DEBUG_INPT   yLOG_note    ("comment, skipping");
-         if (s_ditto != '-')  SCRP_ditto_end ();
-         else                 ++my.n_comment;
+         if (s_dittoing != '-')  SCRP_ditto_end ();
+         else                    ++my.n_comment;
          continue;
       }
       DEBUG_INPT   yLOG_value   ("length"    , x_len);
       if (x_len <= 10)  {
          DEBUG_INPT   yLOG_note    ("too short, skipping");
-         if (s_ditto != '-')  SCRP_ditto_end ();
-         else                 ++my.n_short;
+         if (s_dittoing != '-')  SCRP_ditto_end ();
+         else                    ++my.n_short;
          continue;
-      }
-      /*---(handle ditto)----------------*/
-      if (s_ditto != '-' && s_dittoing == '-') {
-         rc = SCRP_ditto_check (x_recd);
-         if (rc < 1)  continue;
       }
       /*---(translate delayed chars)-----*/
       strlundelay (x_recd, LEN_RECD);
@@ -504,6 +559,11 @@ SCRP_parse         (void)
    /*---(prepare)---------------------*/
    SCRP_clear      ();
    /*---(defense)------------------------*/
+   --rce;  if (my.file_scrp == NULL) {
+      DEBUG_INPT   yLOG_fatal   ("scrp file, file not open");
+      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      return rce;
+   }
    --rce;  if (my.recd [0] == '\0') {
       DEBUG_INPT   yLOG_note    ("NULL record in my.recd");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
@@ -553,10 +613,7 @@ SCRP_parse         (void)
    my.indx = -1;
    for (i = 0; i < MAX_VERB; ++i) {
       if (g_verbs [i].name [0] == '-') {
-         my.indx    = i;
-         ++g_verbs [i].count;
-         ++g_verbs [i].total;
-         printf ("VERB? : %s <<%s>>\n", p, my.recd);
+         DEBUG_INPT   yLOG_note    ("end of verbs");
          break;
       }
       if (g_verbs [i].name [0] != p[0])          continue;
@@ -572,20 +629,21 @@ SCRP_parse         (void)
    --rce;  if (my.indx == -1) {
       DEBUG_INPT   yLOG_note    ("verb not found");
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
-      printf ("VERB? : %s <<%s>>\n", p, my.recd);
       return rce;
    }
    /*---(check for ditto)----------------*/
+   if (strcmp ("SCRP" , g_verbs [i].name) == 0) {
+      DEBUG_INPT   yLOG_note    ("clear ditto marks");
+      SCRP_ditto__clear ();
+   }
+   if (strcmp ("COND", g_verbs [i].name) == 0) {
+      rc = SCRP_ditto__check (p);
+   }
    --rce;  if (strcmp ("DITTO", g_verbs [i].name) == 0) {
       DEBUG_INPT   yLOG_note    ("found a ditto condition");
-      x_len = strlen (p);
-      if (p != 9) {
-         DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
-         return rce;
-      }
-      SCRP_ditto_beg (p [7]);
+      rc = SCRP_ditto_beg (p);
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return 0;
+      return rc;
    }
    /*---(read version)-------------------*/
    p = strtok (NULL  , q);
@@ -694,6 +752,7 @@ SCRP__unit              (char *a_question, int a_num)
 {
    /*---(locals)-----------+-----+-----+-*/
    int         i           =    0;
+   char        s           [LEN_LABEL];
    char        t           [LEN_RECD ];
    /*---(preprare)-----------------------*/
    strlcpy  (my.answer, "SCRP unit      : question not understood", LEN_STR);
@@ -712,7 +771,7 @@ SCRP__unit              (char *a_question, int a_num)
       sprintf (my.answer, "SCRP call      : %-20.20s (%.20s)", my.meth, my.args);
    }
    else if (strcmp (a_question, "test"      ) == 0) {
-      sprintf (my.answer, "SCRP test      : %-10.10s/%.30s", my.test, my.retn);
+      sprintf (my.answer, "SCRP test      : %-10.10s/%.30s", my.test, my.expe);
    }
    else if (strcmp (a_question, "retn"      ) == 0) {
       sprintf (my.answer, "SCRP retn      : %c         /%.30s", my.type, my.retn);
@@ -721,6 +780,18 @@ SCRP__unit              (char *a_question, int a_num)
       strlcpy    (t, my.code, LEN_RECD);
       strlencode (t, ySTR_NONE, LEN_RECD);
       sprintf (my.answer, "SCRP code      : %3d[%.40s]", strlen (t), t);
+   }
+   else if (strcmp (a_question, "ditto"     ) == 0) {
+      sprintf (my.answer, "SCRP ditto     : %2d  %c  %-10p  %-10p  %3d", s_ditto, s_dittoing, s_file_save, s_file_ditto, s_lineno);
+   }
+   else if (strcmp (a_question, "dittos"    ) == 0) {
+      strlcpy (t, "", LEN_RECD);
+      for (i = 0; i < 15; ++i) {
+         if (s_dittos [i] > 0)  sprintf (s, " %2d", s_dittos [i]);
+         else                   sprintf (s, "  -");
+         strlcat (t, s, LEN_RECD);
+      }
+      sprintf (my.answer, "SCRP dittos A-O:%s", t);
    }
    /*---(complete)-----------------------*/
    return my.answer;
