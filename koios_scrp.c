@@ -217,7 +217,6 @@ SCRP_open          (void)
    return 0;
 }
 
-
 char         /*--> clean a script record -----------------[ leaf   [ ------ ]-*/
 SCRP_clear         (void)
 {
@@ -239,6 +238,7 @@ SCRP_clear         (void)
    my.retn        [0] = '\0';
    my.code        [0] = '\0';
    my.refn        [0] = '\0';
+   my.mark            = '-';
    /*---(working vars)-------------------*/
    my.syst        [0] = '\0';
    my.disp        [0] = '\0';
@@ -704,18 +704,27 @@ SCRP_parse         (void)
       return rce;
    }
    /*---(check for ditto)----------------*/
-   if (strcmp ("SCRP" , g_verbs [i].name) == 0) {
-      DEBUG_INPT   yLOG_note    ("clear ditto marks");
-      SCRP_ditto__clear ();
-   }
-   if (strcmp ("COND", g_verbs [i].name) == 0) {
-      rc = SCRP_ditto__check (p);
-   }
-   --rce;  if (strcmp ("DITTO", g_verbs [i].name) == 0) {
-      DEBUG_INPT   yLOG_note    ("found a ditto condition");
-      rc = SCRP_ditto__beg (p);
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return rc;
+   if (my.run_type == G_RUN_CREATE) {
+      if (strcmp ("SCRP" , g_verbs [i].name) == 0) {
+         DEBUG_INPT   yLOG_note    ("clear ditto marks");
+         SCRP_ditto__clear ();
+      } else if (strcmp ("COND", g_verbs [i].name) == 0 && p [5] == '(' && p [7] == ')') {
+         DEBUG_INPT   yLOG_note    ("found a ditto condition");
+         rc = SCRP_ditto__check (p);
+      } else if (strcmp ("DITTO", g_verbs [i].name) == 0) {
+         DEBUG_INPT   yLOG_note    ("found a ditto verb");
+         rc = SCRP_ditto__beg (p);
+         DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+         return rc;
+      }
+   } else {
+      if (strcmp ("COND", g_verbs [i].name) == 0 && p [5] == '(' && p [7] == ')') {
+         DEBUG_INPT   yLOG_note    ("found a ditto condition");
+         my.mark = p [6];
+      } else if (strcmp ("DITTO", g_verbs [i].name) == 0) {
+         DEBUG_INPT   yLOG_note    ("found a ditto verb");
+         my.mark = p [7];
+      }
    }
    /*---(read version)-------------------*/
    p = strtok (NULL  , q);
@@ -853,6 +862,9 @@ SCRP__unit              (char *a_question, int a_num)
       strlcpy    (t, my.code, LEN_RECD);
       strlencode (t, ySTR_NONE, LEN_RECD);
       sprintf (my.answer, "SCRP code      : %3d[%.40s]", strlen (t), t);
+   }
+   else if (strcmp (a_question, "mark"      ) == 0) {
+      sprintf (my.answer, "SCRP mark      : %c", my.mark);
    }
    else if (strcmp (a_question, "ditto"     ) == 0) {
       sprintf (my.answer, "SCRP ditto     : %2d  %c  %-10p  %-10p  %3d", s_ditto, s_dittoing, s_file_save, s_file_ditto, s_lineno);

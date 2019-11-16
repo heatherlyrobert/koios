@@ -22,8 +22,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.2- get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2c"
-#define     P_VERTXT    "added script version 'current' and updated unit testing"
+#define     P_VERNUM    "1.2d"
+#define     P_VERTXT    "added unit testing and clean-up for detailed conversion/update"
 
 
 /*===[[ HEADER ]]=============================================================*/
@@ -206,6 +206,7 @@ struct cGLOBALS
    char        retn        [LEN_STR  ];     /* return variable                */
    char        code        [LEN_RECD ];     /* code/load/sys string           */
    char        refn        [LEN_LABEL];     /* test reference number          */
+   char        mark;                        /* ditto marking                  */
    /*---(working)---------------*/
    char        disp        [LEN_RECD ];     /* display ver " = ~, 1D = |      */
    char        syst        [LEN_RECD ];     /* system ver  " = ", 1D = 1F     */
@@ -303,6 +304,7 @@ char        CONV_open          (void);
 char        CONV_close         (void);
 char        CONV_write         (void);
 char        CONV_comment       (void);
+char*       CONV__unit              (char *a_question, int a_num);
 
 void        VOID_void          (char *a_one, int a_two);
 

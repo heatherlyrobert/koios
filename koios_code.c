@@ -833,6 +833,10 @@ CODE_write         (void)
                    CODE_load   ();
                 }
                 break;
+   case 's'  :  if      (strcmp (my.verb, "sys"      ) == 0) {
+                   /*> CODE_exec   ();                                                <*/
+                }
+                break;
    case 'e'  :  if      (strcmp (my.verb, "exec"     ) == 0) {
                    CODE_exec   ();
                 }
@@ -841,10 +845,6 @@ CODE_write         (void)
                 }
                 break;
    case 'g'  :  if      (strcmp (my.verb, "get"      ) == 0) {
-                   CODE_exec   ();
-                }
-                break;
-   case 's'  :  if      (strcmp (my.verb, "set"      ) == 0) {
                    CODE_exec   ();
                 }
                 break;
