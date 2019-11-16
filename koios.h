@@ -20,10 +20,10 @@
 #define     P_CREATED   "2014-03"
 #define     P_DEPENDS   "none"
 
-#define     P_VERMAJOR  "1.Xx production"
-#define     P_VERMINOR  "1.2x get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2b"
-#define     P_VERTXT    "script file is unit tested pretty well, including ditto verb"
+#define     P_VERMAJOR  "1.-- production"
+#define     P_VERMINOR  "1.2- get unit testing in here to prove changes"
+#define     P_VERNUM    "1.2c"
+#define     P_VERTXT    "added script version 'current' and updated unit testing"
 
 
 /*===[[ HEADER ]]=============================================================*/

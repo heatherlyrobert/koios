@@ -67,7 +67,7 @@ SCRP_ditto__set         (char a_mark)
 }
 
 char
-SCRP_ditto_beg          (char *a_verb)
+SCRP_ditto__beg         (char *a_verb)
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         =  -10;
@@ -157,7 +157,7 @@ SCRP_ditto__check       (char *a_verb)
 }
 
 char
-SCRP_ditto_end          (void)
+SCRP_ditto__end         (void)
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         =  -10;
@@ -296,20 +296,20 @@ SCRP_read          (void)
       x_recd [--x_len] = '\0';
       if (x_recd [0] == '\0') {
          DEBUG_INPT   yLOG_note    ("empty, skipping");
-         if (s_dittoing != '-')  SCRP_ditto_end ();
+         if (s_dittoing != '-')  SCRP_ditto__end ();
          else                    ++my.n_empty;
          continue;
       }
       if (x_recd [0] == '#' && x_recd [1] != '>') {
          DEBUG_INPT   yLOG_note    ("comment, skipping");
-         if (s_dittoing != '-')  SCRP_ditto_end ();
+         if (s_dittoing != '-')  SCRP_ditto__end ();
          else                    ++my.n_comment;
          continue;
       }
       DEBUG_INPT   yLOG_value   ("length"    , x_len);
       if (x_len <= 10)  {
          DEBUG_INPT   yLOG_note    ("too short, skipping");
-         if (s_dittoing != '-')  SCRP_ditto_end ();
+         if (s_dittoing != '-')  SCRP_ditto__end ();
          else                    ++my.n_short;
          continue;
       }
@@ -325,6 +325,78 @@ SCRP_read          (void)
    DEBUG_INPT   yLOG_note    ("got a good record");
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+char         /*--> parse out current records -------------[ leaf   [ ------ ]-*/
+SCRP__current      (char *a_first)
+{
+   /*---(locals)-----------+-----------+-*/
+   int         rc          = 0;             /* generic return code            */
+   char        rce         = -10;           /* return code for errors         */
+   int         i           = 0;
+   char       *p;
+   char       *q           = "\x1F";
+   /*---(read fields)--------------------*/
+   p = a_first;
+   for (i = 2; i < 20; ++i) {
+      /*---(clear spacer bars)-----------*/
+      if (p[0] == '-') {  /* begin careful to avoid negative numbers ;)) */
+         switch (p[1]) {
+         case ' '  :   /* catches "- - - - - - -" lines */
+         case '-'  :   /* catches "-------------" lines */
+         case '\0' :   /* catches "-" placeholder lines */
+            p[0] = '\0';
+            break;
+         }
+      }
+      /*---(handle fields)---------------*/
+      switch (i) {
+      case  2 :   strlcpy (my.desc      , p, LEN_DESC );
+                  DEBUG_INPT   yLOG_info    ("desc"      , my.desc);
+                  break;
+      case  3 :   if (my.spec != 'p') {
+                     strlcpy (my.meth      , p, LEN_DESC );
+                     DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
+                  }
+                  break;
+      case  4 :   if (my.spec == 'P' || my.spec == 'p') {
+                     strlcpy (my.code      , p, LEN_RECD);
+                     DEBUG_INPT   yLOG_info    ("code"      , my.code);
+                  } else {
+                     strlcpy (my.args      , p, LEN_STR);
+                     strlcpy (my.code      , p, LEN_STR);
+                     DEBUG_INPT   yLOG_info    ("args"      , my.args);
+                  }
+                  break;
+      case  5 :   strlcpy (my.test      , p, LEN_LABEL);
+                  DEBUG_INPT   yLOG_info    ("test"      , my.test);
+                  break;
+      case  6 :   strlcpy (my.expe      , p, LEN_OUT  );
+                  DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
+                  break;
+      case  7 :   my.type      = p [0];
+                  if (my.type == '\0')  my.type = '-';
+                  DEBUG_INPT   yLOG_char    ("type"      , my.type);
+                  break;
+      case  8 :   strlcpy (my.retn      , p, LEN_STR);
+                  DEBUG_INPT   yLOG_info    ("retn"      , my.retn);
+                  break;
+      }
+      /*---(stop parsing summ records)---*/
+      if (i >= 3 && my.spec == '-')  break;  /* organization types  */
+      if (i >= 4 && my.spec == 'P')  break;  /* load type           */
+      if (i >= 4 && my.spec == 'p')  break;  /* code/sys types      */
+      /*---(next record)-----------------*/
+      DEBUG_INPT   yLOG_note    ("read next field");
+      p = strtok (NULL  , q);
+      --rce;  if (p == NULL) {
+         DEBUG_INPT   yLOG_note    ("strtok came up empty");
+         DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+         break;
+      }
+      strltrim (p, ySTR_BOTH, LEN_RECD);
+   } 
    return 0;
 }
 
@@ -641,7 +713,7 @@ SCRP_parse         (void)
    }
    --rce;  if (strcmp ("DITTO", g_verbs [i].name) == 0) {
       DEBUG_INPT   yLOG_note    ("found a ditto condition");
-      rc = SCRP_ditto_beg (p);
+      rc = SCRP_ditto__beg (p);
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rc;
    }
@@ -653,18 +725,19 @@ SCRP_parse         (void)
       return rce;
    }
    strltrim (p, ySTR_BOTH, LEN_RECD);
+   x_len = strlen (p);
    if (p[0] == '-')  p[0] = '\0';
-   if      (strcmp (p, "v21") == 0) {
+   if      (x_len != 3 || p [0] != 'v') {
+      if (my.spec != 'c')  SCRP__current (p);
+   } else if (strcmp (p, "v21") == 0) {
       strlcpy (my.vers      , p    , LEN_LABEL);
       DEBUG_INPT   yLOG_info    ("vers"      , my.vers);
       if (my.spec != 'c')  SCRP_vers21  ();
-   }
-   else if (strcmp (p, "v20") == 0) {
+   } else if (strcmp (p, "v20") == 0) {
       strlcpy (my.vers      , p    , LEN_LABEL);
       DEBUG_INPT   yLOG_info    ("vers"      , my.vers);
       SCRP_vers20  ();
-   }
-   else                             {
+   } else                             {
       strlcpy (my.vers      , "v19", LEN_LABEL);
       DEBUG_INPT   yLOG_info    ("vers"      , my.vers);
       strlcpy (my.desc      , p    , LEN_DESC );
