@@ -3,7 +3,6 @@
 
 
 static char s_shared      = '-';         /* flag for shared code or not    */
-static char s_recd        [LEN_RECD] = "";
 
 
 /*====================------------------------------------====================*/
@@ -93,24 +92,24 @@ char
 CONV_prep          (void)
 {
    CONV_header ();
-   sprintf (s_recd      , "PREP          %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc);
-   fprintf (my.file_conv, "%s\n", s_recd);
+   sprintf (my.updated  , "PREP          %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc);
+   fprintf (my.file_conv, "%s\n", my.updated);
    return 0;
 }
 
 char
 CONV_incl          (void)
 {
-   sprintf (s_recd      , "   incl       %-35.35s  %-26.26s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc, my.meth);
-   fprintf (my.file_conv, "%s\n", s_recd);
+   sprintf (my.updated  , "   incl       %-35.35s  %-26.26s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc, my.meth);
+   fprintf (my.file_conv, "%s\n", my.updated);
    return 0;
 }
 
 char
 CONV_comment       (void)
 {
-   sprintf (s_recd      , "%s", my.recd);
-   fprintf (my.file_conv, "%s\n", s_recd);
+   sprintf (my.updated  , "%s", my.recd);
+   fprintf (my.file_conv, "%s\n", my.updated);
    return 0;
 }
 
@@ -130,8 +129,8 @@ CONV_scrp          (void)
    s_shared = '-';
    /*---(output)-------------------------*/
    CONV_header ();
-   sprintf (s_recd      , "SCRP          %-65.65s  %-100.100s  ((%02d.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc, my.meth, my.nscrp);
-   fprintf (my.file_conv, "%s\n", s_recd);
+   sprintf (my.updated  , "SCRP          %-65.65s  %-100.100s  ((%02d.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc, my.meth, my.nscrp);
+   fprintf (my.file_conv, "%s\n", my.updated);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -144,8 +143,8 @@ CONV_sect          (void)
    s_shared = '-';
    /*---(output)-------------------------*/
    CONV_header ();
-   sprintf (s_recd      , "SECT          %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc);
-   fprintf (my.file_conv, "%s\n", s_recd);
+   sprintf (my.updated  , "SECT          %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc);
+   fprintf (my.file_conv, "%s\n", my.updated);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -158,8 +157,8 @@ CONV_shared        (void)
    s_shared = my.desc [1];
    /*---(output)-------------------------*/
    CONV_header ();
-   sprintf (s_recd      , "SHARED        %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%c%c.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc, s_shared, s_shared);
-   fprintf (my.file_conv, "%s\n", s_recd);
+   sprintf (my.updated  , "SHARED        %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%c%c.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc, s_shared, s_shared);
+   fprintf (my.file_conv, "%s\n", my.updated);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -176,8 +175,8 @@ CONV_group         (void)
 {
    /*---(output)-------------------------*/
    fprintf (my.file_conv, "\n");
-   sprintf (s_recd      , "   GROUP      %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc);
-   fprintf (my.file_conv, "%s\n", s_recd);
+   sprintf (my.updated  , "   GROUP      %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc);
+   fprintf (my.file_conv, "%s\n", my.updated);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -192,11 +191,11 @@ CONV_cond          (void)
    fprintf (my.file_conv, "\n");
    if (my.mark != '-')   sprintf (t, "(%c)", my.mark);
    if (s_shared == '-') {
-      sprintf (s_recd      , "   COND %3s   %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%02d.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", t, my.desc, my.nscrp, my.ncond);
+      sprintf (my.updated  , "   COND %3s   %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%02d.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", t, my.desc, my.nscrp, my.ncond);
    } else {
-      sprintf (s_recd      , "   COND %3s   %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%c%c.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", t, my.desc, s_shared, s_shared, my.ncond);
+      sprintf (my.updated  , "   COND %3s   %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%c%c.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", t, my.desc, s_shared, s_shared, my.ncond);
    }
-   fprintf (my.file_conv, "%s\n", s_recd);
+   fprintf (my.file_conv, "%s\n", my.updated);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -207,12 +206,13 @@ CONV_ditto         (void)
    /*---(counters)-----------------------*/
    ++(my.ncond);
    /*---(output)-------------------------*/
+   fprintf (my.file_conv, "\n");
    if (s_shared == '-') {
-   sprintf (s_recd      , "   DITTO (%c)  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%02d.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.mark, my.nscrp, my.ncond);
+   sprintf (my.updated  , "   DITTO (%c)  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%02d.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.mark, my.nscrp, my.ncond);
    } else {
-   sprintf (s_recd      , "   DITTO (%c)  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%c%c.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.mark, s_shared, s_shared, my.ncond);
+   sprintf (my.updated  , "   DITTO (%c)  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%c%c.%03d))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.mark, s_shared, s_shared, my.ncond);
    }
-   fprintf (my.file_conv, "%s\n", s_recd);
+   fprintf (my.file_conv, "%s\n", my.updated);
    return 0;
 }
 
@@ -221,7 +221,8 @@ CONV_use           (void)
 {
    /*---(output)-------------------------*/
    fprintf (my.file_conv, "\n");
-   fprintf (my.file_conv, "   USE_SHARE  %3s  %c  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((%02d.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", "v21", my.desc [0], my.nscrp);
+   sprintf (my.updated  , "   USE_SHARE  %c  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc [0]);
+   fprintf (my.file_conv, "%s\n", my.updated);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -237,36 +238,36 @@ char
 CONV_exec          (void)
 {
    char        t           [LEN_RECD ] = "";
-   sprintf (s_recd      , "     %-4.4s     %-35.35s  %-26.26s  %-100s  %-10.10s  %-100s ", my.verb, my.desc, my.meth, my.args, my.test, my.expe);
+   sprintf (my.updated  , "     %-4.4s     %-35.35s  %-26.26s  %-100s  %-10.10s  %-100s ", my.verb, my.desc, my.meth, my.args, my.test, my.expe);
    if (strcmp (my.retn, "") != 0) {
-      sprintf (t           , " %c  %-26.26s ", my.type, my.retn); 
-      strlcat (s_recd, t, LEN_RECD);
+      sprintf (t           , " %c  %-20s ", my.type, my.retn); 
+      strlcat (my.updated, t, LEN_RECD);
    }
-   fprintf (my.file_conv, "%s\n", s_recd);
+   fprintf (my.file_conv, "%s\n", my.updated);
    return 0;
 }
 
 char
 CONV_load          (void)
 {
-   sprintf (s_recd      , "     %-4.4s     %-35.35s  %-26.26s  %-218s ", my.verb, my.desc, my.meth, my.code);
-   fprintf (my.file_conv, "%s\n", s_recd);
+   sprintf (my.updated  , "     %-4.4s     %-35.35s  %-26.26s  %-218s ", my.verb, my.desc, my.meth, my.code);
+   fprintf (my.file_conv, "%s\n", my.updated);
    return 0;
 }
 
 char
 CONV_code          (void)
 {
-   sprintf (s_recd      , "     %-4.4s     %-35.35s  - - - - - - - - - - - - -   %-218s ", my.verb, my.desc, my.code);
-   fprintf (my.file_conv, "%s\n", s_recd);
+   sprintf (my.updated  , "     %-4.4s     %-35.35s  - - - - - - - - - - - - -   %-218s ", my.verb, my.desc, my.code);
+   fprintf (my.file_conv, "%s\n", my.updated);
    return 0;
 }
 
 char
 CONV_echo          (void)
 {
-   sprintf (s_recd      , "     %-4.4s     %-35.35s  - - - - - - - - - - - - -   %-100s  %-10.10s  %-100s ", my.verb, my.desc, my.args, my.test, my.expe);
-   fprintf (my.file_conv, "%s\n", s_recd);
+   sprintf (my.updated  , "     %-4.4s     %-35.35s  - - - - - - - - - - - - -   %-100s  %-10.10s  %-100s ", my.verb, my.desc, my.args, my.test, my.expe);
+   fprintf (my.file_conv, "%s\n", my.updated);
    return 0;
 }
 
@@ -370,7 +371,7 @@ CONV__unit              (char *a_question, int a_num)
       sprintf (my.answer, "CONV file      : %-35.35s %p", my.name_conv, my.file_conv);
    }
    else if (strcmp (a_question, "recd"      ) == 0) {
-      strlcpy    (t, s_recd, LEN_RECD);
+      strlcpy    (t, my.updated, LEN_RECD);
       strlencode (t, ySTR_NONE, LEN_RECD);
       sprintf (my.answer, "CONV recd      : %3d[%s]", strlen (t), t);
    }

@@ -13,18 +13,18 @@ static  int   s_dittos [26] = { -1 };
 
 tVERB       g_verbs [MAX_VERB] = {
    /* --------------   ---------------------------------------   -  */
-   { "PREP"         , "preparation before testing"            , '-',  0,  0 },
-   { "incl"         , "c header inclusion"                    , '-',  0,  0 },
+   { "PREP"         , "preparation before testing"            , '2',  0,  0 },
+   { "incl"         , "c header inclusion"                    , '3',  0,  0 },
    { "#>"           , "script internal comments"              , 'c',  0,  0 },
    /* --------------   --------------------------------------- */
-   { "SECT"         , "grouping of scripts"                   , '-',  0,  0 },
-   { "SCRP"         , "test script"                           , '-',  0,  0 },
-   { "SHARED"       , "shared code between scripts"           , '-',  0,  0 },
+   { "SECT"         , "grouping of scripts"                   , '2',  0,  0 },
+   { "SCRP"         , "test script"                           , '3',  0,  0 },
+   { "SHARED"       , "shared code between scripts"           , '2',  0,  0 },
    /* --------------   --------------------------------------- */
-   { "GROUP"        , "grouping of conditions"                , '-',  0,  0 },
-   { "COND"         , "test condition"                        , '-',  0,  0 },
-   { "DITTO"        , "repeated test condition"               , '-',  0,  0 },
-   { "USE_SHARE"    , "inclusion of shared code"              , '-',  0,  0 },
+   { "GROUP"        , "grouping of conditions"                , '2',  0,  0 },
+   { "COND"         , "test condition"                        , '2',  0,  0 },
+   { "DITTO"        , "repeated test condition"               , '1',  0,  0 },
+   { "USE_SHARE"    , "inclusion of shared code"              , '2',  0,  0 },
    /* --------------   --------------------------------------- */
    { "exec"         , "function execution"                    , 'f',  0,  0 },
    { "get"          , "unit test accessor retrieval"          , 'f',  0,  0 },
@@ -338,6 +338,7 @@ SCRP__current      (char *a_first)
    char       *p;
    char       *q           = "\x1F";
    /*---(read fields)--------------------*/
+   if (my.spec == '1')  return 0;  /* ditto type */
    p = a_first;
    for (i = 2; i < 20; ++i) {
       /*---(clear spacer bars)-----------*/
@@ -384,7 +385,8 @@ SCRP__current      (char *a_first)
                   break;
       }
       /*---(stop parsing summ records)---*/
-      if (i >= 3 && my.spec == '-')  break;  /* organization types  */
+      if (i >  2 && my.spec == '2')  break;  /* organization types  */
+      if (i >  3 && my.spec == '3')  break;  /* organization types  */
       if (i >= 4 && my.spec == 'P')  break;  /* load type           */
       if (i >= 4 && my.spec == 'p')  break;  /* code/sys types      */
       /*---(next record)-----------------*/
@@ -470,6 +472,7 @@ SCRP_vers21        (void)
                   break;
       }
       /*---(stop parsing summ records)---*/
+      if (i >= 2 && my.spec == '2')  break;  /* organization types  */
       if (i >= 3 && my.spec == '-')  break;  /* organization types  */
       if (i >= 4 && my.spec == 'P')  break;  /* load type           */
       if (i >= 4 && my.spec == 'p')  break;  /* code/sys types      */
@@ -643,7 +646,7 @@ SCRP_parse         (void)
    }
    DEBUG_INPT   yLOG_info    ("record"    , my.recd);
    DEBUG_INPT   yLOG_value   ("length"    , my.len);
-   --rce;  if (my.len < 50 && my.recd [0] != '#') {
+   --rce;  if (my.len <  5 && my.recd [0] != '#') {
       DEBUG_INPT   yLOG_note    ("my.len too short");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;

@@ -22,8 +22,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.2- get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2e"
-#define     P_VERTXT    "tested script for over long fields and improved unit testing"
+#define     P_VERNUM    "1.2f"
+#define     P_VERTXT    "unit testing conversion, re-read to script, and against final file"
 
 
 /*===[[ HEADER ]]=============================================================*/
@@ -214,7 +214,8 @@ struct cGLOBALS
    /*---(flag)------------------*/
    char        driver;                      /* has main/driver been written   */
    /*---(debug/test)------------*/
-   char        answer      [LEN_UNIT];      /* unit testing answer string     */
+   char        answer      [LEN_RECD ];     /* unit testing answer string     */
+   char        updated     [LEN_RECD ];     /* converted record               */
    /*---(done)------------------*/
 };
 extern      tGLOBALS    my;
