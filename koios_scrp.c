@@ -847,16 +847,17 @@ SCRP__unit              (char *a_question, int a_num)
       sprintf (my.answer, "SCRP recd      : %2d %3d[%.40s]", my.n_line, strlen (t), t);
    }
    else if (strcmp (a_question, "verb"      ) == 0) {
-      sprintf (my.answer, "SCRP verb      : %-10.10s/%.30s", my.verb, my.desc);
+      sprintf (my.answer, "SCRP verb      : %-10.10s %3d[%.30s]", my.verb, strlen (my.desc), my.desc);
    }
    else if (strcmp (a_question, "call"      ) == 0) {
-      sprintf (my.answer, "SCRP call      : %-20.20s (%.20s)", my.meth, my.args);
+      sprintf (t, "[%.20s]", my.meth);
+      sprintf (my.answer, "SCRP call      : %3d%-22.22s %3d[%.20s]", strlen (my.meth), t, strlen (my.args), my.args);
    }
    else if (strcmp (a_question, "test"      ) == 0) {
-      sprintf (my.answer, "SCRP test      : %-10.10s/%.30s", my.test, my.expe);
+      sprintf (my.answer, "SCRP test      : %-10.10s %3d[%.30s]", my.test, strlen (my.expe), my.expe);
    }
    else if (strcmp (a_question, "retn"      ) == 0) {
-      sprintf (my.answer, "SCRP retn      : %c         /%.30s", my.type, my.retn);
+      sprintf (my.answer, "SCRP retn      : %c          %3d[%.30s]", my.type, strlen (my.retn), my.retn);
    }
    else if (strcmp (a_question, "code"      ) == 0) {
       strlcpy    (t, my.code, LEN_RECD);

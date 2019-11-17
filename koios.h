@@ -22,8 +22,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.2- get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2d"
-#define     P_VERTXT    "added unit testing and clean-up for detailed conversion/update"
+#define     P_VERNUM    "1.2e"
+#define     P_VERTXT    "tested script for over long fields and improved unit testing"
 
 
 /*===[[ HEADER ]]=============================================================*/
