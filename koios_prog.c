@@ -25,7 +25,7 @@ PROG_version       (void)
 #else
    strncpy (t, "[unknown    ]", 15);
 #endif
-   snprintf (my.version, LEN_STR, "%s   %s : %s", t, KOIOS_VER_NUM, KOIOS_VER_TXT);
+   snprintf (my.version, LEN_STR, "%s   %s : %s", t, P_VERNUM, P_VERTXT);
    return my.version;
 }
 
@@ -48,6 +48,7 @@ PROG_init          (void)
    strlcpy  (my.name_conv, "", LEN_FILE );
    my.driver    = '-';
    my.run_type  = G_RUN_CREATE;
+   my.replace   = '-';
    strlcpy  (my.last     , "", LEN_LABEL);
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
@@ -75,8 +76,12 @@ PROG_args          (int argc, char *argv[])
       if      (strncmp (a, "--create"     , 10) == 0)    my.run_type = G_RUN_CREATE;
       else if (strncmp (a, "--compile"    , 10) == 0)    my.run_type = G_RUN_CREATE;
       else if (strncmp (a, "--debug"      , 10) == 0)    my.run_type = G_RUN_DEBUG;
-      else if (strncmp (a, "--update"     , 10) == 0)    my.run_type = G_RUN_UPDATE;
       else if (strncmp (a, "--convert"    , 10) == 0)    my.run_type = G_RUN_UPDATE;
+      else if (strncmp (a, "--update"     , 10) == 0)  { my.run_type = G_RUN_UPDATE;  my.replace = G_RUN_REPLACE; }
+      else if (strncmp (a, "-"            ,  1) == 0) {
+         printf ("FATAL, arg <<%s>> not understood\n", a);
+         exit (-1);
+      }
    }
    DEBUG_ARGS  yLOG_value  ("entries"   , x_total);
    DEBUG_ARGS  yLOG_value  ("arguments" , x_args);

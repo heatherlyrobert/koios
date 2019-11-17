@@ -6,20 +6,8 @@ int
 main               (int argc, char *argv[])
 {
    /*---(locals)-----------+-----------+-*/
-   FILE       *f_in        = NULL;
-   FILE       *f_out       = NULL;
    char        rc          = 0;
-
-   /*---(locals)-----------+-----------+-*/
-   FILE       *f           = NULL;
-   char        x_recd      [LEN_RECD];
-   char        x_temp      [LEN_RECD];
-   char        x_verb      [20];
-   int         x_len;
-   char       *p;
-   char       *q           = ";";
-   char       *r;
-   char        rce         = -10;
+   char        t           [LEN_RECD];
    int         x_lines     = 0;
 
    /*---(initialize)---------------------*/
@@ -83,6 +71,13 @@ main               (int argc, char *argv[])
    } else if (my.run_type == G_RUN_UPDATE) {
       rc = CONV_end       ();
       rc = CONV_close     ();
+   }
+   if (my.replace == G_RUN_REPLACE) {
+      sprintf (t, "cp -f %s %s.old", my.name_scrp, my.name_scrp);
+      system  (t);
+      printf  ("replacing script with update, saved original in .old\n");
+      sprintf (t, "mv -f %s %s"   , my.name_conv, my.name_scrp);
+      system  (t);
    }
    /*---(summary)------------------------*/
    printf ("\n");

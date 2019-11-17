@@ -22,8 +22,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.2- get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2f"
-#define     P_VERTXT    "unit testing conversion, re-read to script, and against final file"
+#define     P_VERNUM    "1.2g"
+#define     P_VERTXT    "added --replace option to put new over existing (save .old copy)"
 
 
 /*===[[ HEADER ]]=============================================================*/
@@ -114,13 +114,6 @@
 
 
 
-/*===[[ VERSIONING ]]=========================================================*/
-/* rapidly evolving version number to aid with visual change confirmation     */
-#define     KOIOS_VER_NUM    "1.1a"
-#define     KOIOS_VER_TXT    "shortened command line options"
-
-
-
 /*===[[ STANDARD C LIBRARIES ]]===============================================*/
 #include    <stdio.h>        /* C_ANSI : strcpy, strlen, strchr, strcmp, ...  */
 #include    <string.h>       /* C_ANSI : printf, snprintf, fgets, fopen, ...  */
@@ -136,6 +129,7 @@
 #define     G_RUN_CREATE    'c'
 #define     G_RUN_DEBUG     'd'
 #define     G_RUN_UPDATE    'u'
+#define     G_RUN_REPLACE   'r'
 
 
 
@@ -165,6 +159,7 @@ struct cGLOBALS
    /*---(general)---------------*/
    char        version     [LEN_STR  ];     /* program version info           */
    char        run_type;                    /* unit test code or conversion   */
+   char        replace;                     /* convert and replace file       */
    /*---(file names)------------*/
    char        name_base   [LEN_FILE ];     /* base name of files             */
    char        name_scrp   [LEN_FILE ];     /* name of input script file      */

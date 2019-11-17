@@ -385,8 +385,8 @@ SCRP__current      (char *a_first)
                   break;
       }
       /*---(stop parsing summ records)---*/
-      if (i >  2 && my.spec == '2')  break;  /* organization types  */
-      if (i >  3 && my.spec == '3')  break;  /* organization types  */
+      if (i >= 2 && my.spec == '2')  break;  /* organization types  */
+      if (i >= 3 && my.spec == '3')  break;  /* organization types  */
       if (i >= 4 && my.spec == 'P')  break;  /* load type           */
       if (i >= 4 && my.spec == 'p')  break;  /* code/sys types      */
       /*---(next record)-----------------*/
