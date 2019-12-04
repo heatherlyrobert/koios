@@ -22,8 +22,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.2- get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2g"
-#define     P_VERTXT    "added --replace option to put new over existing (save .old copy)"
+#define     P_VERNUM    "1.2h"
+#define     P_VERTXT    "updated to output .cs for --debug to make IDE/make simplier"
 
 
 /*===[[ HEADER ]]=============================================================*/

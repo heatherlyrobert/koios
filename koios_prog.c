@@ -107,7 +107,8 @@ PROG_begin         (void)
       return -1;
    }
    snprintf (my.name_scrp, LEN_FILE, "%s.unit"        , my.name_base);
-   snprintf (my.name_code, LEN_FILE, "%s_unit.c"      , my.name_base);
+   if (my.run_type == G_RUN_CREATE)  snprintf (my.name_code, LEN_FILE, "%s_unit.cs"     , my.name_base);
+   if (my.run_type == G_RUN_DEBUG)   snprintf (my.name_code, LEN_FILE, "%s_unit.c"      , my.name_base);
    snprintf (my.name_main, LEN_FILE, "%s_main_unit.c" , my.name_base);
    snprintf (my.name_conv, LEN_FILE, "%s.unit.new"    , my.name_base);
    my.n_line    = 0;
