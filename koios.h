@@ -22,8 +22,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.2- get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2h"
-#define     P_VERTXT    "updated to output .cs for --debug to make IDE/make simplier"
+#define     P_VERNUM    "1.2i"
+#define     P_VERTXT    "fixed ditto verb, worked in unit test, not in reality"
 
 
 /*===[[ HEADER ]]=============================================================*/
@@ -189,6 +189,7 @@ struct cGLOBALS
    char        status;                      /* record processing status       */
    int         indx;                        /* verb index in tVERB structure  */
    char        verb        [LEN_LABEL];     /* verb                           */
+   char        stage       [LEN_LABEL];     /* master sequence                */
    char        last        [LEN_LABEL];     /* last verb used                 */
    char        spec;                        /* specialty verb (y/n)           */
    char        vers        [LEN_LABEL];     /* version number                 */
@@ -211,6 +212,7 @@ struct cGLOBALS
    /*---(debug/test)------------*/
    char        answer      [LEN_RECD ];     /* unit testing answer string     */
    char        updated     [LEN_RECD ];     /* converted record               */
+   char        compiled    [LEN_RECD ];     /* converted record               */
    /*---(done)------------------*/
 };
 extern      tGLOBALS    my;

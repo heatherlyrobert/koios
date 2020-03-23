@@ -35,6 +35,10 @@ tVERB       g_verbs [MAX_VERB] = {
    { "load"         , "place data into stdin"                 , 'P',  0,  0 },
    { "sys"          , "execute shell code"                    , 'p',  0,  0 },
    /* --------------   --------------------------------------- */
+   { "MASTER"       , "master testing sequence"               , '2',  0,  0 },
+   { "WAVE"         , "testing wave"                          , '2',  0,  0 },
+   { "stage"        , "testing stage"                         , '2',  0,  0 },
+   /* --------------   --------------------------------------- */
    { "----"         , "end-of-entries"                        , '-',  0,  0 },
    /* --------------   --------------------------------------- */
 };
@@ -226,6 +230,7 @@ SCRP_clear         (void)
    strlcpy (my.last, my.verb, LEN_LABEL);
    /*---(input vars)---------------------*/
    my.verb        [0] = '\0';
+   my.stage       [0] = '\0';
    my.spec            = '-';
    my.status          = '-';
    my.vers        [0] = '\0';
@@ -616,119 +621,232 @@ SCRP_vers19        (void)
    return 0;
 }
 
-char         /*--> parse out a script record -------------[ leaf   [ ------ ]-*/
-SCRP_parse         (void)
+char
+SCRP_parse_defense   (void)
 {
    /*---(locals)-----------+-----------+-*/
-   int         rc          = 0;             /* generic return code            */
    char        rce         = -10;           /* return code for errors         */
-   char        x_recd      [LEN_RECD];
-   int         x_len       = 0;             /* input record length            */
-   char       *p;
-   char       *q           = "\x1F";
-   char       *r           = NULL;
-   char        x_temp      [20];
-   int         i           = 0;
    /*---(header)-------------------------*/
-   DEBUG_INPT   yLOG_enter   (__FUNCTION__);
-   /*---(prepare)---------------------*/
-   SCRP_clear      ();
-   /*---(defense)------------------------*/
+   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   DEBUG_INPT   yLOG_spoint  (my.file_scrp);
    --rce;  if (my.file_scrp == NULL) {
-      DEBUG_INPT   yLOG_fatal   ("scrp file, file not open");
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      DEBUG_INPT   yLOG_snote   ("file not open");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
+   DEBUG_INPT   yLOG_sint    (my.recd [0]);
    --rce;  if (my.recd [0] == '\0') {
-      DEBUG_INPT   yLOG_note    ("NULL record in my.recd");
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      DEBUG_INPT   yLOG_snote   ("null record in my.recd");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_INPT   yLOG_info    ("record"    , my.recd);
-   DEBUG_INPT   yLOG_value   ("length"    , my.len);
+   DEBUG_INPT   yLOG_sint    (my.len);
    --rce;  if (my.len <  5 && my.recd [0] != '#') {
-      DEBUG_INPT   yLOG_note    ("my.len too short");
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      DEBUG_INPT   yLOG_snote   ("my.len too short");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   /*---(create a copy of recd)----------*/
-   DEBUG_INPT   yLOG_note    ("create a copy of source record");
-   strlcpy (x_recd, my.recd, LEN_RECD);
-   DEBUG_INPT   yLOG_info    ("x_recd"    , x_recd);
-   if (x_recd [0] == '#' && x_recd [1] == '>') {
-      DEBUG_INPT   yLOG_note    ("found saved record/comment");
-      strlcpy (my.verb, "#>", LEN_LABEL);
-      return 0;
-   }
-   /*---(get recd type)------------------*/
-   p = strtok (x_recd, q);
-   DEBUG_INPT   yLOG_point   ("*p"        , p);
-   --rce;  if (p == NULL) {
-      DEBUG_INPT   yLOG_note    ("strtok came up empty");
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return rce;
-   }
-   strltrim (p, ySTR_BOTH, LEN_STR);
-   x_len = strlen (p);
-   DEBUG_INPT   yLOG_value   ("x_len"     , x_len);
-   --rce;  if (x_len <= 2) {
-      DEBUG_INPT   yLOG_note    ("verb is too short");
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return rce;
-   }
-   DEBUG_INPT   yLOG_point   ("verb"      , p);
-   DEBUG_INPT   yLOG_info    ("verb"      , p);
-   sprintf (x_temp, " %s ", p);
-   --rce;  if (p [0] == '#' && p [1] != '>') {
-      DEBUG_INPT   yLOG_note    ("comment not in column one");
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return rce;
-   }
-   DEBUG_INPT   yLOG_note    ("search for verb");
-   my.indx = -1;
+   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+SCRP_parse_comment      (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   int         i           =    0;
+   /*---(ward-off)-----------------------*/
+   if (my.len < 10 || my.recd [0] != '#' || my.recd [1] != '>')   return 0;
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(check for marker)---------------*/
+   DEBUG_INPT   yLOG_snote   ("saved record/comment");
    for (i = 0; i < MAX_VERB; ++i) {
-      if (g_verbs [i].name [0] == '-') {
-         DEBUG_INPT   yLOG_note    ("end of verbs");
-         break;
-      }
-      if (g_verbs [i].name [0] != p[0])          continue;
-      if (strncmp (g_verbs [i].name, p, 4) != 0) continue;
-      DEBUG_INPT   yLOG_note    ("verb found, save");
+      if (strcmp (g_verbs [i].name, "#>") != 0) continue;
       strlcpy (my.verb, g_verbs [i].name, LEN_LABEL);
       my.indx    = i;
       ++g_verbs [i].count;
       ++g_verbs [i].total;
       my.spec    = g_verbs [i].spec;
+      DEBUG_INPT   yLOG_sint    (g_verbs [i].count);
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   return 1;
+}
+
+char
+SCRP_parse_verb         (char *p)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   int         i           =    0;
+   int         x_len       =    0;
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(defense)------------------------*/
+   DEBUG_INPT   yLOG_spoint  (p);
+   --rce;  if (p == NULL) {
+      DEBUG_INPT   yLOG_snote   ("strtok came up empty");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   strltrim (p, ySTR_BOTH, LEN_STR);
+   x_len = strlen (p);
+   DEBUG_INPT   yLOG_sint    (x_len);
+   --rce;  if (x_len <= 2) {
+      DEBUG_INPT   yLOG_snote   ("verb is too short");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_INPT   yLOG_snote   (p);
+   /*---(filter comments)----------------*/
+   --rce;  if (p [0] == '#') {
+      DEBUG_INPT   yLOG_snote   ("comment not in column one");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(find verb)----------------------*/
+   my.indx = -1;
+   for (i = 0; i < MAX_VERB; ++i) {
+      if (g_verbs [i].name [0] == '-')           break;
+      if (g_verbs [i].name [0] != p[0])          continue;
+      if (strncmp (g_verbs [i].name, p, 4) != 0) continue;
+      DEBUG_INPT   yLOG_snote   ("verb found");
+      strlcpy (my.verb, g_verbs [i].name, LEN_LABEL);
+      my.indx    = i;
+      ++g_verbs [i].count;
+      ++g_verbs [i].total;
+      my.spec    = g_verbs [i].spec;
+      DEBUG_INPT   yLOG_sint    (g_verbs [i].count);
       break;
    }
+   /*---(failure)------------------------*/
    --rce;  if (my.indx == -1) {
-      DEBUG_INPT   yLOG_note    ("verb not found");
+      DEBUG_INPT   yLOG_snote   ("verb not found");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+SCRP_parse_ditto        (char *p)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_enter   (__FUNCTION__);
+   if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
+      if (strcmp ("SCRP" , g_verbs [my.indx].name) == 0) {
+         DEBUG_INPT   yLOG_note    ("clear ditto marks (create)");
+         SCRP_ditto__clear ();
+      } else if (strcmp ("COND", g_verbs [my.indx].name) == 0 && p [5] == '(' && p [7] == ')') {
+         DEBUG_INPT   yLOG_note    ("found a ditto condition (create)");
+         SCRP_ditto__check (p);
+      } else if (strcmp ("DITTO", g_verbs [my.indx].name) == 0) {
+         DEBUG_INPT   yLOG_note    ("found a ditto verb (create)");
+         rc = SCRP_ditto__beg (p);
+         if (rc >= 0)  rc = 1;
+      }
+   } else {
+      if (strcmp ("COND", g_verbs [my.indx].name) == 0 && p [5] == '(' && p [7] == ')') {
+         DEBUG_INPT   yLOG_note    ("found a ditto condition (update)");
+         my.mark = p [6];
+      } else if (strcmp ("DITTO", g_verbs [my.indx].name) == 0) {
+         DEBUG_INPT   yLOG_note    ("found a ditto verb (update)");
+         my.mark = p [7];
+      }
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+   return rc;
+}
+
+char
+SCRP_parse_stage        (char *p)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   int         x_len       =    0;
+   /*---(ward-off)-----------------------*/
+   if (strcmp ("SCRP" , g_verbs [my.indx].name) != 0)    return 0;
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(check markers)------------------*/
+   x_len = strlen (p);
+   if (x_len != 12) {
+      DEBUG_INPT   yLOG_snote   ("normal script marker");
+      return 0;
+   }
+   if (p [ 8] != '[') {
+      DEBUG_INPT   yLOG_snote   ("does not begin right");
+      return 0;
+   }
+   if (p [11] != ']') {
+      DEBUG_INPT   yLOG_snote   ("does not end right");
+      return 0;
+   }
+   /*---(save)---------------------------*/
+   strlcpy (my.stage, p + 8, LEN_LABEL);
+   /*---(complete)-----------------------*/
+   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   return 0;
+}
+
+char         /*--> parse out a script record -------------[ leaf   [ ------ ]-*/
+SCRP_parse         (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   int         rc          = 0;             /* generic return code            */
+   char        x_recd      [LEN_RECD];
+   int         x_len       = 0;             /* input record length            */
+   char       *p;
+   char       *q           = "\x1F";
+   char       *r           = NULL;
+   int         i           = 0;
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_enter   (__FUNCTION__);
+   /*---(prepare)---------------------*/
+   SCRP_clear  ();
+   /*---(defense)---------------------*/
+   rc = SCRP_parse_defense ();
+   --rce;  if (rc < 0) {
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(saved comments)-----------------*/
+   rc = SCRP_parse_comment ();
+   --rce;  if (rc != 0) {
+      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      return 0;
+   }
+   /*---(create a copy of recd)----------*/
+   strlcpy (x_recd, my.recd, LEN_RECD);
+   DEBUG_INPT   yLOG_info    ("x_recd"    , x_recd);
+   /*---(get verb)-----------------------*/
+   p = strtok (x_recd, q);
+   rc = SCRP_parse_verb (p);
+   --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(check for ditto)----------------*/
-   if (my.run_type == G_RUN_CREATE) {
-      if (strcmp ("SCRP" , g_verbs [i].name) == 0) {
-         DEBUG_INPT   yLOG_note    ("clear ditto marks");
-         SCRP_ditto__clear ();
-      } else if (strcmp ("COND", g_verbs [i].name) == 0 && p [5] == '(' && p [7] == ')') {
-         DEBUG_INPT   yLOG_note    ("found a ditto condition");
-         rc = SCRP_ditto__check (p);
-      } else if (strcmp ("DITTO", g_verbs [i].name) == 0) {
-         DEBUG_INPT   yLOG_note    ("found a ditto verb");
-         rc = SCRP_ditto__beg (p);
-         DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-         return rc;
-      }
-   } else {
-      if (strcmp ("COND", g_verbs [i].name) == 0 && p [5] == '(' && p [7] == ')') {
-         DEBUG_INPT   yLOG_note    ("found a ditto condition");
-         my.mark = p [6];
-      } else if (strcmp ("DITTO", g_verbs [i].name) == 0) {
-         DEBUG_INPT   yLOG_note    ("found a ditto verb");
-         my.mark = p [7];
-      }
+   rc = SCRP_parse_ditto (p);
+   if (rc < 0) {
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);
+      return rc;
    }
+   if (rc >  0) {
+      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      return 0;
+   }
+   /*---(check for ditto)----------------*/
+   SCRP_parse_stage (p);
    /*---(read version)-------------------*/
    p = strtok (NULL  , q);
    --rce;  if (p == NULL && my.spec != 'c') {

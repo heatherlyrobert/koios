@@ -129,7 +129,7 @@ CONV_scrp          (void)
    s_shared = '-';
    /*---(output)-------------------------*/
    CONV_header ();
-   sprintf (my.updated  , "SCRP          %-65.65s  %-100.100s  ((%02d.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.desc, my.meth, my.nscrp);
+   sprintf (my.updated  , "SCRP    %-4.4s  %-65.65s  %-100.100s  ((%02d.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ", my.stage, my.desc, my.meth, my.nscrp);
    fprintf (my.file_conv, "%s\n", my.updated);
    /*---(complete)-----------------------*/
    return 0;

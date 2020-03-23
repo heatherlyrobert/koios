@@ -371,6 +371,9 @@ static void  o___COND____________o () { return; }
 char
 CODE_cond_end      (void)
 {
+   /*---(header)-------------------------*/
+   DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
+   DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10p, %-10.10s, %4dn, %4dc", my.file_code, my.last, my.ncond, my.ccond);
    if (strcmp (my.last, "GROUP") != 0 && strcmp (my.last, "USE_SHARE") != 0) {
       if (my.ccond > 0) {
          fprintf (my.file_code, "      /*---(done)------------------------*/\n");
@@ -379,21 +382,31 @@ CODE_cond_end      (void)
       }
    }
    fprintf (my.file_code, "\n");
+   /*---(complete)-----------------------*/
+   DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
+   return 0;
 }
 
 char
 CODE_cond          (void)
 {
+   /*---(header)-------------------------*/
+   DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
    CODE_cond_end ();
    ++(my.ncond);
    ++(my.ccond);
+   DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10p, %-10.10s, %4dn, %4dc", my.file_code, my.last, my.ncond, my.ccond);
    fprintf (my.file_code, "   /*---(cond #%03d)-----------------------*/\n", my.ccond);
    fprintf (my.file_code, "   if (g_cond == g_offset + %i) yUNIT_noisy  (my_unit, 5);\n", my.ccond);
    if (my.run_type == G_RUN_DEBUG) {
       fprintf (my.file_code, "   %sUG_TOPS    %sOG_unitcond (g_origin, g_offset + %d, %d, \"%s\");\n", "DEB", "yL", my.ccond, my.n_line, my.desc);
    }
-   fprintf (my.file_code, "   yUNIT_cond    (my_unit, %4i, g_offset + %3i, \"%s\");\n", my.n_line, my.ccond, my.desc);
+   sprintf (my.compiled , "   yUNIT_cond    (my_unit, %4i, g_offset + %3i, \"%s\");", my.n_line, my.ccond, my.desc);
+   DEBUG_OUTP   yLOG_complex ("output"    , "%3d:%s", strlen (my.compiled), my.compiled);
+   fprintf (my.file_code, "%s\n", my.compiled);
    my.cstep = 0;
+   /*---(complete)-----------------------*/
+   DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -401,6 +414,8 @@ char
 CODE_use           (void)
 {
    char        rce         =  -10;
+   /*---(header)-------------------------*/
+   DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
    CODE_cond_end ();
    --rce;  if (strchr ("ABCDEFGHIJZLMNOPQRSTUVWXYZ", my.desc [0]) == NULL)  return rce;
    fprintf (my.file_code, "   /*---(shared code)-----------------------*/\n");
@@ -409,6 +424,8 @@ CODE_use           (void)
    fprintf (my.file_code, "   g_offset = 0;\n");
    my.ncond += s_share_cnt [my.desc [0]];
    my.ccond += s_share_cnt [my.desc [0]];
+   /*---(complete)-----------------------*/
+   DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -787,6 +804,11 @@ CODE_end           (void)
 char
 CODE_write         (void)
 {
+   /*---(header)-------------------------*/
+   DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
+   /*---(switch)-------------------------*/
+   strlcpy (my.compiled, "", LEN_RECD);
+   DEBUG_OUTP   yLOG_info    ("my.verb"   , my.verb);
    switch (my.verb [0]) {
    case 'P'  :  if      (strcmp (my.verb, "PREP"     ) == 0) {
                    CODE_prep   ();
@@ -816,6 +838,9 @@ CODE_write         (void)
    case 'C'  :  if      (strcmp (my.verb, "COND"     ) == 0) {
                    CODE_cond   ();
                 }
+                break;
+   case 'D'  : 
+                DEBUG_OUTP   yLOG_note    ("nothing to write");
                 break;
    case 'U'  :  if      (strcmp (my.verb, "USE_SHARE") == 0) {
                    CODE_use    ();
@@ -852,6 +877,8 @@ CODE_write         (void)
    default   :  CODE_unknown ();
                 break;
    }
+   /*---(complete)-----------------------*/
+   DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
