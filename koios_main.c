@@ -20,15 +20,14 @@ main               (int argc, char *argv[])
       PROG_end     ();
       return rc;
    }
-
-
-   printf ("base name = %s\n", my.name_base);
-   printf ("scrp name = %s\n", my.name_scrp);
+   /*---(open files)---------------------*/
+   printf ("base name = %s\n", my.n_base);
+   printf ("scrp name = %s\n", my.n_scrp);
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
-      printf ("code name = %s\n", my.name_code);
-      printf ("main name = %s\n", my.name_main);
+      printf ("code name = %s\n", my.n_code);
+      printf ("main name = %s¦", my.n_main);
    } else {
-      printf ("conv name = %s\n", my.name_conv);
+      printf ("conv name = %s¦", my.n_conv);
    }
    /*---(open files)---------------------*/
    if (rc == 0)  rc = SCRP_open      ();
@@ -37,7 +36,7 @@ main               (int argc, char *argv[])
       if (rc == 0)  rc = CODE_begin     ();
    } else if (my.run_type == G_RUN_UPDATE) {
       if (rc == 0)  rc = CONV_open      ();
-      if (rc == 0)  rc = CONV_begin     ();
+      if (rc == 0)  rc = CONV_beg       ();
    }
    if (rc != 0) {
       PROG_end     ();
@@ -57,7 +56,7 @@ main               (int argc, char *argv[])
       /*---(write code)------------------*/
       if      (my.run_type == G_RUN_CREATE)   rc = CODE_write  ();
       else if (my.run_type == G_RUN_DEBUG )   rc = CODE_write  ();
-      else if (my.run_type == G_RUN_UPDATE)   rc = CONV_write  ();
+      else if (my.run_type == G_RUN_UPDATE)   rc = CONV_driver ();
       /*---(debugging output)------------*/
       ++x_lines;
    }
@@ -73,10 +72,10 @@ main               (int argc, char *argv[])
       rc = CONV_close     ();
    }
    if (my.replace == G_RUN_REPLACE) {
-      sprintf (t, "cp -f %s %s.old", my.name_scrp, my.name_scrp);
+      sprintf (t, "cp -f %s %s.old", my.n_scrp, my.n_scrp);
       system  (t);
       printf  ("replacing script with update, saved original in .old\n");
-      sprintf (t, "mv -f %s %s"   , my.name_conv, my.name_scrp);
+      sprintf (t, "mv -f %s %s"   , my.n_conv, my.n_scrp);
       system  (t);
    }
    /*---(summary)------------------------*/

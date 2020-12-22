@@ -6,24 +6,33 @@
 
 #define     P_FOCUS     "PS (programming support)"
 #define     P_NICHE     "st (string testing)"
+#define     P_SUBJECT   "unit testing meta-language"
 #define     P_PURPOSE   "provide simple unit testing framework for writing scripts"
 
 #define     P_NAMESAKE  "koios-polos (axis of heaven)"
 #define     P_HERITAGE  "titan god of intelligence, farsight, and the inquisive mind"
 #define     P_IMAGERY   "very tall, dark armor, with blue-white eyes, hair, and beard"
+#define     P_REASON    ""
+
+#define     P_ONELINE   P_NAMESAKE " " P_SUBJECT
+
+#define     P_BASENAME  ""
+#define     P_FULLPATH  ""
+#define     P_SUFFIX    ""
+#define     P_CONTENT   ""
 
 #define     P_SYSTEM    "gnu/linux   (powerful, ubiquitous, technical, and hackable)"
 #define     P_LANGUAGE  "ansi-c      (wicked, limitless, universal, and everlasting)"
 #define     P_CODESIZE  "small       (appoximately 1,000 slocl)"
+#define     P_DEPENDS   "none"
 
 #define     P_AUTHOR    "heatherlyrobert"
 #define     P_CREATED   "2014-03"
-#define     P_DEPENDS   "none"
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.2- get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2i"
-#define     P_VERTXT    "fixed ditto verb, worked in unit test, not in reality"
+#define     P_VERNUM    "1.2j"
+#define     P_VERTXT    "unit tested all the conversion functions, except driver"
 
 
 /*===[[ HEADER ]]=============================================================*/
@@ -117,6 +126,7 @@
 /*===[[ STANDARD C LIBRARIES ]]===============================================*/
 #include    <stdio.h>        /* C_ANSI : strcpy, strlen, strchr, strcmp, ...  */
 #include    <string.h>       /* C_ANSI : printf, snprintf, fgets, fopen, ...  */
+#include    <stdarg.h>              /* CLIBC   variable argument handling     */
 
 /*===[[ CUSTOM LIBRARIES ]]===================================================*/
 #include    <yUNIT.h>        /* CUSTOM : heatherly unit testing               */
@@ -133,44 +143,24 @@
 
 
 
-
-/*---(rational limits to strings)---------------*/
-/*
- *   i do not beleive in unlimited strings.  i understand the reasoning for
- *   flexibility, future expansion, unknown usage patterns, etc.  but, i think
- *   they also provide hacker/cracker vectors and its just not worth it.  i
- *   have a use in mind for the string and it can only use so many characters
- *   anyway.  if something is too long, 99% probability the input is malformed,
- *   incorrect, or ill-intensioned.  just my perspective.
- *
- */
-#define     LEN_LABEL     20   /* short label                   */
-#define     LEN_DESC     100   /* description                   */
-#define     LEN_STR      200   /* normal, generic string        */
-#define     LEN_OUT      500   /* output fields (act, exp)      */
-#define     LEN_FILE     500   /* fully qualified file names    */
-#define     LEN_RECD    5000   /* input script record length    */
-#define     LEN_UNIT     200   /* unit test return string       */
-
-
 typedef     struct cGLOBALS     tGLOBALS;
 struct cGLOBALS
 {
    /*---(general)---------------*/
-   char        version     [LEN_STR  ];     /* program version info           */
+   char        version     [LEN_FULL];      /* program version info           */
    char        run_type;                    /* unit test code or conversion   */
    char        replace;                     /* convert and replace file       */
    /*---(file names)------------*/
-   char        name_base   [LEN_FILE ];     /* base name of files             */
-   char        name_scrp   [LEN_FILE ];     /* name of input script file      */
-   char        name_code   [LEN_FILE ];     /* name of output code file       */
-   char        name_main   [LEN_FILE ];     /* name of output main file       */
-   char        name_conv   [LEN_FILE ];     /* name of output script file     */
+   char        n_base      [LEN_PATH];      /* base name of files             */
+   char        n_scrp      [LEN_PATH];      /* name of input script file      */
+   char        n_code      [LEN_PATH];      /* name of output code file       */
+   char        n_main      [LEN_PATH];      /* name of output main file       */
+   char        n_conv      [LEN_PATH];      /* name of output script file     */
    /*---(file handles)----------*/
-   FILE       *file_scrp;                   /* pointer to input script file   */
-   FILE       *file_code;                   /* pointer to output code file    */
-   FILE       *file_main;                   /* pointer to output main file    */
-   FILE       *file_conv;                   /* pointer to output script file  */
+   FILE       *f_scrp;                      /* pointer to input script file   */
+   FILE       *f_code;                      /* pointer to output code file    */
+   FILE       *f_main;                      /* pointer to output main file    */
+   FILE       *f_conv;                      /* pointer to output script file  */
    /*---(counters)--------------*/
    int         n_line;                      /* file   all lines               */
    int         n_comment;                   /* file   comment lines           */
@@ -189,20 +179,25 @@ struct cGLOBALS
    char        status;                      /* record processing status       */
    int         indx;                        /* verb index in tVERB structure  */
    char        verb        [LEN_LABEL];     /* verb                           */
-   char        stage       [LEN_LABEL];     /* master sequence                */
+   char      (*p_conv) (void);;
+   char      (*p_code) (void);;
    char        last        [LEN_LABEL];     /* last verb used                 */
    char        spec;                        /* specialty verb (y/n)           */
    char        vers        [LEN_LABEL];     /* version number                 */
    char        desc        [LEN_DESC ];     /* descriptive text               */
    char        meth        [LEN_DESC ];     /* function/method name           */
-   char        args        [LEN_STR  ];     /* function/method args           */
+   char        args        [LEN_FULL];      /* function/method args           */
    char        test        [LEN_LABEL];     /* test type for yVAR             */
-   char        expe        [LEN_OUT  ];     /* expected results               */
+   char        expe        [LEN_RECD];      /* expected results               */
    char        type;
-   char        retn        [LEN_STR  ];     /* return variable                */
+   char        retn        [LEN_FULL];      /* return variable                */
    char        code        [LEN_RECD ];     /* code/load/sys string           */
    char        refn        [LEN_LABEL];     /* test reference number          */
+   /*---(special marks)---------*/
+   char        stage       [LEN_LABEL];     /* master sequence                */
+   char        share;                       /* share marking                  */
    char        mark;                        /* ditto marking                  */
+   char        d_used      [LEN_DESC];      /* ditto markes used              */
    /*---(working)---------------*/
    char        disp        [LEN_RECD ];     /* display ver " = ~, 1D = |      */
    char        syst        [LEN_RECD ];     /* system ver  " = ", 1D = 1F     */
@@ -221,11 +216,13 @@ extern      tGLOBALS    my;
 #define     MAX_VERB         20
 typedef     struct cVERB    tVERB;
 struct cVERB {
-   char        name        [LEN_STR ];      /* verb                           */
-   char        desc        [LEN_STR];       /* description                    */
+   char        name        [LEN_FULL];      /* verb                           */
+   char        desc        [LEN_FULL];      /* description                    */
    char        spec;                        /* specialty verb                 */
    int         count;                       /* number found in script         */
    int         total;                       /* number found in unit test      */
+   char      (*conv) (void);                /* conversion function            */ 
+   char      (*code) (void);                /* code function                  */ 
 };
 extern      tVERB       g_verbs [MAX_VERB];
 
@@ -235,17 +232,15 @@ typedef     struct cTEST    tTEST;
 struct cTEST {
    char        abbr;                        /* abbreviated type               */
    char        repl;                        /* test type relace               */
-   char        name        [LEN_STR ];      /* verb                           */
-   char        func        [LEN_STR ];      /* function call                  */
-   char        desc        [LEN_STR];       /* description                    */
+   char        name        [LEN_FULL];      /* verb                           */
+   char        func        [LEN_FULL];      /* function call                  */
+   char        desc        [LEN_FULL];      /* description                    */
 };
 extern      tTEST       g_tests [MAX_TEST];
 
 
 
 
-/*===[[ MAIN ]]===============================================================*/
-int         main               (int a_argc, char *a_argv[]);
 
 /*===[[ PROG ]]===============================================================*/
 /*---(program)--------------*/
@@ -265,17 +260,21 @@ char        PROG__unit_end     (void);
 /*===[[ SCRP ]]===============================================================*/
 char        SCRP_ditto__clear       (void);
 char        SCRP_ditto__set         (char a_mark);
-char        SCRP_ditto__check       (char *a_verb);
-char        SCRP_open          (void);
-char        SCRP_close         (void);
-char        SCRP_clear         (void);
-char        SCRP_read          (void);
-char        SCRP_parse         (void);
-char        SCRP_vers21        (void);
-char        SCRP_vers20        (void);
-char        SCRP_vers19        (void);
-char        SCRP_verbs         (void);
-char        SCRP_verbcode      (void);
+char        SCRP_ditto__check       (char *a_verb, char a_set);
+char*       SCRP_ditto_used         (void);
+char        SCRP_open               (void);
+char        SCRP_close              (void);
+char        SCRP_clear              (void);
+char        SCRP_read               (void);
+char        SCRP_parse_verb         (char *p);
+char        SCRP_parse_stage        (char *p);
+char        SCRP_parse_comment      (void);
+char        SCRP_parse              (void);
+char        SCRP_vers21             (void);
+char        SCRP_vers20             (void);
+char        SCRP_vers19             (void);
+char        SCRP_verbs              (void);
+char        SCRP_verbcode           (void);
 char*       SCRP__unit              (char *a_question, int a_num);
 
 /*===[[ CODE ]]===============================================================*/
@@ -283,25 +282,53 @@ char        CODE_open          (void);
 char        CODE_close         (void);
 char        CODE_write         (void);
 char        CODE_begin         (void);
+char        CODE_comment       (void);
 char        CODE_prep          (void);
 char        CODE_incl          (void);
 char        CODE_main          (void);
-char        CODE_sect          (void);
 char        CODE_scrp          (void);
+char        CODE_sect          (void);
+char        CODE_shared        (void);
 char        CODE_group         (void);
 char        CODE_cond          (void);
+char        CODE_ditto         (void);
+char        CODE_use           (void);
 char        CODE_prefix        (char a_type);
 char        CODE_expe_var      (char a_type);
 char        CODE_suffix        (char a_type);
 char        CODE_exec          (void);
+char        CODE_echo          (void);
+char        CODE_code          (void);
+char        CODE_load          (void);
 char        CODE_unknown       (void);
 char        CODE_end           (void);
 
 /*===[[ CONV ]]===============================================================*/
-char        CONV_open          (void);
-char        CONV_close         (void);
-char        CONV_write         (void);
-char        CONV_comment       (void);
+/*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
+/*---(file)--------------------*/
+char        CONV_open               (void);
+char        CONV_printf             (char *a_format, ...);
+char        CONV_close              (void);
+/*---(standards)---------------*/
+char        CONV_beg                (void);
+char        CONV_header             (void);
+char        CONV_end                (void);
+char        CONV_comment            (void);
+char        CONV_prep               (void);
+char        CONV_incl               (void);
+char        CONV_scrp               (void);
+char        CONV_sect               (void);
+char        CONV_shared             (void);
+char        CONV_group              (void);
+char        CONV_cond               (void);
+char        CONV_ditto              (void);
+char        CONV_reuse              (void);
+char        CONV_exec               (void);
+char        CONV_echo               (void);
+char        CONV_mode               (void);
+char        CONV_code               (void);
+char        CONV_load               (void);
+char        CONV_driver             (void);
 char*       CONV__unit              (char *a_question, int a_num);
 
 void        VOID_void          (char *a_one, int a_two);

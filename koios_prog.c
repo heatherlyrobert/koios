@@ -25,7 +25,7 @@ PROG_version       (void)
 #else
    strncpy (t, "[unknown    ]", 15);
 #endif
-   snprintf (my.version, LEN_STR, "%s   %s : %s", t, P_VERNUM, P_VERTXT);
+   snprintf (my.version, LEN_FULL, "%s   %s : %s", t, P_VERNUM, P_VERTXT);
    return my.version;
 }
 
@@ -42,10 +42,10 @@ PROG_init          (void)
    /*---(header)-------------------------*/
    DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
    /*---(files)--------------------------*/
-   strlcpy  (my.name_scrp, "", LEN_FILE );
-   strlcpy  (my.name_code, "", LEN_FILE );
-   strlcpy  (my.name_main, "", LEN_FILE );
-   strlcpy  (my.name_conv, "", LEN_FILE );
+   strlcpy  (my.n_scrp, "", LEN_PATH);
+   strlcpy  (my.n_code, "", LEN_PATH);
+   strlcpy  (my.n_main, "", LEN_PATH);
+   strlcpy  (my.n_conv, "", LEN_PATH);
    my.driver    = '-';
    my.run_type  = G_RUN_CREATE;
    my.replace   = '-';
@@ -72,7 +72,7 @@ PROG_args          (int argc, char *argv[])
       if (a[0] == '@')  continue;
       DEBUG_ARGS  yLOG_info    ("cli arg", a);
       ++x_args;
-      strncpy (my.name_base, argv[i], LEN_FILE);
+      strncpy (my.n_base, argv[i], LEN_PATH);
       if      (strncmp (a, "--create"     , 10) == 0)    my.run_type = G_RUN_CREATE;
       else if (strncmp (a, "--compile"    , 10) == 0)    my.run_type = G_RUN_CREATE;
       else if (strncmp (a, "--debug"      , 10) == 0)    my.run_type = G_RUN_DEBUG;
@@ -89,7 +89,7 @@ PROG_args          (int argc, char *argv[])
       DEBUG_ARGS  yLOG_note   ("no arguments identified");
    }
    DEBUG_ARGS  yLOG_char   ("run_type"  , my.run_type);
-   DEBUG_ARGS  yLOG_info   ("basename"  , my.name_base);
+   DEBUG_ARGS  yLOG_info   ("basename"  , my.n_base);
    /*---(complete)-----------------------*/
    DEBUG_TOPS  yLOG_exit  (__FUNCTION__);
    return 0;
@@ -100,17 +100,17 @@ PROG_begin         (void)
 {
    DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
    /*---(file names)---------------------*/
-   DEBUG_TOPS   yLOG_info    ("basename"  , my.name_base);
-   if (strcmp (my.name_base, "") == 0) {
+   DEBUG_TOPS   yLOG_info    ("basename"  , my.n_base);
+   if (strcmp (my.n_base, "") == 0) {
       printf ("no base file name provided, FATAL\n");
       DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
       return -1;
    }
-   snprintf (my.name_scrp, LEN_FILE, "%s.unit"        , my.name_base);
-   if (my.run_type == G_RUN_CREATE)  snprintf (my.name_code, LEN_FILE, "%s_unit.cs"     , my.name_base);
-   if (my.run_type == G_RUN_DEBUG)   snprintf (my.name_code, LEN_FILE, "%s_unit.c"      , my.name_base);
-   snprintf (my.name_main, LEN_FILE, "%s_main_unit.c" , my.name_base);
-   snprintf (my.name_conv, LEN_FILE, "%s.unit.new"    , my.name_base);
+   snprintf (my.n_scrp, LEN_PATH, "%s.unit"        , my.n_base);
+   if (my.run_type == G_RUN_CREATE)  snprintf (my.n_code, LEN_PATH, "%s_unit.cs"     , my.n_base);
+   if (my.run_type == G_RUN_DEBUG)   snprintf (my.n_code, LEN_PATH, "%s_unit.c"      , my.n_base);
+   snprintf (my.n_main, LEN_PATH, "%s_main_unit.c" , my.n_base);
+   snprintf (my.n_conv, LEN_PATH, "%s.unit.new"    , my.n_base);
    my.n_line    = 0;
    my.n_comment = 0;
    my.n_empty   = 0;

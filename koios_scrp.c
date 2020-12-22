@@ -13,33 +13,32 @@ static  int   s_dittos [26] = { -1 };
 
 tVERB       g_verbs [MAX_VERB] = {
    /* --------------   ---------------------------------------   -  */
-   { "PREP"         , "preparation before testing"            , '2',  0,  0 },
-   { "incl"         , "c header inclusion"                    , '3',  0,  0 },
-   { "#>"           , "script internal comments"              , 'c',  0,  0 },
+   { "PREP"         , "preparation before testing"            , '2',  0,  0, CONV_prep     , CODE_prep     },
+   { "incl"         , "c header inclusion"                    , '3',  0,  0, CONV_incl     , CODE_incl     },
+   { "#>"           , "script internal comments"              , 'c',  0,  0, CONV_comment  , NULL          },
    /* --------------   --------------------------------------- */
-   { "SECT"         , "grouping of scripts"                   , '2',  0,  0 },
-   { "SCRP"         , "test script"                           , '3',  0,  0 },
-   { "SHARED"       , "shared code between scripts"           , '2',  0,  0 },
+   { "SCRP"         , "test script"                           , '3',  0,  0, CONV_scrp     , CODE_scrp     },
+   { "SECT"         , "grouping of scripts"                   , '2',  0,  0, CONV_sect     , CODE_sect     },
+   { "SHARED"       , "shared code between scripts"           , '2',  0,  0, CONV_shared   , CODE_shared   },
    /* --------------   --------------------------------------- */
-   { "GROUP"        , "grouping of conditions"                , '2',  0,  0 },
-   { "COND"         , "test condition"                        , '2',  0,  0 },
-   { "DITTO"        , "repeated test condition"               , '1',  0,  0 },
-   { "USE_SHARE"    , "inclusion of shared code"              , '2',  0,  0 },
+   { "GROUP"        , "grouping of conditions"                , '2',  0,  0, CONV_group    , CODE_group    },
+   { "COND"         , "test condition"                        , '2',  0,  0, CONV_cond     , CODE_cond     },
+   { "DITTO"        , "repeated test condition"               , '1',  0,  0, CONV_ditto    , NULL          },
+   { "REUSE"        , "inclusion of shared code"              , '1',  0,  0, CONV_reuse    , CODE_use      },
    /* --------------   --------------------------------------- */
-   { "exec"         , "function execution"                    , 'f',  0,  0 },
-   { "get"          , "unit test accessor retrieval"          , 'f',  0,  0 },
-   { "echo"         , "test a variable directly"              , 'f',  0,  0 },
+   { "exec"         , "function execution"                    , 'f',  0,  0, CONV_exec     , CODE_exec     },
+   { "get"          , "unit test accessor retrieval"          , 'f',  0,  0, CONV_exec     , CODE_exec     },
+   { "echo"         , "test a variable directly"              , 'f',  0,  0, CONV_echo     , CODE_echo     },
    /* --------------   --------------------------------------- */
-   { "mode"         , "set pass or forced_fail mode"          , 'p',  0,  0 },
-   { "code"         , "insert c code"                         , 'p',  0,  0 },
-   { "load"         , "place data into stdin"                 , 'P',  0,  0 },
-   { "sys"          , "execute shell code"                    , 'p',  0,  0 },
+   { "mode"         , "set pass or forced_fail mode"          , 'p',  0,  0, CONV_code     , CODE_code     },
+   { "code"         , "insert c code"                         , 'p',  0,  0, CONV_code     , CODE_code     },
+   { "load"         , "place data into stdin"                 , 'P',  0,  0, CONV_load     , CODE_load     },
+   { "sys"          , "execute shell code"                    , 'p',  0,  0, CONV_code     , CODE_code     },
    /* --------------   --------------------------------------- */
-   { "MASTER"       , "master testing sequence"               , '2',  0,  0 },
-   { "WAVE"         , "testing wave"                          , '2',  0,  0 },
-   { "stage"        , "testing stage"                         , '2',  0,  0 },
+   { "WAVE"         , "testing wave"                          , '2',  0,  0, NULL          , NULL          },
+   { "stage"        , "testing stage"                         , '2',  0,  0, NULL          , NULL          },
    /* --------------   --------------------------------------- */
-   { "----"         , "end-of-entries"                        , '-',  0,  0 },
+   { "----"         , "end-of-entries"                        , '-',  0,  0, NULL          , NULL          },
    /* --------------   --------------------------------------- */
 };
 
@@ -71,6 +70,47 @@ SCRP_ditto__set         (char a_mark)
 }
 
 char
+SCRP_ditto__check       (char *p, char a_set)
+{
+   /*---(locals)-----------+-----------+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char       *q           = NULL;
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(default)------------------------*/
+   my.mark = '-';
+   /*---(defense)------------------------*/
+   DEBUG_INPT   yLOG_spoint  (p);
+   --rce;  if (strcmp ("COND", g_verbs [my.indx].name) != 0) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(find cond lines)----------------*/
+   q = strchr (p, '(');
+   DEBUG_INPT   yLOG_spoint  (q);
+   --rce;  if (q == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (q [2] != ')') {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (strchr ("ABCDEFGHIJKLMNOPQRSTUVWXYZ", q [1]) == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(find our cond)------------------*/
+   DEBUG_INPT   yLOG_schar   (q [1]);
+   if (a_set == 'y')  rc = SCRP_ditto__set (q [1]);
+   my.mark = q [1];
+   /*---(complete)-----------------------*/
+   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   return rc;
+}
+
+char
 SCRP_ditto__beg         (char *a_verb)
 {
    /*---(locals)-----------+-----------+-*/
@@ -78,6 +118,8 @@ SCRP_ditto__beg         (char *a_verb)
    char       *p           = NULL;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
+   /*---(default)------------------------*/
+   my.mark = '-';
    /*---(defense)------------------------*/
    DEBUG_INPT   yLOG_spoint  (a_verb);
    --rce;  if (a_verb == NULL) {
@@ -105,59 +147,25 @@ SCRP_ditto__beg         (char *a_verb)
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   s_ditto      = p [7] - 'A';
+   s_ditto = p [7] - 'A';
+   my.mark = p [7];
    /*---(reopen file)--------------------*/
-   s_file_ditto = fopen (my.name_scrp, "r");
+   s_file_ditto = fopen (my.n_scrp, "r");
    DEBUG_INPT   yLOG_point   ("refile*"   , s_file_ditto);
-   --rce;  if (my.file_scrp == NULL) {
+   --rce;  if (my.f_scrp == NULL) {
       DEBUG_TOPS   yLOG_fatal   ("scrp file, can not open script file");
       DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(swap files)---------------------*/
    DEBUG_INPT   yLOG_note    ("swap file for script");
-   s_file_save  = my.file_scrp;
-   my.file_scrp = s_file_ditto;
+   s_file_save  = my.f_scrp;
+   my.f_scrp = s_file_ditto;
    s_lineno     = 0;
    s_dittoing   = 'y';
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 0;
-}
-
-char
-SCRP_ditto__check       (char *a_verb)
-{
-   /*---(locals)-----------+-----------+-*/
-   char        rce         =  -10;
-   char        rc          =    0;
-   char       *p           = NULL;
-   /*---(header)-------------------------*/
-   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
-   /*---(defense)------------------------*/
-   DEBUG_INPT   yLOG_spoint  (a_verb);
-   --rce;  if (a_verb == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(find cond lines)----------------*/
-   p = strstr (a_verb, "COND (");
-   DEBUG_INPT   yLOG_spoint  (p);
-   --rce;  if (p == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   DEBUG_INPT   yLOG_sint    (p - a_verb);
-   --rce;  if (p - a_verb > 20) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(find our cond)------------------*/
-   DEBUG_INPT   yLOG_schar   (p [6]);
-   rc = SCRP_ditto__set (p [6]);
-   /*---(complete)-----------------------*/
-   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
-   return rc;
 }
 
 char
@@ -173,7 +181,7 @@ SCRP_ditto__end         (void)
    s_dittoing = '-';
    /*---(swap files)---------------------*/
    DEBUG_INPT   yLOG_note    ("swap file for script");
-   my.file_scrp = s_file_save;
+   my.f_scrp = s_file_save;
    /*---(close detail report)------------*/
    DEBUG_INPT   yLOG_point   ("file_ditto", s_file_ditto);
    rc = fclose (s_file_ditto);
@@ -188,6 +196,18 @@ SCRP_ditto__end         (void)
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 0;
+}
+
+char*
+SCRP_ditto_used         (void)
+{
+   int         i           =    0;
+   for (i = 0; i < 26; ++i) {
+      if (s_dittos [i] < 0)    my.d_used [i] = '-';
+      else                     my.d_used [i] = 'A' + i;
+   }
+   my.d_used [i] = '\0';
+   return my.d_used;
 }
 
 
@@ -205,10 +225,10 @@ SCRP_open          (void)
    /*---(header)-------------------------*/
    DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
    /*---(open configuration)-------------*/
-   DEBUG_INPT   yLOG_point   ("name"      , my.name_scrp);
-   my.file_scrp = fopen (my.name_scrp, "r");
-   DEBUG_INPT   yLOG_point   ("file*"     , my.file_scrp);
-   --rce;  if (my.file_scrp == NULL) {
+   DEBUG_INPT   yLOG_point   ("name"      , my.n_scrp);
+   my.f_scrp = fopen (my.n_scrp, "rt");
+   DEBUG_INPT   yLOG_point   ("file*"     , my.f_scrp);
+   --rce;  if (my.f_scrp == NULL) {
       DEBUG_TOPS   yLOG_fatal   ("scrp file, can not open script file");
       DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
@@ -216,6 +236,32 @@ SCRP_open          (void)
    DEBUG_INPT   yLOG_note    ("script file open");
    my.n_line = 0;
    SCRP_ditto__clear ();
+   /*---(complete)-----------------------*/
+   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+char         /*--> close script file ---------------------[ ------ [ ------ ]-*/
+SCRP_close         (void)
+{
+   /*---(locals)-----------+-----------+-*/
+   char        rc          = 0;
+   char        rce         = -10;
+   /*---(header)-------------------------*/
+   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
+   /*---(close detail report)------------*/
+   DEBUG_INPT   yLOG_point   ("*f_scrp", my.f_scrp);
+   --rce;  if (my.f_scrp == NULL) {
+      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   rc = fclose (my.f_scrp);
+   --rce;  if (rc != 0) {
+      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(ground pointer)-----------------*/
+   my.f_scrp = NULL;
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -230,7 +276,9 @@ SCRP_clear         (void)
    strlcpy (my.last, my.verb, LEN_LABEL);
    /*---(input vars)---------------------*/
    my.verb        [0] = '\0';
-   my.stage       [0] = '\0';
+   my.p_conv          = NULL;
+   my.p_code          = NULL;
+   my.verb        [0] = '\0';
    my.spec            = '-';
    my.status          = '-';
    my.vers        [0] = '\0';
@@ -243,6 +291,9 @@ SCRP_clear         (void)
    my.retn        [0] = '\0';
    my.code        [0] = '\0';
    my.refn        [0] = '\0';
+   /*---(special marking)----------------*/
+   my.stage       [0] = '\0';
+   my.share           = '-';
    my.mark            = '-';
    /*---(working vars)-------------------*/
    my.syst        [0] = '\0';
@@ -264,14 +315,16 @@ SCRP_read          (void)
    char        x_temp      [20];
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
-   DEBUG_INPT   yLOG_point   ("*scrp"     , my.file_scrp);
+   DEBUG_INPT   yLOG_point   ("*scrp"     , my.f_scrp);
+   /*---(default)------------------------*/
+   strcpy (my.recd, "");
    /*---(defense)------------------------*/
-   --rce;  if (my.file_scrp == NULL) {
+   --rce;  if (my.f_scrp == NULL) {
       DEBUG_INPT   yLOG_fatal   ("scrp file, file not open");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
-   --rce;  if (feof (my.file_scrp)) {
+   --rce;  if (feof (my.f_scrp)) {
       DEBUG_INPT   yLOG_note    ("already at end of file");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
@@ -284,8 +337,8 @@ SCRP_read          (void)
    while (1) {
       /*---(read next)-------------------*/
       DEBUG_INPT   yLOG_note    ("read script file");
-      fgets (x_recd, LEN_RECD, my.file_scrp);
-      if (feof (my.file_scrp)) {
+      fgets (x_recd, LEN_RECD, my.f_scrp);
+      if (feof (my.f_scrp)) {
          DEBUG_INPT   yLOG_note    ("hit end of file");
          DEBUG_INPT   yLOG_exit    (__FUNCTION__);
          return rce;
@@ -341,7 +394,7 @@ SCRP__current      (char *a_first)
    char        rce         = -10;           /* return code for errors         */
    int         i           = 0;
    char       *p;
-   char       *q           = "\x1F";
+   char       *q           = "§";
    /*---(read fields)--------------------*/
    if (my.spec == '1')  return 0;  /* ditto type */
    p = a_first;
@@ -370,22 +423,22 @@ SCRP__current      (char *a_first)
                      strlcpy (my.code      , p, LEN_RECD);
                      DEBUG_INPT   yLOG_info    ("code"      , my.code);
                   } else {
-                     strlcpy (my.args      , p, LEN_STR);
-                     strlcpy (my.code      , p, LEN_STR);
+                     strlcpy (my.args      , p, LEN_FULL);
+                     strlcpy (my.code      , p, LEN_FULL);
                      DEBUG_INPT   yLOG_info    ("args"      , my.args);
                   }
                   break;
       case  5 :   strlcpy (my.test      , p, LEN_LABEL);
                   DEBUG_INPT   yLOG_info    ("test"      , my.test);
                   break;
-      case  6 :   strlcpy (my.expe      , p, LEN_OUT  );
+      case  6 :   strlcpy (my.expe      , p, LEN_RECD);
                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
                   break;
       case  7 :   my.type      = p [0];
                   if (my.type == '\0')  my.type = '-';
                   DEBUG_INPT   yLOG_char    ("type"      , my.type);
                   break;
-      case  8 :   strlcpy (my.retn      , p, LEN_STR);
+      case  8 :   strlcpy (my.retn      , p, LEN_FULL);
                   DEBUG_INPT   yLOG_info    ("retn"      , my.retn);
                   break;
       }
@@ -404,7 +457,17 @@ SCRP__current      (char *a_first)
       }
       strltrim (p, ySTR_BOTH, LEN_RECD);
    } 
-   return 0;
+   /*---(stop parsing summ records)---*/
+   switch (my.spec) {
+   case '1' : if (i <  1)  rc = rce;  break;
+   case 'c' : if (i <  1)  rc = rce;  break;
+   case '2' : if (i <  2)  rc = rce;  break;
+   case '3' : if (i <  3)  rc = rce;  break;
+   case 'P' : if (i <  4)  rc = rce;  break;
+   case 'p' : if (i <  4)  rc = rce;  break;
+   case 'f' : if (i <  6)  rc = rce;  break;
+   }
+   return rc;
 }
 
 char         /*--> parse out a v21 records ---------------[ leaf   [ ------ ]-*/
@@ -422,7 +485,7 @@ SCRP_vers21        (void)
    char        rce         = -10;           /* return code for errors         */
    int         i           = 0;
    char       *p;
-   char       *q           = "\x1F";
+   char       *q           = "§";
    /*---(read fields)--------------------*/
    for (i = 2; i < 20; ++i) {
       DEBUG_INPT   yLOG_note    ("read next field");
@@ -457,22 +520,22 @@ SCRP_vers21        (void)
                      strlcpy (my.code      , p, LEN_RECD);
                      DEBUG_INPT   yLOG_info    ("code"      , my.code);
                   } else {
-                     strlcpy (my.args      , p, LEN_STR);
-                     strlcpy (my.code      , p, LEN_STR);
+                     strlcpy (my.args      , p, LEN_FULL);
+                     strlcpy (my.code      , p, LEN_FULL);
                      DEBUG_INPT   yLOG_info    ("args"      , my.args);
                   }
                   break;
       case  5 :   strlcpy (my.test      , p, LEN_LABEL);
                   DEBUG_INPT   yLOG_info    ("test"      , my.test);
                   break;
-      case  6 :   strlcpy (my.expe      , p, LEN_OUT  );
+      case  6 :   strlcpy (my.expe      , p, LEN_RECD);
                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
                   break;
       case  7 :   my.type      = p [0];
                   if (my.type == '\0')  my.type = '-';
                   DEBUG_INPT   yLOG_char    ("type"      , my.type);
                   break;
-      case  8 :   strlcpy (my.retn      , p, LEN_STR);
+      case  8 :   strlcpy (my.retn      , p, LEN_FULL);
                   DEBUG_INPT   yLOG_info    ("retn"      , my.retn);
                   break;
       }
@@ -500,7 +563,7 @@ SCRP_vers20        (void)
    char        rce         = -10;           /* return code for errors         */
    int         i           = 0;
    char       *p;
-   char       *q           = "\x1F";
+   char       *q           = "§";
    /*---(read fields)--------------------*/
    for (i = 2; i < 20; ++i) {
       /*---(read field)------------------*/
@@ -535,21 +598,21 @@ SCRP_vers20        (void)
                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
                   }
                   break;
-      case  4 :   strlcpy (my.args      , p, LEN_STR);
-                  strlcpy (my.code      , p, LEN_STR);
+      case  4 :   strlcpy (my.args      , p, LEN_FULL);
+                  strlcpy (my.code      , p, LEN_FULL);
                   DEBUG_INPT   yLOG_info    ("args"      , my.args);
                   break;
       case  5 :   strlcpy (my.test      , p, LEN_LABEL);
                   DEBUG_INPT   yLOG_info    ("test"      , my.test);
                   break;
-      case  6 :   strlcpy (my.expe      , p, LEN_OUT  );
+      case  6 :   strlcpy (my.expe      , p, LEN_RECD);
                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
                   break;
       case  7 :   my.type      = p [0];
                   if (my.type == '\0')  my.type = '-';
                   DEBUG_INPT   yLOG_char    ("type"      , my.type);
                   break;
-      case  8 :   strlcpy (my.retn      , p, LEN_STR);
+      case  8 :   strlcpy (my.retn      , p, LEN_FULL);
                   DEBUG_INPT   yLOG_info    ("retn"      , my.retn);
                   break;
       }
@@ -573,7 +636,7 @@ SCRP_vers19        (void)
    char        rce         = -10;           /* return code for errors         */
    int         i           = 0;
    char       *p;
-   char       *q           = "\x1F";
+   char       *q           = "§";
    /*---(read fields)--------------------*/
    for (i = 2; i < 20; ++i) {
       DEBUG_INPT   yLOG_note    ("read next field");
@@ -604,14 +667,14 @@ SCRP_vers19        (void)
                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
                   }
                   break;
-      case  3 :   strlcpy (my.args      , p, LEN_STR);
-                  strlcpy (my.code      , p, LEN_STR);
+      case  3 :   strlcpy (my.args      , p, LEN_FULL);
+                  strlcpy (my.code      , p, LEN_FULL);
                   DEBUG_INPT   yLOG_info    ("args"      , my.args);
                   break;
       case  4 :   strlcpy (my.test      , p, LEN_LABEL);
                   DEBUG_INPT   yLOG_info    ("test"      , my.test);
                   break;
-      case  5 :   strlcpy (my.expe      , p, LEN_OUT  );
+      case  5 :   strlcpy (my.expe      , p, LEN_RECD);
                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
                   break;
       }
@@ -628,8 +691,8 @@ SCRP_parse_defense   (void)
    char        rce         = -10;           /* return code for errors         */
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
-   DEBUG_INPT   yLOG_spoint  (my.file_scrp);
-   --rce;  if (my.file_scrp == NULL) {
+   DEBUG_INPT   yLOG_spoint  (my.f_scrp);
+   --rce;  if (my.f_scrp == NULL) {
       DEBUG_INPT   yLOG_snote   ("file not open");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
@@ -655,10 +718,20 @@ SCRP_parse_comment      (void)
 {
    /*---(locals)-----------+-----+-----+-*/
    int         i           =    0;
-   /*---(ward-off)-----------------------*/
-   if (my.len < 10 || my.recd [0] != '#' || my.recd [1] != '>')   return 0;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(ward-off)-----------------------*/
+   DEBUG_INPT   yLOG_sint    (my.len);
+   if (my.len < 2) {
+      DEBUG_INPT   yLOG_snote   ("too short");
+      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      return 0;
+   }
+   if (strncmp (my.recd, "#>", 2) != 0) {
+      DEBUG_INPT   yLOG_snote   ("not prefixed with #>");
+      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      return 0;
+   }
    /*---(check for marker)---------------*/
    DEBUG_INPT   yLOG_snote   ("saved record/comment");
    for (i = 0; i < MAX_VERB; ++i) {
@@ -682,8 +755,14 @@ SCRP_parse_verb         (char *p)
    char        rce         =  -10;
    int         i           =    0;
    int         x_len       =    0;
+   char        x_verb      [LEN_LABEL] = "";
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(defaults)-----------------------*/
+   strlcpy  (my.verb , "", LEN_LABEL);
+   my.p_conv = NULL;
+   my.p_code = NULL;
+   my.indx   = -1;
    /*---(defense)------------------------*/
    DEBUG_INPT   yLOG_spoint  (p);
    --rce;  if (p == NULL) {
@@ -691,17 +770,18 @@ SCRP_parse_verb         (char *p)
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   strltrim (p, ySTR_BOTH, LEN_STR);
-   x_len = strlen (p);
+   strlcpy  (x_verb, p, LEN_FULL);
+   strltrim (x_verb, ySTR_BOTH, LEN_FULL);
+   x_len = strlen (x_verb);
    DEBUG_INPT   yLOG_sint    (x_len);
    --rce;  if (x_len <= 2) {
       DEBUG_INPT   yLOG_snote   ("verb is too short");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_INPT   yLOG_snote   (p);
+   DEBUG_INPT   yLOG_snote   (x_verb);
    /*---(filter comments)----------------*/
-   --rce;  if (p [0] == '#') {
+   --rce;  if (x_verb [0] == '#') {
       DEBUG_INPT   yLOG_snote   ("comment not in column one");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
@@ -709,12 +789,14 @@ SCRP_parse_verb         (char *p)
    /*---(find verb)----------------------*/
    my.indx = -1;
    for (i = 0; i < MAX_VERB; ++i) {
-      if (g_verbs [i].name [0] == '-')           break;
-      if (g_verbs [i].name [0] != p[0])          continue;
-      if (strncmp (g_verbs [i].name, p, 4) != 0) continue;
+      if (g_verbs [i].name [0] == '-')                break;
+      if (g_verbs [i].name [0] != x_verb[0])          continue;
+      if (strncmp (g_verbs [i].name, x_verb, 4) != 0) continue;
       DEBUG_INPT   yLOG_snote   ("verb found");
       strlcpy (my.verb, g_verbs [i].name, LEN_LABEL);
       my.indx    = i;
+      my.p_conv  = g_verbs [i].conv;
+      my.p_code  = g_verbs [i].code;
       ++g_verbs [i].count;
       ++g_verbs [i].total;
       my.spec    = g_verbs [i].spec;
@@ -738,15 +820,17 @@ SCRP_parse_ditto        (char *p)
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   char       *q           = NULL;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
+   my.mark = '-';
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
       if (strcmp ("SCRP" , g_verbs [my.indx].name) == 0) {
          DEBUG_INPT   yLOG_note    ("clear ditto marks (create)");
          SCRP_ditto__clear ();
-      } else if (strcmp ("COND", g_verbs [my.indx].name) == 0 && p [5] == '(' && p [7] == ')') {
+      } else if (strcmp ("COND", g_verbs [my.indx].name) == 0) {
          DEBUG_INPT   yLOG_note    ("found a ditto condition (create)");
-         SCRP_ditto__check (p);
+         SCRP_ditto__check (p, 'y');
       } else if (strcmp ("DITTO", g_verbs [my.indx].name) == 0) {
          DEBUG_INPT   yLOG_note    ("found a ditto verb (create)");
          rc = SCRP_ditto__beg (p);
@@ -761,6 +845,11 @@ SCRP_parse_ditto        (char *p)
          my.mark = p [7];
       }
    }
+   --rce;  if (strcmp ("SHARED" , my.verb) == 0 || strcmp ("REUSE" , my.verb) == 0) {
+      q = strchr (p, '-');
+      if (q == NULL) return rce;
+      my.share = q [1];
+   }
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return rc;
@@ -772,26 +861,47 @@ SCRP_parse_stage        (char *p)
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    int         x_len       =    0;
-   /*---(ward-off)-----------------------*/
-   if (strcmp ("SCRP" , g_verbs [my.indx].name) != 0)    return 0;
+   char        t           [LEN_LABEL] = "";
+   char       *q           = NULL;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(defaults)-----------------------*/
+   strlcpy  (my.stage, "", LEN_LABEL);
+   /*---(ward-off)-----------------------*/
+   --rce;  if (my.indx < 0 || strcmp ("SCRP" , g_verbs [my.indx].name) != 0) {
+      DEBUG_INPT   yLOG_snote   ("only applies to scripts");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(prepare)------------------------*/
+   strlcpy  (t, p, LEN_LABEL);
+   strltrim (t, ySTR_BOTH, LEN_LABEL);
    /*---(check markers)------------------*/
-   x_len = strlen (p);
-   if (x_len != 12) {
-      DEBUG_INPT   yLOG_snote   ("normal script marker");
-      return 0;
-   }
-   if (p [ 8] != '[') {
+   q = strchr (t, '[');
+   --rce;  if (q == NULL) {
       DEBUG_INPT   yLOG_snote   ("does not begin right");
-      return 0;
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
    }
-   if (p [11] != ']') {
+   --rce;  if (q [3] != ']') {
       DEBUG_INPT   yLOG_snote   ("does not end right");
-      return 0;
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(positions)----------------------*/
+   --rce;  if (strchr ("èéêëìíîïðñòóôõö÷øùúûüýþÿ", q [1]) == NULL) {
+      DEBUG_INPT   yLOG_snote   ("does not lead with greek letter");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (strchr ("0123456789"              , q [2]) == NULL) {
+      DEBUG_INPT   yLOG_snote   ("does not end with number");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
    }
    /*---(save)---------------------------*/
-   strlcpy (my.stage, p + 8, LEN_LABEL);
+   q [3] = '\0';
+   strlcpy (my.stage, q + 1, LEN_LABEL);
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
    return 0;
@@ -806,7 +916,7 @@ SCRP_parse         (void)
    char        x_recd      [LEN_RECD];
    int         x_len       = 0;             /* input record length            */
    char       *p;
-   char       *q           = "\x1F";
+   char       *q           = "§";
    char       *r           = NULL;
    int         i           = 0;
    /*---(header)-------------------------*/
@@ -857,54 +967,34 @@ SCRP_parse         (void)
    strltrim (p, ySTR_BOTH, LEN_RECD);
    x_len = strlen (p);
    if (p[0] == '-')  p[0] = '\0';
+   rc = 0;
    if      (x_len != 3 || p [0] != 'v') {
-      if (my.spec != 'c')  SCRP__current (p);
+      if (my.spec != 'c')  rc = SCRP__current (p);
    } else if (strcmp (p, "v21") == 0) {
       strlcpy (my.vers      , p    , LEN_LABEL);
       DEBUG_INPT   yLOG_info    ("vers"      , my.vers);
-      if (my.spec != 'c')  SCRP_vers21  ();
+      if (my.spec != 'c')  rc = SCRP_vers21  ();
    } else if (strcmp (p, "v20") == 0) {
       strlcpy (my.vers      , p    , LEN_LABEL);
       DEBUG_INPT   yLOG_info    ("vers"      , my.vers);
-      SCRP_vers20  ();
+      if (my.spec != 'c')  rc = SCRP_vers20  ();
    } else                             {
       strlcpy (my.vers      , "v19", LEN_LABEL);
       DEBUG_INPT   yLOG_info    ("vers"      , my.vers);
       strlcpy (my.desc      , p    , LEN_DESC );
       DEBUG_INPT   yLOG_info    ("desc"      , my.desc);
-      SCRP_vers19  ();
+      if (my.spec != 'c')  rc = SCRP_vers19  ();
+   }
+   if (rc < 0) {
+      DEBUG_INPT   yLOG_note    ("trouble parsing");
+      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      return rce;
    }
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
-
-char         /*--> close script file ---------------------[ ------ [ ------ ]-*/
-SCRP_close         (void)
-{
-   /*---(locals)-----------+-----------+-*/
-   char        rc          = 0;
-   char        rce         = -10;
-   /*---(header)-------------------------*/
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
-   /*---(close detail report)------------*/
-   DEBUG_INPT   yLOG_point   ("*file_scrp", my.file_scrp);
-   --rce;  if (my.file_scrp == NULL) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   rc = fclose (my.file_scrp);
-   --rce;  if (rc != 0) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   my.file_scrp = NULL;
-   /*---(terminate logging)--------------*/
-   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
-   /*---(complete)-----------------------*/
-   return 0;
-}
 
 char         /*--> close script file ---------------------[ ------ [ ------ ]-*/
 SCRP_verbs         (void)
@@ -927,19 +1017,19 @@ SCRP_verbcode      (void)
 {
    int         i           = 0;
    int         c           = 0;
-   fprintf (my.file_code, "char\n");
-   fprintf (my.file_code, "UNIT_stats (void)\n");
-   fprintf (my.file_code, "{\n");
-   fprintf (my.file_code, "   printf (\"koios, record type summary\\n\");\n");
+   fprintf (my.f_code, "char¦");
+   fprintf (my.f_code, "UNIT_stats (void)¦");
+   fprintf (my.f_code, "{¦");
+   fprintf (my.f_code, "   printf (¶koios, record type summaryµn¶);¦");
    for (i = 0; i < MAX_VERB; ++i) {
-      fprintf (my.file_code, "   printf (\"%-10.10s = %5d   %s\\n\");\n", g_verbs [i].name, g_verbs [i].total, g_verbs [i].desc);
+      fprintf (my.f_code, "   printf (¶%-10.10s = %5d   %sµn¶);¦", g_verbs [i].name, g_verbs [i].total, g_verbs [i].desc);
       c += g_verbs [i].total;
       if (g_verbs [i].name [0] == '-') break;
    }
-   fprintf (my.file_code, "   printf (\"%-10.10s = %5d   %s\\n\");\n", "TOTAL"         , c                , "sum of all verbs");
-   fprintf (my.file_code, "   printf (\"%-10.10s = %5d   %s\\n\");\n", "concerns"      , my.n_recd - c    , "records with troubles");
-   fprintf (my.file_code, "   exit (0);\n");
-   fprintf (my.file_code, "}\n");
+   fprintf (my.f_code, "   printf (¶%-10.10s = %5d   %sµn¶);¦", "TOTAL"         , c                , "sum of all verbs");
+   fprintf (my.f_code, "   printf (¶%-10.10s = %5d   %sµn¶);¦", "concerns"      , my.n_recd - c    , "records with troubles");
+   fprintf (my.f_code, "   exit (0);¦");
+   fprintf (my.f_code, "}¦");
    return 0;
 }
 
@@ -958,9 +1048,9 @@ SCRP__unit              (char *a_question, int a_num)
    char        s           [LEN_LABEL];
    char        t           [LEN_RECD ];
    /*---(preprare)-----------------------*/
-   strlcpy  (my.answer, "SCRP unit      : question not understood", LEN_STR);
+   strlcpy  (my.answer, "SCRP unit      : question not understood", LEN_FULL);
    if      (strcmp (a_question, "file"      ) == 0) {
-      sprintf (my.answer, "SCRP file      : %-35.35s %p", my.name_scrp, my.file_scrp);
+      sprintf (my.answer, "SCRP file      : %-35.35s %p", my.n_scrp, my.f_scrp);
    }
    else if (strcmp (a_question, "recd"      ) == 0) {
       strlcpy    (t, my.recd, LEN_RECD);
