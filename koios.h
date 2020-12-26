@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.2- get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2j"
-#define     P_VERTXT    "unit tested all the conversion functions, except driver"
+#define     P_VERNUM    "1.2k"
+#define     P_VERTXT    "unit tested diplay outputs and scrp/cond runs"
 
 
 /*===[[ HEADER ]]=============================================================*/
@@ -126,7 +126,10 @@
 /*===[[ STANDARD C LIBRARIES ]]===============================================*/
 #include    <stdio.h>        /* C_ANSI : strcpy, strlen, strchr, strcmp, ...  */
 #include    <string.h>       /* C_ANSI : printf, snprintf, fgets, fopen, ...  */
-#include    <stdarg.h>              /* CLIBC   variable argument handling     */
+#include    <stdarg.h>       /* C_ANSI : variable argument handling           */
+#include    <unistd.h>       /* stat(),crpyt()                                */
+#include    <sys/stat.h>     /* stat, lstat                                   */
+#include    <sys/types.h>    /* stat, lstat                                   */
 
 /*===[[ CUSTOM LIBRARIES ]]===================================================*/
 #include    <yUNIT.h>        /* CUSTOM : heatherly unit testing               */
@@ -136,11 +139,13 @@
 
 
 
+#define     G_RUN_DEFAULT   '-'
 #define     G_RUN_CREATE    'c'
 #define     G_RUN_DEBUG     'd'
 #define     G_RUN_UPDATE    'u'
 #define     G_RUN_REPLACE   'r'
 
+typedef struct stat      tSTAT;
 
 
 typedef     struct cGLOBALS     tGLOBALS;
@@ -244,18 +249,16 @@ extern      tTEST       g_tests [MAX_TEST];
 
 /*===[[ PROG ]]===============================================================*/
 /*---(program)--------------*/
-char*       PROG_version       (void);
-char        PROG_logger        (int  a_argc, char *a_argv[]);
-char        PROG_init          (void);
-char        PROG_urgsmass      (char a_set , char  a_extra);
-char        PROG_urgs          (int  a_argc, char *a_argv[]);
-char        PROG_args          (int  a_argc, char *a_argv[]);
-char        PROG_begin         (void);
-char        PROG_end           (void);
+char*       PROG_version            (void);
+char        PROG_init               (void);
+char        PROG_file               (char *a_name);
+char        PROG_args               (int  a_argc, char *a_argv[]);
+char        PROG_begin              (void);
+char        PROG_end                (void);
 /*---(unittest)------------*/
-char        PROG__unit_quiet   (void);
-char        PROG__unit_loud    (void);
-char        PROG__unit_end     (void);
+char        PROG__unit_quiet        (void);
+char        PROG__unit_loud         (void);
+char        PROG__unit_end          (void);
 
 /*===[[ SCRP ]]===============================================================*/
 char        SCRP_ditto__clear       (void);
@@ -278,30 +281,38 @@ char        SCRP_verbcode           (void);
 char*       SCRP__unit              (char *a_question, int a_num);
 
 /*===[[ CODE ]]===============================================================*/
-char        CODE_open          (void);
-char        CODE_close         (void);
+/*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
+char        CODE_open               (void);
+char        CODE_printf             (char *a_format, ...);
+char        MAIN_printf             (char *a_format, ...);
+char        CODE_close              (FILE *a_file);
+char        CODE_cycle              (void);
 char        CODE_write         (void);
-char        CODE_begin         (void);
+char        CODE_beg           (void);
+char        CODE_end           (void);
+char        MAIN_beg           (void);
+char        MAIN_end           (void);
+char        MAIN_append        (void);
 char        CODE_comment       (void);
 char        CODE_prep          (void);
 char        CODE_incl          (void);
-char        CODE_main          (void);
 char        CODE_scrp          (void);
+char        CODE_scrp_end        (void);
 char        CODE_sect          (void);
 char        CODE_shared        (void);
 char        CODE_group         (void);
 char        CODE_cond          (void);
-char        CODE_ditto         (void);
-char        CODE_use           (void);
+char        CODE_reuse         (void);
 char        CODE_prefix        (char a_type);
 char        CODE_expe_var      (char a_type);
 char        CODE_suffix        (char a_type);
 char        CODE_exec          (void);
 char        CODE_echo          (void);
+char        CODE_mode          (void);
 char        CODE_code          (void);
 char        CODE_load          (void);
+char        CODE_system        (void);
 char        CODE_unknown       (void);
-char        CODE_end           (void);
 
 /*===[[ CONV ]]===============================================================*/
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/

@@ -21,19 +21,20 @@ main               (int argc, char *argv[])
       return rc;
    }
    /*---(open files)---------------------*/
-   printf ("base name = %s\n", my.n_base);
-   printf ("scrp name = %s\n", my.n_scrp);
-   if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
-      printf ("code name = %s\n", my.n_code);
-      printf ("main name = %s¦", my.n_main);
-   } else {
-      printf ("conv name = %s¦", my.n_conv);
-   }
+   /*> printf ("base name = %s\n", my.n_base);                                        <* 
+    *> printf ("scrp name = %s\n", my.n_scrp);                                        <* 
+    *> if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {               <* 
+    *>    printf ("code name = %s\n", my.n_code);                                     <* 
+    *>    printf ("main name = %s¦", my.n_main);                                      <* 
+    *> } else {                                                                       <* 
+    *>    printf ("conv name = %s¦", my.n_conv);                                      <* 
+    *> }                                                                              <*/
    /*---(open files)---------------------*/
    if (rc == 0)  rc = SCRP_open      ();
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
       if (rc == 0)  rc = CODE_open      ();
-      if (rc == 0)  rc = CODE_begin     ();
+      if (rc == 0)  rc = CODE_beg       ();
+      if (rc == 0)  rc = MAIN_beg       ();
    } else if (my.run_type == G_RUN_UPDATE) {
       if (rc == 0)  rc = CONV_open      ();
       if (rc == 0)  rc = CONV_beg       ();
@@ -65,8 +66,10 @@ main               (int argc, char *argv[])
    /*---(close files)--------------------*/
    rc = SCRP_close     ();
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) { 
+      rc = MAIN_end       ();
       rc = CODE_end       ();
-      rc = CODE_close     ();
+      rc = MAIN_append    ();
+      rc = CODE_close     (my.f_code);
    } else if (my.run_type == G_RUN_UPDATE) {
       rc = CONV_end       ();
       rc = CONV_close     ();
@@ -79,20 +82,20 @@ main               (int argc, char *argv[])
       system  (t);
    }
    /*---(summary)------------------------*/
-   printf ("\n");
-   printf ("reading script...\n");
-   printf ("   %-4d total lines\n"                , my.n_line);
-   printf ("   %-4d comments\n"                   , my.n_comment);
-   printf ("   %-4d empty lines\n"                , my.n_empty);
-   printf ("   %-4d short lines ( <10 chars)\n"   , my.n_short);
-   printf ("   %-4d useable records\n"            , my.n_recd);
-   printf ("   %-4d CONCERNS\n"                   , my.n_line - my.n_comment - my.n_empty - my.n_short - my.n_recd);
-   printf ("\n");
-   SCRP_verbs ();
-   printf ("\n");
+   /*> printf ("\n");                                                                                                      <* 
+    *> printf ("reading script...\n");                                                                                     <* 
+    *> printf ("   %-4d total lines\n"                , my.n_line);                                                        <* 
+    *> printf ("   %-4d comments\n"                   , my.n_comment);                                                     <* 
+    *> printf ("   %-4d empty lines\n"                , my.n_empty);                                                       <* 
+    *> printf ("   %-4d short lines ( <10 chars)\n"   , my.n_short);                                                       <* 
+    *> printf ("   %-4d useable records\n"            , my.n_recd);                                                        <* 
+    *> printf ("   %-4d CONCERNS\n"                   , my.n_line - my.n_comment - my.n_empty - my.n_short - my.n_recd);   <* 
+    *> printf ("\n");                                                                                                      <*/
+   /*> SCRP_verbs ();                                                                 <*/
+   /*> printf ("\n");                                                                 <*/
    /*---(complete)-----------------------*/
    PROG_end     ();
-   printf ("complete\n");
+   /*> printf ("complete\n");                                                         <*/
    return 0;
 }
 

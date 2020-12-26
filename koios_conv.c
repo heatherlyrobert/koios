@@ -98,7 +98,7 @@ char
 CONV_beg           (void)
 {
    CONV_printf ("#!/usr/local/bin/koios\n");
-   CONV_printf ("#   koios-polos (north star) -- customized c unit testing meta-program and mini-language\n");
+   CONV_printf ("#   %s\n", P_ONELINE);
    my.nscrp = my.cscrp = 0;
    my.ncond = my.ccond = 0;
    my.nstep = my.cstep = 0;

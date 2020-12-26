@@ -24,16 +24,16 @@ tVERB       g_verbs [MAX_VERB] = {
    { "GROUP"        , "grouping of conditions"                , '2',  0,  0, CONV_group    , CODE_group    },
    { "COND"         , "test condition"                        , '2',  0,  0, CONV_cond     , CODE_cond     },
    { "DITTO"        , "repeated test condition"               , '1',  0,  0, CONV_ditto    , NULL          },
-   { "REUSE"        , "inclusion of shared code"              , '1',  0,  0, CONV_reuse    , CODE_use      },
+   { "REUSE"        , "inclusion of shared code"              , '1',  0,  0, CONV_reuse    , CODE_reuse    },
    /* --------------   --------------------------------------- */
    { "exec"         , "function execution"                    , 'f',  0,  0, CONV_exec     , CODE_exec     },
    { "get"          , "unit test accessor retrieval"          , 'f',  0,  0, CONV_exec     , CODE_exec     },
    { "echo"         , "test a variable directly"              , 'f',  0,  0, CONV_echo     , CODE_echo     },
    /* --------------   --------------------------------------- */
-   { "mode"         , "set pass or forced_fail mode"          , 'p',  0,  0, CONV_code     , CODE_code     },
+   { "mode"         , "set pass or forced_fail mode"          , '2',  0,  0, CONV_mode     , CODE_mode     },
    { "code"         , "insert c code"                         , 'p',  0,  0, CONV_code     , CODE_code     },
    { "load"         , "place data into stdin"                 , 'P',  0,  0, CONV_load     , CODE_load     },
-   { "sys"          , "execute shell code"                    , 'p',  0,  0, CONV_code     , CODE_code     },
+   { "system"       , "execute shell code"                    , 'p',  0,  0, CONV_code     , CODE_system   },
    /* --------------   --------------------------------------- */
    { "WAVE"         , "testing wave"                          , '2',  0,  0, NULL          , NULL          },
    { "stage"        , "testing stage"                         , '2',  0,  0, NULL          , NULL          },
@@ -394,7 +394,7 @@ SCRP__current      (char *a_first)
    char        rce         = -10;           /* return code for errors         */
    int         i           = 0;
    char       *p;
-   char       *q           = "§";
+   char       *q           = "";
    /*---(read fields)--------------------*/
    if (my.spec == '1')  return 0;  /* ditto type */
    p = a_first;
@@ -485,7 +485,7 @@ SCRP_vers21        (void)
    char        rce         = -10;           /* return code for errors         */
    int         i           = 0;
    char       *p;
-   char       *q           = "§";
+   char       *q           = "";
    /*---(read fields)--------------------*/
    for (i = 2; i < 20; ++i) {
       DEBUG_INPT   yLOG_note    ("read next field");
@@ -563,7 +563,7 @@ SCRP_vers20        (void)
    char        rce         = -10;           /* return code for errors         */
    int         i           = 0;
    char       *p;
-   char       *q           = "§";
+   char       *q           = "";
    /*---(read fields)--------------------*/
    for (i = 2; i < 20; ++i) {
       /*---(read field)------------------*/
@@ -636,7 +636,7 @@ SCRP_vers19        (void)
    char        rce         = -10;           /* return code for errors         */
    int         i           = 0;
    char       *p;
-   char       *q           = "§";
+   char       *q           = "";
    /*---(read fields)--------------------*/
    for (i = 2; i < 20; ++i) {
       DEBUG_INPT   yLOG_note    ("read next field");
@@ -916,7 +916,7 @@ SCRP_parse         (void)
    char        x_recd      [LEN_RECD];
    int         x_len       = 0;             /* input record length            */
    char       *p;
-   char       *q           = "§";
+   char       *q           = "";
    char       *r           = NULL;
    int         i           = 0;
    /*---(header)-------------------------*/

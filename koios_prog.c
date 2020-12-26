@@ -42,27 +42,106 @@ PROG_init          (void)
    /*---(header)-------------------------*/
    DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
    /*---(files)--------------------------*/
+   strlcpy  (my.n_base, "", LEN_PATH);
    strlcpy  (my.n_scrp, "", LEN_PATH);
    strlcpy  (my.n_code, "", LEN_PATH);
    strlcpy  (my.n_main, "", LEN_PATH);
    strlcpy  (my.n_conv, "", LEN_PATH);
    my.driver    = '-';
    my.run_type  = G_RUN_CREATE;
-   my.replace   = '-';
+   my.replace   = G_RUN_DEFAULT;
    strlcpy  (my.last     , "", LEN_LABEL);
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
+char
+PROG_file               (char *a_name)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_base      [LEN_PATH]  = "";
+   char        x_unit      [LEN_PATH]  = "";
+   int         l           =    0;
+   char       *x_valid     = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_/.";
+   int         i           =    0;
+   tSTAT       s;
+   char       *p           = NULL;
+   /*---(header)-------------------------*/
+   DEBUG_ARGS   yLOG_enter   (__FUNCTION__);
+   /*---(defense)------------------------*/
+   DEBUG_ARGS  yLOG_point   ("a_name"    , a_name);
+   --rce;  if (a_name == NULL) {
+      yURG_error ("FATAL, <name>, name can not be null");
+      DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_ARGS  yLOG_info    ("a_name"    , a_name);
+   /*---(check length)-------------------*/
+   l = strlen (a_name);
+   DEBUG_ARGS  yLOG_value   ("l"         , l);
+   --rce;  if (l <= 0) {
+      yURG_error ("FATAL, <name>, name can not be blank/empty");
+      DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(check characters)---------------*/
+   --rce;  for (i = 0; i < l; ++i) {
+      if (strchr (x_valid, a_name [i]) != NULL)  continue;
+      yURG_error ("FATAL, <name>, name can not have a <%c> at character %d", a_name [i], i);
+      DEBUG_ARGS  yLOG_char  ("bad char"  , a_name [i]);
+      DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(check for extention)------------*/
+   strcpy (x_base, a_name);
+   p = strstr (x_base, ".unit");
+   if (p != NULL)   p [0] = '\0';
+   /*---(check device file)--------------*/
+   sprintf (x_unit, "%s.unit", x_base);
+   rc = lstat (x_unit, &s);
+   /*> printf ("x_unit = [%s] %d\n", x_unit, rc);                                     <*/
+   DEBUG_ARGS    yLOG_value   ("stat"      , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_ARGS    yLOG_note    ("can not find source file");
+      DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (S_ISDIR (s.st_mode))  {
+      DEBUG_ARGS    yLOG_note    ("can not use a directory");
+      DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (S_ISLNK (s.st_mode))  {
+      DEBUG_ARGS    yLOG_note    ("can not use a symlink");
+      DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (!S_ISREG (s.st_mode))  {
+      DEBUG_ARGS    yLOG_note    ("can only use regular file");
+      DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(save back)----------------------*/
+   strncpy (my.n_base, a_name, LEN_PATH);
+   DEBUG_ARGS  yLOG_info    ("n_base"    , my.n_base);
+   /*---(complete)-----------------------*/
+   DEBUG_ARGS   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
 char               /* PURPOSE : process the command line arguments            */
 PROG_args          (int argc, char *argv[])
 {
-   /*---(locals)-------------------------*/
-   int         i           = 0;
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   int         i           =    0;
    char       *a           = NULL;
-   int         x_total     = 0;
-   int         x_args      = 0;
+   int         x_total     =    0;
+   int         x_args      =    0;
    /*---(begin)--------------------------*/
    DEBUG_TOPS  yLOG_enter   (__FUNCTION__);
    /*---(process)------------------------*/
@@ -72,15 +151,17 @@ PROG_args          (int argc, char *argv[])
       if (a[0] == '@')  continue;
       DEBUG_ARGS  yLOG_info    ("cli arg", a);
       ++x_args;
-      strncpy (my.n_base, argv[i], LEN_PATH);
       if      (strncmp (a, "--create"     , 10) == 0)    my.run_type = G_RUN_CREATE;
       else if (strncmp (a, "--compile"    , 10) == 0)    my.run_type = G_RUN_CREATE;
       else if (strncmp (a, "--debug"      , 10) == 0)    my.run_type = G_RUN_DEBUG;
       else if (strncmp (a, "--convert"    , 10) == 0)    my.run_type = G_RUN_UPDATE;
       else if (strncmp (a, "--update"     , 10) == 0)  { my.run_type = G_RUN_UPDATE;  my.replace = G_RUN_REPLACE; }
-      else if (strncmp (a, "-"            ,  1) == 0) {
-         printf ("FATAL, arg <<%s>> not understood\n", a);
-         exit (-1);
+      else if (strncmp (a, "-"            ,  1) == 0)  { printf ("FATAL, arg <<%s>> not understood\n", a); DEBUG_TOPS  yLOG_exitr  (__FUNCTION__, rce); return rce; }
+      else {
+         rc = PROG_file (a);
+         if (rc < 0) {
+            DEBUG_TOPS  yLOG_exitr  (__FUNCTION__, rce);
+         }
       }
    }
    DEBUG_ARGS  yLOG_value  ("entries"   , x_total);
@@ -109,7 +190,7 @@ PROG_begin         (void)
    snprintf (my.n_scrp, LEN_PATH, "%s.unit"        , my.n_base);
    if (my.run_type == G_RUN_CREATE)  snprintf (my.n_code, LEN_PATH, "%s_unit.cs"     , my.n_base);
    if (my.run_type == G_RUN_DEBUG)   snprintf (my.n_code, LEN_PATH, "%s_unit.c"      , my.n_base);
-   snprintf (my.n_main, LEN_PATH, "%s_main_unit.c" , my.n_base);
+   snprintf (my.n_main, LEN_PATH, "%s_unit.tmp"    , my.n_base);
    snprintf (my.n_conv, LEN_PATH, "%s.unit.new"    , my.n_base);
    my.n_line    = 0;
    my.n_comment = 0;
