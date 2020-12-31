@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.2- get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2k"
-#define     P_VERTXT    "unit tested diplay outputs and scrp/cond runs"
+#define     P_VERNUM    "1.2l"
+#define     P_VERTXT    "beautiful, and changes to help ouroboros"
 
 
 /*===[[ HEADER ]]=============================================================*/
@@ -160,11 +160,13 @@ struct cGLOBALS
    char        n_scrp      [LEN_PATH];      /* name of input script file      */
    char        n_code      [LEN_PATH];      /* name of output code file       */
    char        n_main      [LEN_PATH];      /* name of output main file       */
+   char        n_wave      [LEN_PATH];      /* name of master code file       */
    char        n_conv      [LEN_PATH];      /* name of output script file     */
    /*---(file handles)----------*/
    FILE       *f_scrp;                      /* pointer to input script file   */
    FILE       *f_code;                      /* pointer to output code file    */
    FILE       *f_main;                      /* pointer to output main file    */
+   FILE       *f_wave;                      /* pointer to output wave file    */
    FILE       *f_conv;                      /* pointer to output script file  */
    /*---(counters)--------------*/
    int         n_line;                      /* file   all lines               */
@@ -178,6 +180,7 @@ struct cGLOBALS
    int         cscrp;                       /* current script number          */
    int         ccond;                       /* current condition number       */
    int         cstep;                       /* current step number            */
+   int         sstep;                       /* steps in current script        */
    /*---(script)---------------*/
    char        recd        [LEN_RECD ];     /* script record                  */
    int         len;                         /* record length                  */
@@ -189,7 +192,7 @@ struct cGLOBALS
    char        last        [LEN_LABEL];     /* last verb used                 */
    char        spec;                        /* specialty verb (y/n)           */
    char        vers        [LEN_LABEL];     /* version number                 */
-   char        desc        [LEN_DESC ];     /* descriptive text               */
+   char        desc        [LEN_LONG ];     /* descriptive text               */
    char        meth        [LEN_DESC ];     /* function/method name           */
    char        args        [LEN_FULL];      /* function/method args           */
    char        test        [LEN_LABEL];     /* test type for yVAR             */
@@ -231,17 +234,6 @@ struct cVERB {
 };
 extern      tVERB       g_verbs [MAX_VERB];
 
-
-#define     MAX_TEST         20
-typedef     struct cTEST    tTEST;
-struct cTEST {
-   char        abbr;                        /* abbreviated type               */
-   char        repl;                        /* test type relace               */
-   char        name        [LEN_FULL];      /* verb                           */
-   char        func        [LEN_FULL];      /* function call                  */
-   char        desc        [LEN_FULL];      /* description                    */
-};
-extern      tTEST       g_tests [MAX_TEST];
 
 
 
@@ -285,6 +277,7 @@ char*       SCRP__unit              (char *a_question, int a_num);
 char        CODE_open               (void);
 char        CODE_printf             (char *a_format, ...);
 char        MAIN_printf             (char *a_format, ...);
+char        WAVE_printf             (char *a_format, ...);
 char        CODE_close              (FILE *a_file);
 char        CODE_cycle              (void);
 char        CODE_write         (void);

@@ -7,6 +7,11 @@
 
 
 
+/*====================------------------------------------====================*/
+/*===----                      general functions                       ----===*/
+/*====================------------------------------------====================*/
+static void      o___GENERAL_________________o (void) {;}
+
 char
 koios__unit_prog_file    (void)
 {
@@ -136,6 +141,11 @@ koios__unit_prog_args    (void)
 
 
 
+/*====================------------------------------------====================*/
+/*===----                     script reading                           ----===*/
+/*====================------------------------------------====================*/
+static void      o___SCRP____________________o (void) {;}
+
 char
 koios__unit_scrp_files   (void)
 {
@@ -147,39 +157,74 @@ koios__unit_scrp_files   (void)
 
    yUNIT_mincond ("attempt to open with no name");
    strcpy (my.n_scrp, "");
+   strcpy (my.n_wave, "");
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "");
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , 0);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , 0);
    yUNIT_minval ("open the script file"               , SCRP_open   (), -999);
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "");
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , 0);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , 0);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt to close when not open");
    strcpy (my.n_scrp, "");
+   strcpy (my.n_wave, "");
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "");
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , 0);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , 0);
    yUNIT_minval ("close the script file"              , SCRP_close  (), -999);
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "");
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , 0);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , 0);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt a non-existant name");
    strcpy (my.n_scrp, "/tmp/koios.unit");
+   strcpy (my.n_wave, "");
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , 0);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , 0);
    yUNIT_minval ("open the script file"               , SCRP_open   (), -999);
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , 0);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , 0);
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("open a new file name");
+   yUNIT_mincond ("attempt with real file, but no wave");
    strcpy (my.n_scrp, "/tmp/koios.unit");
    system ("touch /tmp/koios.unit");
+   strcpy (my.n_wave, "");
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , 0);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , 0);
+   yUNIT_minval ("open the script file"               , SCRP_open   (), -999);
+   yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
+   yUNIT_minval ("... check script pointer"           , my.f_scrp     , 0);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , 0);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("open with real file and valid wave");
+   strcpy (my.n_scrp, "/tmp/koios.unit");
+   system ("touch /tmp/koios.unit");
+   strcpy (my.n_wave, "/tmp/koios.wave");
+   yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
+   yUNIT_minval ("... check script pointer"           , my.f_scrp     , 0);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "/tmp/koios.wave");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , 0);
    yUNIT_minval ("open the script file"               , SCRP_open   (), 0);
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "/tmp/koios.wave");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , my.f_wave);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("close the new name");
@@ -188,6 +233,8 @@ koios__unit_scrp_files   (void)
    yUNIT_minval ("close the script file"              , SCRP_close  (), 0);
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , 0);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "/tmp/koios.wave");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , 0);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt to close twice");
@@ -196,6 +243,8 @@ koios__unit_scrp_files   (void)
    yUNIT_minval ("close the script file"              , SCRP_close  (), -999);
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , 0);
+   yUNIT_minstr ("... check wave name"                , my.n_wave     , "/tmp/koios.wave");
+   yUNIT_minval ("... check wave pointer"             , my.f_wave     , 0);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("clean up after");
@@ -720,6 +769,7 @@ koios__unit_scrp_ditto   (void)
    yUNIT_mincond ("read end-of-file");
    yUNIT_minval ("read a line"                        , SCRP_read   (), -999);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
+   yUNIT_minval ("close the script file"              , SCRP_close  (), 0);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("clean up after");
@@ -766,6 +816,7 @@ koios__unit_scrp_variety (void)
    system ("echo \" REUSE -A-    - - - - - - - - - - - -   - - - - - - - - - - - - - - -   ((03.---))  - - - - - - - - - - - - - - - - - - - -  \"                   >> /tmp/koios.unit");
    my.run_type = G_RUN_CREATE;
    strcpy (my.n_scrp, "/tmp/koios.unit");
+   strcpy (my.n_wave, "/tmp/koios.wave");
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (), 0);
    yUNIT_mindnoc ();
@@ -1113,6 +1164,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mincond ("read end-of-file");
    yUNIT_minval ("read a line"                        , SCRP_read   (), -999);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
+   yUNIT_minval ("close the script file"              , SCRP_close  (), 0);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("clean up after");
@@ -1122,6 +1174,13 @@ koios__unit_scrp_variety (void)
    yUNIT_minprcs ();
    return 0;
 }
+
+
+
+/*====================------------------------------------====================*/
+/*===----                     script writing                           ----===*/
+/*====================------------------------------------====================*/
+static void      o___CONV____________________o (void) {;}
 
 char
 koios__unit_conv_files   (void)
@@ -1243,9 +1302,13 @@ koios__unit_conv_prep    (void)
    yUNIT_minscrp ("CONV_prep, CONV_incl, CONV_comment");
 
    yUNIT_mincond ("prepare and open a new file");
-   strcpy (my.n_conv, "/tmp/koios.unit");
+   strcpy (my.n_scrp, "/tmp/koios.unit");
+   system ("touch /tmp/koios.unit");
+   strcpy (my.n_wave, "/tmp/koios.wave");
+   yUNIT_minval ("open the script file"               , SCRP_open   (), 0);
+   strcpy (my.n_conv, "/tmp/koios.unit.new");
    yUNIT_minval ("open the script file"               , CONV_open   (), 0);
-   yUNIT_minstr ("... check script name"              , my.n_conv     , "/tmp/koios.unit");
+   yUNIT_minstr ("... check script name"              , my.n_conv     , "/tmp/koios.unit.new");
    yUNIT_minval ("... check script pointer"           , my.f_conv     , my.f_conv);
    yUNIT_mindnoc ();
 
@@ -1318,7 +1381,11 @@ koios__unit_conv_prep    (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("clean up after");
-   system ("rm -f /tmp/koios.unit 2> /dev/null");
+   yUNIT_minval ("close script"                       , SCRP_close  (), 0);
+   yUNIT_minval ("close converted"                    , CONV_close  (), 0);
+   system ("rm -f /tmp/koios.unit     2> /dev/null");
+   system ("rm -f /tmp/koios.wave     2> /dev/null");
+   system ("rm -f /tmp/koios.unit.new 2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
@@ -1333,9 +1400,13 @@ koios__unit_conv_scrp    (void)
    yUNIT_minscrp ("CONV_scrp, CONV_sect, CONV_shared");
 
    yUNIT_mincond ("prepare and open a new file");
-   strcpy (my.n_conv, "/tmp/koios.unit");
+   strcpy (my.n_scrp, "/tmp/koios.unit");
+   system ("touch /tmp/koios.unit");
+   strcpy (my.n_wave, "/tmp/koios.wave");
+   yUNIT_minval ("open the script file"               , SCRP_open   (), 0);
+   strcpy (my.n_conv, "/tmp/koios.unit.new");
    yUNIT_minval ("open the script file"               , CONV_open   (), 0);
-   yUNIT_minstr ("... check script name"              , my.n_conv     , "/tmp/koios.unit");
+   yUNIT_minstr ("... check script name"              , my.n_conv     , "/tmp/koios.unit.new");
    yUNIT_minval ("... check script pointer"           , my.f_conv     , my.f_conv);
    yUNIT_mindnoc ();
 
@@ -1418,7 +1489,11 @@ koios__unit_conv_scrp    (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("clean up after");
-   system ("rm -f /tmp/koios.unit 2> /dev/null");
+   yUNIT_minval ("close script"                       , SCRP_close  (), 0);
+   yUNIT_minval ("close converted"                    , CONV_close  (), 0);
+   system ("rm -f /tmp/koios.unit     2> /dev/null");
+   system ("rm -f /tmp/koios.wave     2> /dev/null");
+   system ("rm -f /tmp/koios.unit.new 2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
@@ -1434,9 +1509,13 @@ koios__unit_conv_cond    (void)
    my.run_type = G_RUN_UPDATE;
 
    yUNIT_mincond ("prepare and open a new file");
-   strcpy (my.n_conv, "/tmp/koios.unit");
+   strcpy (my.n_scrp, "/tmp/koios.unit");
+   system ("touch /tmp/koios.unit");
+   strcpy (my.n_wave, "/tmp/koios.wave");
+   yUNIT_minval ("open the script file"               , SCRP_open   (), 0);
+   strcpy (my.n_conv, "/tmp/koios.unit.new");
    yUNIT_minval ("open the script file"               , CONV_open   (), 0);
-   yUNIT_minstr ("... check script name"              , my.n_conv     , "/tmp/koios.unit");
+   yUNIT_minstr ("... check script name"              , my.n_conv     , "/tmp/koios.unit.new");
    yUNIT_minval ("... check script pointer"           , my.f_conv     , my.f_conv);
    yUNIT_mindnoc ();
 
@@ -1529,7 +1608,11 @@ koios__unit_conv_cond    (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("clean up after");
-   system ("rm -f /tmp/koios.unit 2> /dev/null");
+   yUNIT_minval ("close script"                       , SCRP_close  (), 0);
+   yUNIT_minval ("close converted"                    , CONV_close  (), 0);
+   system ("rm -f /tmp/koios.unit     2> /dev/null");
+   system ("rm -f /tmp/koios.wave     2> /dev/null");
+   system ("rm -f /tmp/koios.unit.new 2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
@@ -1545,9 +1628,13 @@ koios__unit_conv_step    (void)
    my.run_type = G_RUN_UPDATE;
 
    yUNIT_mincond ("prepare and open a new file");
-   strcpy (my.n_conv, "/tmp/koios.unit");
+   strcpy (my.n_scrp, "/tmp/koios.unit");
+   system ("touch /tmp/koios.unit");
+   strcpy (my.n_wave, "/tmp/koios.wave");
+   yUNIT_minval ("open the script file"               , SCRP_open   (), 0);
+   strcpy (my.n_conv, "/tmp/koios.unit.new");
    yUNIT_minval ("open the script file"               , CONV_open   (), 0);
-   yUNIT_minstr ("... check script name"              , my.n_conv     , "/tmp/koios.unit");
+   yUNIT_minstr ("... check script name"              , my.n_conv     , "/tmp/koios.unit.new");
    yUNIT_minval ("... check script pointer"           , my.f_conv     , my.f_conv);
    yUNIT_mindnoc ();
 
@@ -1696,12 +1783,23 @@ koios__unit_conv_step    (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("clean up after");
-   system ("rm -f /tmp/koios.unit 2> /dev/null");
+   yUNIT_minval ("close script"                       , SCRP_close  (), 0);
+   yUNIT_minval ("close converted"                    , CONV_close  (), 0);
+   system ("rm -f /tmp/koios.unit     2> /dev/null");
+   system ("rm -f /tmp/koios.wave     2> /dev/null");
+   system ("rm -f /tmp/koios.unit.new 2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
    return 0;
 }
+
+
+
+/*====================------------------------------------====================*/
+/*===----                      code writing                            ----===*/
+/*====================------------------------------------====================*/
+static void      o___CODE____________________o (void) {;}
 
 char
 koios__unit_code_files   (void)
@@ -1711,6 +1809,7 @@ koios__unit_code_files   (void)
    yUNIT_mincond ("prepare clean start");
    system ("rm -f /tmp/koios_scrp_unit.cs   2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h    2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.wave      2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt to open with no code name");
@@ -1836,6 +1935,7 @@ koios__unit_code_files   (void)
    yUNIT_mincond ("clean up after");
    system ("rm -f /tmp/koios_scrp_unit.cs   2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h    2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.wave      2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
@@ -1853,8 +1953,10 @@ koios__unit_code_ends    (void)
    system ("rm -f /tmp/koios.unit         2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.cs 2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h  2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.wave      2> /dev/null");
    strcpy (my.n_code, "/tmp/koios_scrp_unit.cs");
    strcpy (my.n_main, "/tmp/koios_scrp_unit.h");
+   strcpy (my.n_wave, "/tmp/koios_scrp.wave");
    strcpy (my.n_base, "/tmp/koios_scrp");
    yUNIT_minval ("open the script file"               , CODE_open   (), 0);
    yUNIT_minval ("... check code pointer"             , my.f_code     , my.f_code);
@@ -1906,9 +2008,9 @@ koios__unit_code_ends    (void)
    CODE_cycle ();
    yUNIT_minval ("call end"                           , MAIN_end    (), 0);
    yUNIT_minstr ("... check (0) comment"              , yUNIT_read (my.n_main, 0, &c), "   /*---(end scripts)--------------------*/");
-   yUNIT_minstr ("... check (1) tinu"                 , yUNIT_read (my.n_main, 1, &c), "   yUNIT_tinu (g.exec);");
+   yUNIT_minstr ("... check (1) tinu"                 , yUNIT_read (my.n_main, 1, &c), "   rc = yUNIT_tinu (g.exec);");
    yUNIT_minstr ("... check (2) comment"              , yUNIT_read (my.n_main, 2, &c), "   /*---(complete)-----------------------*/");
-   yUNIT_minstr ("... check (3) return"               , yUNIT_read (my.n_main, 3, &c), "   return 0;");
+   yUNIT_minstr ("... check (3) return"               , yUNIT_read (my.n_main, 3, &c), "   return rc;");
    yUNIT_minstr ("... check (4) end brace"            , yUNIT_read (my.n_main, 4, &c), "}");
    yUNIT_minstr ("... check (5) empty"                , yUNIT_read (my.n_main, 5, &c), "");
    yUNIT_minstr ("... check (6) empty"                , yUNIT_read (my.n_main, 6, &c), "");
@@ -1924,6 +2026,7 @@ koios__unit_code_ends    (void)
    system ("rm -f /tmp/koios.unit         2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.cs 2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h  2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.wave    2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
@@ -1938,9 +2041,14 @@ koios__unit_code_prep    (void)
    yUNIT_minscrp ("CODE_prep, CODE_incl");
 
    yUNIT_mincond ("open normally");
-   system ("rm -f /tmp/koios.unit         2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.unit    2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.cs 2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h  2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.wave      2> /dev/null");
+   strcpy (my.n_scrp, "/tmp/koios_srcp.unit");
+   system ("touch /tmp/koios_srcp.unit");
+   strcpy (my.n_wave, "/tmp/koios_srcp.wave");
+   yUNIT_minval ("open the script file"               , SCRP_open   (), 0);
    strcpy (my.n_code, "/tmp/koios_scrp_unit.cs");
    strcpy (my.n_main, "/tmp/koios_scrp_unit.h");
    strcpy (my.n_base, "/tmp/koios_scrp");
@@ -2000,11 +2108,13 @@ koios__unit_code_prep    (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("clean up after");
+   yUNIT_minval ("close script"                       , SCRP_close  (), 0);
    yUNIT_minval ("close all files"                    , CODE_close  (my.f_code), 0);
    yUNIT_minval ("close all files"                    , CODE_close  (my.f_main), 0);
    system ("rm -f /tmp/koios.unit         2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.cs 2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h  2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.wave      2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
@@ -2019,9 +2129,13 @@ koios__unit_code_scrp    (void)
    yUNIT_minscrp ("CODE_scrp, CODE_shared, CODE_sect");
 
    yUNIT_mincond ("open normally");
-   system ("rm -f /tmp/koios.unit         2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.unit    2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.cs 2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h  2> /dev/null");
+   strcpy (my.n_scrp, "/tmp/koios_srcp.unit");
+   system ("touch /tmp/koios_srcp.unit");
+   strcpy (my.n_wave, "/tmp/koios_srcp.wave");
+   yUNIT_minval ("open the script file"               , SCRP_open   (), 0);
    strcpy (my.n_code, "/tmp/koios_scrp_unit.cs");
    strcpy (my.n_main, "/tmp/koios_scrp_unit.h");
    strcpy (my.n_base, "/tmp/koios_scrp");
@@ -2059,7 +2173,7 @@ koios__unit_code_scrp    (void)
    yUNIT_minstr ("... check (4) comment"              , yUNIT_read (my.n_code, 4, &c), "   /*===[[ script header ]]========================*/");
    yUNIT_minstr ("... check (5) local"                , yUNIT_read (my.n_code, 5, &c), "   g.offset  = 0;");
    yUNIT_minstr ("... check (6) local"                , yUNIT_read (my.n_code, 6, &c), "   g.origin  = 1;");
-   yUNIT_minstr ("... check (7) script header"        , yUNIT_read (my.n_code, 7, &c), "   yUNIT_scrp    (  23,   1, \"SCRP_parse\", \"(SCRP) verify openning and closing\");");
+   yUNIT_minstr ("... check (7) script header"        , yUNIT_read (my.n_code, 7, &c), "   yUNIT_scrp    (  23,   1, \"ê3\", \"(SCRP) verify openning and closing\", \"SCRP_parse\");");
    yUNIT_minval ("... check line count"               , c ,  8);
    yUNIT_minstr ("check main entry"                   , yUNIT_read (my.n_main, 0, &c), "   if (g.scrp ==  0 || g.scrp ==  1)  yUNIT_script_01 ();");
    yUNIT_minval ("... check line count"               , c ,  1);
@@ -2098,7 +2212,7 @@ koios__unit_code_scrp    (void)
    yUNIT_minstr ("... check (9) comment"              , yUNIT_read (my.n_code, 9, &c), "   /*===[[ script header ]]========================*/");
    yUNIT_minstr ("... check (10) local"               , yUNIT_read (my.n_code,10, &c), "   g.offset  = 0;");
    yUNIT_minstr ("... check (11) local"               , yUNIT_read (my.n_code,11, &c), "   g.origin  = 2;");
-   yUNIT_minstr ("... check (12) script header"       , yUNIT_read (my.n_code,12, &c), "   yUNIT_scrp    (  52,   2, \"\", \"(SCRP) whatever comes next\");");
+   yUNIT_minstr ("... check (12) script header"       , yUNIT_read (my.n_code,12, &c), "   yUNIT_scrp    (  52,   2, \"è5\", \"(SCRP) whatever comes next\", \"\");");
    yUNIT_minval ("... check line count"               , c , 13);
    yUNIT_minstr ("check main entry"                   , yUNIT_read (my.n_main, 0, &c), "   if (g.scrp ==  0 || g.scrp ==  2)  yUNIT_script_02 ();");
    yUNIT_minval ("... check line count"               , c ,  1);
@@ -2174,7 +2288,7 @@ koios__unit_code_scrp    (void)
    yUNIT_minstr ("... check (9) comment"              , yUNIT_read (my.n_code, 9, &c), "   /*===[[ script header ]]========================*/");
    yUNIT_minstr ("... check (10) local"               , yUNIT_read (my.n_code,10, &c), "   g.offset  = 0;");
    yUNIT_minstr ("... check (11) local"               , yUNIT_read (my.n_code,11, &c), "   g.origin  = 3;");
-   yUNIT_minstr ("... check (12) script header"       , yUNIT_read (my.n_code,12, &c), "   yUNIT_scrp    (  99,   3, \"\", \"(SCRP) last test\");");
+   yUNIT_minstr ("... check (12) script header"       , yUNIT_read (my.n_code,12, &c), "   yUNIT_scrp    (  99,   3, \"ÿ2\", \"(SCRP) last test\", \"\");");
    yUNIT_minval ("... check line count"               , c , 13);
    yUNIT_minstr ("check main entry"                   , yUNIT_read (my.n_main, 0, &c), "   if (g.scrp ==  0 || g.scrp ==  3)  yUNIT_script_03 ();");
    yUNIT_minval ("... check line count"               , c ,  1);
@@ -2207,11 +2321,13 @@ koios__unit_code_scrp    (void)
    yUNIT_minval ("... check line count"               , c ,  1);
 
    yUNIT_mincond ("clean up after");
+   yUNIT_minval ("close script"                       , SCRP_close  (), 0);
    yUNIT_minval ("close all files"                    , CODE_close  (my.f_code), 0);
    yUNIT_minval ("close all files"                    , CODE_close  (my.f_main), 0);
    system ("rm -f /tmp/koios.unit         2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.cs 2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h  2> /dev/null");
+   /*> system ("rm -f /tmp/koios_scrp.wave      2> /dev/null");                       <*/
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
@@ -2226,9 +2342,13 @@ koios__unit_code_cond    (void)
    yUNIT_minscrp ("CODE_cond, CODE_group, CODE_reuse");
 
    yUNIT_mincond ("open normally");
-   system ("rm -f /tmp/koios.unit         2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.unit    2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.cs 2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h  2> /dev/null");
+   strcpy (my.n_scrp, "/tmp/koios_srcp.unit");
+   system ("touch /tmp/koios_srcp.unit");
+   strcpy (my.n_wave, "/tmp/koios_srcp.wave");
+   yUNIT_minval ("open the script file"               , SCRP_open   (), 0);
    strcpy (my.n_code, "/tmp/koios_scrp_unit.cs");
    strcpy (my.n_main, "/tmp/koios_scrp_unit.h");
    strcpy (my.n_base, "/tmp/koios_scrp");
@@ -2366,11 +2486,13 @@ koios__unit_code_cond    (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("clean up after");
+   yUNIT_minval ("close script"                       , SCRP_close  (), 0);
    yUNIT_minval ("close all files"                    , CODE_close  (my.f_code), 0);
    yUNIT_minval ("close all files"                    , CODE_close  (my.f_main), 0);
    system ("rm -f /tmp/koios.unit         2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.cs 2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h  2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.wave      2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
@@ -2385,9 +2507,13 @@ koios__unit_code_step    (void)
    yUNIT_minscrp ("CODE_mode, CODE_load, CODE_system, CODE_echo, CODE_exec");
 
    yUNIT_mincond ("open normally");
-   system ("rm -f /tmp/koios.unit         2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.unit    2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.cs 2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h  2> /dev/null");
+   strcpy (my.n_scrp, "/tmp/koios_srcp.unit");
+   system ("touch /tmp/koios_srcp.unit");
+   strcpy (my.n_wave, "/tmp/koios_srcp.wave");
+   yUNIT_minval ("open the script file"               , SCRP_open   (), 0);
    strcpy (my.n_code, "/tmp/koios_scrp_unit.cs");
    strcpy (my.n_main, "/tmp/koios_scrp_unit.h");
    strcpy (my.n_base, "/tmp/koios_scrp");
@@ -2511,7 +2637,7 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_system (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yUNIT_read (my.n_code, 0, &c), "      /*---(system/execute)--------------*/");
-   yUNIT_minstr ("... check (1) execute and report"   , yUNIT_read (my.n_code, 1, &c), "      yUNIT_system  (  40,   3, \"delete temporary file\", \"rm -f /tmp/koios_unit.cs\", g.exec);");
+   yUNIT_minstr ("... check (1) execute and report"   , yUNIT_read (my.n_code, 1, &c), "      yUNIT_system  (  40,   3, \"delete temporary file\", \"rm -f /tmp/koios_unit.cs\", \"rm -f /tmp/koios_unit.cs\", g.exec);");
    yUNIT_minval ("... check line count"               , c ,  2);
    yUNIT_minstr ("check main entry"                   , yUNIT_read (my.n_main, 0, &c), "");
    yUNIT_minval ("... check line count"               , c ,  0);
@@ -2730,25 +2856,29 @@ koios__unit_code_step    (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("clean up after");
+   yUNIT_minval ("close script"                       , SCRP_close  (), 0);
    yUNIT_minval ("close all files"                    , CODE_close  (my.f_code), 0);
    yUNIT_minval ("close all files"                    , CODE_close  (my.f_main), 0);
    system ("rm -f /tmp/koios.unit         2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.cs 2> /dev/null");
    system ("rm -f /tmp/koios_scrp_unit.h  2> /dev/null");
+   system ("rm -f /tmp/koios_scrp.wave      2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
    return 0;
 }
 
+
+
+/*====================------------------------------------====================*/
+/*===----                    actual runtime testing                    ----===*/
+/*====================------------------------------------====================*/
+static void      o___LIVE____________________o (void) {;}
+
 char
-koios__unit_live_args    (void)
+koios__unit_shared_data  (void)
 {
-   int         c           =    0;
-   char        x_urun      [LEN_HUND]  = "koios.urun";
-
-   yUNIT_minscrp ("live testing on unit test result");
-
    yUNIT_mincond ("prepare a interesting example");
    system ("rm -f koios.unit 2> /dev/null");
    system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  -  123456789- \"   > koios.unit");
@@ -2811,10 +2941,10 @@ koios__unit_live_args    (void)
    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> koios.unit");
    system ("echo \"  REUSE  -A-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> koios.unit");
    system ("echo \"  COND        read one record                     \"                                                                                                       >> koios.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> koios.unit");
-   system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> koios.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> koios.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> koios.unit");
+   system ("echo \"    exec      ... check string                     yUNIT_teststring  1                         s_equal     hello                 \"                >> koios.unit");
+   system ("echo \"    exec      ... check number                     yUNIT_testreal    2                         r_greater   15.0                  \"                >> koios.unit");
+   system ("echo \"    exec      ... check integer                    yUNIT_testint     64                        i_equal     2                     \"                >> koios.unit");
+   system ("echo \"    exec      ... check character                  yUNIT_testchar    87                        i_equal     'A'                   \"                >> koios.unit");
    system ("echo \"  GROUP       round two                           \"                                                                                                       >> koios.unit");
    system ("echo \"  COND        read a second record                \"                                                                                                       >> koios.unit");
    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> koios.unit");
@@ -2838,34 +2968,118 @@ koios__unit_live_args    (void)
    yUNIT_minval  ("... link"                           , system ("gcc -o koios_unit koios_unit.o -lyUNIT"), 0);
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("check displaying scripts");
+   return 0;
+}
+
+char
+koios__unit_live_scrp    (void)
+{
+   int         c           =    0;
+   char        x_urun      [LEN_HUND]  = "koios.urun";
+   char        x_wave      [LEN_HUND]  = "koios.wave";
+
+   yUNIT_minscrp ("live script-level testing on unit test result");
+
+   koios__unit_shared_data ();
+
+   yUNIT_mincond ("check inventory of scripts");
    yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --scrps"), 0);
    yUNIT_minstr  ("... check (0) header line"          , yUNIT_read (x_urun, 0, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
    yUNIT_minstr  ("... check (1) empty line"           , yUNIT_read (x_urun, 1, &c), "");
    yUNIT_minstr  ("... check (2) section"              , yUNIT_read (x_urun, 2, &c), "SECT ===-------------------------- simple testing ---------------------------=== TCES");
    yUNIT_minstr  ("... check (3) empty line"           , yUNIT_read (x_urun, 3, &c), "");
-   yUNIT_minstr  ("... check (4) script"               , yUNIT_read (x_urun, 4, &c), "SCRP [01] (SCRP) verify openning and closing =================================[00004]");
+   yUNIT_minstr  ("... check (4) script"               , yUNIT_read (x_urun, 4, &c), "SCRP [01] (SCRP) verify openning and closing ============================[ê1]=[00004]");
    yUNIT_minstr  ("... check (5) empty line"           , yUNIT_read (x_urun, 5, &c), "");
    yUNIT_minstr  ("... check (6) section"              , yUNIT_read (x_urun, 6, &c), "SECT ===----------------------- more complex testing ------------------------=== TCES");
    yUNIT_minstr  ("... check (7) empty line"           , yUNIT_read (x_urun, 7, &c), "");
-   yUNIT_minstr  ("... check (8) script"               , yUNIT_read (x_urun, 8, &c), "SCRP [02] (SCRP) verify system startup =======================================[00044]");
+   yUNIT_minstr  ("... check (8) script"               , yUNIT_read (x_urun, 8, &c), "SCRP [02] (SCRP) verify system startup ==================================[ê2]=[00044]");
    yUNIT_minstr  ("... check (9) empty line"           , yUNIT_read (x_urun, 9, &c), "");
-   yUNIT_minstr  ("... check (10) script"              , yUNIT_read (x_urun,10, &c), "SCRP [03] (SCRP) verify normal processing ====================================[00052]");
+   yUNIT_minstr  ("... check (10) script"              , yUNIT_read (x_urun,10, &c), "SCRP [03] (SCRP) verify normal processing ===============================[ì2]=[00052]");
    yUNIT_minstr  ("... check (11) empty line"          , yUNIT_read (x_urun,11, &c), "");
-   yUNIT_minstr  ("... check (12) script"              , yUNIT_read (x_urun,12, &c), "SCRP [04] (SCRP) empty script ================================================[00078]");
+   yUNIT_minstr  ("... check (12) script"              , yUNIT_read (x_urun,12, &c), "SCRP [04] (SCRP) empty script ===========================================[è9]=[00078]");
    yUNIT_minstr  ("... check (13) empty line"          , yUNIT_read (x_urun,13, &c), "");
    yUNIT_minstr  ("... check (14) test footer"         , yUNIT_read (x_urun,14, &c), "TINU  scrp=4    cond=15    test=57    [ ------------------------------------------- ]");
    yUNIT_minstr  ("... check (15) empty line"          , yUNIT_read (x_urun,15, &c), "");
    yUNIT_minstr  ("... check (16) footer line"         , yUNIT_read (x_urun,16, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
    yUNIT_minval  ("... check line count"               , c , 17);
+   yUNIT_minstr  ("check wave entry"                   , yUNIT_read (x_wave, 0, &c), "ê  1  koios                       1  (SCRP) verify openning and closing                                ");
+   yUNIT_minstr  ("check wave entry"                   , yUNIT_read (x_wave, 1, &c), "ê  2  koios                       2  (SCRP) verify system startup                                      ");
+   yUNIT_minstr  ("check wave entry"                   , yUNIT_read (x_wave, 2, &c), "ì  2  koios                       3  (SCRP) verify normal processing                                   ");
+   yUNIT_minstr  ("check wave entry"                   , yUNIT_read (x_wave, 3, &c), "è  9  koios                       4  (SCRP) empty script                                               ");
+   yUNIT_minval  ("... check line count"               , c ,  4);
    yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check inventory of one script only");
+   yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --scrps 03"), 0);
+   yUNIT_minstr  ("... check (  0) header line"        , yUNIT_read (x_urun,  0, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
+   yUNIT_minstr  ("... check (  1) empty line"         , yUNIT_read (x_urun,  1, &c), "");
+   yUNIT_minstr  ("... check (  2) script"             , yUNIT_read (x_urun,  2, &c), "SCRP [03] (SCRP) verify normal processing ===============================[ì2]=[00052]");
+   yUNIT_minstr  ("... check (  3) empty line"         , yUNIT_read (x_urun,  3, &c), "");
+   yUNIT_minstr  ("... check (  4) test footer"        , yUNIT_read (x_urun,  4, &c), "TINU  scrp=1    cond=8     test=32    [ ------------------------------------------- ]");
+   yUNIT_minstr  ("... check (  5) empty line"         , yUNIT_read (x_urun,  5, &c), "");
+   yUNIT_minstr  ("... check (  6) footer line"        , yUNIT_read (x_urun,  6, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
+   yUNIT_minval  ("... check line count"               , c ,  7);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check running and presenting scripts only");
+   yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --scrp"), 0);
+   yUNIT_minstr  ("... check ( 0) header line"         , yUNIT_read (x_urun, 0, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
+   yUNIT_minstr  ("... check ( 1) empty line"          , yUNIT_read (x_urun, 1, &c), "");
+   yUNIT_minstr  ("... check ( 2) section"             , yUNIT_read (x_urun, 2, &c), "SECT ===-------------------------- simple testing ---------------------------=== TCES");
+   yUNIT_minstr  ("... check ( 3) empty line"          , yUNIT_read (x_urun, 3, &c), "");
+   yUNIT_minstr  ("... check ( 4) script"              , yUNIT_read (x_urun, 4, &c), "SCRP [01] (SCRP) verify openning and closing ============================[ê1]=[00004]");
+   yUNIT_minstr  ("... check ( 5) script footer"       , yUNIT_read (x_urun, 5, &c), "  " BACK_RED "PRCS -------- cond=3     test=13    [ pass=12    fail=1     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check ( 6) empty line"          , yUNIT_read (x_urun, 6, &c), "");
+   yUNIT_minstr  ("... check ( 7) section"             , yUNIT_read (x_urun, 7, &c), "SECT ===----------------------- more complex testing ------------------------=== TCES");
+   yUNIT_minstr  ("... check ( 8) empty line"          , yUNIT_read (x_urun, 8, &c), "");
+   yUNIT_minstr  ("... check ( 9) script"              , yUNIT_read (x_urun, 9, &c), "SCRP [02] (SCRP) verify system startup ==================================[ê2]=[00044]");
+   yUNIT_minstr  ("... check (10) script footer"       , yUNIT_read (x_urun,10, &c), "  " BACK_RED "PRCS -------- cond=4     test=12    [ pass=9     fail=3     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (11) empty line"          , yUNIT_read (x_urun,11, &c), "");
+   yUNIT_minstr  ("... check (12) script"              , yUNIT_read (x_urun,12, &c), "SCRP [03] (SCRP) verify normal processing ===============================[ì2]=[00052]");
+   yUNIT_minstr  ("... check (13) script footer"       , yUNIT_read (x_urun,13, &c), "  " BACK_RED "PRCS -------- cond=8     test=32    [ pass=28    fail=4     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (14) empty line"          , yUNIT_read (x_urun,14, &c), "");
+   yUNIT_minstr  ("... check (15) script"              , yUNIT_read (x_urun,15, &c), "SCRP [04] (SCRP) empty script ===========================================[è9]=[00078]");
+   yUNIT_minstr  ("... check (16) script footer"       , yUNIT_read (x_urun,16, &c), "  " BACK_YEL "PRCS -------- cond=0     test=0     [ pass=0     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (17) empty line"          , yUNIT_read (x_urun,17, &c), "");
+   yUNIT_minstr  ("... check (18) test footer"         , yUNIT_read (x_urun,18, &c), BACK_RED "TINU  scrp=4    cond=15    test=57    [ pass=49    fail=8     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (19) empty line"          , yUNIT_read (x_urun,19, &c), "");
+   yUNIT_minstr  ("... check (20) footer line"         , yUNIT_read (x_urun,20, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
+   yUNIT_minval  ("... check line count"               , c , 21);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check running and presenting only one script");
+   yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --scrp 02"), 0);
+   yUNIT_minstr  ("... check (  0) header line"        , yUNIT_read (x_urun,  0, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
+   yUNIT_minstr  ("... check (  1) empty line"         , yUNIT_read (x_urun,  1, &c), "");
+   yUNIT_minstr  ("... check (  2) script"             , yUNIT_read (x_urun,  2, &c), "SCRP [02] (SCRP) verify system startup ==================================[ê2]=[00044]");
+   yUNIT_minstr  ("... check (  3) script footer"      , yUNIT_read (x_urun,  3, &c), "  " BACK_GRN "PRCS -------- cond=4     test=12    [ pass=12    fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (  4) empty line"         , yUNIT_read (x_urun,  4, &c), "");
+   yUNIT_minstr  ("... check (  5) test footer"        , yUNIT_read (x_urun,  5, &c), BACK_GRN "TINU  scrp=1    cond=4     test=12    [ pass=12    fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (  6) empty line"         , yUNIT_read (x_urun,  6, &c), "");
+   yUNIT_minstr  ("... check (  7) footer line"        , yUNIT_read (x_urun,  7, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
+   yUNIT_minval  ("... check line count"               , c ,  8);
+   yUNIT_mindnoc ();
+
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios__unit_live_cond    (void)
+{
+   int         c           =    0;
+   char        x_urun      [LEN_HUND]  = "koios.urun";
+
+   yUNIT_minscrp ("live cond-level testing on unit test result");
+
+   koios__unit_shared_data ();
 
    yUNIT_mincond ("check displaying conditions");
    yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --conds"), 0);
    yUNIT_minstr  ("... check (0) header line"          , yUNIT_read (x_urun, 0, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
-   yUNIT_minstr  ("... check (1) patron"               , yUNIT_read (x_urun, 1, &c), "   patron : daktyloi-aeonius (forefinger) automated unit testing");
-   yUNIT_minstr  ("... check (2) level line"           , yUNIT_read (x_urun, 2, &c), "   assign output level to (3) YUNIT_COND");
-   yUNIT_minstr  ("... check (3) eterm line"           , yUNIT_read (x_urun, 3, &c), "   assign format/color to (y) ETERM");
+   yUNIT_minstr  ("... check (1) patron"               , yUNIT_read (x_urun, 1, &c), "   patron : daktyloi-aeonius (forefinger) automated unit testing                   4s");
+   yUNIT_minstr  ("... check (2) level line"           , yUNIT_read (x_urun, 2, &c), "   assign output level to (3) YUNIT_COND                                          19c");
+   yUNIT_minstr  ("... check (3) eterm line"           , yUNIT_read (x_urun, 3, &c), "   assign format/color to (y) ETERM                                               49x");
    yUNIT_minstr  ("... check (4) empty line"           , yUNIT_read (x_urun, 4, &c), "");
    yUNIT_minstr  ("... check (5) empty line"           , yUNIT_read (x_urun, 5, &c), "");
    yUNIT_minstr  ("... check (6) section"              , yUNIT_read (x_urun, 6, &c), "=========================------------------------------------========================");
@@ -2873,7 +3087,7 @@ koios__unit_live_args    (void)
    yUNIT_minstr  ("... check (8) section"              , yUNIT_read (x_urun, 8, &c), "=========================------------------------------------========================");
    yUNIT_minstr  ("... check (9) empty line"           , yUNIT_read (x_urun, 9, &c), "");
    yUNIT_minstr  ("... check (10) empty line"          , yUNIT_read (x_urun,10, &c), "");
-   yUNIT_minstr  ("... check (11) script"              , yUNIT_read (x_urun,11, &c), "SCRP [01] (SCRP) verify openning and closing =================================[00004]");
+   yUNIT_minstr  ("... check (11) script"              , yUNIT_read (x_urun,11, &c), "SCRP [01] (SCRP) verify openning and closing ============================[ê1]=[00004]");
    yUNIT_minstr  ("... check (12) empty line"          , yUNIT_read (x_urun,12, &c), "");
    yUNIT_minstr  ("... check (13) condition"           , yUNIT_read (x_urun,13, &c), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00005]");
    yUNIT_minstr  ("... check (14) empty line"          , yUNIT_read (x_urun,14, &c), "");
@@ -2889,7 +3103,7 @@ koios__unit_live_args    (void)
    yUNIT_minstr  ("... check (24) section"             , yUNIT_read (x_urun,24, &c), "=========================------------------------------------========================");
    yUNIT_minstr  ("... check (25) empty line"          , yUNIT_read (x_urun,25, &c), "");
    yUNIT_minstr  ("... check (26) empty line"          , yUNIT_read (x_urun,26, &c), "");
-   yUNIT_minstr  ("... check (27) script"              , yUNIT_read (x_urun,27, &c), "SCRP [02] (SCRP) verify system startup =======================================[00044]");
+   yUNIT_minstr  ("... check (27) script"              , yUNIT_read (x_urun,27, &c), "SCRP [02] (SCRP) verify system startup ==================================[ê2]=[00044]");
    yUNIT_minstr  ("... check (28) empty line"          , yUNIT_read (x_urun,28, &c), "");
    yUNIT_minstr  ("... check (29) condition"           , yUNIT_read (x_urun,29, &c), "  COND [001] run initialization -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00045]");
    yUNIT_minstr  ("... check (30) empty line"          , yUNIT_read (x_urun,30, &c), "");
@@ -2902,7 +3116,7 @@ koios__unit_live_args    (void)
    yUNIT_minstr  ("... check (37) script footer"       , yUNIT_read (x_urun,37, &c), "  PRCS -------- cond=4     test=12    [ ------------------------------------------- ]");
    yUNIT_minstr  ("... check (38) empty line"          , yUNIT_read (x_urun,38, &c), "");
    yUNIT_minstr  ("... check (39) empty line"          , yUNIT_read (x_urun,39, &c), "");
-   yUNIT_minstr  ("... check (40) script"              , yUNIT_read (x_urun,40, &c), "SCRP [03] (SCRP) verify normal processing ====================================[00052]");
+   yUNIT_minstr  ("... check (40) script"              , yUNIT_read (x_urun,40, &c), "SCRP [03] (SCRP) verify normal processing ===============================[ì2]=[00052]");
    yUNIT_minstr  ("... check (41) empty line"          , yUNIT_read (x_urun,41, &c), "");
    yUNIT_minstr  ("... check (42) group break"         , yUNIT_read (x_urun,42, &c), "  GROUP ===----------------------------   round one   ----------------------------===");
    yUNIT_minstr  ("... check (43) empty line"          , yUNIT_read (x_urun,43, &c), "");
@@ -2929,7 +3143,7 @@ koios__unit_live_args    (void)
    yUNIT_minstr  ("... check (64) script footer"       , yUNIT_read (x_urun,64, &c), "  PRCS -------- cond=8     test=32    [ ------------------------------------------- ]");
    yUNIT_minstr  ("... check (65) empty line"          , yUNIT_read (x_urun,65, &c), "");
    yUNIT_minstr  ("... check (66) empty line"          , yUNIT_read (x_urun,66, &c), "");
-   yUNIT_minstr  ("... check (67) script"              , yUNIT_read (x_urun,67, &c), "SCRP [04] (SCRP) empty script ================================================[00078]");
+   yUNIT_minstr  ("... check (67) script"              , yUNIT_read (x_urun,67, &c), "SCRP [04] (SCRP) empty script ===========================================[è9]=[00078]");
    yUNIT_minstr  ("... check (68) empty line"          , yUNIT_read (x_urun,68, &c), "");
    yUNIT_minstr  ("... check (69) script footer"       , yUNIT_read (x_urun,69, &c), "  PRCS -------- cond=0     test=0     [ ------------------------------------------- ]");
    yUNIT_minstr  ("... check (70) empty line"          , yUNIT_read (x_urun,70, &c), "");
@@ -2940,15 +3154,224 @@ koios__unit_live_args    (void)
    yUNIT_minval  ("... check line count"               , c , 75);
    yUNIT_mindnoc ();
 
+   yUNIT_mincond ("check displaying conditions for one script");
+   yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --conds 02"), 0);
+   yUNIT_minstr  ("... check (  0) header line"        , yUNIT_read (x_urun,  0, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
+   yUNIT_minstr  ("... check (  1) patron"             , yUNIT_read (x_urun,  1, &c), "   patron : daktyloi-aeonius (forefinger) automated unit testing                   4s");
+   yUNIT_minstr  ("... check (  2) level line"         , yUNIT_read (x_urun,  2, &c), "   assign output level to (3) YUNIT_COND                                          19c");
+   yUNIT_minstr  ("... check (  3) eterm line"         , yUNIT_read (x_urun,  3, &c), "   assign format/color to (y) ETERM                                               49x");
+   yUNIT_minstr  ("... check (  4) empty line"         , yUNIT_read (x_urun,  4, &c), "");
+   yUNIT_minstr  ("... check (  5) empty line"         , yUNIT_read (x_urun,  5, &c), "");
+   yUNIT_minstr  ("... check (  6) script"             , yUNIT_read (x_urun,  6, &c), "SCRP [02] (SCRP) verify system startup ==================================[ê2]=[00044]");
+   yUNIT_minstr  ("... check (  7) empty line"         , yUNIT_read (x_urun,  7, &c), "");
+   yUNIT_minstr  ("... check (  8) condition"          , yUNIT_read (x_urun,  8, &c), "  COND [001] run initialization -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00045]");
+   yUNIT_minstr  ("... check (  9) empty line"         , yUNIT_read (x_urun,  9, &c), "");
+   yUNIT_minstr  ("... check ( 10) condition"          , yUNIT_read (x_urun, 10, &c), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00023]");
+   yUNIT_minstr  ("... check ( 11) empty line"         , yUNIT_read (x_urun, 11, &c), "");
+   yUNIT_minstr  ("... check ( 12) condition"          , yUNIT_read (x_urun, 12, &c), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00028]");
+   yUNIT_minstr  ("... check ( 13) empty line"         , yUNIT_read (x_urun, 13, &c), "");
+   yUNIT_minstr  ("... check ( 14) condition"          , yUNIT_read (x_urun, 14, &c), "  COND [004] parse a code record - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00047]");
+   yUNIT_minstr  ("... check ( 15) empty line"         , yUNIT_read (x_urun, 15, &c), "");
+   yUNIT_minstr  ("... check ( 16) script footer"      , yUNIT_read (x_urun, 16, &c), "  PRCS -------- cond=4     test=12    [ ------------------------------------------- ]");
+   yUNIT_minstr  ("... check ( 17) empty line"         , yUNIT_read (x_urun, 17, &c), "");
+   yUNIT_minstr  ("... check ( 18) test footer"        , yUNIT_read (x_urun, 18, &c), "TINU  scrp=1    cond=4     test=12    [ ------------------------------------------- ]");
+   yUNIT_minstr  ("... check ( 19) empty line"         , yUNIT_read (x_urun, 19, &c), "");
+   yUNIT_minstr  ("... check ( 20) empty line"         , yUNIT_read (x_urun, 20, &c), "");
+   yUNIT_minstr  ("... check ( 21) footer line"        , yUNIT_read (x_urun, 21, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
+   yUNIT_minval  ("... check line count"               , c , 22);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check executing and presenting only conditions");
+   yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --cond"), 0);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("verify header");
+   yUNIT_minstr  ("... check ( 0) header line"         , yUNIT_read (x_urun, 0, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
+   yUNIT_minstr  ("... check ( 1) patron"              , yUNIT_read (x_urun, 1, &c), "   patron : daktyloi-aeonius (forefinger) automated unit testing                   4s");
+   yUNIT_minstr  ("... check ( 2) level line"          , yUNIT_read (x_urun, 2, &c), "   assign output level to (3) YUNIT_COND                                          19c");
+   yUNIT_minstr  ("... check ( 3) eterm line"          , yUNIT_read (x_urun, 3, &c), "   assign format/color to (y) ETERM                                               49x");
+   yUNIT_minstr  ("... check ( 4) empty line"          , yUNIT_read (x_urun, 4, &c), "");
+   yUNIT_minstr  ("... check ( 5) empty line"          , yUNIT_read (x_urun, 5, &c), "");
+   yUNIT_minstr  ("... check ( 6) section"             , yUNIT_read (x_urun, 6, &c), "=========================------------------------------------========================");
+   yUNIT_minstr  ("... check ( 7) section"             , yUNIT_read (x_urun, 7, &c), "SECT ===-------------------------- simple testing ---------------------------=== TCES");
+   yUNIT_minstr  ("... check ( 8) section"             , yUNIT_read (x_urun, 8, &c), "=========================------------------------------------========================");
+   yUNIT_minstr  ("... check ( 9) empty line"          , yUNIT_read (x_urun, 9, &c), "");
+   yUNIT_minstr  ("... check (10) empty line"          , yUNIT_read (x_urun,10, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("verify first script");
+   yUNIT_minstr  ("... check (11) script"              , yUNIT_read (x_urun,11, &c), "SCRP [01] (SCRP) verify openning and closing ============================[ê1]=[00004]");
+   yUNIT_minstr  ("... check (12) empty line"          , yUNIT_read (x_urun,12, &c), "");
+   yUNIT_minstr  ("... check (13) condition"           , yUNIT_read (x_urun,13, &c), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00005]");
+   yUNIT_minstr  ("... check (14) condition footer"    , yUNIT_read (x_urun,14, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (15) empty line"          , yUNIT_read (x_urun,15, &c), "");
+   yUNIT_minstr  ("... check (16) condition"           , yUNIT_read (x_urun,16, &c), "  COND [002] defensive checks - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00010]");
+   yUNIT_minstr  ("... check (17) condition footer"    , yUNIT_read (x_urun,17, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (18) empty line"          , yUNIT_read (x_urun,18, &c), "");
+   yUNIT_minstr  ("... check (19) condition"           , yUNIT_read (x_urun,19, &c), "  COND [003] duplicate opens and closes  -- -- -- -- -- -- -- -- -- -- -- -- -[00015]");
+   yUNIT_minstr  ("... check (20) condition footer"    , yUNIT_read (x_urun,20, &c), "      " BACK_RED "DNOC --------------- test=5     [ pass=4     fail=1     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (21) empty line"          , yUNIT_read (x_urun,21, &c), "");
+   yUNIT_minstr  ("... check (22) script footer"       , yUNIT_read (x_urun,22, &c), "  " BACK_RED "PRCS -------- cond=3     test=13    [ pass=12    fail=1     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (23) empty line"          , yUNIT_read (x_urun,23, &c), "");
+   yUNIT_minstr  ("... check (24) empty line"          , yUNIT_read (x_urun,24, &c), "");
+   yUNIT_minstr  ("... check (25) section"             , yUNIT_read (x_urun,25, &c), "=========================------------------------------------========================");
+   yUNIT_minstr  ("... check (26) section"             , yUNIT_read (x_urun,26, &c), "SECT ===----------------------- more complex testing ------------------------=== TCES");
+   yUNIT_minstr  ("... check (27) section"             , yUNIT_read (x_urun,27, &c), "=========================------------------------------------========================");
+   yUNIT_minstr  ("... check (28) empty line"          , yUNIT_read (x_urun,28, &c), "");
+   yUNIT_minstr  ("... check (29) empty line"          , yUNIT_read (x_urun,29, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("verify second script");
+   yUNIT_minstr  ("... check (30) script"              , yUNIT_read (x_urun,30, &c), "SCRP [02] (SCRP) verify system startup ==================================[ê2]=[00044]");
+   yUNIT_minstr  ("... check (31) empty line"          , yUNIT_read (x_urun,31, &c), "");
+   yUNIT_minstr  ("... check (32) condition"           , yUNIT_read (x_urun,32, &c), "  COND [001] run initialization -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00045]");
+   yUNIT_minstr  ("... check (33) condition footer"    , yUNIT_read (x_urun,33, &c), "      " BACK_YEL "DNOC --------------- test=0     [ pass=0     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (34) empty line"          , yUNIT_read (x_urun,34, &c), "");
+   yUNIT_minstr  ("... check (35) condition"           , yUNIT_read (x_urun,35, &c), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00023]");
+   yUNIT_minstr  ("... check (36) condition footer"    , yUNIT_read (x_urun,36, &c), "      " BACK_RED "DNOC --------------- test=4     [ pass=1     fail=3     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (37) empty line"          , yUNIT_read (x_urun,37, &c), "");
+   yUNIT_minstr  ("... check (38) condition"           , yUNIT_read (x_urun,38, &c), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00028]");
+   yUNIT_minstr  ("... check (39) condition footer"    , yUNIT_read (x_urun,39, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (40) empty line"          , yUNIT_read (x_urun,40, &c), "");
+   yUNIT_minstr  ("... check (41) condition"           , yUNIT_read (x_urun,41, &c), "  COND [004] parse a code record - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00047]");
+   yUNIT_minstr  ("... check (42) condition footer"    , yUNIT_read (x_urun,42, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (43) empty line"          , yUNIT_read (x_urun,43, &c), "");
+   yUNIT_minstr  ("... check (44) script footer"       , yUNIT_read (x_urun,44, &c), "  " BACK_RED "PRCS -------- cond=4     test=12    [ pass=9     fail=3     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (45) empty line"          , yUNIT_read (x_urun,45, &c), "");
+   yUNIT_minstr  ("... check (46) empty line"          , yUNIT_read (x_urun,46, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("verify third script");
+   yUNIT_minstr  ("... check (47) script"              , yUNIT_read (x_urun,47, &c), "SCRP [03] (SCRP) verify normal processing ===============================[ì2]=[00052]");
+   yUNIT_minstr  ("... check (48) empty line"          , yUNIT_read (x_urun,48, &c), "");
+   yUNIT_minstr  ("... check (49) group break"         , yUNIT_read (x_urun,49, &c), "  GROUP ===----------------------------   round one   ----------------------------===");
+   yUNIT_minstr  ("... check (50) empty line"          , yUNIT_read (x_urun,50, &c), "");
+   yUNIT_minstr  ("... check (51) condition"           , yUNIT_read (x_urun,51, &c), "  COND [001] process arguments  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00054]");
+   yUNIT_minstr  ("... check (52) condition footer"    , yUNIT_read (x_urun,52, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (53) empty line"          , yUNIT_read (x_urun,53, &c), "");
+   yUNIT_minstr  ("... check (54) condition"           , yUNIT_read (x_urun,54, &c), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00023]");
+   yUNIT_minstr  ("... check (55) condition footer"    , yUNIT_read (x_urun,55, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (56) empty line"          , yUNIT_read (x_urun,56, &c), "");
+   yUNIT_minstr  ("... check (57) condition"           , yUNIT_read (x_urun,57, &c), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00028]");
+   yUNIT_minstr  ("... check (58) condition footer"    , yUNIT_read (x_urun,58, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (59) empty line"          , yUNIT_read (x_urun,59, &c), "");
+   yUNIT_minstr  ("... check (60) condition"           , yUNIT_read (x_urun,60, &c), "  COND [004] read one record -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00060]");
+   yUNIT_minstr  ("... check (61) condition footer"    , yUNIT_read (x_urun,61, &c), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=4     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (62) empty line"          , yUNIT_read (x_urun,62, &c), "");
+   yUNIT_minstr  ("... check (63) group break"         , yUNIT_read (x_urun,63, &c), "  GROUP ===----------------------------   round two   ----------------------------===");
+   yUNIT_minstr  ("... check (64) empty line"          , yUNIT_read (x_urun,64, &c), "");
+   yUNIT_minstr  ("... check (65) condition"           , yUNIT_read (x_urun,65, &c), "  COND [005] read a second record  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00066]");
+   yUNIT_minstr  ("... check (66) condition footer"    , yUNIT_read (x_urun,66, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (67) empty line"          , yUNIT_read (x_urun,67, &c), "");
+   yUNIT_minstr  ("... check (68) condition"           , yUNIT_read (x_urun,68, &c), "  " BACK_MAG "SOND [006]" BACK_OFF " close and delete script file - -- -- -- -- -- -- -- -- -- -- -- -[00034]");
+   yUNIT_minstr  ("... check (69) condition footer"    , yUNIT_read (x_urun,69, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (70) empty line"          , yUNIT_read (x_urun,70, &c), "");
+   yUNIT_minstr  ("... check (71) condition"           , yUNIT_read (x_urun,71, &c), "  " BACK_MAG "SOND [007]" BACK_OFF " close and delete code file  -- -- -- -- -- -- -- -- -- -- -- -- -[00039]");
+   yUNIT_minstr  ("... check (72) condition footer"    , yUNIT_read (x_urun,72, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (73) empty line"          , yUNIT_read (x_urun,73, &c), "");
+   yUNIT_minstr  ("... check (74) group break"         , yUNIT_read (x_urun,74, &c), "  GROUP ===---------------------------   final round   ---------------------------===");
+   yUNIT_minstr  ("... check (75) empty line"          , yUNIT_read (x_urun,75, &c), "");
+   yUNIT_minstr  ("... check (76) condition"           , yUNIT_read (x_urun,76, &c), "  COND [008] generate a summary -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00073]");
+   yUNIT_minstr  ("... check (77) condition footer"    , yUNIT_read (x_urun,77, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (78) empty line"          , yUNIT_read (x_urun,78, &c), "");
+   yUNIT_minstr  ("... check (79) script footer"       , yUNIT_read (x_urun,79, &c), "  " BACK_RED "PRCS -------- cond=8     test=32    [ pass=28    fail=4     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (80) empty line"          , yUNIT_read (x_urun,80, &c), "");
+   yUNIT_minstr  ("... check (81) empty line"          , yUNIT_read (x_urun,81, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("verify fourth script and footer");
+   yUNIT_minstr  ("... check (82) script"              , yUNIT_read (x_urun,82, &c), "SCRP [04] (SCRP) empty script ===========================================[è9]=[00078]");
+   yUNIT_minstr  ("... check (83) empty line"          , yUNIT_read (x_urun,83, &c), "");
+   yUNIT_minstr  ("... check (84) script footer"       , yUNIT_read (x_urun,84, &c), "  " BACK_YEL "PRCS -------- cond=0     test=0     [ pass=0     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (85) empty line"          , yUNIT_read (x_urun,85, &c), "");
+   yUNIT_minstr  ("... check (86) test footer"         , yUNIT_read (x_urun,86, &c), BACK_RED "TINU  scrp=4    cond=15    test=57    [ pass=49    fail=8     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (87) empty line"          , yUNIT_read (x_urun,87, &c), "");
+   yUNIT_minstr  ("... check (88) empty line"          , yUNIT_read (x_urun,88, &c), "");
+   yUNIT_minstr  ("... check (89) footer line"         , yUNIT_read (x_urun,89, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
+   yUNIT_minval  ("... check line count"               , c , 90);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check executing and presenting but show only one script");
+   yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --cond 03"), 0);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("verify header");
+   yUNIT_minstr  ("... check ( 0) header line"         , yUNIT_read (x_urun, 0, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
+   yUNIT_minstr  ("... check ( 1) patron"              , yUNIT_read (x_urun, 1, &c), "   patron : daktyloi-aeonius (forefinger) automated unit testing                   4s");
+   yUNIT_minstr  ("... check ( 2) level line"          , yUNIT_read (x_urun, 2, &c), "   assign output level to (3) YUNIT_COND                                          19c");
+   yUNIT_minstr  ("... check ( 3) eterm line"          , yUNIT_read (x_urun, 3, &c), "   assign format/color to (y) ETERM                                               49x");
+   yUNIT_minstr  ("... check ( 4) empty line"          , yUNIT_read (x_urun, 4, &c), "");
+   yUNIT_minstr  ("... check ( 5) empty line"          , yUNIT_read (x_urun, 5, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("verify third script");
+   yUNIT_minstr  ("... check ( 6) script"              , yUNIT_read (x_urun, 6, &c), "SCRP [03] (SCRP) verify normal processing ===============================[ì2]=[00052]");
+   yUNIT_minstr  ("... check ( 7) empty line"          , yUNIT_read (x_urun, 7, &c), "");
+   yUNIT_minstr  ("... check ( 8) group break"         , yUNIT_read (x_urun, 8, &c), "  GROUP ===----------------------------   round one   ----------------------------===");
+   yUNIT_minstr  ("... check ( 9) empty line"          , yUNIT_read (x_urun, 9, &c), "");
+   yUNIT_minstr  ("... check (10) condition"           , yUNIT_read (x_urun,10, &c), "  COND [001] process arguments  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00054]");
+   yUNIT_minstr  ("... check (11) condition footer"    , yUNIT_read (x_urun,11, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (12) empty line"          , yUNIT_read (x_urun,12, &c), "");
+   yUNIT_minstr  ("... check (13) condition"           , yUNIT_read (x_urun,13, &c), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00023]");
+   yUNIT_minstr  ("... check (14) condition footer"    , yUNIT_read (x_urun,14, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (15) empty line"          , yUNIT_read (x_urun,15, &c), "");
+   yUNIT_minstr  ("... check (16) condition"           , yUNIT_read (x_urun,16, &c), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00028]");
+   yUNIT_minstr  ("... check (17) condition footer"    , yUNIT_read (x_urun,17, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (18) empty line"          , yUNIT_read (x_urun,18, &c), "");
+   yUNIT_minstr  ("... check (19) condition"           , yUNIT_read (x_urun,19, &c), "  COND [004] read one record -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00060]");
+   yUNIT_minstr  ("... check (20) condition footer"    , yUNIT_read (x_urun,20, &c), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=4     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (21) empty line"          , yUNIT_read (x_urun,21, &c), "");
+   yUNIT_minstr  ("... check (22) group break"         , yUNIT_read (x_urun,22, &c), "  GROUP ===----------------------------   round two   ----------------------------===");
+   yUNIT_minstr  ("... check (23) empty line"          , yUNIT_read (x_urun,23, &c), "");
+   yUNIT_minstr  ("... check (24) condition"           , yUNIT_read (x_urun,24, &c), "  COND [005] read a second record  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00066]");
+   yUNIT_minstr  ("... check (25) condition footer"    , yUNIT_read (x_urun,25, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (26) empty line"          , yUNIT_read (x_urun,26, &c), "");
+   yUNIT_minstr  ("... check (27) condition"           , yUNIT_read (x_urun,27, &c), "  " BACK_MAG "SOND [006]" BACK_OFF " close and delete script file - -- -- -- -- -- -- -- -- -- -- -- -[00034]");
+   yUNIT_minstr  ("... check (28) condition footer"    , yUNIT_read (x_urun,28, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (29) empty line"          , yUNIT_read (x_urun,29, &c), "");
+   yUNIT_minstr  ("... check (30) condition"           , yUNIT_read (x_urun,30, &c), "  " BACK_MAG "SOND [007]" BACK_OFF " close and delete code file  -- -- -- -- -- -- -- -- -- -- -- -- -[00039]");
+   yUNIT_minstr  ("... check (31) condition footer"    , yUNIT_read (x_urun,31, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (32) empty line"          , yUNIT_read (x_urun,32, &c), "");
+   yUNIT_minstr  ("... check (33) group break"         , yUNIT_read (x_urun,33, &c), "  GROUP ===---------------------------   final round   ---------------------------===");
+   yUNIT_minstr  ("... check (34) empty line"          , yUNIT_read (x_urun,34, &c), "");
+   yUNIT_minstr  ("... check (35) condition"           , yUNIT_read (x_urun,35, &c), "  COND [008] generate a summary -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00073]");
+   yUNIT_minstr  ("... check (36) condition footer"    , yUNIT_read (x_urun,36, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (37) empty line"          , yUNIT_read (x_urun,37, &c), "");
+   yUNIT_minstr  ("... check (38) script footer"       , yUNIT_read (x_urun,38, &c), "  " BACK_RED "PRCS -------- cond=8     test=32    [ pass=28    fail=4     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (39) empty line"          , yUNIT_read (x_urun,39, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("verify fourth script and footer");
+   yUNIT_minstr  ("... check (40) test footer"         , yUNIT_read (x_urun,40, &c), BACK_RED "TINU  scrp=1    cond=8     test=32    [ pass=28    fail=4     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (41) empty line"          , yUNIT_read (x_urun,41, &c), "");
+   yUNIT_minstr  ("... check (42) empty line"          , yUNIT_read (x_urun,42, &c), "");
+   yUNIT_minstr  ("... check (43) footer line"         , yUNIT_read (x_urun,43, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
+   yUNIT_minval  ("... check line count"               , c , 44);
+   yUNIT_mindnoc ();
+
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios__unit_live_step    (void)
+{
+   int         c           =    0;
+   char        x_urun      [LEN_HUND]  = "koios.urun";
+
+   yUNIT_minscrp ("live testing on unit test result");
+
+   koios__unit_shared_data ();
+
    yUNIT_mincond ("check displaying steps");
    yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --steps"), 0);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("check step level header");
    yUNIT_minstr  ("... check (0) header line"          , yUNIT_read (x_urun, 0, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
-   yUNIT_minstr  ("... check (1) patron"               , yUNIT_read (x_urun, 1, &c), "   patron : daktyloi-aeonius (forefinger) automated unit testing");
-   yUNIT_minstr  ("... check (2) level line"           , yUNIT_read (x_urun, 2, &c), "   assign output level to (4) YUNIT_STEP");
-   yUNIT_minstr  ("... check (3) eterm line"           , yUNIT_read (x_urun, 3, &c), "   assign format/color to (y) ETERM");
+   yUNIT_minstr  ("... check (1) patron"               , yUNIT_read (x_urun, 1, &c), "   patron : daktyloi-aeonius (forefinger) automated unit testing                   4s");
+   yUNIT_minstr  ("... check (2) level line"           , yUNIT_read (x_urun, 2, &c), "   assign output level to (4) YUNIT_STEP                                          19c");
+   yUNIT_minstr  ("... check (3) eterm line"           , yUNIT_read (x_urun, 3, &c), "   assign format/color to (y) ETERM                                               49x");
    yUNIT_minstr  ("... check (4) empty line"           , yUNIT_read (x_urun, 4, &c), "");
    yUNIT_minstr  ("... check (5) empty line"           , yUNIT_read (x_urun, 5, &c), "");
    yUNIT_mindnoc ();
@@ -2963,7 +3386,7 @@ koios__unit_live_args    (void)
 
    yUNIT_mincond ("check step level script format");
    yUNIT_minstr  ("... check (11) separator"           , yUNIT_read (x_urun,11, &c), "===[[ NEW SCRIPT ]]==================================================================");
-   yUNIT_minstr  ("... check (12) script"              , yUNIT_read (x_urun,12, &c), "SCRP [01] (SCRP) verify openning and closing =================================[00004]");
+   yUNIT_minstr  ("... check (12) script"              , yUNIT_read (x_urun,12, &c), "SCRP [01] (SCRP) verify openning and closing ============================[ê1]=[00004]");
    yUNIT_minstr  ("... check (13) empty line"          , yUNIT_read (x_urun,13, &c), "");
    yUNIT_mindnoc ();
 
@@ -3010,145 +3433,157 @@ koios__unit_live_args    (void)
    yUNIT_minval  ("... check line count"               , c , 148);
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("check running and presenting only scripts");
-   yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --scrp"), 0);
-   yUNIT_minstr  ("... check ( 0) header line"         , yUNIT_read (x_urun, 0, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
-   yUNIT_minstr  ("... check ( 1) empty line"          , yUNIT_read (x_urun, 1, &c), "");
-   yUNIT_minstr  ("... check ( 2) section"             , yUNIT_read (x_urun, 2, &c), "SECT ===-------------------------- simple testing ---------------------------=== TCES");
-   yUNIT_minstr  ("... check ( 3) empty line"          , yUNIT_read (x_urun, 3, &c), "");
-   yUNIT_minstr  ("... check ( 4) script"              , yUNIT_read (x_urun, 4, &c), "SCRP [01] (SCRP) verify openning and closing =================================[00004]");
-   yUNIT_minstr  ("... check ( 5) script footer"       , yUNIT_read (x_urun, 5, &c), "  " BACK_GRN "PRCS -------- cond=3     test=8     [ pass=8     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check ( 6) empty line"          , yUNIT_read (x_urun, 6, &c), "");
-   yUNIT_minstr  ("... check ( 7) section"             , yUNIT_read (x_urun, 7, &c), "SECT ===----------------------- more complex testing ------------------------=== TCES");
-   yUNIT_minstr  ("... check ( 8) empty line"          , yUNIT_read (x_urun, 8, &c), "");
-   yUNIT_minstr  ("... check ( 9) script"              , yUNIT_read (x_urun, 9, &c), "SCRP [02] (SCRP) verify system startup =======================================[00044]");
-   yUNIT_minstr  ("... check (10) script footer"       , yUNIT_read (x_urun,10, &c), "  " BACK_RED "PRCS -------- cond=4     test=11    [ pass=8     fail=3     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (11) empty line"          , yUNIT_read (x_urun,11, &c), "");
-   yUNIT_minstr  ("... check (12) script"              , yUNIT_read (x_urun,12, &c), "SCRP [03] (SCRP) verify normal processing ====================================[00052]");
-   yUNIT_minstr  ("... check (13) script footer"       , yUNIT_read (x_urun,13, &c), "  " BACK_GRN "PRCS -------- cond=8     test=31    [ pass=31    fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (14) empty line"          , yUNIT_read (x_urun,14, &c), "");
-   yUNIT_minstr  ("... check (15) script"              , yUNIT_read (x_urun,15, &c), "SCRP [04] (SCRP) empty script ================================================[00078]");
-   yUNIT_minstr  ("... check (16) script footer"       , yUNIT_read (x_urun,16, &c), "  " BACK_YEL "PRCS -------- cond=0     test=0     [ pass=0     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (17) empty line"          , yUNIT_read (x_urun,17, &c), "");
-   yUNIT_minstr  ("... check (18) test footer"         , yUNIT_read (x_urun,18, &c), BACK_RED "TINU  scrp=4    cond=15    test=50    [ pass=47    fail=3     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (19) empty line"          , yUNIT_read (x_urun,19, &c), "");
-   yUNIT_minstr  ("... check (20) footer line"         , yUNIT_read (x_urun,20, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
-   yUNIT_minval  ("... check line count"               , c , 21);
+   yUNIT_mincond ("check executing and presenting down to steps");
+   yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --step"), 0);
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("check executing and presenting only conditions");
-   yUNIT_minval  ("... run unit test"                  , system ("./koios_unit --cond"), 0);
+   yUNIT_mincond ("check step level condition and normal steps");
+   yUNIT_minstr  ("... check (14) condition"           , yUNIT_read (x_urun, 14, &c), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00005]");
+   yUNIT_minstr  ("... check (15) empty line"          , yUNIT_read (x_urun, 15, &c), "");
+   yUNIT_minstr  ("... check (16) step"                , yUNIT_read (x_urun, 16, &c), "  " BACK_GRN "aa) PASS  " BACK_OFF " : check string ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00006]");
+   yUNIT_minstr  ("... check (17) empty line"          , yUNIT_read (x_urun, 17, &c), "");
+   yUNIT_minstr  ("... check (18) step"                , yUNIT_read (x_urun, 18, &c), "  " BACK_GRN "ab) PASS  " BACK_OFF " : check number ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00007]");
+   yUNIT_minstr  ("... check (19) empty line"          , yUNIT_read (x_urun, 19, &c), "");
+   yUNIT_minstr  ("... check (20) step"                , yUNIT_read (x_urun, 20, &c), "  " BACK_GRN "ac) PASS  " BACK_OFF " : check integer · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00008]");
+   yUNIT_minstr  ("... check (21) empty line"          , yUNIT_read (x_urun, 21, &c), "");
+   yUNIT_minstr  ("... check (22) step"                , yUNIT_read (x_urun, 22, &c), "  " BACK_GRN "ad) PASS  " BACK_OFF " : check character ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00009]");
+   yUNIT_minstr  ("... check (23) empty line"          , yUNIT_read (x_urun, 23, &c), "");
+   yUNIT_minstr  ("... check (24) condition footer"    , yUNIT_read (x_urun, 24, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
+   yUNIT_minstr  ("... check (25) empty line"          , yUNIT_read (x_urun, 25, &c), "");
+   yUNIT_minstr  ("... check (26) condition"           , yUNIT_read (x_urun, 26, &c), "  COND [002] defensive checks - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00010]");
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("verify header");
-   yUNIT_minstr  ("... check ( 0) header line"         , yUNIT_read (x_urun, 0, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
-   yUNIT_minstr  ("... check ( 1) patron"              , yUNIT_read (x_urun, 1, &c), "   patron : daktyloi-aeonius (forefinger) automated unit testing");
-   yUNIT_minstr  ("... check ( 2) level line"          , yUNIT_read (x_urun, 2, &c), "   assign output level to (3) YUNIT_COND");
-   yUNIT_minstr  ("... check ( 3) eterm line"          , yUNIT_read (x_urun, 3, &c), "   assign format/color to (y) ETERM");
-   yUNIT_minstr  ("... check ( 4) empty line"          , yUNIT_read (x_urun, 4, &c), "");
-   yUNIT_minstr  ("... check ( 5) empty line"          , yUNIT_read (x_urun, 5, &c), "");
-   yUNIT_minstr  ("... check ( 6) section"             , yUNIT_read (x_urun, 6, &c), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... check ( 7) section"             , yUNIT_read (x_urun, 7, &c), "SECT ===-------------------------- simple testing ---------------------------=== TCES");
-   yUNIT_minstr  ("... check ( 8) section"             , yUNIT_read (x_urun, 8, &c), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... check ( 9) empty line"          , yUNIT_read (x_urun, 9, &c), "");
-   yUNIT_minstr  ("... check (10) empty line"          , yUNIT_read (x_urun,10, &c), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify first script");
-   yUNIT_minstr  ("... check (11) script"              , yUNIT_read (x_urun,11, &c), "SCRP [01] (SCRP) verify openning and closing =================================[00004]");
-   yUNIT_minstr  ("... check (12) empty line"          , yUNIT_read (x_urun,12, &c), "");
-   yUNIT_minstr  ("... check (13) condition"           , yUNIT_read (x_urun,13, &c), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00005]");
-   yUNIT_minstr  ("... check (14) condition footer"    , yUNIT_read (x_urun,14, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (15) empty line"          , yUNIT_read (x_urun,15, &c), "");
-   yUNIT_minstr  ("... check (16) condition"           , yUNIT_read (x_urun,16, &c), "  COND [002] defensive checks - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00010]");
-   yUNIT_minstr  ("... check (17) condition footer"    , yUNIT_read (x_urun,17, &c), "      " BACK_GRN "DNOC --------------- test=3     [ pass=3     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (18) empty line"          , yUNIT_read (x_urun,18, &c), "");
-   yUNIT_minstr  ("... check (19) condition"           , yUNIT_read (x_urun,19, &c), "  COND [003] duplicate opens and closes  -- -- -- -- -- -- -- -- -- -- -- -- -[00015]");
-   yUNIT_minstr  ("... check (20) condition footer"    , yUNIT_read (x_urun,20, &c), "      " BACK_GRN "DNOC --------------- test=1     [ pass=1     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (21) empty line"          , yUNIT_read (x_urun,21, &c), "");
-   yUNIT_minstr  ("... check (22) script footer"       , yUNIT_read (x_urun,22, &c), "  " BACK_GRN "PRCS -------- cond=3     test=8     [ pass=8     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (23) empty line"          , yUNIT_read (x_urun,23, &c), "");
-   yUNIT_minstr  ("... check (24) empty line"          , yUNIT_read (x_urun,24, &c), "");
-   yUNIT_minstr  ("... check (25) section"             , yUNIT_read (x_urun,25, &c), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... check (26) section"             , yUNIT_read (x_urun,26, &c), "SECT ===----------------------- more complex testing ------------------------=== TCES");
-   yUNIT_minstr  ("... check (27) section"             , yUNIT_read (x_urun,27, &c), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... check (28) empty line"          , yUNIT_read (x_urun,28, &c), "");
-   yUNIT_minstr  ("... check (29) empty line"          , yUNIT_read (x_urun,29, &c), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify second script");
-   yUNIT_minstr  ("... check (30) script"              , yUNIT_read (x_urun,30, &c), "SCRP [02] (SCRP) verify system startup =======================================[00044]");
-   yUNIT_minstr  ("... check (31) empty line"          , yUNIT_read (x_urun,31, &c), "");
-   yUNIT_minstr  ("... check (32) condition"           , yUNIT_read (x_urun,32, &c), "  COND [001] run initialization -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00045]");
-   yUNIT_minstr  ("... check (33) condition footer"    , yUNIT_read (x_urun,33, &c), "      " BACK_YEL "DNOC --------------- test=0     [ pass=0     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (34) empty line"          , yUNIT_read (x_urun,34, &c), "");
-   yUNIT_minstr  ("... check (35) condition"           , yUNIT_read (x_urun,35, &c), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00023]");
-   yUNIT_minstr  ("... check (36) condition footer"    , yUNIT_read (x_urun,36, &c), "      " BACK_RED "DNOC --------------- test=3     [ pass=0     fail=3     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (37) empty line"          , yUNIT_read (x_urun,37, &c), "");
-   yUNIT_minstr  ("... check (38) condition"           , yUNIT_read (x_urun,38, &c), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00028]");
-   yUNIT_minstr  ("... check (39) condition footer"    , yUNIT_read (x_urun,39, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (40) empty line"          , yUNIT_read (x_urun,40, &c), "");
-   yUNIT_minstr  ("... check (41) condition"           , yUNIT_read (x_urun,41, &c), "  COND [004] parse a code record - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00047]");
-   yUNIT_minstr  ("... check (42) condition footer"    , yUNIT_read (x_urun,42, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (43) empty line"          , yUNIT_read (x_urun,43, &c), "");
-   yUNIT_minstr  ("... check (44) script footer"       , yUNIT_read (x_urun,44, &c), "  " BACK_RED "PRCS -------- cond=4     test=11    [ pass=8     fail=3     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (45) empty line"          , yUNIT_read (x_urun,45, &c), "");
-   yUNIT_minstr  ("... check (46) empty line"          , yUNIT_read (x_urun,46, &c), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify third script");
-   yUNIT_minstr  ("... check (47) script"              , yUNIT_read (x_urun,47, &c), "SCRP [03] (SCRP) verify normal processing ====================================[00052]");
-   yUNIT_minstr  ("... check (48) empty line"          , yUNIT_read (x_urun,48, &c), "");
-   yUNIT_minstr  ("... check (49) group break"         , yUNIT_read (x_urun,49, &c), "  GROUP ===----------------------------   round one   ----------------------------===");
-   yUNIT_minstr  ("... check (50) empty line"          , yUNIT_read (x_urun,50, &c), "");
-   yUNIT_minstr  ("... check (51) condition"           , yUNIT_read (x_urun,51, &c), "  COND [001] process arguments  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00054]");
-   yUNIT_minstr  ("... check (52) condition footer"    , yUNIT_read (x_urun,52, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (53) empty line"          , yUNIT_read (x_urun,53, &c), "");
-   yUNIT_minstr  ("... check (54) condition"           , yUNIT_read (x_urun,54, &c), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00023]");
-   yUNIT_minstr  ("... check (55) condition footer"    , yUNIT_read (x_urun,55, &c), "      " BACK_GRN "DNOC --------------- test=3     [ pass=3     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (56) empty line"          , yUNIT_read (x_urun,56, &c), "");
-   yUNIT_minstr  ("... check (57) condition"           , yUNIT_read (x_urun,57, &c), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00028]");
-   yUNIT_minstr  ("... check (58) condition footer"    , yUNIT_read (x_urun,58, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (59) empty line"          , yUNIT_read (x_urun,59, &c), "");
-   yUNIT_minstr  ("... check (60) condition"           , yUNIT_read (x_urun,60, &c), "  COND [004] read one record -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00060]");
-   yUNIT_minstr  ("... check (61) condition footer"    , yUNIT_read (x_urun,61, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (62) empty line"          , yUNIT_read (x_urun,62, &c), "");
-   yUNIT_minstr  ("... check (63) group break"         , yUNIT_read (x_urun,63, &c), "  GROUP ===----------------------------   round two   ----------------------------===");
-   yUNIT_minstr  ("... check (64) empty line"          , yUNIT_read (x_urun,64, &c), "");
-   yUNIT_minstr  ("... check (65) condition"           , yUNIT_read (x_urun,65, &c), "  COND [005] read a second record  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00066]");
-   yUNIT_minstr  ("... check (66) condition footer"    , yUNIT_read (x_urun,66, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (67) empty line"          , yUNIT_read (x_urun,67, &c), "");
-   yUNIT_minstr  ("... check (68) condition"           , yUNIT_read (x_urun,68, &c), "  " BACK_MAG "SOND [006]" BACK_OFF " close and delete script file - -- -- -- -- -- -- -- -- -- -- -- -[00034]");
-   yUNIT_minstr  ("... check (69) condition footer"    , yUNIT_read (x_urun,69, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (70) empty line"          , yUNIT_read (x_urun,70, &c), "");
-   yUNIT_minstr  ("... check (71) condition"           , yUNIT_read (x_urun,71, &c), "  " BACK_MAG "SOND [007]" BACK_OFF " close and delete code file  -- -- -- -- -- -- -- -- -- -- -- -- -[00039]");
-   yUNIT_minstr  ("... check (72) condition footer"    , yUNIT_read (x_urun,72, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (73) empty line"          , yUNIT_read (x_urun,73, &c), "");
-   yUNIT_minstr  ("... check (74) group break"         , yUNIT_read (x_urun,74, &c), "  GROUP ===---------------------------   final round   ---------------------------===");
-   yUNIT_minstr  ("... check (75) empty line"          , yUNIT_read (x_urun,75, &c), "");
-   yUNIT_minstr  ("... check (76) condition"           , yUNIT_read (x_urun,76, &c), "  COND [008] generate a summary -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00073]");
-   yUNIT_minstr  ("... check (77) condition footer"    , yUNIT_read (x_urun,77, &c), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (78) empty line"          , yUNIT_read (x_urun,78, &c), "");
-   yUNIT_minstr  ("... check (79) script footer"       , yUNIT_read (x_urun,79, &c), "  " BACK_GRN "PRCS -------- cond=8     test=31    [ pass=31    fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (80) empty line"          , yUNIT_read (x_urun,80, &c), "");
-   yUNIT_minstr  ("... check (81) empty line"          , yUNIT_read (x_urun,81, &c), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify fourthscript and footer");
-   yUNIT_minstr  ("... check (82) script"              , yUNIT_read (x_urun,82, &c), "SCRP [04] (SCRP) empty script ================================================[00078]");
-   yUNIT_minstr  ("... check (83) empty line"          , yUNIT_read (x_urun,83, &c), "");
-   yUNIT_minstr  ("... check (84) script footer"       , yUNIT_read (x_urun,84, &c), "  " BACK_YEL "PRCS -------- cond=0     test=0     [ pass=0     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (85) empty line"          , yUNIT_read (x_urun,85, &c), "");
-   yUNIT_minstr  ("... check (86) test footer"         , yUNIT_read (x_urun,86, &c), BACK_RED "TINU  scrp=4    cond=15    test=50    [ pass=47    fail=3     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... check (87) empty line"          , yUNIT_read (x_urun,87, &c), "");
-   yUNIT_minstr  ("... check (88) empty line"          , yUNIT_read (x_urun,88, &c), "");
-   yUNIT_minstr  ("... check (89) footer line"         , yUNIT_read (x_urun,89, &c), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
-   yUNIT_minval  ("... check line count"               , c , 90);
+   yUNIT_mincond ("check alternative step level entries");
+   yUNIT_minstr  ("... check (38) condition"           , yUNIT_read (x_urun, 38, &c), "  COND [003] duplicate opens and closes  -- -- -- -- -- -- -- -- -- -- -- -- -[00015]");
+   yUNIT_minstr  ("... check (39) empty line"          , yUNIT_read (x_urun, 39, &c), "");
+   yUNIT_minstr  ("... check (40) step"                , yUNIT_read (x_urun, 40, &c), "  " BACK_CYN "aa) " BACK_GRN "CODE  " BACK_OFF " : working variables  ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00016]");
+   yUNIT_minstr  ("... check (41) empty line"          , yUNIT_read (x_urun, 41, &c), "");
+   yUNIT_minstr  ("... check (42) step"                , yUNIT_read (x_urun, 42, &c), "  " BACK_GRN "ab) PASS  " BACK_OFF " : check working variable · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00017]");
+   yUNIT_minstr  ("... check (43) empty line"          , yUNIT_read (x_urun, 43, &c), "");
+   yUNIT_minstr  ("... check (44) step"                , yUNIT_read (x_urun, 44, &c), "  " BACK_CYN "ac) " BACK_GRN "LOAD  " BACK_OFF " : prep data for read ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00018]");
+   yUNIT_minstr  ("... check (45) empty line"          , yUNIT_read (x_urun, 45, &c), "");
+   yUNIT_minstr  ("... check (46) step"                , yUNIT_read (x_urun, 46, &c), "  " BACK_CYN "ad) " BACK_GRN "MODE  " BACK_OFF " : ENABLE FORCED FAILURE (pass=fail, fail=pass)  ·· ·· ·· ·· ·· ··[00019]");
+   yUNIT_minstr  ("... check (47) empty line"          , yUNIT_read (x_urun, 47, &c), "");
+   yUNIT_minstr  ("... check (48) step"                , yUNIT_read (x_urun, 48, &c), "  " BACK_CYN "ae) " BACK_RED "!SYS  " BACK_OFF " : run little · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00020]");
+   yUNIT_minstr  ("... check (49) empty line"          , yUNIT_read (x_urun, 49, &c), "");
+   yUNIT_minstr  ("... check (50) condition footer"    , yUNIT_read (x_urun, 50, &c), "      " BACK_RED "DNOC --------------- test=5     [ pass=4     fail=1     badd=0     void=0     ]" BACK_OFF);
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
    return 0;
 }
+
+char
+koios__unit_live_full    (void)
+{
+   int         c           =    0;
+   char        x_urun      [LEN_HUND]  = "koios.urun";
+
+   yUNIT_minscrp ("live testing on unit test result");
+
+   koios__unit_shared_data ();
+
+
+   yUNIT_mincond ("check executing and presenting full");
+   yUNIT_minval  ("... run unit test"                  , system ("./koios_unit"), 0);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check passing string step");
+   yUNIT_minstr  ("... check ( 16) step"               , yUNIT_read (x_urun, 16, &c), "  " BACK_GRN "aa) PASS  " BACK_OFF " : check string ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00006]");
+   yUNIT_minstr  ("... check ( 17) method"             , yUNIT_read (x_urun, 17, &c), "      method : yUNIT_teststring (0)");
+   yUNIT_minstr  ("... check ( 18) test"               , yUNIT_read (x_urun, 18, &c), "      test   : s_equal    (rc =  101, test abbr = e)");
+   yUNIT_minstr  ("... check ( 19) expect"             , yUNIT_read (x_urun, 19, &c), "      expect :  5[hello]");
+   yUNIT_minstr  ("... check ( 20) actual"             , yUNIT_read (x_urun, 20, &c), "      actual :  5[hello]");
+   yUNIT_minstr  ("... check ( 21) empty"              , yUNIT_read (x_urun, 21, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check failing string step");
+   yUNIT_minstr  ("... check (281) step"               , yUNIT_read (x_urun,281, &c), "  " BACK_RED "aa) FAIL  " BACK_OFF " : check string ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00061]");
+   yUNIT_minstr  ("... check (282) method"             , yUNIT_read (x_urun,282, &c), "      method : yUNIT_teststring (1)");
+   yUNIT_minstr  ("... check (283) test"               , yUNIT_read (x_urun,283, &c), "      test   : s_equal    (rc = -101, test abbr = e)");
+   yUNIT_minstr  ("... check (284) expect"             , yUNIT_read (x_urun,284, &c), "      expect :  7[" BOLD_RED "hello££" BOLD_OFF "]");
+   yUNIT_minstr  ("... check (285) actual"             , yUNIT_read (x_urun,285, &c), "      actual :  7[" BOLD_RED "goodbye" BOLD_OFF "]");
+   yUNIT_minstr  ("... check (286) empty"              , yUNIT_read (x_urun,286, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check forced fail string step");
+   yUNIT_minstr  ("... check (107) step"               , yUNIT_read (x_urun,107, &c), "  " BACK_GRN "aa) " BACK_RED "!FAIL " BACK_OFF " : check string ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00024]");
+   yUNIT_minstr  ("... check (108) method"             , yUNIT_read (x_urun,108, &c), "      method : yUNIT_teststring (0)");
+   yUNIT_minstr  ("... check (109) test"               , yUNIT_read (x_urun,109, &c), "      test   : s_equal    (rc =  101, test abbr = e)");
+   yUNIT_minstr  ("... check (110) expect"             , yUNIT_read (x_urun,110, &c), "      expect :  5[hello]");                              
+   yUNIT_minstr  ("... check (111) actual"             , yUNIT_read (x_urun,111, &c), "      actual :  5[hello]");                              
+   yUNIT_minstr  ("... check (112) empty"              , yUNIT_read (x_urun,112, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check passing float step");
+   yUNIT_minstr  ("... check ( 22) step"               , yUNIT_read (x_urun, 22, &c), "  " BACK_GRN "ab) PASS  " BACK_OFF " : check number ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00007]");
+   yUNIT_minstr  ("... check ( 23) method"             , yUNIT_read (x_urun, 23, &c), "      method : yUNIT_testreal (5)");
+   yUNIT_minstr  ("... check ( 24) test"               , yUNIT_read (x_urun, 24, &c), "      test   : r_greater  (rc =  103, test abbr = g)");
+   yUNIT_minstr  ("... check ( 25) expect"             , yUNIT_read (x_urun, 25, &c), "      expect :  9[15.000000]");
+   yUNIT_minstr  ("... check ( 26) actual"             , yUNIT_read (x_urun, 26, &c), "      actual :  9[15.707964]");
+   yUNIT_minstr  ("... check ( 27) empty"              , yUNIT_read (x_urun, 27, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check failing float step");
+   yUNIT_minstr  ("... check (287) step"               , yUNIT_read (x_urun,287, &c), "  " BACK_RED "ab) FAIL  " BACK_OFF " : check number ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00062]");
+   yUNIT_minstr  ("... check (288) method"             , yUNIT_read (x_urun,288, &c), "      method : yUNIT_testreal (2)");
+   yUNIT_minstr  ("... check (289) test"               , yUNIT_read (x_urun,289, &c), "      test   : r_greater  (rc = -103, test abbr = g)");
+   yUNIT_minstr  ("... check (290) expect"             , yUNIT_read (x_urun,290, &c), "      expect :  9[15.000000]");
+   yUNIT_minstr  ("... check (291) actual"             , yUNIT_read (x_urun,291, &c), "      actual :  8[6.283185]");
+   yUNIT_minstr  ("... check (292) empty"              , yUNIT_read (x_urun,292, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check passing integer step");
+   yUNIT_minstr  ("... check ( 28) step"               , yUNIT_read (x_urun, 28, &c), "  " BACK_GRN "ac) PASS  " BACK_OFF " : check integer · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00008]");
+   yUNIT_minstr  ("... check ( 29) method"             , yUNIT_read (x_urun, 29, &c), "      method : yUNIT_testint (32)");
+   yUNIT_minstr  ("... check ( 30) test"               , yUNIT_read (x_urun, 30, &c), "      test   : i_equal    (rc =  101, test abbr = e)");
+   yUNIT_minstr  ("... check ( 31) expect"             , yUNIT_read (x_urun, 31, &c), "      expect :  1[2]");
+   yUNIT_minstr  ("... check ( 32) actual"             , yUNIT_read (x_urun, 32, &c), "      actual :  1[2]");
+   yUNIT_minstr  ("... check ( 33) empty"              , yUNIT_read (x_urun, 33, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check failing integer step");
+   yUNIT_minstr  ("... check (293) step"               , yUNIT_read (x_urun,293, &c), "  " BACK_RED "ac) FAIL  " BACK_OFF " : check integer · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00063]");
+   yUNIT_minstr  ("... check (294) method"             , yUNIT_read (x_urun,294, &c), "      method : yUNIT_testint (64)");
+   yUNIT_minstr  ("... check (295) test"               , yUNIT_read (x_urun,295, &c), "      test   : i_equal    (rc = -101, test abbr = e)");
+   yUNIT_minstr  ("... check (296) expect"             , yUNIT_read (x_urun,296, &c), "      expect :  1[2]");
+   yUNIT_minstr  ("... check (297) actual"             , yUNIT_read (x_urun,297, &c), "      actual :  1[4]");
+   yUNIT_minstr  ("... check (298) empty"              , yUNIT_read (x_urun,298, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check mode step");                                   
+   yUNIT_minstr  ("... check ( 81) step"               , yUNIT_read (x_urun, 81, &c), "  " BACK_CYN "ad) " BACK_GRN "MODE  " BACK_OFF " : ENABLE FORCED FAILURE (pass=fail, fail=pass)  ·· ·· ·· ·· ·· ··[00019]");
+   yUNIT_minstr  ("... check ( 82) empty"              , yUNIT_read (x_urun, 82, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check code step");                                   
+   yUNIT_minstr  ("... check ( 69) step"               , yUNIT_read (x_urun, 69, &c), "  " BACK_CYN "aa) " BACK_GRN "CODE  " BACK_OFF " : working variables  ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00016]");
+   yUNIT_minstr  ("... check ( 70) contents"           , yUNIT_read (x_urun, 70, &c), "      code   : 10[int c = 0;]");
+   yUNIT_minstr  ("... check ( 71) empty"              , yUNIT_read (x_urun, 71, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check load step");                                   
+   yUNIT_minstr  ("... check ( 78) step"               , yUNIT_read (x_urun, 78, &c), "  " BACK_CYN "ac) " BACK_GRN "LOAD  " BACK_OFF " : prep data for read ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00018]");
+   yUNIT_minstr  ("... check ( 79) contents"           , yUNIT_read (x_urun, 79, &c), "      stdin  : 13[one two three]");
+   yUNIT_minstr  ("... check ( 80) empty"              , yUNIT_read (x_urun, 80, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check sys step");                                   
+   yUNIT_minstr  ("... check ( 83) step"               , yUNIT_read (x_urun, 83, &c), "  " BACK_CYN "ae) " BACK_RED "!SYS  " BACK_OFF " : run little · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00020]");
+   yUNIT_minstr  ("... check ( 84) contents"           , yUNIT_read (x_urun, 84, &c), "      system : 10[/bin/false]");
+   yUNIT_minstr  ("... check ( 85) empty"              , yUNIT_read (x_urun, 85, &c), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_minprcs ();
+   return 0;
+}
+
+
+
+/*====================------------------------------------====================*/
+/*===----                      main driver                             ----===*/
+/*====================------------------------------------====================*/
+static void      o___DRIVER__________________o (void) {;}
 
 char
 main                    (void)
@@ -3180,7 +3615,10 @@ main                    (void)
    koios__unit_code_cond    ();
    koios__unit_code_step    ();
    /*---(live testing)-------------------*/
-   koios__unit_live_args    ();
+   koios__unit_live_scrp    ();
+   koios__unit_live_cond    ();
+   koios__unit_live_step    ();
+   koios__unit_live_full    ();
    /*---(done)---------------------------*/
    yUNIT_mintinu ();
    return 0;

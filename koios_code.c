@@ -2,21 +2,13 @@
 #include    "koios.h"        /* LOCAL  : main header                          */
 
 
-tTEST       g_tests [MAX_TEST] = {
-   /*---- ----- --------------------- --------------------- ----------------------------------------- */
-   { 'v' , 'v' , "void (pure)"       , "yUNIT_void      (" , "no return at all, not even void*"       },
-   { 's' , 's' , "string (pure)"     , "yUNIT_string    (" , "literal string comparison, char-by-char"},
-   { 'i' , 'i' , "integer"           , "yUNIT_int       (" , ""                                       },
-   { '-' , '-' , "end-of-tests"      , ""                  , ""                                       },
-   /*---- ----- --------------------- --------------------- ----------------------------------------- */
-};
-
 
 
 char        CODE_cond_end      (void);
 
 static char s_shared      = '-';         /* flag for shared code or not    */
 static int  s_share_cnt   [26];          /* count of cond in each share    */
+
 
 
 
@@ -45,6 +37,12 @@ CODE_open          (void)
       DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   /*> DEBUG_OUTP   yLOG_info    ("n_wave"    , my.n_wave);                           <*/
+   /*> DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);                           <*/
+   /*> --rce;  if (my.f_wave != NULL) {                                               <* 
+    *>    DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);                              <* 
+    *>    return rce;                                                                 <* 
+    *> }                                                                              <*/
    /*---(open output file)---------------*/
    my.f_code = fopen (my.n_code, "wt");
    DEBUG_OUTP   yLOG_point   ("f_code"    , my.f_code);
@@ -64,6 +62,18 @@ CODE_open          (void)
       return rce;
    }
    DEBUG_OUTP   yLOG_note    ("main file open");
+   /*---(open wave file)-----------------*/
+   /*> printf ("n_wave = [%s]\n", my.n_wave);                                         <*/
+   /*> my.f_wave = fopen (my.n_wave, "wt");                                           <* 
+    *> DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);                           <* 
+    *> --rce;  if (my.f_wave == NULL) {                                               <* 
+    *>    DEBUG_TOPS   yLOG_fatal   ("can not open main file");                       <* 
+    *>    CODE_close (my.f_code);                                                     <* 
+    *>    CODE_close (my.f_main);                                                     <* 
+    *>    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);                                   <* 
+    *>    return rce;                                                                 <* 
+    *> }                                                                              <*/
+   /*> DEBUG_OUTP   yLOG_note    ("wave file open");                                  <*/
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -122,6 +132,7 @@ CODE_close         (FILE *a_file)
    /*---(close)--------------------------*/
    if (a_file == my.f_code)   rc = fclose (my.f_code);
    if (a_file == my.f_main)   rc = fclose (my.f_main);
+   /*> if (a_file == my.f_wave)   rc = fclose (my.f_wave);                            <*/
    --rce;  if (rc != 0) {
       DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
@@ -129,6 +140,7 @@ CODE_close         (FILE *a_file)
    /*---(ground)-------------------------*/
    if (a_file == my.f_code)   my.f_code = NULL;
    if (a_file == my.f_main)   my.f_main = NULL;
+   /*> if (a_file == my.f_wave)   my.f_wave = NULL;                                   <*/
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -143,13 +155,17 @@ CODE_cycle              (void)
    /*---(defense)------------------------*/
    --rce;  if (my.f_code == NULL)    return rce;
    --rce;  if (my.f_main == NULL)    return rce;
+   /*> --rce;  if (my.f_wave == NULL)    return rce;                                  <*/
    /*---(write)--------------------------*/
    CODE_close  (my.f_code);
    CODE_close  (my.f_main);
+   /*> CODE_close  (my.f_wave);                                                       <*/
    sprintf (t, "rm -f %s 2> /dev/null", my.n_code);
    system  (t);
    sprintf (t, "rm -f %s 2> /dev/null", my.n_main);
    system  (t);
+   /*> sprintf (t, "rm -f %s 2> /dev/null", my.n_wave);                               <* 
+    *> system  (t);                                                                   <*/
    CODE_open   ();
    /*---(complete)-------------------------*/
    return 0;
@@ -178,6 +194,7 @@ CODE_beg                (void)
    my.nscrp  = my.cscrp = 0;
    my.ncond  = my.ccond = 0;
    my.nstep  = my.cstep = 0;
+   my.sstep  = 0;
    s_shared = '-';
    for (i = 0; i < 26; ++i)  s_share_cnt [i] = 0;
    return 0;
@@ -218,9 +235,9 @@ char
 MAIN_end           (void)
 {
    MAIN_printf ("   /*---(end scripts)--------------------*/\n");
-   MAIN_printf ("   yUNIT_tinu (g.exec);\n");
+   MAIN_printf ("   rc = yUNIT_tinu (g.exec);\n");
    MAIN_printf ("   /*---(complete)-----------------------*/\n");
-   MAIN_printf ("   return 0;\n");
+   MAIN_printf ("   return rc;\n");
    MAIN_printf ("}\n");
    MAIN_printf ("\n\n\n");
    MAIN_printf ("/* end-of-file.  done, finito, completare, whimper.                           */\n");
@@ -229,9 +246,25 @@ MAIN_end           (void)
 }
 
 char
+CODE_stats         (void)
+{
+   CODE_printf ("\n");
+   CODE_printf ("char\n");
+   CODE_printf ("yUNIT_stats     (void)\n");
+   CODE_printf ("{\n");
+   CODE_printf ("   yUNIT_unique (%d, %d, %d);\n", my.nscrp, my.ncond, my.nstep);
+   CODE_printf ("   return 0;\n");
+   CODE_printf ("}\n");
+   CODE_printf ("\n");
+   return 0;
+}
+
+char
 MAIN_append        (void)
 {
    char        x_recd      [LEN_RECD];
+   CODE_stats     ();
+   SCRP_verbcode  ();
    CODE_close (my.f_main);
    my.f_main = fopen (my.n_main, "rt");
    while (1) {
@@ -298,6 +331,7 @@ CODE_scrp_end        (void)
    /*---(initialize vars)----------------*/
    my.ccond  = 0;
    my.cstep  = 0;
+   my.sstep  = 0;
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -305,6 +339,10 @@ CODE_scrp_end        (void)
 char
 CODE_scrp          (void)
 {
+   char        t           [LEN_HUND]  = "";
+   char        s           [LEN_HUND]  = "";
+   char        x_stage     = '-';
+   char        x_wave      = '-';
    /*---(end last script)----------------*/
    CODE_scrp_end ();
    s_shared = '-';
@@ -319,10 +357,16 @@ CODE_scrp          (void)
    CODE_printf ("   /*===[[ script header ]]========================*/\n");
    CODE_printf ("   g.offset  = 0;\n");
    CODE_printf ("   g.origin  = %d;\n", my.cscrp);
-   CODE_printf ("   yUNIT_scrp    (%4i, %3i, \"%s\", \"%s\");\n", my.n_line, my.cscrp, my.meth, my.desc);
+   CODE_printf ("   yUNIT_scrp    (%4i, %3i, \"%s\", \"%s\", \"%s\");\n", my.n_line, my.cscrp, my.stage, my.desc, my.meth);
    /*> CODE_printf ("   if (g.exec ==  0 && g.level == YUNIT_SCRP)  return 0;\n");    <*/
    /*---(function call to main)----------*/
    MAIN_printf ("   if (g.scrp ==  0 || g.scrp == %2i)  yUNIT_script_%02d ();\n", my.cscrp, my.cscrp);
+   /*---(script entry in wave)-----------*/
+   if (strlen (my.stage) == 2) {
+      x_stage = my.stage [0];
+      x_wave  = my.stage [1];
+   }
+   WAVE_printf ("%c  %c  %-25.25s  %2d  %-65.65s \n", x_stage, x_wave, my.n_base, my.cscrp, my.desc);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -447,6 +491,7 @@ CODE_mode          (void)
 {
    ++(my.nstep);
    ++(my.cstep);
+   ++(my.sstep);
    CODE_printf ("      /*---(mode)------------------------*/\n");
    CODE_printf ("      yUNIT_mode    (%4i, %3i, \"%s\", g.exec);\n", my.n_line, my.cstep, my.desc);
    return 0;
@@ -488,7 +533,7 @@ CODE_display       (void)
          strlcat (my.load, t, 2000);
          break;
       case  G_KEY_DQUOTE  :
-         my.disp [i]  = G_KEY_TILDA;
+         my.disp [i]  = G_CHAR_DDQUOTE;
          sprintf (t, "%c", G_KEY_DQUOTE);
          strlcat (my.syst, t, 2000);
          sprintf (t, "%c", G_KEY_TILDA);
@@ -526,6 +571,7 @@ CODE_code          (void)
    /*---(counters)-----------------------*/
    ++(my.nstep);
    ++(my.cstep);
+   ++(my.sstep);
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(write)--------------------------*/
@@ -549,6 +595,7 @@ CODE_load          (void)
    /*---(counters)-----------------------*/
    ++(my.nstep);
    ++(my.cstep);
+   ++(my.sstep);
    /*---(fix strings)--------------------*/
    CODE_display ();
    CODE_printf ("      /*---(load input)------------------*/\n");
@@ -578,14 +625,26 @@ CODE_load          (void)
 char
 CODE_system        (void)
 {
+   /*---(locals)-----------+-----------+-*/
+   char        x_cmd       [LEN_RECD]  = "";
+   int         l           =    0;
+   int         i           =    0;
    /*---(counters)-----------------------*/
    ++(my.nstep);
    ++(my.cstep);
+   ++(my.sstep);
    /*---(fix strings)--------------------*/
    CODE_display ();
+   /*> strcpy (x_cmd, my.disp);                                                       <* 
+    *> l = strlen (x_cmd);                                                            <* 
+    *> for (i = 0; i < l; ++i) {                                                      <* 
+    *>    switch (x_cmd [i]) {                                                        <* 
+    *>    case '§'  : x_cmd [i] = '';  break;                                        <* 
+    *>    }                                                                           <* 
+    *> }                                                                              <*/
    /*---(write)--------------------------*/
    CODE_printf ("      /*---(system/execute)--------------*/\n");
-   CODE_printf ("      yUNIT_system  (%4i, %3i, \"%s\", \"%s\", g.exec);\n", my.n_line, my.cstep, my.desc, my.disp);
+   CODE_printf ("      yUNIT_system  (%4i, %3i, \"%s\", \"%s\", \"%s\", g.exec);\n", my.n_line, my.cstep, my.desc, my.disp, my.syst);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -723,6 +782,7 @@ CODE_echo          (void)
    /*---(counters)-----------------------*/
    ++(my.nstep);
    ++(my.cstep);
+   ++(my.sstep);
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(handle return values)-----------*/
@@ -745,6 +805,7 @@ CODE_exec          (void)
    /*---(counters)-----------------------*/
    ++(my.nstep);
    ++(my.cstep);
+   ++(my.sstep);
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(debugging)----------------------*/

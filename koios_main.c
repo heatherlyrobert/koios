@@ -58,6 +58,7 @@ main               (int argc, char *argv[])
       if      (my.run_type == G_RUN_CREATE)   rc = CODE_write  ();
       else if (my.run_type == G_RUN_DEBUG )   rc = CODE_write  ();
       else if (my.run_type == G_RUN_UPDATE)   rc = CONV_driver ();
+      /*---(write waves)-----------------*/
       /*---(debugging output)------------*/
       ++x_lines;
    }
@@ -70,6 +71,7 @@ main               (int argc, char *argv[])
       rc = CODE_end       ();
       rc = MAIN_append    ();
       rc = CODE_close     (my.f_code);
+      rc = CODE_close     (my.f_wave);
    } else if (my.run_type == G_RUN_UPDATE) {
       rc = CONV_end       ();
       rc = CONV_close     ();

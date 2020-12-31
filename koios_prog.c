@@ -46,6 +46,7 @@ PROG_init          (void)
    strlcpy  (my.n_scrp, "", LEN_PATH);
    strlcpy  (my.n_code, "", LEN_PATH);
    strlcpy  (my.n_main, "", LEN_PATH);
+   strlcpy  (my.n_wave, "", LEN_PATH);
    strlcpy  (my.n_conv, "", LEN_PATH);
    my.driver    = '-';
    my.run_type  = G_RUN_CREATE;
@@ -191,6 +192,7 @@ PROG_begin         (void)
    if (my.run_type == G_RUN_CREATE)  snprintf (my.n_code, LEN_PATH, "%s_unit.cs"     , my.n_base);
    if (my.run_type == G_RUN_DEBUG)   snprintf (my.n_code, LEN_PATH, "%s_unit.c"      , my.n_base);
    snprintf (my.n_main, LEN_PATH, "%s_unit.tmp"    , my.n_base);
+   snprintf (my.n_wave, LEN_PATH, "%s.wave"        , my.n_base);
    snprintf (my.n_conv, LEN_PATH, "%s.unit.new"    , my.n_base);
    my.n_line    = 0;
    my.n_comment = 0;
