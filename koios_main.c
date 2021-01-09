@@ -5,11 +5,11 @@
 int
 main               (int argc, char *argv[])
 {
-   /*---(locals)-----------+-----------+-*/
-   char        rc          = 0;
+   /*---(locals)-----------+-----+-----+-*/
+   char        rc          =    0;
    char        t           [LEN_RECD];
-   int         x_lines     = 0;
-
+   int         x_lines     =    0;
+   char        x_final     =    0;
    /*---(initialize)---------------------*/
    if (rc >= 0)  rc = yURG_logger  (argc, argv);
    if (rc >= 0)  rc = PROG_init    ();
@@ -50,15 +50,26 @@ main               (int argc, char *argv[])
    while (1) {
       /*---(read and parse)--------------*/
       rc = SCRP_read   ();
-      if (rc < 0) break;
+      if (rc == 0) {
+         DEBUG_TOPS   yLOG_note    ("end of file");
+         break;
+      }
+      if (rc < 0) {
+         DEBUG_TOPS   yLOG_value   ("X_FINAL R" , x_final);
+         --x_final;
+         continue;
+      }
       rc = SCRP_parse  ();
-      if (rc < 0) continue;
+      if (rc < 0) {
+         DEBUG_TOPS   yLOG_value   ("X_FINAL P" , x_final);
+         --x_final;
+         continue;
+      }
       DEBUG_TOPS   yLOG_note    ("writing output");
       /*---(write code)------------------*/
       if      (my.run_type == G_RUN_CREATE)   rc = CODE_write  ();
       else if (my.run_type == G_RUN_DEBUG )   rc = CODE_write  ();
       else if (my.run_type == G_RUN_UPDATE)   rc = CONV_driver ();
-      /*---(write waves)-----------------*/
       /*---(debugging output)------------*/
       ++x_lines;
    }
@@ -98,7 +109,7 @@ main               (int argc, char *argv[])
    /*---(complete)-----------------------*/
    PROG_end     ();
    /*> printf ("complete\n");                                                         <*/
-   return 0;
+   return x_final;
 }
 
 

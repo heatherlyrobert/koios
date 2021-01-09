@@ -52,6 +52,7 @@ PROG_init          (void)
    my.run_type  = G_RUN_CREATE;
    my.replace   = G_RUN_DEFAULT;
    strlcpy  (my.last     , "", LEN_LABEL);
+   yURG_stderr ();
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    return 0;

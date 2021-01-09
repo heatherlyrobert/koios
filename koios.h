@@ -12,14 +12,14 @@
 #define     P_NAMESAKE  "koios-polos (axis of heaven)"
 #define     P_HERITAGE  "titan god of intelligence, farsight, and the inquisive mind"
 #define     P_IMAGERY   "very tall, dark armor, with blue-white eyes, hair, and beard"
-#define     P_REASON    ""
+#define     P_REASON    "the inquisitive mind of koios pitted against unit testing"
 
 #define     P_ONELINE   P_NAMESAKE " " P_SUBJECT
 
 #define     P_BASENAME  ""
 #define     P_FULLPATH  ""
-#define     P_SUFFIX    ""
-#define     P_CONTENT   ""
+#define     P_SUFFIX    "unit"
+#define     P_CONTENT   "unit test script"
 
 #define     P_SYSTEM    "gnu/linux   (powerful, ubiquitous, technical, and hackable)"
 #define     P_LANGUAGE  "ansi-c      (wicked, limitless, universal, and everlasting)"
@@ -30,9 +30,9 @@
 #define     P_CREATED   "2014-03"
 
 #define     P_VERMAJOR  "1.-- production"
-#define     P_VERMINOR  "1.2- get unit testing in here to prove changes"
-#define     P_VERNUM    "1.2l"
-#define     P_VERTXT    "beautiful, and changes to help ouroboros"
+#define     P_VERMINOR  "1.3- switch to proactive issue reporting"
+#define     P_VERNUM    "1.3a"
+#define     P_VERTXT    "added yURG_error reporting for SCRP, SHARED, and REUSE"
 
 
 /*===[[ HEADER ]]=============================================================*/

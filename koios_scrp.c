@@ -379,10 +379,10 @@ SCRP_read          (void)
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
-   --rce;  if (feof (my.f_scrp)) {
+   if (feof (my.f_scrp)) {
       DEBUG_INPT   yLOG_note    ("already at end of file");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return rce;
+      return 0;
    }
    /*---(initialize)---------------------*/
    DEBUG_INPT   yLOG_note    ("initialize my.recd");
@@ -396,7 +396,7 @@ SCRP_read          (void)
       if (feof (my.f_scrp)) {
          DEBUG_INPT   yLOG_note    ("hit end of file");
          DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-         return rce;
+         return 0;
       }
       if (s_dittoing == '-') ++my.n_line;
       else  {
@@ -438,6 +438,32 @@ SCRP_read          (void)
    DEBUG_INPT   yLOG_note    ("got a good record");
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+   return 1;
+}
+
+char
+SCRP__limits            (char *a_min, char *a_max)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   /*---(defense)------------------------*/
+   --rce;  if (a_min == NULL)  return rce;
+   --rce;  if (a_max == NULL)  return rce;
+   /*---(defaults)-----------------------*/
+   *a_min = 0;
+   *a_max = 0;
+   /*---(process)------------------------*/
+   --rce;  switch (my.spec) {
+   case '1' :  *a_min = 1;  *a_max = 1;    break;
+   case 'c' :  *a_min = 1;  *a_max = 1;    break;
+   case '2' :  *a_min = 2;  *a_max = 2;    break;
+   case '3' :  *a_min = 3;  *a_max = 3;    break;
+   case 'P' :  *a_min = 4;  *a_max = 4;    break;
+   case 'p' :  *a_min = 4;  *a_max = 4;    break;
+   case 'f' :  *a_min = 6;  *a_max = 8;    break;
+   default  :  return rce;                 break;
+   }
+   /*---(complete)-----------------------*/
    return 0;
 }
 
@@ -450,8 +476,23 @@ SCRP__current      (char *a_first)
    int         i           = 0;
    char       *p;
    char       *q           = "";
+   char        x_min       =    0;
+   char        x_max       =    0;
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_enter   (__FUNCTION__);
    /*---(read fields)--------------------*/
-   if (my.spec == '1')  return 0;  /* ditto type */
+   DEBUG_INPT   yLOG_char    ("spec"      , my.spec);
+   rc = SCRP__limits (&x_min, &x_max);
+   DEBUG_INPT   yLOG_complex ("limits"    , "%4d rc, %d min, %d max", rc, x_min, x_max);
+   --rce;  if (rc < 0) {
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   if (my.spec == '1') {
+      DEBUG_INPT   yLOG_note    ("one field required and already read as verb");
+      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      return 0;  /* ditto type */
+   }
    p = a_first;
    for (i = 2; i < 20; ++i) {
       /*---(clear spacer bars)-----------*/
@@ -468,6 +509,7 @@ SCRP__current      (char *a_first)
       switch (i) {
       case  2 :   strlcpy (my.desc      , p, LEN_LONG );
                   DEBUG_INPT   yLOG_info    ("desc"      , my.desc);
+                  strltrim (my.desc, ySTR_SINGLE, LEN_LONG);
                   break;
       case  3 :   if (my.spec != 'p') {
                      strlcpy (my.meth      , p, LEN_DESC );
@@ -498,31 +540,38 @@ SCRP__current      (char *a_first)
                   break;
       }
       /*---(stop parsing summ records)---*/
-      if (i >= 2 && my.spec == '2')  break;  /* organization types  */
-      if (i >= 3 && my.spec == '3')  break;  /* organization types  */
-      if (i >= 4 && my.spec == 'P')  break;  /* load type           */
-      if (i >= 4 && my.spec == 'p')  break;  /* code/sys types      */
+      if (i >= x_max)    break;
+      /*> if (i >= 2 && my.spec == '2')  break;  /+ organization types  +/            <* 
+       *> if (i >= 3 && my.spec == '3')  break;  /+ organization types  +/            <* 
+       *> if (i >= 4 && my.spec == 'P')  break;  /+ load type           +/            <* 
+       *> if (i >= 4 && my.spec == 'p')  break;  /+ code/sys types      +/            <*/
       /*---(next record)-----------------*/
       DEBUG_INPT   yLOG_note    ("read next field");
       p = strtok (NULL  , q);
       --rce;  if (p == NULL) {
          DEBUG_INPT   yLOG_note    ("strtok came up empty");
-         DEBUG_INPT   yLOG_exit    (__FUNCTION__);
          break;
       }
       strltrim (p, ySTR_BOTH, LEN_RECD);
    } 
    /*---(stop parsing summ records)---*/
-   switch (my.spec) {
-   case '1' : if (i <  1)  rc = rce;  break;
-   case 'c' : if (i <  1)  rc = rce;  break;
-   case '2' : if (i <  2)  rc = rce;  break;
-   case '3' : if (i <  3)  rc = rce;  break;
-   case 'P' : if (i <  4)  rc = rce;  break;
-   case 'p' : if (i <  4)  rc = rce;  break;
-   case 'f' : if (i <  6)  rc = rce;  break;
+   if (i < x_min) {
+      DEBUG_INPT   yLOG_complex ("too few"   , "%d actual < %d min", i, x_min);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
    }
-   return rc;
+
+   /*> switch (my.spec) {                                                             <* 
+    *> case '1' : if (i <  1)  rc = rce;  break;                                      <* 
+    *> case 'c' : if (i <  1)  rc = rce;  break;                                      <* 
+    *> case '2' : if (i <  2)  rc = rce;  break;                                      <* 
+    *> case '3' : if (i <  3)  rc = rce;  break;                                      <* 
+    *> case 'P' : if (i <  4)  rc = rce;  break;                                      <* 
+    *> case 'p' : if (i <  4)  rc = rce;  break;                                      <* 
+    *> case 'f' : if (i <  6)  rc = rce;  break;                                      <* 
+    *> }                                                                              <*/
+   DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+   return 0;
 }
 
 char         /*--> parse out a v21 records ---------------[ leaf   [ ------ ]-*/
@@ -811,6 +860,7 @@ SCRP_parse_verb         (char *p)
    int         i           =    0;
    int         x_len       =    0;
    char        x_verb      [LEN_LABEL] = "";
+   char       *q           = NULL;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
    /*---(defaults)-----------------------*/
@@ -820,24 +870,26 @@ SCRP_parse_verb         (char *p)
    my.indx   = -1;
    /*---(defense)------------------------*/
    DEBUG_INPT   yLOG_spoint  (p);
-   --rce;  if (p == NULL) {
-      DEBUG_INPT   yLOG_snote   ("strtok came up empty");
+   --rce;  if (p == NULL || strlen (p) <= 0) {
+      yURG_error ("%s:%d:1: error: no verb found", my.n_scrp, my.n_line);
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    strlcpy  (x_verb, p, LEN_FULL);
    strltrim (x_verb, ySTR_BOTH, LEN_FULL);
+   q = strchr (x_verb, ' ');
+   if (q != NULL)  q [0] = '\0';
    x_len = strlen (x_verb);
    DEBUG_INPT   yLOG_sint    (x_len);
    --rce;  if (x_len <= 2) {
-      DEBUG_INPT   yLOG_snote   ("verb is too short");
+      yURG_error ("%s:%d:1: error: verb <%s> is too short (%d <= 2)", my.n_scrp, my.n_line, x_verb, x_len);
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_snote   (x_verb);
    /*---(filter comments)----------------*/
    --rce;  if (x_verb [0] == '#') {
-      DEBUG_INPT   yLOG_snote   ("comment not in column one");
+      yURG_error ("%s:%d:1: error: comment not in column one", my.n_scrp, my.n_line);
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
@@ -846,7 +898,8 @@ SCRP_parse_verb         (char *p)
    for (i = 0; i < MAX_VERB; ++i) {
       if (g_verbs [i].name [0] == '-')                break;
       if (g_verbs [i].name [0] != x_verb[0])          continue;
-      if (strncmp (g_verbs [i].name, x_verb, 4) != 0) continue;
+      if (strcmp (g_verbs [i].name, x_verb) != 0)     continue;
+      /*---(save values)-----------------*/
       DEBUG_INPT   yLOG_snote   ("verb found");
       strlcpy (my.verb, g_verbs [i].name, LEN_LABEL);
       my.indx    = i;
@@ -857,9 +910,11 @@ SCRP_parse_verb         (char *p)
       my.spec    = g_verbs [i].spec;
       DEBUG_INPT   yLOG_sint    (g_verbs [i].count);
       break;
+      /*---(done)------------------------*/
    }
    /*---(failure)------------------------*/
    --rce;  if (my.indx == -1) {
+      yURG_error ("%s:%d:1: error: verb <%s> not recognized/found", my.n_scrp, my.n_line, x_verb);
       DEBUG_INPT   yLOG_snote   ("verb not found");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
@@ -868,6 +923,12 @@ SCRP_parse_verb         (char *p)
    DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
    return 0;
 }
+
+char
+SCRP_parse_shared       (char *p)
+{
+}
+
 
 char
 SCRP_parse_ditto        (char *p)
@@ -902,7 +963,14 @@ SCRP_parse_ditto        (char *p)
    }
    --rce;  if (strcmp ("SHARED" , my.verb) == 0 || strcmp ("REUSE" , my.verb) == 0) {
       q = strchr (p, '-');
-      if (q == NULL) return rce;
+      if (q == NULL || strlen (q) < 3 || q [2] != '-') {
+         yURG_error ("%s:%d:1: error: %s identifier not properly formatted -?-", my.n_scrp, my.n_line, my.verb);
+         return rce;
+      }
+      if (strchr (LTRS_CHARS, q [1]) == NULL) {
+         yURG_error ("%s:%d:1: error: %s identifier (%c) not legal", my.n_scrp, my.n_line, my.verb, q [1]);
+         return rce;
+      }
       my.share = q [1];
    }
    /*---(complete)-----------------------*/
@@ -923,33 +991,37 @@ SCRP_parse_stage        (char *p)
    /*---(defaults)-----------------------*/
    strlcpy  (my.stage, "", LEN_LABEL);
    /*---(ward-off)-----------------------*/
-   --rce;  if (my.indx < 0 || strcmp ("SCRP" , g_verbs [my.indx].name) != 0) {
+   if (my.indx < 0 || strcmp ("SCRP" , my.verb) != 0) {
       DEBUG_INPT   yLOG_snote   ("only applies to scripts");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
+      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      return 0;
    }
    /*---(prepare)------------------------*/
    strlcpy  (t, p, LEN_LABEL);
    strltrim (t, ySTR_BOTH, LEN_LABEL);
+   x_len = strlen (t);
    /*---(check markers)------------------*/
    q = strchr (t, '[');
-   --rce;  if (q == NULL) {
+   if (q == NULL && x_len == 4) {
+      DEBUG_INPT   yLOG_snote   ("no brackets, ok");
+      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      return 0;
+   }
+   --rce;  if (q == NULL || q [3] != ']') {
+      yURG_error ("%s:%d:1: error: %s identifier, uses wrong brackets, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_snote   ("does not begin right");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   --rce;  if (q [3] != ']') {
-      DEBUG_INPT   yLOG_snote   ("does not end right");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
    /*---(positions)----------------------*/
-   --rce;  if (strchr ("èéêëìíîïðñòóôõö÷øùúûüýþÿ", q [1]) == NULL) {
+   --rce;  if (strchr (LTRS_GREEK "-", q [1]) == NULL) {
+      yURG_error ("%s:%d:1: error: %s identifier, not greek letter for wave, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_snote   ("does not lead with greek letter");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   --rce;  if (strchr ("0123456789"              , q [2]) == NULL) {
+   --rce;  if (strchr ("123456789-", q [2]) == NULL) {
+      yURG_error ("%s:%d:1: error: %s identifier, not number for stage, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_snote   ("does not end with number");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
@@ -1008,12 +1080,14 @@ SCRP_parse         (void)
    SCRP_clear  ();
    /*---(defense)---------------------*/
    rc = SCRP_parse_defense ();
+   DEBUG_INPT   yLOG_value   ("defense"   , rc);
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(saved comments)-----------------*/
    rc = SCRP_parse_comment ();
+   DEBUG_INPT   yLOG_value   ("comment"   , rc);
    --rce;  if (rc != 0) {
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return 0;
@@ -1024,22 +1098,29 @@ SCRP_parse         (void)
    /*---(get verb)-----------------------*/
    p = strtok (x_recd, q);
    rc = SCRP_parse_verb (p);
+   DEBUG_INPT   yLOG_value   ("verb"      , rc);
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(check for ditto)----------------*/
    rc = SCRP_parse_ditto (p);
-   if (rc < 0) {
+   DEBUG_INPT   yLOG_value   ("ditto"     , rc);
+   --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);
-      return rc;
+      return rce;
    }
    if (rc >  0) {
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return 0;
    }
    /*---(check for ditto)----------------*/
-   SCRP_parse_stage (p);
+   rc = SCRP_parse_stage (p);
+   DEBUG_INPT   yLOG_value   ("stage"     , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);
+      return rce;
+   }
    /*---(read version)-------------------*/
    p = strtok (NULL  , q);
    --rce;  if (p == NULL && my.spec != 'c') {

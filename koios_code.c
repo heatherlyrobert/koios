@@ -240,7 +240,7 @@ MAIN_end           (void)
    MAIN_printf ("   return rc;\n");
    MAIN_printf ("}\n");
    MAIN_printf ("\n\n\n");
-   MAIN_printf ("/* end-of-file.  done, finito, completare, whimper.                           */\n");
+   MAIN_printf ("/* end-of-file.  done, finito, completare, whimper [Ï´···                     */\n");
    MAIN_printf ("/*================================= end-code =================================*/\n");
    return 0;
 }
@@ -315,7 +315,7 @@ CODE_scrp_end        (void)
    }
    /*---(close script/share)-------------*/
    /*> if (s_shared != '-' || my.cscrp >  0) {                                        <*/
-   if (my.cscrp >  0) {
+   if (my.cscrp >  0 || s_shared != '-') {
       if (s_shared != '-') {
          CODE_printf ("   /*===[[ shared done ]]==========================*/\n");
          CODE_printf ("   yUNIT_erahs ('%c');\n", s_shared);
@@ -467,7 +467,7 @@ CODE_reuse         (void)
    /*---(header)-------------------------*/
    DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
    CODE_cond_end ();
-   --rce;  if (strchr ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJZLMNOPQRSTUVWXYZ0123456789", my.share) == NULL)  return rce;
+   --rce;  if (strchr (LTRS_CHARS, my.share) == NULL)  return rce;
    CODE_printf ("   /*---(shared code)-----------------------*/\n");
    CODE_printf ("   g.offset = %3i;\n", my.ccond);
    CODE_printf ("   yUNIT_shared_%c ();\n", my.share);

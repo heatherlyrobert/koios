@@ -109,7 +109,7 @@ char
 CONV_end           (void)
 {
    CONV_printf ("\n\n\n");
-   CONV_printf ("# end-of-file.  done, finito, completare, whimper.\n");
+   CONV_printf ("# end-of-file.  done, finito, completare, whimper [Ï´···\n");
    return 0;
 }
 
