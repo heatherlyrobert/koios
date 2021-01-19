@@ -31,10 +31,10 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3a"
-#define     P_VERTXT    "added yURG_error reporting for SCRP, SHARED, and REUSE"
+#define     P_VERNUM    "1.3b"
+#define     P_VERTXT    "working excellently in production, just a few fixes"
 
-
+/*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 /*===[[ HEADER ]]=============================================================*/
 
 /*   focus         : (PS) programming support

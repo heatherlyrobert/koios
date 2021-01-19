@@ -541,11 +541,12 @@ koios__unit_scrp_parse   (void)
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (), 0);
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 0);
+   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
+   yUNIT_minstr ("... check error message"            , yURG_lasterror (), "/tmp/koios.unit:1:1: error: verb only, exec requires more fields");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
-   yUNIT_minstr ("... check the record"               , my.recd       , "");
-   yUNIT_minstr ("... check verb"                     , my.verb       , "");
+   yUNIT_minstr ("... check the record"               , my.recd       , "exec    §");
+   yUNIT_minstr ("... check verb"                     , my.verb       , "exec");
    yUNIT_minstr ("... check stage"                    , my.stage      , "");
    yUNIT_minchr ("... check share"                    , my.share      , '-');
    yUNIT_minchr ("... check mark"                     , my.mark       , '-');
@@ -567,6 +568,7 @@ koios__unit_scrp_parse   (void)
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
+   yUNIT_minstr ("... check error message"            , yURG_lasterror (), "/tmp/koios.unit:1:1: error: too few fields (2) for exec, requires 6");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "exec    § read a line     §");
    yUNIT_minstr ("... check verb"                     , my.verb       , "exec");
@@ -591,6 +593,7 @@ koios__unit_scrp_parse   (void)
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
+   yUNIT_minstr ("... check error message"            , yURG_lasterror (), "/tmp/koios.unit:1:1: error: too few fields (3) for exec, requires 6");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "exec    § read a line     § SCRP_read   §");
    yUNIT_minstr ("... check verb"                     , my.verb       , "exec");
@@ -615,6 +618,7 @@ koios__unit_scrp_parse   (void)
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
+   yUNIT_minstr ("... check error message"            , yURG_lasterror (), "/tmp/koios.unit:1:1: error: too few fields (5) for exec, requires 6");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "exec    § read a line     § SCRP_read   §   § i_lesser   §");
    yUNIT_minstr ("... check verb"                     , my.verb       , "exec");

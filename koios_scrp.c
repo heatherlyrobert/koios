@@ -393,6 +393,7 @@ SCRP_read          (void)
       /*---(read next)-------------------*/
       DEBUG_INPT   yLOG_note    ("read script file");
       fgets (x_recd, LEN_RECD, my.f_scrp);
+      /*> printf ("record = %2d[%s]\n", strlen (x_recd), x_recd);                     <*/
       if (feof (my.f_scrp)) {
          DEBUG_INPT   yLOG_note    ("hit end of file");
          DEBUG_INPT   yLOG_exit    (__FUNCTION__);
@@ -420,7 +421,7 @@ SCRP_read          (void)
          continue;
       }
       DEBUG_INPT   yLOG_value   ("length"    , x_len);
-      if (x_len <= 10)  {
+      if (x_len <=  5)  {
          DEBUG_INPT   yLOG_note    ("too short, skipping");
          if (s_dittoing != '-')  SCRP_ditto__end ();
          else                    ++my.n_short;
@@ -485,6 +486,7 @@ SCRP__current      (char *a_first)
    rc = SCRP__limits (&x_min, &x_max);
    DEBUG_INPT   yLOG_complex ("limits"    , "%4d rc, %d min, %d max", rc, x_min, x_max);
    --rce;  if (rc < 0) {
+      yURG_error ("%s:%d:1: error: can not identify %s spec limits", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
@@ -496,14 +498,10 @@ SCRP__current      (char *a_first)
    p = a_first;
    for (i = 2; i < 20; ++i) {
       /*---(clear spacer bars)-----------*/
-      if (p[0] == '-') {  /* begin careful to avoid negative numbers ;)) */
-         switch (p[1]) {
-         case ' '  :   /* catches "- - - - - - -" lines */
-         case '-'  :   /* catches "-------------" lines */
-         case '\0' :   /* catches "-" placeholder lines */
-            p[0] = '\0';
-            break;
-         }
+      if (p [0] == '-') {
+         if (strncmp (p, "- - -", 5) == 0)    p [0] = '\0';
+         if (strncmp (p, "-----", 5) == 0)    p [0] = '\0';
+         if (p [1] == '\0')                   p [0] = '\0';
       }
       /*---(handle fields)---------------*/
       switch (i) {
@@ -556,6 +554,7 @@ SCRP__current      (char *a_first)
    } 
    /*---(stop parsing summ records)---*/
    if (i < x_min) {
+      yURG_error ("%s:%d:1: error: too few fields (%d) for %s, requires %d", my.n_scrp, my.n_line, i, my.verb, x_min);
       DEBUG_INPT   yLOG_complex ("too few"   , "%d actual < %d min", i, x_min);
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
@@ -752,14 +751,10 @@ SCRP_vers19        (void)
       }
       strltrim (p, ySTR_BOTH, LEN_RECD);
       /*---(clear spacer bars)-----------*/
-      if (p[0] == '-') {
-         switch (p[1]) {
-         case ' '  :   /* catches "- - - - - - -" lines */
-         case '-'  :   /* catches "-------------" lines */
-         case '\0' :   /* catches "-" placeholder lines */
-            p[0] = '\0';
-            break;
-         }
+      if (p [0] == '-') {
+         if (strncmp (p, "- - -", 5) == 0)    p [0] = '\0';
+         if (strncmp (p, "-----", 5) == 0)    p [0] = '\0';
+         if (p [1] == '\0')                   p [0] = '\0';
       }
       /*---(handle fields)---------------*/
       switch (i) {
@@ -1081,12 +1076,14 @@ SCRP_parse         (void)
    /*---(defense)---------------------*/
    rc = SCRP_parse_defense ();
    DEBUG_INPT   yLOG_value   ("defense"   , rc);
+   /*> printf ("defense %d\n", rc);                                                   <*/
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(saved comments)-----------------*/
    rc = SCRP_parse_comment ();
+   /*> printf ("comment %d\n", rc);                                                   <*/
    DEBUG_INPT   yLOG_value   ("comment"   , rc);
    --rce;  if (rc != 0) {
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
@@ -1098,6 +1095,7 @@ SCRP_parse         (void)
    /*---(get verb)-----------------------*/
    p = strtok (x_recd, q);
    rc = SCRP_parse_verb (p);
+   /*> printf ("verb %d\n", rc);                                                      <*/
    DEBUG_INPT   yLOG_value   ("verb"      , rc);
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
@@ -1124,6 +1122,7 @@ SCRP_parse         (void)
    /*---(read version)-------------------*/
    p = strtok (NULL  , q);
    --rce;  if (p == NULL && my.spec != 'c') {
+      yURG_error ("%s:%d:1: error: verb only, %s requires more fields", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_note    ("strtok came up empty");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
