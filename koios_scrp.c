@@ -948,15 +948,24 @@ SCRP_parse_ditto        (char *p)
          if (rc >= 0)  rc = 1;
       }
    } else {
-      if (strstr (p, "COND (") != NULL) {
+      q = strchr (p, '(');
+      if (q != NULL && strcmp ("COND" , g_verbs [my.indx].name) == 0) {
          DEBUG_INPT   yLOG_note    ("found a ditto condition (update)");
-         my.mark = p [6];
-      } else if (strstr (p, "COND  (") != NULL) {
-         DEBUG_INPT   yLOG_note    ("found a ditto condition (update)");
-         my.mark = p [7];
-      } else if (strcmp ("DITTO", g_verbs [my.indx].name) == 0) {
+         if (strchr (LTRS_UPPER, q[1]) == NULL) {
+            yURG_err (YURG_FATAL, "%s:%d:1: error: COND identifier (%c) not [A-Z]", my.n_scrp, my.n_line, q[1]);
+            return rce;
+         }
+         my.mark = q [1];
+      } else if (q != NULL && strcmp ("DITTO" , g_verbs [my.indx].name) == 0) {
          DEBUG_INPT   yLOG_note    ("found a ditto verb (update)");
-         my.mark = p [7];
+         if (strchr (LTRS_UPPER, q[1]) == NULL) {
+            yURG_err (YURG_FATAL, "%s:%d:1: error: DITTO identifier (%c) not [A-Z]", my.n_scrp, my.n_line, q[1]);
+            return rce;
+         }
+         my.mark = q [1];
+      } else if (q == NULL && strcmp ("DITTO" , g_verbs [my.indx].name) == 0) {
+         yURG_err (YURG_FATAL, "%s:%d:1: error: DITTO verb does not include (?) idenfifier", my.n_scrp, my.n_line);
+         return rce;
       }
    }
    --rce;  if (strcmp ("SHARED" , my.verb) == 0 || strcmp ("REUSE" , my.verb) == 0) {

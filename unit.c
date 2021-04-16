@@ -1556,7 +1556,7 @@ koios__unit_conv_cond    (void)
    CONV_cycle ();
    yUNIT_minval ("call condition"                     , CONV_cond   (), 0);
    yUNIT_minstr ("... check (0) empty"                , yURG_peek (my.n_conv, 0), "");
-   yUNIT_minstr ("... check (1) script line"          , yURG_peek (my.n_conv, 1), "   COND (B)   verify successful value                                            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((aa.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr ("... check (1) script line"          , yURG_peek (my.n_conv, 1), "   COND  (B)  verify successful value                                            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((aa.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_conv) , 2);
    yUNIT_mindnoc ();
 

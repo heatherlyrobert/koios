@@ -88,11 +88,15 @@ main               (int argc, char *argv[])
       rc = CONV_close     ();
    }
    if (my.replace == G_RUN_REPLACE) {
-      sprintf (t, "cp -f %s %s.old", my.n_scrp, my.n_scrp);
-      system  (t);
-      printf  ("replacing script with update, saved original in .old\n");
-      sprintf (t, "mv -f %s %s"   , my.n_conv, my.n_scrp);
-      system  (t);
+      if (x_final == 0) {
+         sprintf (t, "cp -f %s %s.old", my.n_scrp, my.n_scrp);
+         system  (t);
+         printf  ("replacing script with update, saved original in .old\n");
+         sprintf (t, "mv -f %s %s"   , my.n_conv, my.n_scrp);
+         system  (t);
+      } else {
+         printf  ("%d troubles found, script left in original status\n", -x_final);
+      }
    }
    /*---(summary)------------------------*/
    /*> printf ("\n");                                                                                                      <* 

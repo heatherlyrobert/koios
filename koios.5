@@ -1,9 +1,9 @@
-.TH koios 5 2016-May "linux" "heatherly custom tools manual"
+.TH koios 5 2016-May "linux" "structure of config, files, and streams"
 
 .SH NAME
 koios \- c language unit testing meta-language and parser
 
-.SH PATRON (ñöðöù, roughly pronounced key-oh-s)
+.SH PATRON (roughly pronounced key-oh-s)
 .B koios-polos
 (axis of heaven), titan of intelligence and farsight
 
@@ -11,74 +11,203 @@ koios \- c language unit testing meta-language and parser
 northern star around which all the other consellations revolve
 
 .SH SUMMARY
-koios is a primarily a meta-language to simplify and standardize c language
-unit testing which is then parsed into c code and finally executables to
-drive the actual unit tests.
+koios is a meta-language and related parser to simplify, standardize, and
+make executable unit tests for the c language.  it is integrated with yUNIT,
+yVAR, and oroborus (on a system-wide basis).
+
+.SH DOCUMENTATION FILES
+.nf  
+koios (1)          command-line initiation, use, and options
+.B koios (5)··········structure of config, files, and streams
+koios (7)          decision rationale, scope, and objectives
+
+.SH TABLE OF CONTENTS
+.nf  
+a) example         simple example of file contents
+b) overview        general overview of unit test source
+c) files           preview of files used and produced
+d) units           guidelines for unit files
+e) script          usage and layout of script-level verbs
+f) condition       usage and layout of condition-level verbs
+g) step            usage and layout of step-level verbs
+h) specialty       usage and layout of specialty step verbs
+i) oroborus        linkage to the oroborus sequencing system
+
+.SH A) EXAMPLE
+the following is a simplisic, but workable unit testing example.
+the indentation of the first (or any) field is not required, but helps with
+human comprehension and maintenance.  also, spacing and lining up fields is
+also unnecessary, but clarifying ;)
+
+below, the 
+.B §
+symbol is a placeholder for the ascii-standard 0x1F column separator.
+0x1F must be used in a real file.
+
+also, the
+.B ´´´>
+symbol means that more file contents exist to the right, but
+are not shown in this example extract.
+
+.B begin åexample.unitæ ---------------------------------
+
+SCRP     § verify creation and destruction of object
+
+  COND   § check initial state
+    get  § check object count     § OBJ_count     §      ´´´>
+
+  COND   § create first object    
+    exec § call creation          § OBJ_create    §  32  ´´´>
+    get  § check object count     § OBJ_count     §      ´´´>
+
+  COND   § create second object   
+    exec § call creation          § OBJ_create    §  60  ´´´>
+    get  § check object count     § OBJ_count     §      ´´´>
+
+  COND   § delete first object    
+    exec § call destruction       § OBJ_delete    §  32  ´´´>
+    get  § check object count     § OBJ_count     §      ´´´>
+
+  COND   § purge all object       
+    exec § call purge             § OBJ_purge     §      ´´´>
+    get  § check object count     § OBJ_count     §      ´´´>
+
+.B end åexample.unitæ -----------------------------------
+
+.SH B) OVERVIEW
+unit testing source files are kept in pure,
+.B 8-bit ascii
+text and a standard
+.B column-delimited (0x1F)
+format for very easy human digestion and maintenance using a programmer's
+favorite editor.
+
+for the sake of my environment and my standard make framework, each unit test
+source file uses the
+.B .unit
+extension and begins with the common program prefix used by the related c
+source files.
+
+generally, but not necessarily, there is one unit test description file for
+each source code file in the program.  some source may not require testing
+(LOL) or may be broken into multiple testing files for easier maintenance.
+additional files may be used for complex, integrated testing.
+
+each line is complete in-and-of-itself, but they are executed sequentially
+as they appear in the file.  preceding lines often establish conditions or
+context for those that follow, but they are not explicitly linked.
+
+vertically, unit tests have a
+.B 4-level heirarchy
+   1) unit         the entire file
+   2) script       begin at
+.B SCRP
+and end before next
+.B SCRP
+   3) condition    begin at 
+.B COND
+and end before next
+.B COND
+   4) step         almost any other kind of line (almost)
+
+horizontally, unit test lines roughly use a
+.B 6-column layout
+   1) verb         koios action requested
+   2) description  human useful and shown on output
+   3) function     actual c source function name
+   4) arguments    arguments for that c function
+   5) test         explained later and in yVAR
+   6) expected     literal results of step/function
+
+while not all lines follow this exact layout, columns are blocked out and spaced
+to provide easy readability.  after intense editing, koios is fully capable
+of re-formatting to keep a programmer from having to align everything manually.
+
+.SH C) FILES
+other than compilier artifacts, there are only four useful unit testing
+files to consider.  there are no configuration files.
+
+.B input files (human maintained) ----------------------------
+
+.B åBASENAMEæ.unit
+, the 8-bit, human-readable ascii text file that contains the unit testing
+scripts.  this is editable in any editor and can be reformatted with
+.B koios --convert åBASENAMEæ
+
+.B master.unit
+, an 8-bit, human-readable ascii text file with global code and execution
+order descriptions useful to oroborus the unit test sequencer.  this is
+not always useful.
+
+.B outputs (do not edit) -------------------------------------
+
+.B åBASENAMEæ_unit.c
+, produced by
+.B koios --update åBASENAMEæ
+containing the c source code to be linked and compilied into the final unit
+test.  this is temporarily useful and can normally be deleted.
+
+.B åBASENAMEæ_unit
+, also produced by
+.B koios --update åBASENAMEæ
+and is the compiled unit test which is linked to yUNIT and yVAR to display
+standard unit testing results.
+
+.SH UNITS
+as described above, units are the contents of an entire
+.B .unit
+file.  during development, unit tests are typically executed script-by-script.
+but, during production and updates, full units are often run.
+
+there are two required, unit specific verbs...
+   PREP       before any scripts, allows header inclusion
+   incl       directly after PREP, includes one header each
+
+.B begin åexample.unitæ ---------------------------------
+
+PREP     § include the program headers    § 
+   incl  § include public header          § example.h        §
+   incl  § include private header         § example_priv.h   §
+
+.B end åexample.unitæ -----------------------------------
+
+no headers are automatically included, same as in c source files.  this is
+the koios equivalent of
+.B #include ¶example.h¶.
+
+it is critical to get the
+.B .unit
+files (including master.unit, as needed) added to the version control system
+as they are the equivelent of source code.
+
+.B blank lines
+have no meaning, but help with human comprehension.  these lines
+are standardized during re-formatting and conversion.
+
+.B #>
+prefixed lines are kept as
+.B comments
+but moved to the top-of-file during re-formatting and conversion.
+
+.SH SCRIPTS
+scripts are just a grouping of conditions and execution lines into a manageable
+and related set.  they are mostly a complexity management tool.
+
+BUT, when using oroborus, scripts can be sequenced in complex ways to ensure
+the correct testing order in large programs.
+
+there are three script specific verbs...
+   SCRP       starts the beginning of a new script
+   SECT       allows scripts to be visually grouped in the output
+   SHARED     unit-shared code that can be used in various scripts
 
 
 
-
-.SH SYNOPSIS
-
-.B koios [BASENAME]
-.nf
-which is the primary production version
-
-.B koios_debug [URGENTS] [BASENAME]
-.nf
-which can perform all production actions, but with debugging and tracing
-
-.SH OPTIONS
-koios is simple, efficient, and direct, therefore it has a very limited
-option set.
-
-.B <basename>
-.RS 8
-base unit test file name with no ".unit" extention.
-.RE
-
-.B --convert
-.RS 8
-updates the unit test file format to the latest standard.
-.RE
-
-.B --unittest
-.RS 8
-creates the unit testing c source file for later compilation.
-.RE
-
-
-koios only accepts a single option, BASENAME, which is the program to be unit
-tested's executable name.  technically, it can be any name, but using it this
-way is cleanest and easiest to remember.
-
-.SH FILES
-.B [BASENAME].unit
-, a 7bit safe, human-readable ascii text file that contains the unit testing
-scripts.  its structure is described below in the STRUCTURE section.
-
-.B [BASENAME]_unit.c
-, a 7bit safe, human-readable ascii text file contained the resulting
-c source code to be linked to your program, compiled, and executed as
-described in the COMPILING and EXECUTION sections.
 
 .SH STRUCTURE
 
-.B file level
-   -- contains all unit tests required to verify a program or module
-   -- technically, there can be more that one unit test file, if required
-   -- complicated programs may have one file per module or source file
-   -- best case is to keep the scripts in a single, version controlled file
-
 .B preparation (see PREPARATION)
    -- very first in the file and simply allows local header inclusion
-
-.B general file formatting
-   -- only pure ascii text (7bit safe)
-   -- one script record per line, terminated with a newline
-   -- empty/blank lines are allowed anywhere to help readability
-   -- comments start with a hash (#) in the first character
-   -- all other lines will be interpreted as script records
 
 .B fields
    -- each unit testing record is broken into 3 to 7 fields

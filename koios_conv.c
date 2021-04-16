@@ -222,7 +222,7 @@ CONV_cond          (void)
    if (my.mark != '-')   sprintf (t, "(%c)", my.mark);
    if (s_shared == '-')  sprintf (s, "((%02d.%03d))", my.nscrp, my.ncond);
    else                  sprintf (s, "((%c%c.%03d))", s_shared, s_shared, my.ncond);
-   CONV_printf ("\n   COND %-3.3s   %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   %-10.10s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", t, my.desc, s);
+   CONV_printf ("\n   COND  %-3.3s  %-65.65s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   %-10.10s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \n", t, my.desc, s);
    return 0;
 }
 
