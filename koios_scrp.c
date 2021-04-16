@@ -486,7 +486,7 @@ SCRP__current      (char *a_first)
    rc = SCRP__limits (&x_min, &x_max);
    DEBUG_INPT   yLOG_complex ("limits"    , "%4d rc, %d min, %d max", rc, x_min, x_max);
    --rce;  if (rc < 0) {
-      yURG_error ("%s:%d:1: error: can not identify %s spec limits", my.n_scrp, my.n_line, my.verb);
+      yURG_err (YURG_FATAL, "%s:%d:1: error: can not identify %s spec limits", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
@@ -554,7 +554,7 @@ SCRP__current      (char *a_first)
    } 
    /*---(stop parsing summ records)---*/
    if (i < x_min) {
-      yURG_error ("%s:%d:1: error: too few fields (%d) for %s, requires %d", my.n_scrp, my.n_line, i, my.verb, x_min);
+      yURG_err (YURG_FATAL, "%s:%d:1: error: too few fields (%d) for %s, requires %d", my.n_scrp, my.n_line, i, my.verb, x_min);
       DEBUG_INPT   yLOG_complex ("too few"   , "%d actual < %d min", i, x_min);
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
@@ -866,7 +866,7 @@ SCRP_parse_verb         (char *p)
    /*---(defense)------------------------*/
    DEBUG_INPT   yLOG_spoint  (p);
    --rce;  if (p == NULL || strlen (p) <= 0) {
-      yURG_error ("%s:%d:1: error: no verb found", my.n_scrp, my.n_line);
+      yURG_err (YURG_FATAL, "%s:%d:1: error: no verb found", my.n_scrp, my.n_line);
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
@@ -877,14 +877,14 @@ SCRP_parse_verb         (char *p)
    x_len = strlen (x_verb);
    DEBUG_INPT   yLOG_sint    (x_len);
    --rce;  if (x_len <= 2) {
-      yURG_error ("%s:%d:1: error: verb <%s> is too short (%d <= 2)", my.n_scrp, my.n_line, x_verb, x_len);
+      yURG_err (YURG_FATAL, "%s:%d:1: error: verb <%s> is too short (%d <= 2)", my.n_scrp, my.n_line, x_verb, x_len);
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_snote   (x_verb);
    /*---(filter comments)----------------*/
    --rce;  if (x_verb [0] == '#') {
-      yURG_error ("%s:%d:1: error: comment not in column one", my.n_scrp, my.n_line);
+      yURG_err (YURG_FATAL, "%s:%d:1: error: comment not in column one", my.n_scrp, my.n_line);
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
@@ -909,7 +909,7 @@ SCRP_parse_verb         (char *p)
    }
    /*---(failure)------------------------*/
    --rce;  if (my.indx == -1) {
-      yURG_error ("%s:%d:1: error: verb <%s> not recognized/found", my.n_scrp, my.n_line, x_verb);
+      yURG_err (YURG_FATAL, "%s:%d:1: error: verb <%s> not recognized/found", my.n_scrp, my.n_line, x_verb);
       DEBUG_INPT   yLOG_snote   ("verb not found");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
@@ -948,9 +948,12 @@ SCRP_parse_ditto        (char *p)
          if (rc >= 0)  rc = 1;
       }
    } else {
-      if (strcmp ("COND", g_verbs [my.indx].name) == 0 && p [5] == '(' && p [7] == ')') {
+      if (strstr (p, "COND (") != NULL) {
          DEBUG_INPT   yLOG_note    ("found a ditto condition (update)");
          my.mark = p [6];
+      } else if (strstr (p, "COND  (") != NULL) {
+         DEBUG_INPT   yLOG_note    ("found a ditto condition (update)");
+         my.mark = p [7];
       } else if (strcmp ("DITTO", g_verbs [my.indx].name) == 0) {
          DEBUG_INPT   yLOG_note    ("found a ditto verb (update)");
          my.mark = p [7];
@@ -959,11 +962,11 @@ SCRP_parse_ditto        (char *p)
    --rce;  if (strcmp ("SHARED" , my.verb) == 0 || strcmp ("REUSE" , my.verb) == 0) {
       q = strchr (p, '-');
       if (q == NULL || strlen (q) < 3 || q [2] != '-') {
-         yURG_error ("%s:%d:1: error: %s identifier not properly formatted -?-", my.n_scrp, my.n_line, my.verb);
+         yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier not properly formatted -?-", my.n_scrp, my.n_line, my.verb);
          return rce;
       }
       if (strchr (LTRS_CHARS, q [1]) == NULL) {
-         yURG_error ("%s:%d:1: error: %s identifier (%c) not legal", my.n_scrp, my.n_line, my.verb, q [1]);
+         yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier (%c) not legal", my.n_scrp, my.n_line, my.verb, q [1]);
          return rce;
       }
       my.share = q [1];
@@ -1003,20 +1006,20 @@ SCRP_parse_stage        (char *p)
       return 0;
    }
    --rce;  if (q == NULL || q [3] != ']') {
-      yURG_error ("%s:%d:1: error: %s identifier, uses wrong brackets, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier, uses wrong brackets, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_snote   ("does not begin right");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(positions)----------------------*/
    --rce;  if (strchr (LTRS_GREEK "-", q [1]) == NULL) {
-      yURG_error ("%s:%d:1: error: %s identifier, not greek letter for wave, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier, not greek letter for wave, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_snote   ("does not lead with greek letter");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    --rce;  if (strchr ("123456789-", q [2]) == NULL) {
-      yURG_error ("%s:%d:1: error: %s identifier, not number for stage, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier, not number for stage, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_snote   ("does not end with number");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
@@ -1122,7 +1125,7 @@ SCRP_parse         (void)
    /*---(read version)-------------------*/
    p = strtok (NULL  , q);
    --rce;  if (p == NULL && my.spec != 'c') {
-      yURG_error ("%s:%d:1: error: verb only, %s requires more fields", my.n_scrp, my.n_line, my.verb);
+      yURG_err (YURG_FATAL, "%s:%d:1: error: verb only, %s requires more fields", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_note    ("strtok came up empty");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;

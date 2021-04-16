@@ -52,7 +52,7 @@ PROG_init          (void)
    my.run_type  = G_RUN_CREATE;
    my.replace   = G_RUN_DEFAULT;
    strlcpy  (my.last     , "", LEN_LABEL);
-   yURG_stderr ();
+   yURG_err_std ();
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -76,7 +76,7 @@ PROG_file               (char *a_name)
    /*---(defense)------------------------*/
    DEBUG_ARGS  yLOG_point   ("a_name"    , a_name);
    --rce;  if (a_name == NULL) {
-      yURG_error ("FATAL, <name>, name can not be null");
+      yURG_err ('f', "<name>, name can not be null");
       DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
       return rce;
    }
@@ -85,14 +85,14 @@ PROG_file               (char *a_name)
    l = strlen (a_name);
    DEBUG_ARGS  yLOG_value   ("l"         , l);
    --rce;  if (l <= 0) {
-      yURG_error ("FATAL, <name>, name can not be blank/empty");
+      yURG_err ('f', "<name>, name can not be blank/empty");
       DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
       return rce;
    }
    /*---(check characters)---------------*/
    --rce;  for (i = 0; i < l; ++i) {
       if (strchr (x_valid, a_name [i]) != NULL)  continue;
-      yURG_error ("FATAL, <name>, name can not have a <%c> at character %d", a_name [i], i);
+      yURG_err ('f', "<name>, name can not have a <%c> at character %d", a_name [i], i);
       DEBUG_ARGS  yLOG_char  ("bad char"  , a_name [i]);
       DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
       return rce;

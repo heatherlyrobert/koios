@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3b"
-#define     P_VERTXT    "working excellently in production, just a few fixes"
+#define     P_VERNUM    "1.3c"
+#define     P_VERTXT    "repaired after yURG updates to yURG_err and yURG_peek"
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 /*===[[ HEADER ]]=============================================================*/
