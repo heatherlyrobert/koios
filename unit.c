@@ -141,6 +141,171 @@ koios__unit_prog_args    (void)
    return 0;
 }
 
+char
+koios__unit_prog_shared  (void)
+{
+   yUNIT_minscrp ("SCRP__shared");
+   yURG_err_none ();  /* not to stderr/terminal */
+
+   yUNIT_mincond ("prepare clean start");
+   system ("rm -f /tmp/koios.unit 2> /dev/null");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check defaults");
+   yUNIT_minval ("... run clear"                      , SCRP__shared_purge ()         , 0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check master indexing");
+   yUNIT_minval ("... master min"                     , SCRP__shared_index ('m', 'A') ,    0);
+   yUNIT_minval ("... master middle"                  , SCRP__shared_index ('m', 'J') ,    9);
+   yUNIT_minval ("... master max"                     , SCRP__shared_index ('m', 'Z') ,   25);
+   yUNIT_minval ("... master too small"               , SCRP__shared_index ('m',  0 ) , -999);
+   yUNIT_minval ("... master using reuses"            , SCRP__shared_index ('m', 'b') , -999);
+   yUNIT_minval ("... master using dittos"            , SCRP__shared_index ('m', '4') , -999);
+   yUNIT_minval ("... master using greek"             , SCRP__shared_index ('m', 'ë') , -999);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check reuses indexing");
+   yUNIT_minval ("... reuses min"                     , SCRP__shared_index ('r', 'a') ,    0);
+   yUNIT_minval ("... reuses middle"                  , SCRP__shared_index ('r', 'm') ,   12);
+   yUNIT_minval ("... reuses max"                     , SCRP__shared_index ('r', 'z') ,   25);
+   yUNIT_minval ("... reuses too small"               , SCRP__shared_index ('r',  0 ) , -999);
+   yUNIT_minval ("... reuses using master"            , SCRP__shared_index ('r', 'B') , -999);
+   yUNIT_minval ("... reuses using dittos"            , SCRP__shared_index ('r', '4') , -999);
+   yUNIT_minval ("... reuses using greek"             , SCRP__shared_index ('r', 'ë') , -999);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check dittos indexing");
+   yUNIT_minval ("... dittos min"                     , SCRP__shared_index ('d', '0') ,    0);
+   yUNIT_minval ("... dittos middle"                  , SCRP__shared_index ('d', '4') ,    4);
+   yUNIT_minval ("... dittos max"                     , SCRP__shared_index ('d', '9') ,    9);
+   yUNIT_minval ("... dittos too small"               , SCRP__shared_index ('d',  0 ) , -999);
+   yUNIT_minval ("... dittos using master"            , SCRP__shared_index ('d', 'B') , -999);
+   yUNIT_minval ("... dittos using reuses"            , SCRP__shared_index ('d', 'j') , -999);
+   yUNIT_minval ("... dittos using greek"             , SCRP__shared_index ('d', 'ë') , -999);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check indexing with bad types");
+   yUNIT_minval ("... check null"                     , SCRP__shared_index ( 0 , '0') , -999);
+   yUNIT_minval ("... check symbol"                   , SCRP__shared_index ('#', '0') , -999);
+   yUNIT_minval ("... check greek"                    , SCRP__shared_index ('è', '0') , -999);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("get masters before setting");
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+   yUNIT_minval ("... get master min"                 , SCRP__shared_get   ('m', 'A') , -999);
+   yUNIT_minval ("... get master middle"              , SCRP__shared_get   ('m', 'J') , -999);
+   yUNIT_minval ("... get master max"                 , SCRP__shared_get   ('m', 'Z') , -999);
+   yUNIT_minval ("... get master null"                , SCRP__shared_get   ('m',  0 ) , -999);
+   yUNIT_minval ("... get master reuses"              , SCRP__shared_get   ('m', 'b') , -999);
+   yUNIT_minval ("... get master dittos"              , SCRP__shared_get   ('m', '4') , -999);
+   yUNIT_minval ("... get master greek"               , SCRP__shared_get   ('m', 'ë') , -999);
+   yUNIT_minval ("... get master symbol"              , SCRP__shared_get   ('m', '-') , -999);
+
+   yUNIT_mincond ("set masters");
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+   my.n_line = 15;
+   yUNIT_minval ("... set master min"                 , SCRP__shared_set   ('m', 'A') ,    0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A-------------------------   --------------------------   ----------");
+   my.n_line = 30;
+   yUNIT_minval ("... set master middle"              , SCRP__shared_set   ('m', 'J') ,    0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J----------------   --------------------------   ----------");
+   my.n_line = 45;
+   yUNIT_minval ("... set master max"                 , SCRP__shared_set   ('m', 'Z') ,    0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   --------------------------   ----------");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("get masters after setting");
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   --------------------------   ----------");
+   yUNIT_minval ("... get master min"                 , SCRP__shared_get   ('m', 'A') ,   15);
+   yUNIT_minval ("... get master middle"              , SCRP__shared_get   ('m', 'J') ,   30);
+   yUNIT_minval ("... get master max"                 , SCRP__shared_get   ('m', 'Z') ,   45);
+   yUNIT_minval ("... get master null"                , SCRP__shared_get   ('m',  0 ) , -999);
+   yUNIT_minval ("... get master reuses"              , SCRP__shared_get   ('m', 'b') , -999);
+   yUNIT_minval ("... get master dittos"              , SCRP__shared_get   ('m', '4') , -999);
+   yUNIT_minval ("... get master greek"               , SCRP__shared_get   ('m', 'ë') , -999);
+   yUNIT_minval ("... get master symbol"              , SCRP__shared_get   ('m', '-') , -999);
+
+   yUNIT_mincond ("get reuses before setting");
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   --------------------------   ----------");
+   yUNIT_minval ("... get reuses min"                 , SCRP__shared_get   ('r', 'a') , -999);
+   yUNIT_minval ("... get reuses middle"              , SCRP__shared_get   ('r', 'm') , -999);
+   yUNIT_minval ("... get reuses max"                 , SCRP__shared_get   ('r', 'z') , -999);
+   yUNIT_minval ("... get reuses null"                , SCRP__shared_get   ('r',  0 ) , -999);
+   yUNIT_minval ("... get reuses master"              , SCRP__shared_get   ('r', 'B') , -999);
+   yUNIT_minval ("... get reuses dittos"              , SCRP__shared_get   ('r', '4') , -999);
+   yUNIT_minval ("... get reuses greek"               , SCRP__shared_get   ('r', 'ë') , -999);
+   yUNIT_minval ("... get reuses symbol"              , SCRP__shared_get   ('r', '-') , -999);
+
+   yUNIT_mincond ("set reuses");
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   --------------------------   ----------");
+   my.n_line = 60;
+   yUNIT_minval ("... set reuses min"                 , SCRP__shared_set   ('r', 'a') ,    0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-------------------------   ----------");
+   my.n_line = 75;
+   yUNIT_minval ("... set reuses middle"              , SCRP__shared_set   ('r', 'm') ,    0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m-------------   ----------");
+   my.n_line = 90;
+   yUNIT_minval ("... set reuses max"                 , SCRP__shared_set   ('r', 'z') ,    0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("get reuses after setting");
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
+   yUNIT_minval ("... get reuses min"                 , SCRP__shared_get   ('r', 'a') ,   60);
+   yUNIT_minval ("... get reuses middle"              , SCRP__shared_get   ('r', 'm') ,   75);
+   yUNIT_minval ("... get reuses max"                 , SCRP__shared_get   ('r', 'z') ,   90);
+   yUNIT_minval ("... get reuses null"                , SCRP__shared_get   ('r',  0 ) , -999);
+   yUNIT_minval ("... get reuses master"              , SCRP__shared_get   ('r', 'B') , -999);
+   yUNIT_minval ("... get reuses dittos"              , SCRP__shared_get   ('r', '4') , -999);
+   yUNIT_minval ("... get reuses greek"               , SCRP__shared_get   ('r', 'ë') , -999);
+   yUNIT_minval ("... get reuses symbol"              , SCRP__shared_get   ('r', '-') , -999);
+
+   yUNIT_mincond ("get dittos before setting");
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
+   yUNIT_minval ("... get dittos min"                 , SCRP__shared_get   ('d', 'a') , -999);
+   yUNIT_minval ("... get dittos middle"              , SCRP__shared_get   ('d', 'm') , -999);
+   yUNIT_minval ("... get dittos max"                 , SCRP__shared_get   ('d', 'z') , -999);
+   yUNIT_minval ("... get dittos null"                , SCRP__shared_get   ('d',  0 ) , -999);
+   yUNIT_minval ("... get dittos master"              , SCRP__shared_get   ('d', 'B') , -999);
+   yUNIT_minval ("... get dittos reuses"              , SCRP__shared_get   ('d', 'j') , -999);
+   yUNIT_minval ("... get dittos greek"               , SCRP__shared_get   ('d', 'ë') , -999);
+   yUNIT_minval ("... get dittos symbol"              , SCRP__shared_get   ('d', '-') , -999);
+
+   yUNIT_mincond ("set dittos");
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
+   my.n_line = 92;
+   yUNIT_minval ("... set dittos min"                 , SCRP__shared_set   ('d', '0') ,    0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---------");
+   my.n_line = 94;
+   yUNIT_minval ("... set dittos middle"              , SCRP__shared_set   ('d', '4') ,    0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---4-----");
+   my.n_line = 98;
+   yUNIT_minval ("... set dittos max"                 , SCRP__shared_set   ('d', '9') ,    0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---4----9");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("get dittos after setting");
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---4----9");
+   yUNIT_minval ("... get dittos min"                 , SCRP__shared_get   ('d', '0') ,   92);
+   yUNIT_minval ("... get dittos middle"              , SCRP__shared_get   ('d', '4') ,   94);
+   yUNIT_minval ("... get dittos max"                 , SCRP__shared_get   ('d', '9') ,   98);
+   yUNIT_minval ("... get dittos null"                , SCRP__shared_get   ('d',  0 ) , -999);
+   yUNIT_minval ("... get dittos master"              , SCRP__shared_get   ('d', 'B') , -999);
+   yUNIT_minval ("... get dittos reuses"              , SCRP__shared_get   ('d', 'j') , -999);
+   yUNIT_minval ("... get dittos greek"               , SCRP__shared_get   ('d', 'ë') , -999);
+   yUNIT_minval ("... get dittos symbol"              , SCRP__shared_get   ('d', '-') , -999);
+
+   yUNIT_mincond ("check defaults");
+   yUNIT_minval ("... run clear"                      , SCRP__shared_purge ()         , 0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+   yUNIT_mindnoc ();
+
+   yUNIT_minprcs ();
+   return 0;
+}
+
 
 
 /*====================------------------------------------====================*/
@@ -3739,6 +3904,7 @@ main                    (void)
    /*---(program wide)-------------------*/
    koios__unit_prog_file    ();
    koios__unit_prog_args    ();
+   koios__unit_prog_shared  ();
    /*---(script input)-------------------*/
    koios__unit_scrp_files   ();
    koios__unit_scrp_read    ();
@@ -3768,6 +3934,7 @@ main                    (void)
    koios__unit_live_step    ();
    koios__unit_live_full    ();
    /*---(done)---------------------------*/
+   system ("rm -f /tmp/koios.unit 2> /dev/null");
    yUNIT_mintinu ();
    return 0;
 }

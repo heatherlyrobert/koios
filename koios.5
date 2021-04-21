@@ -13,7 +13,7 @@ northern star around which all the other consellations revolve
 .SH SUMMARY
 koios is a meta-language and related parser to simplify, standardize, and
 make executable unit tests for the c language.  it is integrated with yUNIT,
-yVAR, and oroborus (on a system-wide basis).
+yVAR, and ouroborus (on a system-wide basis).
 
 .SH DOCUMENTATION FILES
 .nf  
@@ -27,11 +27,11 @@ a) example         simple example of file contents
 b) overview        general overview of unit test source
 c) files           preview of files used and produced
 d) units           guidelines for unit files
-e) script          usage and layout of script-level verbs
-f) condition       usage and layout of condition-level verbs
-g) step            usage and layout of step-level verbs
+e) scripts         usage and layout of script-level verbs
+f) conditions      usage and layout of condition-level verbs
+g) steps           usage and layout of step-level verbs
 h) specialty       usage and layout of specialty step verbs
-i) oroborus        linkage to the oroborus sequencing system
+i) ouroborus       linkage to the ouroborus sequencing system
 
 .SH A) EXAMPLE
 the following is a simplisic, but workable unit testing example.
@@ -112,16 +112,25 @@ and end before next
 
 horizontally, unit test lines roughly use a
 .B 6-column layout
-   1) verb         koios action requested
-   2) description  human useful and shown on output
-   3) function     actual c source function name
-   4) arguments    arguments for that c function
-   5) test         explained later and in yVAR
-   6) expected     literal results of step/function
+   1) verb         koios action requested          ( 12 char)
+   2) description  human useful, shown on output   ( 35 char)
+   3) function     actual c source function name   ( 26 char)
+   4) arguments    arguments for that c function   (100 char)
+   5) test         explained later and in yVAR     ( 10 char)
+   6) expected     expected results of step        (100 char)
 
 while not all lines follow this exact layout, columns are blocked out and spaced
 to provide easy readability.  after intense editing, koios is fully capable
 of re-formatting to keep a programmer from having to align everything manually.
+
+because columns are delimited, they may be shorter or longer than the maximums
+shown above.  they are also trimmed of leading and trailing spaces when read.
+
+there are also two optional fields for step-level lines that allow the program
+to explicitly capture a function return value.  while this is not common for
+me, it is extremely useful depending on function structure.
+   7) type         return value type               (  1 char)
+   8) variable     local variable to accept value  ( 20 char)
 
 .SH C) FILES
 other than compilier artifacts, there are only four useful unit testing
@@ -136,7 +145,7 @@ scripts.  this is editable in any editor and can be reformatted with
 
 .B master.unit
 , an 8-bit, human-readable ascii text file with global code and execution
-order descriptions useful to oroborus the unit test sequencer.  this is
+order descriptions useful to ouroborus the unit test sequencer.  this is
 not always useful.
 
 .B outputs (do not edit) -------------------------------------
@@ -145,7 +154,7 @@ not always useful.
 , produced by
 .B koios --update ÂBASENAMEÊ
 containing the c source code to be linked and compilied into the final unit
-test.  this is temporarily useful and can normally be deleted.
+test.  this is temporarily useful for debugging and can normally be deleted.
 
 .B ÂBASENAMEÊ_unit
 , also produced by
@@ -153,7 +162,7 @@ test.  this is temporarily useful and can normally be deleted.
 and is the compiled unit test which is linked to yUNIT and yVAR to display
 standard unit testing results.
 
-.SH UNITS
+.SH D) UNITS
 as described above, units are the contents of an entire
 .B .unit
 file.  during development, unit tests are typically executed script-by-script.
@@ -189,17 +198,179 @@ prefixed lines are kept as
 .B comments
 but moved to the top-of-file during re-formatting and conversion.
 
-.SH SCRIPTS
+.SH E) SCRIPTS
 scripts are just a grouping of conditions and execution lines into a manageable
-and related set.  they are mostly a complexity management tool.
+and related set.  they are mostly a complexity management tool.  all conditions
+and steps MUST be inside a script.
 
-BUT, when using oroborus, scripts can be sequenced in complex ways to ensure
-the correct testing order in large programs.
+BUT, when using ouroborus, scripts can be sequenced in complex ways to ensure
+the correct testing order in large programs.  see OUROBOROS below.
 
 there are three script specific verbs...
-   SCRP       starts the beginning of a new script
+   SCRP       starts the beginning of a new script (REQUIRED)
    SECT       allows scripts to be visually grouped in the output
    SHARED     unit-shared code that can be used in various scripts
+
+.B SCRP     ß overall testing description  ß func1, func2, ...  ß
+
+the SCRP verb begins a new script, which is automatically numbered from
+01 to 99.  every line after the SCRP line is within this script until the
+next SCRP line or the end-of-file.
+
+SCRP has two other fields, description and a list of the primary functions
+tested.  neither of the other two fields effects testing actions and they
+are not checked in any way.  they are just repeated on the testing output.
+
+.B SECT     ß comment on group of scrps    ß
+
+the SECT verb groups all SCRPs after it until the next SECT or end-of-file.
+this verb also ends the SCRP before so must appear on its own.
+
+SECT only has one field, a title, which explains why the scripts are being
+grouped.
+
+.B SHARED -D- ß description of conditions    ß
+
+the SHARED verb is similar to a SCRP, in that it groups conditions and steps
+into a larger unit.  but, SHARED conditions are never executed alone, they
+are reused inside multiple scripts later in the file.
+
+the identifier letter surrounded by '-' (hyphens) is the way they are reused
+later.  in the example above, this is shared tests D.  shared tests are only
+available in the unit they appear and must appear before they are reused.  see
+REUSE in the CONDITIONS section below.
+
+.SH F) CONDITIONS
+conditions are just a grouping of execution lines into a manageable and related
+set.  they are mostly a complexity management tool.  it is rarely a good idea
+to have more than 10 steps in any one condition.  all steps MUST appear in a
+condition.
+
+there are five condition specific verbs...
+   COND       starts the beginning of a new condition (REQUIRED)
+   GROUP      allows conditions to be visually grouped in output
+   COND  (A)  same as COND, but can be reused later
+   DITTO (A)  reuses a COND (A) without duplicating lines
+   REUSE -D-  insert unit-shared code from a SHARED verb
+
+.B COND      ß condition description        ß
+
+the COND verb begins a new condition, which is automatically numbered within
+a script from 001 to 999.  all scripts have a condition 001.  conditions must
+identify both the script number and condition number to be unique.  every line
+after COND is within the condition up until the next COND, GROUP, SCRP, SECT,
+DITTO, or REUSE.
+
+COND only has one other field which is a description for the maintainer and
+the output file.
+
+.B GROUP     ß grouping description         ß
+
+the GROUP verb groups all CONDs after it until the next GROUP or SCRP.
+
+COND only has one other field which is a description for the maintainer and
+the output file.
+
+.B COND  (A) ß condition description        ß
+
+this is exactly like the COND verb, but has a identifier that can be used
+later in the same SCRP to duplicate this COND and its steps.  very useful to
+prevent duplication and aid updates.  the (A) above only needs to be unique
+within a SCRP, but a second COND (A) in the same script will hide the first one.
+
+.B DITTO (A) ß
+
+this acts as a recall for the COND (A) above it.  the COND (A) header and
+all its steps are regeneraed in the code at code generation time.
+
+.B REUSE -D- ß
+
+this acts as a recall for the SHARED -D- above the current SCRP.  the SHARED
+-D- header and all its conditions and steps are regeneraed in the code at
+code generation time.
+
+.SH G) STEPS
+steps are the real workhorse of unit testing -- units, scripts, and conditions
+are simply grouping tools.  each execution line is complete-in-itself
+but usually requires previous steps to prepare and later steps to verify.
+all steps MUST appear in a condition.
+
+there are two step specific verbs (essentially the same)...
+   exec       runs a function and checks return value
+   get        same as exec, only helps identify grey-box testing
+
+.B exec   ß description  ß func ß arg1, arg2 ß i_equal ß 0  ß
+at its simplist, function <func> is passed <arg1> and <arg2>.  at code
+generation time, the function prototype will idenfity typical troubles.
+
+the next two fields tell koios what test to perform on the return value, in
+this case <i_equal> which is integer equal to, and the gives the actual
+expected result.  in appropriate tests or values cause the same trouble as
+bad coding in a c program and are debugged the same way, i.e., comparing an
+integer to a string, etc.
+
+refer to yVAR for all the possible tests, but the most common are...
+   i_equal        integer equality ==
+   i_lesser       integer lesser than <
+   i_greater      integer greater than >
+   r_equal        real/float equality ==
+   r_lesser       real/float lesser than <
+   r_greater      real/float greater than >
+   s_equal        string equality, plus many cool extras
+   s_not          string inequality (strcmp != 0)
+   p_null         pointer is grounded/NULL
+   p_exists       pointer is not grounded/NULL
+   u_round        rounded numbers in a string (greybox)
+
+.B get    ß description  ß func ß arg1, arg2 ß i_equal ß 0  ß
+the very same as exec, but used to identify greybox testing using data accessors
+in the c source code.  my habit is to include a function that returns a char*
+answer to many data questions so that i can verify the results of actions in
+the code.  i use accessors to interrogate globals, data structures, and file
+level variables since i refuse to use direct access that would bind the unit
+test to specific representations.
+
+.SH H) SPECIALTY
+also at the step level, there are some specialty steps that can give a unit
+test much more flexibility.  all specialty steps MUST appear in a condition.
+
+there are four specialty step verbs...
+   code       accepts a c source code line for execution
+   echo       allows a specific variable to be checked
+   system     executes a string using system()
+   load       places a string into input, like stdin
+
+.B code   ß description   ß - - - ß <source code>;    ß
+
+this places this code in the unit test exactly as requested and labels it
+with the description.  this helps to prepare or force data conditions.
+
+.B code   ß description   ß - - - ß int c = 0;        ß
+
+also, this allows local unit testing variables to be defined for use
+in the execution statements below.  remember, any variables defined are
+local to the script only, not the whole unit and won't be available in
+any SHARED code.
+
+.B echo   ß description  ß - - - ß <var> ß i_equal ß 0  ß
+
+the allows the checking of unit test locals or source globals by exchanging
+the variable name with <var>.  the tests and expected are exactly like with
+the exec verb.
+
+.B system ß description   ß - - - ß rm test.txt       ß
+
+uses the system() function call to execute the string.  this helps simplify
+entry and also performs some addition checking automatically.
+
+.B load   ß description   ß stdin ß test for input    ß
+
+places the string into the input stream for the program to read as if typed.
+the third field is either stdin or ncurse as they have slightly different
+requirements.
+
+
+
 
 
 

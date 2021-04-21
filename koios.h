@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3d"
-#define     P_VERTXT    "fixed cond/ditto issue in conversion and added failsafe"
+#define     P_VERNUM    "1.3e"
+#define     P_VERTXT    "added and unit tested new shared code for master, reuses, and dittos"
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 /*===[[ HEADER ]]=============================================================*/
@@ -205,7 +205,7 @@ struct cGLOBALS
    char        stage       [LEN_LABEL];     /* master sequence                */
    char        share;                       /* share marking                  */
    char        mark;                        /* ditto marking                  */
-   char        d_used      [LEN_DESC];      /* ditto markes used              */
+   char        d_used      [LEN_HUND];      /* ditto markes used              */
    /*---(working)---------------*/
    char        disp        [LEN_RECD ];     /* display ver " = ~, 1D = |      */
    char        syst        [LEN_RECD ];     /* system ver  " = ", 1D = 1F     */
@@ -253,6 +253,14 @@ char        PROG__unit_loud         (void);
 char        PROG__unit_end          (void);
 
 /*===[[ SCRP ]]===============================================================*/
+/*---(shared)--------------*/
+char        SCRP__shared_clear      (cchar a_type);
+char        SCRP__shared_purge      (void);
+char        SCRP__shared_index      (cchar a_type, cchar a_mark);
+char        SCRP__shared_set        (cchar a_type, cchar a_mark);
+int         SCRP__shared_get        (cchar a_type, cchar a_mark);
+char*       SCRP__shared_used       (void);
+/*---(dittos)--------------*/
 char        SCRP_ditto__clear       (void);
 char        SCRP_ditto__set         (char a_mark);
 char        SCRP_ditto__check       (char *a_verb, char a_set);

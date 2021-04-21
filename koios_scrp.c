@@ -9,6 +9,8 @@ static  FILE *s_file_save;
 static  FILE *s_file_ditto;
 static  int   s_lineno   =   0;
 
+static  int   s_master [26] = { -1 };
+static  int   s_reuses [26] = { -1 };
 static  int   s_dittos [26] = { -1 };
 
 tVERB       g_verbs [MAX_VERB] = {
@@ -41,6 +43,128 @@ tVERB       g_verbs [MAX_VERB] = {
    { "----"         , "end-of-entries"                        , '-',  0,  0, NULL          , NULL          },
    /* --------------   --------------------------------------- */
 };
+
+
+
+/*====================------------------------------------====================*/
+/*===----                    for shared lines                          ----===*/
+/*====================------------------------------------====================*/
+static void      o___SHARED__________________o (void) {;}
+
+char
+SCRP__shared_clear      (cchar a_type)
+{
+   /*---(locals)-------------------------*/
+   int         i           =    0;
+   /*---(set defaults)-------------------*/
+   for (i = 0; i < 26; ++i) {
+      switch (a_type) {
+      case 'm' : s_master [i] = -1;              break;
+      case 'r' : s_reuses [i] = -1;              break;
+      case 'd' : s_dittos [i] = -1;              break;
+      }
+   }
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char
+SCRP__shared_purge      (void)
+{
+   SCRP__shared_clear ('m');
+   SCRP__shared_clear ('r');
+   SCRP__shared_clear ('d');
+   return 0;
+}
+
+char
+SCRP__shared_index      (cchar a_type, cchar a_mark)
+{
+   /*---(locals)-------------------------*/
+   char        rce         =  -10;
+   char       *x_valid     = NULL;
+   char        i           =  -10;
+   /*---(set type)-----------------------*/
+   --rce;  switch (a_type) {
+   case 'm' : x_valid = LTRS_UPPER;   break;
+   case 'r' : x_valid = LTRS_LOWER;   break;
+   case 'd' : x_valid = LTRS_NUMBER;  break;
+   default  : return rce;             break;
+   }
+   /*---(defense)------------------------*/
+   --rce;  if (a_mark == 0)                        return rce;
+   --rce;  if (strchr (x_valid , a_mark) == NULL)  return rce;
+   /*---(update list)--------------------*/
+   i = a_mark - x_valid [0];
+   /*---(complete)-----------------------*/
+   return i;
+}
+
+char
+SCRP__shared_set        (cchar a_type, cchar a_mark)
+{
+   /*---(locals)-------------------------*/
+   char        i           =  -10;
+   /*---(get index)----------------------*/
+   i = SCRP__shared_index (a_type, a_mark);
+   if (i < 0) return i;
+   /*---(update list)--------------------*/
+   switch (a_type) {
+   case 'm' : s_master [i] = my.n_line;   break;
+   case 'r' : s_reuses [i] = my.n_line;   break;
+   case 'd' : s_dittos [i] = my.n_line;   break;
+   }
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+int
+SCRP__shared_get        (cchar a_type, cchar a_mark)
+{
+   /*---(locals)-------------------------*/
+   char        i           =  -10;
+   int         x_line      =   -1;
+   /*---(get index)----------------------*/
+   i = SCRP__shared_index (a_type, a_mark);
+   if (i < 0) return i;
+   /*---(update list)--------------------*/
+   switch (a_type) {
+   case 'm' : x_line = s_master [i];   break;
+   case 'r' : x_line = s_reuses [i];   break;
+   case 'd' : x_line = s_dittos [i];   break;
+   }
+   /*---(complete)-----------------------*/
+   return x_line;
+}
+
+char*
+SCRP__shared_used       (void)
+{
+   /*---(locals)-------------------------*/
+   int         i           =    0;
+   /*---(default)------------------------*/
+   for (i = 0; i < (26 + 3 + 26 + 3 + 10); ++i) {
+      my.d_used [i] = ' ';
+   }
+   my.d_used [i] = '\0';
+   /*---(master)-------------------------*/
+   for (i = 0; i < 26; ++i) {
+      if (s_master [i] < 0)    my.d_used [i +  0] = '-';
+      else                     my.d_used [i +  0] = 'A' + i;
+   }
+   /*---(reuses)-------------------------*/
+   for (i = 0; i < 26; ++i) {
+      if (s_reuses [i] < 0)    my.d_used [i + 29] = '-';
+      else                     my.d_used [i + 29] = 'a' + i;
+   }
+   /*---(dittos)-------------------------*/
+   for (i = 0; i < 10; ++i) {
+      if (s_dittos [i] < 0)    my.d_used [i + 58] = '-';
+      else                     my.d_used [i + 58] = '0' + i;
+   }
+   /*---(complete)-----------------------*/
+   return my.d_used;
+}
 
 
 
@@ -140,10 +264,12 @@ SCRP_ditto__beg         (char *a_verb)
    }
    /*---(save mark)----------------------*/
    --rce;  if (p [7] < 'A' || p [7] > 'Z') {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: DITTO indetifier %c must be in range [A-Z]", my.n_scrp, my.n_line, p [7]);
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    --rce;  if (s_dittos [p [7] - 'A'] < 1) {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: DITTO indetifier %c not set in previous COND (%c)", my.n_scrp, my.n_line, p [7], p [7]);
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
