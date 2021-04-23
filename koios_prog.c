@@ -53,6 +53,8 @@ PROG_init          (void)
    my.replace   = G_RUN_DEFAULT;
    strlcpy  (my.last     , "", LEN_LABEL);
    yURG_err_std ();
+   SCRP__shared_purge ();
+   CODE__shared_purge ();
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    return 0;

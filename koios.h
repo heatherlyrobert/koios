@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3e"
-#define     P_VERTXT    "added and unit tested new shared code for master, reuses, and dittos"
+#define     P_VERNUM    "1.3f"
+#define     P_VERTXT    "everything working in unit tests, but still need GLOBAL code"
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 /*===[[ HEADER ]]=============================================================*/
@@ -145,6 +145,12 @@
 #define     G_RUN_UPDATE    'u'
 #define     G_RUN_REPLACE   'r'
 
+
+#define     T_MASTER    'm'
+#define     T_REUSES    'r'
+#define     T_DITTOS    'd'
+
+
 typedef struct stat      tSTAT;
 
 
@@ -203,6 +209,7 @@ struct cGLOBALS
    char        refn        [LEN_LABEL];     /* test reference number          */
    /*---(special marks)---------*/
    char        stage       [LEN_LABEL];     /* master sequence                */
+   char        cshare;                      /* current share                  */
    char        share;                       /* share marking                  */
    char        mark;                        /* ditto marking                  */
    char        d_used      [LEN_HUND];      /* ditto markes used              */
@@ -221,7 +228,7 @@ struct cGLOBALS
 extern      tGLOBALS    my;
 
 
-#define     MAX_VERB         20
+#define     MAX_VERB         30
 typedef     struct cVERB    tVERB;
 struct cVERB {
    char        name        [LEN_FULL];      /* verb                           */
@@ -252,6 +259,8 @@ char        PROG__unit_quiet        (void);
 char        PROG__unit_loud         (void);
 char        PROG__unit_end          (void);
 
+
+
 /*===[[ SCRP ]]===============================================================*/
 /*---(shared)--------------*/
 char        SCRP__shared_clear      (cchar a_type);
@@ -261,14 +270,15 @@ char        SCRP__shared_set        (cchar a_type, cchar a_mark);
 int         SCRP__shared_get        (cchar a_type, cchar a_mark);
 char*       SCRP__shared_used       (void);
 /*---(dittos)--------------*/
-char        SCRP_ditto__clear       (void);
-char        SCRP_ditto__set         (char a_mark);
-char        SCRP_ditto__check       (char *a_verb, char a_set);
-char*       SCRP_ditto_used         (void);
+char        SCRP__ditto_clear       (void);
+char        SCRP__reuses_check      (char *p);
+char        SCRP__ditto_check       (char *p);
+/*---(file)----------------*/
 char        SCRP_open               (void);
 char        SCRP_close              (void);
 char        SCRP_clear              (void);
 char        SCRP_read               (void);
+/*---(parsing)-------------*/
 char        SCRP_parse_verb         (char *p);
 char        SCRP_parse_stage        (char *p);
 char        SCRP_parse_comment      (void);
@@ -276,12 +286,24 @@ char        SCRP_parse              (void);
 char        SCRP_vers21             (void);
 char        SCRP_vers20             (void);
 char        SCRP_vers19             (void);
+/*---(verbs)---------------*/
 char        SCRP_verbs              (void);
 char        SCRP_verbcode           (void);
+/*---(unittest)------------*/
 char*       SCRP__unit              (char *a_question, int a_num);
+
+
 
 /*===[[ CODE ]]===============================================================*/
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
+/*---(counts)--------------*/
+char        CODE__shared_clear      (cchar a_type);
+char        CODE__shared_purge      (void);
+char        CODE__shared_index      (cchar a_type, cchar a_mark);
+char        CODE__shared_set        (cchar a_type, cchar a_mark, int a_count);
+int         CODE__shared_get        (cchar a_type, cchar a_mark);
+char*       CODE__shared_used       (void);
+/*---(file)----------------*/
 char        CODE_open               (void);
 char        CODE_printf             (char *a_format, ...);
 char        MAIN_printf             (char *a_format, ...);
@@ -301,6 +323,7 @@ char        CODE_scrp          (void);
 char        CODE_scrp_end        (void);
 char        CODE_sect          (void);
 char        CODE_shared        (void);
+char        CODE_global        (void);
 char        CODE_group         (void);
 char        CODE_cond          (void);
 char        CODE_reuse         (void);
@@ -331,6 +354,7 @@ char        CONV_incl               (void);
 char        CONV_scrp               (void);
 char        CONV_sect               (void);
 char        CONV_shared             (void);
+char        CONV_global             (void);
 char        CONV_group              (void);
 char        CONV_cond               (void);
 char        CONV_ditto              (void);

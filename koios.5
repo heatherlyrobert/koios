@@ -210,6 +210,7 @@ there are three script specific verbs...
    SCRP       starts the beginning of a new script (REQUIRED)
    SECT       allows scripts to be visually grouped in the output
    SHARED     unit-shared code that can be used in various scripts
+   GLOBAL     program-shared code that can be used in various scripts
 
 .B SCRP     § overall testing description  § func1, func2, ...  §
 
@@ -229,16 +230,23 @@ this verb also ends the SCRP before so must appear on its own.
 SECT only has one field, a title, which explains why the scripts are being
 grouped.
 
-.B SHARED -D- § description of conditions    §
+.B SHARED -d- § description of conditions    §
 
-the SHARED verb is similar to a SCRP, in that it groups conditions and steps
+the SHARED verb is similar to a SCRP in that it groups conditions and steps
 into a larger unit.  but, SHARED conditions are never executed alone, they
-are reused inside multiple scripts later in the file.
+are reused inside multiple scripts later in the file.  at generation time
+this code is put into a shared function.
 
-the identifier letter surrounded by '-' (hyphens) is the way they are reused
-later.  in the example above, this is shared tests D.  shared tests are only
-available in the unit they appear and must appear before they are reused.  see
-REUSE in the CONDITIONS section below.
+the identifier letter [a-z] surrounded by '-' (hyphens) is the way they are
+reused later.  in the example above, this is shared tests 'd'.  shared tests are
+only available in the unit they appear and must appear before they are reused.
+see REUSE in the CONDITIONS section below.
+
+.B GLOBAL -D- § description of conditions    §
+
+same as SHARED, but the code is put in a header which all unit tests can call.
+GLOBAL identifiers are upper case [A-Z] to differentiate from SHARED [a-z].
+this verb can only appear in the åmaster.unitæ file.
 
 .SH F) CONDITIONS
 conditions are just a grouping of execution lines into a manageable and related
@@ -249,9 +257,9 @@ condition.
 there are five condition specific verbs...
    COND       starts the beginning of a new condition (REQUIRED)
    GROUP      allows conditions to be visually grouped in output
-   COND  (A)  same as COND, but can be reused later
-   DITTO (A)  reuses a COND (A) without duplicating lines
-   REUSE -D-  insert unit-shared code from a SHARED verb
+   COND  (7)  same as COND, but can be reused later
+   DITTO (7)  reuses a COND (7) without duplicating lines
+   REUSE -d-  insert unit-shared code from a SHARED verb
 
 .B COND      § condition description        §
 
@@ -271,23 +279,25 @@ the GROUP verb groups all CONDs after it until the next GROUP or SCRP.
 COND only has one other field which is a description for the maintainer and
 the output file.
 
-.B COND  (A) § condition description        §
+.B COND  (7) § condition description        §
 
-this is exactly like the COND verb, but has a identifier that can be used
-later in the same SCRP to duplicate this COND and its steps.  very useful to
-prevent duplication and aid updates.  the (A) above only needs to be unique
-within a SCRP, but a second COND (A) in the same script will hide the first one.
+this is exactly like the COND verb, but has a identifier [0-9] that can be
+used later in the same SCRP to duplicate this COND and its steps.  very useful
+to prevent source duplication and aid updates.  the (7) above only needs to
+be unique within a SCRP, but a second COND (7) in the same script will hide
+the first one.
 
-.B DITTO (A) §
+.B DITTO (7) §
 
-this acts as a recall for the COND (A) above it.  the COND (A) header and
-all its steps are regeneraed in the code at code generation time.
+this acts as a recall for the COND (7) above it.  the COND (7) header and all
+its steps are duplicated (usually minor) in the code at code generation time.
 
-.B REUSE -D- §
+.B REUSE -d- §
 
-this acts as a recall for the SHARED -D- above the current SCRP.  the SHARED
--D- header and all its conditions and steps are regeneraed in the code at
-code generation time.
+this recalls shared code from either GLOBAL [A-Z] in a shared master.unit file
+or SHARED [a-z] above the current SCRP.  the GLOBAL and SHARED and all their
+conditions and steps are called as part of a shared function code generation
+time -- no duplication.
 
 .SH G) STEPS
 steps are the real workhorse of unit testing -- units, scripts, and conditions

@@ -6,9 +6,118 @@
 
 char        CODE_cond_end      (void);
 
-static char s_shared      = '-';         /* flag for shared code or not    */
-static int  s_share_cnt   [26];          /* count of cond in each share    */
 
+
+static int  s_master_cnt   [26];          /* count of cond in each share    */
+static int  s_reuses_cnt   [26];          /* count of cond in each share    */
+
+
+
+char
+CODE__shared_clear       (cchar a_type)
+{
+   /*---(locals)-------------------------*/
+   int         i           =    0;
+   /*---(set defaults)-------------------*/
+   for (i = 0; i < 26; ++i) {
+      switch (a_type) {
+      case T_MASTER : s_master_cnt [i] = 0;     break;
+      case T_REUSES : s_reuses_cnt [i] = 0;     break;
+      }
+   }
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char
+CODE__shared_purge       (void)
+{
+   CODE__shared_clear (T_MASTER);
+   CODE__shared_clear (T_REUSES);
+   return 0;
+}
+
+char
+CODE__shared_index       (cchar a_type, cchar a_mark)
+{
+   /*---(locals)-------------------------*/
+   char        rce         =  -10;
+   char       *x_valid     = NULL;
+   char        i           =  -10;
+   /*---(set type)-----------------------*/
+   --rce;  switch (a_type) {
+   case T_MASTER : x_valid = LTRS_UPPER;   break;
+   case T_REUSES : x_valid = LTRS_LOWER;   break;
+   default       : return rce;             break;
+   }
+   /*---(defense)------------------------*/
+   --rce;  if (a_mark == 0)                        return rce;
+   --rce;  if (strchr (x_valid , a_mark) == NULL)  return rce;
+   /*---(update list)--------------------*/
+   i = a_mark - x_valid [0];
+   /*---(complete)-----------------------*/
+   return i;
+}
+
+char
+CODE__shared_set         (cchar a_type, cchar a_mark, int a_count)
+{
+   /*---(locals)-------------------------*/
+   char        i           =  -10;
+   /*---(get index)----------------------*/
+   i = CODE__shared_index (a_type, a_mark);
+   if (i < 0) return i;
+   /*---(update list)--------------------*/
+   switch (a_type) {
+   case T_MASTER : s_master_cnt [i] = a_count;   break;
+   case T_REUSES : s_reuses_cnt [i] = a_count;   break;
+   }
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+int
+CODE__shared_get         (cchar a_type, cchar a_mark)
+{
+   /*---(locals)-------------------------*/
+   char        i           =  -10;
+   /*---(get index)----------------------*/
+   i = CODE__shared_index (a_type, a_mark);
+   if (i < 0) return i;
+   /*---(update list)--------------------*/
+   switch (a_type) {
+   case T_MASTER : return s_master_cnt [i];   break;
+   case T_REUSES : return s_reuses_cnt [i];   break;
+   }
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char*
+CODE__shared_used        (void)
+{
+   /*---(locals)-------------------------*/
+   int         i           =    0;
+   /*---(default)------------------------*/
+   for (i = 0; i < (26 + 3 + 26); ++i) {
+      my.d_used [i] = ' ';
+   }
+   my.d_used [i] = '\0';
+   /*---(master)-------------------------*/
+   for (i = 0; i < 26; ++i) {
+      if      (s_master_cnt [i] <=  0)    my.d_used [i +  0] = '-';
+      else if (s_master_cnt [i] >  62)    my.d_used [i +  0] = '*';
+      else                                my.d_used [i +  0] = LTRS_CHARS [s_master_cnt [i]];
+   }
+   /*---(reuses)-------------------------*/
+   for (i = 0; i < 26; ++i) {
+      if      (s_reuses_cnt [i] <=  0)    my.d_used [i + 29] = '-';
+      else if (s_reuses_cnt [i] >  62)    my.d_used [i + 29] = '*';
+      else                                my.d_used [i + 29] = LTRS_CHARS [s_reuses_cnt [i]];
+   }
+   /*---(complete)-----------------------*/
+   return my.d_used;
+}
 
 
 
@@ -195,8 +304,8 @@ CODE_beg                (void)
    my.ncond  = my.ccond = 0;
    my.nstep  = my.cstep = 0;
    my.sstep  = 0;
-   s_shared = '-';
-   for (i = 0; i < 26; ++i)  s_share_cnt [i] = 0;
+   my.cshare = '-';
+   CODE__shared_purge ();
    return 0;
 }
 
@@ -303,24 +412,22 @@ CODE_scrp_end        (void)
 {
    if (strcmp (my.last, "SECT") == 0)    return 0;
    /*---(close final condition)----------*/
-   /*> if (s_shared != '-' || my.cscrp >  0) {                                        <* 
+   /*> if (my.cshare != '-' || my.cscrp >  0) {                                        <* 
     *>    CODE_cond_end ();                                                           <* 
     *> }                                                                              <*/
    if (my.cscrp >  0) {
       CODE_cond_end ();
    }
    /*---(end share)----------------------*/
-   if (s_shared != '-') {
-      s_share_cnt [s_shared] = my.ccond;
-   }
+   if (my.cshare != '-')   CODE__shared_set (T_REUSES, my.cshare, my.ccond);
    /*---(close script/share)-------------*/
-   /*> if (s_shared != '-' || my.cscrp >  0) {                                        <*/
-   if (my.cscrp >  0 || s_shared != '-') {
-      if (s_shared != '-') {
+   /*> if (my.cshare != '-' || my.cscrp >  0) {                                        <*/
+   if (my.cscrp >  0 || my.cshare != '-') {
+      if (my.cshare != '-') {
          CODE_printf ("   /*===[[ shared done ]]==========================*/\n");
-         CODE_printf ("   yUNIT_erahs ('%c');\n", s_shared);
+         CODE_printf ("   yUNIT_erahs ('%c');\n", my.cshare);
       }
-      if (s_shared == '-') {
+      if (my.cshare == '-') {
          CODE_printf ("   /*===[[ script done ]]==========================*/\n");
          CODE_printf ("   yUNIT_prcs    (g.exec);\n");
       }
@@ -345,7 +452,7 @@ CODE_scrp          (void)
    char        x_wave      = '-';
    /*---(end last script)----------------*/
    CODE_scrp_end ();
-   s_shared = '-';
+   my.cshare = '-';
    /*---(counters)-----------------------*/
    ++(my.nscrp);
    ++(my.cscrp);
@@ -379,15 +486,15 @@ CODE_shared          (void)
    /*---(end last script)----------------*/
    CODE_scrp_end ();
    /*---(counters)-----------------------*/
-   s_shared = my.share;
-   s_share_cnt [s_shared] = 0;
+   my.cshare = my.share;
+   CODE__shared_set (T_REUSES, my.cshare, 0);
    /*---(open script function)-----------*/
    CODE_printf ("\n");
    CODE_printf ("char\n");
-   CODE_printf ("yUNIT_shared_%c           (void)\n", s_shared);
+   CODE_printf ("yUNIT_shared_%c           (void)\n", my.cshare);
    CODE_printf ("{\n");
    CODE_printf ("   /*===[[ shared header ]]========================*/\n");
-   CODE_printf ("   yUNIT_share ('%c', \"%s\");\n", s_shared, my.desc);
+   CODE_printf ("   yUNIT_share ('%c', \"%s\");\n", my.cshare, my.desc);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -400,6 +507,12 @@ CODE_sect          (void)
    /*---(add section)--------------------*/
    MAIN_printf ("   if (g.scrp ==  0)                  yUNIT_sect      (\"%s\");\n", my.desc);
    /*---(complete)-----------------------*/
+   return 0;
+}
+
+char         /*-> common shared code between units -----[ ------ [----------]-*/
+CODE_global          (void)
+{
    return 0;
 }
 
@@ -442,7 +555,7 @@ CODE_cond          (void)
    if (my.run_type == G_RUN_DEBUG) {
       CODE_printf ("   %sUG_TOPS    %sOG_unitcond (g.origin, g.offset + %3i, %4i, \"%s\");\n", "DEB", "yL", my.ccond, my.n_line, my.desc);
    }
-   sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.ccond, s_shared, my.desc);
+   sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.ccond, my.cshare, my.desc);
    DEBUG_OUTP   yLOG_complex ("output"    , "%3d:%s", strlen (my.compiled), my.compiled);
    CODE_printf ("%s\n", my.compiled);
    my.cstep = 0;
@@ -472,8 +585,8 @@ CODE_reuse         (void)
    CODE_printf ("   g.offset = %3i;\n", my.ccond);
    CODE_printf ("   yUNIT_shared_%c ();\n", my.share);
    CODE_printf ("   g.offset = 0;\n");
-   my.ncond += s_share_cnt [my.share];
-   my.ccond += s_share_cnt [my.share];
+   my.ncond += CODE__shared_get (T_REUSES, my.share);
+   my.ccond += CODE__shared_get (T_REUSES, my.share);
    /*---(complete)-----------------------*/
    DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -833,77 +946,6 @@ CODE_write         (void)
    /*---(switch)-------------------------*/
    if (my.p_code == NULL)  return;
    rc = my.p_code ();
-   /*> strlcpy (my.compiled, "", LEN_RECD);                                                     <* 
-    *> DEBUG_OUTP   yLOG_info    ("my.verb"   , my.verb);                                       <* 
-    *> switch (my.verb [0]) {                                                                   <* 
-    *> case 'P'  :  if      (strcmp (my.verb, "PREP"     ) == 0) {                              <* 
-    *>                 CODE_prep   ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case 'i'  :  if      (strcmp (my.verb, "incl"     ) == 0) {                              <* 
-    *>                 CODE_incl   ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case 'S'  :  if      (strcmp (my.verb, "SCRP"     ) == 0) {                              <* 
-    *>                 CODE_main   ();                                                          <* 
-    *>                 CODE_scrp   ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              else if (strcmp (my.verb, "SECT"     ) == 0) {                              <* 
-    *>                 CODE_main   ();                                                          <* 
-    *>                 CODE_sect   ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              else if (strcmp (my.verb, "SHARED"   ) == 0) {                              <* 
-    *>                 CODE_main   ();                                                          <* 
-    *>                 CODE_shared ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case 'G'  :  if      (strcmp (my.verb, "GROUP"    ) == 0) {                              <* 
-    *>                 CODE_group  ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case 'C'  :  if      (strcmp (my.verb, "COND"     ) == 0) {                              <* 
-    *>                 CODE_cond   ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case 'D'  :                                                                              <* 
-    *>              DEBUG_OUTP   yLOG_note    ("nothing to write");                             <* 
-    *>              break;                                                                      <* 
-    *> case 'U'  :  if      (strcmp (my.verb, "REUSE") == 0) {                                  <* 
-    *>                 CODE_reuse  ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case 'm'  :  if      (strcmp (my.verb, "mode"     ) == 0) {                              <* 
-    *>                 CODE_mode   ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case 'c'  :  if      (strcmp (my.verb, "code"     ) == 0) {                              <* 
-    *>                 CODE_code   ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case 'l'  :  if      (strcmp (my.verb, "load"     ) == 0) {                              <* 
-    *>                 CODE_load   ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case 's'  :  if      (strcmp (my.verb, "system"   ) == 0) {                              <* 
-    *>                 CODE_system ();                                                          <* 
-    *>                 /+> CODE_exec   ();                                                <+/   <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case 'e'  :  if      (strcmp (my.verb, "exec"     ) == 0) {                              <* 
-    *>                 CODE_exec   ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              else if (strcmp (my.verb, "echo"     ) == 0) {                              <* 
-    *>                 CODE_echo   ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case 'g'  :  if      (strcmp (my.verb, "get"      ) == 0) {                              <* 
-    *>                 CODE_exec   ();                                                          <* 
-    *>              }                                                                           <* 
-    *>              break;                                                                      <* 
-    *> case '#'  :  break;                                                                      <* 
-    *> default   :  CODE_unknown ();                                                            <* 
-    *>              break;                                                                      <* 
-    *> }                                                                                        <*/
    /*---(complete)-----------------------*/
    DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
    return 0;

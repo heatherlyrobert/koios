@@ -3,6 +3,8 @@
 
 
 
+
+
 static  int   s_ditto    = -1;
 static  char  s_dittoing = '-';
 static  FILE *s_file_save;
@@ -14,34 +16,36 @@ static  int   s_reuses [26] = { -1 };
 static  int   s_dittos [26] = { -1 };
 
 tVERB       g_verbs [MAX_VERB] = {
-   /* --------------   ---------------------------------------   -  */
+   /* --global------   ---------------------------------------   -  */
+   { "GLOBAL"       , "shared code between units"             , '2',  0,  0, CONV_global   , CODE_global   },
+   /* --units-------   ---------------------------------------   -  */
    { "PREP"         , "preparation before testing"            , '2',  0,  0, CONV_prep     , CODE_prep     },
    { "incl"         , "c header inclusion"                    , '3',  0,  0, CONV_incl     , CODE_incl     },
    { "#>"           , "script internal comments"              , 'c',  0,  0, CONV_comment  , NULL          },
-   /* --------------   --------------------------------------- */
+   /* --scrps-------   --------------------------------------- */
    { "SCRP"         , "test script"                           , '3',  0,  0, CONV_scrp     , CODE_scrp     },
    { "SECT"         , "grouping of scripts"                   , '2',  0,  0, CONV_sect     , CODE_sect     },
    { "SHARED"       , "shared code between scripts"           , '2',  0,  0, CONV_shared   , CODE_shared   },
-   /* --------------   --------------------------------------- */
+   /* --conds-------   --------------------------------------- */
    { "GROUP"        , "grouping of conditions"                , '2',  0,  0, CONV_group    , CODE_group    },
    { "COND"         , "test condition"                        , '2',  0,  0, CONV_cond     , CODE_cond     },
    { "DITTO"        , "repeated test condition"               , '1',  0,  0, CONV_ditto    , NULL          },
    { "REUSE"        , "inclusion of shared code"              , '1',  0,  0, CONV_reuse    , CODE_reuse    },
-   /* --------------   --------------------------------------- */
+   /* --steps-------   --------------------------------------- */
    { "exec"         , "function execution"                    , 'f',  0,  0, CONV_exec     , CODE_exec     },
    { "get"          , "unit test accessor retrieval"          , 'f',  0,  0, CONV_exec     , CODE_exec     },
-   { "echo"         , "test a variable directly"              , 'f',  0,  0, CONV_echo     , CODE_echo     },
-   /* --------------   --------------------------------------- */
-   { "mode"         , "set pass or forced_fail mode"          , '2',  0,  0, CONV_mode     , CODE_mode     },
+   /* --specialty---   --------------------------------------- */
    { "code"         , "insert c code"                         , 'p',  0,  0, CONV_code     , CODE_code     },
-   { "load"         , "place data into stdin"                 , 'P',  0,  0, CONV_load     , CODE_load     },
+   { "echo"         , "test a variable directly"              , 'f',  0,  0, CONV_echo     , CODE_echo     },
    { "system"       , "execute shell code"                    , 'p',  0,  0, CONV_code     , CODE_system   },
-   /* --------------   --------------------------------------- */
+   { "load"         , "place data into stdin"                 , 'P',  0,  0, CONV_load     , CODE_load     },
+   { "mode"         , "set pass or forced_fail mode"          , '2',  0,  0, CONV_mode     , CODE_mode     },
+   /* --ouroboros---   --------------------------------------- */
    { "WAVE"         , "testing wave"                          , '2',  0,  0, NULL          , NULL          },
    { "stage"        , "testing stage"                         , '2',  0,  0, NULL          , NULL          },
-   /* --------------   --------------------------------------- */
+   /* --sentinal----   --------------------------------------- */
    { "----"         , "end-of-entries"                        , '-',  0,  0, NULL          , NULL          },
-   /* --------------   --------------------------------------- */
+   /* --done--------   --------------------------------------- */
 };
 
 
@@ -59,9 +63,9 @@ SCRP__shared_clear      (cchar a_type)
    /*---(set defaults)-------------------*/
    for (i = 0; i < 26; ++i) {
       switch (a_type) {
-      case 'm' : s_master [i] = -1;              break;
-      case 'r' : s_reuses [i] = -1;              break;
-      case 'd' : s_dittos [i] = -1;              break;
+      case T_MASTER : s_master [i] = -1;              break;
+      case T_REUSES : s_reuses [i] = -1;              break;
+      case T_DITTOS : s_dittos [i] = -1;              break;
       }
    }
    /*---(complete)-----------------------*/
@@ -71,9 +75,9 @@ SCRP__shared_clear      (cchar a_type)
 char
 SCRP__shared_purge      (void)
 {
-   SCRP__shared_clear ('m');
-   SCRP__shared_clear ('r');
-   SCRP__shared_clear ('d');
+   SCRP__shared_clear (T_MASTER);
+   SCRP__shared_clear (T_REUSES);
+   SCRP__shared_clear (T_DITTOS);
    return 0;
 }
 
@@ -86,10 +90,10 @@ SCRP__shared_index      (cchar a_type, cchar a_mark)
    char        i           =  -10;
    /*---(set type)-----------------------*/
    --rce;  switch (a_type) {
-   case 'm' : x_valid = LTRS_UPPER;   break;
-   case 'r' : x_valid = LTRS_LOWER;   break;
-   case 'd' : x_valid = LTRS_NUMBER;  break;
-   default  : return rce;             break;
+   case T_MASTER : x_valid = LTRS_UPPER;   break;
+   case T_REUSES : x_valid = LTRS_LOWER;   break;
+   case T_DITTOS : x_valid = LTRS_NUMBER;  break;
+   default       : return rce;             break;
    }
    /*---(defense)------------------------*/
    --rce;  if (a_mark == 0)                        return rce;
@@ -110,9 +114,9 @@ SCRP__shared_set        (cchar a_type, cchar a_mark)
    if (i < 0) return i;
    /*---(update list)--------------------*/
    switch (a_type) {
-   case 'm' : s_master [i] = my.n_line;   break;
-   case 'r' : s_reuses [i] = my.n_line;   break;
-   case 'd' : s_dittos [i] = my.n_line;   break;
+   case T_MASTER : s_master [i] = my.n_line;   break;
+   case T_REUSES : s_reuses [i] = my.n_line;   break;
+   case T_DITTOS : s_dittos [i] = my.n_line;   break;
    }
    /*---(complete)-----------------------*/
    return 0;
@@ -129,9 +133,9 @@ SCRP__shared_get        (cchar a_type, cchar a_mark)
    if (i < 0) return i;
    /*---(update list)--------------------*/
    switch (a_type) {
-   case 'm' : x_line = s_master [i];   break;
-   case 'r' : x_line = s_reuses [i];   break;
-   case 'd' : x_line = s_dittos [i];   break;
+   case T_MASTER : x_line = s_master [i];   break;
+   case T_REUSES : x_line = s_reuses [i];   break;
+   case T_DITTOS : x_line = s_dittos [i];   break;
    }
    /*---(complete)-----------------------*/
    return x_line;
@@ -173,66 +177,7 @@ SCRP__shared_used       (void)
 /*====================------------------------------------====================*/
 static void      o___DITTOING________________o (void) {;}
 
-char
-SCRP_ditto__clear       (void)
-{
-   int         i           =    0;
-   for (i = 0; i < 26; ++i) {
-      s_dittos [i] = -1;
-   }
-   return 0;
-}
-
-char
-SCRP_ditto__set         (char a_mark)
-{
-   char        rce         =  -10;
-   --rce;  if (s_file_ditto != NULL)          return rce;
-   --rce;  if (a_mark < 'A' || a_mark > 'Z')  return rce;
-   s_dittos [a_mark - 'A'] = my.n_line;
-   return 0;
-}
-
-char
-SCRP_ditto__check       (char *p, char a_set)
-{
-   /*---(locals)-----------+-----------+-*/
-   char        rce         =  -10;
-   char        rc          =    0;
-   char       *q           = NULL;
-   /*---(header)-------------------------*/
-   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
-   /*---(default)------------------------*/
-   my.mark = '-';
-   /*---(defense)------------------------*/
-   DEBUG_INPT   yLOG_spoint  (p);
-   --rce;  if (strcmp ("COND", g_verbs [my.indx].name) != 0) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(find cond lines)----------------*/
-   q = strchr (p, '(');
-   DEBUG_INPT   yLOG_spoint  (q);
-   --rce;  if (q == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   --rce;  if (q [2] != ')') {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   --rce;  if (strchr ("ABCDEFGHIJKLMNOPQRSTUVWXYZ", q [1]) == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(find our cond)------------------*/
-   DEBUG_INPT   yLOG_schar   (q [1]);
-   if (a_set == 'y')  rc = SCRP_ditto__set (q [1]);
-   my.mark = q [1];
-   /*---(complete)-----------------------*/
-   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
-   return rc;
-}
+char SCRP__ditto_clear  (void)        { return SCRP__shared_clear (T_DITTOS); }
 
 char
 SCRP_ditto__beg         (char *a_verb)
@@ -242,39 +187,12 @@ SCRP_ditto__beg         (char *a_verb)
    char       *p           = NULL;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
-   /*---(default)------------------------*/
-   my.mark = '-';
    /*---(defense)------------------------*/
    DEBUG_INPT   yLOG_spoint  (a_verb);
    --rce;  if (a_verb == NULL) {
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   /*---(parse ditto line)---------------*/
-   p = strstr (a_verb, "DITTO (");
-   DEBUG_INPT   yLOG_spoint  (p);
-   --rce;  if (p == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   DEBUG_INPT   yLOG_sint    (p - a_verb);
-   --rce;  if (p - a_verb > 20) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(save mark)----------------------*/
-   --rce;  if (p [7] < 'A' || p [7] > 'Z') {
-      yURG_err (YURG_FATAL, "%s:%d:1: error: DITTO indetifier %c must be in range [A-Z]", my.n_scrp, my.n_line, p [7]);
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   --rce;  if (s_dittos [p [7] - 'A'] < 1) {
-      yURG_err (YURG_FATAL, "%s:%d:1: error: DITTO indetifier %c not set in previous COND (%c)", my.n_scrp, my.n_line, p [7], p [7]);
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   s_ditto = p [7] - 'A';
-   my.mark = p [7];
    /*---(reopen file)--------------------*/
    s_file_ditto = fopen (my.n_scrp, "r");
    DEBUG_INPT   yLOG_point   ("refile*"   , s_file_ditto);
@@ -324,16 +242,253 @@ SCRP_ditto__end         (void)
    return 0;
 }
 
-char*
-SCRP_ditto_used         (void)
+char
+SCRP__reuses_check      (char *p)
 {
-   int         i           =    0;
-   for (i = 0; i < 26; ++i) {
-      if (s_dittos [i] < 0)    my.d_used [i] = '-';
-      else                     my.d_used [i] = 'A' + i;
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char       *q           = NULL;
+   char        m           =  '-';
+   int         n           =   -1;
+   int         o           =   -1;
+   char        t           [LEN_LABEL] = "";
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(default)------------------------*/
+   my.share = '-';
+   /*---(defense)------------------------*/
+   DEBUG_INPT   yLOG_spoint  (p);
+   --rce;  if (p == NULL) {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: GLOBAL/SHARED/REUSE called with a null string", my.n_scrp, my.n_line);
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
    }
-   my.d_used [i] = '\0';
-   return my.d_used;
+   DEBUG_INPT   yLOG_snote   (p);
+   /*---(check for right verbs)----------*/
+   strcpy (t, g_verbs [my.indx].name);
+   if (strstr (" GLOBAL SHARED REUSE " , t) == NULL) {
+      DEBUG_INPT   yLOG_snote   ("this only applies to GLOBAL/SHARED/REUSE");
+      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      return 0;
+   }
+   /*---(check for marker)---------------*/
+   q = strchr (p, '-');
+   DEBUG_INPT   yLOG_spoint  (q);
+   --rce;  if (q == NULL) {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s missing a valid identifier string -?-", my.n_scrp, my.n_line, t);
+      DEBUG_INPT   yLOG_snote   ("no openning marker");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (q [1] == NULL) {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier did not follow - marker", my.n_scrp, my.n_line, t);
+      DEBUG_INPT   yLOG_snote   ("no identifer");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (q [1] == '-') {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s no identifier within -- markers", my.n_scrp, my.n_line, t);
+      DEBUG_INPT   yLOG_snote   ("no identifer inside");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   m = q [1];
+   DEBUG_INPT   yLOG_schar   (m);
+   --rce;  if (q [2] != '-') {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier å%cæ not followed by - marker", my.n_scrp, my.n_line, t, m);
+      DEBUG_INPT   yLOG_snote   ("no close marker");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(validate marker)----------------*/
+   n  = SCRP__shared_get (T_MASTER, m);
+   DEBUG_INPT   yLOG_sint    (n);
+   o  = SCRP__shared_get (T_REUSES, m);
+   DEBUG_INPT   yLOG_sint    (o);
+   /*---(handle global)------------------*/
+   --rce;  if (strcmp ("GLOBAL" , g_verbs [my.indx].name) == 0) {
+      DEBUG_INPT   yLOG_snote   ("handle global");
+      if (n < -1) {
+         DEBUG_INPT   yLOG_snote   ("global identifier must be A-Z");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: GLOBAL identifier å%cæ not valid [A-Z]", my.n_scrp, my.n_line, m);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      if (n >= 0) {
+         DEBUG_INPT   yLOG_snote   ("already set");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: GLOBAL identifier å%cæ already in use", my.n_scrp, my.n_line, m);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      rc = SCRP__shared_set (T_MASTER, m);
+      my.share = m;
+   }
+   /*---(handle shared)------------------*/
+   --rce;  if (strcmp ("SHARED" , g_verbs [my.indx].name) == 0) {
+      DEBUG_INPT   yLOG_snote   ("handle shared");
+      if (o < -1) {
+         DEBUG_INPT   yLOG_snote   ("shared identifier must be a-z");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: SHARED identifier å%cæ not valid [a-z]", my.n_scrp, my.n_line, m);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      if (o >= 0) {
+         DEBUG_INPT   yLOG_snote   ("already set");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: SHARED identifier å%cæ already in use", my.n_scrp, my.n_line, m);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      rc = SCRP__shared_set (T_REUSES, m);
+      my.share = m;
+   }
+   /*---(handle reuses)------------------*/
+   --rce;  if (strcmp ("REUSE" , g_verbs [my.indx].name) == 0) {
+      DEBUG_INPT   yLOG_snote   ("handle reuse");
+      if (n < -1 && o < -1) {
+         DEBUG_INPT   yLOG_snote   ("not set");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: REUSE identifier å%cæ not valid [a-zA-Z]", my.n_scrp, my.n_line, m);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      if (n == -1) {
+         DEBUG_INPT   yLOG_snote   ("not set");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: REUSE identifier å%cæ never set by GLOBAL", my.n_scrp, my.n_line, m);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      if (o == -1) {
+         DEBUG_INPT   yLOG_snote   ("not set");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: REUSE identifier å%cæ never set by SHARED", my.n_scrp, my.n_line, m);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      if (m == my.cshare) {
+         DEBUG_INPT   yLOG_snote   ("reuse is recursive");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: REUSE identifier å%cæ called inside itself, recursive", my.n_scrp, my.n_line, m);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      my.share = m;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+SCRP__ditto_check       (char *p)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char       *q           = NULL;
+   char        m           =  '-';
+   int         n           =   -1;
+   char        t           [LEN_LABEL] = "";
+   /*---(header)-------------------------*/
+   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(default)------------------------*/
+   my.mark = '-';
+   /*---(defense)------------------------*/
+   DEBUG_INPT   yLOG_spoint  (p);
+   --rce;  if (p == NULL) {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: COND/DITTO called with a null string", my.n_scrp, my.n_line);
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_INPT   yLOG_snote   (p);
+   /*---(check for script)---------------*/
+   strcpy (t, g_verbs [my.indx].name);
+   if (strstr (" SCRP SHARED " , t) != NULL) {
+      DEBUG_INPT   yLOG_snote   ("found SCRP/SHARED, resetting dittos");
+      SCRP__ditto_clear ();
+      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      return 0;
+   }
+   if (strstr (" COND DITTO " , t) == NULL) {
+      DEBUG_INPT   yLOG_snote   ("this only applies to COND/DITTO");
+      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      return 0;
+   }
+   /*---(check for marker)---------------*/
+   q = strchr (p, '(');
+   DEBUG_INPT   yLOG_spoint  (q);
+   --rce;  if (q == NULL) {
+      if (strcmp (t, "DITTO") == 0) {
+         yURG_err (YURG_FATAL, "%s:%d:1: error: DITTO missing a valid identifier string (?)", my.n_scrp, my.n_line);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      DEBUG_INPT   yLOG_snote   ("no openning marker");
+      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      return 0;
+   }
+   --rce;  if (q [1] == NULL) {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier did not follow ( marker", my.n_scrp, my.n_line, t);
+      DEBUG_INPT   yLOG_snote   ("no identifer");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (q [1] == ')') {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s no identifier within () markers", my.n_scrp, my.n_line, t);
+      DEBUG_INPT   yLOG_snote   ("no identifer");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   m = q [1];
+   DEBUG_INPT   yLOG_schar   (m);
+   --rce;  if (q [2] != ')') {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier å%cæ not followed by ) marker", my.n_scrp, my.n_line, t, m);
+      DEBUG_INPT   yLOG_snote   ("no close marker");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(validate marker)----------------*/
+   n  = SCRP__shared_get (T_DITTOS, m);
+   DEBUG_INPT   yLOG_sint    (n);
+   if (n < -1) {
+      DEBUG_INPT   yLOG_snote   ("invalid identifier");
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier å%cæ not valid [0-9]", my.n_scrp, my.n_line, t, m);
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(handle condition)---------------*/
+   --rce;  if (strcmp ("COND" , g_verbs [my.indx].name) == 0) {
+      if (s_dittoing != 'y') {
+         DEBUG_INPT   yLOG_snote   ("handle cond");
+         if (n > 0) {
+            DEBUG_INPT   yLOG_snote   ("already set identifier (hidding)");
+            yURG_err (YURG_WARN, "%s:%d:1: warning: COND identifier å%cæ already set, now overwritten", my.n_scrp, my.n_line, m);
+         }
+         rc = SCRP__shared_set (T_DITTOS, m);
+         my.mark = m;
+      } else {
+         DEBUG_INPT   yLOG_snote   ("cond () inside ditto, ignored");
+      }
+   }
+   /*---(handle ditto)-------------------*/
+   if (strcmp ("DITTO" , g_verbs [my.indx].name) == 0) {
+      DEBUG_INPT   yLOG_snote   ("handle ditto");
+      if (n == -1) {
+         DEBUG_INPT   yLOG_snote   ("unset identifier");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: DITTO identifier å%cæ not set by previous COND", my.n_scrp, my.n_line, m);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      my.mark = m;
+      s_ditto = n;
+      if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
+         DEBUG_INPT   yLOG_snote   ("begin ditto processing");
+         DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+         rc = SCRP_ditto__beg (p);
+         if (rc >= 0)  rc = 1;
+         return rc;
+      }
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   return 0;
 }
 
 
@@ -374,7 +529,7 @@ SCRP_open          (void)
    }
    DEBUG_INPT   yLOG_note    ("script file open");
    my.n_line = 0;
-   SCRP_ditto__clear ();
+   SCRP__ditto_clear ();
    /*---(open wave file)-----------------*/
    /*> printf ("n_wave = [%s]\n", my.n_wave);                                         <*/
    my.f_wave = fopen (my.n_wave, "wt");
@@ -1064,10 +1219,10 @@ SCRP_parse_ditto        (char *p)
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
       if (strcmp ("SCRP" , g_verbs [my.indx].name) == 0) {
          DEBUG_INPT   yLOG_note    ("clear ditto marks (create)");
-         SCRP_ditto__clear ();
+         SCRP__ditto_clear ();
       } else if (strcmp ("COND", g_verbs [my.indx].name) == 0) {
          DEBUG_INPT   yLOG_note    ("found a ditto condition (create)");
-         SCRP_ditto__check (p, 'y');
+         SCRP__ditto_check (p);
       } else if (strcmp ("DITTO", g_verbs [my.indx].name) == 0) {
          DEBUG_INPT   yLOG_note    ("found a ditto verb (create)");
          rc = SCRP_ditto__beg (p);
@@ -1239,8 +1394,15 @@ SCRP_parse         (void)
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   /*---(check for shares)---------------*/
+   rc = SCRP__reuses_check (p);
+   DEBUG_INPT   yLOG_value   ("reuses"    , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);
+      return rce;
+   }
    /*---(check for ditto)----------------*/
-   rc = SCRP_parse_ditto (p);
+   rc = SCRP__ditto_check (p);
    DEBUG_INPT   yLOG_value   ("ditto"     , rc);
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);

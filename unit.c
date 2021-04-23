@@ -513,10 +513,10 @@ koios__unit_scrp_verb    (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("parse prefix of verbs");
-   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb ("SHARED -A-"), 0);
+   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb ("SHARED -a-"), 0);
    yUNIT_minstr ("... check verb"                      , my.verb       , "SHARED");
    yUNIT_minval ("... check index"                     , my.indx       , 999);
-   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb (" COND [a]"), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb (" COND (1)"), 0);
    yUNIT_minstr ("... check verb"                      , my.verb       , "COND");
    yUNIT_minval ("... check index"                     , my.indx       , 999);
    yUNIT_minval  ("parse exec"                         , SCRP_parse_verb ("  exec &"), 0);
@@ -809,6 +809,346 @@ koios__unit_scrp_parse   (void)
 }
 
 char
+koios__unit_scrp_share   (void)
+{
+   yUNIT_minscrp ("koios_scrp identifying global/shared/reuse marks");
+   yURG_err_none ();  /* not to stderr/terminal */
+
+   yUNIT_mincond ("prepare clean start");
+   system ("rm -f /tmp/koios.unit 2> /dev/null");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("set to conversion mode");
+   my.run_type = G_RUN_UPDATE;
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("set to defaults");
+   yUNIT_minval  ("... run clear"                      , SCRP__shared_purge ()         , 0);
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a min global identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse GLOBAL"                       , SCRP_parse_verb    ("GLOBAL -A-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "GLOBAL");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("GLOBAL -A-"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-------------------------   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , 'A');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a middle global identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse GLOBAL"                       , SCRP_parse_verb    ("GLOBAL -M-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "GLOBAL");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("GLOBAL -M-"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-------------   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , 'M');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with no identifier string");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse GLOBAL"                       , SCRP_parse_verb    ("GLOBAL"    ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "GLOBAL");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("GLOBAL"    ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: GLOBAL missing a valid identifier string -?-");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-------------   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with only identifier beginning");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse GLOBAL"                       , SCRP_parse_verb    ("GLOBAL -"  ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "GLOBAL");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("GLOBAL -"  ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: GLOBAL identifier did not follow - marker");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-------------   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with no identifier within");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse GLOBAL"                       , SCRP_parse_verb    ("GLOBAL --" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "GLOBAL");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("GLOBAL --" ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: GLOBAL no identifier within -- markers");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-------------   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with no identifier ending");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse GLOBAL"                       , SCRP_parse_verb    ("GLOBAL -C" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "GLOBAL");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("GLOBAL -C" ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: GLOBAL identifier åCæ not followed by - marker");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-------------   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with a non-valid identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse GLOBAL"                       , SCRP_parse_verb    ("GLOBAL -d-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "GLOBAL");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("GLOBAL -d-"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: GLOBAL identifier ådæ not valid [A-Z]");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-------------   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check another good identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse GLOBAL"                       , SCRP_parse_verb    ("GLOBAL -Y-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "GLOBAL");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("GLOBAL -Y-"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , 'Y');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check an attempt to reuse a identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse GLOBAL"                       , SCRP_parse_verb    ("GLOBAL -M-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "GLOBAL");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("GLOBAL -M-"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: GLOBAL identifier åMæ already in use");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check good reuse of identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE  -M-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE  -M-"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , 'M');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with no identifier string");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE"     ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE" );
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE"     ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: REUSE missing a valid identifier string -?-");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with only identifier beginning");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE  -"  ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE  -"  ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: REUSE identifier did not follow - marker");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with no identifier within");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE  --" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE  --" ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: REUSE no identifier within -- markers");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with no identifier ending");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE  -C" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE  -C" ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: REUSE identifier åCæ not followed by - marker");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with a non-valid identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE  -2-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE  -2-"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: REUSE identifier å2æ not valid [a-zA-Z]");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check another good reuse of identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE  -A-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE  -A-"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , 'A');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("attempt to reuse a non-set identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE  -K-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE  -K-"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: REUSE identifier åKæ never set by GLOBAL");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   --------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a min shared identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb    ("SHARED -b-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "SHARED");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("SHARED -b-"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b------------------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , 'b');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a middle shared identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb    ("SHARED -j-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "SHARED");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("SHARED -j-"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j----------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , 'j');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with no identifier string");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb    ("SHARED"    ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "SHARED");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("SHARED"    ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: SHARED missing a valid identifier string -?-");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j----------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with only identifier beginning");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb    ("SHARED -"  ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "SHARED");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("SHARED -"  ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: SHARED identifier did not follow - marker");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j----------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with no identifier within");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb    ("SHARED --" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "SHARED");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("SHARED --" ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: SHARED no identifier within -- markers");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j----------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with no identifier ending");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb    ("SHARED -c" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "SHARED");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("SHARED -c" ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: SHARED identifier åcæ not followed by - marker");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j----------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check with a non-valid identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb    ("SHARED -D-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "SHARED");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("SHARED -D-"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: SHARED identifier åDæ not valid [a-z]");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j----------------   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check another good identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb    ("SHARED -w-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "SHARED");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("SHARED -w-"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j------------w---   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , 'w');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check an attempt to reuse a identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb    ("SHARED -j-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "SHARED");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("SHARED -j-"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: SHARED identifier åjæ already in use");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j------------w---   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check good reuse of identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE  -j-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE  -j-"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j------------w---   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , 'j');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("attempt to reuse a non-set identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE  -k-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE  -k-"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: REUSE identifier åkæ never set by SHARED");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j------------w---   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check another good use of identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE  -b-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE  -b-"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j------------w---   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , 'b');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("set a shared reuse point");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse SHARED"                       , SCRP_parse_verb    ("SHARED -s-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "SHARED");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("SHARED -s-"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j--------s---w---   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , 's');
+   my.cshare = 's';
+   yUNIT_minchr  ("... check current share"            , my.cshare         , 's');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("attempt to reuse the current share");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse REUSE"                        , SCRP_parse_verb    ("REUSE  -s-"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb           , "REUSE");
+   yUNIT_minval  ("check reuses"                       , SCRP__reuses_check ("REUSE  -s-"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: REUSE identifier åsæ called inside itself, recursive");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "A-----------M-----------Y-   -b-------j--------s---w---   ----------");
+   yUNIT_minchr  ("... check mark"                     , my.share          , '-');
+   yUNIT_minchr  ("... check current share"            , my.cshare         , 's');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("clean up after");
+   system ("rm -f /tmp/koios.unit 2> /dev/null");
+   yUNIT_mindnoc ();
+
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
 koios__unit_scrp_ditto   (void)
 {
    yUNIT_minscrp ("koios_scrp identifying ditto marks");
@@ -816,64 +1156,184 @@ koios__unit_scrp_ditto   (void)
 
    yUNIT_mincond ("prepare clean start");
    system ("rm -f /tmp/koios.unit 2> /dev/null");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("set to conversion mode");
+   my.run_type = G_RUN_UPDATE;
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("set to defaults");
+   yUNIT_minval  ("... run clear"                      , SCRP__shared_purge ()         , 0);
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a min cond identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("COND (0)"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (0)"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0---------");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '0');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a middle cond identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("COND (3)"), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (3)"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '3');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a missing cond identifier, trunctated");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("COND ("  ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND ("  ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND identifier did not follow ( marker");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a missing cond identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("COND ()" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND ()" ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND no identifier within () markers");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a missing cond close marker");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("COND (5" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (5" ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND identifier å5æ not followed by ) marker");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check cond with an invalid identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("COND (B)" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (B)" ), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND identifier åBæ not valid [0-9]");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a valid cond again (extra spaces)");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("COND     (8)" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND     (8)"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '8');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a cond masking another");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("COND     (8)" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND     (8)"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: warning: COND identifier å8æ already set, now overwritten");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '8');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a valid ditto");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("DITTO    (3)" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO    (3)"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '3');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a ditto with no lead marker");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("DITTO" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO missing a valid identifier string (?)");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a ditto with no identifier (truncated)");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("DITTO (" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO ("), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO identifier did not follow ( marker");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a ditto with no identifier inside markers");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("DITTO ()" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO ()"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO no identifier within () markers");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a ditto with illegal identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("DITTO (a)" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO (a)"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO identifier åaæ not valid [0-9]");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check a ditto with an unset identifier");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("DITTO (5)" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO (5)"), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO identifier å5æ not set by previous COND");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check another valid ditto");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb   ("DITTO    (8)" ), 0);
+   yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO    (8)"), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   yUNIT_minchr  ("... check mark"                     , my.mark          , '8');
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("set to defaults");
+   yUNIT_minval  ("... run clear"                      , SCRP__shared_purge ()         , 0);
+   yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("set to create/code mode");
    my.run_type = G_RUN_CREATE;
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("directly set ditto marks");
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "--------------------------");
-   yUNIT_minval  ("set ditto"                          , SCRP_ditto__set ('A'), 0);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "A-------------------------");
-   yUNIT_minval  ("set ditto"                          , SCRP_ditto__set ('M'), 0);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "A-----------M-------------");
-   yUNIT_minval  ("set ditto"                          , SCRP_ditto__set ('W'), 0);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "A-----------M---------W---");
-   yUNIT_minval  ("set ditto"                          , SCRP_ditto__set (' '), -999);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "A-----------M---------W---");
-   yUNIT_minval  ("set ditto"                          , SCRP_ditto__set ('b'), -999);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "A-----------M---------W---");
-   yUNIT_minval  ("set ditto"                          , SCRP_ditto__set ('è'), -999);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "A-----------M---------W---");
-   yUNIT_minval  ("clear all dittos"                   , SCRP_ditto__clear () , 0);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "--------------------------");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("use ditto check");
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "--------------------------");
-   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb ("COND (A)"), 0);
-   yUNIT_minstr ("... check verb"                      , my.verb       , "COND");
-   yUNIT_minval  ("check ditto"                        , SCRP_ditto__check ("COND (A)", 'y'), 0);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "A-------------------------");
-   yUNIT_minchr ("... check mark"                      , my.mark       , 'A');
-   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb ("COND (M)"), 0);
-   yUNIT_minstr ("... check verb"                      , my.verb       , "COND");
-   yUNIT_minval  ("check ditto"                        , SCRP_ditto__check ("COND (M)", 'y'), 0);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "A-----------M-------------");
-   yUNIT_minchr ("... check mark"                      , my.mark       , 'M');
-   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb ("COND ("  ), 0);
-   yUNIT_minstr ("... check verb"                      , my.verb       , "COND");
-   yUNIT_minval  ("check ditto"                        , SCRP_ditto__check ("COND ("  , 'y'), -999);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "A-----------M-------------");
-   yUNIT_minchr ("... check mark"                      , my.mark       , '-');
-   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb ("COND ()" ), 0);
-   yUNIT_minstr ("... check verb"                      , my.verb       , "COND");
-   yUNIT_minval  ("check ditto"                        , SCRP_ditto__check ("COND ()" , 'y'), -999);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "A-----------M-------------");
-   yUNIT_minchr ("... check mark"                      , my.mark       , '-');
-   yUNIT_minval  ("parse COND"                         , SCRP_parse_verb ("COND     (W)" ), 0);
-   yUNIT_minstr ("... check verb"                      , my.verb       , "COND");
-   yUNIT_minval  ("check ditto"                        , SCRP_ditto__check ("COND     (W)", 'y'), 0);
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "A-----------M---------W---");
-   yUNIT_minchr ("... check mark"                      , my.mark       , 'W');
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify handling dittos");
    strcpy (my.n_scrp, "/tmp/koios.unit");
    system ("echo \"\"                                                                         >  /tmp/koios.unit");
-   system ("echo \"  COND (B)   original cond    - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
+   system ("echo \"  COND (2)   original cond    - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
    system ("echo \"    exec     line one         - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
    system ("echo \"    exec     line two         - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
    system ("echo \"\"                                                                         >> /tmp/koios.unit");
-   system ("echo \"  DITTO (B)  new cond         - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
+   system ("echo \"  DITTO (2)  new cond         - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
    system ("echo \"\"                                                                         >> /tmp/koios.unit");
    system ("echo \"  COND       after others     - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
@@ -881,72 +1341,90 @@ koios__unit_scrp_ditto   (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read ditto condition");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
-   yUNIT_minstr ("... check the record"               , my.recd       , "  COND (B)  § original cond   § - - - - - - § - § - - - - -  § - - -  §");
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "-B------------------------");
+   yUNIT_minstr ("... check the record"               , my.recd       , "  COND (2)  § original cond   § - - - - - - § - § - - - - -  § - - -  §");
+   yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read detailed line");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line one        § - - - - - - § - § - - - - -  § - - -  §");
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "-B------------------------");
+   yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read detailed line");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line two        § - - - - - - § - § - - - - -  § - - -  §");
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "-B------------------------");
+   yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read ditto call");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
-   yUNIT_minstr ("... check the record"               , my.recd       , "  DITTO (B) § new cond        § - - - - - - § - § - - - - -  § - - -  §");
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "-B------------------------");
+   yUNIT_minstr ("... check the record"               , my.recd       , "  DITTO (2) § new cond        § - - - - - - § - § - - - - -  § - - -  §");
+   yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read ditto condition");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
-   yUNIT_minstr ("... check the record"               , my.recd       , "  COND (B)  § original cond   § - - - - - - § - § - - - - -  § - - -  §");
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "-B------------------------");
+   yUNIT_minstr ("... check the record"               , my.recd       , "  COND (2)  § original cond   § - - - - - - § - § - - - - -  § - - -  §");
+   yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read detailed line");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line one        § - - - - - - § - § - - - - -  § - - -  §");
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "-B------------------------");
+   yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read detailed line");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line two        § - - - - - - § - § - - - - -  § - - -  §");
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "-B------------------------");
+   yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read after condition");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "  COND      § after others    § - - - - - - § - § - - - - -  § - - -  §");
-   yUNIT_minstr ("... check dittos"                    , SCRP_ditto_used ()  , "-B------------------------");
+   yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read end-of-file");
+   yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
    yUNIT_minval ("read a line"                        , SCRP_read   (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    yUNIT_minval ("close the script file"              , SCRP_close  (), 0);
    yUNIT_mindnoc ();
 
@@ -990,9 +1468,9 @@ koios__unit_scrp_variety (void)
    system ("echo \"    system    remove a file                        - - - - - - - - - - - - -   rm -fv test.txt   \"                                                >> /tmp/koios.unit");
    system ("echo \"\"                                                                                                                                                     >> /tmp/koios.unit");
    system ("echo \"#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  t  =(var)==== \"  >> /tmp/koios.unit");
-   system ("echo \"SHARED   -A-  setup cron files and lines           - - - - - - - -   ((CC.---))  - - - - - - - - - - - - - - - - - - - - - - - - -  \"            >> /tmp/koios.unit");
+   system ("echo \"SHARED   -a-  setup cron files and lines           - - - - - - - -   ((CC.---))  - - - - - - - - - - - - - - - - - - - - - - - - -  \"            >> /tmp/koios.unit");
    system ("echo \"\"                                                                                                                                                     >> /tmp/koios.unit");
-   system ("echo \" REUSE -A-    - - - - - - - - - - - -   - - - - - - - - - - - - - - -   ((03.---))  - - - - - - - - - - - - - - - - - - - -  \"                   >> /tmp/koios.unit");
+   system ("echo \" REUSE -a-    - - - - - - - - - - - -   - - - - - - - - - - - - - - -   ((03.---))  - - - - - - - - - - - - - - - - - - - -  \"                   >> /tmp/koios.unit");
    my.run_type = G_RUN_CREATE;
    strcpy (my.n_scrp, "/tmp/koios.unit");
    strcpy (my.n_wave, "/tmp/koios.wave");
@@ -1304,10 +1782,10 @@ koios__unit_scrp_variety (void)
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
-   yUNIT_minstr ("... check the record"               , my.recd       , "SHARED   -A- § setup cron files and lines          § - - - - - - - -  § ((CC.---)) § - - - - - - - - - - - - - - - - - - - - - - - - -  §");
+   yUNIT_minstr ("... check the record"               , my.recd       , "SHARED   -a- § setup cron files and lines          § - - - - - - - -  § ((CC.---)) § - - - - - - - - - - - - - - - - - - - - - - - - -  §");
    yUNIT_minstr ("... check verb"                     , my.verb       , "SHARED");
    yUNIT_minstr ("... check stage"                    , my.stage      , "");
-   yUNIT_minchr ("... check share"                    , my.share      , 'A');
+   yUNIT_minchr ("... check share"                    , my.share      , 'a');
    yUNIT_minchr ("... check mark"                     , my.mark       , '-');
    yUNIT_minstr ("... check version"                  , my.vers       , "");
    yUNIT_minstr ("... check description"              , my.desc       , "setup cron files and lines");
@@ -1324,10 +1802,10 @@ koios__unit_scrp_variety (void)
    yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
-   yUNIT_minstr ("... check the record"               , my.recd       , " REUSE -A-   § - - - - - - - - - - - -  § - - - - - - - - - - - - - - -  § ((03.---)) § - - - - - - - - - - - - - - - - - - - -  §");
+   yUNIT_minstr ("... check the record"               , my.recd       , " REUSE -a-   § - - - - - - - - - - - -  § - - - - - - - - - - - - - - -  § ((03.---)) § - - - - - - - - - - - - - - - - - - - -  §");
    yUNIT_minstr ("... check verb"                     , my.verb       , "REUSE");
    yUNIT_minstr ("... check stage"                    , my.stage      , "");
-   yUNIT_minchr ("... check share"                    , my.share      , 'A');
+   yUNIT_minchr ("... check share"                    , my.share      , 'a');
    yUNIT_minchr ("... check mark"                     , my.mark       , '-');
    yUNIT_minstr ("... check version"                  , my.vers       , "");
    yUNIT_minstr ("... check description"              , my.desc       , "");
@@ -1579,7 +2057,7 @@ koios__unit_conv_scrp    (void)
 {
    int         c           =    0;
 
-   yUNIT_minscrp ("CONV_scrp, CONV_sect, CONV_shared");
+   yUNIT_minscrp ("CONV_scrp, CONV_sect, CONV_shared, CONV_global");
    yURG_err_none ();  /* not to stderr/terminal */
 
    yUNIT_mincond ("prepare and open a new file");
@@ -1591,6 +2069,11 @@ koios__unit_conv_scrp    (void)
    yUNIT_minval ("open the script file"               , CONV_open   (), 0);
    yUNIT_minstr ("... check script name"              , my.n_conv     , "/tmp/koios.unit.new");
    yUNIT_minval ("... check script pointer"           , my.f_conv     , my.f_conv);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check defaults");
+   yUNIT_minval ("... run clear"                      , SCRP__shared_purge ()         , 0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("write a script");
@@ -1671,6 +2154,32 @@ koios__unit_conv_scrp    (void)
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_conv) , 6);
    yUNIT_mindnoc ();
 
+   yUNIT_mincond ("write a global line");
+   strcpy (my.recd, "GLOBAL -D-  setup base test objects         ");
+   yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
+   strlencode (my.recd, ySTR_NONE, LEN_RECD);
+   yUNIT_minstr ("... check the record"               , my.recd       , "GLOBAL -D- § setup base test objects §  §  §  §  §");
+   yUNIT_minstr ("... check verb"                     , my.verb       , "GLOBAL");
+   yUNIT_minstr ("... check stage"                    , my.stage      , "");
+   yUNIT_minchr ("... check share"                    , my.share      , 'D');
+   yUNIT_minchr ("... check mark"                     , my.mark       , '-');
+   yUNIT_minstr ("... check version"                  , my.vers       , "");
+   yUNIT_minstr ("... check description"              , my.desc       , "setup base test objects");
+   yUNIT_minstr ("... check method"                   , my.meth       , "");
+   yUNIT_minstr ("... check arguments"                , my.args       , "");
+   yUNIT_minstr ("... check test"                     , my.test       , "");
+   yUNIT_minstr ("... check expect"                   , my.expe       , "");
+   CONV_cycle ();
+   yUNIT_minval ("call shared"                        , CONV_global (), 0);
+   yUNIT_minstr ("... check (0) empty"                , yURG_peek (my.n_conv, 0), "");
+   yUNIT_minstr ("... check (1) empty"                , yURG_peek (my.n_conv, 1), "");
+   yUNIT_minstr ("... check (2) empty"                , yURG_peek (my.n_conv, 2), "");
+   yUNIT_minstr ("... check (3) number ruler"         , yURG_peek (my.n_conv, 3), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  -  123456789-123456789- ");
+   yUNIT_minstr ("... check (4) title"                , yURG_peek (my.n_conv, 4), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  t  ========(var)======= ");
+   yUNIT_minstr ("... check (5) shared line"          , yURG_peek (my.n_conv, 5), "GLOBAL   -D-  setup base test objects                                            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((DD.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_conv) , 6);
+   yUNIT_mindnoc ();
+
    yUNIT_mincond ("clean up after");
    yUNIT_minval ("close script"                       , SCRP_close  (), 0);
    yUNIT_minval ("close converted"                    , CONV_close  (), 0);
@@ -1704,14 +2213,14 @@ koios__unit_conv_cond    (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("write a condition");
-   strcpy (my.recd, "COND (B)  verify successful value         ");
+   strcpy (my.recd, "COND (2)  verify successful value         ");
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
-   yUNIT_minstr ("... check the record"               , my.recd       , "COND (B) § verify successful value §  §  §  §  §");
+   yUNIT_minstr ("... check the record"               , my.recd       , "COND (2) § verify successful value §  §  §  §  §");
    yUNIT_minstr ("... check verb"                     , my.verb       , "COND");
    yUNIT_minstr ("... check stage"                    , my.stage      , "");
    yUNIT_minchr ("... check share"                    , my.share      , '-');
-   yUNIT_minchr ("... check mark"                     , my.mark       , 'B');
+   yUNIT_minchr ("... check mark"                     , my.mark       , '2');
    yUNIT_minstr ("... check version"                  , my.vers       , "");
    yUNIT_minstr ("... check description"              , my.desc       , "verify successful value");
    yUNIT_minstr ("... check method"                   , my.meth       , "");
@@ -1721,19 +2230,19 @@ koios__unit_conv_cond    (void)
    CONV_cycle ();
    yUNIT_minval ("call condition"                     , CONV_cond   (), 0);
    yUNIT_minstr ("... check (0) empty"                , yURG_peek (my.n_conv, 0), "");
-   yUNIT_minstr ("... check (1) script line"          , yURG_peek (my.n_conv, 1), "   COND  (B)  verify successful value                                            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((aa.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr ("... check (1) script line"          , yURG_peek (my.n_conv, 1), "   COND  (2)  verify successful value                                            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((DD.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_conv) , 2);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("write a ditto");
-   strcpy (my.recd, "DITTO (B)           ");
+   strcpy (my.recd, "DITTO (2)           ");
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
-   yUNIT_minstr ("... check the record"               , my.recd       , "DITTO (B) §  §  §  §  §  §");
+   yUNIT_minstr ("... check the record"               , my.recd       , "DITTO (2) §  §  §  §  §  §");
    yUNIT_minstr ("... check verb"                     , my.verb       , "DITTO");
    yUNIT_minstr ("... check stage"                    , my.stage      , "");
    yUNIT_minchr ("... check share"                    , my.share      , '-');
-   yUNIT_minchr ("... check mark"                     , my.mark       , 'B');
+   yUNIT_minchr ("... check mark"                     , my.mark       , '2');
    yUNIT_minstr ("... check version"                  , my.vers       , "");
    yUNIT_minstr ("... check description"              , my.desc       , "");
    yUNIT_minstr ("... check method"                   , my.meth       , "");
@@ -1743,7 +2252,7 @@ koios__unit_conv_cond    (void)
    CONV_cycle ();
    yUNIT_minval ("call ditto"                         , CONV_ditto  (), 0);
    yUNIT_minstr ("... check (0) empty"                , yURG_peek (my.n_conv, 0), "");
-   yUNIT_minstr ("... check (1) script line"          , yURG_peek (my.n_conv, 1), "   DITTO (B)  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((aa.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr ("... check (1) script line"          , yURG_peek (my.n_conv, 1), "   DITTO (2)  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((DD.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_conv) , 2);
    yUNIT_mindnoc ();
 
@@ -1770,6 +2279,7 @@ koios__unit_conv_cond    (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("write a use for shares");
+   yUNIT_minval ("... set shared to reuse"            , SCRP__shared_set   ('r', 'd') ,    0);
    strcpy (my.recd, "REUSE -d-           ");
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -1985,6 +2495,116 @@ koios__unit_conv_step    (void)
 /*===----                      code writing                            ----===*/
 /*====================------------------------------------====================*/
 static void      o___CODE____________________o (void) {;}
+
+char
+koios__unit_code_counts  (void)
+{
+   yUNIT_minscrp ("CODE__shared");
+   yURG_err_none ();  /* not to stderr/terminal */
+
+   yUNIT_mincond ("prepare clean start");
+   system ("rm -f /tmp/koios.unit 2> /dev/null");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check defaults");
+   yUNIT_minval ("... run clear"                      , CODE__shared_purge ()         , 0);
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "--------------------------   --------------------------");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check master indexing");
+   yUNIT_minval ("... master min"                     , CODE__shared_index ('m', 'A') ,    0);
+   yUNIT_minval ("... master middle"                  , CODE__shared_index ('m', 'J') ,    9);
+   yUNIT_minval ("... master max"                     , CODE__shared_index ('m', 'Z') ,   25);
+   yUNIT_minval ("... master too small"               , CODE__shared_index ('m',  0 ) , -999);
+   yUNIT_minval ("... master using reuses"            , CODE__shared_index ('m', 'b') , -999);
+   yUNIT_minval ("... master using dittos"            , CODE__shared_index ('m', '4') , -999);
+   yUNIT_minval ("... master using greek"             , CODE__shared_index ('m', 'ë') , -999);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check reuses indexing");
+   yUNIT_minval ("... reuses min"                     , CODE__shared_index ('r', 'a') ,    0);
+   yUNIT_minval ("... reuses middle"                  , CODE__shared_index ('r', 'm') ,   12);
+   yUNIT_minval ("... reuses max"                     , CODE__shared_index ('r', 'z') ,   25);
+   yUNIT_minval ("... reuses too small"               , CODE__shared_index ('r',  0 ) , -999);
+   yUNIT_minval ("... reuses using master"            , CODE__shared_index ('r', 'B') , -999);
+   yUNIT_minval ("... reuses using dittos"            , CODE__shared_index ('r', '4') , -999);
+   yUNIT_minval ("... reuses using greek"             , CODE__shared_index ('r', 'ë') , -999);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check indexing with bad types");
+   yUNIT_minval ("... check null"                     , CODE__shared_index ( 0 , '0') , -999);
+   yUNIT_minval ("... check dittos"                   , CODE__shared_index ('d', '0') , -999);
+   yUNIT_minval ("... check symbol"                   , CODE__shared_index ('#', '0') , -999);
+   yUNIT_minval ("... check greek"                    , CODE__shared_index ('è', '0') , -999);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("get masters before setting");
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "--------------------------   --------------------------");
+   yUNIT_minval ("... get master min"                 , CODE__shared_get   ('m', 'A') ,    0);
+   yUNIT_minval ("... get master middle"              , CODE__shared_get   ('m', 'J') ,    0);
+   yUNIT_minval ("... get master max"                 , CODE__shared_get   ('m', 'Z') ,    0);
+   yUNIT_minval ("... get master null"                , CODE__shared_get   ('m',  0 ) , -999);
+   yUNIT_minval ("... get master reuses"              , CODE__shared_get   ('m', 'b') , -999);
+   yUNIT_minval ("... get master dittos"              , CODE__shared_get   ('m', '4') , -999);
+   yUNIT_minval ("... get master greek"               , CODE__shared_get   ('m', 'ë') , -999);
+   yUNIT_minval ("... get master symbol"              , CODE__shared_get   ('m', '-') , -999);
+
+   yUNIT_mincond ("set masters");
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "--------------------------   --------------------------");
+   yUNIT_minval ("... set master min"                 , CODE__shared_set   ('m', 'A',  5) ,    0);
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "5-------------------------   --------------------------");
+   yUNIT_minval ("... set master middle"              , CODE__shared_set   ('m', 'J', 12) ,    0);
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "5--------c----------------   --------------------------");
+   yUNIT_minval ("... set master max"                 , CODE__shared_set   ('m', 'Z', 29) ,    0);
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "5--------c---------------t   --------------------------");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("get masters after setting");
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "5--------c---------------t   --------------------------");
+   yUNIT_minval ("... get master min"                 , CODE__shared_get   ('m', 'A') ,    5);
+   yUNIT_minval ("... get master middle"              , CODE__shared_get   ('m', 'J') ,   12);
+   yUNIT_minval ("... get master max"                 , CODE__shared_get   ('m', 'Z') ,   29);
+   yUNIT_minval ("... get master null"                , CODE__shared_get   ('m',  0 ) , -999);
+   yUNIT_minval ("... get master reuses"              , CODE__shared_get   ('m', 'b') , -999);
+   yUNIT_minval ("... get master dittos"              , CODE__shared_get   ('m', '4') , -999);
+   yUNIT_minval ("... get master greek"               , CODE__shared_get   ('m', 'ë') , -999);
+   yUNIT_minval ("... get master symbol"              , CODE__shared_get   ('m', '-') , -999);
+
+   yUNIT_mincond ("get reuses before setting");
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "5--------c---------------t   --------------------------");
+   yUNIT_minval ("... get reuses min"                 , CODE__shared_get   ('r', 'b') ,    0);
+   yUNIT_minval ("... get reuses middle"              , CODE__shared_get   ('r', 's') ,    0);
+   yUNIT_minval ("... get reuses max"                 , CODE__shared_get   ('r', 'y') ,    0);
+   yUNIT_minval ("... get reuses null"                , CODE__shared_get   ('r',  0 ) , -999);
+   yUNIT_minval ("... get reuses reuses"              , CODE__shared_get   ('r', 'B') , -999);
+   yUNIT_minval ("... get reuses dittos"              , CODE__shared_get   ('r', '4') , -999);
+   yUNIT_minval ("... get reuses greek"               , CODE__shared_get   ('r', 'ë') , -999);
+   yUNIT_minval ("... get reuses symbol"              , CODE__shared_get   ('r', '-') , -999);
+
+   yUNIT_mincond ("set reuses");
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "5--------c---------------t   --------------------------");
+   yUNIT_minval ("... set reuses min"                 , CODE__shared_set   ('r', 'b',  8) ,    0);
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "5--------c---------------t   -8------------------------");
+   yUNIT_minval ("... set reuses middle"              , CODE__shared_set   ('r', 's', 22) ,    0);
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "5--------c---------------t   -8----------------m-------");
+   yUNIT_minval ("... set reuses max"                 , CODE__shared_set   ('r', 'y', 52) ,    0);
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "5--------c---------------t   -8----------------m-----Q-");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("get reuses after setting");
+   yUNIT_minstr ("... check all marks"                , CODE__shared_used  ()         , "5--------c---------------t   -8----------------m-----Q-");
+   yUNIT_minval ("... get reuses min"                 , CODE__shared_get   ('r', 'b') ,    8);
+   yUNIT_minval ("... get reuses middle"              , CODE__shared_get   ('r', 's') ,   22);
+   yUNIT_minval ("... get reuses max"                 , CODE__shared_get   ('r', 'y') ,   52);
+   yUNIT_minval ("... get reuses null"                , CODE__shared_get   ('r',  0 ) , -999);
+   yUNIT_minval ("... get reuses reuses"              , CODE__shared_get   ('r', 'B') , -999);
+   yUNIT_minval ("... get reuses dittos"              , CODE__shared_get   ('r', '4') , -999);
+   yUNIT_minval ("... get reuses greek"               , CODE__shared_get   ('r', 'ë') , -999);
+   yUNIT_minval ("... get reuses symbol"              , CODE__shared_get   ('r', '-') , -999);
+
+   yUNIT_minprcs ();
+   return 0;
+}
 
 char
 koios__unit_code_files   (void)
@@ -2509,25 +3129,30 @@ koios__unit_code_scrp    (void)
    yUNIT_minstr ("... check (0) comment"              , yURG_peek (my.n_main, 0), "   if (g.scrp ==  0)                  yUNIT_sect      (\"file oriented\");");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  1);
 
+   yUNIT_mincond ("check defaults");
+   yUNIT_minval ("... run clear"                      , SCRP__shared_purge ()         , 0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+   yUNIT_mindnoc ();
+
    yUNIT_mincond ("attempt some bad shared conditions");
    strcpy (my.recd, "SHARED        remove temporary files       ");
    my.len = strlen (my.recd);
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
    yUNIT_minval ("parse the line"                     , SCRP_parse (), -999);
-   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:300:1: error: SHARED identifier not properly formatted -?-");
+   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:300:1: error: SHARED missing a valid identifier string -?-");
    strcpy (my.recd, "SHARED -b  testing        ");
    my.len = strlen (my.recd);
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), -999);
-   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:300:1: error: SHARED identifier not properly formatted -?-");
+   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:300:1: error: SHARED identifier åbæ not followed by - marker");
    strcpy (my.recd, "SHARED -è-  testing       ");
    my.len = strlen (my.recd);
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), -999);
-   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:300:1: error: SHARED identifier (è) not legal");
+   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:300:1: error: SHARED identifier åèæ not valid [a-z]");
    strcpy (my.recd, "SHARE -b-  testing       ");
    my.len = strlen (my.recd);
    my.n_line = 300;
@@ -2547,16 +3172,19 @@ koios__unit_code_scrp    (void)
    my.len = strlen (my.recd);
    my.n_line = 300;
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), 0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   -b------------------------   ----------");
    yUNIT_minstr ("... check verb"                     , my.verb          , "SHARED");
-   strcpy (my.recd, "SHARED -2-  testing       ");
+   strcpy (my.recd, "SHARED -y-  testing       ");
    my.len = strlen (my.recd);
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), 0);
-   strcpy (my.recd, "SHARED -A-  testing       ");
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   -b----------------------y-   ----------");
+   strcpy (my.recd, "SHARED -a-  testing       ");
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), 0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   ab----------------------y-   ----------");
 
    yUNIT_mincond ("attempt some bad scrp verbs");
    strcpy (my.recd, "SCRI          (SCRP) last test       ");
@@ -2638,17 +3266,17 @@ koios__unit_code_cond    (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("first condition beginning");
-   strcpy (my.recd, "COND (A)  verify defenses       ");
+   strcpy (my.recd, "COND (6)  verify defenses       ");
    my.n_line   = 32;
    my.ccond    =  0;
    my.run_type = G_RUN_DEBUG;
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
-   yUNIT_minstr ("... check the record"               , my.recd       , "COND (A) § verify defenses §  §  §  §");
+   yUNIT_minstr ("... check the record"               , my.recd       , "COND (6) § verify defenses §  §  §  §");
    yUNIT_minstr ("... check verb"                     , my.verb       , "COND");
    yUNIT_minstr ("... check stage"                    , my.stage      , "");
    yUNIT_minchr ("... check share"                    , my.share      , '-');
-   yUNIT_minchr ("... check mark"                     , my.mark       , 'A');
+   yUNIT_minchr ("... check mark"                     , my.mark       , '6');
    yUNIT_minstr ("... check version"                  , my.vers       , "");
    yUNIT_minstr ("... check description"              , my.desc       , "verify defenses");
    yUNIT_minstr ("... check method"                   , my.meth       , "");
@@ -2770,17 +3398,17 @@ koios__unit_code_cond    (void)
    my.n_line   = 38;
    my.run_type = G_RUN_CREATE;
    yUNIT_minval ("parse a REUSE"                      , SCRP_parse  (), -999);
-   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:38:1: error: REUSE identifier not properly formatted -?-");
+   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:38:1: error: REUSE missing a valid identifier string -?-");
    strcpy (my.recd, "REUSE -b          ");
    my.n_line   = 38;
    my.run_type = G_RUN_CREATE;
    yUNIT_minval ("parse a REUSE"                      , SCRP_parse  (), -999);
-   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:38:1: error: REUSE identifier not properly formatted -?-");
+   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:38:1: error: REUSE identifier åbæ not followed by - marker");
    strcpy (my.recd, "REUSE -è-         ");
    my.n_line   = 38;
    my.run_type = G_RUN_CREATE;
    yUNIT_minval ("parse a REUSE"                      , SCRP_parse  (), -999);
-   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:38:1: error: REUSE identifier (è) not legal");
+   yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:38:1: error: REUSE identifier åèæ not valid [a-zA-Z]");
    strcpy (my.recd, "REUSED -b-         ");
    my.n_line   = 38;
    my.run_type = G_RUN_CREATE;
@@ -3188,6 +3816,15 @@ static void      o___LIVE____________________o (void) {;}
 char
 koios__unit_shared_data  (void)
 {
+
+   yUNIT_minscrp ("run-time testing");
+   yURG_err_none ();  /* not to stderr/terminal */
+
+   yUNIT_mincond ("check defaults");
+   yUNIT_minval ("... run clear"                      , SCRP__shared_purge ()         , 0);
+   yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+   yUNIT_mindnoc ();
+
    yUNIT_mincond ("prepare a interesting example");
    system ("rm -f koios.unit 2> /dev/null");
    system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  -  123456789- \"   > koios.unit");
@@ -3211,7 +3848,7 @@ koios__unit_shared_data  (void)
    system ("echo \"    mode      FORCED_FAIL                         \"                                                                                                       >> koios.unit");
    system ("echo \"    system    ... run little                       - - - - - - - -   /bin/false                                                      \"                >> koios.unit");
    system ("echo \"SECT          more complex testing                \"                                                                                                       >> koios.unit");
-   system ("echo \"SHARED   -A-  prepare files for use               \"                                                                                                       >> koios.unit");
+   system ("echo \"SHARED   -a-  prepare files for use               \"                                                                                                       >> koios.unit");
    system ("echo \"  COND        script input file                   \"                                                                                                       >> koios.unit");
    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> koios.unit");
    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> koios.unit");
@@ -3222,7 +3859,7 @@ koios__unit_shared_data  (void)
    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> koios.unit");
    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> koios.unit");
    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> koios.unit");
-   system ("echo \"SHARED   -B-  remove files after use              \"                                                                                                       >> koios.unit");
+   system ("echo \"SHARED   -b-  remove files after use              \"                                                                                                       >> koios.unit");
    system ("echo \"  COND        close and delete script file        \"                                                                                                       >> koios.unit");
    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> koios.unit");
    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> koios.unit");
@@ -3235,7 +3872,7 @@ koios__unit_shared_data  (void)
    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> koios.unit");
    system ("echo \"SCRP    [ê2]  (SCRP) verify system startup                          \"                                                                                   >> koios.unit");
    system ("echo \"  COND        run initialization                  \"                                                                                                       >> koios.unit");
-   system ("echo \"  REUSE  -A-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> koios.unit");
+   system ("echo \"  REUSE  -a-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> koios.unit");
    system ("echo \"  COND        parse a code record                 \"                                                                                                       >> koios.unit");
    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> koios.unit");
    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> koios.unit");
@@ -3248,7 +3885,7 @@ koios__unit_shared_data  (void)
    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> koios.unit");
    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> koios.unit");
    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> koios.unit");
-   system ("echo \"  REUSE  -A-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> koios.unit");
+   system ("echo \"  REUSE  -a-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> koios.unit");
    system ("echo \"  COND        read one record                     \"                                                                                                       >> koios.unit");
    system ("echo \"    exec      ... check string                     yUNIT_teststring  1                         s_equal     hello                 \"                >> koios.unit");
    system ("echo \"    exec      ... check number                     yUNIT_testreal    2                         r_greater   15.0                  \"                >> koios.unit");
@@ -3260,7 +3897,7 @@ koios__unit_shared_data  (void)
    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> koios.unit");
    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> koios.unit");
    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> koios.unit");
-   system ("echo \"  REUSE  -B-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> koios.unit");
+   system ("echo \"  REUSE  -b-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> koios.unit");
    system ("echo \"  GROUP       final round                         \"                                                                                                       >> koios.unit");
    system ("echo \"  COND        generate a summary                  \"                                                                                                       >> koios.unit");
    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> koios.unit");
@@ -3276,6 +3913,8 @@ koios__unit_shared_data  (void)
    yUNIT_minval  ("... compile"                        , system ("gcc -c koios_unit.c"), 0);
    yUNIT_minval  ("... link"                           , system ("gcc -o koios_unit koios_unit.o -lyUNIT"), 0);
    yUNIT_mindnoc ();
+
+   yUNIT_minprcs ();
 
    return 0;
 }
@@ -3726,7 +4365,7 @@ koios__unit_live_step    (void)
    yUNIT_minstr  ("... check (43) empty line"          , yURG_peek (x_urun,43), "");
    yUNIT_minstr  ("... check (44) condition"           , yURG_peek (x_urun,44), "  COND [001] run initialization -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00045]");
    yUNIT_minstr  ("... check (45) empty line"          , yURG_peek (x_urun,45), "");
-   yUNIT_minstr  ("... check (46) share marker"        , yURG_peek (x_urun,46), "  " BACK_MAG "SHARE (A) ===--------------------   prepare files for use   --------------------===" BACK_OFF);
+   yUNIT_minstr  ("... check (46) share marker"        , yURG_peek (x_urun,46), "  " BACK_MAG "SHARE (a) ===--------------------   prepare files for use   --------------------===" BACK_OFF);
    yUNIT_minstr  ("... check (47) empty line"          , yURG_peek (x_urun,47), "");
    yUNIT_minstr  ("... check (48) condition"           , yURG_peek (x_urun,48), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00023]");
    yUNIT_minstr  ("... check (49) step"                , yURG_peek (x_urun,49), "     aa) str   : check string · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·[00024]");
@@ -3740,7 +4379,7 @@ koios__unit_live_step    (void)
    yUNIT_minstr  ("... check (57) step"                , yURG_peek (x_urun,57), "     ac) int   : check integer  ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·[00031]");
    yUNIT_minstr  ("... check (58) step"                , yURG_peek (x_urun,58), "     ad) int   : check character · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·[00032]");
    yUNIT_minstr  ("... check (59) empty line"          , yURG_peek (x_urun,59), "");
-   yUNIT_minstr  ("... check (60) share marker"        , yURG_peek (x_urun,60), "  " BACK_MAG "ERAHS (A) ===--------------------   prepare files for use   --------------------===" BACK_OFF);
+   yUNIT_minstr  ("... check (60) share marker"        , yURG_peek (x_urun,60), "  " BACK_MAG "ERAHS (a) ===--------------------   prepare files for use   --------------------===" BACK_OFF);
    yUNIT_minstr  ("... check (61) empty line"          , yURG_peek (x_urun,61), "");
    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 148);
    yUNIT_mindnoc ();
@@ -3912,6 +4551,7 @@ main                    (void)
    koios__unit_scrp_stage   ();
    koios__unit_scrp_comment ();
    koios__unit_scrp_parse   ();
+   koios__unit_scrp_share   ();
    koios__unit_scrp_ditto   ();
    koios__unit_scrp_variety ();
    /*---(conversion output)--------------*/
@@ -3922,6 +4562,7 @@ main                    (void)
    koios__unit_conv_cond    ();
    koios__unit_conv_step    ();
    /*---(code generation)----------------*/
+   koios__unit_code_counts  ();
    koios__unit_code_files   ();
    koios__unit_code_ends    ();
    koios__unit_code_prep    ();
