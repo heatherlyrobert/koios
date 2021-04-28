@@ -17,34 +17,35 @@ static  int   s_dittos [26] = { -1 };
 
 tVERB       g_verbs [MAX_VERB] = {
    /* --global------   ---------------------------------------   -  */
-   { "GLOBAL"       , "shared code between units"             , '2',  0,  0, CONV_global   , CODE_global   },
+   { "GLOBAL"       , "shared code between units"             , '2', 'm',  0,  0, CONV_global   , CODE_global   },
    /* --units-------   ---------------------------------------   -  */
-   { "PREP"         , "preparation before testing"            , '2',  0,  0, CONV_prep     , CODE_prep     },
-   { "incl"         , "c header inclusion"                    , '3',  0,  0, CONV_incl     , CODE_incl     },
-   { "#>"           , "script internal comments"              , 'c',  0,  0, CONV_comment  , NULL          },
+   { "PREP"         , "preparation before testing"            , '2', '-',  0,  0, CONV_prep     , CODE_prep     },
+   { "incl"         , "c header inclusion"                    , '3', '-',  0,  0, CONV_incl     , CODE_incl     },
+   { "#>"           , "script internal comments"              , 'c', '-',  0,  0, CONV_comment  , NULL          },
    /* --scrps-------   --------------------------------------- */
-   { "SCRP"         , "test script"                           , '3',  0,  0, CONV_scrp     , CODE_scrp     },
-   { "SECT"         , "grouping of scripts"                   , '2',  0,  0, CONV_sect     , CODE_sect     },
-   { "SHARED"       , "shared code between scripts"           , '2',  0,  0, CONV_shared   , CODE_shared   },
+   { "SCRP"         , "test script"                           , '3', 'n',  0,  0, CONV_scrp     , CODE_scrp     },
+   { "SECT"         , "grouping of scripts"                   , '2', 'n',  0,  0, CONV_sect     , CODE_sect     },
+   { "SHARED"       , "shared code between scripts"           , '2', 'n',  0,  0, CONV_shared   , CODE_shared   },
    /* --conds-------   --------------------------------------- */
-   { "GROUP"        , "grouping of conditions"                , '2',  0,  0, CONV_group    , CODE_group    },
-   { "COND"         , "test condition"                        , '2',  0,  0, CONV_cond     , CODE_cond     },
-   { "DITTO"        , "repeated test condition"               , '1',  0,  0, CONV_ditto    , NULL          },
-   { "REUSE"        , "inclusion of shared code"              , '1',  0,  0, CONV_reuse    , CODE_reuse    },
+   { "GROUP"        , "grouping of conditions"                , '2', '-',  0,  0, CONV_group    , CODE_group    },
+   { "COND"         , "test condition"                        , '2', '-',  0,  0, CONV_cond     , CODE_cond     },
+   { "DITTO"        , "repeated test condition"               , '1', '-',  0,  0, CONV_ditto    , NULL          },
+   { "REUSE"        , "inclusion of shared code"              , '1', '-',  0,  0, CONV_reuse    , CODE_reuse    },
    /* --steps-------   --------------------------------------- */
-   { "exec"         , "function execution"                    , 'f',  0,  0, CONV_exec     , CODE_exec     },
-   { "get"          , "unit test accessor retrieval"          , 'f',  0,  0, CONV_exec     , CODE_exec     },
+   { "exec"         , "function execution"                    , 'f', '-',  0,  0, CONV_exec     , CODE_exec     },
+   { "get"          , "unit test accessor retrieval"          , 'f', '-',  0,  0, CONV_exec     , CODE_exec     },
    /* --specialty---   --------------------------------------- */
-   { "code"         , "insert c code"                         , 'p',  0,  0, CONV_code     , CODE_code     },
-   { "echo"         , "test a variable directly"              , 'f',  0,  0, CONV_echo     , CODE_echo     },
-   { "system"       , "execute shell code"                    , 'p',  0,  0, CONV_code     , CODE_system   },
-   { "load"         , "place data into stdin"                 , 'P',  0,  0, CONV_load     , CODE_load     },
-   { "mode"         , "set pass or forced_fail mode"          , '2',  0,  0, CONV_mode     , CODE_mode     },
+   { "code"         , "insert c code"                         , 'p', '-',  0,  0, CONV_code     , CODE_code     },
+   { "echo"         , "test a variable directly"              , 'f', '-',  0,  0, CONV_echo     , CODE_echo     },
+   { "system"       , "execute shell code"                    , 'p', '-',  0,  0, CONV_code     , CODE_system   },
+   { "load"         , "place data into stdin"                 , 'P', '-',  0,  0, CONV_load     , CODE_load     },
+   { "mode"         , "set pass or forced_fail mode"          , '2', '-',  0,  0, CONV_mode     , CODE_mode     },
+   { "global"       , "global variable definition"            , 'p', '-',  0,  0, CONV_gvar     , CODE_gvar     },
    /* --ouroboros---   --------------------------------------- */
-   { "WAVE"         , "testing wave"                          , '2',  0,  0, NULL          , NULL          },
-   { "stage"        , "testing stage"                         , '2',  0,  0, NULL          , NULL          },
+   { "WAVE"         , "testing wave"                          , '2', 'm',  0,  0, NULL          , NULL          },
+   { "stage"        , "testing stage"                         , '2', 'm',  0,  0, NULL          , NULL          },
    /* --sentinal----   --------------------------------------- */
-   { "----"         , "end-of-entries"                        , '-',  0,  0, NULL          , NULL          },
+   { "----"         , "end-of-entries"                        , '-', '-',  0,  0, NULL          , NULL          },
    /* --done--------   --------------------------------------- */
 };
 
@@ -309,6 +310,12 @@ SCRP__reuses_check      (char *p)
    /*---(handle global)------------------*/
    --rce;  if (strcmp ("GLOBAL" , g_verbs [my.indx].name) == 0) {
       DEBUG_INPT   yLOG_snote   ("handle global");
+      IF_NORMAL {
+         DEBUG_INPT   yLOG_snote   ("GLOBAL only allowed in master.unit");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: GLOBAL not allowed outside master.unit", my.n_scrp, my.n_line);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
       if (n < -1) {
          DEBUG_INPT   yLOG_snote   ("global identifier must be A-Z");
          yURG_err (YURG_FATAL, "%s:%d:1: error: GLOBAL identifier å%cæ not valid [A-Z]", my.n_scrp, my.n_line, m);
@@ -327,6 +334,12 @@ SCRP__reuses_check      (char *p)
    /*---(handle shared)------------------*/
    --rce;  if (strcmp ("SHARED" , g_verbs [my.indx].name) == 0) {
       DEBUG_INPT   yLOG_snote   ("handle shared");
+      IF_MASTER {
+         DEBUG_INPT   yLOG_snote   ("SHARED verb not allowed in master.unit");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: SHARED verb not allowed in master.unit", my.n_scrp, my.n_line);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
       if (o < -1) {
          DEBUG_INPT   yLOG_snote   ("shared identifier must be a-z");
          yURG_err (YURG_FATAL, "%s:%d:1: error: SHARED identifier å%cæ not valid [a-z]", my.n_scrp, my.n_line, m);
@@ -345,6 +358,12 @@ SCRP__reuses_check      (char *p)
    /*---(handle reuses)------------------*/
    --rce;  if (strcmp ("REUSE" , g_verbs [my.indx].name) == 0) {
       DEBUG_INPT   yLOG_snote   ("handle reuse");
+      IF_MASTER {
+         DEBUG_INPT   yLOG_snote   ("REUSE not allowed in master.unit");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: REUSE verb not allowed in master.unit", my.n_scrp, my.n_line);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
       if (n < -1 && o < -1) {
          DEBUG_INPT   yLOG_snote   ("not set");
          yURG_err (YURG_FATAL, "%s:%d:1: error: REUSE identifier å%cæ not valid [a-zA-Z]", my.n_scrp, my.n_line, m);
@@ -1195,75 +1214,26 @@ SCRP_parse_verb         (char *p)
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
+   /*---(file limitations)---------------*/
+   --rce;  IF_MASTER {
+      if (g_verbs [my.indx].files == 'n') {
+         DEBUG_INPT   yLOG_snote   ("verb not allowed in master.unit");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: %s verb not allowed inside master.unit", my.n_scrp, my.n_line, my.verb);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+   }
+   --rce;  IF_NORMAL {
+      if (g_verbs [my.indx].files == 'm') {
+         DEBUG_INPT   yLOG_snote   ("verb not allowed outside master.unit");
+         yURG_err (YURG_FATAL, "%s:%d:1: error: %s verb not allowed outside master.unit", my.n_scrp, my.n_line, my.verb);
+         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+   }
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
    return 0;
-}
-
-char
-SCRP_parse_shared       (char *p)
-{
-}
-
-
-char
-SCRP_parse_ditto        (char *p)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   char        rc          =    0;
-   char       *q           = NULL;
-   /*---(header)-------------------------*/
-   DEBUG_INPT   yLOG_enter   (__FUNCTION__);
-   my.mark = '-';
-   if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
-      if (strcmp ("SCRP" , g_verbs [my.indx].name) == 0) {
-         DEBUG_INPT   yLOG_note    ("clear ditto marks (create)");
-         SCRP__ditto_clear ();
-      } else if (strcmp ("COND", g_verbs [my.indx].name) == 0) {
-         DEBUG_INPT   yLOG_note    ("found a ditto condition (create)");
-         SCRP__ditto_check (p);
-      } else if (strcmp ("DITTO", g_verbs [my.indx].name) == 0) {
-         DEBUG_INPT   yLOG_note    ("found a ditto verb (create)");
-         rc = SCRP_ditto__beg (p);
-         if (rc >= 0)  rc = 1;
-      }
-   } else {
-      q = strchr (p, '(');
-      if (q != NULL && strcmp ("COND" , g_verbs [my.indx].name) == 0) {
-         DEBUG_INPT   yLOG_note    ("found a ditto condition (update)");
-         if (strchr (LTRS_UPPER, q[1]) == NULL) {
-            yURG_err (YURG_FATAL, "%s:%d:1: error: COND identifier (%c) not [A-Z]", my.n_scrp, my.n_line, q[1]);
-            return rce;
-         }
-         my.mark = q [1];
-      } else if (q != NULL && strcmp ("DITTO" , g_verbs [my.indx].name) == 0) {
-         DEBUG_INPT   yLOG_note    ("found a ditto verb (update)");
-         if (strchr (LTRS_UPPER, q[1]) == NULL) {
-            yURG_err (YURG_FATAL, "%s:%d:1: error: DITTO identifier (%c) not [A-Z]", my.n_scrp, my.n_line, q[1]);
-            return rce;
-         }
-         my.mark = q [1];
-      } else if (q == NULL && strcmp ("DITTO" , g_verbs [my.indx].name) == 0) {
-         yURG_err (YURG_FATAL, "%s:%d:1: error: DITTO verb does not include (?) idenfifier", my.n_scrp, my.n_line);
-         return rce;
-      }
-   }
-   --rce;  if (strcmp ("SHARED" , my.verb) == 0 || strcmp ("REUSE" , my.verb) == 0) {
-      q = strchr (p, '-');
-      if (q == NULL || strlen (q) < 3 || q [2] != '-') {
-         yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier not properly formatted -?-", my.n_scrp, my.n_line, my.verb);
-         return rce;
-      }
-      if (strchr (LTRS_CHARS, q [1]) == NULL) {
-         yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier (%c) not legal", my.n_scrp, my.n_line, my.verb, q [1]);
-         return rce;
-      }
-      my.share = q [1];
-   }
-   /*---(complete)-----------------------*/
-   DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-   return rc;
 }
 
 char

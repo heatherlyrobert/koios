@@ -168,15 +168,17 @@ as described above, units are the contents of an entire
 file.  during development, unit tests are typically executed script-by-script.
 but, during production and updates, full units are often run.
 
-there are two required, unit specific verbs...
+there are three overall unit specific verbs...
    PREP       before any scripts, allows header inclusion
    incl       directly after PREP, includes one header each
+   global     see SPECIALTY section
 
 .B begin åexample.unitæ ---------------------------------
 
-PREP     § include the program headers    § 
-   incl  § include public header          § example.h        §
-   incl  § include private header         § example_priv.h   §
+PREP      § include the program headers    § 
+   incl   § include public header          § example.h           §
+   incl   § include private header         § example_priv.h      §
+   global § global output variable         § - - -  § int c = 0; §
 
 .B end åexample.unitæ -----------------------------------
 
@@ -244,9 +246,12 @@ see REUSE in the CONDITIONS section below.
 
 .B GLOBAL -D- § description of conditions    §
 
-same as SHARED, but the code is put in a header which all unit tests can call.
-GLOBAL identifiers are upper case [A-Z] to differentiate from SHARED [a-z].
-this verb can only appear in the åmaster.unitæ file.
+same as SHARED, but the code is put in a header called åmaster.hæ which all
+unit tests can call.  GLOBAL identifiers are upper case [A-Z] to differentiate
+from SHARED [a-z].  this verb can only appear in the åmaster.unitæ file.
+
+CRITICAL, for GLOBAL code to function, the master.unit file requires the PREP
+and incl verbs also.  same as c language.
 
 .SH F) CONDITIONS
 conditions are just a grouping of execution lines into a manageable and related
@@ -346,6 +351,7 @@ test much more flexibility.  all specialty steps MUST appear in a condition.
 
 there are four specialty step verbs...
    code       accepts a c source code line for execution
+   global     c source definition of global variable
    echo       allows a specific variable to be checked
    system     executes a string using system()
    load       places a string into input, like stdin
@@ -361,6 +367,12 @@ also, this allows local unit testing variables to be defined for use
 in the execution statements below.  remember, any variables defined are
 local to the script only, not the whole unit and won't be available in
 any SHARED code.
+
+.B global § description   § - - - § <var definition>;    §
+
+same as code variable above for defining variable, but only placed below
+the PREP section of the script.  this variable is available in all scripts
+within the unit.  if placed in master.unit, it is available everywhere.
 
 .B echo   § description  § - - - § <var> § i_equal § 0  §
 

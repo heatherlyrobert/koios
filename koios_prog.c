@@ -103,7 +103,7 @@ PROG_file               (char *a_name)
    strcpy (x_base, a_name);
    p = strstr (x_base, ".unit");
    if (p != NULL)   p [0] = '\0';
-   /*---(check device file)--------------*/
+   /*---(check unit file)----------------*/
    sprintf (x_unit, "%s.unit", x_base);
    rc = lstat (x_unit, &s);
    /*> printf ("x_unit = [%s] %d\n", x_unit, rc);                                     <*/
@@ -128,6 +128,10 @@ PROG_file               (char *a_name)
       DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   /*---(check master.h)-----------------*/
+   rc = lstat ("master.h", &s);
+   DEBUG_ARGS    yLOG_value   ("stat"      , rc);
+   if (rc < 0)   system  ("touch master.h");
    /*---(save back)----------------------*/
    strncpy (my.n_base, a_name, LEN_PATH);
    DEBUG_ARGS  yLOG_info    ("n_base"    , my.n_base);

@@ -102,9 +102,9 @@ CONV_beg           (void)
 {
    CONV_printf ("#!/usr/local/bin/koios\n");
    CONV_printf ("#   %s\n", P_ONELINE);
-   my.nscrp  = my.cscrp = 0;
-   my.ncond  = my.ccond = 0;
-   my.nstep  = my.cstep = 0;
+   my.nscrp  = 0;
+   my.ncond  = my.scond = 0;
+   my.nstep  = my.sstep = my.cstep = 0;
    my.cshare = '-';
    return 0;
 }
@@ -309,6 +309,13 @@ char
 CONV_code          (void)
 {
    CONV_printf ("     %-6.6s   %-35.35s  - - - - - - - - - - - - -   %-218s \n", my.verb, my.desc, my.code);
+   return 0;
+}
+
+char
+CONV_gvar          (void)
+{
+   CONV_printf ("   global     %-35.35s  - - - - - - - - - - - - -   %-218s \n", my.desc, my.code);
    return 0;
 }
 

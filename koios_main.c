@@ -43,6 +43,7 @@ main               (int argc, char *argv[])
       PROG_end     ();
       return rc;
    }
+   IF_NORMAL  CODE_shared_in  ();
    /*---(main-loop)----------------------*/
    DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
    DEBUG_TOPS   yLOG_note    ("entering main processing loop");
@@ -80,9 +81,11 @@ main               (int argc, char *argv[])
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) { 
       rc = MAIN_end       ();
       rc = CODE_end       ();
-      rc = MAIN_append    ();
+      IF_NORMAL  rc = MAIN_append    ();
+      IF_MASTER  CODE_shared_out ();
       rc = CODE_close     (my.f_code);
       rc = CODE_close     (my.f_wave);
+      IF_MASTER  system  ("mv -f master_unit.cs master.h");
    } else if (my.run_type == G_RUN_UPDATE) {
       rc = CONV_end       ();
       rc = CONV_close     ();

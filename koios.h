@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3f"
-#define     P_VERTXT    "everything working in unit tests, but still need GLOBAL code"
+#define     P_VERNUM    "1.3g"
+#define     P_VERTXT    "fully integrated global and unit test is passing again"
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 /*===[[ HEADER ]]=============================================================*/
@@ -150,6 +150,8 @@
 #define     T_REUSES    'r'
 #define     T_DITTOS    'd'
 
+#define     IF_MASTER     if (strcmp (my.n_base, "master") == 0)
+#define     IF_NORMAL     if (strcmp (my.n_base, "master") != 0)
 
 typedef struct stat      tSTAT;
 
@@ -181,12 +183,11 @@ struct cGLOBALS
    int         n_short;                     /* file   short lines             */
    int         n_recd;                      /* file   good records            */
    int         nscrp;                       /* total count of scripts         */
-   int         ncond;                       /* total count of scripts         */
-   int         nstep;                       /* total count of scripts         */
-   int         cscrp;                       /* current script number          */
-   int         ccond;                       /* current condition number       */
+   int         ncond;                       /* total count of conditions      */
+   int         nstep;                       /* total count of steps           */
+   int         scond;                       /* curr scrp count of conditions  */
+   int         sstep;                       /* curr scrp count of steps       */
    int         cstep;                       /* current step number            */
-   int         sstep;                       /* steps in current script        */
    /*---(script)---------------*/
    char        recd        [LEN_RECD ];     /* script record                  */
    int         len;                         /* record length                  */
@@ -234,6 +235,7 @@ struct cVERB {
    char        name        [LEN_FULL];      /* verb                           */
    char        desc        [LEN_FULL];      /* description                    */
    char        spec;                        /* specialty verb                 */
+   char        files;                       /* master vs normal vs both       */
    int         count;                       /* number found in script         */
    int         total;                       /* number found in unit test      */
    char      (*conv) (void);                /* conversion function            */ 
@@ -300,9 +302,11 @@ char*       SCRP__unit              (char *a_question, int a_num);
 char        CODE__shared_clear      (cchar a_type);
 char        CODE__shared_purge      (void);
 char        CODE__shared_index      (cchar a_type, cchar a_mark);
-char        CODE__shared_set        (cchar a_type, cchar a_mark, int a_count);
-int         CODE__shared_get        (cchar a_type, cchar a_mark);
+char        CODE__shared_set        (cchar a_type, cchar a_mark, int a_cond, int a_step);
+char        CODE__shared_add        (cchar a_type, cchar a_mark, int *a_cond, int *a_step);
 char*       CODE__shared_used       (void);
+char        CODE_shared_out         (void);
+char        CODE_shared_in          (void);
 /*---(file)----------------*/
 char        CODE_open               (void);
 char        CODE_printf             (char *a_format, ...);
@@ -334,6 +338,7 @@ char        CODE_exec          (void);
 char        CODE_echo          (void);
 char        CODE_mode          (void);
 char        CODE_code          (void);
+char        CODE_gvar          (void);
 char        CODE_load          (void);
 char        CODE_system        (void);
 char        CODE_unknown       (void);
@@ -363,6 +368,7 @@ char        CONV_exec               (void);
 char        CONV_echo               (void);
 char        CONV_mode               (void);
 char        CONV_code               (void);
+char        CONV_gvar               (void);
 char        CONV_load               (void);
 char        CONV_driver             (void);
 char*       CONV__unit              (char *a_question, int a_num);

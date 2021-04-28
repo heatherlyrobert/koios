@@ -8,10 +8,93 @@ char        CODE_cond_end      (void);
 
 
 
-static int  s_master_cnt   [26];          /* count of cond in each share    */
-static int  s_reuses_cnt   [26];          /* count of cond in each share    */
+static int  s_master_cond   [26];          /* count of cond in each share    */
+static int  s_master_step   [26];          /* count of step in each share    */
+static int  s_reuses_cond   [26];          /* count of cond in each share    */
+static int  s_reuses_step   [26];          /* count of step in each share    */
 
 
+
+/*====================------------------------------------====================*/
+/*===----                      statistics handling                     ----===*/
+/*====================------------------------------------====================*/
+static void  o___STATS___________o () { return; }
+
+char
+CODE__stats_debug       (char *a_called)
+{
+   /*> printf ("%-10.10s  %-4d  %-10.10s   %3d   %3d %3d   %3d %3d %3d\n",            <* 
+    *>       a_called,                                                                <* 
+    *>       my.n_line, my.verb,                                                      <* 
+    *>       my.nscrp,                                                                <* 
+    *>       my.ncond, my.scond,                                                      <* 
+    *>       my.nstep, my.sstep, my.cstep);                                           <*/
+   return 0;
+}
+
+char
+CODE__stats_purge       (void)
+{
+   my.nscrp  = 0;
+   my.ncond  = my.scond = 0;
+   my.nstep  = my.sstep = my.cstep = 0;
+   CODE__stats_debug ("purge"    );
+   return 0;
+}
+
+char
+CODE__stats_scrp_beg    (void)
+{
+   ++(my.nscrp);
+   CODE__stats_debug ("scrp_beg" );
+   return 0;
+}
+
+char
+CODE__stats_scrp_end    (void)
+{
+   my.scond  = 0;
+   my.sstep  = my.cstep  = 0;
+   CODE__stats_debug ("scrp_end" );
+   /*> printf ("\n");                                                                 <*/
+   return 0;
+}
+
+char
+CODE__stats_cond_beg    (void)
+{
+   ++(my.ncond);
+   ++(my.scond);
+   CODE__stats_debug ("cond_beg" );
+   return 0;
+}
+
+char
+CODE__stats_cond_end    (void)
+{
+   my.cstep  = 0;
+   CODE__stats_debug ("cond_end" );
+   return 0;
+   return 0;
+}
+
+char
+CODE__stats_step        (void)
+{
+   ++(my.nstep);
+   ++(my.sstep);
+   ++(my.cstep);
+   CODE__stats_debug ("step"     );
+   return 0;
+}
+
+
+
+
+/*====================------------------------------------====================*/
+/*===----                       shared data                            ----===*/
+/*====================------------------------------------====================*/
+static void  o___SHARED__________o () { return; }
 
 char
 CODE__shared_clear       (cchar a_type)
@@ -21,8 +104,14 @@ CODE__shared_clear       (cchar a_type)
    /*---(set defaults)-------------------*/
    for (i = 0; i < 26; ++i) {
       switch (a_type) {
-      case T_MASTER : s_master_cnt [i] = 0;     break;
-      case T_REUSES : s_reuses_cnt [i] = 0;     break;
+      case T_MASTER :
+         s_master_cond [i] = 0;
+         s_master_step [i] = 0;
+         break;
+      case T_REUSES :
+         s_reuses_cond [i] = 0;
+         s_reuses_step [i] = 0;
+         break;
       }
    }
    /*---(complete)-----------------------*/
@@ -60,7 +149,7 @@ CODE__shared_index       (cchar a_type, cchar a_mark)
 }
 
 char
-CODE__shared_set         (cchar a_type, cchar a_mark, int a_count)
+CODE__shared_set         (cchar a_type, cchar a_mark, int a_cond, int a_step)
 {
    /*---(locals)-------------------------*/
    char        i           =  -10;
@@ -69,25 +158,38 @@ CODE__shared_set         (cchar a_type, cchar a_mark, int a_count)
    if (i < 0) return i;
    /*---(update list)--------------------*/
    switch (a_type) {
-   case T_MASTER : s_master_cnt [i] = a_count;   break;
-   case T_REUSES : s_reuses_cnt [i] = a_count;   break;
+   case T_MASTER :
+      s_master_cond [i] = a_cond;
+      s_master_step [i] = a_step;
+      break;
+   case T_REUSES :
+      s_reuses_cond [i] = a_cond;
+      s_reuses_step [i] = a_step;
+      break;
    }
    /*---(complete)-----------------------*/
    return 0;
 }
 
-int
-CODE__shared_get         (cchar a_type, cchar a_mark)
+char
+CODE__shared_add         (cchar a_type, cchar a_mark, int *a_cond, int *a_step)
 {
    /*---(locals)-------------------------*/
+   char        rce         =  -10;
    char        i           =  -10;
    /*---(get index)----------------------*/
    i = CODE__shared_index (a_type, a_mark);
    if (i < 0) return i;
    /*---(update list)--------------------*/
    switch (a_type) {
-   case T_MASTER : return s_master_cnt [i];   break;
-   case T_REUSES : return s_reuses_cnt [i];   break;
+   case T_MASTER : 
+      if (a_cond != NULL)  *a_cond += s_master_cond [i];
+      if (a_step != NULL)  *a_step += s_master_step [i];
+      break;
+   case T_REUSES :
+      if (a_cond != NULL)  *a_cond += s_reuses_cond [i];
+      if (a_step != NULL)  *a_step += s_reuses_step [i];
+      break;
    }
    /*---(complete)-----------------------*/
    return 0;
@@ -105,18 +207,55 @@ CODE__shared_used        (void)
    my.d_used [i] = '\0';
    /*---(master)-------------------------*/
    for (i = 0; i < 26; ++i) {
-      if      (s_master_cnt [i] <=  0)    my.d_used [i +  0] = '-';
-      else if (s_master_cnt [i] >  62)    my.d_used [i +  0] = '*';
-      else                                my.d_used [i +  0] = LTRS_CHARS [s_master_cnt [i]];
+      if      (s_master_cond [i] <=  0)    my.d_used [i +  0] = '-';
+      else if (s_master_cond [i] >  62)    my.d_used [i +  0] = '*';
+      else                                 my.d_used [i +  0] = LTRS_CHARS [s_master_step [i]];
    }
    /*---(reuses)-------------------------*/
    for (i = 0; i < 26; ++i) {
-      if      (s_reuses_cnt [i] <=  0)    my.d_used [i + 29] = '-';
-      else if (s_reuses_cnt [i] >  62)    my.d_used [i + 29] = '*';
-      else                                my.d_used [i + 29] = LTRS_CHARS [s_reuses_cnt [i]];
+      if      (s_reuses_cond [i] <=  0)    my.d_used [i + 29] = '-';
+      else if (s_reuses_cond [i] >  62)    my.d_used [i + 29] = '*';
+      else                                 my.d_used [i + 29] = LTRS_CHARS [s_reuses_step [i]];
    }
    /*---(complete)-----------------------*/
    return my.d_used;
+}
+
+char
+CODE_shared_out         (void)
+{
+   char        rce         =  -10;
+   FILE       *f           = NULL;
+   int         i           =    0;
+   f = fopen ("master.stats", "wt");
+   --rce;  if (f == NULL)  return rce;
+   for (i = 0; i < 26; ++i) {
+      fprintf (f, "%4d %4d\n", s_master_cond [i], s_master_step [i]);
+   }
+   fclose (f);
+   return 0;
+}
+
+char
+CODE_shared_in          (void)
+{
+   char        rce         =  -10;
+   char        rc          =    0;
+   FILE       *f           = NULL;
+   int         i           =    0;
+   int         x_cond      =    0;
+   int         x_step      =    0;
+   f = fopen ("master.stats", "rt");
+   --rce;  if (f == NULL)  return rce;
+   for (i = 0; i < 26; ++i) {
+      fscanf  (f, "%4d %4d\n", &x_cond, &x_step);
+      rc = CODE__shared_set (T_MASTER, 'A' + i, x_cond, x_step);
+      rc = SCRP__shared_set (T_MASTER, 'A' + i);
+
+      /*> printf ("%c %4d %4d  (%d)\n", 'A' + i, x_cond, x_step, rc);                 <*/
+   }
+   fclose (f);
+   return 0;
 }
 
 
@@ -294,30 +433,35 @@ CODE_beg                (void)
    CODE_printf ("/*================================= beg-code =================================*/\n");
    CODE_printf ("/* /usr/local/bin/koios                                                       */\n");
    CODE_printf ("/*   autogen by %-60.60s  */\n", P_ONELINE);
-   CODE_printf ("\n");
-   CODE_printf ("/*---(standard support functions)----*/\n");
-   CODE_printf ("#include    <yUNIT_unit.h>\n");
-   CODE_printf ("\n");
-   CODE_printf ("/*================================ beg-script ================================*/\n");
+   IF_NORMAL {
+      CODE_printf ("\n");
+      CODE_printf ("/*---(standard support functions)----*/\n");
+      CODE_printf ("#include    <yUNIT_unit.h>\n");
+      CODE_printf ("#include    \"master.h\"\n");
+      CODE_printf ("\n");
+      CODE_printf ("/*================================ beg-script ================================*/\n");
+   } else {
+      CODE_printf ("\n");
+      CODE_printf ("/*================================ beg-global ================================*/\n");
+   }
    /*---(initialize variables)-----------*/
-   my.nscrp  = my.cscrp = 0;
-   my.ncond  = my.ccond = 0;
-   my.nstep  = my.cstep = 0;
-   my.sstep  = 0;
+   CODE__stats_purge  ();
    my.cshare = '-';
-   CODE__shared_purge ();
    return 0;
 }
 
 char
 CODE_end           (void)
 {
-   if (my.nscrp > 0)  {
+   if (my.nscrp > 0 || my.cshare != '-') {
       strlcpy (my.last, my.verb, LEN_LABEL);
       CODE_scrp_end ();
    }
-   /*> SCRP_verbcode ();                                                              <*/
-   CODE_printf ("/*================================ end-script ================================*/\n");
+   IF_NORMAL {
+      CODE_printf ("/*================================ end-script ================================*/\n");
+   } else {
+      CODE_printf ("/*================================ end-global ================================*/\n");
+   }
    return 0;
 }
 
@@ -412,33 +556,41 @@ CODE_scrp_end        (void)
 {
    if (strcmp (my.last, "SECT") == 0)    return 0;
    /*---(close final condition)----------*/
-   /*> if (my.cshare != '-' || my.cscrp >  0) {                                        <* 
-    *>    CODE_cond_end ();                                                           <* 
-    *> }                                                                              <*/
-   if (my.cscrp >  0) {
+   if (my.nscrp >  0) {
       CODE_cond_end ();
    }
+   IF_MASTER {
+      if (my.cstep > 0)  CODE_cond_end ();
+   }
    /*---(end share)----------------------*/
-   if (my.cshare != '-')   CODE__shared_set (T_REUSES, my.cshare, my.ccond);
+   if (my.cshare != '-') {
+      if (my.cshare == tolower (my.cshare))  CODE__shared_set (T_REUSES, my.cshare, my.scond, my.sstep);
+      else                                   CODE__shared_set (T_MASTER, my.cshare, my.scond, my.sstep);
+   }
    /*---(close script/share)-------------*/
-   /*> if (my.cshare != '-' || my.cscrp >  0) {                                        <*/
-   if (my.cscrp >  0 || my.cshare != '-') {
-      if (my.cshare != '-') {
-         CODE_printf ("   /*===[[ shared done ]]==========================*/\n");
-         CODE_printf ("   yUNIT_erahs ('%c');\n", my.cshare);
-      }
+   if (my.nscrp >  0 || my.cshare != '-') {
       if (my.cshare == '-') {
          CODE_printf ("   /*===[[ script done ]]==========================*/\n");
          CODE_printf ("   yUNIT_prcs    (g.exec);\n");
+      }
+      else if (my.cshare == tolower (my.cshare)) {
+         CODE_printf ("   /*===[[ shared done ]]==========================*/\n");
+         CODE_printf ("   yUNIT_erahs ('%c');\n", my.cshare);
+         my.ncond -= my.scond;
+         my.nstep -= my.sstep;
+      }
+      else {
+         CODE_printf ("   /*===[[ global done ]]==========================*/\n");
+         CODE_printf ("   yUNIT_labolg ('%c');\n", my.cshare);
+         my.ncond -= my.scond;
+         my.nstep -= my.sstep;
       }
       CODE_printf ("   /*---(complete)-----------------------*/\n");
       CODE_printf ("   return 0;\n");
       CODE_printf ("}\n");
    }
    /*---(initialize vars)----------------*/
-   my.ccond  = 0;
-   my.cstep  = 0;
-   my.sstep  = 0;
+   CODE__stats_scrp_end ();
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -454,26 +606,25 @@ CODE_scrp          (void)
    CODE_scrp_end ();
    my.cshare = '-';
    /*---(counters)-----------------------*/
-   ++(my.nscrp);
-   ++(my.cscrp);
+   CODE__stats_scrp_beg ();
    /*---(open script function)-----------*/
    CODE_printf ("\n");
    CODE_printf ("char\n");
-   CODE_printf ("yUNIT_script_%02d          (void)\n", my.cscrp);
+   CODE_printf ("yUNIT_script_%02d          (void)\n", my.nscrp);
    CODE_printf ("{\n");
    CODE_printf ("   /*===[[ script header ]]========================*/\n");
    CODE_printf ("   g.offset  = 0;\n");
-   CODE_printf ("   g.origin  = %d;\n", my.cscrp);
-   CODE_printf ("   yUNIT_scrp    (%4i, %3i, \"%s\", \"%s\", \"%s\");\n", my.n_line, my.cscrp, my.stage, my.desc, my.meth);
+   CODE_printf ("   g.origin  = %d;\n", my.nscrp);
+   CODE_printf ("   yUNIT_scrp    (%4i, %3i, \"%s\", \"%s\", \"%s\");\n", my.n_line, my.nscrp, my.stage, my.desc, my.meth);
    /*> CODE_printf ("   if (g.exec ==  0 && g.level == YUNIT_SCRP)  return 0;\n");    <*/
    /*---(function call to main)----------*/
-   MAIN_printf ("   if (g.scrp ==  0 || g.scrp == %2i)  yUNIT_script_%02d ();\n", my.cscrp, my.cscrp);
+   MAIN_printf ("   if (g.scrp ==  0 || g.scrp == %2i)  yUNIT_script_%02d ();\n", my.nscrp, my.nscrp);
    /*---(script entry in wave)-----------*/
    if (strlen (my.stage) == 2) {
       x_stage = my.stage [0];
       x_wave  = my.stage [1];
    }
-   WAVE_printf ("%c  %c  %-25.25s  %2d  %-65.65s \n", x_stage, x_wave, my.n_base, my.cscrp, my.desc);
+   WAVE_printf ("%c  %c  %-25.25s  %2d  %-65.65s \n", x_stage, x_wave, my.n_base, my.nscrp, my.desc);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -487,7 +638,7 @@ CODE_shared          (void)
    CODE_scrp_end ();
    /*---(counters)-----------------------*/
    my.cshare = my.share;
-   CODE__shared_set (T_REUSES, my.cshare, 0);
+   CODE__shared_set (T_REUSES, my.cshare,  0,  0);
    /*---(open script function)-----------*/
    CODE_printf ("\n");
    CODE_printf ("char\n");
@@ -513,6 +664,21 @@ CODE_sect          (void)
 char         /*-> common shared code between units -----[ ------ [----------]-*/
 CODE_global          (void)
 {
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   /*---(end last script)----------------*/
+   CODE_scrp_end ();
+   /*---(counters)-----------------------*/
+   my.cshare = my.share;
+   CODE__shared_set (T_MASTER, my.cshare,  0,  0);
+   /*---(open script function)-----------*/
+   CODE_printf ("\n");
+   CODE_printf ("char\n");
+   CODE_printf ("yUNIT_shared_%c           (void)\n", my.cshare);
+   CODE_printf ("{\n");
+   CODE_printf ("   /*===[[ global header ]]========================*/\n");
+   CODE_printf ("   yUNIT_global ('%c', \"%s\");\n", my.cshare, my.desc);
+   /*---(complete)-----------------------*/
    return 0;
 }
 
@@ -528,14 +694,15 @@ CODE_cond_end      (void)
 {
    /*---(header)-------------------------*/
    DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
-   DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10p, %-10.10s, %4dn, %4dc", my.f_code, my.last, my.ncond, my.ccond);
+   DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10p, %-10.10s, %4dn, %4dc", my.f_code, my.last, my.ncond, my.scond);
    if (strcmp (my.last, "GROUP") != 0 && strcmp (my.last, "REUSE") != 0) {
-      if (my.ccond > 0) {
+      if (my.scond > 0) {
          CODE_printf ("      /*---(summary)---------------------*/\n");
          CODE_printf ("      yUNIT_dnoc    (g.exec);\n");
          CODE_printf ("      /*---(done)------------------------*/\n");
       }
    }
+   CODE__stats_cond_end ();
    /*---(complete)-----------------------*/
    DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -547,18 +714,16 @@ CODE_cond          (void)
    /*---(header)-------------------------*/
    DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
    CODE_cond_end ();
-   ++(my.ncond);
-   ++(my.ccond);
-   DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10p, %-10.10s, %4dn, %4dc", my.f_code, my.last, my.ncond, my.ccond);
-   CODE_printf ("   /*===[[ COND #%03i ]]============================*/\n", my.ccond);
-   CODE_printf ("   if (g.cond == g.offset + %3i)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (g.level, 'y');\n", my.ccond);
+   CODE__stats_cond_beg ();
+   DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10p, %-10.10s, %4dn, %4dc", my.f_code, my.last, my.ncond, my.scond);
+   CODE_printf ("   /*===[[ COND #%03i ]]============================*/\n", my.scond);
+   CODE_printf ("   if (g.cond == g.offset + %3i)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (g.level, 'y');\n", my.scond);
    if (my.run_type == G_RUN_DEBUG) {
-      CODE_printf ("   %sUG_TOPS    %sOG_unitcond (g.origin, g.offset + %3i, %4i, \"%s\");\n", "DEB", "yL", my.ccond, my.n_line, my.desc);
+      CODE_printf ("   %sUG_TOPS    %sOG_unitcond (g.origin, g.offset + %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.n_line, my.desc);
    }
-   sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.ccond, my.cshare, my.desc);
+   sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.cshare, my.desc);
    DEBUG_OUTP   yLOG_complex ("output"    , "%3d:%s", strlen (my.compiled), my.compiled);
    CODE_printf ("%s\n", my.compiled);
-   my.cstep = 0;
    /*---(complete)-----------------------*/
    DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -582,11 +747,18 @@ CODE_reuse         (void)
    CODE_cond_end ();
    --rce;  if (strchr (LTRS_CHARS, my.share) == NULL)  return rce;
    CODE_printf ("   /*---(shared code)-----------------------*/\n");
-   CODE_printf ("   g.offset = %3i;\n", my.ccond);
+   CODE_printf ("   g.offset = %3i;\n", my.scond);
    CODE_printf ("   yUNIT_shared_%c ();\n", my.share);
    CODE_printf ("   g.offset = 0;\n");
-   my.ncond += CODE__shared_get (T_REUSES, my.share);
-   my.ccond += CODE__shared_get (T_REUSES, my.share);
+   if (tolower (my.share) == my.share) {
+      CODE__shared_add (T_REUSES, my.share, &(my.ncond), &(my.nstep));
+      CODE__shared_add (T_REUSES, my.share, &(my.scond), &(my.sstep));
+      my.cstep = my.sstep;
+   } else {
+      CODE__shared_add (T_MASTER, my.share, &(my.ncond), &(my.nstep));
+      CODE__shared_add (T_MASTER, my.share, &(my.scond), &(my.sstep));
+      my.cstep = my.sstep;
+   }
    /*---(complete)-----------------------*/
    DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -602,9 +774,7 @@ static void  o___STEP____________o () { return; }
 char
 CODE_mode          (void)
 {
-   ++(my.nstep);
-   ++(my.cstep);
-   ++(my.sstep);
+   CODE__stats_step ();
    CODE_printf ("      /*---(mode)------------------------*/\n");
    CODE_printf ("      yUNIT_mode    (%4i, %3i, \"%s\", g.exec);\n", my.n_line, my.cstep, my.desc);
    return 0;
@@ -682,9 +852,7 @@ char
 CODE_code          (void)
 {
    /*---(counters)-----------------------*/
-   ++(my.nstep);
-   ++(my.cstep);
-   ++(my.sstep);
+   CODE__stats_step ();
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(write)--------------------------*/
@@ -692,6 +860,15 @@ CODE_code          (void)
    CODE_printf ("      %s\n",  my.syst);
    CODE_printf ("      yUNIT_code    (%4i, %3i, \"%s\", \"%s\", g.exec);\n", my.n_line, my.cstep, my.desc, my.disp);
    /*---(complete)-----------------------*/
+   return 0;
+}
+
+char
+CODE_gvar          (void)
+{
+   CODE_display ();
+   CODE_printf ("/*---(global variables)------------*/\n");
+   CODE_printf ("%s\n",  my.syst);
    return 0;
 }
 
@@ -706,9 +883,7 @@ CODE_load          (void)
    char        x_temp      [LEN_FULL];
    char       *x_var       = NULL;
    /*---(counters)-----------------------*/
-   ++(my.nstep);
-   ++(my.cstep);
-   ++(my.sstep);
+   CODE__stats_step ();
    /*---(fix strings)--------------------*/
    CODE_display ();
    CODE_printf ("      /*---(load input)------------------*/\n");
@@ -743,9 +918,7 @@ CODE_system        (void)
    int         l           =    0;
    int         i           =    0;
    /*---(counters)-----------------------*/
-   ++(my.nstep);
-   ++(my.cstep);
-   ++(my.sstep);
+   CODE__stats_step ();
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*> strcpy (x_cmd, my.disp);                                                       <* 
@@ -893,9 +1066,7 @@ CODE_echo          (void)
 {
    char        x_test      = '-';
    /*---(counters)-----------------------*/
-   ++(my.nstep);
-   ++(my.cstep);
-   ++(my.sstep);
+   CODE__stats_step ();
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(handle return values)-----------*/
@@ -916,15 +1087,13 @@ CODE_exec          (void)
 {
    char        x_test      = '-';
    /*---(counters)-----------------------*/
-   ++(my.nstep);
-   ++(my.cstep);
-   ++(my.sstep);
+   CODE__stats_step ();
    /*---(fix strings)--------------------*/
    CODE_display ();
    /*---(debugging)----------------------*/
    CODE_printf ("      /*---(run step)--------------------*/\n");
    if (my.run_type == G_RUN_DEBUG) {
-      CODE_printf ("      %sUG_TOPS    %sOG_unitstep (g.origin, g.offset + %3i, %3i, %4i, \"%s\");\n", "DEB", "yL", my.ccond, my.cstep, my.n_line, my.desc);
+      CODE_printf ("      %sUG_TOPS    %sOG_unitstep (g.origin, g.offset + %3i, %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.cstep, my.n_line, my.desc);
    }
    /*---(handle return values)-----------*/
    x_test = my.test [0];
