@@ -1,17 +1,41 @@
-.TH koios 1 2016-May linux "heatherly custom tools manual"
+.TH koios 1 2016-May linux "command-line initiation, use, and options"
 
 .SH NAME
-koios_polos \- customized c unit testing meta-program and mini-language
+koios \- c language unit testing meta-language and parser
 
-.SH IMAGERY (see HERITAGE at bottom for more)
-northern star (polos), the axis around which all consellations revolve
+.SH PATRON (roughly pronounced key-oh-s)
+.B koios-polos
+(axis of heaven), titan of intelligence and farsight
+
+.SH IMAGERY
+northern star around which all the other consellations revolve
 
 .SH SUMMARY
-koios (pronounced key-oh-s) is a light, clean, simple, and fast c unit testing
-metaprogram that reads a scripting mini-language file as input and creates a c
-source file to conduct the unit testing as output.
+koios is a meta-language and related parser to simplify, standardize, and
+make executable unit tests for the c language.  it is integrated with yUNIT,
+yVAR, and ouroborus (on a system-wide basis).
 
-.SH SYNOPSIS
+.SH CAVEAT
+nobody will ever use my programs ;) they use my shared libraries (zero public),
+keyboard centric usage, one true language (c) focus, and experimental/crazy
+designs.  dedicated dog-fooder, no time to coddle.
+
+.SH DOCUMENTATION FILES
+.nf  
+.B koios (1)··········command-line initiation, use, and options
+koios (5)          structure of config, files, and streams
+koios (7)          decision rationale, scope, and objectives
+
+.SH TABLE OF CONTENTS
+.nf  
+a) synopsis        simple run examples
+b) validation      reviewing scripts for quality
+c) conversion      updating and cleaning-up scripts
+d) generation      creating c source code for unit test
+e) compilation     turning c source into executables
+f) run-time        running unit tests
+
+.SH A) SYNOPSIS
 
 .B koios [BASENAME]
 .nf
@@ -21,58 +45,76 @@ primary production version
 .nf
 performs all production actions, but with debugging and tracing
 
-.SH OPTIONS
-there are two levels of options in the heatherly unit testing framework.
-the first is for koios which converts the unit testing meta-language input file
-into a c source file.  second is for the compilied unit test itself.
+.SH B) VALIDATION
+koios can read unit test source description and validate it for quality.
+the input file is untouched.
 
-.SH KOIOS RUNTIME OPTIONS
-koios is simple, efficient, and direct; and, it only has a very limited
-run-time configuration with only two options.  it has no configuration file.
+if validation fails, error messages are generated.  these error messages
+include the file name, input line number, and a description to aid in debugging.
+this is not a perfect process, some unit tests can pass and yet not compile.
+buyer beware.
 
-when run in --create mode and provided a <basename>, koios reads <basename>.unit which
-contains the meta-language describing the unit testing.  koios then produces
-<basename>_unit.c which is the c source code for compilation.
+.B koios --validate åexampleæ
 
-when run in --update mode and provided a <basename>, it produces
-<basename>.unit.new that contains the unit test meta-language updated to the
-most recent version.
+this will look for the file åexample.unitæ.  if åmaster.unitæ has not be
+processed before, all GLOBAL references will fail.
 
-.B <basename>
-.RS 8
-base unit test file name with no ".unit" extention (required).
-.RE
+.SH C) CONVERSION
+koios will read the unit test source description, validate as discussed above,
+and clean up the formatting.
 
-.B --create, --compile
-.RS 8
-creates unit testing c source file for compilation (default).
-.RE
+if the validation passes, the source file åexample.unitæ will be renamed
+åexample.unit.oldæ and the new, cleaned-up file uses the original name.
+if validation fails, the file is untouched.
 
-.B --update, --convert
-.RS 8
-update unit test input to latest standard.
-.RE
+.B koios --convert åexampleæ
 
-the --create and --update options are mutually exclusive.
+this will look for the file åexample.unitæ.  if åmaster.unitæ has not be
+processed before, all GLOBAL references will fail.
 
-.SH COMPILING
-to work properly, the main function of the c program must be placed in
-a separate source file.  i call mine by the [BASENAME]_main.c.  the unit
-test creates its own main function within [BASENAME]_unit.c.  all program
-modules (except main) need to be linked against [BASENAME]_unit.c to create
-an executable.  i name the resulting executable [BASENAME]_unit.
+.SH D) GENERATION
+koios will read the unit test source descripion, validate as discussed above,
+and generate the necessary c source code to match the request.
 
-.SH UNIT TESTING RUNTIME OPTIONS
-.SS overview
+if the validation passes, the output c source file åexample_unit.csæ will
+be produced.  copy to åexample_unit.cæ and compile with gcc linked to
+-lyUNIT_debug and -lyVAR_debug.
+
+.B koios --generate åexampleæ
+
+this will look for the file åexample.unitæ.  if åmaster.unitæ has not be
+processed before, all GLOBAL references will fail.
+
+.SH E) COMPILATION
+this is a very standard process using gcc.  my custom make framework does this
+automatically with ",qu".  it is a short process.
+   1) copies åexample_unit.csæ to åexample_unit.cæ
+   2) compiles them both
+   3) links c to libraries and generates åexample_unitæ
+   4) links cs to libraries and generates åexample_unit_debugæ
+
+for the normal version, the libraries in question are -lyUNIT and -lyVAR.  then
+also link to all program objects except the one with main.  koios automatically
+generates its own main.
+
+for the debug version, the libraries in question are -lyUNIT_debug and
+-lyVAR_debug.  then also link to all program debug objects except the one
+with main.  koios automatically generates its own main.
+
+anyone who does not use a debug version regularly is amazing.  i am a much
+less perfect creature ;) i am aware of my short-comings.
+
+.SH F) RUN-TIME
 after compilation, the resulting unit testing programs have a short list of
 options primarily focused on which parts of the file to run (execution scope),
 how verbose the output (execution verbosity), color formatting, and whether
 to provide information on the test vs execute it (information only).
 
 .SS execution scope
-when running the unit test program, you may run one of three scopes as shown
-below.  it is very common to run a single script, but it can be dangerous to
-run a single condition as it may only be valid in the context of the script.
+when running the unit test program, you may run either all units, all scripts
+in a single unit, or a single script.  in development, it is very common to
+run single scripts.  later, typically either the full unit is run, the master
+unit test, or ouroboros is used.
 
 .B --all
 .RS 8
@@ -84,9 +126,9 @@ run all contained scipts and conditions (default)
 run all conditions in script <nn> (two digits 00 to 99)
 .RE
 
-.B <nn>.<nnn> (<nn>-<nnn>)
+.B make allunit
 .RS 8
-run condition <nnn> in script <nn> (three digits 000 to 999)
+runs all units in alphabetical order
 .RE
 
 .SS execution verbosity
@@ -95,32 +137,32 @@ condition, and step.  sometimes the tester wishes to focus the output a little
 finer.  the options below start with none and each new option is cumulative,
 i.e., the option below includes all above.
 
-.B --show-none, --quiet
+.B --none, --quiet
 .RS 8
 no output only, just a return code, neg=fail vs zero/pos=pass
 .RE
 
-.B --show-summ
+.B --test
 .RS 8
 one line with test level summary numbers
 .RE
 
-.B --show-scrp
+.B --scrp
 .RS 8
 one line of stats per test and script
 .RE
 
-.B --show-cond
+.B --cond
 .RS 8
 one line of stats per test, script, and condition
 .RE
 
-.B --show-step
+.B --step
 .RS 8
 one line of stats per test, script, condition, and step
 .RE
 
-.B --show-full, --loud
+.B --full, --loud
 .RS 8
 show all including actual vs expected comparision (default)
 .RE
@@ -144,68 +186,19 @@ do not colorize output so it can run in a console session
 it is often important to get an overview or retrieve reference/index numbers
 for a particular script or condition.  the following options enable that.
 
-.B --list-scrp
+.B --scrps
 .RS 8
 display list of all available script headers
 .RE
 
-.B --list-cond
+.B --conds, <nn> --conds
 .RS 8
 display list of all script and condition headers
 .RE
 
-.B <nn> --list-cond
+.B --steps, <nn> --steps
 .RS 8
-display list of condition headers for script <nn>
-.RE
-
-.B --list-stats
-.RS 8
-display list of all record types in unit test
-.RE
-
-.SH DEBUGGING URGENTS
-.SS overview
-koios and the produced unit tests run using the standard yURG library and
-supports all the included debugging commands.
-
-.SS koios_debug
-koios is a simple filter/translation program and so the most important urgents
-for koios itself are for reading input and writing output.
-
-.B @i, @@inpt
-.RS 8
-details of the lines read from the input file
-.RE
-
-.B @o, @@outp
-.RS 8
-details of the lines written to the output file
-.RE
-
-.SS unit test programs
-each unit test program automatically log all if used in debug mode rather
-that requiring urgents.  there are a couple unique logging formats for scripts
-and conditions that make them easy to locate by searching for their numbers.
-
-debugging is not turned on from command line urgents.  to enable debugging,
-the program or library, the unit test script must run a specific start up
-and shutdown function.  there are standards for including this in program
-files.
-
-.B PROG_testquiet
-.RS 8
-runs logger, init, urgs, args, and begin with no logging
-.RE
-
-.B PROG_testloud
-.RS 8
-runs logger, init, urgs, args, and begin with @@kitchen
-.RE
-
-.B PROG_testend
-.RS 8
-runs end as well as shuts down logging
+display list of all script and condition headers
 .RE
 
 .SH BUGS and CONCERNS
@@ -213,14 +206,6 @@ koios depends on proper formatting of the input meta-language file.  if the
 file lacks a double quote or delimiter in the correct place, the resulting
 errors when compiling the c source for the unit test can be difficult to
 track down.
-
-.SH SEE ALSO
-this documentation is layered to provide easier navigation.
-   koios (7), decision rationale, objectives, and overview
-   koios (5), structure of unit testing meta-language file
-   koios (1), initiation, options, and structure
-   yUNIT, unit testing support library
-   yVAR, data comparison support library
 
 .SH AUTHOR
 rsheatherly  can be reached at jelloshrke at gmail dot com

@@ -1,15 +1,30 @@
-.TH koios 7 2016-May "linux" "heatherly custom tools manual"
+.TH koios 7 2016-May "linux" "decision rationale, objectives, and overview"
 
 .SH NAME
-koios_polos \- decision rationale, objectives, and overview
+koios \- c language unit testing meta-language and parser
 
-.SH IMAGERY (see HERITAGE at bottom for more)
-northern star (polos), the axis around which all consellations revolve
+.SH PATRON (roughly pronounced key-oh-s)
+.B koios-polos
+(axis of heaven), titan of intelligence and farsight
+
+.SH IMAGERY
+northern star around which all the other consellations revolve
 
 .SH SUMMARY
-koios (pronounced key-oh-s) is a light, clean, simple, and fast c unit testing
-metaprogram that reads a scripting mini-language file as input and creates a c
-source file to conduct the unit testing as output.
+koios is a meta-language and related parser to simplify, standardize, and
+make executable unit tests for the c language.  it is integrated with yUNIT,
+yVAR, and ouroborus (on a system-wide basis).
+
+.SH CAVEAT
+nobody will ever use my programs ;) they use my shared libraries (zero public),
+keyboard centric usage, one true language (c) focus, and experimental/crazy
+designs.  dedicated dog-fooder, no time to coddle.
+
+.SH DOCUMENTATION FILES
+.nf  
+koios (1)          command-line initiation, use, and options
+koios (5)          structure of config, files, and streams
+.B koios (7)··········decision rationale, scope, and objectives
 
 .SH SCOPE, REASONING and DECISION
 
@@ -126,14 +141,6 @@ koios depends on proper formatting of the input meta-language file.  if the
 file lacks a double quote or delimiter in the correct place, the resulting
 errors when compiling the c source for the unit test can be difficult to
 track down.
-
-.SH SEE ALSO
-this documentation is layered to provide easier navigation.
-   koios (7), decision rationale, objectives, and overview
-   koios (5), structure of unit testing meta-language file
-   koios (1), initiation, options, and structure
-   yUNIT, unit testing support library
-   yVAR, data comparison support library
 
 .SH AUTHOR
 rsheatherly  can be reached at jelloshrke at gmail dot com

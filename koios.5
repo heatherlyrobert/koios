@@ -15,6 +15,11 @@ koios is a meta-language and related parser to simplify, standardize, and
 make executable unit tests for the c language.  it is integrated with yUNIT,
 yVAR, and ouroborus (on a system-wide basis).
 
+.SH CAVEAT
+nobody will ever use my programs ;) they use my shared libraries (zero public),
+keyboard centric usage, one true language (c) focus, and experimental/crazy
+designs.  dedicated dog-fooder, no time to coddle.
+
 .SH DOCUMENTATION FILES
 .nf  
 koios (1)          command-line initiation, use, and options
@@ -128,7 +133,7 @@ shown above.  they are also trimmed of leading and trailing spaces when read.
 
 there are also two optional fields for step-level lines that allow the program
 to explicitly capture a function return value.  while this is not common for
-me, it is extremely useful depending on function structure.
+me, it can be extremely useful.
    7) type         return value type               (  1 char)
    8) variable     local variable to accept value  ( 20 char)
 
@@ -145,8 +150,8 @@ scripts.  this is editable in any editor and can be reformatted with
 
 .B master.unit
 , an 8-bit, human-readable ascii text file with global code and execution
-order descriptions useful to ouroborus the unit test sequencer.  this is
-not always useful.
+order descriptions useful to ouroborus, the unit test sequencer.  this is
+not always necessary or useful.
 
 .B outputs (do not edit) -------------------------------------
 
@@ -159,7 +164,7 @@ test.  this is temporarily useful for debugging and can normally be deleted.
 .B åBASENAMEæ_unit
 , also produced by
 .B koios --update åBASENAMEæ
-and is the compiled unit test which is linked to yUNIT and yVAR to display
+and is the executable unit test which is linked to yUNIT and yVAR to display
 standard unit testing results.
 
 .SH D) UNITS
@@ -167,24 +172,6 @@ as described above, units are the contents of an entire
 .B .unit
 file.  during development, unit tests are typically executed script-by-script.
 but, during production and updates, full units are often run.
-
-there are three overall unit specific verbs...
-   PREP       before any scripts, allows header inclusion
-   incl       directly after PREP, includes one header each
-   global     see SPECIALTY section
-
-.B begin åexample.unitæ ---------------------------------
-
-PREP      § include the program headers    § 
-   incl   § include public header          § example.h           §
-   incl   § include private header         § example_priv.h      §
-   global § global output variable         § - - -  § int c = 0; §
-
-.B end åexample.unitæ -----------------------------------
-
-no headers are automatically included, same as in c source files.  this is
-the koios equivalent of
-.B #include ¶example.h¶.
 
 it is critical to get the
 .B .unit
@@ -200,6 +187,38 @@ prefixed lines are kept as
 .B comments
 but moved to the top-of-file during re-formatting and conversion.
 
+.SS D0. there are three overall unit-specific verbs...
+.nf
+1. PREP       before any scripts, allows header inclusion
+2. incl       directly after PREP, includes one header each
+3. global     see "global" in SPECIALTY section
+
+.SS D1. PREP   § include the program headers    § 
+
+this verb must be used to introduce "incl" and "global" verbs, otherwise
+it is unnecessary.  it only uses a description.  this generates no output.
+
+.SS D2. incl   § include private header         § example_priv.h      §
+
+no headers are automatically included, same as in c source files.  this is
+the koios equivalent of
+.B #include ¶example.h¶.
+this generates no output.
+
+.SS D3. global § global output variable         § - - -  § int c = 0; §
+
+this is exactly like the "code" verb below, but specificially creates a
+unit shared or global variable.  this generates no output.
+
+.SS D4. output displayed (TINU colored green, yellow, or red)
+
+   yUNIT - heatherly unit testing framework --------------------(beg)
+   ·
+   ·     scripts, conditions, and steps ·····
+   ·
+   TINU  scrp= 5 cond=12 test=43 [[ pass=43 fail=0  badd=0 void=0  ]]
+   yUNIT - heatherly unit testing framework --------------------(end)
+
 .SH E) SCRIPTS
 scripts are just a grouping of conditions and execution lines into a manageable
 and related set.  they are mostly a complexity management tool.  all conditions
@@ -208,31 +227,56 @@ and steps MUST be inside a script.
 BUT, when using ouroborus, scripts can be sequenced in complex ways to ensure
 the correct testing order in large programs.  see OUROBOROS below.
 
-there are three script specific verbs...
-   SCRP       starts the beginning of a new script (REQUIRED)
-   SECT       allows scripts to be visually grouped in the output
-   SHARED     unit-shared code that can be used in various scripts
-   GLOBAL     program-shared code that can be used in various scripts
+.SS E0. there are four script-specific verbs...
+.nf
+1. SCRP       starts the beginning of a new script (REQUIRED)
+2. SCRP [è1]  same as SCRP, but has ouroboros sequencing
+3. SECT       allows scripts to be visually grouped in the output
+4. SHARED     unit-test, shared code that can be used in scripts
+5. GLOBAL     program-wide, shared code that can be used anywhere
 
-.B SCRP     § overall testing description  § func1, func2, ...  §
+.SS E1. SCRP       § verify cronpulse operations  § func1, func2, ... §
 
-the SCRP verb begins a new script, which is automatically numbered from
-01 to 99.  every line after the SCRP line is within this script until the
-next SCRP line or the end-of-file.
+the SCRP verb begins a new script, which is automatically numbered from 01
+to 99 (within a the specific unit test).  every line after SCRP is
+within this script until the next SCRP line or end-of-file.
 
 SCRP has two other fields, description and a list of the primary functions
 tested.  neither of the other two fields effects testing actions and they
 are not checked in any way.  they are just repeated on the testing output.
 
-.B SECT     § comment on group of scrps    §
+.B sample output (PRCS colored green, yellow, or red)...
 
-the SECT verb groups all SCRPs after it until the next SECT or end-of-file.
-this verb also ends the SCRP before so must appear on its own.
+   ===[[ NEW SCRIPT ]]===============================================
+   SCRP [01] verify cronpulse operations ===================== [0019]
+      focus : func1, func2, ...
+      ·
+      ·     conditions and steps ·····
+      ·
+      PRCS       cond=12 test=43 [[ pass=43 fail=0  badd=0 void=0  ]]
+
+.SS E2. SCRP [è1]  § overall testing description  § func1, func2, ... §
+
+exactly the same effect and output as SCRP, but provides an ouroboros
+sequencing string.  see OUROBOROS section.
+
+.SS E3. SECT       § more complex testing         §
+
+the SECT verb visually groups all SCRPs after it until the next SECT or
+end-of-file.  this verb also ends the SCRP before so must appear on its own.
+sect has zero impact on the actual running or results of the unit test other
+than to make them more clear.
 
 SECT only has one field, a title, which explains why the scripts are being
 grouped.
 
-.B SHARED -d- § description of conditions    §
+.B sample output (uncolored)...
+
+   ===============-------------------------------------==============
+   SECT ===------------- more complex testing ---------------=== TCES
+   ===============-------------------------------------==============
+
+.SS E4. SHARED -d- § prepare files for use        §
 
 the SHARED verb is similar to a SCRP in that it groups conditions and steps
 into a larger unit.  but, SHARED conditions are never executed alone, they
@@ -244,14 +288,30 @@ reused later.  in the example above, this is shared tests 'd'.  shared tests are
 only available in the unit they appear and must appear before they are reused.
 see REUSE in the CONDITIONS section below.
 
-.B GLOBAL -D- § description of conditions    §
+.B sample output (colored magenta)...
 
-same as SHARED, but the code is put in a header called åmaster.hæ which all
-unit tests can call.  GLOBAL identifiers are upper case [A-Z] to differentiate
-from SHARED [a-z].  this verb can only appear in the åmaster.unitæ file.
+      SHARE (a) ===---------   prepare files for use   -----------===
+      ·
+      ·     conditions and steps ·····
+      ·
+      ERAHS (a) ===---------   prepare files for use   -----------===
+
+.SS E5. GLOBAL -D- § globally shared steps        §
+
+same as SHARED, but can only appear in åmaster.unitæ.  after processing,
+the code is put in a header called åmaster.hæ which all unit tests can call.
+GLOBAL identifiers are upper case [A-Z] to differentiate from SHARED [a-z].
 
 CRITICAL, for GLOBAL code to function, the master.unit file requires the PREP
 and incl verbs also.  same as c language.
+
+.B sample output (colored blue)...
+
+      GLOBAL (D) ===---------   globally shared steps   ----------===
+      ·
+      ·     conditions and steps ·····
+      ·
+      LABOLG (D) ===---------   globally shared steps   ----------===
 
 .SH F) CONDITIONS
 conditions are just a grouping of execution lines into a manageable and related
@@ -259,14 +319,15 @@ set.  they are mostly a complexity management tool.  it is rarely a good idea
 to have more than 10 steps in any one condition.  all steps MUST appear in a
 condition.
 
-there are five condition specific verbs...
-   COND       starts the beginning of a new condition (REQUIRED)
-   GROUP      allows conditions to be visually grouped in output
-   COND  (7)  same as COND, but can be reused later
-   DITTO (7)  reuses a COND (7) without duplicating lines
-   REUSE -d-  insert unit-shared code from a SHARED verb
+.SS F0. there are five condition-specific verbs...
+.nf
+1. COND       starts the beginning of a new condition (REQUIRED)
+2. GROUP      allows conditions to be visually grouped in output
+3. COND  (7)  same as COND, but can be reused later
+4. DITTO (7)  reuses a COND (7) without duplicating lines
+5. REUSE -d-  insert unit-shared code from a SHARED verb
 
-.B COND      § condition description        §
+.SS F1. COND      § generate a summary           §
 
 the COND verb begins a new condition, which is automatically numbered within
 a script from 001 to 999.  all scripts have a condition 001.  conditions must
@@ -277,14 +338,24 @@ DITTO, or REUSE.
 COND only has one other field which is a description for the maintainer and
 the output file.
 
-.B GROUP     § grouping description         §
+.B sample output (uncolored, except matches shared or global)...
+
+      COND [008] generate a summary  -- -- -- -- -- -- -- -- -[00075]
+
+.SS F2. GROUP     § final round                  §
 
 the GROUP verb groups all CONDs after it until the next GROUP or SCRP.
+group has zero impact on the actual running or results of the unit test other
+than to make them more clear.
 
-COND only has one other field which is a description for the maintainer and
+group only has one other field which is a description for the maintainer and
 the output file.
 
-.B COND  (7) § condition description        §
+.B sample output (uncolored)...
+
+      GROUP ===-----------------   final round   -----------------===
+
+.SS F3. COND  (7) § condition description        §
 
 this is exactly like the COND verb, but has a identifier [0-9] that can be
 used later in the same SCRP to duplicate this COND and its steps.  very useful
@@ -292,17 +363,30 @@ to prevent source duplication and aid updates.  the (7) above only needs to
 be unique within a SCRP, but a second COND (7) in the same script will hide
 the first one.
 
-.B DITTO (7) §
+output is exactly the same as COND.
+
+.SS F4. DITTO (7) §
 
 this acts as a recall for the COND (7) above it.  the COND (7) header and all
 its steps are duplicated (usually minor) in the code at code generation time.
+never seen directly in the output, just replaced by original condition and
+its steps.
 
-.B REUSE -d- §
+.SS F5. REUSE -d- §
 
 this recalls shared code from either GLOBAL [A-Z] in a shared master.unit file
 or SHARED [a-z] above the current SCRP.  the GLOBAL and SHARED and all their
 conditions and steps are called as part of a shared function code generation
-time -- no duplication.
+time -- no duplication.  never seen on output, will just see the SHARE or
+GLOBAL output as shown in SCRIPT section.
+
+in the ouput, SHARED conditions are shown as SOND, rather than COND, and the
+SOND word is colored magenta.  as stated in SHARED above, a header and footer
+is placed around shared conditions.
+
+similar for GLOBAL conditions.  they are shown as GOND, rather than COND,
+and the GOND word is colored blue.  as stated in GLOBAL above, a header and
+footer is placed around global conditions.
 
 .SH G) STEPS
 steps are the real workhorse of unit testing -- units, scripts, and conditions
@@ -310,11 +394,12 @@ are simply grouping tools.  each execution line is complete-in-itself
 but usually requires previous steps to prepare and later steps to verify.
 all steps MUST appear in a condition.
 
-there are two step specific verbs (essentially the same)...
-   exec       runs a function and checks return value
-   get        same as exec, only helps identify grey-box testing
+.SS G0. there are two step-specific verbs (essentially the same)...
+.nf
+1. exec       runs a function and checks return value
+2. get        same as exec, only helps identify grey-box testing
 
-.B exec   § description  § func § arg1, arg2 § i_equal § 0  §
+.SS G1. exec   § description  § func § arg1, arg2 § i_equal § 0  §
 at its simplist, function <func> is passed <arg1> and <arg2>.  at code
 generation time, the function prototype will idenfity typical troubles.
 
@@ -337,7 +422,15 @@ refer to yVAR for all the possible tests, but the most common are...
    p_exists       pointer is not grounded/NULL
    u_round        rounded numbers in a string (greybox)
 
-.B get    § description  § func § arg1, arg2 § i_equal § 0  §
+.B sample output (prefix colored green, yellow, or red)...
+
+      aa) str   : check string ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·[00076]
+         method : yUNIT_teststring (0)
+         test   : s_equal    (rc =  101, test abbr = e)
+         expect :  5[hello]
+         actual :  5[hello]
+
+.SS G2. get    § description  § func § arg1, arg2 § i_equal § 0  §
 the very same as exec, but used to identify greybox testing using data accessors
 in the c source code.  my habit is to include a function that returns a char*
 answer to many data questions so that i can verify the results of actions in
@@ -346,550 +439,107 @@ level variables since i refuse to use direct access that would bind the unit
 test to specific representations.
 
 .SH H) SPECIALTY
-also at the step level, there are some specialty steps that can give a unit
+also at the step level, there are some specialty verbs that can give a unit
 test much more flexibility.  all specialty steps MUST appear in a condition.
 
-there are four specialty step verbs...
-   code       accepts a c source code line for execution
-   global     c source definition of global variable
-   echo       allows a specific variable to be checked
-   system     executes a string using system()
-   load       places a string into input, like stdin
+.SS H0. there are six specialty step verbs...
+.nf
+1. code       c source code line for direct execution
+2. code       c source code for local variable definition
+3. global     c source definition of global variable (PREP)
+4. echo       allows a specific variable to be checked
+5. system     executes a string using system()
+6. load       places a string into input, like stdin
 
-.B code   § description   § - - - § <source code>;    §
+.SS H1. code   § description   § - - - § <source code>;    §
 
 this places this code in the unit test exactly as requested and labels it
 with the description.  this helps to prepare or force data conditions.
 
-.B code   § description   § - - - § int c = 0;        §
+.B sample output (prefix colored brown)
+
+      aa) CODE  : set initial value ·· ·· ·· ·· ·· ·· ·· ·· ··[00027]
+         code   : 26[strcpy (x_test, "string");]
+
+.SS H2. code   § description   § - - - § int c = 0;        §
 
 also, this allows local unit testing variables to be defined for use
 in the execution statements below.  remember, any variables defined are
 local to the script only, not the whole unit and won't be available in
 any SHARED code.
 
-.B global § description   § - - - § <var definition>;    §
+.B sample output (prefix colored brown)
+
+      aa) CODE  : working variables ·· ·· ·· ·· ·· ·· ·· ·· ··[00008]
+         code   : 10[int f = 0;]
+
+.SS H3. global § description   § - - - § <var definition>;    §
 
 same as code variable above for defining variable, but only placed below
 the PREP section of the script.  this variable is available in all scripts
 within the unit.  if placed in master.unit, it is available everywhere.
+this produces no output.
 
-.B echo   § description  § - - - § <var> § i_equal § 0  §
+.SS H4. echo   § description  § - - - § <var> § i_equal § 0  §
 
 the allows the checking of unit test locals or source globals by exchanging
 the variable name with <var>.  the tests and expected are exactly like with
-the exec verb.
+the exec verb.  echo appears exactly like exec/get in output.
 
-.B system § description   § - - - § rm test.txt       §
+.SS H5. system § description   § - - - § rm test.txt       §
 
 uses the system() function call to execute the string.  this helps simplify
 entry and also performs some addition checking automatically.
 
-.B load   § description   § stdin § test for input    §
+.B sample output (prefix colored green or red)
+
+      ae) SYS   : run little  ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00022]
+         system : 10[/bin/false]
+
+.SS H6. load   § description   § stdin § test for input    §
 
 places the string into the input stream for the program to read as if typed.
 the third field is either stdin or ncurse as they have slightly different
 requirements.
 
+.B sample output (prefix colored brown)
 
+      aa) LOAD  : prep data for read · ·· ·· ·· ·· ·· ·· ·· ··[00013]
+         stdin  : 13[one two three]
 
+.SH I) OUROBOROS
+the impact of ouroboros on unit testing is huge.
 
+it allows scripts to be explicitly sequenced, rather than sequentially run,
+without manual intervention.  many unit tests are inter-related, meaning simple
+isolated things are tested first and building up to highly integrated functions
+later.  with ouroboros, scripts are given specific sequences so that they can
+run in any order without having to rebuild and complicate the actual unit tests.
 
+but, the only sign of ouroboros within a unit test is in the SCRP verb.
+simply add a sequencing string after the verb and ouroboros will handle
+the rest.  the sequence is two characters surrounded by square brackets [--].
 
+WAVE is the first character.  it must be a greek letter.  waves are the major
+sequence, and usually proceeds from è = independent functions that do not
+require any shared data, to ÿ = integrated reporting that reflects the final
+result, i.e., fully dependent on all other code.
 
-.SH STRUCTURE
+STAGE is the second character.  it must be a digit.  stages are the minor
+sequence, and usually only help with small adjustments to keep scripts from
+interferring with each other.
 
-.B preparation (see PREPARATION)
-   -- very first in the file and simply allows local header inclusion
+the default sequence is [--] which means run last.  if all SCRP verbs lack
+sequencing, they will run in default order which is SCRP-by-SCRP within
+unit.  and, units are run in alphabetical order.
 
-.B fields
-   -- each unit testing record is broken into 3 to 7 fields
-   -- fields are separated by the ascii "field separator" character (31)
-   -- fields may have leading and trailing spaces (which will be trimmed)
-   -- best case is to use a columar format and indentation for readability
-
-.B script level (see SCRIPTS)
-   -- highest level structure in unit testing
-   -- groups conditions into independent, runable chunks for ease of testing
-   -- does no actual testing, this is simply a helpful organizing level
-   -- produces reporting output to help visually review the unit test
-   -- each script will produce summary numbers on successes and failures
-   -- there may be one or more scripts in the file
-
-.B conditions (see CONDITIONS)
-   -- middle level structure in unit testing
-   -- groups tests into logical blocks to verify a single objective
-   -- does no actual testing, this is simply a helpful organizing level
-   -- produces reporting output to help visually review the unit test
-   -- each condition will produce summary numbers on successes and failures
-   -- there may be one or more conditions in each script
-
-.B steps
-   -- bottom level structure in unit testing
-   -- there may be one or more steps in each condition
-   -- can be tests which execute functions directly (see TESTS)
-   -- can be tests which compare to custom formatted strings (see CUSTOM)
-   -- can be verification, or grey box testing (see GETTING)
-   -- can be modification, also grey box testing (see SETTING)
-   -- can be direct code injection (see CODE)
-   -- can be system() calls to verify results (see SYSTEM)
-   -- can be inserting records into stdin for later reading (see LOAD)
-   -- can reverse the interpretation of pass and fail (see MODE)
-
-.SH FIELDS
-the field meanings in the file a "almost" totally standard.  the few exceptions
-will be pointed out in the individual sections
-
-.B verb
-, 4-5 character label identifying the action of the script record
-
-.B vers
-, 3 character label to tell koios how the record is formatted.  examples are
-v21, v20, and v19.
-
-.B desc
-, text field used literally to label output in the unit test.  while the fields
-can be relatively long, only the first 40-60 characters are used in the output.
-the trailing characters are truncated.
-
-.B func
-, the method/function to be called by the unit test.  this must be exactly right
-or it will fail.
-
-.B args
-, the method/function arguments exactly as you would normally represent them.
-you can use quoted strings, quoted characters, pointers, integers, reals, etc.
-the key is you can also use local variables defined in "code" records.
-
-.B test
-, there are a large number of tests to compare the expected and actual results.
-all these tests are defined in the man page for yVAR.
-
-.B expe
-, expected results as a string, so no quoting required.  if the test is
-for integers or reals, the unit test will automatically convert using atoi,
-atof respectively.
-
-.SH SCRIPTS
-it is way beyond the scope of this man page to describe current thinking
-and best practices around the grouping of conditions into scripts.  but
-this section will describe the formatting of a script record and the output
-it produces.
-
-.B fields (4)...
-   1) verb    : SCRP
-   2) vers    : (see FIELDS)
-   3) desc    : (see FIELDS)
-   4) func    : list just the major functions under review
-
-.B sample script records...
-   -- please replace double pipes (||) with the field sperator char (31)
-   -- >> is used here as a line continuation symbol to show in man pages
-
-   SCRP   || v20 || verify cronpulse operations            || >>
-          >> BASE_timestamp, BASE_lastpulse                ||
-
-.B sample output at the start of a script...
-   -- a stark separator/divider is show to help visual review
-   -- description and function fields are displayed (will trunc to fit)
-   -- a consecutive script number is assigned to help selective execution
-   -- source script line number is shown at the right to speed updates
-
-   ===[[ NEW SCRIPT ]]======================================================
-   SCRP [01] verify cronpulse operations ============================ [0019]
-     focus : BASE_timestamp, BASE_lastpulse                                 
-
-.B sample output at the end of a script...
-   -- a summary line is printed at the end with useful numbers
-
-   PRCS   step=43    [[ pass=43    fail=0     badd=0     void=0    ]]
-
-.SH CONDITIONS
-as with scripts, it is way beyond the scope of this man page to describe current
-thinking and best practices around the grouping of tests into conditions.
-but this section will describe the formatting of a condition record and the
-output it produces.
-
-.B fields (3)...
-   1) verb    : COND
-   2) vers    : (see FIELDS)
-   3) desc    : (see FIELDS)
-
-.B sample script records...
-   -- please replace double pipes (||) with the field sperator char (31)
-   -- >> is used here as a line continuation symbol to show in man pages
-
-   COND   || v20 || test the cron ending time (cronwatch file)      ||
-
-.B sample output at the start of a condition...
-   -- the description is displayed on the single line (will trunc to fit)
-   -- a consecutive condition number is assigned to help later review
-   -- source condition line number is shown at the right to speed updates
-
-   COND [008] test the cron ending time (cronwatch file) -- -- -- - [0294]
-
-.B sample output at the end of a condition...
-   -- a summary line is printed at the end with useful numbers
-
-   DNOC   step=1     [[ pass=1     fail=0     badd=0     void=0    ]]
-
-.SH TESTS
-a test record executes a function and validates the return value against
-an expected result.
-
-.B fields (7)...
-   1) verb    : exec
-   2) vers    : (see FIELDS)
-   3) desc    : (see FIELDS)
-   4) func    : (see FIELDS)
-   5) args    : (see FIELDS)
-   6) test    : (see FIELDS)
-   7) expe    : (see FIELDS)
-
-.B sample script records...
-   -- please replace double pipes (||) with the field sperator char (31)
-   -- >> is used here as a line continuation symbol to show in man pages
-
-   exec   || v20 || call the crontab name validation             || >>
-          >> BASE_name      || "root.my_crontab"           , '-' || >>
-          >> i_equal        || 0                                 ||
-
-.B sample output...
-   -- the description is displayed on the single line (will trunc to fit)
-   -- arguments with double quotes are shown with tilda's instead
-   -- a consecutive condition number is assigned to help later review
-   -- source test line number is shown at the right to speed updates
-
-   a ) PASS   : call the crontab name validation  .  .  .  .  .  .  [0348]
-       method : BASE_name (~root.my_crontab~           , '-')
-       test   : i_equal        (@ 0 msecs with rc = 21) 
-       expect : 0>>
-       actual : 0>>
-
-.SH GETTING
-getting is exactly the same as a "test" except is calls a unit test accessor
-specifically used for greybox testing, i.e., limited access to internal state.
-this ability is critical as most functions alter "something" like a method,
-rather than only return a value like a function.
-
-technically, this verb is not required and the information below simply
-communicates how i personally conduct greybox testing.
-
-use general "questions" so that the unit test is not dependent on internal
-data representation or variable naming.
-
-.B fields (7)...
-   1) verb    : get
-   -- rest are the same as in TEST section
-
-.B sample script records...
-   -- same as in TEST section
-
-.B sample output...
-   -- same as in TEST section
-
-.B accessor questions...
-   -- i personally call the accessors by the module the support
-   -- i label them as a "getter", but you can call them anything you wish
-   -- they take at least one string value, which is the question
-   -- accessor code in a single function and indenpendent of the code
-   -- the function included in the source code of the program itself
-
-   prototype   : char   *BASE_getter   (char *a_question);
-
-   sample call : BASE_getter ("sched_hrs");
-
-.B global return value...
-   -- use a single, globale, medium length c-string
-   -- write answers from the accessor into a c-string
-   -- name is anything you wish, i chose the name and length below
-
-   char   *unit_answer   [1000];
-
-.B answer formatting and sample output...
-   -- make the answers unique to verify  the right accessor was used
-   -- i chose to write formatted text into the strings
-   -- i simply use snprintf to encase the value in the string
-   -- do not make the strings reporting quality, only unique
-
-   LIST hours       : [_____1__________________]
-
-   LIST running     :    3 line,    2 fast,    0 proc
-
-   LIST controls    : imp 0, mon -, cat -, del y, ski y, kil y
-
-.B sample script records...
-   -- please replace double pipes (||) with the field sperator char (31)
-   -- >> is used here as a line continuation symbol to show in man pages
-
-   get    || v20 || check hours                                || >>
-          >> LIST_getter  || "sched_hrs"    , cfile_1st->tail  || >>
-          >> s_equal      || LIST hours       : [_____1__________________]
-
-.B sample output...
-   -- the description is displayed on the single line (will trunc to fit)
-   -- arguments with double quotes are shown with tilda's instead
-   -- a consecutive condition number is assigned to help later review
-   -- source test line number is shown at the right to speed updates
-
-   l ) PASS   : check hours   (cursory)  .  .  .  .  .  .  .  .  .  [1316]
-       method : LIST_unit (~sched_hrs~    , cfile_1st->tail)
-       test   : s_equal        (@ 0 msecs with rc = 10) 
-       expect : LIST hours       : [_____1__________________]>>
-       actual : LIST hours       : [_____1__________________]>>
-
-.SH SETTING
-if changing internal state is required to properly test a program, i use
-specific "setter" functions rather than change variables directly.  again,
-this allows the program and data representation to change while not effecting
-the unit test.
-
-technically, this verb is not required and the information below simply
-communicates how i personally conduct greybox testing.
-
-.B fields (7)...
-   1) verb    : set
-   -- rest are the same as in TEST section
-
-.B sample script records...
-   -- same as in TEST section
-
-.B sample output...
-   -- same as in TEST section
-
-.B example...
-   -- for instance, sometimes i wish to reroute files to /tmp
-
-   char       /*----: set up program test file locations --------------*/
-   PROG_testfiles     (void)
-   {
-      snprintf (my.name_pulser , 200, "%s%s", "/tmp/" , FILE_PULSE);
-      snprintf (my.name_watcher, 200, "%s%s", "/tmp/" , FILE_WATCH);
-      snprintf (my.name_locker , 200, "%s%s", "/tmp/" , FILE_LOCK);
-      snprintf (my.name_exec   , 200, "%s%s", "/tmp/" , FILE_EXEC);
-      snprintf (my.name_status , 200, "%s%s", "/tmp/" , FILE_STATUS);
-      return 0;
-   }
-
-.SH CUSTOM
-to allow for compound and/or complicated expect strings, there is a global
-string called CUSTOM.  actually, any string variable can be used, CUSTOM is
-simply defined to make it easier.
-
-.B add string to CUSTOM...
-   -- first, sprintf is used to populate CUSTOM with a string
-
-   code   || v21 || create a custom file expect string  || - - - || >>
-          >> sprintf (CUSTOM, "LIST file list   : >>
-          >> n=%4d, f=%4d, b=%4d, h=%-10p, t=%p", >>
-          >> 2, 2, 2, cfile_1st, cfile_2nd);   ||
-
-.B using string for a test...
-   -- expect string has CUSTOM with double square brackets surrounding
-   -- actually any string variable can be within the brackets
-   -- this can be used with exec, get, and set
-
-   get    || v21 || review the file list                       || >>
-          >> LIST_unit    || "files"        , NULL             || >>
-          >> s_equal      || [[ CUSTOM ]]                      ||
-
-.SH CODE
-in order to test, i always need some variables to hold values, pointers, etc.
-to easily do this without a crazy number of script commands, i have simply
-included a "code" script option to directly add code to the test.
-
-.B fields (7)...
-   1) verb    : exec
-   2) vers    : (see FIELDS)
-   3) desc    : (see FIELDS)
-   4) func    : blank
-   5) code    : see sample script records below
-
-.B sample script records...
-   -- please replace double pipes (||) with the field sperator char (31)
-   -- >> is used here as a line continuation symbol to show in man pages
-
-   code   || v21 || holder for broken-down time         || - - - || >>
-          >> struct tm *curr_time = NULL;                        ||
-
-.B sample output...
-   -- the description is displayed on the single line (will trunc to fit)
-   -- a consecutive test number is assigned to help later review
-   -- source test line number is shown at the right to speed updates
-   -- these do not count as test steps in the totals
-
-   b ) CODE   : holder for broken-down time  .  .  .  .  .  .  .  . [0023]
-       code   : struct tm *curr_time = NULL;                                          
-
-.SH LOAD
-if the program or a function reads data from stdin, the following verb will
-load values for reading.
-
-.B fields (7)...
-   1) verb    : exec
-   2) vers    : (see FIELDS)
-   3) desc    : (see FIELDS)
-   4) func    : blank
-   5) payload : see script records below
-
-.B sample script records...
-   -- please replace double pipes (||) with the field sperator char (31)
-   -- >> is used here as a line continuation symbol to show in man pages
-
-   load   || v21 || add a basic line to stdin           || - - -          || >>
-          >> * * * * * /bin/true > /dev/null                     ||
-
-.B sample output...
-   -- the description is displayed on the single line (will trunc to fit)
-   -- a consecutive test number is assigned to help later review
-   -- source test line number is shown at the right to speed updates
-   -- these do not count as test steps in the totals
-
-   a ) CODE   : add a basic line to stdin  .  .  .  .  .  .  .  .   [1000]
-       load   : * * * * * /bin/true > /dev/null
-
-.SH SYSTEM
-sometimes the only way to verify a function is to understand its impact on
-the linux environment itself.  there are many ways to accomplish this, but
-one easy way is to run a system() call.
-
-.B fields (7)...
-   1) verb    : exec
-   2) vers    : (see FIELDS)
-   3) desc    : (see FIELDS)
-   4) func    : blank
-   5) payload : shell code
-
-.B sample script records...
-   -- please replace double pipes (||) with the field sperator char (31)
-   -- >> is used here as a line continuation symbol to show in man pages
-
-   sys    || v21 || get the filesystem owner            || - - - ||
-          >> ls -l /tmp/themis/etc/themis.conf | cut -d' ' -f 3  ||
-
-.B sample output...
-   -- the description is displayed on the single line (will trunc to fit)
-   -- a consecutive test number is assigned to help later review
-   -- source test line number is shown at the right to speed updates
-   -- these do not count as test steps in the totals
-
-   d ) CODE   : get the filesystem perms  .  .  .  .  .  .  .  .  . [0453]
-       sys    : ls -l /tmp/themis | grep etc | cut -d' ' -f 1
-
-.SH MODE
-rarely, but critically, sometimes it is valuable to force a failure just
-to be sure of the results.  by this i mean, is the code just always labeling
-everything a pass?  i am a little paranoid sometimes ;))
-
-do not forget to turn the mode back to normal after testing.
-
-.B fields (7)...
-   1) verb    : mode
-   2) vers    : (see FIELDS)
-   3) desc    : blank
-   4) func    : blank
-   5) mode    : see below
-
-.B sample script records...
-   -- please replace double pipes (||) with the field sperator char (31)
-   -- >> is used here as a line continuation symbol to show in man pages
-   -- ther are only two options, "FORCED_FAIL" and "PASSING"
-
-   mode   || v21 || set to failure mode                 || - - - || >>
-          >>  "FORCED_FAIL"                                      ||
-
-   mode   || v21 || set to normal mode                  || - - - || >>
-          >>  "PASSING"                                          ||
-
-.B effect...
-   -- the shell pipeline is routed into the global yUNIT_systext
-   -- you can the compare and test this value as you wish
-
-.B sample output...
-   -- the description is displayed on the single line (will trunc to fit)
-   -- a consecutive test number is assigned to help later review
-   -- source test line number is shown at the right to speed updates
-   -- these do not count as test steps in the totals
-
-   b ) MODE   : ENABLE FORCED FAILURE (pass=fail, fail=pass) .  .   [0530]
-
-.SH PREPARATION
-in order to properly compile, the unit test must have access to all local
-headers.  this is a very easy, one-time step for the whole file, not script
-by script.
-
-.B sample script records...
-   -- please replace double pipes (||) with the field sperator char (31)
-   -- >> is used here as a line continuation symbol to show in man pages
-   -- both lines below are required
-
-   PREP   || v20 || include the prototype headers                ||
-
-   incl   || v20 || include crond header           || khronos.h  ||
-
-.B effect...
-   -- "PREP" simply inserts some comments in the code
-   -- "incl" intserts a #include directive in the code
-
-.B sample output...
-   -- none
-
-.SH COMPILING
-to work properly, the main function of the c program must be placed in
-a separate source file.  i call mine by the [BASENAME]_main.c.  the unit
-test creates its own main function within [BASENAME]_unit.c.  all program
-modules (except main) need to be linked against [BASENAME]_unit.c to create
-an executable.  i name the resulting executable [BASENAME]_unit.
-
-.SH EXECUTING
-the resulting [BASENAME]_unit executable has several options build in.
-
-.B @@quiet
-, no output only a return code : neg = fail, pos = warn, 0 = pass
-
-.B @@test
-, only a single line of summary numbers indicating pass/fail
-
-.B @@scrp
-, shows summary and script level output.  no step details
-
-.B @@cond
-, shows summary, script, and condition output. no step details.
-
-.B @@step
-, shows summary, script, and condition, and step output. no details.
-
-.B @@full
-, shows all output.  this is the default.
-
-.B --console
-, show plain text without terminal color codes.
-
-.B --eterm
-, show output with embedded eterm, 256 color terminal color codes.
-
-.B <nn>
-, two digits with a leading zero if required to make two.  this
-causes the unit test to only run the script by that number.
-
-.B <nnn>
-, three digits with a leading zeros if required to make three.  this causes
-the unit test to only show the condition by that number.  sometimes this
-makes it easier to find in the output.
+for all other information about ouroboros, just see man ouroboros.
 
 .SH BUGS and CONCERNS
 koios depends on proper formatting of the input meta-language file.  if the
 file lacks a double quote or delimiter in the correct place, the resulting
 errors when compiling the c source for the unit test can be difficult to
 track down.
-
-.SH SEE ALSO
-this documentation is layered to provide easier navigation.
-   koios (7), decision rationale, objectives, and overview
-   koios (5), structure of unit testing meta-language file
-   koios (1), initiation, options, and structure
-   yUNIT, unit testing support library
-   yVAR, data comparison support library
 
 .SH AUTHOR
 rsheatherly  can be reached at jelloshrke at gmail dot com

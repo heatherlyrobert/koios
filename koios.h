@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3g"
-#define     P_VERTXT    "fully integrated global and unit test is passing again"
+#define     P_VERNUM    "1.3h"
+#define     P_VERTXT    "major update to man files"
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 /*===[[ HEADER ]]=============================================================*/
