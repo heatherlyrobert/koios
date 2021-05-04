@@ -168,7 +168,10 @@ PROG_args          (int argc, char *argv[])
       else {
          rc = PROG_file (a);
          if (rc < 0) {
+            printf ("base file name is invalid or not found, FATAL\n");
+            DEBUG_TOPS  yLOG_note   ("base name is invalid or not found");
             DEBUG_TOPS  yLOG_exitr  (__FUNCTION__, rce);
+            return rce;
          }
       }
    }
@@ -206,6 +209,9 @@ PROG_begin         (void)
    my.n_empty   = 0;
    my.n_short   = 0;
    my.n_recd    = 0;
+   my.dittoing  = '-';
+   my.dmark     = '-';
+   my.ditto     = -1;
    /*---(complete)-----------------------*/
    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
    return 0;

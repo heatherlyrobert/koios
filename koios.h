@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3h"
-#define     P_VERTXT    "major update to man files"
+#define     P_VERNUM    "1.3i"
+#define     P_VERTXT    "huge fixes to code output for proper totaling (very hard)"
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 /*===[[ HEADER ]]=============================================================*/
@@ -212,6 +212,9 @@ struct cGLOBALS
    char        stage       [LEN_LABEL];     /* master sequence                */
    char        cshare;                      /* current share                  */
    char        share;                       /* share marking                  */
+   char        dittoing;                    /* currently dittoing             */
+   char        dmark;                       /* current ditto mark             */
+   char        ditto;                       /* current ditto position         */
    char        mark;                        /* ditto marking                  */
    char        d_used      [LEN_HUND];      /* ditto markes used              */
    /*---(working)---------------*/

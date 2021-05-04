@@ -5,8 +5,6 @@
 
 
 
-static  int   s_ditto    = -1;
-static  char  s_dittoing = '-';
 static  FILE *s_file_save;
 static  FILE *s_file_ditto;
 static  int   s_lineno   =   0;
@@ -204,13 +202,43 @@ SCRP_ditto__beg         (char *a_verb)
    }
    /*---(swap files)---------------------*/
    DEBUG_INPT   yLOG_note    ("swap file for script");
+   printf ("START DITTO ----------------------------------------\n");
    s_file_save  = my.f_scrp;
    my.f_scrp = s_file_ditto;
    s_lineno     = 0;
-   s_dittoing   = 'y';
+   my.dittoing  = 'y';
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 0;
+}
+
+char
+SCRP_ditto__handler     (void)
+{
+   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(check for no ditto)-------------*/
+   DEBUG_INPT   yLOG_schar   (my.dittoing);
+   if (my.dittoing != 'y') {
+      DEBUG_INPT   yLOG_snote   ("not dittoing");
+      ++my.n_line;
+      DEBUG_INPT   yLOG_sint    (my.n_line);
+      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      return 0;
+   }
+   /*---(update ditto line)--------------*/
+   ++s_lineno;
+   DEBUG_INPT   yLOG_sint    (s_lineno);
+   DEBUG_INPT   yLOG_sint    (my.ditto);
+   /*---(check for pre-ditto)------------*/
+   if (s_lineno <  my.ditto) {
+      DEBUG_INPT   yLOG_snote   ("pre-ditto source line");
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, -1);
+      return -1;
+   }
+   /*---(dittoing)-----------------------*/
+   DEBUG_INPT   yLOG_snote   ("in sweet spot");
+   DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, 1);
+   return 1;
 }
 
 char
@@ -221,9 +249,27 @@ SCRP_ditto__end         (void)
    char        rc          =    0;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
+   /*---(defense)------------------------*/
+   DEBUG_INPT   yLOG_char    ("dittoing"  , my.dittoing);
+   --rce;  if (my.dittoing != 'y') {
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_INPT   yLOG_point   ("s_file_sav", s_file_save);
+   --rce;  if (s_file_save == NULL) {
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_INPT   yLOG_point   ("s_file_dit", s_file_ditto);
+   --rce;  if (s_file_ditto == NULL) {
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
    /*---(reset ditto)--------------------*/
-   s_ditto    = -1;
-   s_dittoing = '-';
+   printf ("STOP DITTO -----------------------------------------\n");
+   my.dittoing = '-';
+   my.dmark    = '-';
+   my.ditto    = -1;
    /*---(swap files)---------------------*/
    DEBUG_INPT   yLOG_note    ("swap file for script");
    my.f_scrp = s_file_save;
@@ -474,7 +520,7 @@ SCRP__ditto_check       (char *p)
    }
    /*---(handle condition)---------------*/
    --rce;  if (strcmp ("COND" , g_verbs [my.indx].name) == 0) {
-      if (s_dittoing != 'y') {
+      if (my.dittoing != 'y') {
          DEBUG_INPT   yLOG_snote   ("handle cond");
          if (n > 0) {
             DEBUG_INPT   yLOG_snote   ("already set identifier (hidding)");
@@ -485,6 +531,9 @@ SCRP__ditto_check       (char *p)
       } else {
          DEBUG_INPT   yLOG_snote   ("cond () inside ditto, ignored");
       }
+      DEBUG_INPT   yLOG_snote   ("saving position");
+      DEBUG_INPT   yLOG_schar   (my.mark);
+      DEBUG_INPT   yLOG_sint    (my.n_line);
    }
    /*---(handle ditto)-------------------*/
    if (strcmp ("DITTO" , g_verbs [my.indx].name) == 0) {
@@ -495,15 +544,19 @@ SCRP__ditto_check       (char *p)
          DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
          return rce;
       }
-      my.mark = m;
-      s_ditto = n;
+      my.mark  = m;
+      my.ditto = n;
       if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
          DEBUG_INPT   yLOG_snote   ("begin ditto processing");
          DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+         my.dmark = m;
          rc = SCRP_ditto__beg (p);
          if (rc >= 0)  rc = 1;
          return rc;
       }
+      DEBUG_INPT   yLOG_snote   ("using position");
+      DEBUG_INPT   yLOG_schar   (my.mark);
+      DEBUG_INPT   yLOG_sint    (my.n_line);
    }
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
@@ -628,7 +681,7 @@ SCRP_clear         (void)
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
    /*---(save value)---------------------*/
-   strlcpy (my.last, my.verb, LEN_LABEL);
+   if (strcmp (my.verb, "DITTO") != 0)  strlcpy (my.last, my.verb, LEN_LABEL);
    /*---(input vars)---------------------*/
    my.verb        [0] = '\0';
    my.p_conv          = NULL;
@@ -667,18 +720,24 @@ SCRP_read          (void)
    char        rce         = -10;           /* return code for errors         */
    char        x_recd      [LEN_RECD];
    int         x_len       = 0;             /* input record length            */
-   char        x_temp      [20];
+   char        t           [LEN_LABEL];
+   char       *p           = NULL;
+   char       *r           = NULL;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
    DEBUG_INPT   yLOG_point   ("*scrp"     , my.f_scrp);
+   /*> printf ("SCRP_read enter ------------------------------\n");                   <*/
    /*---(default)------------------------*/
+   SCRP_clear  ();
    strcpy (my.recd, "");
    /*---(defense)------------------------*/
+   /*> printf ("   my.f_scrp   = %p\n", my.f_scrp);                                   <*/
    --rce;  if (my.f_scrp == NULL) {
       DEBUG_INPT   yLOG_fatal   ("scrp file, file not open");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
+   /*> printf ("   feof ()     = %d\n", feof (my.f_scrp));                            <*/
    if (feof (my.f_scrp)) {
       DEBUG_INPT   yLOG_note    ("already at end of file");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
@@ -693,40 +752,70 @@ SCRP_read          (void)
       /*---(read next)-------------------*/
       DEBUG_INPT   yLOG_note    ("read script file");
       fgets (x_recd, LEN_RECD, my.f_scrp);
+      /*> printf ("   x_recd      = å%sæ\n", x_recd);                                 <*/
       /*> printf ("record = %2d[%s]\n", strlen (x_recd), x_recd);                     <*/
+      /*> printf ("   feof ()     = %d\n", feof (my.f_scrp));                         <*/
       if (feof (my.f_scrp)) {
          DEBUG_INPT   yLOG_note    ("hit end of file");
          DEBUG_INPT   yLOG_exit    (__FUNCTION__);
          return 0;
       }
-      if (s_dittoing == '-') ++my.n_line;
-      else  {
-         ++s_lineno;
-         if (s_lineno <  s_dittos [s_ditto]) continue;
-      }
-      DEBUG_INPT   yLOG_value   ("line#"     , my.n_line);
+      DEBUG_INPT   yLOG_complex ("line#"     , "%4d my.n_line, %c, %4d s_lineno", my.n_line, my.dittoing, s_lineno);
+      /*> printf ("   SCRP_ditto__handler -- beg\n");                                 <*/
+      rc = SCRP_ditto__handler ();
+      DEBUG_INPT   yLOG_value   ("handler"   , rc);
+      /*> printf ("   rc = %d\n", rc);                                                <*/
+      /*> printf ("   SCRP_ditto__handler -- end\n");                                 <*/
+      if (rc < 0)  continue;
       /*---(filter)----------------------*/
       x_len = strllen (x_recd, LEN_RECD);
-      x_recd [--x_len] = '\0';
+      /*> printf ("   x_len = %d\n", x_len);                                          <*/
+      if (x_len > 0)  x_recd [--x_len] = '\0';
+      /*> printf ("   check empty\n");                                                <*/
       if (x_recd [0] == '\0') {
-         DEBUG_INPT   yLOG_note    ("empty, skipping");
-         if (s_dittoing != '-')  SCRP_ditto__end ();
-         else                    ++my.n_empty;
+         /*> printf ("   -- FOUND empty\n");                                          <*/
+         DEBUG_INPT   yLOG_note    ("SKIP, empty");
+         /*> printf ("   -- handle ditto if going, %d %c\n", my.dittoing, my.dittoing);   <*/
+         if (my.dittoing == 'y')  SCRP_ditto__end ();
+         else                      ++my.n_empty;
+         /*> printf ("   -- continue to next line\n");                                <*/
          continue;
       }
-      if (x_recd [0] == '#' && x_recd [1] != '>') {
-         DEBUG_INPT   yLOG_note    ("comment, skipping");
-         if (s_dittoing != '-')  SCRP_ditto__end ();
-         else                    ++my.n_comment;
+      /*> printf ("   check comment\n");                                              <*/
+      if (x_len > 1 && x_recd [0] == '#' && x_recd [1] != '>') {
+         DEBUG_INPT   yLOG_note    ("SKIP, comment");
+         if (my.dittoing == 'y')  SCRP_ditto__end ();
+         else                     ++my.n_comment;
          continue;
       }
       DEBUG_INPT   yLOG_value   ("length"    , x_len);
+      /*> printf ("   check length\n");                                               <*/
       if (x_len <=  5)  {
-         DEBUG_INPT   yLOG_note    ("too short, skipping");
-         if (s_dittoing != '-')  SCRP_ditto__end ();
-         else                    ++my.n_short;
+         DEBUG_INPT   yLOG_note    ("SKIP, too short");
+         if (my.dittoing == 'y')  SCRP_ditto__end ();
+         else                     ++my.n_short;
          continue;
       }
+      /*---(check other end ditto)-------*/
+      /*> printf ("   check in-ditto -- beg\n");                                      <*/
+      if (my.dittoing == 'y' && s_lineno != my.ditto)  {
+         strlcpy (t, x_recd, LEN_LABEL);
+         p = strtok (t, "");
+         p = strtok (p, " ");
+         DEBUG_INPT   yLOG_point   ("p"         , p);
+         if (p != NULL) {
+            strltrim (p, ySTR_BOTH, LEN_LABEL);
+            DEBUG_INPT   yLOG_info    ("p"         , p);
+            if (strstr ("PREP SCRP SECT SHARED GLOBAL COND GROUP DITTO REUSE", p) != NULL) {
+               SCRP_ditto__end ();
+               continue;
+            }
+            if (strstr ("DITTO GROUP REUSE", p) != NULL) {
+               continue;
+            }
+         }
+      }
+      /*> printf ("   in-ditto -- end\n");                                            <*/
       /*---(translate delayed chars)-----*/
       strlundelay (x_recd, LEN_RECD);
       /*---(copy)------------------------*/
@@ -738,6 +827,7 @@ SCRP_read          (void)
    }
    DEBUG_INPT   yLOG_note    ("got a good record");
    /*---(complete)-----------------------*/
+   /*> printf ("SCRP_read exit -------------------------------\n");                   <*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 1;
 }
@@ -1335,7 +1425,7 @@ SCRP_parse         (void)
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
    /*---(prepare)---------------------*/
-   SCRP_clear  ();
+   /*> SCRP_clear  ();                                                                <*/
    /*---(defense)---------------------*/
    rc = SCRP_parse_defense ();
    DEBUG_INPT   yLOG_value   ("defense"   , rc);
@@ -1379,6 +1469,7 @@ SCRP_parse         (void)
       return rce;
    }
    if (rc >  0) {
+      DEBUG_INPT   yLOG_note    ("FOUND DITTO, back to reading");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return 0;
    }
@@ -1514,7 +1605,7 @@ SCRP__unit              (char *a_question, int a_num)
       sprintf (my.answer, "SCRP mark      : %c", my.mark);
    }
    else if (strcmp (a_question, "ditto"     ) == 0) {
-      sprintf (my.answer, "SCRP ditto     : %2d  %c  %-10p  %-10p  %3d", s_ditto, s_dittoing, s_file_save, s_file_ditto, s_lineno);
+      sprintf (my.answer, "SCRP ditto     : %2d  %c  %-10p  %-10p  %3d", my.ditto, my.dittoing, s_file_save, s_file_ditto, s_lineno);
    }
    else if (strcmp (a_question, "dittos"    ) == 0) {
       strlcpy (t, "", LEN_RECD);

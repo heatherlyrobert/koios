@@ -339,6 +339,7 @@ CODE_printf             (char *a_format, ...)
    /*---(write)--------------------------*/
    va_start (x_vlist, a_format);
    vfprintf (my.f_code, a_format, x_vlist);
+   /*> printf   ("%s", a_format);                                                     <*/
    va_end   (x_vlist);
    fflush   (my.f_code);
    /*---(complete)-------------------------*/
@@ -453,6 +454,7 @@ CODE_beg                (void)
 char
 CODE_end           (void)
 {
+   strcpy (my.verb, "EOF");
    if (my.nscrp > 0 || my.cshare != '-') {
       strlcpy (my.last, my.verb, LEN_LABEL);
       CODE_scrp_end ();
@@ -559,6 +561,7 @@ CODE_scrp_end        (void)
    if (my.nscrp >  0) {
       CODE_cond_end ();
    }
+   /*> printf ("my.cstep %4d, my.verb å%sæ\n", my.cstep, my.verb);                    <*/
    IF_MASTER {
       if (my.cstep > 0)  CODE_cond_end ();
    }
@@ -615,8 +618,9 @@ CODE_scrp          (void)
    CODE_printf ("   /*===[[ script header ]]========================*/\n");
    CODE_printf ("   g.offset  = 0;\n");
    CODE_printf ("   g.origin  = %d;\n", my.nscrp);
+   CODE_printf ("   yUNIT_mode_reset ();\n");
    CODE_printf ("   yUNIT_scrp    (%4i, %3i, \"%s\", \"%s\", \"%s\");\n", my.n_line, my.nscrp, my.stage, my.desc, my.meth);
-   /*> CODE_printf ("   if (g.exec ==  0 && g.level == YUNIT_SCRP)  return 0;\n");    <*/
+   CODE_printf ("   if (g.exec ==  0 && g.level == YUNIT_SCRP)  return 0;\n");
    /*---(function call to main)----------*/
    MAIN_printf ("   if (g.scrp ==  0 || g.scrp == %2i)  yUNIT_script_%02d ();\n", my.nscrp, my.nscrp);
    /*---(script entry in wave)-----------*/
@@ -635,6 +639,7 @@ CODE_shared          (void)
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    /*---(end last script)----------------*/
+   /*> printf ("CODE_shared     my line %4d, my verb å%sæ, my.share å%cæ\n", my.n_line, my.verb, my.share);   <*/
    CODE_scrp_end ();
    /*---(counters)-----------------------*/
    my.cshare = my.share;
@@ -695,8 +700,9 @@ CODE_cond_end      (void)
    /*---(header)-------------------------*/
    DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
    DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10p, %-10.10s, %4dn, %4dc", my.f_code, my.last, my.ncond, my.scond);
-   if (strcmp (my.last, "GROUP") != 0 && strcmp (my.last, "REUSE") != 0) {
+   if (strstr ("GROUP REUSE", my.last) == NULL) {
       if (my.scond > 0) {
+         printf ("   writing yUNIT_dnoc\n\n");
          CODE_printf ("      /*---(summary)---------------------*/\n");
          CODE_printf ("      yUNIT_dnoc    (g.exec);\n");
          CODE_printf ("      /*---(done)------------------------*/\n");
@@ -711,6 +717,7 @@ CODE_cond_end      (void)
 char
 CODE_cond          (void)
 {
+   char        t           [LEN_RECD]  = "";
    /*---(header)-------------------------*/
    DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
    CODE_cond_end ();
@@ -721,7 +728,16 @@ CODE_cond          (void)
    if (my.run_type == G_RUN_DEBUG) {
       CODE_printf ("   %sUG_TOPS    %sOG_unitcond (g.origin, g.offset + %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.n_line, my.desc);
    }
-   sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.cshare, my.desc);
+   if (my.dittoing == 'y') {
+      /*> printf ("inside a ditto (%c)\n", my.dmark);                                 <*/
+      /*> sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.mark      , my.desc);   <*/
+      sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.dmark      , my.desc);
+   } else if (my.mark != '-') {
+      /*> printf ("found a cond (%c)\n", my.mark);                                    <*/
+      sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.mark - '0' , my.desc);
+   } else {
+      sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.cshare     , my.desc);
+   }
    DEBUG_OUTP   yLOG_complex ("output"    , "%3d:%s", strlen (my.compiled), my.compiled);
    CODE_printf ("%s\n", my.compiled);
    /*---(complete)-----------------------*/
@@ -732,6 +748,7 @@ CODE_cond          (void)
 char
 CODE_group         (void)
 {
+   /*> printf ("CODE_group      my line %4d, my verb å%sæ, my last å%sæ\n", my.n_line, my.verb, my.last);   <*/
    CODE_cond_end ();
    CODE_printf ("   /*---(group)--------------------------*/\n");
    CODE_printf ("   yUNIT_group   (\"%s\");\n", my.desc);
@@ -744,6 +761,7 @@ CODE_reuse         (void)
    char        rce         =  -10;
    /*---(header)-------------------------*/
    DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
+   /*> printf ("CODE_reuse      my line %4d, my verb å%sæ, my.share å%cæ\n", my.n_line, my.verb, my.share);   <*/
    CODE_cond_end ();
    --rce;  if (strchr (LTRS_CHARS, my.share) == NULL)  return rce;
    CODE_printf ("   /*---(shared code)-----------------------*/\n");
@@ -1113,7 +1131,12 @@ CODE_write         (void)
    /*---(header)-------------------------*/
    DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
    /*---(switch)-------------------------*/
-   if (my.p_code == NULL)  return;
+   if (my.p_code == NULL) {
+      DEBUG_OUTP   yLOG_note    ("code handler NULL, likely DITTO or #>");
+      DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
+      return 0;
+   }
+   printf ("CODE_write      my line %4d, my verb å%sæ, my last å%sæ\n", my.n_line, my.verb, my.last);
    rc = my.p_code ();
    /*---(complete)-----------------------*/
    DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
