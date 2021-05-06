@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3i"
-#define     P_VERTXT    "huge fixes to code output for proper totaling (very hard)"
+#define     P_VERNUM    "1.3j"
+#define     P_VERTXT    "add back conditional execution and clean up return values"
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 /*===[[ HEADER ]]=============================================================*/
@@ -340,8 +340,9 @@ char        CODE_suffix        (char a_type);
 char        CODE_exec          (void);
 char        CODE_echo          (void);
 char        CODE_mode          (void);
-char        CODE_code          (void);
 char        CODE_gvar          (void);
+char        CODE_lvar          (void);
+char        CODE_code          (void);
 char        CODE_load          (void);
 char        CODE_system        (void);
 char        CODE_unknown       (void);

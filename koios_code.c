@@ -481,7 +481,7 @@ MAIN_beg                (void)
    MAIN_printf ("   rc = yUNIT_init ();\n");
    MAIN_printf ("   rc = yUNIT_args (a_argc, a_argv);\n");
    MAIN_printf ("   if (rc < 0)  return -1;\n");
-   MAIN_printf ("   yUNIT_unit (\"%s\", g.level, g.eterm, g.exec);\n", my.n_base);
+   MAIN_printf ("   yUNIT_unit (\"%s\", cyUNIT.level, cyUNIT.eterm, cyUNIT.exec);\n", my.n_base);
    MAIN_printf ("   /*---(beg scripts)--------------------*/\n");
    return 0;
 }
@@ -490,7 +490,7 @@ char
 MAIN_end           (void)
 {
    MAIN_printf ("   /*---(end scripts)--------------------*/\n");
-   MAIN_printf ("   rc = yUNIT_tinu (g.exec);\n");
+   MAIN_printf ("   rc = yUNIT_tinu (cyUNIT.exec);\n");
    MAIN_printf ("   /*---(complete)-----------------------*/\n");
    MAIN_printf ("   return rc;\n");
    MAIN_printf ("}\n");
@@ -574,7 +574,7 @@ CODE_scrp_end        (void)
    if (my.nscrp >  0 || my.cshare != '-') {
       if (my.cshare == '-') {
          CODE_printf ("   /*===[[ script done ]]==========================*/\n");
-         CODE_printf ("   yUNIT_prcs    (g.exec);\n");
+         CODE_printf ("   yUNIT_prcs    (cyUNIT.exec);\n");
       }
       else if (my.cshare == tolower (my.cshare)) {
          CODE_printf ("   /*===[[ shared done ]]==========================*/\n");
@@ -616,13 +616,12 @@ CODE_scrp          (void)
    CODE_printf ("yUNIT_script_%02d          (void)\n", my.nscrp);
    CODE_printf ("{\n");
    CODE_printf ("   /*===[[ script header ]]========================*/\n");
-   CODE_printf ("   g.offset  = 0;\n");
-   CODE_printf ("   g.origin  = %d;\n", my.nscrp);
+   CODE_printf ("   cyUNIT.offset  = 0;\n");
+   CODE_printf ("   cyUNIT.origin  = %d;\n", my.nscrp);
    CODE_printf ("   yUNIT_mode_reset ();\n");
    CODE_printf ("   yUNIT_scrp    (%4i, %3i, \"%s\", \"%s\", \"%s\");\n", my.n_line, my.nscrp, my.stage, my.desc, my.meth);
-   CODE_printf ("   if (g.exec ==  0 && g.level == YUNIT_SCRP)  return 0;\n");
    /*---(function call to main)----------*/
-   MAIN_printf ("   if (g.scrp ==  0 || g.scrp == %2i)  yUNIT_script_%02d ();\n", my.nscrp, my.nscrp);
+   MAIN_printf ("   if (cyUNIT.scrp == YUNIT_ALL  || cyUNIT.scrp == %2i)  yUNIT_script_%02d ();\n", my.nscrp, my.nscrp);
    /*---(script entry in wave)-----------*/
    if (strlen (my.stage) == 2) {
       x_stage = my.stage [0];
@@ -661,7 +660,7 @@ CODE_sect          (void)
    /*---(end last script)----------------*/
    CODE_scrp_end ();
    /*---(add section)--------------------*/
-   MAIN_printf ("   if (g.scrp ==  0)                  yUNIT_sect      (\"%s\");\n", my.desc);
+   MAIN_printf ("   if (cyUNIT.scrp ==  0)                  yUNIT_sect      (\"%s\");\n", my.desc);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -702,9 +701,9 @@ CODE_cond_end      (void)
    DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10p, %-10.10s, %4dn, %4dc", my.f_code, my.last, my.ncond, my.scond);
    if (strstr ("GROUP REUSE", my.last) == NULL) {
       if (my.scond > 0) {
-         printf ("   writing yUNIT_dnoc\n\n");
+         /*> printf ("   writing yUNIT_dnoc\n\n");                                    <*/
          CODE_printf ("      /*---(summary)---------------------*/\n");
-         CODE_printf ("      yUNIT_dnoc    (g.exec);\n");
+         CODE_printf ("      yUNIT_dnoc    (cyUNIT.exec);\n");
          CODE_printf ("      /*---(done)------------------------*/\n");
       }
    }
@@ -717,6 +716,7 @@ CODE_cond_end      (void)
 char
 CODE_cond          (void)
 {
+   char        a           =    0;
    char        t           [LEN_RECD]  = "";
    /*---(header)-------------------------*/
    DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
@@ -724,19 +724,20 @@ CODE_cond          (void)
    CODE__stats_cond_beg ();
    DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10p, %-10.10s, %4dn, %4dc", my.f_code, my.last, my.ncond, my.scond);
    CODE_printf ("   /*===[[ COND #%03i ]]============================*/\n", my.scond);
-   CODE_printf ("   if (g.cond == g.offset + %3i)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (g.level, 'y');\n", my.scond);
+   CODE_printf ("   if (cyUNIT.cond == cyUNIT.offset + %3i)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (cyUNIT.level, 'y');\n", my.scond);
    if (my.run_type == G_RUN_DEBUG) {
-      CODE_printf ("   %sUG_TOPS    %sOG_unitcond (g.origin, g.offset + %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.n_line, my.desc);
+      CODE_printf ("   %sUG_TOPS    %sOG_unitcond (cyUNIT.origin, cyUNIT.offset + %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.n_line, my.desc);
    }
    if (my.dittoing == 'y') {
       /*> printf ("inside a ditto (%c)\n", my.dmark);                                 <*/
-      /*> sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.mark      , my.desc);   <*/
-      sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.dmark      , my.desc);
+      /*> sprintf (my.compiled , "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.mark      , my.desc);   <*/
+      sprintf (my.compiled , "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.dmark , my.desc);
    } else if (my.mark != '-') {
       /*> printf ("found a cond (%c)\n", my.mark);                                    <*/
-      sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.mark - '0' , my.desc);
+      a = my.mark - '0' + ' ';
+      sprintf (my.compiled , "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, a        , my.desc);
    } else {
-      sprintf (my.compiled , "   yUNIT_cond    (%4i, g.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.cshare     , my.desc);
+      sprintf (my.compiled , "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");", my.n_line, my.scond, my.cshare, my.desc);
    }
    DEBUG_OUTP   yLOG_complex ("output"    , "%3d:%s", strlen (my.compiled), my.compiled);
    CODE_printf ("%s\n", my.compiled);
@@ -765,9 +766,9 @@ CODE_reuse         (void)
    CODE_cond_end ();
    --rce;  if (strchr (LTRS_CHARS, my.share) == NULL)  return rce;
    CODE_printf ("   /*---(shared code)-----------------------*/\n");
-   CODE_printf ("   g.offset = %3i;\n", my.scond);
+   CODE_printf ("   cyUNIT.offset = %3i;\n", my.scond);
    CODE_printf ("   yUNIT_shared_%c ();\n", my.share);
-   CODE_printf ("   g.offset = 0;\n");
+   CODE_printf ("   cyUNIT.offset = 0;\n");
    if (tolower (my.share) == my.share) {
       CODE__shared_add (T_REUSES, my.share, &(my.ncond), &(my.nstep));
       CODE__shared_add (T_REUSES, my.share, &(my.scond), &(my.sstep));
@@ -794,7 +795,7 @@ CODE_mode          (void)
 {
    CODE__stats_step ();
    CODE_printf ("      /*---(mode)------------------------*/\n");
-   CODE_printf ("      yUNIT_mode    (%4i, %3i, \"%s\", g.exec);\n", my.n_line, my.cstep, my.desc);
+   CODE_printf ("      yUNIT_mode    (%4i, %3i, \"%s\", cyUNIT.exec);\n", my.n_line, my.cstep, my.desc);
    return 0;
 }
 
@@ -867,6 +868,30 @@ CODE_display       (void)
 }
 
 char
+CODE_gvar          (void)
+{
+   CODE_display ();
+   CODE_printf ("/*---(global variables)------------*/\n");
+   CODE_printf ("%s\n",  my.syst);
+   return 0;
+}
+
+char
+CODE_lvar          (void)
+{
+   /*---(counters)-----------------------*/
+   CODE__stats_step ();
+   /*---(fix strings)--------------------*/
+   CODE_display ();
+   /*---(write)--------------------------*/
+   CODE_printf ("      /*---(setup local)-----------------*/\n");
+   CODE_printf ("      %s\n",  my.syst);
+   CODE_printf ("      yUNIT_local   (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", my.n_line, my.cstep, my.desc, my.disp);
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char
 CODE_code          (void)
 {
    /*---(counters)-----------------------*/
@@ -875,18 +900,9 @@ CODE_code          (void)
    CODE_display ();
    /*---(write)--------------------------*/
    CODE_printf ("      /*---(inject code)-----------------*/\n");
-   CODE_printf ("      %s\n",  my.syst);
-   CODE_printf ("      yUNIT_code    (%4i, %3i, \"%s\", \"%s\", g.exec);\n", my.n_line, my.cstep, my.desc, my.disp);
+   CODE_printf ("      if (cyUNIT.exec) { %s }\n",  my.syst);
+   CODE_printf ("      yUNIT_code    (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", my.n_line, my.cstep, my.desc, my.disp);
    /*---(complete)-----------------------*/
-   return 0;
-}
-
-char
-CODE_gvar          (void)
-{
-   CODE_display ();
-   CODE_printf ("/*---(global variables)------------*/\n");
-   CODE_printf ("%s\n",  my.syst);
    return 0;
 }
 
@@ -923,7 +939,7 @@ CODE_load          (void)
       else           CODE_printf ("%s" , x_var);
    }
    /*---(write)--------------------------*/
-   CODE_printf (", g.exec);\n");
+   CODE_printf (", cyUNIT.exec);\n");
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -948,7 +964,7 @@ CODE_system        (void)
     *> }                                                                              <*/
    /*---(write)--------------------------*/
    CODE_printf ("      /*---(system/execute)--------------*/\n");
-   CODE_printf ("      yUNIT_system  (%4i, %3i, \"%s\", \"%s\", \"%s\", g.exec);\n", my.n_line, my.cstep, my.desc, my.disp, my.syst);
+   CODE_printf ("      yUNIT_system  (%4i, %3i, \"%s\", \"%s\", \"%s\", cyUNIT.exec);\n", my.n_line, my.cstep, my.desc, my.disp, my.syst);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -964,10 +980,27 @@ CODE_prefix        (char a_test)
 {
    /*---(locals)-----------+-----------+-*/
    char        x_func      [LEN_FULL]   = "";
-   /*---(pre-work for void)--------------*/
-   if (a_test == 'v') {
-      CODE_printf ("      if (g.exec == 1)  ");
-      CODE_printf ("%-13s (%s);\n"     , my.meth , my.args);
+   /*---(reset rc)-----------------------*/
+   CODE_printf ("      yUNIT_reset_rc ();\n");
+   /*---(run function)-------------------*/
+   if (strcmp (my.meth, "echo") != 0) {
+      switch (a_test) {
+      case 'v'  :
+         CODE_printf ("      if (cyUNIT.exec)  %-13s (%s);\n", my.meth , my.syst);
+         break;
+      case 's'  : case 'u'  :
+         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.s_rc = %-13s (%s);\n", my.meth , my.syst);
+         break;
+      case 'i'  :
+         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.i_rc = %-13s (%s);\n", my.meth , my.syst);
+         break;
+      case 'r'  :
+         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.r_rc = %-13s (%s);\n", my.meth , my.syst);
+         break;
+      case 'p'  :
+         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.p_rc = %-13s (%s);\n", my.meth , my.syst);
+         break;
+      }
    }
    /*---(determine function)-------------*/
    switch (a_test) {
@@ -988,7 +1021,7 @@ CODE_prefix        (char a_test)
    /*---(write test)---------------------*/
    switch (a_test) {
    case 'v' :    /* pure void        */
-      CODE_printf ("\"%s\", g.exec);\n", my.test);
+      CODE_printf ("\"%s\", cyUNIT.exec);\n", my.test);
       break;
    default  :    /* all others       */
       CODE_printf ("\"%s\", "          , my.test);
@@ -1004,7 +1037,7 @@ CODE_unknown       (void)
 {
    CODE_prefix  ('-');
    CODE_printf ("\"%s\", "           , my.expe);
-   CODE_printf ("\"\", g.exec);\n"   );
+   CODE_printf ("\"\", cyUNIT.exec);\n"   );
    CODE_printf ("\n");
    return 0;
 }
@@ -1030,7 +1063,7 @@ CODE_expe_var      (char a_test)
          CODE_printf ("%s, "     , my.expe);
          break;
       default  :
-         CODE_printf ("\"%s\", g.exec);\n"         , my.expe);
+         CODE_printf ("\"%s\", cyUNIT.exec);\n"         , my.expe);
          break;
       }
       return 0;
@@ -1054,27 +1087,44 @@ CODE_suffix        (char a_test)
    if (a_test == 'v')    return 0;
    /*---(handle echos)-------------------*/
    if (strcmp (my.meth, "echo") == 0) {
-      CODE_printf ("%s, g.exec);\n"      , my.syst);
+      CODE_printf ("%s, cyUNIT.exec);\n"      , my.syst);
    }
    /*---(check for simple end)-----------*/
-   else if (strcmp (my.retn, "") == 0) {
-      CODE_printf ("%s (%s), g.exec);\n" , my.meth, my.syst);
-   }
-   /*---(handle return variables)--------*/
    else {
       switch (my.type) {
-      case 'i' : case 'p' : case 'r' :
-         CODE_printf ("%s = %s (%s), g.exec);\n", my.retn, my.meth, my.syst);
+      case 's'  :
+         CODE_printf ("cyUNIT.s_rc, cyUNIT.exec);\n");
+         if (strcmp (my.retn, "") != 0) CODE_printf ("         if (cyUNIT.exec)  strcpy (%s, cyUNIT.s_rc);\n", my.retn);
          break;
-      case 's' : case 'u' :
-         CODE_printf ("%s (%s), g.exec);\n"     , my.meth, my.syst);
-         CODE_printf ("         if (g.exec == 1)  strcpy (%s, %s);\n", my.retn, yUNIT_s_rc);
+      case 'i'  :
+         CODE_printf ("cyUNIT.i_rc, cyUNIT.exec);\n");
+         if (strcmp (my.retn, "") != 0) CODE_printf ("         if (cyUNIT.exec)  %s = cyUNIT.i_rc;\n", my.retn);
          break;
-      default  :
-         CODE_printf ("%s (%s), g.exec);\n"     , my.meth, my.syst);
+      case 'r'  :
+         CODE_printf ("cyUNIT.r_rc, cyUNIT.exec);\n");
+         if (strcmp (my.retn, "") != 0) CODE_printf ("         if (cyUNIT.exec)  %s = cyUNIT.r_rc;\n", my.retn);
+         break;
+      case 'p'  :
+         CODE_printf ("cyUNIT.p_rc, cyUNIT.exec);\n");
+         if (strcmp (my.retn, "") != 0) CODE_printf ("         if (cyUNIT.exec)  %s = cyUNIT.p_rc;\n", my.retn);
          break;
       }
    }
+   /*---(handle return variables)--------*/
+   /*> else {                                                                                           <* 
+    *>    switch (my.type) {                                                                            <* 
+    *>    case 'i' : case 'p' : case 'r' :                                                              <* 
+    *>       CODE_printf ("%s = %s (%s), cyUNIT.exec);\n", my.retn, my.meth, my.syst);                  <* 
+    *>       break;                                                                                     <* 
+    *>    case 's' : case 'u' :                                                                         <* 
+    *>       CODE_printf ("%s (%s), cyUNIT.exec);\n"     , my.meth, my.syst);                           <* 
+    *>       CODE_printf ("         if (cyUNIT.exec == 1)  strcpy (%s, %s);\n", my.retn, yUNIT_s_rc);   <* 
+    *>       break;                                                                                     <* 
+    *>    default  :                                                                                    <* 
+    *>       CODE_printf ("%s (%s), cyUNIT.exec);\n"     , my.meth, my.syst);                           <* 
+    *>       break;                                                                                     <* 
+    *>    }                                                                                             <* 
+    *> }                                                                                                <*/
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -1111,7 +1161,7 @@ CODE_exec          (void)
    /*---(debugging)----------------------*/
    CODE_printf ("      /*---(run step)--------------------*/\n");
    if (my.run_type == G_RUN_DEBUG) {
-      CODE_printf ("      %sUG_TOPS    %sOG_unitstep (g.origin, g.offset + %3i, %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.cstep, my.n_line, my.desc);
+      CODE_printf ("      %sUG_TOPS    %sOG_unitstep (cyUNIT.origin, cyUNIT.offset + %3i, %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.cstep, my.n_line, my.desc);
    }
    /*---(handle return values)-----------*/
    x_test = my.test [0];
@@ -1136,7 +1186,7 @@ CODE_write         (void)
       DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
       return 0;
    }
-   printf ("CODE_write      my line %4d, my verb å%sæ, my last å%sæ\n", my.n_line, my.verb, my.last);
+   /*> printf ("CODE_write      my line %4d, my verb å%sæ, my last å%sæ\n", my.n_line, my.verb, my.last);   <*/
    rc = my.p_code ();
    /*---(complete)-----------------------*/
    DEBUG_OUTP   yLOG_exit    (__FUNCTION__);

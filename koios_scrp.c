@@ -33,12 +33,13 @@ tVERB       g_verbs [MAX_VERB] = {
    { "exec"         , "function execution"                    , 'f', '-',  0,  0, CONV_exec     , CODE_exec     },
    { "get"          , "unit test accessor retrieval"          , 'f', '-',  0,  0, CONV_exec     , CODE_exec     },
    /* --specialty---   --------------------------------------- */
+   { "global"       , "global/unit variable definition"       , 'p', '-',  0,  0, CONV_gvar     , CODE_gvar     },
+   { "local"        , "local/script variable deinition"       , 'p', '-',  0,  0, CONV_code     , CODE_lvar     },
    { "code"         , "insert c code"                         , 'p', '-',  0,  0, CONV_code     , CODE_code     },
    { "echo"         , "test a variable directly"              , 'f', '-',  0,  0, CONV_echo     , CODE_echo     },
    { "system"       , "execute shell code"                    , 'p', '-',  0,  0, CONV_code     , CODE_system   },
    { "load"         , "place data into stdin"                 , 'P', '-',  0,  0, CONV_load     , CODE_load     },
    { "mode"         , "set pass or forced_fail mode"          , '2', '-',  0,  0, CONV_mode     , CODE_mode     },
-   { "global"       , "global variable definition"            , 'p', '-',  0,  0, CONV_gvar     , CODE_gvar     },
    /* --ouroboros---   --------------------------------------- */
    { "WAVE"         , "testing wave"                          , '2', 'm',  0,  0, NULL          , NULL          },
    { "stage"        , "testing stage"                         , '2', 'm',  0,  0, NULL          , NULL          },

@@ -2029,6 +2029,7 @@ koios__unit_conv_prep    (void)
 
    yUNIT_mincond ("write the prep");
    strcpy (my.recd, "PREP   include the prototype headers          ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the prep line"                , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "PREP  § include the prototype headers  §  §  §  §  §");
@@ -2055,6 +2056,7 @@ koios__unit_conv_prep    (void)
 
    yUNIT_mincond ("write an include");
    strcpy (my.recd, "incl   public header  stdio.h         ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "incl  § public header § stdio.h §  §  §  §  §");
@@ -2076,6 +2078,7 @@ koios__unit_conv_prep    (void)
 
    yUNIT_mincond ("write a comment");
    strcpy (my.recd, "#> the following macro resets exec lines");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "#> the following macro resets exec lines");
@@ -2133,6 +2136,7 @@ koios__unit_conv_scrp    (void)
 
    yUNIT_mincond ("write a script");
    strcpy (my.recd, "SCRP [ì4]   (FILE) biggest script  core_function       ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "SCRP [ì4]  § (FILE) biggest script § core_function §  §  §  §");
@@ -2159,6 +2163,7 @@ koios__unit_conv_scrp    (void)
 
    yUNIT_mincond ("write a section break");
    strcpy (my.recd, "SECT  file oriented         ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "SECT § file oriented §  §  §  §  §");
@@ -2185,6 +2190,7 @@ koios__unit_conv_scrp    (void)
 
    yUNIT_mincond ("write a shared line");
    strcpy (my.recd, "SHARED -a-  remove temporary files         ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "SHARED -a- § remove temporary files §  §  §  §  §");
@@ -2213,6 +2219,7 @@ koios__unit_conv_scrp    (void)
 
    yUNIT_mincond ("write a global line");
    strcpy (my.recd, "GLOBAL -D-  setup base test objects         ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "GLOBAL -D- § setup base test objects §  §  §  §  §");
@@ -2273,6 +2280,7 @@ koios__unit_conv_cond    (void)
 
    yUNIT_mincond ("write a condition");
    strcpy (my.recd, "COND (2)  verify successful value         ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "COND (2) § verify successful value §  §  §  §  §");
@@ -2295,6 +2303,7 @@ koios__unit_conv_cond    (void)
 
    yUNIT_mincond ("write a ditto");
    strcpy (my.recd, "DITTO (2)           ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "DITTO (2) §  §  §  §  §  §");
@@ -2317,6 +2326,7 @@ koios__unit_conv_cond    (void)
 
    yUNIT_mincond ("write a group");
    strcpy (my.recd, "GROUP  check major defenses         ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "GROUP § check major defenses §  §  §  §  §");
@@ -2340,6 +2350,7 @@ koios__unit_conv_cond    (void)
    yUNIT_mincond ("write a use for shares");
    yUNIT_minval ("... set shared to reuse"            , SCRP__shared_set   ('r', 'd') ,    0);
    strcpy (my.recd, "REUSE -d-           ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "REUSE -d- §  §  §  §  §  §");
@@ -2394,6 +2405,7 @@ koios__unit_conv_step    (void)
 
    yUNIT_mincond ("write a exec");
    strcpy (my.recd, "exec          read a line      SCRP_read    test, 5   i_lesser    0       p  my_var   ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "exec         § read a line     § SCRP_read   § test, 5  § i_lesser   § 0      § p § my_var   §");
@@ -2418,6 +2430,7 @@ koios__unit_conv_step    (void)
 
    yUNIT_mincond ("write a get");
    strcpy (my.recd, "get  ...check count  UNIT_answer  \"ans\"  s_equal  count = 15.2 ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "get § ...check count § UNIT_answer § \"ans\" § s_equal § count = 15.2 §");
@@ -2442,6 +2455,7 @@ koios__unit_conv_step    (void)
 
    yUNIT_mincond ("write a mode");
    strcpy (my.recd, "mode  FORCED_FAIL         ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "mode § FORCED_FAIL §  §  §  §  §");
@@ -2466,6 +2480,7 @@ koios__unit_conv_step    (void)
 
    yUNIT_mincond ("write a load");
    strcpy (my.recd, "load  keyboard input  ncurses  abcdefghijklmnopqrstuvwxyz ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "load § keyboard input § ncurses § abcdefghijklmnopqrstuvwxyz §");
@@ -2490,6 +2505,7 @@ koios__unit_conv_step    (void)
 
    yUNIT_mincond ("write a code");
    strcpy (my.recd, "code  working variable   int l = 15; ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "code § working variable § § int l = 15; §");
@@ -2514,6 +2530,7 @@ koios__unit_conv_step    (void)
 
    yUNIT_mincond ("write an echo");
    strcpy (my.recd, "echo  check length   l  r_equal  15.2 ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "echo § check length § § l § r_equal § 15.2 §");
@@ -2937,7 +2954,7 @@ koios__unit_code_ends    (void)
    yUNIT_minstr ("... check (9) check arguments"      , yURG_peek (my.n_main, 9), "   rc = yUNIT_init ();");
    yUNIT_minstr ("... check (10) check arguments"     , yURG_peek (my.n_main,10), "   rc = yUNIT_args (a_argc, a_argv);");
    yUNIT_minstr ("... check (11) error checking"      , yURG_peek (my.n_main,11), "   if (rc < 0)  return -1;");
-   yUNIT_minstr ("... check (12) start unit test"     , yURG_peek (my.n_main,12), "   yUNIT_unit (\"/tmp/koios_scrp\", g.level, g.eterm, g.exec);");
+   yUNIT_minstr ("... check (12) start unit test"     , yURG_peek (my.n_main,12), "   yUNIT_unit (\"/tmp/koios_scrp\", cyUNIT.level, cyUNIT.eterm, cyUNIT.exec);");
    yUNIT_minstr ("... check (13) comment"             , yURG_peek (my.n_main,13), "   /*---(beg scripts)--------------------*/");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) , 14);
    yUNIT_mindnoc ();
@@ -2946,7 +2963,7 @@ koios__unit_code_ends    (void)
    CODE_cycle ();
    yUNIT_minval ("call end"                           , MAIN_end    (), 0);
    yUNIT_minstr ("... check (0) comment"              , yURG_peek (my.n_main, 0), "   /*---(end scripts)--------------------*/");
-   yUNIT_minstr ("... check (1) tinu"                 , yURG_peek (my.n_main, 1), "   rc = yUNIT_tinu (g.exec);");
+   yUNIT_minstr ("... check (1) tinu"                 , yURG_peek (my.n_main, 1), "   rc = yUNIT_tinu (cyUNIT.exec);");
    yUNIT_minstr ("... check (2) comment"              , yURG_peek (my.n_main, 2), "   /*---(complete)-----------------------*/");
    yUNIT_minstr ("... check (3) return"               , yURG_peek (my.n_main, 3), "   return rc;");
    yUNIT_minstr ("... check (4) end brace"            , yURG_peek (my.n_main, 4), "}");
@@ -2998,6 +3015,7 @@ koios__unit_code_prep    (void)
 
    yUNIT_mincond ("handle the prep");
    strcpy (my.recd, "PREP  include the prototype headers         ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "PREP § include the prototype headers §  §  §  §  §");
@@ -3023,6 +3041,7 @@ koios__unit_code_prep    (void)
    yUNIT_mincond ("handle an include line");
    strcpy (my.recd, "   incl  include public header  koios.h       ");
    my.n_line = 15;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "   incl § include public header § koios.h §  §  §  §");
@@ -3088,6 +3107,7 @@ koios__unit_code_scrp    (void)
    strcpy (my.recd, "SCRP    [ê3]  (SCRP) verify openning and closing  SCRP_parse     ");
    my.n_line = 23;
    my.nscrp  =  0;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "SCRP    [ê3] § (SCRP) verify openning and closing § SCRP_parse §  §  §");
@@ -3111,17 +3131,20 @@ koios__unit_code_scrp    (void)
    yUNIT_minstr ("... check (2) declaration"          , yURG_peek (my.n_code, 2), "yUNIT_script_01          (void)");
    yUNIT_minstr ("... check (3) open brace"           , yURG_peek (my.n_code, 3), "{");
    yUNIT_minstr ("... check (4) comment"              , yURG_peek (my.n_code, 4), "   /*===[[ script header ]]========================*/");
-   yUNIT_minstr ("... check (5) local"                , yURG_peek (my.n_code, 5), "   g.offset  = 0;");
-   yUNIT_minstr ("... check (6) local"                , yURG_peek (my.n_code, 6), "   g.origin  = 1;");
-   yUNIT_minstr ("... check (7) script header"        , yURG_peek (my.n_code, 7), "   yUNIT_scrp    (  23,   1, \"ê3\", \"(SCRP) verify openning and closing\", \"SCRP_parse\");");
-   yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  8);
-   yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "   if (g.scrp ==  0 || g.scrp ==  1)  yUNIT_script_01 ();");
+   yUNIT_minstr ("... check (5) local"                , yURG_peek (my.n_code, 5), "   cyUNIT.offset  = 0;");
+   yUNIT_minstr ("... check (6) local"                , yURG_peek (my.n_code, 6), "   cyUNIT.origin  = 1;");
+   yUNIT_minstr ("... check (7) reset"                , yURG_peek (my.n_code, 7), "   yUNIT_mode_reset ();");
+   yUNIT_minstr ("... check (8) script header"        , yURG_peek (my.n_code, 8), "   yUNIT_scrp    (  23,   1, \"ê3\", \"(SCRP) verify openning and closing\", \"SCRP_parse\");");
+   yUNIT_minstr ("... check (9) wave off"             , yURG_peek (my.n_code, 9), "   if (cyUNIT.exec == YUNIT_LIST && cyUNIT.level == YUNIT_SCRP)  return 0;");
+   yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) , 10);
+   yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "   if (cyUNIT.scrp == YUNIT_ALL  || cyUNIT.scrp ==  1)  yUNIT_script_01 ();");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  1);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("second script beginning");
    strcpy (my.recd, "SCRP    [è5]  (SCRP) whatever comes next       ");
    my.n_line = 52;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "SCRP    [è5] § (SCRP) whatever comes next §  §  §  §");
@@ -3141,7 +3164,7 @@ koios__unit_code_scrp    (void)
    CODE_cycle ();
    yUNIT_minval ("call scrp"                          , CODE_scrp   (), 0);
    yUNIT_minstr ("... check (0) comment"              , yURG_peek (my.n_code, 0), "   /*===[[ script done ]]==========================*/");
-   yUNIT_minstr ("... check (1) prcs footer"          , yURG_peek (my.n_code, 1), "   yUNIT_prcs    (g.exec);");
+   yUNIT_minstr ("... check (1) prcs footer"          , yURG_peek (my.n_code, 1), "   yUNIT_prcs    (cyUNIT.exec);");
    yUNIT_minstr ("... check (2) comment"              , yURG_peek (my.n_code, 2), "   /*---(complete)-----------------------*/");
    yUNIT_minstr ("... check (3) return"               , yURG_peek (my.n_code, 3), "   return 0;");
    yUNIT_minstr ("... check (4) closing brace"        , yURG_peek (my.n_code, 4), "}");
@@ -3150,17 +3173,20 @@ koios__unit_code_scrp    (void)
    yUNIT_minstr ("... check (7) declaration"          , yURG_peek (my.n_code, 7), "yUNIT_script_02          (void)");
    yUNIT_minstr ("... check (8) open brace"           , yURG_peek (my.n_code, 8), "{");
    yUNIT_minstr ("... check (9) comment"              , yURG_peek (my.n_code, 9), "   /*===[[ script header ]]========================*/");
-   yUNIT_minstr ("... check (10) local"               , yURG_peek (my.n_code,10), "   g.offset  = 0;");
-   yUNIT_minstr ("... check (11) local"               , yURG_peek (my.n_code,11), "   g.origin  = 2;");
-   yUNIT_minstr ("... check (12) script header"       , yURG_peek (my.n_code,12), "   yUNIT_scrp    (  52,   2, \"è5\", \"(SCRP) whatever comes next\", \"\");");
-   yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) , 13);
-   yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "   if (g.scrp ==  0 || g.scrp ==  2)  yUNIT_script_02 ();");
+   yUNIT_minstr ("... check (10) local"               , yURG_peek (my.n_code,10), "   cyUNIT.offset  = 0;");
+   yUNIT_minstr ("... check (11) local"               , yURG_peek (my.n_code,11), "   cyUNIT.origin  = 2;");
+   yUNIT_minstr ("... check (12)reset"                , yURG_peek (my.n_code,12), "   yUNIT_mode_reset ();");
+   yUNIT_minstr ("... check (13) script header"       , yURG_peek (my.n_code,13), "   yUNIT_scrp    (  52,   2, \"è5\", \"(SCRP) whatever comes next\", \"\");");
+   yUNIT_minstr ("... check (14) wave off"            , yURG_peek (my.n_code,14), "   if (cyUNIT.exec == YUNIT_LIST && cyUNIT.level == YUNIT_SCRP)  return 0;");
+   yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) , 15);
+   yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "   if (cyUNIT.scrp == YUNIT_ALL  || cyUNIT.scrp ==  2)  yUNIT_script_02 ();");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  1);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("second script beginning");
    strcpy (my.recd, "SHARED   -b-  remove temporary files       ");
    my.n_line = 300;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "SHARED   -b- § remove temporary files §  §  §  §");
@@ -3180,7 +3206,7 @@ koios__unit_code_scrp    (void)
    CODE_cycle ();
    yUNIT_minval ("call shared"                        , CODE_shared (), 0);
    yUNIT_minstr ("... check (0) comment"              , yURG_peek (my.n_code, 0), "   /*===[[ script done ]]==========================*/");
-   yUNIT_minstr ("... check (1) prcs footer"          , yURG_peek (my.n_code, 1), "   yUNIT_prcs    (g.exec);");
+   yUNIT_minstr ("... check (1) prcs footer"          , yURG_peek (my.n_code, 1), "   yUNIT_prcs    (cyUNIT.exec);");
    yUNIT_minstr ("... check (2) comment"              , yURG_peek (my.n_code, 2), "   /*---(complete)-----------------------*/");
    yUNIT_minstr ("... check (3) return"               , yURG_peek (my.n_code, 3), "   return 0;");
    yUNIT_minstr ("... check (4) closing brace"        , yURG_peek (my.n_code, 4), "}");
@@ -3198,6 +3224,7 @@ koios__unit_code_scrp    (void)
    yUNIT_mincond ("script after shared");
    strcpy (my.recd, "SCRP    [ÿ2]  (SCRP) last test       ");
    my.n_line = 99;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "SCRP    [ÿ2] § (SCRP) last test §  §  §  §");
@@ -3226,16 +3253,19 @@ koios__unit_code_scrp    (void)
    yUNIT_minstr ("... check (7) declaration"          , yURG_peek (my.n_code, 7), "yUNIT_script_03          (void)");
    yUNIT_minstr ("... check (8) open brace"           , yURG_peek (my.n_code, 8), "{");
    yUNIT_minstr ("... check (9) comment"              , yURG_peek (my.n_code, 9), "   /*===[[ script header ]]========================*/");
-   yUNIT_minstr ("... check (10) local"               , yURG_peek (my.n_code,10), "   g.offset  = 0;");
-   yUNIT_minstr ("... check (11) local"               , yURG_peek (my.n_code,11), "   g.origin  = 3;");
-   yUNIT_minstr ("... check (12) script header"       , yURG_peek (my.n_code,12), "   yUNIT_scrp    (  99,   3, \"ÿ2\", \"(SCRP) last test\", \"\");");
-   yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) , 13);
-   yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "   if (g.scrp ==  0 || g.scrp ==  3)  yUNIT_script_03 ();");
+   yUNIT_minstr ("... check (10) local"               , yURG_peek (my.n_code,10), "   cyUNIT.offset  = 0;");
+   yUNIT_minstr ("... check (11) local"               , yURG_peek (my.n_code,11), "   cyUNIT.origin  = 3;");
+   yUNIT_minstr ("... check (12) reset"               , yURG_peek (my.n_code,12), "   yUNIT_mode_reset ();");
+   yUNIT_minstr ("... check (13) script header"       , yURG_peek (my.n_code,13), "   yUNIT_scrp    (  99,   3, \"ÿ2\", \"(SCRP) last test\", \"\");");
+   yUNIT_minstr ("... check (14) wave off"            , yURG_peek (my.n_code,14), "   if (cyUNIT.exec == YUNIT_LIST && cyUNIT.level == YUNIT_SCRP)  return 0;");
+   yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) , 15);
+   yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "   if (cyUNIT.scrp == YUNIT_ALL  || cyUNIT.scrp ==  3)  yUNIT_script_03 ();");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  1);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("write a section break");
    strcpy (my.recd, "SECT  file oriented         ");
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "SECT § file oriented §  §  §  §  §");
@@ -3252,12 +3282,12 @@ koios__unit_code_scrp    (void)
    CODE_cycle ();
    yUNIT_minval ("call section"                       , CODE_sect   (), 0);
    yUNIT_minstr ("... check (0) comment"              , yURG_peek (my.n_code, 0), "   /*===[[ script done ]]==========================*/");
-   yUNIT_minstr ("... check (1) prcs footer"          , yURG_peek (my.n_code, 1), "   yUNIT_prcs    (g.exec);");
+   yUNIT_minstr ("... check (1) prcs footer"          , yURG_peek (my.n_code, 1), "   yUNIT_prcs    (cyUNIT.exec);");
    yUNIT_minstr ("... check (2) comment"              , yURG_peek (my.n_code, 2), "   /*---(complete)-----------------------*/");
    yUNIT_minstr ("... check (3) return"               , yURG_peek (my.n_code, 3), "   return 0;");
    yUNIT_minstr ("... check (4) closing brace"        , yURG_peek (my.n_code, 4), "}");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  5);
-   yUNIT_minstr ("... check (0) comment"              , yURG_peek (my.n_main, 0), "   if (g.scrp ==  0)                  yUNIT_sect      (\"file oriented\");");
+   yUNIT_minstr ("... check (0) comment"              , yURG_peek (my.n_main, 0), "   if (cyUNIT.scrp ==  0)                  yUNIT_sect      (\"file oriented\");");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  1);
 
    yUNIT_mincond ("check defaults");
@@ -3270,30 +3300,35 @@ koios__unit_code_scrp    (void)
    my.len = strlen (my.recd);
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse the line"                     , SCRP_parse (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:300:1: error: SHARED missing a valid identifier string -?-");
    strcpy (my.recd, "SHARED -b  testing        ");
    my.len = strlen (my.recd);
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:300:1: error: SHARED identifier åbæ not followed by - marker");
    strcpy (my.recd, "SHARED -è-  testing       ");
    my.len = strlen (my.recd);
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:300:1: error: SHARED identifier åèæ not valid [a-z]");
    strcpy (my.recd, "SHARE -b-  testing       ");
    my.len = strlen (my.recd);
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:300:1: error: verb <SHARE> not recognized/found");
    strcpy (my.recd, "SHAREY -b-  testing       ");
    my.len = strlen (my.recd);
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:300:1: error: verb <SHAREY> not recognized/found");
    yUNIT_mindnoc ();
@@ -3302,6 +3337,7 @@ koios__unit_code_scrp    (void)
    strcpy (my.recd, "SHARED   -b-  remove temporary files       ");
    my.len = strlen (my.recd);
    my.n_line = 300;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), 0);
    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   -b------------------------   ----------");
    yUNIT_minstr ("... check verb"                     , my.verb          , "SHARED");
@@ -3309,11 +3345,13 @@ koios__unit_code_scrp    (void)
    my.len = strlen (my.recd);
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), 0);
    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   -b----------------------y-   ----------");
    strcpy (my.recd, "SHARED -a-  testing       ");
    my.n_line = 300;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a SHARED"                     , SCRP_parse  (), 0);
    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   ab----------------------y-   ----------");
 
@@ -3322,31 +3360,37 @@ koios__unit_code_scrp    (void)
    my.len = strlen (my.recd);
    my.n_line = 99;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:99:1: error: verb <SCRI> not recognized/found");
    strcpy (my.recd, "SCRIPT  [ÿ2]  (SCRP) last test       ");
    my.n_line = 99;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:99:1: error: verb <SCRIPT> not recognized/found");
    strcpy (my.recd, "SCRP    [aa]  (SCRP) last test       ");
    my.n_line = 99;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:99:1: error: SCRP identifier, not greek letter for wave, e.g., [ì4]");
    strcpy (my.recd, "SCRP    [ég]  (SCRP) last test       ");
    my.n_line = 99;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:99:1: error: SCRP identifier, not number for stage, e.g., [ì4]");
    strcpy (my.recd, "SCRP    (é2)  (SCRP) last test       ");
    my.n_line = 99;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:99:1: error: SCRP identifier, uses wrong brackets, e.g., [ì4]");
    strcpy (my.recd, "SCRP    -é2   (SCRP) last test       ");
    my.n_line = 99;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:99:1: error: SCRP identifier, uses wrong brackets, e.g., [ì4]");
    yUNIT_mindnoc ();
@@ -3355,6 +3399,7 @@ koios__unit_code_scrp    (void)
    strcpy (my.recd, "SCRP    [--]  (SCRP) last test       ");
    my.n_line = 99;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    yUNIT_mindnoc ();
 
@@ -3363,6 +3408,7 @@ koios__unit_code_scrp    (void)
    yUNIT_mincond ("global after script");
    strcpy (my.recd, "GLOBAL   -D-  common setup       ");
    my.n_line = 99;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "GLOBAL   -D- § common setup §  §  §  §");
@@ -3382,7 +3428,7 @@ koios__unit_code_scrp    (void)
    CODE_cycle ();
    yUNIT_minval ("call global"                        , CODE_global (), 0);
    yUNIT_minstr ("... check (0) comment"              , yURG_peek (my.n_code, 0), "   /*===[[ script done ]]==========================*/");
-   yUNIT_minstr ("... check (1) prcs footer"          , yURG_peek (my.n_code, 1), "   yUNIT_prcs    (g.exec);");
+   yUNIT_minstr ("... check (1) prcs footer"          , yURG_peek (my.n_code, 1), "   yUNIT_prcs    (cyUNIT.exec);");
    yUNIT_minstr ("... check (2) comment"              , yURG_peek (my.n_code, 2), "   /*---(complete)-----------------------*/");
    yUNIT_minstr ("... check (3) return"               , yURG_peek (my.n_code, 3), "   return 0;");
    yUNIT_minstr ("... check (4) closing brace"        , yURG_peek (my.n_code, 4), "}");
@@ -3442,6 +3488,7 @@ koios__unit_code_cond    (void)
    my.n_line   = 32;
    my.scond    =  0;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "COND (6) § verify defenses §  §  §  §");
@@ -3461,9 +3508,9 @@ koios__unit_code_cond    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_cond   (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "   /*===[[ COND #001 ]]============================*/");
-   yUNIT_minstr ("... check (1) set noise level"      , yURG_peek (my.n_code, 1), "   if (g.cond == g.offset +   1)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (g.level, 'y');");
-   yUNIT_minstr ("... check (2) debugging"            , yURG_peek (my.n_code, 2), "   DEBUG_TOPS    yLOG_unitcond (g.origin, g.offset +   1,   32, \"verify defenses\");");
-   yUNIT_minstr ("... check (3) condition notice"     , yURG_peek (my.n_code, 3), "   yUNIT_cond    (  32, g.offset +   1, '-', \"verify defenses\");");
+   yUNIT_minstr ("... check (1) set noise level"      , yURG_peek (my.n_code, 1), "   if (cyUNIT.cond == cyUNIT.offset +   1)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (cyUNIT.level, 'y');");
+   yUNIT_minstr ("... check (2) debugging"            , yURG_peek (my.n_code, 2), "   DEBUG_TOPS    yLOG_unitcond (cyUNIT.origin, cyUNIT.offset +   1,   32, \"verify defenses\");");
+   yUNIT_minstr ("... check (3) condition notice"     , yURG_peek (my.n_code, 3), "   yUNIT_cond    (  32, cyUNIT.offset +   1, '&', \"verify defenses\");");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  4);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3473,6 +3520,7 @@ koios__unit_code_cond    (void)
    strcpy (my.recd, "COND  verify null handling       ");
    my.n_line   = 34;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "COND § verify null handling §  §  §  §");
@@ -3492,11 +3540,11 @@ koios__unit_code_cond    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_cond   (), 0);
    yUNIT_minstr ("... check (0) final comment"        , yURG_peek (my.n_code, 0), "      /*---(summary)---------------------*/");
-   yUNIT_minstr ("... check (1) dnoc reporting"       , yURG_peek (my.n_code, 1), "      yUNIT_dnoc    (g.exec);");
+   yUNIT_minstr ("... check (1) dnoc reporting"       , yURG_peek (my.n_code, 1), "      yUNIT_dnoc    (cyUNIT.exec);");
    yUNIT_minstr ("... check (2) final comment"        , yURG_peek (my.n_code, 2), "      /*---(done)------------------------*/");
    yUNIT_minstr ("... check (3) lead comment"         , yURG_peek (my.n_code, 3), "   /*===[[ COND #002 ]]============================*/");
-   yUNIT_minstr ("... check (4) set noise level"      , yURG_peek (my.n_code, 4), "   if (g.cond == g.offset +   2)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (g.level, 'y');");
-   yUNIT_minstr ("... check (5) condition notice"     , yURG_peek (my.n_code, 5), "   yUNIT_cond    (  34, g.offset +   2, '-', \"verify null handling\");");
+   yUNIT_minstr ("... check (4) set noise level"      , yURG_peek (my.n_code, 4), "   if (cyUNIT.cond == cyUNIT.offset +   2)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (cyUNIT.level, 'y');");
+   yUNIT_minstr ("... check (5) condition notice"     , yURG_peek (my.n_code, 5), "   yUNIT_cond    (  34, cyUNIT.offset +   2, '-', \"verify null handling\");");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  6);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3506,6 +3554,7 @@ koios__unit_code_cond    (void)
    strcpy (my.recd, "GROUP  more complex defenses       ");
    my.n_line   = 36;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "GROUP § more complex defenses §  §  §  §");
@@ -3525,7 +3574,7 @@ koios__unit_code_cond    (void)
    CODE_cycle ();
    yUNIT_minval ("call group"                         , CODE_group  (), 0);
    yUNIT_minstr ("... check (0) final comment"        , yURG_peek (my.n_code, 0), "      /*---(summary)---------------------*/");
-   yUNIT_minstr ("... check (1) dnoc reporting"       , yURG_peek (my.n_code, 1), "      yUNIT_dnoc    (g.exec);");
+   yUNIT_minstr ("... check (1) dnoc reporting"       , yURG_peek (my.n_code, 1), "      yUNIT_dnoc    (cyUNIT.exec);");
    yUNIT_minstr ("... check (2) final comment"        , yURG_peek (my.n_code, 2), "      /*---(done)------------------------*/");
    yUNIT_minstr ("... check (3) comment"              , yURG_peek (my.n_code, 3), "   /*---(group)--------------------------*/");
    yUNIT_minstr ("... check (4) group reporting"      , yURG_peek (my.n_code, 4), "   yUNIT_group   (\"more complex defenses\");");
@@ -3538,6 +3587,7 @@ koios__unit_code_cond    (void)
    strcpy (my.recd, "REUSE -b-         ");
    my.n_line   = 38;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "REUSE -b- §  §  §  §  §");
@@ -3557,9 +3607,9 @@ koios__unit_code_cond    (void)
    CODE_cycle ();
    yUNIT_minval ("call reuse"                         , CODE_reuse  (), 0);
    yUNIT_minstr ("... check (0) comment"              , yURG_peek (my.n_code, 0), "   /*---(shared code)-----------------------*/");
-   yUNIT_minstr ("... check (1) prepare offset"       , yURG_peek (my.n_code, 1), "   g.offset =   2;");
+   yUNIT_minstr ("... check (1) prepare offset"       , yURG_peek (my.n_code, 1), "   cyUNIT.offset =   2;");
    yUNIT_minstr ("... check (2) call share"           , yURG_peek (my.n_code, 2), "   yUNIT_shared_b ();");
-   yUNIT_minstr ("... check (3) reset offset"         , yURG_peek (my.n_code, 3), "   g.offset = 0;");
+   yUNIT_minstr ("... check (3) reset offset"         , yURG_peek (my.n_code, 3), "   cyUNIT.offset = 0;");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  4);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3569,26 +3619,31 @@ koios__unit_code_cond    (void)
    strcpy (my.recd, "REUSE             ");
    my.n_line   = 38;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a REUSE"                      , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:38:1: error: REUSE missing a valid identifier string -?-");
    strcpy (my.recd, "REUSE -b          ");
    my.n_line   = 38;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a REUSE"                      , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:38:1: error: REUSE identifier åbæ not followed by - marker");
    strcpy (my.recd, "REUSE -è-         ");
    my.n_line   = 38;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a REUSE"                      , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:38:1: error: REUSE identifier åèæ not valid [a-zA-Z]");
    strcpy (my.recd, "REUSED -b-         ");
    my.n_line   = 38;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a REUSE"                      , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:38:1: error: verb <REUSED> not recognized/found");
    strcpy (my.recd, "REUS   -b-         ");
    my.n_line   = 38;
    my.run_type = G_RUN_CREATE;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a REUSE"                      , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios_scrp.unit:38:1: error: verb <REUS> not recognized/found");
    yUNIT_mindnoc ();
@@ -3636,6 +3691,7 @@ koios__unit_code_step    (void)
    my.n_line   = 40;
    my.cstep    =  2;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "mode § FORCED_FAIL §  §  §  §");
@@ -3655,7 +3711,7 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_mode   (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "      /*---(mode)------------------------*/");
-   yUNIT_minstr ("... check (1) set mode"             , yURG_peek (my.n_code, 1), "      yUNIT_mode    (  40,   3, \"FORCED_FAIL\", g.exec);");
+   yUNIT_minstr ("... check (1) set mode"             , yURG_peek (my.n_code, 1), "      yUNIT_mode    (  40,   3, \"FORCED_FAIL\", cyUNIT.exec);");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  2);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3666,6 +3722,7 @@ koios__unit_code_step    (void)
    my.n_line   = 40;
    my.cstep    =  2;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "code § working variables §  § int a = 37;  §");
@@ -3686,7 +3743,7 @@ koios__unit_code_step    (void)
    yUNIT_minval ("call cond"                          , CODE_code   (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "      /*---(inject code)-----------------*/");
    yUNIT_minstr ("... check (1) show command"         , yURG_peek (my.n_code, 1), "      int a = 37;");
-   yUNIT_minstr ("... check (2) execute code"         , yURG_peek (my.n_code, 2), "      yUNIT_code    (  40,   3, \"working variables\", \"int a = 37;\", g.exec);");
+   yUNIT_minstr ("... check (2) execute code"         , yURG_peek (my.n_code, 2), "      yUNIT_code    (  40,   3, \"working variables\", \"int a = 37;\", cyUNIT.exec);");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  3);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3697,6 +3754,7 @@ koios__unit_code_step    (void)
    my.n_line   = 40;
    my.cstep    =  2;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "load § fill out screen § stdin § hello;  15.6 §");
@@ -3716,7 +3774,7 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_load   (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "      /*---(load input)------------------*/");
-   yUNIT_minstr ("... check (1) report and execute"   , yURG_peek (my.n_code, 1), "      yUNIT_load    (  40,   3, \"fill out screen\", \"stdin\", \"hello;  15.6\", g.exec);");
+   yUNIT_minstr ("... check (1) report and execute"   , yURG_peek (my.n_code, 1), "      yUNIT_load    (  40,   3, \"fill out screen\", \"stdin\", \"hello;  15.6\", cyUNIT.exec);");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  2);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3727,6 +3785,7 @@ koios__unit_code_step    (void)
    my.n_line   = 40;
    my.cstep    =  2;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "system § delete temporary file §  § rm -f /tmp/koios_unit.cs §");
@@ -3746,7 +3805,7 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_system (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "      /*---(system/execute)--------------*/");
-   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_system  (  40,   3, \"delete temporary file\", \"rm -f /tmp/koios_unit.cs\", \"rm -f /tmp/koios_unit.cs\", g.exec);");
+   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_system  (  40,   3, \"delete temporary file\", \"rm -f /tmp/koios_unit.cs\", \"rm -f /tmp/koios_unit.cs\", cyUNIT.exec);");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  2);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3757,6 +3816,7 @@ koios__unit_code_step    (void)
    my.n_line   = 40;
    my.cstep    =  2;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "echo § check length §  § l § r_equal § 13.6 §");
@@ -3776,7 +3836,7 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_echo   (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "      /*---(echo/verify)-----------------*/");
-   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_real    (  40,   3, \"check length\", \"echo\", \"l\", \"r_equal\", 13.6, l, g.exec);");
+   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_real    (  40,   3, \"check length\", \"echo\", \"l\", \"r_equal\", 13.6, l, cyUNIT.exec);");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  2);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3787,6 +3847,7 @@ koios__unit_code_step    (void)
    my.n_line   = 40;
    my.cstep    =  2;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "echo § check length §  § l § i_lesser § 13.6 §");
@@ -3806,7 +3867,7 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_echo   (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "      /*---(echo/verify)-----------------*/");
-   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_int     (  40,   3, \"check length\", \"echo\", \"l\", \"i_lesser\", 13.6, l, g.exec);");
+   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_int     (  40,   3, \"check length\", \"echo\", \"l\", \"i_lesser\", 13.6, l, cyUNIT.exec);");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  2);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3817,6 +3878,7 @@ koios__unit_code_step    (void)
    my.n_line   = 40;
    my.cstep    =  2;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "echo § check length §  § l § s_not § 13.6 §");
@@ -3836,7 +3898,7 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_echo   (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "      /*---(echo/verify)-----------------*/");
-   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_string  (  40,   3, \"check length\", \"echo\", \"l\", \"s_not\", \"13.6\", l, g.exec);");
+   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_string  (  40,   3, \"check length\", \"echo\", \"l\", \"s_not\", \"13.6\", l, cyUNIT.exec);");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  2);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3847,6 +3909,7 @@ koios__unit_code_step    (void)
    my.n_line   = 40;
    my.cstep    =  2;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "echo § check length §  § l § p_null § 13.6 §");
@@ -3866,7 +3929,7 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_echo   (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "      /*---(echo/verify)-----------------*/");
-   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_point   (  40,   3, \"check length\", \"echo\", \"l\", \"p_null\", 13.6, l, g.exec);");
+   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_point   (  40,   3, \"check length\", \"echo\", \"l\", \"p_null\", 13.6, l, cyUNIT.exec);");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  2);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3877,6 +3940,7 @@ koios__unit_code_step    (void)
    my.n_line   = 40;
    my.cstep    =  2;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "echo § check length §  § l § u_round/3 § 13.6 §");
@@ -3896,7 +3960,7 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_echo   (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "      /*---(echo/verify)-----------------*/");
-   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_round   (  40,   3, \"check length\", \"echo\", \"l\", \"u_round/3\", \"13.6\", l, g.exec);");
+   yUNIT_minstr ("... check (1) execute and report"   , yURG_peek (my.n_code, 1), "      yUNIT_round   (  40,   3, \"check length\", \"echo\", \"l\", \"u_round/3\", \"13.6\", l, cyUNIT.exec);");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  2);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3907,6 +3971,7 @@ koios__unit_code_step    (void)
    my.n_line   = 40;
    my.cstep    =  2;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "exec § check length § test_func § 27, 36 § s_equal § 13.6 §");
@@ -3926,8 +3991,8 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_exec   (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "      /*---(run step)--------------------*/");
-   yUNIT_minstr ("... check (1) debugging"            , yURG_peek (my.n_code, 1), "      DEBUG_TOPS    yLOG_unitstep (g.origin, g.offset +   2,   3,   40, \"check length\");");
-   yUNIT_minstr ("... check (2) execute"              , yURG_peek (my.n_code, 2), "      yUNIT_string  (  40,   3, \"check length\", \"test_func\", \"27, 36\", \"s_equal\", \"13.6\", test_func (27, 36), g.exec);");
+   yUNIT_minstr ("... check (1) debugging"            , yURG_peek (my.n_code, 1), "      DEBUG_TOPS    yLOG_unitstep (cyUNIT.origin, cyUNIT.offset +   2,   3,   40, \"check length\");");
+   yUNIT_minstr ("... check (2) execute"              , yURG_peek (my.n_code, 2), "      yUNIT_string  (  40,   3, \"check length\", \"test_func\", \"27, 36\", \"s_equal\", \"13.6\", test_func (27, 36), cyUNIT.exec);");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  3);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -3938,6 +4003,7 @@ koios__unit_code_step    (void)
    my.n_line   = 40;
    my.cstep    =  2;
    my.run_type = G_RUN_DEBUG;
+   yUNIT_minval ("clear the fields"                   , SCRP_clear (), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "get § ... verify length § test_unit § 27, 36 § i_equal § 13.6 §");
@@ -3957,8 +4023,8 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_exec   (), 0);
    yUNIT_minstr ("... check (0) lead comment"         , yURG_peek (my.n_code, 0), "      /*---(run step)--------------------*/");
-   yUNIT_minstr ("... check (1) debugging"            , yURG_peek (my.n_code, 1), "      DEBUG_TOPS    yLOG_unitstep (g.origin, g.offset +   2,   3,   40, \"... verify length\");");
-   yUNIT_minstr ("... check (2) execute"              , yURG_peek (my.n_code, 2), "      yUNIT_int     (  40,   3, \"... verify length\", \"test_unit\", \"27, 36\", \"i_equal\", 13.6, test_unit (27, 36), g.exec);");
+   yUNIT_minstr ("... check (1) debugging"            , yURG_peek (my.n_code, 1), "      DEBUG_TOPS    yLOG_unitstep (cyUNIT.origin, cyUNIT.offset +   2,   3,   40, \"... verify length\");");
+   yUNIT_minstr ("... check (2) execute"              , yURG_peek (my.n_code, 2), "      yUNIT_int     (  40,   3, \"... verify length\", \"test_unit\", \"27, 36\", \"i_equal\", 13.6, test_unit (27, 36), cyUNIT.exec);");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  3);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 0), "");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_main) ,  0);
@@ -4006,7 +4072,7 @@ koios__unit_shared_data  (void)
    system ("echo \"  global      global variable                      - - - - - - - -   int h = 0;                                                        \"              >> master.unit");
    system ("echo \"GLOBAL   -D-  globally shared steps               \"                                                                                                       >> master.unit");
    system ("echo \"  COND        prepare variables                   \"                                                                                                       >> master.unit");
-   system ("echo \"    code      ... working variables                - - - - - - - -   int f = 0;                                                      \"                >> master.unit");
+   system ("echo \"    code      ... set new value                    - - - - - - - -   h = 32 * 64;                                                    \"                >> master.unit");
    system ("echo \"  COND        generate a summary                  \"                                                                                                       >> master.unit");
    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> master.unit");
    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> master.unit");
@@ -4040,7 +4106,7 @@ koios__unit_shared_data  (void)
    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> koios.unit");
    system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> koios.unit");
    system ("echo \"  COND        duplicate opens and closes          \"                                                                                                       >> koios.unit");
-   system ("echo \"    code      ... working variables                - - - - - - - -   int c = 0;                                                      \"                >> koios.unit");
+   system ("echo \"    local     ... working variables                - - - - - - - -   int c = 0;                                                      \"                >> koios.unit");
    system ("echo \"    echo      ... check working variable           - - - - - - - -   c                         i_equal     0                     \"                >> koios.unit");
    system ("echo \"    load      ... prep data for read               stdin             one two three                                                   \"                >> koios.unit");
    system ("echo \"    mode      FORCED_FAIL                         \"                                                                                                       >> koios.unit");
@@ -4137,11 +4203,11 @@ koios__unit_live_scrp    (void)
    yUNIT_minstr  ("... check (5) empty line"           , yURG_peek (x_urun, 5), "");
    yUNIT_minstr  ("... check (6) section"              , yURG_peek (x_urun, 6), "SECT ===----------------------- more complex testing ------------------------=== TCES");
    yUNIT_minstr  ("... check (7) empty line"           , yURG_peek (x_urun, 7), "");
-   yUNIT_minstr  ("... check (8) script"               , yURG_peek (x_urun, 8), "SCRP [02] (SCRP) verify system startup ==================================[ê2]=[00042]");
+   yUNIT_minstr  ("... check (8) script"               , yURG_peek (x_urun, 8), "SCRP [02] (SCRP) verify system startup ==================================[ê2]=[00050]");
    yUNIT_minstr  ("... check (9) empty line"           , yURG_peek (x_urun, 9), "");
-   yUNIT_minstr  ("... check (10) script"              , yURG_peek (x_urun,10), "SCRP [03] (SCRP) verify normal processing ===============================[ì2]=[00050]");
+   yUNIT_minstr  ("... check (10) script"              , yURG_peek (x_urun,10), "SCRP [03] (SCRP) verify normal processing ===============================[ì2]=[00062]");
    yUNIT_minstr  ("... check (11) empty line"          , yURG_peek (x_urun,11), "");
-   yUNIT_minstr  ("... check (12) script"              , yURG_peek (x_urun,12), "SCRP [04] (SCRP) empty script ===========================================[è9]=[00069]");
+   yUNIT_minstr  ("... check (12) script"              , yURG_peek (x_urun,12), "SCRP [04] (SCRP) empty script ===========================================[è9]=[00082]");
    yUNIT_minstr  ("... check (13) empty line"          , yURG_peek (x_urun,13), "");
    yUNIT_minstr  ("... check (14) test footer"         , yURG_peek (x_urun,14), "TINU  scrp=4    cond=17    test=61    [ ------------------------------------------- ]");
    yUNIT_minstr  ("... check (15) empty line"          , yURG_peek (x_urun,15), "");
