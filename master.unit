@@ -1,0 +1,12 @@
+#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  123456789- 
+#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  =(var)==== 
+PREP          global function headers             
+  incl        fake header                          koios.h           
+  global      global variable                      - - - - - - - -   int h = 0;                                                        
+GLOBAL   -D-  globally shared steps               
+  COND        prepare variables                   
+    code      ... set new value                    - - - - - - - -   h = 32 * 64;                                                    
+  COND        generate a summary                  
+    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 
+    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  
+    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     

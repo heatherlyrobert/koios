@@ -445,7 +445,7 @@ test much more flexibility.  all specialty steps MUST appear in a condition.
 .SS H0. there are six specialty step verbs...
 .nf
 1. code       c source code line for direct execution
-2. code       c source code for local variable definition
+2. local      c source code for local variable definition
 3. global     c source definition of global variable (PREP)
 4. echo       allows a specific variable to be checked
 5. system     executes a string using system()
@@ -461,17 +461,16 @@ with the description.  this helps to prepare or force data conditions.
       aa) CODE  : set initial value ·· ·· ·· ·· ·· ·· ·· ·· ··[00027]
          code   : 26[strcpy (x_test, "string");]
 
-.SS H2. code   § description   § - - - § int c = 0;        §
+.SS H2. local  § description   § - - - § int c = 0;        §
 
-also, this allows local unit testing variables to be defined for use
-in the execution statements below.  remember, any variables defined are
-local to the script only, not the whole unit and won't be available in
-any SHARED code.
+this allows local unit testing variables to be defined for use in the execution
+statements below.  remember, any variables defined are local to the script
+only, not the whole unit and won't be available in any SHARED code.
 
 .B sample output (prefix colored brown)
 
-      aa) CODE  : working variables ·· ·· ·· ·· ·· ·· ·· ·· ··[00008]
-         code   : 10[int f = 0;]
+      aa) LOCAL : working variables ·· ·· ·· ·· ·· ·· ·· ·· ··[00008]
+         local  : 10[int f = 0;]
 
 .SS H3. global § description   § - - - § <var definition>;    §
 

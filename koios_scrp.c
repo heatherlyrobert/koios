@@ -203,7 +203,7 @@ SCRP_ditto__beg         (char *a_verb)
    }
    /*---(swap files)---------------------*/
    DEBUG_INPT   yLOG_note    ("swap file for script");
-   printf ("START DITTO ----------------------------------------\n");
+   /*> printf ("START DITTO ----------------------------------------\n");             <*/
    s_file_save  = my.f_scrp;
    my.f_scrp = s_file_ditto;
    s_lineno     = 0;
@@ -267,7 +267,7 @@ SCRP_ditto__end         (void)
       return rce;
    }
    /*---(reset ditto)--------------------*/
-   printf ("STOP DITTO -----------------------------------------\n");
+   /*> printf ("STOP DITTO -----------------------------------------\n");             <*/
    my.dittoing = '-';
    my.dmark    = '-';
    my.ditto    = -1;
@@ -696,7 +696,6 @@ SCRP_clear         (void)
    my.args        [0] = '\0';
    my.test        [0] = '\0';
    my.expe        [0] = '\0';
-   my.type            = '-';
    my.retn        [0] = '\0';
    my.code        [0] = '\0';
    my.refn        [0] = '\0';
@@ -920,11 +919,7 @@ SCRP__current      (char *a_first)
       case  6 :   strlcpy (my.expe      , p, LEN_RECD);
                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
                   break;
-      case  7 :   my.type      = p [0];
-                  if (my.type == '\0')  my.type = '-';
-                  DEBUG_INPT   yLOG_char    ("type"      , my.type);
-                  break;
-      case  8 :   strlcpy (my.retn      , p, LEN_FULL);
+      case  7 :   strlcpy (my.retn      , p, LEN_FULL);
                   DEBUG_INPT   yLOG_info    ("retn"      , my.retn);
                   break;
       }
@@ -1025,11 +1020,7 @@ SCRP_vers21        (void)
       case  6 :   strlcpy (my.expe      , p, LEN_RECD);
                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
                   break;
-      case  7 :   my.type      = p [0];
-                  if (my.type == '\0')  my.type = '-';
-                  DEBUG_INPT   yLOG_char    ("type"      , my.type);
-                  break;
-      case  8 :   strlcpy (my.retn      , p, LEN_FULL);
+      case  7 :   strlcpy (my.retn      , p, LEN_FULL);
                   DEBUG_INPT   yLOG_info    ("retn"      , my.retn);
                   break;
       }
@@ -1102,11 +1093,7 @@ SCRP_vers20        (void)
       case  6 :   strlcpy (my.expe      , p, LEN_RECD);
                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
                   break;
-      case  7 :   my.type      = p [0];
-                  if (my.type == '\0')  my.type = '-';
-                  DEBUG_INPT   yLOG_char    ("type"      , my.type);
-                  break;
-      case  8 :   strlcpy (my.retn      , p, LEN_FULL);
+      case  7 :   strlcpy (my.retn      , p, LEN_FULL);
                   DEBUG_INPT   yLOG_info    ("retn"      , my.retn);
                   break;
       }
@@ -1595,7 +1582,7 @@ SCRP__unit              (char *a_question, int a_num)
       sprintf (my.answer, "SCRP test      : %-10.10s %3d[%.30s]", my.test, strlen (my.expe), my.expe);
    }
    else if (strcmp (a_question, "retn"      ) == 0) {
-      sprintf (my.answer, "SCRP retn      : %c          %3d[%.30s]", my.type, strlen (my.retn), my.retn);
+      sprintf (my.answer, "SCRP retn      : %c          %3d[%.30s]", my.test [0], strlen (my.retn), my.retn);
    }
    else if (strcmp (a_question, "code"      ) == 0) {
       strlcpy    (t, my.code, LEN_RECD);

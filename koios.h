@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3j"
-#define     P_VERTXT    "add back conditional execution and clean up return values"
+#define     P_VERNUM    "1.3k"
+#define     P_VERTXT    "full unit test working with expanded live data, YES!!!"
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 /*===[[ HEADER ]]=============================================================*/
@@ -204,7 +204,6 @@ struct cGLOBALS
    char        args        [LEN_FULL];      /* function/method args           */
    char        test        [LEN_LABEL];     /* test type for yVAR             */
    char        expe        [LEN_RECD];      /* expected results               */
-   char        type;
    char        retn        [LEN_FULL];      /* return variable                */
    char        code        [LEN_RECD ];     /* code/load/sys string           */
    char        refn        [LEN_LABEL];     /* test reference number          */

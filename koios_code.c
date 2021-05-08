@@ -980,25 +980,24 @@ CODE_prefix        (char a_test)
 {
    /*---(locals)-----------+-----------+-*/
    char        x_func      [LEN_FULL]   = "";
-   /*---(reset rc)-----------------------*/
-   CODE_printf ("      yUNIT_reset_rc ();\n");
    /*---(run function)-------------------*/
    if (strcmp (my.meth, "echo") != 0) {
+      CODE_printf ("      yUNIT_reset_rc ();\n");
       switch (a_test) {
       case 'v'  :
          CODE_printf ("      if (cyUNIT.exec)  %-13s (%s);\n", my.meth , my.syst);
          break;
       case 's'  : case 'u'  :
-         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.s_rc = %-13s (%s);\n", my.meth , my.syst);
+         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.s_rc = %s (%s);\n", my.meth , my.syst);
          break;
       case 'i'  :
-         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.i_rc = %-13s (%s);\n", my.meth , my.syst);
+         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.i_rc = %s (%s);\n", my.meth , my.syst);
          break;
       case 'r'  :
-         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.r_rc = %-13s (%s);\n", my.meth , my.syst);
+         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.r_rc = %s (%s);\n", my.meth , my.syst);
          break;
       case 'p'  :
-         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.p_rc = %-13s (%s);\n", my.meth , my.syst);
+         CODE_printf ("      if (cyUNIT.exec)  cyUNIT.p_rc = %s (%s);\n", my.meth , my.syst);
          break;
       }
    }
@@ -1091,40 +1090,38 @@ CODE_suffix        (char a_test)
    }
    /*---(check for simple end)-----------*/
    else {
-      switch (my.type) {
-      case 's'  :
+      switch (a_test) {
+      case 's'  : case 'u'  :
          CODE_printf ("cyUNIT.s_rc, cyUNIT.exec);\n");
-         if (strcmp (my.retn, "") != 0) CODE_printf ("         if (cyUNIT.exec)  strcpy (%s, cyUNIT.s_rc);\n", my.retn);
          break;
       case 'i'  :
          CODE_printf ("cyUNIT.i_rc, cyUNIT.exec);\n");
-         if (strcmp (my.retn, "") != 0) CODE_printf ("         if (cyUNIT.exec)  %s = cyUNIT.i_rc;\n", my.retn);
          break;
       case 'r'  :
          CODE_printf ("cyUNIT.r_rc, cyUNIT.exec);\n");
-         if (strcmp (my.retn, "") != 0) CODE_printf ("         if (cyUNIT.exec)  %s = cyUNIT.r_rc;\n", my.retn);
          break;
       case 'p'  :
          CODE_printf ("cyUNIT.p_rc, cyUNIT.exec);\n");
-         if (strcmp (my.retn, "") != 0) CODE_printf ("         if (cyUNIT.exec)  %s = cyUNIT.p_rc;\n", my.retn);
          break;
       }
    }
    /*---(handle return variables)--------*/
-   /*> else {                                                                                           <* 
-    *>    switch (my.type) {                                                                            <* 
-    *>    case 'i' : case 'p' : case 'r' :                                                              <* 
-    *>       CODE_printf ("%s = %s (%s), cyUNIT.exec);\n", my.retn, my.meth, my.syst);                  <* 
-    *>       break;                                                                                     <* 
-    *>    case 's' : case 'u' :                                                                         <* 
-    *>       CODE_printf ("%s (%s), cyUNIT.exec);\n"     , my.meth, my.syst);                           <* 
-    *>       CODE_printf ("         if (cyUNIT.exec == 1)  strcpy (%s, %s);\n", my.retn, yUNIT_s_rc);   <* 
-    *>       break;                                                                                     <* 
-    *>    default  :                                                                                    <* 
-    *>       CODE_printf ("%s (%s), cyUNIT.exec);\n"     , my.meth, my.syst);                           <* 
-    *>       break;                                                                                     <* 
-    *>    }                                                                                             <* 
-    *> }                                                                                                <*/
+   if (strcmp (my.retn, "") != 0) {
+      switch (a_test) {
+      case 's'  : case 'u'  :
+         CODE_printf ("         if (cyUNIT.exec && cyUNIT.s_rc != NULL)  strcpy (%s, cyUNIT.s_rc);\n", my.retn);
+         break;
+      case 'i'  :
+         CODE_printf ("         if (cyUNIT.exec)  %s = cyUNIT.i_rc;\n", my.retn);
+         break;
+      case 'r'  :
+         CODE_printf ("         if (cyUNIT.exec)  %s = cyUNIT.r_rc;\n", my.retn);
+         break;
+      case 'p'  :
+         CODE_printf ("         if (cyUNIT.exec)  %s = cyUNIT.p_rc;\n", my.retn);
+         break;
+      }
+   }
    /*---(complete)-----------------------*/
    return 0;
 }
