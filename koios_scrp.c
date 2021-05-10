@@ -7,7 +7,6 @@
 
 static  FILE *s_file_save;
 static  FILE *s_file_ditto;
-static  int   s_lineno   =   0;
 
 static  int   s_master [26] = { -1 };
 static  int   s_reuses [26] = { -1 };
@@ -205,8 +204,8 @@ SCRP_ditto__beg         (char *a_verb)
    DEBUG_INPT   yLOG_note    ("swap file for script");
    /*> printf ("START DITTO ----------------------------------------\n");             <*/
    s_file_save  = my.f_scrp;
-   my.f_scrp = s_file_ditto;
-   s_lineno     = 0;
+   my.f_scrp    = s_file_ditto;
+   my.dline     = 0;
    my.dittoing  = 'y';
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
@@ -227,11 +226,11 @@ SCRP_ditto__handler     (void)
       return 0;
    }
    /*---(update ditto line)--------------*/
-   ++s_lineno;
-   DEBUG_INPT   yLOG_sint    (s_lineno);
+   ++my.dline;
+   DEBUG_INPT   yLOG_sint    (my.dline);
    DEBUG_INPT   yLOG_sint    (my.ditto);
    /*---(check for pre-ditto)------------*/
-   if (s_lineno <  my.ditto) {
+   if (my.dline <  my.ditto) {
       DEBUG_INPT   yLOG_snote   ("pre-ditto source line");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, -1);
       return -1;
@@ -284,7 +283,7 @@ SCRP_ditto__end         (void)
    /*---(null closed pointers)-----------*/
    s_file_ditto = NULL;
    s_file_save  = NULL;
-   s_lineno     = 0;
+   my.dline     = 0;
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -760,7 +759,7 @@ SCRP_read          (void)
          DEBUG_INPT   yLOG_exit    (__FUNCTION__);
          return 0;
       }
-      DEBUG_INPT   yLOG_complex ("line#"     , "%4d my.n_line, %c, %4d s_lineno", my.n_line, my.dittoing, s_lineno);
+      DEBUG_INPT   yLOG_complex ("line#"     , "%4d my.n_line, %c, %4d my.dline", my.n_line, my.dittoing, my.dline);
       /*> printf ("   SCRP_ditto__handler -- beg\n");                                 <*/
       rc = SCRP_ditto__handler ();
       DEBUG_INPT   yLOG_value   ("handler"   , rc);
@@ -798,7 +797,7 @@ SCRP_read          (void)
       }
       /*---(check other end ditto)-------*/
       /*> printf ("   check in-ditto -- beg\n");                                      <*/
-      if (my.dittoing == 'y' && s_lineno != my.ditto)  {
+      if (my.dittoing == 'y' && my.dline != my.ditto)  {
          strlcpy (t, x_recd, LEN_LABEL);
          p = strtok (t, "");
          p = strtok (p, " ");
@@ -1593,7 +1592,7 @@ SCRP__unit              (char *a_question, int a_num)
       sprintf (my.answer, "SCRP mark      : %c", my.mark);
    }
    else if (strcmp (a_question, "ditto"     ) == 0) {
-      sprintf (my.answer, "SCRP ditto     : %2d  %c  %-10p  %-10p  %3d", my.ditto, my.dittoing, s_file_save, s_file_ditto, s_lineno);
+      sprintf (my.answer, "SCRP ditto     : %2d  %c  %-10p  %-10p  %3d", my.ditto, my.dittoing, s_file_save, s_file_ditto, my.dline);
    }
    else if (strcmp (a_question, "dittos"    ) == 0) {
       strlcpy (t, "", LEN_RECD);

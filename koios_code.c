@@ -790,12 +790,19 @@ CODE_reuse         (void)
 /*====================------------------------------------====================*/
 static void  o___STEP____________o () { return; }
 
+int
+CODE__myline            (void)
+{
+   if (my.dittoing == 'y') return my.dline;
+   return my.n_line;
+}
+
 char
 CODE_mode          (void)
 {
    CODE__stats_step ();
    CODE_printf ("      /*---(mode)------------------------*/\n");
-   CODE_printf ("      yUNIT_mode    (%4i, %3i, \"%s\", cyUNIT.exec);\n", my.n_line, my.cstep, my.desc);
+   CODE_printf ("      yUNIT_mode    (%4i, %3i, \"%s\", cyUNIT.exec);\n", CODE__myline (), my.cstep, my.desc);
    return 0;
 }
 
@@ -886,7 +893,7 @@ CODE_lvar          (void)
    /*---(write)--------------------------*/
    CODE_printf ("      /*---(setup local)-----------------*/\n");
    CODE_printf ("      %s\n",  my.syst);
-   CODE_printf ("      yUNIT_local   (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", my.n_line, my.cstep, my.desc, my.disp);
+   CODE_printf ("      yUNIT_local   (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", CODE__myline (), my.cstep, my.desc, my.disp);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -901,7 +908,7 @@ CODE_code          (void)
    /*---(write)--------------------------*/
    CODE_printf ("      /*---(inject code)-----------------*/\n");
    CODE_printf ("      if (cyUNIT.exec) { %s }\n",  my.syst);
-   CODE_printf ("      yUNIT_code    (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", my.n_line, my.cstep, my.desc, my.disp);
+   CODE_printf ("      yUNIT_code    (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", CODE__myline (), my.cstep, my.desc, my.disp);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -921,7 +928,7 @@ CODE_load          (void)
    /*---(fix strings)--------------------*/
    CODE_display ();
    CODE_printf ("      /*---(load input)------------------*/\n");
-   CODE_printf ("      yUNIT_load    (%4i, %3i, \"%s\", \"%s\", ", my.n_line, my.cstep, my.desc, my.meth);
+   CODE_printf ("      yUNIT_load    (%4i, %3i, \"%s\", \"%s\", ", CODE__myline (), my.cstep, my.desc, my.meth);
    /*---(check for var)------------------*/
    x_len = strlen (my.load);
    if        (x_len <= 7) {
@@ -964,7 +971,7 @@ CODE_system        (void)
     *> }                                                                              <*/
    /*---(write)--------------------------*/
    CODE_printf ("      /*---(system/execute)--------------*/\n");
-   CODE_printf ("      yUNIT_system  (%4i, %3i, \"%s\", \"%s\", \"%s\", cyUNIT.exec);\n", my.n_line, my.cstep, my.desc, my.disp, my.syst);
+   CODE_printf ("      yUNIT_system  (%4i, %3i, \"%s\", \"%s\", \"%s\", cyUNIT.exec);\n", CODE__myline (), my.cstep, my.desc, my.disp, my.syst);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -1014,7 +1021,7 @@ CODE_prefix        (char a_test)
    /*---(write prefix)-------------------*/
    CODE_printf ("      ");
    CODE_printf ("%-13s ("              , x_func);
-   CODE_printf ("%4i, %3i, "           , my.n_line, my.cstep);
+   CODE_printf ("%4i, %3i, "           , CODE__myline (), my.cstep);
    CODE_printf ("\"%s\", "             , my.desc);
    CODE_printf ("\"%s\", \"%s\", "     , my.meth  , my.disp);
    /*---(write test)---------------------*/

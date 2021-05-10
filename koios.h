@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3k"
-#define     P_VERTXT    "full unit test working with expanded live data, YES!!!"
+#define     P_VERNUM    "1.3l"
+#define     P_VERTXT    "fixed horrible char vs int bug on ditto line number! and better line numbers in output"
 
 /*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 /*===[[ HEADER ]]=============================================================*/
@@ -213,7 +213,8 @@ struct cGLOBALS
    char        share;                       /* share marking                  */
    char        dittoing;                    /* currently dittoing             */
    char        dmark;                       /* current ditto mark             */
-   char        ditto;                       /* current ditto position         */
+   int         ditto;                       /* current ditto position         */
+   int         dline;                       /* current dittoing source line   */
    char        mark;                        /* ditto marking                  */
    char        d_used      [LEN_HUND];      /* ditto markes used              */
    /*---(working)---------------*/
