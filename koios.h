@@ -31,34 +31,9 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3l"
-#define     P_VERTXT    "fixed horrible char vs int bug on ditto line number! and better line numbers in output"
+#define     P_VERNUM    "1.3m"
+#define     P_VERTXT    "fix for shares before scripts missing final DNOC"
 
-/*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
-/*===[[ HEADER ]]=============================================================*/
-
-/*   focus         : (PS) programming support
- *   niche         : (st) software testing
- *   heritage      : koios (titan-god of the inquisitive and questioning mind)
- *   purpose       : provide consistent automated unit testing framework
- *
- *   base_system   : gnu/linux   (powerful, ubiquitous, technical, and hackable)
- *   lang_name     : ansi-c      (wicked, limitless, universal, and everlasting)
- *   dependencies  : none
- *   size goal     : toolish (less than 10,000 slocL)
- *
- *
- *   base_system   : gnu/linux   (powerful, ubiquitous, technical, and hackable)
- *   lang_name     : gnu/ansi-c  (right, just, best, standard, and everlasting)
- *   dependencies  : yVAR only (for var testing)
- *   size          : small       (less than 2,000 slocL)
- *
- *   author        : heatherly
- *   created       : 2014-mar
- *   priorities    : direct, simple, brief, vigorous, and lucid (h.w. fowler)
- *   end goal      : loosely coupled, strict interface, maintainable, portable
- *
- */
 /*===[[ SUMMARY ]]=============================================================#
 
  *   koios is a light, clean, simple, and fast metaprogram that reads a custom

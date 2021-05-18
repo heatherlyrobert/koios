@@ -558,13 +558,8 @@ CODE_scrp_end        (void)
 {
    if (strcmp (my.last, "SECT") == 0)    return 0;
    /*---(close final condition)----------*/
-   if (my.nscrp >  0) {
-      CODE_cond_end ();
-   }
-   /*> printf ("my.cstep %4d, my.verb å%sæ\n", my.cstep, my.verb);                    <*/
-   IF_MASTER {
       if (my.cstep > 0)  CODE_cond_end ();
-   }
+   /*> printf ("my.cstep %4d, my.verb å%sæ\n", my.cstep, my.verb);                    <*/
    /*---(end share)----------------------*/
    if (my.cshare != '-') {
       if (my.cshare == tolower (my.cshare))  CODE__shared_set (T_REUSES, my.cshare, my.scond, my.sstep);
