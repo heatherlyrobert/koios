@@ -263,10 +263,14 @@ CONV_ditto         (void)
 char         /*--> write a condition entry ---------------[--------[--------]-*/
 CONV_reuse         (void)
 {
-   char        t           [LEN_RECD ] = "";
+   /*---(locals)-----------+-----+-----+-*/
+   char        s           [LEN_LABEL] = "";
+   char        t           [LEN_HUND ] = "";
    /*---(output)-------------------------*/
-   sprintf (t, "-%c-", my.share);
-   CONV_printf ("\n   REUSE %-3.3s  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  %s\n", t, s_suffix);
+   sprintf (s, "-%c-", my.share);
+   if (strcmp (my.desc, "") == 0) strlcpy (t, "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -", LEN_HUND);
+   else                           sprintf (t, my.desc, LEN_HUND);
+   CONV_printf ("\n   REUSE %-3.3s  %-65.65s  %s\n", s, t, s_suffix);
    /*---(complete)-----------------------*/
    return 0;
 }

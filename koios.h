@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3m"
-#define     P_VERTXT    "fix for shares before scripts missing final DNOC"
+#define     P_VERNUM    "1.3n"
+#define     P_VERTXT    "reuse can have titles"
 
 /*===[[ SUMMARY ]]=============================================================#
 
@@ -175,7 +175,7 @@ struct cGLOBALS
    char        spec;                        /* specialty verb (y/n)           */
    char        vers        [LEN_LABEL];     /* version number                 */
    char        desc        [LEN_LONG ];     /* descriptive text               */
-   char        meth        [LEN_DESC ];     /* function/method name           */
+   char        meth        [LEN_HUND ];     /* function/method name           */
    char        args        [LEN_FULL];      /* function/method args           */
    char        test        [LEN_LABEL];     /* test type for yVAR             */
    char        expe        [LEN_RECD];      /* expected results               */
@@ -212,7 +212,7 @@ typedef     struct cVERB    tVERB;
 struct cVERB {
    char        name        [LEN_FULL];      /* verb                           */
    char        desc        [LEN_FULL];      /* description                    */
-   char        spec;                        /* specialty verb                 */
+   char        spec;                        /* verb type for parsing          */
    char        files;                       /* master vs normal vs both       */
    int         count;                       /* number found in script         */
    int         total;                       /* number found in unit test      */

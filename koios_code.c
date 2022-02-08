@@ -135,8 +135,8 @@ CODE__shared_index       (cchar a_type, cchar a_mark)
    char        i           =  -10;
    /*---(set type)-----------------------*/
    --rce;  switch (a_type) {
-   case T_MASTER : x_valid = LTRS_UPPER;   break;
-   case T_REUSES : x_valid = LTRS_LOWER;   break;
+   case T_MASTER : x_valid = YSTR_UPPER;   break;
+   case T_REUSES : x_valid = YSTR_LOWER;   break;
    default       : return rce;             break;
    }
    /*---(defense)------------------------*/
@@ -209,13 +209,13 @@ CODE__shared_used        (void)
    for (i = 0; i < 26; ++i) {
       if      (s_master_cond [i] <=  0)    my.d_used [i +  0] = '-';
       else if (s_master_cond [i] >  62)    my.d_used [i +  0] = '*';
-      else                                 my.d_used [i +  0] = LTRS_CHARS [s_master_step [i]];
+      else                                 my.d_used [i +  0] = YSTR_CHARS [s_master_step [i]];
    }
    /*---(reuses)-------------------------*/
    for (i = 0; i < 26; ++i) {
       if      (s_reuses_cond [i] <=  0)    my.d_used [i + 29] = '-';
       else if (s_reuses_cond [i] >  62)    my.d_used [i + 29] = '*';
-      else                                 my.d_used [i + 29] = LTRS_CHARS [s_reuses_step [i]];
+      else                                 my.d_used [i + 29] = YSTR_CHARS [s_reuses_step [i]];
    }
    /*---(complete)-----------------------*/
    return my.d_used;
@@ -759,7 +759,7 @@ CODE_reuse         (void)
    DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
    /*> printf ("CODE_reuse      my line %4d, my verb å%sæ, my.share å%cæ\n", my.n_line, my.verb, my.share);   <*/
    CODE_cond_end ();
-   --rce;  if (strchr (LTRS_CHARS, my.share) == NULL)  return rce;
+   --rce;  if (strchr (YSTR_CHARS, my.share) == NULL)  return rce;
    CODE_printf ("   /*---(shared code)-----------------------*/\n");
    CODE_printf ("   cyUNIT.offset = %3i;\n", my.scond);
    CODE_printf ("   yUNIT_shared_%c ();\n", my.share);
@@ -911,10 +911,10 @@ CODE_code          (void)
 char
 CODE_load          (void)
 {
-   /*---(locals)-----------+-----------+-*/
-   int         x_len       = 0;
+   /*---(locals)-----------+-----+-----+-*/
+   int         x_len       =    0;
    char       *p           = NULL;
-   char       *q           = " ";
+   char       *q           =  " ";
    char       *r           = NULL;
    char        x_temp      [LEN_FULL];
    char       *x_var       = NULL;

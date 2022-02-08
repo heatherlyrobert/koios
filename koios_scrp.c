@@ -27,7 +27,7 @@ tVERB       g_verbs [MAX_VERB] = {
    { "GROUP"        , "grouping of conditions"                , '2', '-',  0,  0, CONV_group    , CODE_group    },
    { "COND"         , "test condition"                        , '2', '-',  0,  0, CONV_cond     , CODE_cond     },
    { "DITTO"        , "repeated test condition"               , '1', '-',  0,  0, CONV_ditto    , NULL          },
-   { "REUSE"        , "inclusion of shared code"              , '1', '-',  0,  0, CONV_reuse    , CODE_reuse    },
+   { "REUSE"        , "inclusion of shared code"              , 'r', '-',  0,  0, CONV_reuse    , CODE_reuse    },
    /* --steps-------   --------------------------------------- */
    { "exec"         , "function execution"                    , 'f', '-',  0,  0, CONV_exec     , CODE_exec     },
    { "get"          , "unit test accessor retrieval"          , 'f', '-',  0,  0, CONV_exec     , CODE_exec     },
@@ -89,9 +89,9 @@ SCRP__shared_index      (cchar a_type, cchar a_mark)
    char        i           =  -10;
    /*---(set type)-----------------------*/
    --rce;  switch (a_type) {
-   case T_MASTER : x_valid = LTRS_UPPER;   break;
-   case T_REUSES : x_valid = LTRS_LOWER;   break;
-   case T_DITTOS : x_valid = LTRS_NUMBER;  break;
+   case T_MASTER : x_valid = YSTR_UPPER;   break;
+   case T_REUSES : x_valid = YSTR_LOWER;   break;
+   case T_DITTOS : x_valid = YSTR_NUMBER;  break;
    default       : return rce;             break;
    }
    /*---(defense)------------------------*/
@@ -846,6 +846,7 @@ SCRP__limits            (char *a_min, char *a_max)
    --rce;  switch (my.spec) {
    case '1' :  *a_min = 1;  *a_max = 1;    break;
    case 'c' :  *a_min = 1;  *a_max = 1;    break;
+   case 'r' :  *a_min = 1;  *a_max = 2;    break;
    case '2' :  *a_min = 2;  *a_max = 2;    break;
    case '3' :  *a_min = 3;  *a_max = 3;    break;
    case 'P' :  *a_min = 4;  *a_max = 4;    break;
@@ -899,7 +900,7 @@ SCRP__current      (char *a_first)
                   strltrim (my.desc, ySTR_SINGLE, LEN_LONG);
                   break;
       case  3 :   if (my.spec != 'p') {
-                     strlcpy (my.meth      , p, LEN_DESC );
+                     strlcpy (my.meth      , p, LEN_HUND );
                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
                   }
                   break;
@@ -1000,7 +1001,7 @@ SCRP_vers21        (void)
                   DEBUG_INPT   yLOG_info    ("desc"      , my.desc);
                   break;
       case  3 :   if (my.spec != 'p') {
-                     strlcpy (my.meth      , p, LEN_DESC );
+                     strlcpy (my.meth      , p, LEN_HUND );
                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
                   }
                   break;
@@ -1078,7 +1079,7 @@ SCRP_vers20        (void)
                      strlcpy (my.code      , p, LEN_RECD);
                      DEBUG_INPT   yLOG_info    ("code"      , my.code);
                   } else {
-                     strlcpy (my.meth      , p, LEN_DESC );
+                     strlcpy (my.meth      , p, LEN_HUND );
                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
                   }
                   break;
@@ -1139,7 +1140,7 @@ SCRP_vers19        (void)
                      strlcpy (my.code      , p, LEN_RECD);
                      DEBUG_INPT   yLOG_info    ("code"      , my.code);
                   } else {
-                     strlcpy (my.meth      , p, LEN_DESC );
+                     strlcpy (my.meth      , p, LEN_HUND );
                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
                   }
                   break;
@@ -1349,7 +1350,7 @@ SCRP_parse_stage        (char *p)
       return rce;
    }
    /*---(positions)----------------------*/
-   --rce;  if (strchr (LTRS_GREEK "-", q [1]) == NULL) {
+   --rce;  if (strchr (YSTR_GREEK "-", q [1]) == NULL) {
       yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier, not greek letter for wave, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_snote   ("does not lead with greek letter");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
