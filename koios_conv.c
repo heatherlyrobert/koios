@@ -303,6 +303,20 @@ CONV_load          (void)
 }
 
 char
+CONV_file          (void)
+{
+   CONV_printf ("     %-6.6s   %-35.35s  - - - - - - - - - - - - -   %-218s \n", my.verb, my.desc, my.code);
+   return 0;
+}
+
+char
+CONV_append        (void)
+{
+   CONV_printf ("     %-6.6s   %-35.35s  - - - - - - - - - - - - -   %-218s \n", my.verb, my.desc, my.code);
+   return 0;
+}
+
+char
 CONV_mode          (void)
 {
    CONV_printf ("     %-6.6s   %-35.35s  - - - - - - - - - - - - -   %s\n", my.verb, my.desc, s_suffix);

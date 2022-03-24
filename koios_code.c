@@ -947,6 +947,48 @@ CODE_load          (void)
 }
 
 char
+CODE_file          (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   int         x_len       =    0;
+   char       *p           = NULL;
+   char       *q           =  " ";
+   char       *r           = NULL;
+   char        x_temp      [LEN_FULL];
+   char       *x_var       = NULL;
+   /*---(counters)-----------------------*/
+   CODE__stats_step ();
+   /*---(fix strings)--------------------*/
+   CODE_display ();
+   /*---(write)--------------------------*/
+   CODE_printf ("      /*---(create file)-----------------*/\n");
+   CODE_printf ("      yUNIT_file    (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", CODE__myline (), my.cstep, my.desc, my.code);
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char
+CODE_append        (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   int         x_len       =    0;
+   char       *p           = NULL;
+   char       *q           =  " ";
+   char       *r           = NULL;
+   char        x_temp      [LEN_FULL];
+   char       *x_var       = NULL;
+   /*---(counters)-----------------------*/
+   CODE__stats_step ();
+   /*---(fix strings)--------------------*/
+   CODE_display ();
+   /*---(write)--------------------------*/
+   CODE_printf ("      /*---(create file)-----------------*/\n");
+   CODE_printf ("      yUNIT_append  (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", CODE__myline (), my.cstep, my.desc, my.code);
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char
 CODE_system        (void)
 {
    /*---(locals)-----------+-----------+-*/

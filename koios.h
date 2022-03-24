@@ -31,8 +31,8 @@
 
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3n"
-#define     P_VERTXT    "reuse can have titles"
+#define     P_VERNUM    "1.3o"
+#define     P_VERTXT    "added <file> and <append> verbs to aid test data file loading"
 
 /*===[[ SUMMARY ]]=============================================================#
 
@@ -319,6 +319,8 @@ char        CODE_gvar          (void);
 char        CODE_lvar          (void);
 char        CODE_code          (void);
 char        CODE_load          (void);
+char        CODE_file          (void);
+char        CODE_append        (void);
 char        CODE_system        (void);
 char        CODE_unknown       (void);
 
@@ -349,6 +351,8 @@ char        CONV_mode               (void);
 char        CONV_code               (void);
 char        CONV_gvar               (void);
 char        CONV_load               (void);
+char        CONV_file               (void);
+char        CONV_append             (void);
 char        CONV_driver             (void);
 char*       CONV__unit              (char *a_question, int a_num);
 

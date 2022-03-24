@@ -38,6 +38,8 @@ tVERB       g_verbs [MAX_VERB] = {
    { "echo"         , "test a variable directly"              , 'f', '-',  0,  0, CONV_echo     , CODE_echo     },
    { "system"       , "execute shell code"                    , 'p', '-',  0,  0, CONV_code     , CODE_system   },
    { "load"         , "place data into stdin"                 , 'P', '-',  0,  0, CONV_load     , CODE_load     },
+   { "file"         , "create a temporary file"               , 'p', '-',  0,  0, CONV_file     , CODE_file     },
+   { "append"       , "append data to temporary file"         , 'p', '-',  0,  0, CONV_append   , CODE_append   },
    { "mode"         , "set pass or forced_fail mode"          , '2', '-',  0,  0, CONV_mode     , CODE_mode     },
    /* --ouroboros---   --------------------------------------- */
    { "WAVE"         , "testing wave"                          , '2', 'm',  0,  0, NULL          , NULL          },
