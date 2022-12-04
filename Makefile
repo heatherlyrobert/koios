@@ -18,7 +18,7 @@ INST_DIR   = /usr/local/bin
 # extra include directories required
 INC_MINE   = 
 # utilities generated, separate from main program
-NAME_UTIL  = unit
+NAME_UTIL  = 
 # libraries only for the utilities
 LIB_UTIL   = 
 

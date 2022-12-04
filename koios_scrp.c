@@ -20,7 +20,7 @@ tVERB       g_verbs [MAX_VERB] = {
    { "incl"         , "c header inclusion"                    , '3', '-',  0,  0, CONV_incl     , CODE_incl     },
    { "#>"           , "script internal comments"              , 'c', '-',  0,  0, CONV_comment  , NULL          },
    /* --scrps-------   --------------------------------------- */
-   { "SCRP"         , "test script"                           , '3', 'n',  0,  0, CONV_scrp     , CODE_scrp     },
+   { "SCRP"         , "test script"                           , 's', 'n',  0,  0, CONV_scrp     , CODE_scrp     },
    { "SECT"         , "grouping of scripts"                   , '2', 'n',  0,  0, CONV_sect     , CODE_sect     },
    { "SHARED"       , "shared code between scripts"           , '2', 'n',  0,  0, CONV_shared   , CODE_shared   },
    /* --conds-------   --------------------------------------- */
@@ -198,8 +198,8 @@ SCRP_ditto__beg         (char *a_verb)
    s_file_ditto = fopen (my.n_scrp, "r");
    DEBUG_INPT   yLOG_point   ("refile*"   , s_file_ditto);
    --rce;  if (my.f_scrp == NULL) {
-      DEBUG_TOPS   yLOG_fatal   ("scrp file, can not open script file");
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_fatal   ("scrp file, can not open script file");
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(swap files)---------------------*/
@@ -279,7 +279,7 @@ SCRP_ditto__end         (void)
    DEBUG_INPT   yLOG_point   ("file_ditto", s_file_ditto);
    rc = fclose (s_file_ditto);
    --rce;  if (rc != 0) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(null closed pointers)-----------*/
@@ -578,18 +578,18 @@ SCRP_open          (void)
    /*---(locals)-----------+-----------+-*/
    char        rce         = -10;           /* return code for errors         */
    /*---(header)-------------------------*/
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(already open)-------------------*/
    DEBUG_OUTP   yLOG_info    ("n_scrp"    , my.n_scrp);
    DEBUG_OUTP   yLOG_point   ("f_scrp"    , my.f_scrp);
    --rce;  if (my.f_scrp != NULL) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_OUTP   yLOG_info    ("n_wave"    , my.n_wave);
    DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);
    --rce;  if (my.f_wave != NULL) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(open configuration)-------------*/
@@ -597,8 +597,8 @@ SCRP_open          (void)
    my.f_scrp = fopen (my.n_scrp, "rt");
    DEBUG_INPT   yLOG_point   ("file*"     , my.f_scrp);
    --rce;  if (my.f_scrp == NULL) {
-      DEBUG_TOPS   yLOG_fatal   ("scrp file, can not open script file");
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_fatal   ("scrp file, can not open script file");
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_note    ("script file open");
@@ -609,15 +609,15 @@ SCRP_open          (void)
    my.f_wave = fopen (my.n_wave, "wt");
    DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);
    --rce;  if (my.f_wave == NULL) {
-      DEBUG_TOPS   yLOG_fatal   ("can not open wave file");
+      DEBUG_PROG   yLOG_fatal   ("can not open wave file");
       fclose (my.f_scrp);
       my.f_scrp = NULL;
-      DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
       return rce;
    }
    DEBUG_OUTP   yLOG_note    ("wave file open");
    /*---(complete)-----------------------*/
-   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -646,34 +646,34 @@ SCRP_close         (void)
    char        rc          = 0;
    char        rce         = -10;
    /*---(header)-------------------------*/
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(close detail report)------------*/
    DEBUG_INPT   yLOG_point   ("*f_scrp", my.f_scrp);
    --rce;  if (my.f_scrp == NULL) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    rc = fclose (my.f_scrp);
    --rce;  if (rc != 0) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(close wave file)----------------*/
    DEBUG_INPT   yLOG_point   ("*f_wave", my.f_wave);
    --rce;  if (my.f_wave == NULL) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    rc = fclose (my.f_wave);
    --rce;  if (rc != 0) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(ground pointer)-----------------*/
    my.f_scrp = NULL;
    my.f_wave = NULL;
    /*---(complete)-----------------------*/
-   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -851,6 +851,7 @@ SCRP__limits            (char *a_min, char *a_max)
    case 'r' :  *a_min = 1;  *a_max = 2;    break;
    case '2' :  *a_min = 2;  *a_max = 2;    break;
    case '3' :  *a_min = 3;  *a_max = 3;    break;
+   case 's' :  *a_min = 3;  *a_max = 5;    break;
    case 'P' :  *a_min = 4;  *a_max = 4;    break;
    case 'p' :  *a_min = 4;  *a_max = 4;    break;
    case 'f' :  *a_min = 6;  *a_max = 8;    break;
@@ -871,6 +872,7 @@ SCRP__current      (char *a_first)
    char       *q           = "";
    char        x_min       =    0;
    char        x_max       =    0;
+   int         l           =    0;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
    /*---(read fields)--------------------*/
@@ -888,6 +890,7 @@ SCRP__current      (char *a_first)
       return 0;  /* ditto type */
    }
    p = a_first;
+   if (p != NULL)  l = strlen (a_first);
    for (i = 2; i < 20; ++i) {
       /*---(clear spacer bars)-----------*/
       if (p [0] == '-') {
@@ -901,12 +904,24 @@ SCRP__current      (char *a_first)
                   DEBUG_INPT   yLOG_info    ("desc"      , my.desc);
                   strltrim (my.desc, ySTR_SINGLE, LEN_LONG);
                   break;
-      case  3 :   if (my.spec != 'p') {
+      case  3 :   if (my.spec == 's') {
+                     if (l > 10)  {
+                        strlcpy (my.meth      , p, LEN_HUND );
+                        DEBUG_INPT   yLOG_info    ("focus"     , my.meth);
+                        x_max = 3;
+                     } else {
+                        strlcpy (my.test      , p, LEN_LABEL);
+                        DEBUG_INPT   yLOG_info    ("duration"  , my.test);
+                     }
+                  } else if (my.spec != 'p') {
                      strlcpy (my.meth      , p, LEN_HUND );
                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);
                   }
                   break;
-      case  4 :   if (my.spec == 'P' || my.spec == 'p') {
+      case  4 :   if      (my.spec == 's') {
+                     strlcpy (my.retn      , p, LEN_FULL);
+                     DEBUG_INPT   yLOG_info    ("terse tag" , my.retn);
+                  } else if (my.spec == 'P' || my.spec == 'p') {
                      strlcpy (my.code      , p, LEN_RECD);
                      DEBUG_INPT   yLOG_info    ("code"      , my.code);
                   } else {
@@ -915,8 +930,13 @@ SCRP__current      (char *a_first)
                      DEBUG_INPT   yLOG_info    ("args"      , my.args);
                   }
                   break;
-      case  5 :   strlcpy (my.test      , p, LEN_LABEL);
-                  DEBUG_INPT   yLOG_info    ("test"      , my.test);
+      case  5 :   if (my.spec == 's') {
+                     strlcpy (my.meth      , p, LEN_HUND );
+                     DEBUG_INPT   yLOG_info    ("focus"     , my.meth);
+                  } else {
+                     strlcpy (my.test      , p, LEN_LABEL);
+                     DEBUG_INPT   yLOG_info    ("test"      , my.test);
+                  }
                   break;
       case  6 :   strlcpy (my.expe      , p, LEN_RECD);
                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);
@@ -938,6 +958,7 @@ SCRP__current      (char *a_first)
          DEBUG_INPT   yLOG_note    ("strtok came up empty");
          break;
       }
+      l = strlen (p);
       strltrim (p, ySTR_BOTH, LEN_RECD);
    } 
    /*---(stop parsing summ records)---*/

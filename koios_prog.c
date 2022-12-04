@@ -40,7 +40,7 @@ char         /*--> shutdown program ----------------------[ ------ [ ------ ]-*/
 PROG_init          (void)
 {
    /*---(header)-------------------------*/
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(files)--------------------------*/
    strlcpy  (my.n_base, "", LEN_PATH);
    strlcpy  (my.n_scrp, "", LEN_PATH);
@@ -56,7 +56,7 @@ PROG_init          (void)
    SCRP__shared_purge ();
    CODE__shared_purge ();
    /*---(complete)-----------------------*/
-   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -151,7 +151,7 @@ PROG_args          (int argc, char *argv[])
    int         x_total     =    0;
    int         x_args      =    0;
    /*---(begin)--------------------------*/
-   DEBUG_TOPS  yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG  yLOG_enter   (__FUNCTION__);
    /*---(process)------------------------*/
    for (i = 1; i < argc; ++i) {
       a = argv[i];
@@ -164,13 +164,13 @@ PROG_args          (int argc, char *argv[])
       else if (strncmp (a, "--debug"      , 10) == 0)    my.run_type = G_RUN_DEBUG;
       else if (strncmp (a, "--convert"    , 10) == 0)    my.run_type = G_RUN_UPDATE;
       else if (strncmp (a, "--update"     , 10) == 0)  { my.run_type = G_RUN_UPDATE;  my.replace = G_RUN_REPLACE; }
-      else if (strncmp (a, "-"            ,  1) == 0)  { printf ("FATAL, arg <<%s>> not understood\n", a); DEBUG_TOPS  yLOG_exitr  (__FUNCTION__, rce); return rce; }
+      else if (strncmp (a, "-"            ,  1) == 0)  { printf ("FATAL, arg <<%s>> not understood¦", a); DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce); return rce; }
       else {
          rc = PROG_file (a);
          if (rc < 0) {
             printf ("base file name is invalid or not found, FATAL\n");
-            DEBUG_TOPS  yLOG_note   ("base name is invalid or not found");
-            DEBUG_TOPS  yLOG_exitr  (__FUNCTION__, rce);
+            DEBUG_PROG  yLOG_note   ("base name is invalid or not found");
+            DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce);
             return rce;
          }
       }
@@ -183,19 +183,19 @@ PROG_args          (int argc, char *argv[])
    DEBUG_ARGS  yLOG_char   ("run_type"  , my.run_type);
    DEBUG_ARGS  yLOG_info   ("basename"  , my.n_base);
    /*---(complete)-----------------------*/
-   DEBUG_TOPS  yLOG_exit  (__FUNCTION__);
+   DEBUG_PROG  yLOG_exit  (__FUNCTION__);
    return 0;
 }
 
 char                /* PURPOSE : initialize program and key variables --------*/
 PROG_begin         (void)
 {
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(file names)---------------------*/
-   DEBUG_TOPS   yLOG_info    ("basename"  , my.n_base);
+   DEBUG_PROG   yLOG_info    ("basename"  , my.n_base);
    if (strcmp (my.n_base, "") == 0) {
       printf ("no base file name provided, FATAL\n");
-      DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
       return -1;
    }
    snprintf (my.n_scrp, LEN_PATH, "%s.unit"        , my.n_base);
@@ -213,7 +213,7 @@ PROG_begin         (void)
    my.dmark     = '-';
    my.ditto     = -1;
    /*---(complete)-----------------------*/
-   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -227,8 +227,8 @@ static void  o___WRAPUP__________o () { return; }
 char                /* PURPOSE : shutdown program and free memory ------------*/
 PROG_end           (void)
 {
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
-   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    yLOGS_end     ();
    return 0;
 }

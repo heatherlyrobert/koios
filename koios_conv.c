@@ -21,19 +21,19 @@ CONV_open          (void)
    /*---(locals)-----------+-----------+-*/
    char        rce         = -10;           /* return code for errors         */
    /*---(header)-------------------------*/
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(open configuration)-------------*/
    DEBUG_OUTP   yLOG_point   ("name"      , my.n_conv);
    my.f_conv = fopen (my.n_conv, "w");
    DEBUG_OUTP   yLOG_point   ("file*"     , my.f_conv);
    --rce;  if (my.f_conv == NULL) {
-      DEBUG_TOPS   yLOG_fatal   ("scrp file, can not open output script file");
-      DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+      DEBUG_PROG   yLOG_fatal   ("scrp file, can not open output script file");
+      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
       return rce;
    }
    DEBUG_OUTP   yLOG_note    ("output script file open");
    /*---(complete)-----------------------*/
-   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -44,21 +44,21 @@ CONV_close         (void)
    char        rc          = 0;
    char        rce         = -10;
    /*---(header)-------------------------*/
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(close detail report)------------*/
    DEBUG_OUTP   yLOG_point   ("*f_conv", my.f_conv);
    --rce;  if (my.f_conv == NULL) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    rc = fclose (my.f_conv);
    --rce;  if (rc != 0) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    my.f_conv = NULL;
    /*---(complete)-----------------------*/
-   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -165,9 +165,11 @@ CONV_scrp          (void)
    my.ncond  = 0;
    my.cshare = '-';
    if (strlen (my.stage) != 0)  sprintf (t, "[%s]", my.stage);
+   if (strlen (my.test)  == 0)  strcpy (my.test, "0s");
+   if (strlen (my.retn)  == 0)  strcpy (my.retn, "tbd");
    /*---(output)-------------------------*/
    CONV_header ();
-   CONV_printf ("SCRP    %-4.4s  %-65.65s  %-100.100s  ((%02d.---))  %s \n", t, my.desc, my.meth, my.nscrp, s_hund);
+   CONV_printf ("SCRP    %-4.4s  %-65.65s  %-3.3s  %-14.14s  %-75.75s  ((%02d.---))  %s \n", t, my.desc, my.test, my.retn, my.meth, my.nscrp, s_hund);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -355,11 +357,11 @@ char
 CONV_driver        (void)
 {
    char        rc          =    0;
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    if (my.p_conv == NULL)  return;
    rc = my.p_conv ();
    /*---(complete)-----------------------*/
-   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 

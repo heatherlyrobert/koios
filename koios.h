@@ -2,37 +2,44 @@
 
 
 /*===[[ HEADER ]]=============================================================*/
-/*345678901-12345678901-123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
 
+/*--------- 12345678901 ´123456789-123456789-123456789-123456789-123456789-123456789-123456789-*/
+/*········· ··········· ´·····························´········································*/
 #define     P_FOCUS     "PS (programming support)"
 #define     P_NICHE     "st (string testing)"
 #define     P_SUBJECT   "unit testing meta-language"
 #define     P_PURPOSE   "provide simple unit testing framework for writing scripts"
-
+/*········· ··········· ´·····························´········································*/
 #define     P_NAMESAKE  "koios-polos (axis of heaven)"
-#define     P_HERITAGE  "titan god of intelligence, farsight, and the inquisive mind"
+#define     P_PRONOUNCE "kee·ohs poh·lohs"
+#define     P_HERITAGE  "titan god of intelligence, farsight, and the inquisitive mind"
+#define     P_BRIEFLY   "quick, inquisitive mind"
 #define     P_IMAGERY   "very tall, dark armor, with blue-white eyes, hair, and beard"
 #define     P_REASON    "the inquisitive mind of koios pitted against unit testing"
-
+/*········· ··········· ´·····························´········································*/
 #define     P_ONELINE   P_NAMESAKE " " P_SUBJECT
-
-#define     P_BASENAME  ""
-#define     P_FULLPATH  ""
+/*········· ··········· ´·····························´········································*/
+#define     P_HOMEDIR   "/home/system/koios.unit_test_generator"
+#define     P_BASENAME  "koios"
+#define     P_FULLPATH  "/usr/local/bin/koios"
 #define     P_SUFFIX    "unit"
 #define     P_CONTENT   "unit test script"
-
+/*········· ··········· ´·····························´········································*/
 #define     P_SYSTEM    "gnu/linux   (powerful, ubiquitous, technical, and hackable)"
 #define     P_LANGUAGE  "ansi-c      (wicked, limitless, universal, and everlasting)"
+#define     P_COMPILER  "gcc 5.3.0"
 #define     P_CODESIZE  "small       (appoximately 1,000 slocl)"
 #define     P_DEPENDS   "none"
-
+/*········· ··········· ´·····························´········································*/
 #define     P_AUTHOR    "heatherlyrobert"
 #define     P_CREATED   "2014-03"
-
+/*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3o"
-#define     P_VERTXT    "added <file> and <append> verbs to aid test data file loading"
+#define     P_VERNUM    "1.3p"
+#define     P_VERTXT    "added duration and terse tag to script"
+/*········· ··········· ´·····························´········································*/
+
 
 /*===[[ SUMMARY ]]=============================================================#
 
@@ -102,6 +109,7 @@
 #include    <stdio.h>        /* C_ANSI : strcpy, strlen, strchr, strcmp, ...  */
 #include    <string.h>       /* C_ANSI : printf, snprintf, fgets, fopen, ...  */
 #include    <stdarg.h>       /* C_ANSI : variable argument handling           */
+#include    <stdlib.h>       /* C_ANSI : system                               */
 #include    <unistd.h>       /* stat(),crpyt()                                */
 #include    <sys/stat.h>     /* stat, lstat                                   */
 #include    <sys/types.h>    /* stat, lstat                                   */

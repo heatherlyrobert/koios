@@ -45,28 +45,28 @@ main               (int argc, char *argv[])
    }
    IF_NORMAL  CODE_shared_in  ();
    /*---(main-loop)----------------------*/
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
-   DEBUG_TOPS   yLOG_note    ("entering main processing loop");
-   DEBUG_TOPS   yLOG_break   ();
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG   yLOG_note    ("entering main processing loop");
+   DEBUG_PROG   yLOG_break   ();
    while (1) {
       /*---(read and parse)--------------*/
       rc = SCRP_read   ();
       if (rc == 0) {
-         DEBUG_TOPS   yLOG_note    ("end of file");
+         DEBUG_PROG   yLOG_note    ("end of file");
          break;
       }
       if (rc < 0) {
-         DEBUG_TOPS   yLOG_value   ("X_FINAL R" , x_final);
+         DEBUG_PROG   yLOG_value   ("X_FINAL R" , x_final);
          --x_final;
          continue;
       }
       rc = SCRP_parse  ();
       if (rc < 0) {
-         DEBUG_TOPS   yLOG_value   ("X_FINAL P" , x_final);
+         DEBUG_PROG   yLOG_value   ("X_FINAL P" , x_final);
          --x_final;
          continue;
       }
-      DEBUG_TOPS   yLOG_note    ("writing output");
+      DEBUG_PROG   yLOG_note    ("writing output");
       /*---(write code)------------------*/
       if      (my.run_type == G_RUN_CREATE)   rc = CODE_write  ();
       else if (my.run_type == G_RUN_DEBUG )   rc = CODE_write  ();
@@ -74,8 +74,8 @@ main               (int argc, char *argv[])
       /*---(debugging output)------------*/
       ++x_lines;
    }
-   DEBUG_TOPS  yLOG_break   ();
-   DEBUG_TOPS  yLOG_note    ("exiting main processing loop");
+   DEBUG_PROG  yLOG_break   ();
+   DEBUG_PROG  yLOG_note    ("exiting main processing loop");
    /*---(close files)--------------------*/
    rc = SCRP_close     ();
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) { 

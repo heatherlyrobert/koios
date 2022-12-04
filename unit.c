@@ -3475,7 +3475,7 @@ koios__unit_code_cond    (void)
    yUNIT_minval ("call cond"                          , CODE_cond   (), 0);
    yUNIT_minstr ("... check code beginning"           , yURG_peek (my.n_code, 'º'), "   /*===[[ COND #001 ]]============================*/");
    yUNIT_minstr ("... check set noise level"          , yURG_peek (my.n_code, 'Ö'), "   if (cyUNIT.cond == cyUNIT.offset +   1)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (cyUNIT.level, 'y');");
-   yUNIT_minstr ("... check debugging"                , yURG_peek (my.n_code, 'Ö'), "   DEBUG_TOPS    yLOG_unitcond (cyUNIT.origin, cyUNIT.offset +   1,   32, \"verify defenses\");");
+   yUNIT_minstr ("... check debugging"                , yURG_peek (my.n_code, 'Ö'), "   DEBUG_PROG    yLOG_unitcond (cyUNIT.origin, cyUNIT.offset +   1,   32, ¶verify defenses¶);");
    yUNIT_minstr ("... check condition notice"         , yURG_peek (my.n_code, 'Ö'), "   yUNIT_cond    (  32, cyUNIT.offset +   1, '&', \"verify defenses\");");
    yUNIT_minval ("... check line count"               , yURG_peek_count (my.n_code) ,  4);
    yUNIT_minstr ("check main entry"                   , yURG_peek (my.n_main, 'º'), "");
@@ -3944,7 +3944,7 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_exec   (), 0);
    yUNIT_minstr ("... check code beginning"           , yURG_peek (my.n_code, 'º'), "      /*---(run step)--------------------*/");
-   yUNIT_minstr ("... check debugging"                , yURG_peek (my.n_code, 'Ö'), "      DEBUG_TOPS    yLOG_unitstep (cyUNIT.origin, cyUNIT.offset +   2,   3,   40, \"check length\");");
+   yUNIT_minstr ("... check debugging"                , yURG_peek (my.n_code, 'Ö'), "      DEBUG_PROG    yLOG_unitstep (cyUNIT.origin, cyUNIT.offset +   2,   3,   40, ¶check length¶);");
    yUNIT_minstr ("... check reset rcs"                , yURG_peek (my.n_code, 'Ö'), "      yUNIT_reset_rc ();");
    yUNIT_minstr ("... check execute"                  , yURG_peek (my.n_code, 'Ö'), "      if (cyUNIT.exec)  cyUNIT.s_rc = test_func (27, 36);");
    yUNIT_minstr ("... check report"                   , yURG_peek (my.n_code, 'Ö'), "      yUNIT_string  (  40,   3, \"check length\", \"test_func\", \"27, 36\", \"s_equal\", \"13.6\", cyUNIT.s_rc, cyUNIT.exec);");
@@ -3977,7 +3977,7 @@ koios__unit_code_step    (void)
    CODE_cycle ();
    yUNIT_minval ("call cond"                          , CODE_exec   (), 0);
    yUNIT_minstr ("... check code beginning"           , yURG_peek (my.n_code, 'º'), "      /*---(run step)--------------------*/");
-   yUNIT_minstr ("... check debugging"                , yURG_peek (my.n_code, 'Ö'), "      DEBUG_TOPS    yLOG_unitstep (cyUNIT.origin, cyUNIT.offset +   2,   3,   40, \"... verify length\");");
+   yUNIT_minstr ("... check debugging"                , yURG_peek (my.n_code, 'Ö'), "      DEBUG_PROG    yLOG_unitstep (cyUNIT.origin, cyUNIT.offset +   2,   3,   40, ¶... verify length¶);");
    yUNIT_minstr ("... check reset"                    , yURG_peek (my.n_code, 'Ö'), "      yUNIT_reset_rc ();");
    yUNIT_minstr ("... check execute"                  , yURG_peek (my.n_code, 'Ö'), "      if (cyUNIT.exec)  cyUNIT.i_rc = test_unit (27, 36);");
    yUNIT_minstr ("... check results"                  , yURG_peek (my.n_code, 'Ö'), "      yUNIT_int     (  40,   3, \"... verify length\", \"test_unit\", \"27, 36\", \"i_equal\", 13.6, cyUNIT.i_rc, cyUNIT.exec);");

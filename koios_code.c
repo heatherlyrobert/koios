@@ -271,32 +271,32 @@ CODE_open          (void)
    /*---(locals)-----------+-----------+-*/
    char        rce         = -10;           /* return code for errors         */
    /*---(header)-------------------------*/
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(defense)------------------------*/
    DEBUG_OUTP   yLOG_info    ("n_code"    , my.n_code);
    DEBUG_OUTP   yLOG_point   ("f_code"    , my.f_code);
    --rce;  if (my.f_code != NULL) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_OUTP   yLOG_info    ("n_main"    , my.n_main);
    DEBUG_OUTP   yLOG_point   ("f_main"    , my.f_main);
    --rce;  if (my.f_main != NULL) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*> DEBUG_OUTP   yLOG_info    ("n_wave"    , my.n_wave);                           <*/
    /*> DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);                           <*/
    /*> --rce;  if (my.f_wave != NULL) {                                               <* 
-    *>    DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);                              <* 
+    *>    DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);                              <* 
     *>    return rce;                                                                 <* 
     *> }                                                                              <*/
    /*---(open output file)---------------*/
    my.f_code = fopen (my.n_code, "wt");
    DEBUG_OUTP   yLOG_point   ("f_code"    , my.f_code);
    --rce;  if (my.f_code == NULL) {
-      DEBUG_TOPS   yLOG_fatal   ("can not open code file");
-      DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+      DEBUG_PROG   yLOG_fatal   ("can not open code file");
+      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
       return rce;
    }
    DEBUG_OUTP   yLOG_note    ("code file open");
@@ -304,9 +304,9 @@ CODE_open          (void)
    my.f_main = fopen (my.n_main, "wt");
    DEBUG_OUTP   yLOG_point   ("f_main"    , my.f_main);
    --rce;  if (my.f_main == NULL) {
-      DEBUG_TOPS   yLOG_fatal   ("can not open main file");
+      DEBUG_PROG   yLOG_fatal   ("can not open main file");
       CODE_close (my.f_code);
-      DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
       return rce;
    }
    DEBUG_OUTP   yLOG_note    ("main file open");
@@ -315,15 +315,15 @@ CODE_open          (void)
    /*> my.f_wave = fopen (my.n_wave, "wt");                                           <* 
     *> DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);                           <* 
     *> --rce;  if (my.f_wave == NULL) {                                               <* 
-    *>    DEBUG_TOPS   yLOG_fatal   ("can not open main file");                       <* 
+    *>    DEBUG_PROG   yLOG_fatal   ("can not open main file");                       <* 
     *>    CODE_close (my.f_code);                                                     <* 
     *>    CODE_close (my.f_main);                                                     <* 
-    *>    DEBUG_TOPS   yLOG_exit    (__FUNCTION__);                                   <* 
+    *>    DEBUG_PROG   yLOG_exit    (__FUNCTION__);                                   <* 
     *>    return rce;                                                                 <* 
     *> }                                                                              <*/
    /*> DEBUG_OUTP   yLOG_note    ("wave file open");                                  <*/
    /*---(complete)-----------------------*/
-   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -371,11 +371,11 @@ CODE_close         (FILE *a_file)
    char        rce         =  -10;
    char        rc          =    0;
    /*---(header)-------------------------*/
-   DEBUG_TOPS   yLOG_enter   (__FUNCTION__);
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(defense)------------------------*/
    DEBUG_OUTP   yLOG_point   ("a_file"    , a_file);
    --rce;  if (a_file == NULL) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(close)--------------------------*/
@@ -383,7 +383,7 @@ CODE_close         (FILE *a_file)
    if (a_file == my.f_main)   rc = fclose (my.f_main);
    /*> if (a_file == my.f_wave)   rc = fclose (my.f_wave);                            <*/
    --rce;  if (rc != 0) {
-      DEBUG_TOPS   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(ground)-------------------------*/
@@ -391,7 +391,7 @@ CODE_close         (FILE *a_file)
    if (a_file == my.f_main)   my.f_main = NULL;
    /*> if (a_file == my.f_wave)   my.f_wave = NULL;                                   <*/
    /*---(complete)-----------------------*/
-   DEBUG_TOPS   yLOG_exit    (__FUNCTION__);
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -603,6 +603,8 @@ CODE_scrp          (void)
    /*---(end last script)----------------*/
    CODE_scrp_end ();
    my.cshare = '-';
+   if (strlen (my.test)  == 0)  strcpy (my.test, "0s");
+   if (strlen (my.retn)  == 0)  strcpy (my.retn, "tbd");
    /*---(counters)-----------------------*/
    CODE__stats_scrp_beg ();
    /*---(open script function)-----------*/
@@ -614,7 +616,7 @@ CODE_scrp          (void)
    CODE_printf ("   cyUNIT.offset  = 0;\n");
    CODE_printf ("   cyUNIT.origin  = %d;\n", my.nscrp);
    CODE_printf ("   yUNIT_mode_reset ();\n");
-   CODE_printf ("   yUNIT_scrp    (%4i, %3i, \"%s\", \"%s\", \"%s\");\n", my.n_line, my.nscrp, my.stage, my.desc, my.meth);
+   CODE_printf ("   yUNIT_scrp    (%4i, %3i, \"%s\", \"%s\", \"%s\", \"%s\", \"%s\");\n", my.n_line, my.nscrp, my.stage, my.desc, my.test, my.retn, my.meth);
    /*---(function call to main)----------*/
    MAIN_printf ("   if (cyUNIT.scrp == YUNIT_ALL  || cyUNIT.scrp == %2i)  yUNIT_script_%02d ();\n", my.nscrp, my.nscrp);
    /*---(script entry in wave)-----------*/
@@ -721,7 +723,7 @@ CODE_cond          (void)
    CODE_printf ("   /*===[[ COND #%03i ]]============================*/\n", my.scond);
    CODE_printf ("   if (cyUNIT.cond == cyUNIT.offset + %3i)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (cyUNIT.level, 'y');\n", my.scond);
    if (my.run_type == G_RUN_DEBUG) {
-      CODE_printf ("   %sUG_TOPS    %sOG_unitcond (cyUNIT.origin, cyUNIT.offset + %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.n_line, my.desc);
+      CODE_printf ("   %sUG_PROG    %sOG_unitcond (cyUNIT.origin, cyUNIT.offset + %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.n_line, my.desc);
    }
    if (my.dittoing == 'y') {
       /*> printf ("inside a ditto (%c)\n", my.dmark);                                 <*/
@@ -1202,7 +1204,7 @@ CODE_exec          (void)
    /*---(debugging)----------------------*/
    CODE_printf ("      /*---(run step)--------------------*/\n");
    if (my.run_type == G_RUN_DEBUG) {
-      CODE_printf ("      %sUG_TOPS    %sOG_unitstep (cyUNIT.origin, cyUNIT.offset + %3i, %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.cstep, my.n_line, my.desc);
+      CODE_printf ("      %sUG_PROG    %sOG_unitstep (cyUNIT.origin, cyUNIT.offset + %3i, %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.cstep, my.n_line, my.desc);
    }
    /*---(handle return values)-----------*/
    x_test = my.test [0];
