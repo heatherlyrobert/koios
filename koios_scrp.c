@@ -14,7 +14,7 @@ static  int   s_dittos [26] = { -1 };
 
 tVERB       g_verbs [MAX_VERB] = {
    /* --global------   ---------------------------------------   -  */
-   { "GLOBAL"       , "shared code between units"             , '2', 'm',  0,  0, CONV_global   , CODE_global   },
+   { "GLOBAL"       , "shared code between units"             , 's', 'm',  0,  0, CONV_global   , CODE_global   },
    /* --units-------   ---------------------------------------   -  */
    { "PREP"         , "preparation before testing"            , '2', '-',  0,  0, CONV_prep     , CODE_prep     },
    { "incl"         , "c header inclusion"                    , '3', '-',  0,  0, CONV_incl     , CODE_incl     },
@@ -22,7 +22,7 @@ tVERB       g_verbs [MAX_VERB] = {
    /* --scrps-------   --------------------------------------- */
    { "SCRP"         , "test script"                           , 's', 'n',  0,  0, CONV_scrp     , CODE_scrp     },
    { "SECT"         , "grouping of scripts"                   , '2', 'n',  0,  0, CONV_sect     , CODE_sect     },
-   { "SHARED"       , "shared code between scripts"           , '2', 'n',  0,  0, CONV_shared   , CODE_shared   },
+   { "SHARED"       , "shared code between scripts"           , 's', 'n',  0,  0, CONV_shared   , CODE_shared   },
    /* --conds-------   --------------------------------------- */
    { "GROUP"        , "grouping of conditions"                , '2', '-',  0,  0, CONV_group    , CODE_group    },
    { "COND"         , "test condition"                        , '2', '-',  0,  0, CONV_cond     , CODE_cond     },
@@ -851,6 +851,7 @@ SCRP__limits            (char *a_min, char *a_max)
    case 'r' :  *a_min = 1;  *a_max = 2;    break;
    case '2' :  *a_min = 2;  *a_max = 2;    break;
    case '3' :  *a_min = 3;  *a_max = 3;    break;
+   case 'F' :  *a_min = 3;  *a_max = 3;    break;
    case 's' :  *a_min = 3;  *a_max = 5;    break;
    case 'P' :  *a_min = 4;  *a_max = 4;    break;
    case 'p' :  *a_min = 4;  *a_max = 4;    break;
@@ -900,12 +901,11 @@ SCRP__current      (char *a_first)
       }
       /*---(handle fields)---------------*/
       switch (i) {
-      case  2 :   strlcpy (my.desc      , p, LEN_LONG );
-                  DEBUG_INPT   yLOG_info    ("desc"      , my.desc);
-                  strltrim (my.desc, ySTR_SINGLE, LEN_LONG);
-                  break;
+      case  2 : strlcpy  (my.desc, p        , LEN_FULL);
+                strltrim (my.desc, ySTR_BOTH, LEN_FULL);
+                break;
       case  3 :   if (my.spec == 's') {
-                     if (l > 10)  {
+                     if (l == 0 || l > 10)  {
                         strlcpy (my.meth      , p, LEN_HUND );
                         DEBUG_INPT   yLOG_info    ("focus"     , my.meth);
                         x_max = 3;

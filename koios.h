@@ -36,8 +36,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3p"
-#define     P_VERTXT    "added duration and terse tag to script"
+#define     P_VERNUM    "1.3q"
+#define     P_VERTXT    "added duration and terse tag to shared and global too"
 /*········· ··········· ´·····························´········································*/
 
 

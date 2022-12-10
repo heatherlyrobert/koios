@@ -196,11 +196,14 @@ CONV_shared        (void)
    /*---(counters)-----------------------*/
    my.ncond  = 0;
    my.cshare = my.share;
+   if (strlen (my.test)  == 0)  strcpy  (my.test, "0s");
+   if (strlen (my.retn)  == 0)  strcpy  (my.retn, "tbd");
+   if (strlen (my.meth)  == 0)  sprintf (my.meth, "%-75.75s", s_hund);
    /*---(output)-------------------------*/
    CONV_header ();
    sprintf (t, "-%c-", my.cshare);
    sprintf (s, "((%c%c.---))", my.cshare, my.cshare);
-   CONV_printf ("SHARED   %-3.3s  %-65.65s  %s  %-10.10s  %s \n", t, my.desc, s_hund, s, s_hund);
+   CONV_printf ("SHARED   %-3.3s  %-65.65s  %-3.3s  %-14.14s  %-75.75s  %-10.10s  %s \n", t, my.desc, my.test, my.retn, my.meth, s, s_hund);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -213,11 +216,14 @@ CONV_global        (void)
    /*---(counters)-----------------------*/
    my.ncond  = 0;
    my.cshare = my.share;
+   if (strlen (my.test)  == 0)  strcpy  (my.test, "0s");
+   if (strlen (my.retn)  == 0)  strcpy  (my.retn, "tbd");
+   if (strlen (my.meth)  == 0)  sprintf (my.meth, "%-75.75s", s_hund);
    /*---(output)-------------------------*/
    CONV_header ();
    sprintf (t, "-%c-", my.cshare);
    sprintf (s, "((%c%c.---))", my.cshare, my.cshare);
-   CONV_printf ("GLOBAL   %-3.3s  %-65.65s  %s  %-10.10s  %s \n", t, my.desc, s_hund, s, s_hund);
+   CONV_printf ("GLOBAL   %-3.3s  %-65.65s  %-3.3s  %-14.14s  %-75.75s  %-10.10s  %s \n", t, my.desc, my.test, my.retn, my.meth, s, s_hund);
    /*---(complete)-----------------------*/
    return 0;
 }
