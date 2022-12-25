@@ -964,7 +964,21 @@ CODE_file          (void)
    CODE_display ();
    /*---(write)--------------------------*/
    CODE_printf ("      /*---(create file)-----------------*/\n");
-   CODE_printf ("      yUNIT_file    (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", CODE__myline (), my.cstep, my.desc, my.code);
+   CODE_printf ("      yUNIT_file    (%4i, %3i, \"%s\", ", CODE__myline (), my.cstep, my.desc);
+   /*---(check for var)------------------*/
+   x_len = strlen (my.load);
+   if        (strncmp (my.code, "[[ ", 3) != 0) {
+      CODE_printf ("\"%s\"", my.code);
+   } else {
+      /*> printf ("variable one\n");                                                  <*/
+      strlcpy (x_temp, my.code + 3, LEN_FULL);
+      x_var = x_temp;
+      p = strtok_r (x_temp, q, &r);
+      if (p == NULL) CODE_printf ("\"%s\"" , "unknown");
+      else           CODE_printf ("%s" , x_var);
+   }
+   /*---(write)--------------------------*/
+   CODE_printf (", cyUNIT.exec);\n");
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -985,7 +999,21 @@ CODE_append        (void)
    CODE_display ();
    /*---(write)--------------------------*/
    CODE_printf ("      /*---(create file)-----------------*/\n");
-   CODE_printf ("      yUNIT_append  (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", CODE__myline (), my.cstep, my.desc, my.code);
+   CODE_printf ("      yUNIT_append  (%4i, %3i, \"%s\", ", CODE__myline (), my.cstep, my.desc);
+   /*---(check for var)------------------*/
+   x_len = strlen (my.load);
+   if        (strncmp (my.code, "[[ ", 3) != 0) {
+      CODE_printf ("\"%s\"", my.code);
+   } else {
+      /*> printf ("variable one\n");                                                  <*/
+      strlcpy (x_temp, my.code + 3, LEN_FULL);
+      x_var = x_temp;
+      p = strtok_r (x_temp, q, &r);
+      if (p == NULL) CODE_printf ("\"%s\"" , "unknown");
+      else           CODE_printf ("%s" , x_var);
+   }
+   /*---(write)--------------------------*/
+   CODE_printf (", cyUNIT.exec);\n");
    /*---(complete)-----------------------*/
    return 0;
 }
