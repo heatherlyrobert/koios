@@ -101,6 +101,7 @@ main               (int argc, char *argv[])
          printf  ("%d troubles found, script left in original status\n", -x_final);
       }
    }
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    /*---(summary)------------------------*/
    /*> printf ("\n");                                                                                                      <* 
     *> printf ("reading script...\n");                                                                                     <* 

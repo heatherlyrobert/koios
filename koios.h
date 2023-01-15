@@ -36,8 +36,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3r"
-#define     P_VERTXT    "fixed file appending, and touched up file identification"
+#define     P_VERNUM    "1.3s"
+#define     P_VERTXT    "handles .sunit string tests now"
 /*········· ··········· ´·····························´········································*/
 
 
@@ -147,6 +147,7 @@ struct cGLOBALS
    char        run_type;                    /* unit test code or conversion   */
    char        replace;                     /* convert and replace file       */
    /*---(file names)------------*/
+   char        n_ext       [LEN_TERSE];     /* .unit vs .sunit                */
    char        n_base      [LEN_PATH];      /* base name of files             */
    char        n_scrp      [LEN_PATH];      /* name of input script file      */
    char        n_code      [LEN_PATH];      /* name of output code file       */

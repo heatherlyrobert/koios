@@ -73,6 +73,8 @@ PROG_file               (char *a_name)
    int         i           =    0;
    tSTAT       s;
    char       *p           = NULL;
+   tSTAT       r;
+   char        t           [LEN_FULL]  = "";
    /*---(header)-------------------------*/
    DEBUG_ARGS   yLOG_enter   (__FUNCTION__);
    /*---(defense)------------------------*/
@@ -105,25 +107,66 @@ PROG_file               (char *a_name)
    if (p != NULL)   p [0] = '\0';
    /*---(check unit file)----------------*/
    sprintf (x_unit, "%s.unit", x_base);
+   DEBUG_ARGS    yLOG_value   ("x_unit"    , rc);
    rc = lstat (x_unit, &s);
-   /*> printf ("x_unit = [%s] %d\n", x_unit, rc);                                     <*/
    DEBUG_ARGS    yLOG_value   ("stat"      , rc);
    --rce;  if (rc < 0) {
-      DEBUG_ARGS    yLOG_note    ("can not find source file");
-      DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
-      return rce;
+      sprintf (x_unit, "%s.sunit", x_base);
+      DEBUG_ARGS    yLOG_value   ("x_unit"    , rc);
+      rc = lstat (x_unit, &s);
+      DEBUG_ARGS    yLOG_value   ("stat"      , rc);
+      if (rc < 0) {
+         printf ("FATAL, can not find source either .unit or .sunit\n");
+         DEBUG_ARGS    yLOG_note    ("can not find source either .unit or .sunit");
+         DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
+         return rce;
+      } else {
+         strcpy (my.n_ext, ".sunit");
+      }
+   } else {
+      strcpy (my.n_ext, ".unit");
    }
    --rce;  if (S_ISDIR (s.st_mode))  {
+      printf ("FATAL, can not use a directory as a source\n");
       DEBUG_ARGS    yLOG_note    ("can not use a directory");
       DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    --rce;  if (S_ISLNK (s.st_mode))  {
-      DEBUG_ARGS    yLOG_note    ("can not use a symlink");
-      DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
+      DEBUG_ARGS    yLOG_note    ("is a link, figure it out");
+      if (strcmp (my.n_ext, ".sunit") == 0) {
+         printf ("FATAL, .sunit can not be a symlink\n");
+         DEBUG_ARGS    yLOG_note    ("can not use a symlink");
+         DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
+         return rce;
+      } else {
+         rc = readlink (x_unit, t, LEN_FULL);
+         DEBUG_ARGS    yLOG_value   ("readlink"  , rc);
+         if (rc < 0) {
+            DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
+            return rce;
+         }
+         DEBUG_ARGS  yLOG_info    ("t"         , t);
+         l = strlen (t);
+         DEBUG_ARGS  yLOG_value   ("l"         , l);
+         if (l < 7) {
+            DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
+            return rce;
+         }
+         DEBUG_ARGS  yLOG_info    ("suffix"    , t + l - 6);
+         if (strcmp (t + l - 6, ".sunit") != 0) {
+            DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
+            return rce;
+         }
+         rc = stat (t, &r);
+         DEBUG_ARGS    yLOG_value   ("stat"      , rc);
+         if (rc < 0) {
+            DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
+            return rce;
+         }
+      }
    }
-   --rce;  if (!S_ISREG (s.st_mode))  {
+   else if (!S_ISREG (s.st_mode)) {
       DEBUG_ARGS    yLOG_note    ("can only use regular file");
       DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
       return rce;
@@ -168,7 +211,6 @@ PROG_args          (int argc, char *argv[])
       else {
          rc = PROG_file (a);
          if (rc < 0) {
-            printf ("base file name is invalid or not found, FATAL\n");
             DEBUG_PROG  yLOG_note   ("base name is invalid or not found");
             DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce);
             return rce;
@@ -190,20 +232,43 @@ PROG_args          (int argc, char *argv[])
 char                /* PURPOSE : initialize program and key variables --------*/
 PROG_begin         (void)
 {
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
-   /*---(file names)---------------------*/
+   /*---(defense)------------------------*/
    DEBUG_PROG   yLOG_info    ("basename"  , my.n_base);
-   if (strcmp (my.n_base, "") == 0) {
-      printf ("no base file name provided, FATAL\n");
-      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
-      return -1;
+   --rce;  if (strcmp (my.n_base, "") == 0) {
+      printf ("FATAL, no base file name provided\n");
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
    }
-   snprintf (my.n_scrp, LEN_PATH, "%s.unit"        , my.n_base);
-   if (my.run_type == G_RUN_CREATE)  snprintf (my.n_code, LEN_PATH, "%s_unit.cs"     , my.n_base);
-   if (my.run_type == G_RUN_DEBUG)   snprintf (my.n_code, LEN_PATH, "%s_unit.c"      , my.n_base);
-   snprintf (my.n_main, LEN_PATH, "%s_unit.tmp"    , my.n_base);
+   /*---(defense)------------------------*/
+   --rce;  if (strcmp (my.n_ext, ".sunit") == 0) {
+      if (my.run_type != G_RUN_UPDATE) {
+         printf ("FATAL, can not compile/debug .sunit files\n");
+         DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+         return rce;
+      }
+   }
+   /*---(create names)-------------------*/
+   snprintf (my.n_scrp, LEN_PATH, "%s%s", my.n_base, my.n_ext);
    snprintf (my.n_wave, LEN_PATH, "%s.wave"        , my.n_base);
-   snprintf (my.n_conv, LEN_PATH, "%s.unit.new"    , my.n_base);
+   switch (my.run_type) {
+   case G_RUN_UPDATE  :
+      snprintf (my.n_conv, LEN_PATH, "%s%s.new"       , my.n_base, my.n_ext);
+      break;
+   case G_RUN_CREATE  :
+      snprintf (my.n_code, LEN_PATH, "%s_unit.cs"     , my.n_base);
+      snprintf (my.n_main, LEN_PATH, "%s_unit.tmp"    , my.n_base);
+      snprintf (my.n_wave, LEN_PATH, "%s.wave"        , my.n_base);
+      break;
+   case G_RUN_DEBUG   :
+      snprintf (my.n_code, LEN_PATH, "%s_unit.c"      , my.n_base);
+      snprintf (my.n_main, LEN_PATH, "%s_unit.tmp"    , my.n_base);
+      break;
+   }
+   /*---(initialize)---------------------*/
    my.n_line    = 0;
    my.n_comment = 0;
    my.n_empty   = 0;
