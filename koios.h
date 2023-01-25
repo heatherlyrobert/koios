@@ -36,8 +36,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3s"
-#define     P_VERTXT    "handles .sunit string tests now"
+#define     P_VERNUM    "1.3t"
+#define     P_VERTXT    "updated to run range and list of scripts, not more cond level isolation"
 /*········· ··········· ´·····························´········································*/
 
 

@@ -618,7 +618,8 @@ CODE_scrp          (void)
    CODE_printf ("   yUNIT_mode_reset ();\n");
    CODE_printf ("   yUNIT_scrp    (%4i, %3i, \"%s\", \"%s\", \"%s\", \"%s\", \"%s\");\n", my.n_line, my.nscrp, my.stage, my.desc, my.test, my.retn, my.meth);
    /*---(function call to main)----------*/
-   MAIN_printf ("   if (cyUNIT.scrp == YUNIT_ALL  || cyUNIT.scrp == %2i)  yUNIT_script_%02d ();\n", my.nscrp, my.nscrp);
+   /*> MAIN_printf ("   if (cyUNIT.scrp == YUNIT_ALL  || cyUNIT.scrp == %2i)  yUNIT_script_%02d ();\n", my.nscrp, my.nscrp);   <*/
+   MAIN_printf ("   if (yUNIT_run_scrp (%2i) == 1)  yUNIT_script_%02d ();\n", my.nscrp, my.nscrp);
    /*---(script entry in wave)-----------*/
    if (strlen (my.stage) == 2) {
       x_stage = my.stage [0];
@@ -657,7 +658,7 @@ CODE_sect          (void)
    /*---(end last script)----------------*/
    CODE_scrp_end ();
    /*---(add section)--------------------*/
-   MAIN_printf ("   if (cyUNIT.scrp ==  0)                  yUNIT_sect      (\"%s\");\n", my.desc);
+   MAIN_printf ("   if (cyUNIT.all  ==  1)                  yUNIT_sect      (\"%s\");\n", my.desc);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -721,7 +722,7 @@ CODE_cond          (void)
    CODE__stats_cond_beg ();
    DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10p, %-10.10s, %4dn, %4dc", my.f_code, my.last, my.ncond, my.scond);
    CODE_printf ("   /*===[[ COND #%03i ]]============================*/\n", my.scond);
-   CODE_printf ("   if (cyUNIT.cond == cyUNIT.offset + %3i)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (cyUNIT.level, 'y');\n", my.scond);
+   /*> CODE_printf ("   if (cyUNIT.cond == cyUNIT.offset + %3i)  yUNIT_level (YUNIT_FULL, 'y'); else yUNIT_level (cyUNIT.level, 'y');\n", my.scond);   <*/
    if (my.run_type == G_RUN_DEBUG) {
       CODE_printf ("   %sUG_PROG    %sOG_unitcond (cyUNIT.origin, cyUNIT.offset + %3i, %4i, \"%s\");\n", "DEB", "yL", my.scond, my.n_line, my.desc);
    }

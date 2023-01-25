@@ -205,6 +205,7 @@ PROG_args          (int argc, char *argv[])
       if      (strncmp (a, "--create"     , 10) == 0)    my.run_type = G_RUN_CREATE;
       else if (strncmp (a, "--compile"    , 10) == 0)    my.run_type = G_RUN_CREATE;
       else if (strncmp (a, "--debug"      , 10) == 0)    my.run_type = G_RUN_DEBUG;
+      else if (strncmp (a, "--validate"   , 10) == 0)    my.run_type = G_RUN_UPDATE;
       else if (strncmp (a, "--convert"    , 10) == 0)    my.run_type = G_RUN_UPDATE;
       else if (strncmp (a, "--update"     , 10) == 0)  { my.run_type = G_RUN_UPDATE;  my.replace = G_RUN_REPLACE; }
       else if (strncmp (a, "-"            ,  1) == 0)  { printf ("FATAL, arg <<%s>> not understood¦", a); DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce); return rce; }
