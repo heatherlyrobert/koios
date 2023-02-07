@@ -36,10 +36,18 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3t"
-#define     P_VERTXT    "updated to run range and list of scripts, not more cond level isolation"
+#define     P_VERNUM    "1.3u"
+#define     P_VERTXT    "handle new unit stage/wave indicators and '-' string expecteds"
 /*········· ··········· ´·····························´········································*/
 
+/*>                                                                                   <* 
+ *> SCRP  [·è] [·é] [·ê] [·ë]      simple dependencies, only to · in its own file     <* 
+ *> SCRP  [´ì] [´í] [´î] [´ï]      dependent on · or less, or ´ in its own file       <* 
+ *> SCRP  [ ð] [ ñ] [ ò] [ ó]      dependent on ´ or less, or   in its own file       <* 
+ *> SCRP  [Ïô] [Ïõ] [Ïö] [Ï÷]      dependent on   or less, or Ï in its own file       <* 
+ *> SCRP  [¬ø] [¬ù] [¬ú] [¬û]      dependent on Ï or less, or ¬ in its own file       <* 
+ *> SCRP  [°ü] [°ý] [°þ] [°ÿ]      integration/string tests                           <* 
+ *>                                                                                   <*/
 
 /*===[[ SUMMARY ]]=============================================================#
 

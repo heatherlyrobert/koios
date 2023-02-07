@@ -894,7 +894,7 @@ SCRP__current      (char *a_first)
    if (p != NULL)  l = strlen (a_first);
    for (i = 2; i < 20; ++i) {
       /*---(clear spacer bars)-----------*/
-      if (p [0] == '-') {
+      if (p [0] == '-' && i != 6) {
          if (strncmp (p, "- - -", 5) == 0)    p [0] = '\0';
          if (strncmp (p, "-----", 5) == 0)    p [0] = '\0';
          if (p [1] == '\0')                   p [0] = '\0';
@@ -1084,7 +1084,7 @@ SCRP_vers20        (void)
       }
       strltrim (p, ySTR_BOTH, LEN_RECD);
       /*---(clear spacer bars)-----------*/
-      if (p[0] == '-') {
+      if (p[0] == '-' && i != 6) {
          switch (p[1]) {
          case ' '  :   /* catches "- - - - - - -" lines */
          case '-'  :   /* catches "-------------" lines */
@@ -1367,21 +1367,21 @@ SCRP_parse_stage        (char *p)
       return 0;
    }
    --rce;  if (q == NULL || q [3] != ']') {
-      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier, uses wrong brackets, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
+      yURG_err (YURG_FATAL, "%s:%d:3: error: %s identifier, uses wrong brackets, e.g., [´ì]", my.n_scrp, my.n_line, my.verb);
       DEBUG_INPT   yLOG_snote   ("does not begin right");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(positions)----------------------*/
-   --rce;  if (strchr (YSTR_GREEK "-", q [1]) == NULL) {
-      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier, not greek letter for wave, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
-      DEBUG_INPT   yLOG_snote   ("does not lead with greek letter");
+   --rce;  if (strchr ("·´ Ï¬°", q [1]) == NULL) {
+      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier, ·´ Ï¬° wave, e.g., [´ì]", my.n_scrp, my.n_line, my.verb);
+      DEBUG_INPT   yLOG_snote   ("does not lead with symbol");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   --rce;  if (strchr ("123456789-", q [2]) == NULL) {
-      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier, not number for stage, e.g., [ì4]", my.n_scrp, my.n_line, my.verb);
-      DEBUG_INPT   yLOG_snote   ("does not end with number");
+   --rce;  if (strchr (YSTR_GREEK "-", q [2]) == NULL) {
+      yURG_err (YURG_FATAL, "%s:%d:2: error: %s identifier, not greek letter for stage, e.g., [´ì]", my.n_scrp, my.n_line, my.verb);
+      DEBUG_INPT   yLOG_snote   ("does not end with greek letter");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
