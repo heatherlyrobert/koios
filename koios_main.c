@@ -30,7 +30,10 @@ main               (int argc, char *argv[])
     *>    printf ("conv name = %s¦", my.n_conv);                                      <* 
     *> }                                                                              <*/
    /*---(open files)---------------------*/
-   if (rc == 0)  rc = SCRP_open      ();
+   if (rc == 0)  {
+      rc = SCRP_open      ();
+      rc = WAVE_open      (my.n_wave);
+   }
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
       if (rc == 0)  rc = CODE_open      ();
       if (rc == 0)  rc = CODE_beg       ();
@@ -51,6 +54,7 @@ main               (int argc, char *argv[])
    while (1) {
       /*---(read and parse)--------------*/
       rc = SCRP_read   ();
+      DEBUG_PROG   yLOG_value   ("read"      , rc);
       if (rc == 0) {
          DEBUG_PROG   yLOG_note    ("end of file");
          break;
@@ -61,6 +65,7 @@ main               (int argc, char *argv[])
          continue;
       }
       rc = SCRP_parse  ();
+      DEBUG_PROG   yLOG_value   ("parse"     , rc);
       if (rc < 0) {
          DEBUG_PROG   yLOG_value   ("X_FINAL P" , x_final);
          --x_final;
@@ -78,13 +83,14 @@ main               (int argc, char *argv[])
    DEBUG_PROG  yLOG_note    ("exiting main processing loop");
    /*---(close files)--------------------*/
    rc = SCRP_close     ();
+   rc = WAVE_close     ();
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) { 
       rc = MAIN_end       ();
       rc = CODE_end       ();
       IF_NORMAL  rc = MAIN_append    ();
       IF_MASTER  CODE_shared_out ();
       rc = CODE_close     (my.f_code);
-      rc = CODE_close     (my.f_wave);
+      /*> rc = CODE_close     (my.f_wave);                                            <*/
       IF_MASTER  system  ("mv -f master_unit.cs master.h");
    } else if (my.run_type == G_RUN_UPDATE) {
       rc = CONV_end       ();

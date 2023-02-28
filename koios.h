@@ -36,8 +36,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3u"
-#define     P_VERTXT    "handle new unit stage/wave indicators and '-' string expecteds"
+#define     P_VERNUM    "1.3v"
+#define     P_VERTXT    "small update to have wrap å...æ string testing"
 /*········· ··········· ´·····························´········································*/
 
 /*>                                                                                   <* 
@@ -306,7 +306,6 @@ char        CODE_shared_in          (void);
 char        CODE_open               (void);
 char        CODE_printf             (char *a_format, ...);
 char        MAIN_printf             (char *a_format, ...);
-char        WAVE_printf             (char *a_format, ...);
 char        CODE_close              (FILE *a_file);
 char        CODE_cycle              (void);
 char        CODE_write         (void);
@@ -377,6 +376,10 @@ void        VOID_void          (char *a_one, int a_two);
 
 
 
+/*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
+char        WAVE_open               (char a_base [LEN_HUND]);
+char        WAVE_scrp               (char a_stage, char a_wave, char *a_base, char a_scrp, char *a_desc);
+char        WAVE_close              (void);
 
 
 #endif

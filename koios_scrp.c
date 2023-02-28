@@ -586,12 +586,12 @@ SCRP_open          (void)
       DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_OUTP   yLOG_info    ("n_wave"    , my.n_wave);
-   DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);
-   --rce;  if (my.f_wave != NULL) {
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
+   /*> DEBUG_OUTP   yLOG_info    ("n_wave"    , my.n_wave);                           <*/
+   /*> DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);                           <*/
+   /*> --rce;  if (my.f_wave != NULL) {                                               <* 
+    *>    DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);                              <* 
+    *>    return rce;                                                                 <* 
+    *> }                                                                              <*/
    /*---(open configuration)-------------*/
    DEBUG_INPT   yLOG_point   ("name"      , my.n_scrp);
    my.f_scrp = fopen (my.n_scrp, "rt");
@@ -606,36 +606,18 @@ SCRP_open          (void)
    SCRP__ditto_clear ();
    /*---(open wave file)-----------------*/
    /*> printf ("n_wave = [%s]\n", my.n_wave);                                         <*/
-   my.f_wave = fopen (my.n_wave, "wt");
-   DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);
-   --rce;  if (my.f_wave == NULL) {
-      DEBUG_PROG   yLOG_fatal   ("can not open wave file");
-      fclose (my.f_scrp);
-      my.f_scrp = NULL;
-      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
-      return rce;
-   }
-   DEBUG_OUTP   yLOG_note    ("wave file open");
+   /*> my.f_wave = fopen (my.n_wave, "wt");                                           <* 
+    *> DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);                           <* 
+    *> --rce;  if (my.f_wave == NULL) {                                               <* 
+    *>    DEBUG_PROG   yLOG_fatal   ("can not open wave file");                       <* 
+    *>    fclose (my.f_scrp);                                                         <* 
+    *>    my.f_scrp = NULL;                                                           <* 
+    *>    DEBUG_PROG   yLOG_exit    (__FUNCTION__);                                   <* 
+    *>    return rce;                                                                 <* 
+    *> }                                                                              <*/
+   /*> DEBUG_OUTP   yLOG_note    ("wave file open");                                  <*/
    /*---(complete)-----------------------*/
    DEBUG_PROG   yLOG_exit    (__FUNCTION__);
-   return 0;
-}
-
-char
-WAVE_printf             (char *a_format, ...)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   va_list     x_vlist;
-   /*---(defense)------------------------*/
-   --rce;  if (my.f_wave == NULL)    return rce;
-   --rce;  if (a_format  == NULL)    return rce;
-   /*---(write)--------------------------*/
-   va_start (x_vlist, a_format);
-   vfprintf (my.f_wave, a_format, x_vlist);
-   va_end   (x_vlist);
-   fflush   (my.f_wave);
-   /*---(complete)-------------------------*/
    return 0;
 }
 
@@ -659,19 +641,19 @@ SCRP_close         (void)
       return rce;
    }
    /*---(close wave file)----------------*/
-   DEBUG_INPT   yLOG_point   ("*f_wave", my.f_wave);
-   --rce;  if (my.f_wave == NULL) {
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   rc = fclose (my.f_wave);
-   --rce;  if (rc != 0) {
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
+   /*> DEBUG_INPT   yLOG_point   ("*f_wave", my.f_wave);                              <*/
+   /*> --rce;  if (my.f_wave == NULL) {                                               <* 
+    *>    DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);                              <* 
+    *>    return rce;                                                                 <* 
+    *> }                                                                              <* 
+    *> rc = fclose (my.f_wave);                                                       <* 
+    *> --rce;  if (rc != 0) {                                                         <* 
+    *>    DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);                              <* 
+    *>    return rce;                                                                 <* 
+    *> }                                                                              <*/
    /*---(ground pointer)-----------------*/
    my.f_scrp = NULL;
-   my.f_wave = NULL;
+   /*> my.f_wave = NULL;                                                              <*/
    /*---(complete)-----------------------*/
    DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -1393,34 +1375,6 @@ SCRP_parse_stage        (char *p)
    return 0;
 }
 
-char
-SCRP_write_wave         (void)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   char        x_stage     = '-';
-   char        x_wave      = '-';
-   static char x_scrp      =   0;
-   /*---(header)-------------------------*/
-   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
-   /*---(ward-off)-----------------------*/
-   --rce;  if (my.indx < 0 || strcmp ("SCRP" , g_verbs [my.indx].name) != 0) {
-      DEBUG_INPT   yLOG_snote   ("only applies to scripts");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(script entry in wave)-----------*/
-   ++x_scrp;
-   if (strlen (my.stage) == 2) {
-      x_stage = my.stage [0];
-      x_wave  = my.stage [1];
-   }
-   WAVE_printf ("%c  %c  %-25.25s  %2d  %-65.65s \n", x_stage, x_wave, my.n_base, x_scrp, my.desc);
-   /*---(complete)-----------------------*/
-   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
-   return 0;
-}
-
 char         /*--> parse out a script record -------------[ leaf   [ ------ ]-*/
 SCRP_parse         (void)
 {
@@ -1457,7 +1411,7 @@ SCRP_parse         (void)
    strlcpy (x_recd, my.recd, LEN_RECD);
    DEBUG_INPT   yLOG_info    ("x_recd"    , x_recd);
    /*---(get verb)-----------------------*/
-   p = strtok (x_recd, q);
+   p  = strtok (x_recd, q);
    rc = SCRP_parse_verb (p);
    /*> printf ("verb %d\n", rc);                                                      <*/
    DEBUG_INPT   yLOG_value   ("verb"      , rc);
@@ -1499,7 +1453,8 @@ SCRP_parse         (void)
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
-   strltrim (p, ySTR_BOTH, LEN_RECD);
+   x_len = strlen (p);
+   strltrim (p, ySTR_BOTH, x_len);
    x_len = strlen (p);
    if (p[0] == '-')  p[0] = '\0';
    rc = 0;

@@ -625,7 +625,7 @@ CODE_scrp          (void)
       x_stage = my.stage [0];
       x_wave  = my.stage [1];
    }
-   WAVE_printf ("%c  %c  %-25.25s  %2d  %-65.65s \n", x_stage, x_wave, my.n_base, my.nscrp, my.desc);
+   WAVE_scrp   (x_stage, x_wave, my.n_base, my.nscrp, my.desc);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -1062,7 +1062,7 @@ CODE_prefix        (char a_test)
       case 'v'  :
          CODE_printf ("      if (cyUNIT.exec)  %-13s (%s);\n", my.meth , my.syst);
          break;
-      case 's'  : case 'u'  :
+      case 's'  : case 'u'  : case 'w'  :
          CODE_printf ("      if (cyUNIT.exec)  cyUNIT.s_rc = %s (%s);\n", my.meth , my.syst);
          break;
       case 'i'  :
@@ -1080,6 +1080,7 @@ CODE_prefix        (char a_test)
    switch (a_test) {
    case 'v'  : strlcpy (x_func, "yUNIT_void"     , LEN_FULL);    break;
    case 's'  : strlcpy (x_func, "yUNIT_string"   , LEN_FULL);    break;
+   case 'w'  : strlcpy (x_func, "yUNIT_wrap"     , LEN_FULL);    break;
    case 'u'  : strlcpy (x_func, "yUNIT_round"    , LEN_FULL);    break;
    case 'i'  : strlcpy (x_func, "yUNIT_int"      , LEN_FULL);    break;
    case 'r'  : strlcpy (x_func, "yUNIT_real"     , LEN_FULL);    break;
@@ -1130,7 +1131,7 @@ CODE_expe_var      (char a_test)
    /*---(normal)-------------------------*/
    if (strncmp (my.expe, "[[ ", 3) != 0) {
       switch (a_test) {
-      case 's' : case 'u' :                 /* stringish   */
+      case 's' : case 'u' : case 'w' :      /* stringish   */
          CODE_printf ("\"%s\", " , my.expe);
          break;
       case 'i' : case 'p' : case 'r' :      /* numberish   */
@@ -1161,12 +1162,12 @@ CODE_suffix        (char a_test)
    if (a_test == 'v')    return 0;
    /*---(handle echos)-------------------*/
    if (strcmp (my.meth, "echo") == 0) {
-      CODE_printf ("%s, cyUNIT.exec);\n"      , my.syst);
+      CODE_printf ("%s  , cyUNIT.exec);\n"      , my.syst);
    }
    /*---(check for simple end)-----------*/
    else {
       switch (a_test) {
-      case 's'  : case 'u'  :
+      case 's'  : case 'u'  : case 'w'  :
          CODE_printf ("cyUNIT.s_rc, cyUNIT.exec);\n");
          break;
       case 'i'  :
@@ -1183,7 +1184,7 @@ CODE_suffix        (char a_test)
    /*---(handle return variables)--------*/
    if (strcmp (my.retn, "") != 0) {
       switch (a_test) {
-      case 's'  : case 'u'  :
+      case 's'  : case 'u'  : case 'w'  :
          CODE_printf ("         if (cyUNIT.exec && cyUNIT.s_rc != NULL)  strcpy (%s, cyUNIT.s_rc);\n", my.retn);
          break;
       case 'i'  :
