@@ -29,6 +29,7 @@
 #define     P_LANGUAGE  "ansi-c      (wicked, limitless, universal, and everlasting)"
 #define     P_COMPILER  "gcc 5.3.0"
 #define     P_CODESIZE  "small       (appoximately 1,000 slocl)"
+/*········· ··········· ´·····························´········································*/
 #define     P_DEPENDS   "none"
 /*········· ··········· ´·····························´········································*/
 #define     P_AUTHOR    "heatherlyrobert"
@@ -36,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3v"
-#define     P_VERTXT    "small update to have wrap å...æ string testing"
+#define     P_VERNUM    "1.3w"
+#define     P_VERTXT    "fixed file/append working with variables error"
 /*········· ··········· ´·····························´········································*/
 
 /*>                                                                                   <* 

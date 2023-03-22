@@ -976,7 +976,7 @@ CODE_file          (void)
       x_var = x_temp;
       p = strtok_r (x_temp, q, &r);
       if (p == NULL) CODE_printf ("\"%s\"" , "unknown");
-      else           CODE_printf ("%s" , x_var);
+      else           CODE_printf ("%s" , p);
    }
    /*---(write)--------------------------*/
    CODE_printf (", cyUNIT.exec);\n");
@@ -1011,7 +1011,7 @@ CODE_append        (void)
       x_var = x_temp;
       p = strtok_r (x_temp, q, &r);
       if (p == NULL) CODE_printf ("\"%s\"" , "unknown");
-      else           CODE_printf ("%s" , x_var);
+      else           CODE_printf ("%s" , p);
    }
    /*---(write)--------------------------*/
    CODE_printf (", cyUNIT.exec);\n");
