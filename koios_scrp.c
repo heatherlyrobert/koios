@@ -406,12 +406,12 @@ SCRP__reuses_check      (char *p)
    /*---(handle reuses)------------------*/
    --rce;  if (strcmp ("REUSE" , g_verbs [my.indx].name) == 0) {
       DEBUG_INPT   yLOG_snote   ("handle reuse");
-      IF_MASTER {
-         DEBUG_INPT   yLOG_snote   ("REUSE not allowed in master.unit");
-         yURG_err (YURG_FATAL, "%s:%d:1: error: REUSE verb not allowed in master.unit", my.n_scrp, my.n_line);
-         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-         return rce;
-      }
+      /*> IF_MASTER {                                                                                                <* 
+       *>    DEBUG_INPT   yLOG_snote   ("REUSE not allowed in master.unit");                                         <* 
+       *>    yURG_err (YURG_FATAL, "%s:%d:1: error: REUSE verb not allowed in master.unit", my.n_scrp, my.n_line);   <* 
+       *>    DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);                                                          <* 
+       *>    return rce;                                                                                             <* 
+       *> }                                                                                                          <*/
       if (n < -1 && o < -1) {
          DEBUG_INPT   yLOG_snote   ("not set");
          yURG_err (YURG_FATAL, "%s:%d:1: error: REUSE identifier å%cæ not valid [a-zA-Z]", my.n_scrp, my.n_line, m);
@@ -572,88 +572,76 @@ SCRP__ditto_check       (char *p)
 /*====================------------------------------------====================*/
 static void      o___READING_________________o (void) {;}
 
-char         /*--> open script file ----------------------[ leaf   [ ------ ]-*/
-SCRP_open          (void)
+char
+SCRP_open               (cchar a_name [LEN_RECD], FILE **r_file, int *r_line)
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         = -10;           /* return code for errors         */
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
-   /*---(already open)-------------------*/
-   DEBUG_OUTP   yLOG_info    ("n_scrp"    , my.n_scrp);
-   DEBUG_OUTP   yLOG_point   ("f_scrp"    , my.f_scrp);
-   --rce;  if (my.f_scrp != NULL) {
+   /*---(default)------------------------*/
+   if (r_line != NULL)  *r_line = 0;
+   /*---(defense)------------------------*/
+   DEBUG_OUTP   yLOG_point   ("a_name"    , a_name);
+   --rce;  if (a_name  == NULL || a_name [0] == '\0') {
       DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   /*> DEBUG_OUTP   yLOG_info    ("n_wave"    , my.n_wave);                           <*/
-   /*> DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);                           <*/
-   /*> --rce;  if (my.f_wave != NULL) {                                               <* 
-    *>    DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);                              <* 
-    *>    return rce;                                                                 <* 
-    *> }                                                                              <*/
-   /*---(open configuration)-------------*/
-   DEBUG_INPT   yLOG_point   ("name"      , my.n_scrp);
-   my.f_scrp = fopen (my.n_scrp, "rt");
-   DEBUG_INPT   yLOG_point   ("file*"     , my.f_scrp);
-   --rce;  if (my.f_scrp == NULL) {
-      DEBUG_PROG   yLOG_fatal   ("scrp file, can not open script file");
+   DEBUG_OUTP   yLOG_info    ("a_name"    , a_name);
+   DEBUG_OUTP   yLOG_point   ("r_file"    , r_file);
+   --rce;  if (r_file  == NULL) {
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_OUTP   yLOG_point   ("*r_file"   , *r_file);
+   --rce;  if (*r_file != NULL) {
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(open)---------------------------*/
+   *r_file = fopen (a_name, "rt");
+   DEBUG_OUTP   yLOG_point   ("*r_file"   , *r_file);
+   --rce;  if (*r_file == NULL) {
+      DEBUG_PROG   yLOG_fatal   ("can not open script file");
       DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_note    ("script file open");
-   my.n_line = 0;
+   /*---(default)------------------------*/
    SCRP__ditto_clear ();
-   /*---(open wave file)-----------------*/
-   /*> printf ("n_wave = [%s]\n", my.n_wave);                                         <*/
-   /*> my.f_wave = fopen (my.n_wave, "wt");                                           <* 
-    *> DEBUG_OUTP   yLOG_point   ("f_wave"    , my.f_wave);                           <* 
-    *> --rce;  if (my.f_wave == NULL) {                                               <* 
-    *>    DEBUG_PROG   yLOG_fatal   ("can not open wave file");                       <* 
-    *>    fclose (my.f_scrp);                                                         <* 
-    *>    my.f_scrp = NULL;                                                           <* 
-    *>    DEBUG_PROG   yLOG_exit    (__FUNCTION__);                                   <* 
-    *>    return rce;                                                                 <* 
-    *> }                                                                              <*/
-   /*> DEBUG_OUTP   yLOG_note    ("wave file open");                                  <*/
    /*---(complete)-----------------------*/
    DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
 char         /*--> close script file ---------------------[ ------ [ ------ ]-*/
-SCRP_close         (void)
+SCRP_close         (FILE **b_file)
 {
    /*---(locals)-----------+-----------+-*/
    char        rc          = 0;
    char        rce         = -10;
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
-   /*---(close detail report)------------*/
-   DEBUG_INPT   yLOG_point   ("*f_scrp", my.f_scrp);
-   --rce;  if (my.f_scrp == NULL) {
+   /*---(defense)------------------------*/
+   DEBUG_OUTP   yLOG_point   ("b_file"    , b_file);
+   --rce;  if (b_file  == NULL) {
       DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   rc = fclose (my.f_scrp);
-   --rce;  if (rc != 0) {
+   DEBUG_OUTP   yLOG_point   ("*b_file"   , *b_file);
+   --rce;  if (*b_file == NULL) {
       DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   /*---(close wave file)----------------*/
-   /*> DEBUG_INPT   yLOG_point   ("*f_wave", my.f_wave);                              <*/
-   /*> --rce;  if (my.f_wave == NULL) {                                               <* 
-    *>    DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);                              <* 
-    *>    return rce;                                                                 <* 
-    *> }                                                                              <* 
-    *> rc = fclose (my.f_wave);                                                       <* 
-    *> --rce;  if (rc != 0) {                                                         <* 
-    *>    DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);                              <* 
-    *>    return rce;                                                                 <* 
-    *> }                                                                              <*/
-   /*---(ground pointer)-----------------*/
-   my.f_scrp = NULL;
-   /*> my.f_wave = NULL;                                                              <*/
+   /*---(close)--------------------------*/
+   rc = fclose (*b_file);
+   DEBUG_OUTP   yLOG_value   ("rc"        , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(default)------------------------*/
+   *b_file = NULL;
    /*---(complete)-----------------------*/
    DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -1319,61 +1307,61 @@ SCRP_parse_verb         (char *p)
    return 0;
 }
 
-char
-SCRP_parse_stage        (char *p)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   int         x_len       =    0;
-   char        t           [LEN_LABEL] = "";
-   char       *q           = NULL;
-   /*---(header)-------------------------*/
-   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
-   /*---(defaults)-----------------------*/
-   strlcpy  (my.stage, "", LEN_LABEL);
-   /*---(ward-off)-----------------------*/
-   if (my.indx < 0 || strcmp ("SCRP" , my.verb) != 0) {
-      DEBUG_INPT   yLOG_snote   ("only applies to scripts");
-      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
-      return 0;
-   }
-   /*---(prepare)------------------------*/
-   strlcpy  (t, p, LEN_LABEL);
-   strltrim (t, ySTR_BOTH, LEN_LABEL);
-   x_len = strlen (t);
-   /*---(check markers)------------------*/
-   q = strchr (t, '[');
-   if (q == NULL && x_len == 4) {
-      DEBUG_INPT   yLOG_snote   ("no brackets, ok");
-      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
-      return 0;
-   }
-   --rce;  if (q == NULL || q [3] != ']') {
-      yURG_err (YURG_FATAL, "%s:%d:3: error: %s identifier, uses wrong brackets, e.g., [´ì]", my.n_scrp, my.n_line, my.verb);
-      DEBUG_INPT   yLOG_snote   ("does not begin right");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(positions)----------------------*/
-   --rce;  if (strchr ("·´ Ï¬°", q [1]) == NULL) {
-      yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier, ·´ Ï¬° wave, e.g., [´ì]", my.n_scrp, my.n_line, my.verb);
-      DEBUG_INPT   yLOG_snote   ("does not lead with symbol");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   --rce;  if (strchr (YSTR_GREEK "-", q [2]) == NULL) {
-      yURG_err (YURG_FATAL, "%s:%d:2: error: %s identifier, not greek letter for stage, e.g., [´ì]", my.n_scrp, my.n_line, my.verb);
-      DEBUG_INPT   yLOG_snote   ("does not end with greek letter");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(save)---------------------------*/
-   q [3] = '\0';
-   strlcpy (my.stage, q + 1, LEN_LABEL);
-   /*---(complete)-----------------------*/
-   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
-   return 0;
-}
+/*> char                                                                                                                                   <* 
+ *> SCRP_parse_stage        (char *p)                                                                                                      <* 
+ *> {                                                                                                                                      <* 
+ *>    /+---(locals)-----------+-----+-----+-+/                                                                                            <* 
+ *>    char        rce         =  -10;                                                                                                     <* 
+ *>    int         x_len       =    0;                                                                                                     <* 
+ *>    char        t           [LEN_LABEL] = "";                                                                                           <* 
+ *>    char       *q           = NULL;                                                                                                     <* 
+ *>    /+---(header)-------------------------+/                                                                                            <* 
+ *>    DEBUG_INPT   yLOG_senter  (__FUNCTION__);                                                                                           <* 
+ *>    /+---(defaults)-----------------------+/                                                                                            <* 
+ *>    strlcpy  (my.stage, "", LEN_LABEL);                                                                                                 <* 
+ *>    /+---(ward-off)-----------------------+/                                                                                            <* 
+ *>    if (my.indx < 0 || strcmp ("SCRP" , my.verb) != 0) {                                                                                <* 
+ *>       DEBUG_INPT   yLOG_snote   ("only applies to scripts");                                                                           <* 
+ *>       DEBUG_INPT   yLOG_sexit   (__FUNCTION__);                                                                                        <* 
+ *>       return 0;                                                                                                                        <* 
+ *>    }                                                                                                                                   <* 
+ *>    /+---(prepare)------------------------+/                                                                                            <* 
+ *>    strlcpy  (t, p, LEN_LABEL);                                                                                                         <* 
+ *>    strltrim (t, ySTR_BOTH, LEN_LABEL);                                                                                                 <* 
+ *>    x_len = strlen (t);                                                                                                                 <* 
+ *>    /+---(check markers)------------------+/                                                                                            <* 
+ *>    q = strchr (t, '[');                                                                                                                <* 
+ *>    if (q == NULL && x_len == 4) {                                                                                                      <* 
+ *>       DEBUG_INPT   yLOG_snote   ("no brackets, ok");                                                                                   <* 
+ *>       DEBUG_INPT   yLOG_sexit   (__FUNCTION__);                                                                                        <* 
+ *>       return 0;                                                                                                                        <* 
+ *>    }                                                                                                                                   <* 
+ *>    --rce;  if (q == NULL || q [3] != ']') {                                                                                            <* 
+ *>       yURG_err (YURG_FATAL, "%s:%d:3: error: %s identifier, uses wrong brackets, e.g., [´ì]", my.n_scrp, my.n_line, my.verb);          <* 
+ *>       DEBUG_INPT   yLOG_snote   ("does not begin right");                                                                              <* 
+ *>       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);                                                                                   <* 
+ *>       return rce;                                                                                                                      <* 
+ *>    }                                                                                                                                   <* 
+ *>    /+---(positions)----------------------+/                                                                                            <* 
+ *>    --rce;  if (strchr ("·´ Ï¬°", q [1]) == NULL) {                                                                                     <* 
+ *>       yURG_err (YURG_FATAL, "%s:%d:1: error: %s identifier, ·´ Ï¬° wave, e.g., [´ì]", my.n_scrp, my.n_line, my.verb);                  <* 
+ *>       DEBUG_INPT   yLOG_snote   ("does not lead with symbol");                                                                         <* 
+ *>       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);                                                                                   <* 
+ *>       return rce;                                                                                                                      <* 
+ *>    }                                                                                                                                   <* 
+ *>    --rce;  if (strchr (YSTR_GREEK "-", q [2]) == NULL) {                                                                               <* 
+ *>       yURG_err (YURG_FATAL, "%s:%d:2: error: %s identifier, not greek letter for stage, e.g., [´ì]", my.n_scrp, my.n_line, my.verb);   <* 
+ *>       DEBUG_INPT   yLOG_snote   ("does not end with greek letter");                                                                    <* 
+ *>       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);                                                                                   <* 
+ *>       return rce;                                                                                                                      <* 
+ *>    }                                                                                                                                   <* 
+ *>    /+---(save)---------------------------+/                                                                                            <* 
+ *>    q [3] = '\0';                                                                                                                       <* 
+ *>    strlcpy (my.stage, q + 1, LEN_LABEL);                                                                                               <* 
+ *>    /+---(complete)-----------------------+/                                                                                            <* 
+ *>    DEBUG_INPT   yLOG_sexit   (__FUNCTION__);                                                                                           <* 
+ *>    return 0;                                                                                                                           <* 
+ *> }                                                                                                                                      <*/
 
 char         /*--> parse out a script record -------------[ leaf   [ ------ ]-*/
 SCRP_parse         (void)
@@ -1438,8 +1426,8 @@ SCRP_parse         (void)
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return 0;
    }
-   /*---(check for ditto)----------------*/
-   rc = SCRP_parse_stage (p);
+   /*---(check for stage marker)---------*/
+   rc = WAVE_parse (p);
    DEBUG_INPT   yLOG_value   ("stage"     , rc);
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);

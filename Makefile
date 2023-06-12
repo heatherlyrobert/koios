@@ -39,10 +39,10 @@ include /usr/local/sbin/make_program
 #===(post-processing)======================================#
 # create a rule for...
 install_post       :
-#	gcc -c unit.c
-#	gcc -o unit unit.o koios_code.o koios_conv.o koios_prog.o koios_scrp.o -lyUNIT -lySTR -lyURG -lyLOG
-	gcc -c unit_wave.c
-	gcc -o unit_wave unit_wave.o koios_wave.o -lyUNIT -lySTR -lyURG -lyLOG
+	gcc -c unit.c
+	gcc -o unit unit.o koios_code.o koios_conv.o koios_prog.o koios_scrp.o koios_wave.o -lyUNIT -lySTR -lyURG -lyLOG
+#	gcc -c unit_wave.c
+#	gcc -o unit_wave unit_wave.o koios_wave.o -lyUNIT -lySTR -lyURG -lyLOG
 
 #remove_post        :
 

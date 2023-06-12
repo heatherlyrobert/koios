@@ -31,7 +31,7 @@ main               (int argc, char *argv[])
     *> }                                                                              <*/
    /*---(open files)---------------------*/
    if (rc == 0)  {
-      rc = SCRP_open      ();
+      rc = SCRP_open      (my.n_scrp, &(my.f_scrp), &(my.n_line));
       rc = WAVE_open      (my.n_wave);
    }
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
@@ -82,7 +82,7 @@ main               (int argc, char *argv[])
    DEBUG_PROG  yLOG_break   ();
    DEBUG_PROG  yLOG_note    ("exiting main processing loop");
    /*---(close files)--------------------*/
-   rc = SCRP_close     ();
+   rc = SCRP_close     (&(my.f_scrp));
    rc = WAVE_close     ();
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) { 
       rc = MAIN_end       ();

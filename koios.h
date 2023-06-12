@@ -37,9 +37,26 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3w"
-#define     P_VERTXT    "fixed file/append working with variables error"
+#define     P_VERNUM    "1.3y"
+#define     P_VERTXT    "most of the way through updating unit test to match format updates"
 /*········· ··········· ´·····························´········································*/
+
+/*>                                                                                   <* 
+ *> 24 testing phases in 6 loose blocks to help sequence                              <* 
+ *>                                                                                   <* 
+ *> basics, functionality, safety, and string                                         <* 
+ *> SCRP  [Àè] [Àé] [Àê] [Àë]      simple dependencies, only to · in its own file     <* 
+ *> SCRP  [Áì] [Áí] [Áî] [Áï]      dependent on À or less, or Á in its own file       <* 
+ *> SCRP  [Âð] [Âñ] [Âò] [Âó]      dependent on Á or less, or Â in its own file       <* 
+ *>                                                                                   <* 
+ *> integration testing                                                               <* 
+ *> SCRP  [Ãô] [Ãõ] [Ãö] [Ã÷]      dependent on Â or less, or Ã in its own file       <* 
+ *> SCRP  [Äø] [Äù] [Äú] [Äû]      dependent on Ã or less, or Ä in its own file       <* 
+ *>                                                                                   <* 
+ *> testing in a host application (e.g., gyges testing yMACRO)                        <* 
+ *> SCRP  [Åü] [Åý] [Åþ] [Åÿ]      dependent on Ä or less, or Å in its own file       <* 
+ *>                                                                                   <* 
+ *>                                                                                   <*/
 
 /*>                                                                                   <* 
  *> SCRP  [·è] [·é] [·ê] [·ë]      simple dependencies, only to · in its own file     <* 
@@ -48,6 +65,41 @@
  *> SCRP  [Ïô] [Ïõ] [Ïö] [Ï÷]      dependent on   or less, or Ï in its own file       <* 
  *> SCRP  [¬ø] [¬ù] [¬ú] [¬û]      dependent on Ï or less, or ¬ in its own file       <* 
  *> SCRP  [°ü] [°ý] [°þ] [°ÿ]      integration/string tests                           <* 
+ *>                                                                                   <*/
+
+/*>                                                                                   <* 
+ *> basics, functionality, and safety                                                 <* 
+ *> SCRP  [áè] [áé] [áê] [áë]      simple dependencies, only to · in its own file     <* 
+ *> SCRP  [ ì] [ í] [ î] [ ï]      dependent on · or less, or   in its own file       <* 
+ *> SCRP  [¬ð] [¬ñ] [¬ò] [¬ó]      dependent on   or less, or ¬ in its own file       <* 
+ *>                                                                                   <* 
+ *> strings, integration, and debugging                                               <* 
+ *> SCRP  [´ô] [´õ] [´ö] [´÷]      dependent on ¬ or less, or ´ in its own file       <* 
+ *> SCRP  [Ïø] [Ïù] [Ïú] [Ïû]      dependent on ´ or less, or Ï in its own file       <* 
+ *> SCRP  [°ü] [°ý] [°þ] [°ÿ]      dependent on Ï or less, or ° in its own file       <* 
+ *>                                                                                   <* 
+ *>                                                                                   <*/
+
+/*>                                                                                   <* 
+ *> basics, functionality, and safety                                                 <* 
+ *> SCRP  [aè] [aé] [aê] [aë]      simple dependencies, only to · in its own file     <* 
+ *> SCRP  [bì] [bí] [bî] [bï]      dependent on · or less, or   in its own file       <* 
+ *> SCRP  [cð] [cñ] [cò] [có]      dependent on   or less, or ¬ in its own file       <* 
+ *>                                                                                   <* 
+ *> strings, integration, and debugging                                               <* 
+ *> SCRP  [dô] [dõ] [dö] [d÷]      dependent on ¬ or less, or ´ in its own file       <* 
+ *> SCRP  [eø] [eù] [eú] [eû]      dependent on ´ or less, or Ï in its own file       <* 
+ *> SCRP  [fü] [fý] [fþ] [fÿ]      dependent on Ï or less, or ° in its own file       <* 
+ *>                                                                                   <* 
+ *>                                                                                   <*/
+
+/*>                                                                                   <* 
+ *> SCRP  [1è] [1é] [1ê] [1ë]      simple dependencies, only to · in its own file     <* 
+ *> SCRP  [2è] [2é] [2ê] [2ë]      dependent on · or less, or ´ in its own file       <* 
+ *> SCRP  [3è] [3é] [3ê] [3ë]      dependent on ´ or less, or   in its own file       <* 
+ *> SCRP  [4è] [4é] [4ê] [4ë]      dependent on   or less, or Ï in its own file       <* 
+ *> SCRP  [5è] [5é] [5ê] [5ë]      dependent on Ï or less, or ¬ in its own file       <* 
+ *> SCRP  [6è] [6é] [6ê] [6ë]      integration/string tests                           <* 
  *>                                                                                   <*/
 
 /*===[[ SUMMARY ]]=============================================================#
@@ -272,8 +324,8 @@ char        SCRP__ditto_clear       (void);
 char        SCRP__reuses_check      (char *p);
 char        SCRP__ditto_check       (char *p);
 /*---(file)----------------*/
-char        SCRP_open               (void);
-char        SCRP_close              (void);
+char        SCRP_open               (cchar a_name [LEN_RECD], FILE **r_file, int *r_line);
+char        SCRP_close              (FILE **b_file);
 char        SCRP_clear              (void);
 char        SCRP_read               (void);
 /*---(parsing)-------------*/
@@ -378,6 +430,7 @@ void        VOID_void          (char *a_one, int a_two);
 
 
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
+char        WAVE_parse              (char *p);
 char        WAVE_open               (char a_base [LEN_HUND]);
 char        WAVE_scrp               (char a_stage, char a_wave, char *a_base, char a_scrp, char *a_desc);
 char        WAVE_close              (void);
