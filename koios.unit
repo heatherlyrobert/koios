@@ -3,7 +3,7 @@
 PREP          global function headers             
   incl        fake header                          koios.h           
 SECT          simple testing                      
-SCRP    [Í1]  (SCRP) verify openning and closing                    
+SCRP    [¿Í]  (SCRP) verify openning and closing   0s  tbd        
   COND        simple openning                     
     exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 
     exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  
@@ -25,7 +25,7 @@ SCRP    [Í1]  (SCRP) verify openning and closing                    
     mode      FORCED_FAIL                         
     system    ... run little                       - - - - - - - -   /bin/false                                                      
 SECT          more complex testing                
-SHARED   -a-  prepare files for use               
+SHARED   -a-  prepare files for use                0s  tbd         
   COND        script input file                   
     exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 
     exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  
@@ -36,7 +36,7 @@ SHARED   -a-  prepare files for use               
     exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  
     exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     
     exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   
-SHARED   -b-  remove files after use              
+SHARED   -b-  remove files after use               0s  tbd         
   COND        code output file                    
     exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 
     exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  
@@ -47,7 +47,7 @@ SHARED   -b-  remove files after use              
     exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  
     exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     
     exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   
-SCRP    [Í2]  (SCRP) verify system startup                          
+SCRP    [¿Î]  (SCRP) verify system startup          0s  tbd                          
   COND        run initialization                  
     exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 
     mode      FORCED_FAIL                         
@@ -71,7 +71,7 @@ SCRP    [Í2]  (SCRP) verify system startup                          
     exec      ... check pointer                    yUNIT_testptr                               p_exists    0                      x_ptr  
     echo      ... verify pointer                   - - - - - - - -   x_ptr                     p_exists    0                     
     echo      ... verify value at pointer          - - - - - - - -   (x_ptr) ? *x_ptr : 0      i_equal     42                    
-SCRP    [Ï2]  (SCRP) verify normal processing                       
+SCRP    [¡Ï]  (SCRP) verify normal processing       0s  tbd                          
   GROUP       round one                           
   COND   (1)  process arguments                   
     exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 
@@ -91,4 +91,4 @@ SCRP    [Ï2]  (SCRP) verify normal processing                       
   DITTO  (2)  - - - - - - - - - - - - - - - - -   
   REUSE  -D-  - - - - - - - - - - - - - - - - -   
   DITTO  (1)  - - - - - - - - - - - - - - - - -   
-SCRP    [Ë9]  (SCRP) empty script                                   
+SCRP    [¬Ú]  (SCRP) empty script                   0s  tbd                          

@@ -36,13 +36,13 @@
 #define     P_CREATED   "2014-03"
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
-#define     P_VERMINOR  "1.3- switch to proactive issue reporting"
-#define     P_VERNUM    "1.3y"
-#define     P_VERTXT    "most of the way through updating unit test to match format updates"
+#define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
+#define     P_VERNUM    "1.4a"
+#define     P_VERTXT    "fully unit tested, WAVE functions no longer use globals (its a start ;)"
 /*········· ··········· ´·····························´········································*/
 
 /*>                                                                                   <* 
- *> 24 testing phases in 6 loose blocks to help sequence                              <* 
+ *> 24 testing phases in 6 loose blocks to help sequence (like visual look)           <* 
  *>                                                                                   <* 
  *> basics, functionality, safety, and string                                         <* 
  *> SCRP  [Àè] [Àé] [Àê] [Àë]      simple dependencies, only to · in its own file     <* 
@@ -53,12 +53,16 @@
  *> SCRP  [Ãô] [Ãõ] [Ãö] [Ã÷]      dependent on Â or less, or Ã in its own file       <* 
  *> SCRP  [Äø] [Äù] [Äú] [Äû]      dependent on Ã or less, or Ä in its own file       <* 
  *>                                                                                   <* 
- *> testing in a host application (e.g., gyges testing yMACRO)                        <* 
+ *> testing library in a host application (e.g., gyges testing yMACRO)                <* 
  *> SCRP  [Åü] [Åý] [Åþ] [Åÿ]      dependent on Ä or less, or Å in its own file       <* 
  *>                                                                                   <* 
+ *> its not perfect, but i don't want more than solid guidance (80:20 solution)       <* 
+ *>   second character is unique/enough, but the first one helps w/quick inspection   <* 
  *>                                                                                   <*/
 
 /*>                                                                                   <* 
+ *> ORIGINAL WITH WAVES                                                               <* 
+ *>                                                                                   <* 
  *> SCRP  [·è] [·é] [·ê] [·ë]      simple dependencies, only to · in its own file     <* 
  *> SCRP  [´ì] [´í] [´î] [´ï]      dependent on · or less, or ´ in its own file       <* 
  *> SCRP  [ ð] [ ñ] [ ò] [ ó]      dependent on ´ or less, or   in its own file       <* 
@@ -68,6 +72,8 @@
  *>                                                                                   <*/
 
 /*>                                                                                   <* 
+ *> POTENTIAL SYMBOL UPDATE                                                           <* 
+ *>                                                                                   <* 
  *> basics, functionality, and safety                                                 <* 
  *> SCRP  [áè] [áé] [áê] [áë]      simple dependencies, only to · in its own file     <* 
  *> SCRP  [ ì] [ í] [ î] [ ï]      dependent on · or less, or   in its own file       <* 
@@ -81,6 +87,8 @@
  *>                                                                                   <*/
 
 /*>                                                                                   <* 
+ *> ATTEMPT AT MORE ALPHA                                                             <* 
+ *>                                                                                   <* 
  *> basics, functionality, and safety                                                 <* 
  *> SCRP  [aè] [aé] [aê] [aë]      simple dependencies, only to · in its own file     <* 
  *> SCRP  [bì] [bí] [bî] [bï]      dependent on · or less, or   in its own file       <* 
@@ -94,6 +102,8 @@
  *>                                                                                   <*/
 
 /*>                                                                                   <* 
+ *> ATTEMPT AT FULLY ALPHA                                                            <* 
+ *>                                                                                   <* 
  *> SCRP  [1è] [1é] [1ê] [1ë]      simple dependencies, only to · in its own file     <* 
  *> SCRP  [2è] [2é] [2ê] [2ë]      dependent on · or less, or ´ in its own file       <* 
  *> SCRP  [3è] [3é] [3ê] [3ë]      dependent on ´ or less, or   in its own file       <* 
@@ -101,6 +111,18 @@
  *> SCRP  [5è] [5é] [5ê] [5ë]      dependent on Ï or less, or ¬ in its own file       <* 
  *> SCRP  [6è] [6é] [6ê] [6ë]      integration/string tests                           <* 
  *>                                                                                   <*/
+
+/*>                                                                                   <* 
+ *> FIRST RUN (4 waves of 10 stages each)                                             <* 
+ *>                                                                                   <* 
+ *> SCRP  [è0] [è1] [è2] [è3] [è4] [è5] [è6] [è7] [è8] [è9]                           <* 
+ *> SCRP  [é0] [é1] [é2] [é3] [é4] [é5] [é6] [èé] [é8] [é9]                           <* 
+ *> SCRP  [ê0] [ê1] [ê2] [ê3] [ê4] [ê5] [ê6] [ê7] [ê8] [ê9]                           <* 
+ *> SCRP  [ë0] [ë1] [ë2] [ë3] [ë4] [ë5] [ë6] [ë7] [ë8] [ë9]                           <* 
+ *>                                                                                   <* 
+ *> just didn't play out right                                                        <* 
+ *>                                                                                   <*/
+
 
 /*===[[ SUMMARY ]]=============================================================#
 
@@ -210,7 +232,7 @@ struct cGLOBALS
    /*---(file names)------------*/
    char        n_ext       [LEN_TERSE];     /* .unit vs .sunit                */
    char        n_base      [LEN_PATH];      /* base name of files             */
-   char        n_scrp      [LEN_PATH];      /* name of input script file      */
+   char        n_scrp      [LEN_TITLE];     /* name of input script file      */
    char        n_code      [LEN_PATH];      /* name of output code file       */
    char        n_main      [LEN_PATH];      /* name of output main file       */
    char        n_wave      [LEN_PATH];      /* name of master code file       */
@@ -253,7 +275,7 @@ struct cGLOBALS
    char        code        [LEN_RECD ];     /* code/load/sys string           */
    char        refn        [LEN_LABEL];     /* test reference number          */
    /*---(special marks)---------*/
-   char        stage       [LEN_LABEL];     /* master sequence                */
+   char        stage       [LEN_SHORT];     /* master sequence                */
    char        cshare;                      /* current share                  */
    char        share;                       /* share marking                  */
    char        dittoing;                    /* currently dittoing             */
@@ -430,7 +452,7 @@ void        VOID_void          (char *a_one, int a_two);
 
 
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
-char        WAVE_parse              (char *p);
+char        WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, int a_indx, char a_verb [LEN_LABEL], char a_field [LEN_LABEL], char r_stage [LEN_SHORT]);
 char        WAVE_open               (char a_base [LEN_HUND]);
 char        WAVE_scrp               (char a_stage, char a_wave, char *a_base, char a_scrp, char *a_desc);
 char        WAVE_close              (void);

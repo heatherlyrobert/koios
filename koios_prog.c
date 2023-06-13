@@ -43,7 +43,7 @@ PROG_init          (void)
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(files)--------------------------*/
    strlcpy  (my.n_base, "", LEN_PATH);
-   strlcpy  (my.n_scrp, "", LEN_PATH);
+   strlcpy  (my.n_scrp, "", LEN_TITLE);
    strlcpy  (my.n_code, "", LEN_PATH);
    strlcpy  (my.n_main, "", LEN_PATH);
    strlcpy  (my.n_wave, "", LEN_PATH);
@@ -253,7 +253,7 @@ PROG_begin         (void)
       }
    }
    /*---(create names)-------------------*/
-   snprintf (my.n_scrp, LEN_PATH, "%s%s", my.n_base, my.n_ext);
+   snprintf (my.n_scrp, LEN_TITLE, "%s%s", my.n_base, my.n_ext);
    snprintf (my.n_wave, LEN_PATH, "%s.wave"        , my.n_base);
    switch (my.run_type) {
    case G_RUN_UPDATE  :

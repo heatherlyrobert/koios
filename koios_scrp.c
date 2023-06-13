@@ -1427,7 +1427,7 @@ SCRP_parse         (void)
       return 0;
    }
    /*---(check for stage marker)---------*/
-   rc = WAVE_parse (p);
+   rc = WAVE_parse (my.n_scrp, my.n_line, my.indx, my.verb, p, my.stage) ;
    DEBUG_INPT   yLOG_value   ("stage"     , rc);
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);
