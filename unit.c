@@ -15,50 +15,102 @@ static void      o___GENERAL_________________o (void) {;}
 char
 koios__unit_prog_file    (void)
 {
+   char        x_base      [LEN_PATH]  = "";
+   char        x_ext       [LEN_TERSE] = "";
    yUNIT_minscrp ("PROG_file");
    yURG_err_none ();  /* not to stderr/terminal */
 
+   yURG_err_clear ();
    yUNIT_mincond ("prepare clean start");
-   system ("rm -f /tmp/linked.unit       2> /dev/null");
-   system ("rm -f /tmp/koios.unit        2> /dev/null");
-   system ("rm -f /tmp/koios-a.unit      2> /dev/null");
-   system ("rm -f /tmp/koios_a.unit      2> /dev/null");
+   system ("rm    -f /tmp/koios.unit        2> /dev/null");
+   system ("rm    -f /tmp/linked.unit       2> /dev/null");
+   system ("rm    -f /tmp/linked.sunit      2> /dev/null");
+   system ("rm    -f /tmp/koios-a.unit      2> /dev/null");
+   system ("rm    -f /tmp/koios_a.unit      2> /dev/null");
+   system ("rmdir -f /tmp/koios_dir.unit    2> /dev/null");
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("quick success");
+   yURG_err_clear ();
+   yUNIT_mincond ("attempt with a missing file");
+   yUNIT_minval  ("... run file check"                 , PROG_file ("/tmp/koios", x_base, x_ext)           , -999);
+   yUNIT_minstr  ("... check base"                     , x_base          , "");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , "");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "script name ¶/tmp/koios¶ can not be found as .unit or .sunit");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
    system ("touch /tmp/koios.unit        2> /dev/null");
-   yUNIT_minval ("... run file check"                 , PROG_file ("/tmp/koios")           , 0);
+   yUNIT_mincond ("quick success once file added");
+   yUNIT_minval  ("... run file check"                 , PROG_file ("/tmp/koios", x_base, x_ext)           , 0);
+   yUNIT_minstr  ("... check base"                     , x_base          , "/tmp/koios");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , ".unit");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("attempt a symlink to same file");
-   system ("cp -s /tmp/koios.unit /tmp/linked.unit  2> /dev/null");
-   yUNIT_minval ("... run file check"                 , PROG_file ("/tmp/linked")          , -999);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("same file after deletion");
+   yURG_err_clear ();
    system ("rm -f /tmp/koios.unit        2> /dev/null");
-   yUNIT_minval ("... run file check"                 , PROG_file ("/tmp/koios")           , -999);
+   system ("touch /tmp/linked.unit       2> /dev/null");
+   system ("cp -s /tmp/linked.unit  /tmp/koios.unit  2> /dev/null");
+   yUNIT_mincond ("attempt a symlink to regular e (.unit file)");
+   yUNIT_minval  ("... run file check"                 , PROG_file ("/tmp/koios", x_base, x_ext)           , -999);
+   yUNIT_minstr  ("... check base"                     , x_base          , "");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , "");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "script name ¶/tmp/koios¶ is a symlink to ¶/tmp/linked.unit¶, only .sunit is legal");
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("badly named unit test");
+   yURG_err_clear ();
+   system ("rm -f /tmp/koios.unit        2> /dev/null");
+   system ("touch /tmp/linked.sunit      2> /dev/null");
+   system ("cp -s /tmp/linked.sunit /tmp/koios.unit  2> /dev/null");
+   yUNIT_mincond ("verify can symlink to .sunit");
+   yUNIT_minval  ("... run file check"                 , PROG_file ("/tmp/koios", x_base, x_ext)           , 0);
+   yUNIT_minstr  ("... check base"                     , x_base          , "/tmp/koios");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , ".unit");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   system ("mkdir /tmp/koios_dir.unit    2> /dev/null");
+   yUNIT_mincond ("attempt to use a directory");
+   yUNIT_minval  ("... run file check"                 , PROG_file ("/tmp/koios_dir", x_base, x_ext)       , -999);
+   yUNIT_minstr  ("... check base"                     , x_base          , "");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , "");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "script name ¶/tmp/koios_dir¶ refers to a directory, illegal");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
    system ("touch /tmp/koios-a.unit      2> /dev/null");
-   yUNIT_minval ("... run file check"                 , PROG_file ("/tmp/koios-a")         , -999);
+   yUNIT_mincond ("badly named unit test");
+   yUNIT_minval  ("... run file check"                 , PROG_file ("/tmp/koios-a", x_base, x_ext)         , -999);
+   yUNIT_minstr  ("... check base"                     , x_base          , "");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , "");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "script name ¶/tmp/koios-a¶ can not have a '-' as character 10");
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("named with underscore");
+   yURG_err_clear ();
    system ("touch /tmp/koios_a.unit      2> /dev/null");
-   yUNIT_minval ("... run file check"                 , PROG_file ("/tmp/koios_a")         , 0);
+   yUNIT_mincond ("named with underscore");
+   yUNIT_minval  ("... run file check"                 , PROG_file ("/tmp/koios_a", x_base, x_ext)         , 0);
+   yUNIT_minstr  ("... check base"                     , x_base          , "/tmp/koios_a");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , ".unit");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc ();
 
+   yURG_err_clear ();
    yUNIT_mincond ("called with extention");
-   yUNIT_minval ("... run file check"                 , PROG_file ("/tmp/koios_a.unit")    , 0);
+   yUNIT_minval  ("... run file check"                 , PROG_file ("/tmp/koios_a.unit", x_base, x_ext)    , 0);
+   yUNIT_minstr  ("... check base"                     , x_base          , "/tmp/koios_a");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , ".unit");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("clean up at end");
-   system ("rm -f /tmp/linked.unit       2> /dev/null");
-   system ("rm -f /tmp/koios.unit        2> /dev/null");
-   system ("rm -f /tmp/koios-a.unit      2> /dev/null");
-   system ("rm -f /tmp/koios_a.unit      2> /dev/null");
+   system ("rm    -f /tmp/koios.unit        2> /dev/null");
+   system ("rm    -f /tmp/linked.unit       2> /dev/null");
+   system ("rm    -f /tmp/linkeds.unit      2> /dev/null");
+   system ("rm    -f /tmp/koios-a.unit      2> /dev/null");
+   system ("rm    -f /tmp/koios_a.unit      2> /dev/null");
+   system ("rmdir -f /tmp/koios_dir.unit    2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
@@ -68,73 +120,120 @@ koios__unit_prog_file    (void)
 char
 koios__unit_prog_args    (void)
 {
+   char        x_base      [LEN_PATH]  = "";
+   char        x_ext       [LEN_TERSE] = "";
+   char        x_runtype   = '·';
+   char        x_replace   = '·';
    yUNIT_minscrp ("PROG_args");
    yURG_err_none ();  /* not to stderr/terminal */
 
    yUNIT_mincond ("prepare clean start");
-   system ("rm -f /tmp/koios.unit 2> /dev/null");
-   char  *x_argA [2]  = { "koios_unit" , "--debug"       };
-   char  *x_argB [2]  = { "koios_unit" , "--compile"     };
-   char  *x_argC [2]  = { "koios_unit" , "--debugery"    };
-   char  *x_argD [2]  = { "koios_unit" , "--create"      };
-   char  *x_argE [2]  = { "koios_unit" , "--convert"     };
+   char  *x_argA [3]  = { "koios_unit" , "--debug"       , "/home/member/khaos.unit"  };
+   char  *x_argB [3]  = { "koios_unit" , "--compile"     , "/tmp/gyges.unit"          };
+   char  *x_argC [3]  = { "koios_unit" , "--debuggery"   , "/tmp/hestia.unit"         };
+   char  *x_argD [3]  = { "koios_unit" , "--create"      , "/tmp/hestia"              };
+   char  *x_argE [3]  = { "koios_unit" , "--convert"     , "/tmp/koios.sunit"         };
    char  *x_argF [1]  = { "koios_unit" };
-   char  *x_argG [2]  = { "koios_unit" , "--update"      };
+   char  *x_argG [3]  = { "koios_unit" , "--update"      , "/tmp/koios"               };
+   char  *x_argH [3]  = { "koios_unit" , "--compile"     , "/tmp/koios.sunit"         };
+   system ("rm    -f /home/member/khaos.unit    2> /dev/null");
+   system ("rm    -f /tmp/gyges.unit            2> /dev/null");
+   system ("rm    -f /tmp/hestia.unit           2> /dev/null");
+   system ("rm    -f /tmp/koios.sunit           2> /dev/null");
+   system ("rm    -f /tmp/hoios.unit            2> /dev/null");
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("check defaults");
-   yUNIT_minval ("... run init"                       , PROG_init ()          , 0);
-   yUNIT_minchr ("... check run type"                 , my.run_type , G_RUN_CREATE);
-   yUNIT_minchr ("... check run replace"              , my.replace  , G_RUN_DEFAULT);
+   yURG_err_clear ();
+   yUNIT_mincond ("attempt with no arguments (defaulting)");
+   yUNIT_minval  ("... run args"                       , PROG_args (1, x_argF, &x_runtype, &x_replace, x_base, x_ext) , -999);
+   yUNIT_minchr  ("... check run type"                 , x_runtype   , '·');
+   yUNIT_minchr  ("... check run replace"              , x_replace   , '·');
+   yUNIT_minstr  ("... check base"                     , x_base      , "");
+   yUNIT_minstr  ("... check ext"                      , x_ext       , "");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "script name/base was not provided on command line");
    yUNIT_mindnoc ();
 
+   system ("touch /home/member/khaos.unit  2> /dev/null");
+   yURG_err_clear ();
    yUNIT_mincond ("run with debug");
-   yUNIT_minval ("... run init"                       , PROG_init ()          , 0);
-   yUNIT_minval ("... run args"                       , PROG_args (2, x_argA) , 0);
-   yUNIT_minchr ("... check run type"                 , my.run_type , G_RUN_DEBUG);
-   yUNIT_minchr ("... check run replace"              , my.replace  , G_RUN_DEFAULT);
+   yUNIT_minval  ("... run args"                       , PROG_args (3, x_argA, &x_runtype, &x_replace, x_base, x_ext) , 0);
+   yUNIT_minchr  ("... check run type"                 , x_runtype   , G_RUN_DEBUG);
+   yUNIT_minchr  ("... check run replace"              , x_replace   , G_RUN_DEFAULT);
+   yUNIT_minstr  ("... check base"                     , x_base          , "/home/member/khaos");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , ".unit");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc ();
 
+   system ("touch /tmp/gyges.unit          2> /dev/null");
+   yURG_err_clear ();
    yUNIT_mincond ("run with compile");
-   yUNIT_minval ("... run init"                       , PROG_init ()          , 0);
-   yUNIT_minval ("... run args"                       , PROG_args (2, x_argB) , 0);
-   yUNIT_minchr ("... check run type"                 , my.run_type , G_RUN_CREATE);
-   yUNIT_minchr ("... check run replace"              , my.replace  , G_RUN_DEFAULT);
+   yUNIT_minval  ("... run args"                       , PROG_args (3, x_argB, &x_runtype, &x_replace, x_base, x_ext) , 0);
+   yUNIT_minchr  ("... check run type"                 , x_runtype   , G_RUN_CREATE);
+   yUNIT_minchr  ("... check run replace"              , x_replace   , G_RUN_DEFAULT);
+   yUNIT_minstr  ("... check base"                     , x_base          , "/tmp/gyges");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , ".unit");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc ();
 
+   system ("touch /tmp/hestia.unit         2> /dev/null");
+   yURG_err_clear ();
    yUNIT_mincond ("run with bad argument");
-   yUNIT_minval ("... run init"                       , PROG_init ()          , 0);
-   yUNIT_minval ("... run args"                       , PROG_args (2, x_argC) , -999);
-   yUNIT_minchr ("... check run type"                 , my.run_type , G_RUN_CREATE);
-   yUNIT_minchr ("... check run replace"              , my.replace  , G_RUN_DEFAULT);
+   yUNIT_minval  ("... run args"                       , PROG_args (3, x_argC, &x_runtype, &x_replace, x_base, x_ext) , -999);
+   yUNIT_minchr  ("... check run type"                 , x_runtype   , '·');
+   yUNIT_minchr  ("... check run replace"              , x_replace   , '·');
+   yUNIT_minstr  ("... check base"                     , x_base          , "");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , "");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "argument ¶--debuggery¶ is not recognized");
    yUNIT_mindnoc ();
 
+   yURG_err_clear ();
    yUNIT_mincond ("run with create");
-   yUNIT_minval ("... run init"                       , PROG_init ()          , 0);
-   yUNIT_minval ("... run args"                       , PROG_args (2, x_argD) , 0);
-   yUNIT_minchr ("... check run type"                 , my.run_type , G_RUN_CREATE);
-   yUNIT_minchr ("... check run replace"              , my.replace  , G_RUN_DEFAULT);
+   yUNIT_minval  ("... run args"                       , PROG_args (3, x_argD, &x_runtype, &x_replace, x_base, x_ext) , 0);
+   yUNIT_minchr  ("... check run type"                 , x_runtype   , G_RUN_CREATE);
+   yUNIT_minchr  ("... check run replace"              , x_replace   , G_RUN_DEFAULT);
+   yUNIT_minstr  ("... check base"                     , x_base          , "/tmp/hestia");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , ".unit");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("run with convert");
-   yUNIT_minval ("... run init"                       , PROG_init ()          , 0);
-   yUNIT_minval ("... run args"                       , PROG_args (2, x_argE) , 0);
-   yUNIT_minchr ("... check run type"                 , my.run_type , G_RUN_UPDATE);
-   yUNIT_minchr ("... check run replace"              , my.replace  , G_RUN_DEFAULT);
+   system ("touch /tmp/koios.sunit         2> /dev/null");
+   yURG_err_clear ();
+   yUNIT_mincond ("run sunit with convert");
+   yUNIT_minval  ("... run args"                       , PROG_args (3, x_argE, &x_runtype, &x_replace, x_base, x_ext) , 0);
+   yUNIT_minchr  ("... check run type"                 , x_runtype   , G_RUN_UPDATE);
+   yUNIT_minchr  ("... check run replace"              , x_replace   , G_RUN_DEFAULT);
+   yUNIT_minstr  ("... check base"                     , x_base          , "/tmp/koios");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , ".sunit");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc ();
 
-   yUNIT_mincond ("run with no arguments");
-   yUNIT_minval ("... run init"                       , PROG_init ()          , 0);
-   yUNIT_minval ("... run args"                       , PROG_args (1, x_argF) , 0);
-   yUNIT_minchr ("... check run type"                 , my.run_type , G_RUN_CREATE);
-   yUNIT_minchr ("... check run replace"              , my.replace  , G_RUN_DEFAULT);
+   yURG_err_clear ();
+   yUNIT_mincond ("run sunit with compile");
+   yUNIT_minval  ("... run args"                       , PROG_args (3, x_argH, &x_runtype, &x_replace, x_base, x_ext) , -999);
+   yUNIT_minchr  ("... check run type"                 , x_runtype   , '·');
+   yUNIT_minchr  ("... check run replace"              , x_replace   , '·');
+   yUNIT_minstr  ("... check base"                     , x_base      , "");
+   yUNIT_minstr  ("... check ext"                      , x_ext       , "");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "can not compile ¶/tmp/koios¶ as .sunit, must compile in linked .unit location");
    yUNIT_mindnoc ();
 
+   system ("touch /tmp/koios.unit          2> /dev/null");
+   yURG_err_clear ();
    yUNIT_mincond ("run with update");
-   yUNIT_minval ("... run init"                       , PROG_init ()          , 0);
-   yUNIT_minval ("... run args"                       , PROG_args (2, x_argG) , 0);
-   yUNIT_minchr ("... check run type"                 , my.run_type , G_RUN_UPDATE);
-   yUNIT_minchr ("... check run replace"              , my.replace  , G_RUN_REPLACE);
+   yUNIT_minval  ("... run args"                       , PROG_args (3, x_argG, &x_runtype, &x_replace, x_base, x_ext) , 0);
+   yUNIT_minchr  ("... check run type"                 , x_runtype   , G_RUN_UPDATE);
+   yUNIT_minchr  ("... check run replace"              , x_replace   , G_RUN_REPLACE);
+   yUNIT_minstr  ("... check base"                     , x_base          , "/tmp/koios");
+   yUNIT_minstr  ("... check ext"                      , x_ext           , ".unit");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("clean up after");
+   system ("rm    -f /home/member/khaos.unit    2> /dev/null");
+   system ("rm    -f /tmp/gyges.unit            2> /dev/null");
+   system ("rm    -f /tmp/hestia.unit           2> /dev/null");
+   system ("rm    -f /tmp/hoios.sunit           2> /dev/null");
+   system ("rm    -f /tmp/hoios.unit            2> /dev/null");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
@@ -329,66 +428,80 @@ koios__unit_scrp_files   (void)
    yUNIT_mindnoc ();
 
    x_line = 25;
+   yURG_err_clear ();
    yUNIT_mincond  ("attempt to open a null name");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 25);
    yUNIT_minval   ("open the script file"               , SCRP_open   (NULL  , &x_file, &x_line), -999);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
 
    x_line = 35;
+   yURG_err_clear ();
    yUNIT_mincond  ("attempt to open with no name");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 35);
    yUNIT_minval   ("open the script file"               , SCRP_open   (""    , &x_file, &x_line), -999);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
 
    x_line = 45;
+   yURG_err_clear ();
    yUNIT_mincond  ("attempt to open with a non-existant file");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 45);
    yUNIT_minval   ("open the script file"               , SCRP_open   (x_name, &x_file, &x_line), -999);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "file ¶/tmp/koios.unit¶ could not be openned");
    yUNIT_mindnoc  ();
 
    sprintf (t, "touch %s", x_name);
    system (t);
    x_line = 55;
+   yURG_err_clear ();
    yUNIT_mincond  ("verify openning a valid file");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 55);
    yUNIT_minval   ("open the script file"               , SCRP_open   (x_name, &x_file, &x_line), 0);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 999);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
 
    x_line = 65;
+   yURG_err_clear ();
    yUNIT_mincond  ("attempt to re-open an open file");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 999);
    yUNIT_minval   ("... check line number"              , x_line        , 65);
    yUNIT_minval   ("open the script file"               , SCRP_open   (x_name, &x_file, &x_line), -999);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 999);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
 
+   yURG_err_clear ();
    yUNIT_mincond  ("verify closing an open file");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 999);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
    yUNIT_minval   ("close the script file"              , SCRP_close  (&x_file)                 , 0);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
 
+   yURG_err_clear ();
    yUNIT_mincond  ("attempt to re-close a closed file");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
    yUNIT_minval   ("open the script file"               , SCRP_close  (&x_file)                 , -999);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
 
    sprintf (t, "rm -f %s 2> /dev/null", x_name);
@@ -416,7 +529,7 @@ koios__unit_scrp_read    (void)
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 0);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , ""               );
    yUNIT_minval ("close the script file"              , SCRP_close  (&(my.f_scrp)), 0);
@@ -429,7 +542,7 @@ koios__unit_scrp_read    (void)
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "exec    § read a line     § SCRP_read   §   § i_lesser   § 0      §");
    yUNIT_minval ("close the script file"              , SCRP_close  (&(my.f_scrp)), 0);
@@ -444,7 +557,7 @@ koios__unit_scrp_read    (void)
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "exec    § read a line     § SCRP_read   §   § i_lesser   § 0      §");
    yUNIT_minval ("close the script file"              , SCRP_close  (&(my.f_scrp)), 0);
@@ -539,14 +652,14 @@ koios__unit_wave_stage   (void)
    yUNIT_mincond ("attempt with an illegal wave");
    yUNIT_minval  ("parse [aè]"                         , WAVE_parse      ("test.unit", 26, 4, "SCRP", "SCRP    [aè]", x_stage), -999);
    yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "test.unit:26:9: error: SCRP identifier, wave not a subscript (ÀÁÂÃÄÅ), e.g., [Áì]");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "test.unit:26:9: error: SCRP identifier, wave (a) not a subscript (ÀÁÂÃÄÅ), e.g., [Áì]");
    yUNIT_mindnoc ();
 
    yURG_err_clear ();
    yUNIT_mincond ("attempt with an illegal stage");
    yUNIT_minval  ("parse [ÀA]"                         , WAVE_parse      ("test.unit", 27, 4, "SCRP", "SCRP    [ÀA]", x_stage), -999);
    yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "test.unit:27:10: error: SCRP identifier, stage not a greek letter (èéêëìíîïðñòóôõö÷øùúûüýþÿ), e.g., [Áì]");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "test.unit:27:10: error: SCRP identifier, stage (A) not a greek letter (èéêëìíîïðñòóôõö÷øùúûüýþÿ), e.g., [Áì]");
    yUNIT_mindnoc ();
 
    yURG_err_clear ();
@@ -574,14 +687,14 @@ koios__unit_wave_stage   (void)
    yUNIT_mincond ("attempt with wrong start");        
    yUNIT_minval  ("parse (Âò]"                         , WAVE_parse      ("test.unit", 22, 4, "SCRP", "SCRP    (Âò]", x_stage), -999);
    yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "test.unit:22:0: error: SCRP identifier, illegal chars after verb, maybe stage, e.g., [Áì]");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "test.unit:22:0: error: SCRP identifier, illegal char '(' after verb, maybe stage, e.g., [Áì]");
    yUNIT_mindnoc ();
 
    yURG_err_clear ();
    yUNIT_mincond ("attempt with wrong parens");        
    yUNIT_minval  ("parse [Âò)"                         , WAVE_parse      ("test.unit", 31, 4, "SCRP", "SCRP    [Âò)", x_stage), -999);
    yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "test.unit:31:11: error: SCRP identifier, stage uses wrong end bracket, e.g., [Áì]");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "test.unit:31:11: error: SCRP identifier, stage uses wrong end bracket ')' vs ']', e.g., [Áì]");
    yUNIT_mindnoc ();
 
    yURG_err_clear ();
@@ -595,7 +708,7 @@ koios__unit_wave_stage   (void)
    yUNIT_mincond ("attempt with no close paren");      
    yUNIT_minval  ("parse [Ã÷"                          , WAVE_parse      ("test.unit", 33, 4, "SCRP", "SCRP    [Ã÷", x_stage ), -999);
    yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "test.unit:33:8: error: SCRP identifier, stage must be exactly 4 characters, e.g., [Áì]");
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "test.unit:33:8: error: SCRP identifier, stage ¶[Ã÷¶ must be exactly 4 characters, e.g., [Áì]");
    yUNIT_mindnoc ();
 
    yURG_err_clear ();
@@ -689,7 +802,7 @@ koios__unit_scrp_parse   (void)
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 0);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , ""               );
@@ -705,7 +818,7 @@ koios__unit_scrp_parse   (void)
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "exec    § read a line     § SCRP_read   §   § i_lesser   § 0      §");
@@ -729,7 +842,7 @@ koios__unit_scrp_parse   (void)
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 0);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "");
@@ -753,7 +866,7 @@ koios__unit_scrp_parse   (void)
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: verb only, exec requires more fields");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -778,7 +891,7 @@ koios__unit_scrp_parse   (void)
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: too few fields (2) for exec, requires 6");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -803,7 +916,7 @@ koios__unit_scrp_parse   (void)
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: too few fields (3) for exec, requires 6");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -828,7 +941,7 @@ koios__unit_scrp_parse   (void)
    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
    yUNIT_minval ("... check script pointer"           , my.f_scrp     , my.f_scrp);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minstr ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: too few fields (5) for exec, requires 6");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -1441,7 +1554,7 @@ koios__unit_scrp_ditto   (void)
 
    yUNIT_mincond ("read ditto condition");
    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -1451,7 +1564,7 @@ koios__unit_scrp_ditto   (void)
 
    yUNIT_mincond ("read detailed line");
    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -1461,7 +1574,7 @@ koios__unit_scrp_ditto   (void)
 
    yUNIT_mincond ("read detailed line");
    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -1471,7 +1584,7 @@ koios__unit_scrp_ditto   (void)
 
    yUNIT_mincond ("read ditto call");
    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -1481,7 +1594,7 @@ koios__unit_scrp_ditto   (void)
 
    yUNIT_mincond ("read ditto condition");
    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -1491,7 +1604,7 @@ koios__unit_scrp_ditto   (void)
 
    yUNIT_mincond ("read detailed line");
    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -1501,7 +1614,7 @@ koios__unit_scrp_ditto   (void)
 
    yUNIT_mincond ("read detailed line");
    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -1511,7 +1624,7 @@ koios__unit_scrp_ditto   (void)
 
    yUNIT_mincond ("read after condition");
    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
@@ -1521,7 +1634,7 @@ koios__unit_scrp_ditto   (void)
 
    yUNIT_mincond ("read end-of-file");
    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 0);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    yUNIT_minval ("close the script file"              , SCRP_close  (&(my.f_scrp)), 0);
@@ -1578,7 +1691,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read very detailed exec line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "exec         § read a line     § SCRP_read   §   § i_lesser   § 0      § my_var   §");
@@ -1597,7 +1710,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read saved comment line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "#> this is a saved comment");
@@ -1616,7 +1729,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read get/accessor line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "     get     § ... check on script § SCRP__unit  § file , -1 § s_equal § SCRP file      : /tmp/koios.unit §");
@@ -1635,7 +1748,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read code line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "   code      § add lines                           § - - - - - - - - - - - - -  § system ();        §");
@@ -1654,7 +1767,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read condition line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "  COND       § parse a code record  § - - - - - - - - - - - - -  § ((01.001)) § - - - - - - - - - §");
@@ -1673,7 +1786,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read prep line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "PREP         § include the prototype headers                           § - - - - - - - - - -  § - - - - -  § - - - - - - - - - -  §>>");
@@ -1692,7 +1805,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read include line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "   incl      § include public header               § koios.h          § - - - - - - - - - -  § - - - - -  § - - - - - - - - - -  §");
@@ -1711,7 +1824,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read script header line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "SCRP    [Áì] § (SCRP  ) verify openning and closin §                                         § ((01.---)) § - - - - - - - - - -  §");
@@ -1730,7 +1843,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read stdin load line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "  load       § add a line to stdin   § stdin § * * * * *                      : basic line                  : - - - - -  :  /bin/true > /dev/null§");
@@ -1749,7 +1862,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read stdin load line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "  toad       § add a line to stdin 2 § stdin § * * * * *                      : basic line                  : - - - - -  :  /bin/true > /dev/null§");
@@ -1768,7 +1881,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read verbless line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "             § (SCRP  ) verify openning and closin §                                         § ((01.---)) § - - - - - - - - - -  §");
@@ -1787,7 +1900,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read group divider line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "GROUP        § complete              § - - - - - - - - - - - - - - -  § - - - - -  § - - - - - - - - - - - - - - - - - - - - - - - - -  §");
@@ -1806,7 +1919,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read section header line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "SECT         § internal testing      § - - - - - - - - - - - - - - -  § - - - - -  § - - - - - - - - - - - - - - - - - - - - - - - - -  §");
@@ -1825,7 +1938,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read echo line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "    echo     § ...check y location   § - - - - - - - - - - - - -  § y       § r_norm93   § -125.381                                     §");
@@ -1844,7 +1957,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read system line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "    system   § remove a file                       § - - - - - - - - - - - - -  § rm -fv test.txt   §");
@@ -1863,7 +1976,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read shared section line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , "SHARED   -a- § setup cron files and lines          § - - - - - - - -  § ((CC.---)) § - - - - - - - - - - - - - - - - - - - - - - - - -  §");
@@ -1882,7 +1995,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read use shared line");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 1);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), 0);
    strlencode (my.recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr ("... check the record"               , my.recd       , " REUSE -a-   § - - - - - - - - - - - -  § - - - - - - - - - - - - - - -  § ((03.---)) § - - - - - - - - - - - - - - - - - - - -  §");
@@ -1901,7 +2014,7 @@ koios__unit_scrp_variety (void)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("read end-of-file");
-   yUNIT_minval ("read a line"                        , SCRP_read   (), 0);
+   yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 0);
    yUNIT_minval ("parse a line"                       , SCRP_parse  (), -999);
    yUNIT_minval ("close the script file"              , SCRP_close  (&(my.f_scrp)), 0);
    yUNIT_mindnoc ();
@@ -4888,42 +5001,49 @@ koios__unit_live_full    (void)
 static void      o___DRIVER__________________o (void) {;}
 
 char
-main                    (void)
+main                    (int a_argc, char *a_argv [])
 {
+   int         x_unit      =    0;
+   int         n           =    0;
+   /*---(args)---------------------------*/
+   printf ("testing : %s\n\n", a_argv [0]);
+   if (a_argc >= 2) {
+      x_unit = atoi (a_argv [1]);
+   }
    /*---(program wide)-------------------*/
-   koios__unit_prog_file    ();
-   koios__unit_prog_args    ();
-   koios__unit_prog_shared  ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_prog_file    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_prog_args    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_prog_shared  ();
    /*---(script input)-------------------*/
-   koios__unit_scrp_files   ();
-   koios__unit_scrp_read    ();
-   koios__unit_scrp_verb    ();
-   koios__unit_wave_stage   ();
-   koios__unit_scrp_comment ();
-   koios__unit_scrp_parse   ();
-   koios__unit_scrp_share   ();
-   koios__unit_scrp_ditto   ();
-   koios__unit_scrp_variety ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_scrp_files   ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_scrp_read    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_scrp_verb    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_wave_stage   ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_scrp_comment ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_scrp_parse   ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_scrp_share   ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_scrp_ditto   ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_scrp_variety ();
    /*---(conversion output)--------------*/
-   koios__unit_conv_files   ();
-   koios__unit_conv_ends    ();
-   koios__unit_conv_prep    ();
-   koios__unit_conv_scrp    ();
-   koios__unit_conv_cond    ();
-   koios__unit_conv_step    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_files   ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_ends    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_prep    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_scrp    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_cond    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_step    ();
    /*---(code generation)----------------*/
-   koios__unit_code_counts  ();
-   koios__unit_code_files   ();
-   koios__unit_code_ends    ();
-   koios__unit_code_prep    ();
-   koios__unit_code_scrp    ();
-   koios__unit_code_cond    ();
-   koios__unit_code_step    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_code_counts  ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_code_files   ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_code_ends    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_code_prep    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_code_scrp    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_code_cond    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_code_step    ();
    /*---(live testing)-------------------*/
-   koios__unit_live_scrp    ();
-   koios__unit_live_cond    ();
-   koios__unit_live_step    ();
-   koios__unit_live_full    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_scrp    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_cond    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_step    ();
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_full    ();
    /*---(done)---------------------------*/
    system ("rm -f /tmp/koios.unit 2> /dev/null");
    yUNIT_mintinu ();

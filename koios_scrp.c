@@ -215,24 +215,38 @@ SCRP_ditto__beg         (char *a_verb)
 }
 
 char
-SCRP_ditto__handler     (void)
+SCRP_ditto__handler     (char a_dittoing, int a_ditto, int *r_nline, int *r_dline)
 {
+   /*---(locals)-----------+-----------+-*/
+   char        rce         =  -10;
+   /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   /*---(defense)------------------------*/
+   DEBUG_INPT   yLOG_spoint  (r_nline);
+   --rce;  if (r_nline == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_INPT   yLOG_spoint  (r_dline);
+   --rce;  if (r_dline == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
    /*---(check for no ditto)-------------*/
-   DEBUG_INPT   yLOG_schar   (my.dittoing);
-   if (my.dittoing != 'y') {
+   DEBUG_INPT   yLOG_schar   (a_dittoing);
+   if (a_dittoing != 'y') {
       DEBUG_INPT   yLOG_snote   ("not dittoing");
-      ++my.n_line;
-      DEBUG_INPT   yLOG_sint    (my.n_line);
+      ++(*r_nline);
+      DEBUG_INPT   yLOG_sint    (*r_nline);
       DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
       return 0;
    }
    /*---(update ditto line)--------------*/
-   ++my.dline;
-   DEBUG_INPT   yLOG_sint    (my.dline);
-   DEBUG_INPT   yLOG_sint    (my.ditto);
+   ++(*r_dline);
+   DEBUG_INPT   yLOG_sint    (*r_dline);
+   DEBUG_INPT   yLOG_sint    (a_ditto);
    /*---(check for pre-ditto)------------*/
-   if (my.dline <  my.ditto) {
+   if (*r_dline <  a_ditto) {
       DEBUG_INPT   yLOG_snote   ("pre-ditto source line");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, -1);
       return -1;
@@ -602,6 +616,7 @@ SCRP_open               (cchar a_name [LEN_RECD], FILE **r_file, int *r_line)
    *r_file = fopen (a_name, "rt");
    DEBUG_OUTP   yLOG_point   ("*r_file"   , *r_file);
    --rce;  if (*r_file == NULL) {
+      yURG_err (YURG_FATAL, "file ¶%s¶ could not be openned", a_name);
       DEBUG_PROG   yLOG_fatal   ("can not open script file");
       DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
@@ -684,7 +699,7 @@ SCRP_clear         (void)
 }
 
 char         /*--> read script record --------------------[ leaf   [ ------ ]-*/
-SCRP_read          (void)
+SCRP_read               (FILE *a_file, int *r_nline, char a_dittoing, int a_ditto, int *r_dline, int *r_nrecd, int *r_len, char r_recd [LEN_RECD])
 {
    /*---(locals)-----------+-----------+-*/
    int         rc          = 0;             /* generic return code            */
@@ -696,80 +711,71 @@ SCRP_read          (void)
    char       *r           = NULL;
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
-   DEBUG_INPT   yLOG_point   ("*scrp"     , my.f_scrp);
-   /*> printf ("SCRP_read enter ------------------------------\n");                   <*/
    /*---(default)------------------------*/
    SCRP_clear  ();
-   strcpy (my.recd, "");
+   if (r_recd != NULL)  strcpy (r_recd, "");
+   if (r_len  != NULL)  *r_len = 0;
    /*---(defense)------------------------*/
-   /*> printf ("   my.f_scrp   = %p\n", my.f_scrp);                                   <*/
-   --rce;  if (my.f_scrp == NULL) {
-      DEBUG_INPT   yLOG_fatal   ("scrp file, file not open");
+   DEBUG_INPT   yLOG_point   ("a_file"    , a_file);
+   --rce;  if (a_file == NULL) {
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
-   /*> printf ("   feof ()     = %d\n", feof (my.f_scrp));                            <*/
-   if (feof (my.f_scrp)) {
+   if (feof (a_file)) {
       DEBUG_INPT   yLOG_note    ("already at end of file");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return 0;
    }
-   /*---(initialize)---------------------*/
-   DEBUG_INPT   yLOG_note    ("initialize my.recd");
-   my.recd [0] = '\0';
+   DEBUG_INPT   yLOG_point   ("r_nline"   , r_nline);
+   --rce;  if (r_nline == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_INPT   yLOG_point   ("r_dline"   , r_dline);
+   --rce;  if (r_dline == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_INPT   yLOG_point   ("r_nrecd"   , r_nrecd);
+   --rce;  if (r_nrecd == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
    /*---(read for a good record)---------*/
-   --rce;
-   while (1) {
+   --rce; while (1) {
       /*---(read next)-------------------*/
       DEBUG_INPT   yLOG_note    ("read script file");
-      fgets (x_recd, LEN_RECD, my.f_scrp);
-      /*> printf ("   x_recd      = å%sæ\n", x_recd);                                 <*/
-      /*> printf ("record = %2d[%s]\n", strlen (x_recd), x_recd);                     <*/
-      /*> printf ("   feof ()     = %d\n", feof (my.f_scrp));                         <*/
-      if (feof (my.f_scrp)) {
+      fgets (x_recd, LEN_RECD, a_file);
+      if (feof (a_file)) {
          DEBUG_INPT   yLOG_note    ("hit end of file");
          DEBUG_INPT   yLOG_exit    (__FUNCTION__);
          return 0;
       }
-      DEBUG_INPT   yLOG_complex ("line#"     , "%4d my.n_line, %c, %4d my.dline", my.n_line, my.dittoing, my.dline);
-      /*> printf ("   SCRP_ditto__handler -- beg\n");                                 <*/
-      rc = SCRP_ditto__handler ();
+      DEBUG_INPT   yLOG_complex ("line#"     , "%4d nline, %c, %4d dline", *r_nline, a_dittoing, *r_dline);
+      rc = SCRP_ditto__handler (a_dittoing, a_ditto, r_nline, r_dline);
       DEBUG_INPT   yLOG_value   ("handler"   , rc);
-      /*> printf ("   rc = %d\n", rc);                                                <*/
-      /*> printf ("   SCRP_ditto__handler -- end\n");                                 <*/
       if (rc < 0)  continue;
       /*---(filter)----------------------*/
       x_len = strllen (x_recd, LEN_RECD);
-      /*> printf ("   x_len = %d\n", x_len);                                          <*/
       if (x_len > 0)  x_recd [--x_len] = '\0';
-      /*> printf ("   check empty\n");                                                <*/
       if (x_recd [0] == '\0') {
-         /*> printf ("   -- FOUND empty\n");                                          <*/
          DEBUG_INPT   yLOG_note    ("SKIP, empty");
-         /*> printf ("   -- handle ditto if going, %d %c\n", my.dittoing, my.dittoing);   <*/
-         if (my.dittoing == 'y')  SCRP_ditto__end ();
-         else                      ++my.n_empty;
-         /*> printf ("   -- continue to next line\n");                                <*/
+         if (a_dittoing == 'y')  SCRP_ditto__end ();
          continue;
       }
-      /*> printf ("   check comment\n");                                              <*/
       if (x_len > 1 && x_recd [0] == '#' && x_recd [1] != '>') {
          DEBUG_INPT   yLOG_note    ("SKIP, comment");
-         if (my.dittoing == 'y')  SCRP_ditto__end ();
-         else                     ++my.n_comment;
+         if (a_dittoing == 'y')  SCRP_ditto__end ();
          continue;
       }
       DEBUG_INPT   yLOG_value   ("length"    , x_len);
-      /*> printf ("   check length\n");                                               <*/
       if (x_len <=  5)  {
          DEBUG_INPT   yLOG_note    ("SKIP, too short");
-         if (my.dittoing == 'y')  SCRP_ditto__end ();
-         else                     ++my.n_short;
+         if (a_dittoing == 'y')  SCRP_ditto__end ();
          continue;
       }
       /*---(check other end ditto)-------*/
-      /*> printf ("   check in-ditto -- beg\n");                                      <*/
-      if (my.dittoing == 'y' && my.dline != my.ditto)  {
+      if (a_dittoing == 'y' && *r_dline != a_ditto)  {
          strlcpy (t, x_recd, LEN_LABEL);
          p = strtok (t, "");
          p = strtok (p, " ");
@@ -786,19 +792,17 @@ SCRP_read          (void)
             }
          }
       }
-      /*> printf ("   in-ditto -- end\n");                                            <*/
       /*---(translate delayed chars)-----*/
       strlundelay (x_recd, LEN_RECD);
       /*---(copy)------------------------*/
       DEBUG_INPT   yLOG_note    ("save copy of source record");
-      strlcpy (my.recd, x_recd, LEN_RECD);
-      my.len   = x_len;
-      ++my.n_recd;
+      if (r_recd != NULL)  strlcpy (r_recd, x_recd, LEN_RECD);
+      if (r_len  != NULL)  *r_len   = x_len;
+      ++(*r_nrecd);
       break;
    }
    DEBUG_INPT   yLOG_note    ("got a good record");
    /*---(complete)-----------------------*/
-   /*> printf ("SCRP_read exit -------------------------------\n");                   <*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 1;
 }

@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4a"
-#define     P_VERTXT    "fully unit tested, WAVE functions no longer use globals (its a start ;)"
+#define     P_VERNUM    "1.4b"
+#define     P_VERTXT    "PROG_file and PROG_args functions no longer use globals (sweet)"
 /*········· ··········· ´·····························´········································*/
 
 /*>                                                                                   <* 
@@ -245,9 +245,6 @@ struct cGLOBALS
    FILE       *f_conv;                      /* pointer to output script file  */
    /*---(counters)--------------*/
    int         n_line;                      /* file   all lines               */
-   int         n_comment;                   /* file   comment lines           */
-   int         n_empty;                     /* file   empty lines             */
-   int         n_short;                     /* file   short lines             */
    int         n_recd;                      /* file   good records            */
    int         nscrp;                       /* total count of scripts         */
    int         ncond;                       /* total count of conditions      */
@@ -322,8 +319,8 @@ extern      tVERB       g_verbs [MAX_VERB];
 /*---(program)--------------*/
 char*       PROG_version            (void);
 char        PROG_init               (void);
-char        PROG_file               (char *a_name);
-char        PROG_args               (int  a_argc, char *a_argv[]);
+char        PROG_file               (char a_name [LEN_PATH], char r_base [LEN_PATH], char r_ext [LEN_TERSE]);
+char        PROG_args               (int a_argc, char *a_argv [], char *r_runtype, char *r_replace, char r_base [LEN_PATH], char r_ext [LEN_SHORT]);
 char        PROG_begin              (void);
 char        PROG_end                (void);
 /*---(unittest)------------*/
@@ -345,11 +342,12 @@ char*       SCRP__shared_used       (void);
 char        SCRP__ditto_clear       (void);
 char        SCRP__reuses_check      (char *p);
 char        SCRP__ditto_check       (char *p);
+char        SCRP_ditto__handler     (char a_dittoing, int a_ditto, int *r_nline, int *r_dline);
 /*---(file)----------------*/
 char        SCRP_open               (cchar a_name [LEN_RECD], FILE **r_file, int *r_line);
 char        SCRP_close              (FILE **b_file);
 char        SCRP_clear              (void);
-char        SCRP_read               (void);
+char        SCRP_read               (FILE *a_file, int *r_nline, char a_dittoing, int a_ditto, int *r_dline, int *r_nrecd, int *r_len, char r_recd [LEN_RECD]);
 /*---(parsing)-------------*/
 char        SCRP_parse_verb         (char *p);
 char        SCRP_parse_stage        (char *p);

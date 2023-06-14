@@ -60,7 +60,7 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, int a_indx, char a
    x_pos = 0;
    DEBUG_INPT   yLOG_schar   (t [x_pos]);
    --rce;  if (t [x_pos] != '[') {
-      yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, illegal chars after verb, maybe stage, e.g., [¡Ï]", a_scrp, a_line, x_pos, a_verb);
+      yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, illegal char '%c' after verb, maybe stage, e.g., [¡Ï]", a_scrp, a_line, x_pos, a_verb, t [x_pos]);
       DEBUG_INPT   yLOG_snote   ("meaningless junk found after SCRP verb");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
@@ -73,7 +73,7 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, int a_indx, char a
    x_len = strlen (t);
    DEBUG_INPT   yLOG_sint    (x_len);
    --rce;  if (x_len != 4) {
-      yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, stage must be exactly 4 characters, e.g., [¡Ï]", a_scrp, a_line, x_beg + x_pos, a_verb);
+      yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, stage ∂%s∂ must be exactly 4 characters, e.g., [¡Ï]", a_scrp, a_line, x_beg + x_pos, a_verb, t);
       DEBUG_INPT   yLOG_snote   ("stage identifier must be 4 characters");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
@@ -82,7 +82,7 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, int a_indx, char a
    x_pos = 3;
    DEBUG_INPT   yLOG_schar   (q [x_pos]);
    --rce;  if (q [x_pos] != ']') {
-      yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, stage uses wrong end bracket, e.g., [¡Ï]", a_scrp, a_line, x_beg + x_pos, a_verb);
+      yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, stage uses wrong end bracket '%c' vs ']', e.g., [¡Ï]", a_scrp, a_line, x_beg + x_pos, a_verb, q [x_pos]);
       DEBUG_INPT   yLOG_snote   ("no end stage ']' marker found");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
@@ -91,7 +91,7 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, int a_indx, char a
    x_pos = 1;
    DEBUG_INPT   yLOG_schar   (q [x_pos]);
    --rce;  if (strchr (YSTR_SUBS, q [x_pos]) == NULL) {
-      yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, wave not a subscript (%s), e.g., [¡Ï]", a_scrp, a_line, x_beg + x_pos, a_verb, YSTR_SUBS);
+      yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, wave (%c) not a subscript (%s), e.g., [¡Ï]", a_scrp, a_line, x_beg + x_pos, a_verb, q [x_pos], YSTR_SUBS);
       DEBUG_INPT   yLOG_snote   ("stage is not a number");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
@@ -101,7 +101,7 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, int a_indx, char a
    x_pos = 2;
    DEBUG_INPT   yLOG_schar   (q [x_pos]);
    --rce;  if (strchr (YSTR_GREEK, q [x_pos]) == NULL) {
-      yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, stage not a greek letter (%s), e.g., [¡Ï]", a_scrp, a_line, x_beg + x_pos, a_verb, YSTR_GREEK);
+      yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, stage (%c) not a greek letter (%s), e.g., [¡Ï]", a_scrp, a_line, x_beg + x_pos, a_verb, q [x_pos], YSTR_GREEK);
       DEBUG_INPT   yLOG_snote   ("does not end with greek letter");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;

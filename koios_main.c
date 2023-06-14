@@ -3,7 +3,7 @@
 
 
 int
-main               (int argc, char *argv[])
+main               (int a_argc, char *a_argv [])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -11,10 +11,10 @@ main               (int argc, char *argv[])
    int         x_lines     =    0;
    char        x_final     =    0;
    /*---(initialize)---------------------*/
-   if (rc >= 0)  rc = yURG_logger  (argc, argv);
+   if (rc >= 0)  rc = yURG_logger  (a_argc, a_argv);
    if (rc >= 0)  rc = PROG_init    ();
-   if (rc >= 0)  rc = yURG_urgs    (argc, argv);
-   if (rc >= 0)  rc = PROG_args    (argc, argv);
+   if (rc >= 0)  rc = yURG_urgs    (a_argc, a_argv);
+   if (rc >= 0)  rc = PROG_args    (a_argc, a_argv, &(my.run_type), &(my.replace), my.n_base, my.n_ext);
    if (rc >= 0)  rc = PROG_begin   ();
    if (rc <  0)  {
       PROG_end     ();
@@ -53,7 +53,7 @@ main               (int argc, char *argv[])
    DEBUG_PROG   yLOG_break   ();
    while (1) {
       /*---(read and parse)--------------*/
-      rc = SCRP_read   ();
+      rc = SCRP_read   (my.f_scrp, my.n_line, my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd);
       DEBUG_PROG   yLOG_value   ("read"      , rc);
       if (rc == 0) {
          DEBUG_PROG   yLOG_note    ("end of file");
@@ -109,15 +109,6 @@ main               (int argc, char *argv[])
    }
    DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    /*---(summary)------------------------*/
-   /*> printf ("\n");                                                                                                      <* 
-    *> printf ("reading script...\n");                                                                                     <* 
-    *> printf ("   %-4d total lines\n"                , my.n_line);                                                        <* 
-    *> printf ("   %-4d comments\n"                   , my.n_comment);                                                     <* 
-    *> printf ("   %-4d empty lines\n"                , my.n_empty);                                                       <* 
-    *> printf ("   %-4d short lines ( <10 chars)\n"   , my.n_short);                                                       <* 
-    *> printf ("   %-4d useable records\n"            , my.n_recd);                                                        <* 
-    *> printf ("   %-4d CONCERNS\n"                   , my.n_line - my.n_comment - my.n_empty - my.n_short - my.n_recd);   <* 
-    *> printf ("\n");                                                                                                      <*/
    /*> SCRP_verbs ();                                                                 <*/
    /*> printf ("\n");                                                                 <*/
    /*---(complete)-----------------------*/

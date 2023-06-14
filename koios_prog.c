@@ -42,15 +42,12 @@ PROG_init          (void)
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(files)--------------------------*/
-   strlcpy  (my.n_base, "", LEN_PATH);
    strlcpy  (my.n_scrp, "", LEN_TITLE);
    strlcpy  (my.n_code, "", LEN_PATH);
    strlcpy  (my.n_main, "", LEN_PATH);
    strlcpy  (my.n_wave, "", LEN_PATH);
    strlcpy  (my.n_conv, "", LEN_PATH);
    my.driver    = '-';
-   my.run_type  = G_RUN_CREATE;
-   my.replace   = G_RUN_DEFAULT;
    strlcpy  (my.last     , "", LEN_LABEL);
    yURG_err_std ();
    SCRP__shared_purge ();
@@ -61,13 +58,14 @@ PROG_init          (void)
 }
 
 char
-PROG_file               (char *a_name)
+PROG_file               (char a_name [LEN_PATH], char r_base [LEN_PATH], char r_ext [LEN_TERSE])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
    char        x_base      [LEN_PATH]  = "";
    char        x_unit      [LEN_PATH]  = "";
+   char        x_ext       [LEN_TERSE] = "";
    int         l           =    0;
    char       *x_valid     = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_/.";
    int         i           =    0;
@@ -77,33 +75,48 @@ PROG_file               (char *a_name)
    char        t           [LEN_FULL]  = "";
    /*---(header)-------------------------*/
    DEBUG_ARGS   yLOG_enter   (__FUNCTION__);
+   /*---(default)------------------------*/
+   if (r_base != NULL)  strcpy (r_base, "");
+   if (r_ext  != NULL)  strcpy (r_ext , "");
    /*---(defense)------------------------*/
    DEBUG_ARGS  yLOG_point   ("a_name"    , a_name);
    --rce;  if (a_name == NULL) {
-      yURG_err ('f', "<name>, name can not be null");
+      yURG_err ('f', "script name can not be null");
       DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_ARGS  yLOG_info    ("a_name"    , a_name);
+   DEBUG_ARGS  yLOG_point   ("r_base"    , r_base);
+   --rce;  if (r_base == NULL) {
+      DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
+      return rce;
+   }
+   DEBUG_ARGS  yLOG_point   ("r_ext"     , r_ext);
+   --rce;  if (r_ext  == NULL) {
+      DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
+      return rce;
+   }
    /*---(check length)-------------------*/
    l = strlen (a_name);
    DEBUG_ARGS  yLOG_value   ("l"         , l);
    --rce;  if (l <= 0) {
-      yURG_err ('f', "<name>, name can not be blank/empty");
+      yURG_err ('f', "script name can not be blank/empty");
       DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
       return rce;
    }
    /*---(check characters)---------------*/
    --rce;  for (i = 0; i < l; ++i) {
       if (strchr (x_valid, a_name [i]) != NULL)  continue;
-      yURG_err ('f', "<name>, name can not have a <%c> at character %d", a_name [i], i);
+      yURG_err ('f', "script name ¶%s¶ can not have a '%c' as character %d", a_name, a_name [i], i);
       DEBUG_ARGS  yLOG_char  ("bad char"  , a_name [i]);
       DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
       return rce;
    }
-   /*---(check for extention)------------*/
+   /*---(check for extentions)-----------*/
    strcpy (x_base, a_name);
    p = strstr (x_base, ".unit");
+   if (p != NULL)   p [0] = '\0';
+   p = strstr (x_base, ".sunit");
    if (p != NULL)   p [0] = '\0';
    /*---(check unit file)----------------*/
    sprintf (x_unit, "%s.unit", x_base);
@@ -116,25 +129,26 @@ PROG_file               (char *a_name)
       rc = lstat (x_unit, &s);
       DEBUG_ARGS    yLOG_value   ("stat"      , rc);
       if (rc < 0) {
-         printf ("FATAL, can not find source either .unit or .sunit\n");
+         yURG_err ('f', "script name ¶%s¶ can not be found as .unit or .sunit", a_name);
          DEBUG_ARGS    yLOG_note    ("can not find source either .unit or .sunit");
          DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
          return rce;
       } else {
-         strcpy (my.n_ext, ".sunit");
+         strcpy (x_ext, ".sunit");
       }
    } else {
-      strcpy (my.n_ext, ".unit");
+      strcpy (x_ext, ".unit");
    }
    --rce;  if (S_ISDIR (s.st_mode))  {
-      printf ("FATAL, can not use a directory as a source\n");
+      yURG_err ('f', "script name ¶%s¶ refers to a directory, illegal", a_name);
       DEBUG_ARGS    yLOG_note    ("can not use a directory");
       DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    --rce;  if (S_ISLNK (s.st_mode))  {
       DEBUG_ARGS    yLOG_note    ("is a link, figure it out");
-      if (strcmp (my.n_ext, ".sunit") == 0) {
+      if (strcmp (x_ext, ".sunit") == 0) {
+         yURG_err ('f', "script name ¶%s¶ is a .sunit can can not be a symlink", a_name);
          printf ("FATAL, .sunit can not be a symlink\n");
          DEBUG_ARGS    yLOG_note    ("can not use a symlink");
          DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
@@ -155,18 +169,21 @@ PROG_file               (char *a_name)
          }
          DEBUG_ARGS  yLOG_info    ("suffix"    , t + l - 6);
          if (strcmp (t + l - 6, ".sunit") != 0) {
+            yURG_err ('f', "script name ¶%s¶ is a symlink to ¶%s¶, only .sunit is legal", a_name, t);
             DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
             return rce;
          }
          rc = stat (t, &r);
          DEBUG_ARGS    yLOG_value   ("stat"      , rc);
          if (rc < 0) {
+            yURG_err ('f', "script name ¶%s¶ is a symlink to .sunit ¶%s¶, but source does not exist", a_name, t);
             DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
             return rce;
          }
       }
    }
    else if (!S_ISREG (s.st_mode)) {
+      yURG_err ('f', "script name ¶%s¶ is not a regular file, illegal", a_name);
       DEBUG_ARGS    yLOG_note    ("can only use regular file");
       DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
       return rce;
@@ -176,41 +193,62 @@ PROG_file               (char *a_name)
    DEBUG_ARGS    yLOG_value   ("stat"      , rc);
    if (rc < 0)   system  ("touch master.h");
    /*---(save back)----------------------*/
-   strncpy (my.n_base, a_name, LEN_PATH);
-   DEBUG_ARGS  yLOG_info    ("n_base"    , my.n_base);
+   strncpy (r_base, x_base, LEN_PATH);
+   DEBUG_ARGS  yLOG_info    ("n_base"    , r_base);
+   strncpy (r_ext , x_ext , LEN_TERSE);
+   DEBUG_ARGS  yLOG_info    ("n_ext"     , r_ext);
    /*---(complete)-----------------------*/
    DEBUG_ARGS   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
 char               /* PURPOSE : process the command line arguments            */
-PROG_args          (int argc, char *argv[])
+PROG_args          (int a_argc, char *a_argv [], char *r_runtype, char *r_replace, char r_base [LEN_PATH], char r_ext [LEN_SHORT])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   char        x_runtype   = G_RUN_CREATE;
+   char        x_replace   = G_RUN_DEFAULT;
+   char        x_base      [LEN_PATH]  = "";
+   char        x_ext       [LEN_TERSE] = "";
    int         i           =    0;
    char       *a           = NULL;
    int         x_total     =    0;
    int         x_args      =    0;
    /*---(begin)--------------------------*/
    DEBUG_PROG  yLOG_enter   (__FUNCTION__);
+   /*---(default)------------------------*/
+   if (r_runtype != NULL)  *r_runtype = '·';
+   if (r_replace != NULL)  *r_replace = '·';
+   if (r_base    != NULL)  strcpy (r_base, "");
+   if (r_ext     != NULL)  strcpy (r_ext , "");
+   /*---(defenses)-----------------------*/
+   DEBUG_ARGS  yLOG_point   ("a_argv" , a_argv);
+   --rce;  if (a_argv == NULL) {
+      DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
    /*---(process)------------------------*/
-   for (i = 1; i < argc; ++i) {
-      a = argv[i];
+   --rce;  for (i = 1; i < a_argc; ++i) {
+      a = a_argv[i];
       ++x_total;
       if (a[0] == '@')  continue;
       DEBUG_ARGS  yLOG_info    ("cli arg", a);
       ++x_args;
-      if      (strncmp (a, "--create"     , 10) == 0)    my.run_type = G_RUN_CREATE;
-      else if (strncmp (a, "--compile"    , 10) == 0)    my.run_type = G_RUN_CREATE;
-      else if (strncmp (a, "--debug"      , 10) == 0)    my.run_type = G_RUN_DEBUG;
-      else if (strncmp (a, "--validate"   , 10) == 0)    my.run_type = G_RUN_UPDATE;
-      else if (strncmp (a, "--convert"    , 10) == 0)    my.run_type = G_RUN_UPDATE;
-      else if (strncmp (a, "--update"     , 10) == 0)  { my.run_type = G_RUN_UPDATE;  my.replace = G_RUN_REPLACE; }
-      else if (strncmp (a, "-"            ,  1) == 0)  { printf ("FATAL, arg <<%s>> not understood¦", a); DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce); return rce; }
+      if      (strncmp (a, "--create"     , 10) == 0)    x_runtype = G_RUN_CREATE;
+      else if (strncmp (a, "--compile"    , 10) == 0)    x_runtype = G_RUN_CREATE;
+      else if (strncmp (a, "--debug"      , 10) == 0)    x_runtype = G_RUN_DEBUG;
+      else if (strncmp (a, "--validate"   , 10) == 0)    x_runtype = G_RUN_UPDATE;
+      else if (strncmp (a, "--convert"    , 10) == 0)    x_runtype = G_RUN_UPDATE;
+      else if (strncmp (a, "--update"     , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_replace = G_RUN_REPLACE; }
+      else if (strncmp (a, "-"            ,  1) == 0)  {
+         yURG_err ('f', "argument ¶%s¶ is not recognized", a);
+         DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce);
+         return rce;
+      }
       else {
-         rc = PROG_file (a);
+         rc = PROG_file (a, x_base, x_ext);
          if (rc < 0) {
             DEBUG_PROG  yLOG_note   ("base name is invalid or not found");
             DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce);
@@ -223,8 +261,28 @@ PROG_args          (int argc, char *argv[])
    if (x_args == 0) {
       DEBUG_ARGS  yLOG_note   ("no arguments identified");
    }
-   DEBUG_ARGS  yLOG_char   ("run_type"  , my.run_type);
-   DEBUG_ARGS  yLOG_info   ("basename"  , my.n_base);
+   DEBUG_ARGS  yLOG_char   ("run_type"  , x_runtype);
+   DEBUG_ARGS  yLOG_info   ("basename"  , x_base);
+   /*---(defense)------------------------*/
+   DEBUG_PROG   yLOG_info    ("basename"  , x_base);
+   --rce;  if (strcmp (x_base, "") == 0) {
+      yURG_err ('f', "script name/base was not provided on command line");
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(defense)------------------------*/
+   --rce;  if (strcmp (x_ext, ".sunit") == 0) {
+      if (x_runtype != G_RUN_UPDATE) {
+         yURG_err ('f', "can not compile ¶%s¶ as .sunit, must compile in linked .unit location", x_base);
+         DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+         return rce;
+      }
+   }
+   /*---(save-back)----------------------*/
+   if (r_runtype != NULL)  *r_runtype = x_runtype;
+   if (r_replace != NULL)  *r_replace = x_replace;
+   if (r_base    != NULL)  strlcpy (r_base, x_base, LEN_PATH);
+   if (r_ext     != NULL)  strlcpy (r_ext , x_ext , LEN_TERSE);
    /*---(complete)-----------------------*/
    DEBUG_PROG  yLOG_exit  (__FUNCTION__);
    return 0;
@@ -237,21 +295,6 @@ PROG_begin         (void)
    char        rce         =  -10;
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
-   /*---(defense)------------------------*/
-   DEBUG_PROG   yLOG_info    ("basename"  , my.n_base);
-   --rce;  if (strcmp (my.n_base, "") == 0) {
-      printf ("FATAL, no base file name provided\n");
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(defense)------------------------*/
-   --rce;  if (strcmp (my.n_ext, ".sunit") == 0) {
-      if (my.run_type != G_RUN_UPDATE) {
-         printf ("FATAL, can not compile/debug .sunit files\n");
-         DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
-         return rce;
-      }
-   }
    /*---(create names)-------------------*/
    snprintf (my.n_scrp, LEN_TITLE, "%s%s", my.n_base, my.n_ext);
    snprintf (my.n_wave, LEN_PATH, "%s.wave"        , my.n_base);
@@ -271,9 +314,6 @@ PROG_begin         (void)
    }
    /*---(initialize)---------------------*/
    my.n_line    = 0;
-   my.n_comment = 0;
-   my.n_empty   = 0;
-   my.n_short   = 0;
    my.n_recd    = 0;
    my.dittoing  = '-';
    my.dmark     = '-';
@@ -309,11 +349,12 @@ static void      o___UNITTEST________________o (void) {;}
 char       /*----: set up program urgents/debugging --------------------------*/
 PROG__unit_quiet   (void)
 {
+   char        x_argc      = 1;
    char       *x_args [1]  = { "koios" };
-   yURG_logger    (1, x_args);
+   yURG_logger    (x_argc, x_args);
    PROG_init      ();
-   yURG_urgs      (1, x_args);
-   PROG_args      (1, x_args);
+   yURG_urgs      (x_argc, x_args);
+   PROG_args      (x_argc, x_args, &(my.run_type), &(my.replace), my.n_base, my.n_ext);
    PROG_begin     ();
    return 0;
 }
@@ -321,11 +362,12 @@ PROG__unit_quiet   (void)
 char       /*----: set up program urgents/debugging --------------------------*/
 PROG__unit_loud    (void)
 {
+   char        x_argc      = 2;
    char       *x_args [2]  = { "koios_unit", "@@kitchen"    };
-   yURG_logger    (1, x_args);
+   yURG_logger    (x_argc, x_args);
    PROG_init      ();
-   yURG_urgs      (2, x_args);
-   PROG_args      (2, x_args);
+   yURG_urgs      (x_argc, x_args);
+   PROG_args      (x_argc, x_args, &(my.run_type), &(my.replace), my.n_base, my.n_ext);
    PROG_begin     ();
    return 0;
 }
