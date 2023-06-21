@@ -6,18 +6,35 @@ int
 main               (int a_argc, char *a_argv [])
 {
    /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
    char        rc          =    0;
    char        t           [LEN_RECD];
    int         x_lines     =    0;
    char        x_final     =    0;
-   /*---(initialize)---------------------*/
+   /*---(debugging)----------------------*/
+   rc = PROG_urgents (a_argc, a_argv);
+   DEBUG_PROG   yLOG_value    ("urgents"   , rc);
+   --rce;  if (rc <  0) { 
+      PROG_shutdown ();
+      return rce;
+   }
+   /*---(initialization)-----------------*/
+   rc = PROG_startup (a_argc, a_argv);
+   DEBUG_PROG   yLOG_value    ("startup"   , rc);
+   --rce;  if (rc <  0) {
+      PROG_shutdown ();
+      return rce;
+   }
+   /*> yURG_startup (a_argc, a_argv);                                                 <* 
+    *> --rce;  if (rc < 0) {                                                          <* 
+    *> }                                                                              <*/
    if (rc >= 0)  rc = yURG_logger  (a_argc, a_argv);
-   if (rc >= 0)  rc = PROG_init    ();
+   if (rc >= 0)  rc = PROG__init    ();
    if (rc >= 0)  rc = yURG_urgs    (a_argc, a_argv);
-   if (rc >= 0)  rc = PROG_args    (a_argc, a_argv, &(my.run_type), &(my.replace), my.n_base, my.n_ext);
-   if (rc >= 0)  rc = PROG_begin   ();
+   if (rc >= 0)  rc = PROG__args    (a_argc, a_argv, &(my.run_type), &(my.replace), my.n_base, my.n_ext);
+   if (rc >= 0)  rc = PROG__begin   ();
    if (rc <  0)  {
-      PROG_end     ();
+      PROG_shutdown ();
       return rc;
    }
    /*---(open files)---------------------*/
@@ -32,6 +49,7 @@ main               (int a_argc, char *a_argv [])
    /*---(open files)---------------------*/
    if (rc == 0)  {
       rc = SCRP_open      (my.n_scrp, &(my.f_scrp), &(my.n_line));
+      DITTO_purge ();
       rc = WAVE_open      (my.n_wave);
    }
    if (my.run_type == G_RUN_CREATE || my.run_type == G_RUN_DEBUG) {
@@ -43,7 +61,7 @@ main               (int a_argc, char *a_argv [])
       if (rc == 0)  rc = CONV_beg       ();
    }
    if (rc != 0) {
-      PROG_end     ();
+      PROG_shutdown ();
       return rc;
    }
    IF_NORMAL  CODE_shared_in  ();
@@ -64,7 +82,7 @@ main               (int a_argc, char *a_argv [])
          --x_final;
          continue;
       }
-      rc = SCRP_parse  ();
+      rc = SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers, my.desc, my.meth, my.args, my.test, my.expe, my.retn, my.code);
       DEBUG_PROG   yLOG_value   ("parse"     , rc);
       if (rc < 0) {
          DEBUG_PROG   yLOG_value   ("X_FINAL P" , x_final);
@@ -112,7 +130,7 @@ main               (int a_argc, char *a_argv [])
    /*> SCRP_verbs ();                                                                 <*/
    /*> printf ("\n");                                                                 <*/
    /*---(complete)-----------------------*/
-   PROG_end     ();
+   PROG_shutdown ();
    /*> printf ("complete\n");                                                         <*/
    return x_final;
 }

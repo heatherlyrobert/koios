@@ -24,6 +24,11 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, int a_indx, char a
    /*---(default)------------------------*/
    if (r_stage != NULL)  strlcpy  (r_stage, "", LEN_SHORT);
    /*---(defense)------------------------*/
+   DEBUG_INPT   yLOG_spoint  (a_scrp);
+   --rce;  if (a_scrp == NULL) {
+      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      return rce;
+   }
    DEBUG_INPT   yLOG_spoint  (a_verb);
    --rce;  if (a_verb == NULL) {
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);

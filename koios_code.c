@@ -108,7 +108,7 @@ CODE__shared_clear       (cchar a_type)
          s_master_cond [i] = 0;
          s_master_step [i] = 0;
          break;
-      case T_REUSES :
+      case T_SHARES :
          s_reuses_cond [i] = 0;
          s_reuses_step [i] = 0;
          break;
@@ -122,7 +122,7 @@ char
 CODE__shared_purge       (void)
 {
    CODE__shared_clear (T_MASTER);
-   CODE__shared_clear (T_REUSES);
+   CODE__shared_clear (T_SHARES);
    return 0;
 }
 
@@ -136,7 +136,7 @@ CODE__shared_index       (cchar a_type, cchar a_mark)
    /*---(set type)-----------------------*/
    --rce;  switch (a_type) {
    case T_MASTER : x_valid = YSTR_UPPER;   break;
-   case T_REUSES : x_valid = YSTR_LOWER;   break;
+   case T_SHARES : x_valid = YSTR_LOWER;   break;
    default       : return rce;             break;
    }
    /*---(defense)------------------------*/
@@ -162,7 +162,7 @@ CODE__shared_set         (cchar a_type, cchar a_mark, int a_cond, int a_step)
       s_master_cond [i] = a_cond;
       s_master_step [i] = a_step;
       break;
-   case T_REUSES :
+   case T_SHARES :
       s_reuses_cond [i] = a_cond;
       s_reuses_step [i] = a_step;
       break;
@@ -186,7 +186,7 @@ CODE__shared_add         (cchar a_type, cchar a_mark, int *a_cond, int *a_step)
       if (a_cond != NULL)  *a_cond += s_master_cond [i];
       if (a_step != NULL)  *a_step += s_master_step [i];
       break;
-   case T_REUSES :
+   case T_SHARES :
       if (a_cond != NULL)  *a_cond += s_reuses_cond [i];
       if (a_step != NULL)  *a_step += s_reuses_step [i];
       break;
@@ -250,9 +250,7 @@ CODE_shared_in          (void)
    for (i = 0; i < 26; ++i) {
       fscanf  (f, "%4d %4d\n", &x_cond, &x_step);
       rc = CODE__shared_set (T_MASTER, 'A' + i, x_cond, x_step);
-      rc = SCRP__shared_set (T_MASTER, 'A' + i);
-
-      /*> printf ("%c %4d %4d  (%d)\n", 'A' + i, x_cond, x_step, rc);                 <*/
+      rc = SCRP__shared_set (T_MASTER, 'A' + i, 0);
    }
    fclose (f);
    return 0;
@@ -562,7 +560,7 @@ CODE_scrp_end        (void)
    /*> printf ("my.cstep %4d, my.verb å%sæ\n", my.cstep, my.verb);                    <*/
    /*---(end share)----------------------*/
    if (my.cshare != '-') {
-      if (my.cshare == tolower (my.cshare))  CODE__shared_set (T_REUSES, my.cshare, my.scond, my.sstep);
+      if (my.cshare == tolower (my.cshare))  CODE__shared_set (T_SHARES, my.cshare, my.scond, my.sstep);
       else                                   CODE__shared_set (T_MASTER, my.cshare, my.scond, my.sstep);
    }
    /*---(close script/share)-------------*/
@@ -593,6 +591,8 @@ CODE_scrp_end        (void)
    return 0;
 }
 
+/*> char                                                                                                                                                                                                                                                    <* 
+ *> CODE_scrp               (char a_nscrp, int a_line, char r_stage [LEN_TERSE], char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_code [LEN_RECD])   <*/
 char
 CODE_scrp          (void)
 {
@@ -640,7 +640,7 @@ CODE_shared          (void)
    CODE_scrp_end ();
    /*---(counters)-----------------------*/
    my.cshare = my.share;
-   CODE__shared_set (T_REUSES, my.cshare,  0,  0);
+   CODE__shared_set (T_SHARES, my.cshare,  0,  0);
    /*---(open script function)-----------*/
    CODE_printf ("\n");
    CODE_printf ("char\n");
@@ -768,8 +768,8 @@ CODE_reuse         (void)
    CODE_printf ("   yUNIT_shared_%c ();\n", my.share);
    CODE_printf ("   cyUNIT.offset = 0;\n");
    if (tolower (my.share) == my.share) {
-      CODE__shared_add (T_REUSES, my.share, &(my.ncond), &(my.nstep));
-      CODE__shared_add (T_REUSES, my.share, &(my.scond), &(my.sstep));
+      CODE__shared_add (T_SHARES, my.share, &(my.ncond), &(my.nstep));
+      CODE__shared_add (T_SHARES, my.share, &(my.scond), &(my.sstep));
       my.cstep = my.sstep;
    } else {
       CODE__shared_add (T_MASTER, my.share, &(my.ncond), &(my.nstep));
@@ -1223,6 +1223,8 @@ CODE_echo          (void)
    return 0;
 }
 
+/*> char                                                                                                                                                                                                                                                    <* 
+ *> CODE_exec               (char a_nscrp, int a_line, char r_stage [LEN_TERSE], char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_code [LEN_RECD])   <*/
 char
 CODE_exec          (void)
 {

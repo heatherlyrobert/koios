@@ -156,6 +156,8 @@ CONV_comment       (void)
 /*====================------------------------------------====================*/
 static void  o___SCRIPT__________o () { return; }
 
+/*> char                                                                                                                                                                                                                                                    <* 
+ *> CONV_scrp               (char a_nscrp, int a_line, char r_stage [LEN_TERSE], char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_code [LEN_RECD])   <*/
 char         /*--> write a script entry ------------------[--------[--------]-*/
 CONV_scrp          (void)
 {

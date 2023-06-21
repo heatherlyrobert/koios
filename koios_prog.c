@@ -32,12 +32,72 @@ PROG_version       (void)
 
 
 /*====================------------------------------------====================*/
+/*===----                       pre-initialization                     ----===*/
+/*====================------------------------------------====================*/
+static void      o___PREINIT_________________o (void) {;}
+
+char       /*----: very first setup ------------------s-----------------------*/
+PROG__header            (void)
+{
+   /*---(header)----------------------*/
+   DEBUG_PROG   yLOG_enter (__FUNCTION__);
+   /*---(versioning)------------------*/
+   DEBUG_PROG   yLOG_info     ("gregg"   , PROG_version      ());
+   DEBUG_PROG   yLOG_info     ("purpose" , P_PURPOSE);
+   DEBUG_PROG   yLOG_info     ("namesake", P_NAMESAKE);
+   DEBUG_PROG   yLOG_info     ("heritage", P_HERITAGE);
+   DEBUG_PROG   yLOG_info     ("imagery" , P_IMAGERY);
+   DEBUG_PROG   yLOG_note     ("custom core");
+   DEBUG_PROG   yLOG_info     ("yURG"    , yURG_version      ());
+   DEBUG_PROG   yLOG_info     ("yLOG"    , yLOGS_version     ());
+   DEBUG_PROG   yLOG_info     ("ySTR"    , ySTR_version      ());
+   /*---(complete)-----------------------*/
+   DEBUG_PROG   yLOG_exit  (__FUNCTION__);
+   return 0;
+}
+
+char
+PROG_urgents            (int a_argc, char *a_argv [])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(set mute)-----------------------*/
+   yURG_all_mute ();
+   /*---(start logger)-------------------*/
+   rc = yURG_logger  (a_argc, a_argv);
+   DEBUG_PROG   yLOG_value    ("logger"    , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(process urgents)----------------*/
+   rc = yURG_urgs    (a_argc, a_argv);
+   DEBUG_PROG   yLOG_value    ("logger"    , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(process urgents)----------------*/
+   rc = PROG__header ();
+   DEBUG_PROG   yLOG_value    ("header"    , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   return rc;
+}
+
+
+
+/*====================------------------------------------====================*/
 /*===----                        startup functions                     ----===*/
 /*====================------------------------------------====================*/
 static void  o___STARTUP_________o () { return; }
 
 char         /*--> shutdown program ----------------------[ ------ [ ------ ]-*/
-PROG_init          (void)
+PROG__init              (void)
 {
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
@@ -58,7 +118,7 @@ PROG_init          (void)
 }
 
 char
-PROG_file               (char a_name [LEN_PATH], char r_base [LEN_PATH], char r_ext [LEN_TERSE])
+PROG__file              (char a_name [LEN_PATH], char r_base [LEN_PATH], char r_ext [LEN_TERSE])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -202,8 +262,8 @@ PROG_file               (char a_name [LEN_PATH], char r_base [LEN_PATH], char r_
    return 0;
 }
 
-char               /* PURPOSE : process the command line arguments            */
-PROG_args          (int a_argc, char *a_argv [], char *r_runtype, char *r_replace, char r_base [LEN_PATH], char r_ext [LEN_SHORT])
+char
+PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_replace, char r_base [LEN_PATH], char r_ext [LEN_SHORT])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -248,7 +308,7 @@ PROG_args          (int a_argc, char *a_argv [], char *r_runtype, char *r_replac
          return rce;
       }
       else {
-         rc = PROG_file (a, x_base, x_ext);
+         rc = PROG__file (a, x_base, x_ext);
          if (rc < 0) {
             DEBUG_PROG  yLOG_note   ("base name is invalid or not found");
             DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce);
@@ -288,8 +348,8 @@ PROG_args          (int a_argc, char *a_argv [], char *r_runtype, char *r_replac
    return 0;
 }
 
-char                /* PURPOSE : initialize program and key variables --------*/
-PROG_begin         (void)
+char
+PROG__begin             (void)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -323,6 +383,42 @@ PROG_begin         (void)
    return 0;
 }
 
+char
+PROG_startup            (int a_argc, char *a_argv [])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)----------------------*/
+   yURG_stage_check (YURG_BEG);
+   DEBUG_PROG  yLOG_enter   (__FUNCTION__);
+   /*---(initialize)---------------------*/
+   rc = PROG__init   ();
+   DEBUG_PROG   yLOG_value    ("init"      , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(arguments)----------------------*/
+   rc = PROG__args   (a_argc, a_argv, &(my.run_type), &(my.replace), my.n_base, my.n_ext);
+   DEBUG_PROG   yLOG_value    ("args"      , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(begin)--------------------------*/
+   rc = PROG__begin  ();
+   DEBUG_PROG   yLOG_value    ("begin"     , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_PROG  yLOG_exit  (__FUNCTION__);
+   yURG_stage_check (YURG_MID);
+   return rc;
+}
+
 
 
 /*====================------------------------------------====================*/
@@ -331,11 +427,24 @@ PROG_begin         (void)
 static void  o___WRAPUP__________o () { return; }
 
 char                /* PURPOSE : shutdown program and free memory ------------*/
-PROG_end           (void)
+PROG__end          (void)
 {
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    DEBUG_PROG   yLOG_exit    (__FUNCTION__);
-   yLOGS_end     ();
+   return 0;
+}
+
+char             /* [------] drive the program closure activities ------------*/
+PROG_shutdown           (void)
+{
+   /*---(stage-check)--------------------*/
+   yURG_stage_check (YURG_END);
+   /*---(header)-------------------------*/
+   DEBUG_PROG   yLOG_enter    (__FUNCTION__);
+   PROG__end ();
+   /*---(complete)-----------------------*/
+   DEBUG_PROG   yLOG_exit     (__FUNCTION__);
+   DEBUG_PROG   yLOGS_end    ();
    return 0;
 }
 
@@ -349,33 +458,57 @@ static void      o___UNITTEST________________o (void) {;}
 char       /*----: set up program urgents/debugging --------------------------*/
 PROG__unit_quiet   (void)
 {
-   char        x_argc      = 1;
-   char       *x_args [1]  = { "koios" };
-   yURG_logger    (x_argc, x_args);
-   PROG_init      ();
-   yURG_urgs      (x_argc, x_args);
-   PROG_args      (x_argc, x_args, &(my.run_type), &(my.replace), my.n_base, my.n_ext);
-   PROG_begin     ();
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_argc      =    2;
+   char       *x_argv [2]  = { "koios", "koios" };
+   /*---(debugging)----------------------*/
+   rc = PROG_urgents (x_argc, x_argv);
+   DEBUG_PROG   yLOG_value    ("urgents"   , rc);
+   --rce;  if (rc <  0) { 
+      PROG_shutdown ();
+      return rce;
+   }
+   /*---(initialization)-----------------*/
+   rc = PROG_startup (x_argc, x_argv);
+   DEBUG_PROG   yLOG_value    ("startup"   , rc);
+   --rce;  if (rc <  0) {
+      PROG_shutdown ();
+      return rce;
+   }
+   /*---(complete)-----------------------*/
    return 0;
 }
 
 char       /*----: set up program urgents/debugging --------------------------*/
 PROG__unit_loud    (void)
 {
-   char        x_argc      = 2;
-   char       *x_args [2]  = { "koios_unit", "@@kitchen"    };
-   yURG_logger    (x_argc, x_args);
-   PROG_init      ();
-   yURG_urgs      (x_argc, x_args);
-   PROG_args      (x_argc, x_args, &(my.run_type), &(my.replace), my.n_base, my.n_ext);
-   PROG_begin     ();
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_argc      =    3;
+   char       *x_argv [3]  = { "koios_unit", "@@kitchen" , "koios"};
+   /*---(debugging)----------------------*/
+   rc = PROG_urgents (x_argc, x_argv);
+   DEBUG_PROG   yLOG_value    ("urgents"   , rc);
+   --rce;  if (rc <  0) { 
+      PROG_shutdown ();
+      return rce;
+   }
+   /*---(initialization)-----------------*/
+   rc = PROG_startup (x_argc, x_argv);
+   DEBUG_PROG   yLOG_value    ("startup"   , rc);
+   --rce;  if (rc <  0) {
+      PROG_shutdown ();
+      return rce;
+   }
+   /*---(complete)-----------------------*/
    return 0;
 }
 
 char       /*----: set up program urgents/debugging --------------------------*/
 PROG__unit_end     (void)
 {
-   PROG_end       ();
+   PROG_shutdown   ();
    return 0;
 }
 
