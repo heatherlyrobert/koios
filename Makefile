@@ -40,7 +40,7 @@ include /usr/local/sbin/make_program
 # create a rule for...
 install_post       :
 	gcc -c unit.c
-	gcc -o unit unit.o koios_code.o koios_conv.o koios_ditto.o koios_flow.o koios_prog.o koios_read.o koios_reuse.o koios_scrp.o koios_verb.o koios_wave.o -lyUNIT -lySTR -lyURG -lyLOG
+	gcc -o unit unit.o koios_code.o koios_conv.o koios_ditto.o koios_flow.o koios_parse.o koios_prog.o koios_read.o koios_reuse.o koios_scrp.o koios_verb.o koios_wave.o -lyUNIT -lySTR -lyURG -lyLOG
 #	gcc -c unit_wave.c
 #	gcc -o unit_wave unit_wave.o koios_wave.o -lyUNIT -lySTR -lyURG -lyLOG
 

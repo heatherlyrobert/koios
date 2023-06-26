@@ -57,8 +57,7 @@ main               (int a_argc, char *a_argv [])
       if (rc == 0)  rc = CODE_beg       ();
       if (rc == 0)  rc = MAIN_beg       ();
    } else if (my.run_type == G_RUN_UPDATE) {
-      if (rc == 0)  rc = CONV_open      ();
-      if (rc == 0)  rc = CONV_beg       ();
+      if (rc == 0)  rc = CONV_header_new  (my.n_conv, &(my.f_conv), &(my.cshare));
    }
    if (rc != 0) {
       PROG_shutdown ();
@@ -93,7 +92,7 @@ main               (int a_argc, char *a_argv [])
       /*---(write code)------------------*/
       if      (my.run_type == G_RUN_CREATE)   rc = CODE_write  ();
       else if (my.run_type == G_RUN_DEBUG )   rc = CODE_write  ();
-      else if (my.run_type == G_RUN_UPDATE)   rc = CONV_driver ();
+      else if (my.run_type == G_RUN_UPDATE)   rc = CONV_driver (my.p_conv, my.f_conv, my.verb, my.desc, my.meth, my.args, my.test, my.expe, my.retn, my.share, my.mark, my.stage, &(my.cshare));
       /*---(debugging output)------------*/
       ++x_lines;
    }
@@ -111,8 +110,7 @@ main               (int a_argc, char *a_argv [])
       /*> rc = CODE_close     (my.f_wave);                                            <*/
       IF_MASTER  system  ("mv -f master_unit.cs master.h");
    } else if (my.run_type == G_RUN_UPDATE) {
-      rc = CONV_end       ();
-      rc = CONV_close     ();
+      rc = CONV_footer_new  (&(my.f_conv));
    }
    if (my.replace == G_RUN_REPLACE) {
       if (x_final == 0) {

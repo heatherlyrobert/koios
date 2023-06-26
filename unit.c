@@ -462,7 +462,7 @@ koios__unit_read_open    (char a_list)
    yUNIT_mincond  ("attempt to open a null name");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 25);
-   yUNIT_minval   ("open the script file"               , READ_open   (NULL  , &x_file, &x_line), -999);
+   yUNIT_minval   ("open the script file"               , READ_open   (NULL  , 'r', &x_file, &x_line), -999);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
@@ -473,7 +473,7 @@ koios__unit_read_open    (char a_list)
    yUNIT_mincond  ("attempt to open with no name");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 35);
-   yUNIT_minval   ("open the script file"               , READ_open   (""    , &x_file, &x_line), -999);
+   yUNIT_minval   ("open the script file"               , READ_open   (""    , 'r', &x_file, &x_line), -999);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
@@ -484,7 +484,7 @@ koios__unit_read_open    (char a_list)
    yUNIT_mincond  ("attempt to open with a non-existant file");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 45);
-   yUNIT_minval   ("open the script file"               , READ_open   (x_name, &x_file, &x_line), -999);
+   yUNIT_minval   ("open the script file"               , READ_open   (x_name, 'r', &x_file, &x_line), -999);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "file ¶/tmp/koios.unit¶ could not be openned");
@@ -497,7 +497,7 @@ koios__unit_read_open    (char a_list)
    yUNIT_mincond  ("verify openning a valid file");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 55);
-   yUNIT_minval   ("open the script file"               , READ_open   (x_name, &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open   (x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 1);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
@@ -508,7 +508,7 @@ koios__unit_read_open    (char a_list)
    yUNIT_mincond  ("attempt to re-open an open file");
    yUNIT_minpoint ("... check script pointer"           , x_file        , 1);
    yUNIT_minval   ("... check line number"              , x_line        , 65);
-   yUNIT_minval   ("open the script file"               , READ_open   (x_name, &x_file, &x_line), -999);
+   yUNIT_minval   ("open the script file"               , READ_open   (x_name, 'r', &x_file, &x_line), -999);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 1);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
@@ -588,7 +588,6 @@ koios__unit_read_defense (char a_list)
    return 0;
 }
 
-
 char
 koios__unit_read_single  (char a_list)
 {
@@ -610,7 +609,7 @@ koios__unit_read_single  (char a_list)
 
    yUNIT_mincond  ("verify reading a single record");
    system ("echo \"exec     read a line      SCRP_read       i_lesser    0      \"                                             > /tmp/koios.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -632,7 +631,7 @@ koios__unit_read_single  (char a_list)
 
    yUNIT_mincond  ("verify an empty line");
    system ("echo \"\"                                                                                                                       > /tmp/koios.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -654,7 +653,7 @@ koios__unit_read_single  (char a_list)
 
    yUNIT_mincond  ("verify another good line");
    system ("echo \"SCRP     testing          0s    tbd    - - - - -  \"                                                       > /tmp/koios.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -676,7 +675,7 @@ koios__unit_read_single  (char a_list)
 
    yUNIT_mincond  ("verify a comment");
    system ("echo \"## the descripion of something else\"                                                                              > /tmp/koios.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -698,7 +697,7 @@ koios__unit_read_single  (char a_list)
 
    yUNIT_mincond  ("verify a short line");
    system ("echo \"SCRP\"                                                                                                             > /tmp/koios.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -721,7 +720,7 @@ koios__unit_read_single  (char a_list)
    yUNIT_mincond  ("verify at end-of-file");
    system ("rm -f /tmp/koios.unit 2> /dev/null");
    system ("touch /tmp/koios.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -748,7 +747,6 @@ koios__unit_read_single  (char a_list)
    yUNIT_minprcs ();
    return 0;
 }
-
 
 char
 koios__unit_read_end_ditto  (char a_list)
@@ -784,7 +782,7 @@ koios__unit_read_end_ditto  (char a_list)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("open script, roll forward to DITTO, then start a ditto");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
    x_main     = x_file;
    fgets (x_recd, LEN_RECD, x_main);
    fgets (x_recd, LEN_RECD, x_main);
@@ -901,6 +899,267 @@ koios__unit_read_end_ditto  (char a_list)
    yUNIT_mindnoc ();
 
    PROG__unit_end    ();
+
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios__unit_read_driver  (char a_list)
+{
+   char         x_name     [LEN_HUND] = "/tmp/koios.unit";
+   FILE        *x_file     = NULL;
+   int          x_line     =    0;
+   char         x_dittoing =  '-';
+   char         x_dmark    =  '-';
+   int          x_ditto    =    0;
+   int          x_dline    =    0;
+   int          x_nrecd    =    0;
+   int          x_len      =    0;
+   char         x_recd     [LEN_RECD] = "";
+
+   yUNIT_minscrp ("READ_driver");
+   if (a_list == 'y')  return 0;
+   yURG_err_none ();  /* not to stderr/terminal */
+   system ("rm -f /tmp/koios.unit 2> /dev/null");
+
+   yUNIT_mincond  ("create an input file");
+   system ("echo \"##\"                                                                                                                                                                                                                                                                                                                                  > /tmp/koios.unit");
+   system ("echo \"\"                                                                                                                                                                                                                                                                                                                                   >> /tmp/koios.unit");
+   system ("echo \"SCRP          (CATS) verify preparation and defaulting                           0s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \"                 >> /tmp/koios.unit");
+   system ("echo \"\"                                                                                                                                                                                                                                                                                                                                   >> /tmp/koios.unit");
+   system ("echo \"   COND  (0)  verify the defaults                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \"                 >> /tmp/koios.unit");
+   system ("echo \"     exec     call prepare                         CATS__prepare               \\\"· ·  · · ·   · ·\\\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq         i_equal     0                                                                                                    \"           >> /tmp/koios.unit");
+   system ("echo \"\"                                                                                                                                                                                                                                                                                                                                   >> /tmp/koios.unit");
+   system ("echo \"   COND       make global changes                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \"                 >> /tmp/koios.unit");
+   system ("echo \"     code     ... change part                      - - - - - - - - - - - - -   x_part      = 'v';                                                                                                                                                                                                         \"                 >> /tmp/koios.unit");
+   system ("echo \"\"                                                                                                                                                                                                                                                                                                                                   >> /tmp/koios.unit");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("open the script");
+   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
+   yUNIT_mindnoc  ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("verify first good line");
+   yUNIT_minval   ("... line"                           , x_line                   ,    0);
+   yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    0);
+   yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
+   yUNIT_minval   ("... line"                           , x_line                   ,    3);
+   yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
+   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   yUNIT_minstr   ("... check the record"               , x_recd        , "SCRP         § (CATS) verify preparation and defaulting                          § 0s  § prepare        § CATS__prepare                                                               § ((01.---)) § - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  §");
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
+   yUNIT_mindnoc  ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("verify next good line");
+   yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
+   yUNIT_minval   ("... line"                           , x_line                   ,    5);
+   yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
+   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   yUNIT_minstr   ("... check the record"               , x_recd        , "   COND  (0) § verify the defaults                                               § - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  § ((01.001)) § - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  §");
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
+   yUNIT_mindnoc  ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("verify next good line");
+   yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
+   yUNIT_minval   ("... line"                           , x_line                   ,    6);
+   yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    3);
+   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   yUNIT_minstr   ("... check the record"               , x_recd        , "     exec    § call prepare                        § CATS__prepare              § \"· ·  · · ·   · ·\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq        § i_equal    § 0                                                                                                    §");
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
+   yUNIT_mindnoc  ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("verify next good line");
+   yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
+   yUNIT_minval   ("... line"                           , x_line                   ,    8);
+   yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    4);
+   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   yUNIT_minstr   ("... check the record"               , x_recd        , "   COND      § make global changes                                               § - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  § ((01.001)) § - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  §");
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
+   yUNIT_mindnoc  ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("verify next good line");
+   yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
+   yUNIT_minval   ("... line"                           , x_line                   ,    9);
+   yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    5);
+   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   yUNIT_minstr   ("... check the record"               , x_recd        , "     code    § ... change part                     § - - - - - - - - - - - - -  § x_part      = 'v';                                                                                                                                                                                                         §");
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
+   yUNIT_mindnoc  ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("verify hitting end-of-file");
+   yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    0);
+   yUNIT_minval   ("... line"                           , x_line                   ,   10);
+   yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    5);
+   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   yUNIT_minstr   ("... check the record"               , x_recd        , "");
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("close out the script");
+   yUNIT_minval   ("close the script file"              , READ_close  (&x_file), 0);
+   system ("rm -f /tmp/koios.unit 2> /dev/null");
+   yUNIT_mindnoc ();
+
+   yUNIT_minprcs ();
+   return 0;
+}
+
+
+
+/*====================------------------------------------====================*/
+/*===----                        record parsing                        ----===*/
+/*====================------------------------------------====================*/
+static void      o___PARSE___________________o (void) {;}
+
+char
+koios__unit_parse_field  (char a_list)
+{
+   char        x_spec      =  '-';
+   char        x_max       =    0;
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_meth      [LEN_HUND]  = "";
+   char        x_args      [LEN_FULL]  = "";
+   char        x_test      [LEN_LABEL] = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_retn      [LEN_FULL]  = "";
+
+   yUNIT_minscrp ("PARSE__field");
+   if (a_list == 'y')  return 0;
+   yURG_err_none ();
+
+   x_spec = 's';  x_max = 2;
+   yUNIT_mincond  ("verify script success");
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (1, "SCRP"                     , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (2, "check variable"           , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (3, "extra"                    , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
+   yUNIT_minval   ("... check max"                      , x_max         , 2);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "check variable");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   x_spec = 'f';  x_max = 7;
+   yUNIT_mincond  ("verify exec success");
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (2, "call function"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (3, "BIG_function"             , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (4, "27, 86, 't'"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (5, "i_equal"                  , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (6, "42"                       , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (7, "n"                        , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (8, "junk at end"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
+   yUNIT_minval   ("... check max"                      , x_max         , 7);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "call function");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "BIG_function");
+   yUNIT_minstr   ("... check args"                     , x_args        , "27, 86, 't'");
+   yUNIT_minstr   ("... check test"                     , x_test        , "i_equal");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "42");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "n");
+   yUNIT_mindnoc  ();
+
+   x_spec = 'p';  x_max = 4;
+   yUNIT_mincond  ("verify code success");
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (3, "- - - - - - -"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (4, "my.val = 978;"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (5, "more stuff"               , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
+   yUNIT_minval   ("... check max"                      , x_max         , 4);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "update global");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "my.val = 978;");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   x_spec = '1';  x_max = 1;
+   yUNIT_mincond  ("verify ditto success");
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__field    (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
+   yUNIT_minval   ("... check max"                      , x_max         , 1);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios__unit_parse_current   (char a_list)
+{
+   char        x_name      [LEN_HUND]  = "/tmp/koios.unit";
+   char        x_recd      [LEN_RECD]  = "";
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_meth      [LEN_HUND]  = "";
+   char        x_args      [LEN_FULL]  = "";
+   char        x_test      [LEN_LABEL] = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_retn      [LEN_FULL]  = "";
+
+   yUNIT_minscrp ("PARSE_current");
+   if (a_list == 'y')  return 0;
+   yURG_err_none ();
+
+   strcpy (x_recd, "SCRP          (CATS) verify preparation and defaulting                           0s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_mincond  ("verify script success");
+   yUNIT_minval   ("call parse"                         , PARSE_current   (x_name,  5, "SCRP", 's', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "(CATS) verify preparation and defaulting");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "CATS__prepare");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "0s");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "prepare");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "   COND  (0)  verify the defaults                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_mincond  ("verify condition success");
+   yUNIT_minval   ("call parse"                         , PARSE_current   (x_name, 10, "COND", '2', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "verify the defaults");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "     exec     call prepare                         CATS__prepare               \"· ·  · · ·   · ·\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq         i_equal     0                                                                                                    ");
+   yUNIT_mincond  ("verify exec/get success");
+   yUNIT_minval   ("call parse"                         , PARSE_current   (x_name, 15, "exec", 'f', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "call prepare");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "CATS__prepare");
+   yUNIT_minstr   ("... check args"                     , x_args        , "\"· ·  · · ·   · ·\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq");
+   yUNIT_minstr   ("... check test"                     , x_test        , "i_equal");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "0");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "     code     ... change part                      - - - - - - - - - - - - -   x_part      = 'v';                                                                                                                                                                                                           ");
+   yUNIT_mincond  ("verify code success");
+   yUNIT_minval   ("call parse"                         , PARSE_current   (x_name, 20, "code", 'p', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "... change part");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "x_part      = 'v';");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
 
    yUNIT_minprcs ();
    return 0;
@@ -1378,96 +1637,96 @@ koios__unit_ditto_read   (char a_list)
  *    yUNIT_minval ("... set master max"                 , SCRP__shared_set   ('m', 'Z') ,    0);
  *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   --------------------------   ----------");
  *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("get masters after setting");
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   --------------------------   ----------");
- *    yUNIT_minval ("... get master min"                 , SCRP__shared_get   ('m', 'A') ,   15);
- *    yUNIT_minval ("... get master middle"              , SCRP__shared_get   ('m', 'J') ,   30);
- *    yUNIT_minval ("... get master max"                 , SCRP__shared_get   ('m', 'Z') ,   45);
- *    yUNIT_minval ("... get master null"                , SCRP__shared_get   ('m',  0 ) , -999);
- *    yUNIT_minval ("... get master reuses"              , SCRP__shared_get   ('m', 'b') , -999);
- *    yUNIT_minval ("... get master dittos"              , SCRP__shared_get   ('m', '4') , -999);
- *    yUNIT_minval ("... get master greek"               , SCRP__shared_get   ('m', 'ë') , -999);
- *    yUNIT_minval ("... get master symbol"              , SCRP__shared_get   ('m', '-') , -999);
- * 
- *    yUNIT_mincond ("get reuses before setting");
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   --------------------------   ----------");
- *    yUNIT_minval ("... get reuses min"                 , SCRP__shared_get   ('r', 'a') , -999);
- *    yUNIT_minval ("... get reuses middle"              , SCRP__shared_get   ('r', 'm') , -999);
- *    yUNIT_minval ("... get reuses max"                 , SCRP__shared_get   ('r', 'z') , -999);
- *    yUNIT_minval ("... get reuses null"                , SCRP__shared_get   ('r',  0 ) , -999);
- *    yUNIT_minval ("... get reuses master"              , SCRP__shared_get   ('r', 'B') , -999);
- *    yUNIT_minval ("... get reuses dittos"              , SCRP__shared_get   ('r', '4') , -999);
- *    yUNIT_minval ("... get reuses greek"               , SCRP__shared_get   ('r', 'ë') , -999);
- *    yUNIT_minval ("... get reuses symbol"              , SCRP__shared_get   ('r', '-') , -999);
- * 
- *    yUNIT_mincond ("set reuses");
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   --------------------------   ----------");
- *    my.n_line = 60;
- *    yUNIT_minval ("... set reuses min"                 , SCRP__shared_set   ('r', 'a') ,    0);
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-------------------------   ----------");
- *    my.n_line = 75;
- *    yUNIT_minval ("... set reuses middle"              , SCRP__shared_set   ('r', 'm') ,    0);
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m-------------   ----------");
- *    my.n_line = 90;
- *    yUNIT_minval ("... set reuses max"                 , SCRP__shared_set   ('r', 'z') ,    0);
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("get reuses after setting");
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
- *    yUNIT_minval ("... get reuses min"                 , SCRP__shared_get   ('r', 'a') ,   60);
- *    yUNIT_minval ("... get reuses middle"              , SCRP__shared_get   ('r', 'm') ,   75);
- *    yUNIT_minval ("... get reuses max"                 , SCRP__shared_get   ('r', 'z') ,   90);
- *    yUNIT_minval ("... get reuses null"                , SCRP__shared_get   ('r',  0 ) , -999);
- *    yUNIT_minval ("... get reuses master"              , SCRP__shared_get   ('r', 'B') , -999);
- *    yUNIT_minval ("... get reuses dittos"              , SCRP__shared_get   ('r', '4') , -999);
- *    yUNIT_minval ("... get reuses greek"               , SCRP__shared_get   ('r', 'ë') , -999);
- *    yUNIT_minval ("... get reuses symbol"              , SCRP__shared_get   ('r', '-') , -999);
- * 
- *    yUNIT_mincond ("get dittos before setting");
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
- *    yUNIT_minval ("... get dittos min"                 , SCRP__shared_get   ('d', 'a') , -999);
- *    yUNIT_minval ("... get dittos middle"              , SCRP__shared_get   ('d', 'm') , -999);
- *    yUNIT_minval ("... get dittos max"                 , SCRP__shared_get   ('d', 'z') , -999);
- *    yUNIT_minval ("... get dittos null"                , SCRP__shared_get   ('d',  0 ) , -999);
- *    yUNIT_minval ("... get dittos master"              , SCRP__shared_get   ('d', 'B') , -999);
- *    yUNIT_minval ("... get dittos reuses"              , SCRP__shared_get   ('d', 'j') , -999);
- *    yUNIT_minval ("... get dittos greek"               , SCRP__shared_get   ('d', 'ë') , -999);
- *    yUNIT_minval ("... get dittos symbol"              , SCRP__shared_get   ('d', '-') , -999);
- * 
- *    yUNIT_mincond ("set dittos");
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
- *    my.n_line = 92;
- *    yUNIT_minval ("... set dittos min"                 , SCRP__shared_set   ('d', '0') ,    0);
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---------");
- *    my.n_line = 94;
- *    yUNIT_minval ("... set dittos middle"              , SCRP__shared_set   ('d', '4') ,    0);
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---4-----");
- *    my.n_line = 98;
- *    yUNIT_minval ("... set dittos max"                 , SCRP__shared_set   ('d', '9') ,    0);
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---4----9");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("get dittos after setting");
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---4----9");
- *    yUNIT_minval ("... get dittos min"                 , SCRP__shared_get   ('d', '0') ,   92);
- *    yUNIT_minval ("... get dittos middle"              , SCRP__shared_get   ('d', '4') ,   94);
- *    yUNIT_minval ("... get dittos max"                 , SCRP__shared_get   ('d', '9') ,   98);
- *    yUNIT_minval ("... get dittos null"                , SCRP__shared_get   ('d',  0 ) , -999);
- *    yUNIT_minval ("... get dittos master"              , SCRP__shared_get   ('d', 'B') , -999);
- *    yUNIT_minval ("... get dittos reuses"              , SCRP__shared_get   ('d', 'j') , -999);
- *    yUNIT_minval ("... get dittos greek"               , SCRP__shared_get   ('d', 'ë') , -999);
- *    yUNIT_minval ("... get dittos symbol"              , SCRP__shared_get   ('d', '-') , -999);
- * 
- *    yUNIT_mincond ("check defaults");
- *    yUNIT_minval ("... run clear"                      , SCRP__shared_purge ()         , 0);
- *    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_minprcs ();
- *    return 0;
- */
+* 
+*    yUNIT_mincond ("get masters after setting");
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   --------------------------   ----------");
+*    yUNIT_minval ("... get master min"                 , SCRP__shared_get   ('m', 'A') ,   15);
+*    yUNIT_minval ("... get master middle"              , SCRP__shared_get   ('m', 'J') ,   30);
+*    yUNIT_minval ("... get master max"                 , SCRP__shared_get   ('m', 'Z') ,   45);
+*    yUNIT_minval ("... get master null"                , SCRP__shared_get   ('m',  0 ) , -999);
+*    yUNIT_minval ("... get master reuses"              , SCRP__shared_get   ('m', 'b') , -999);
+*    yUNIT_minval ("... get master dittos"              , SCRP__shared_get   ('m', '4') , -999);
+*    yUNIT_minval ("... get master greek"               , SCRP__shared_get   ('m', 'ë') , -999);
+*    yUNIT_minval ("... get master symbol"              , SCRP__shared_get   ('m', '-') , -999);
+* 
+*    yUNIT_mincond ("get reuses before setting");
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   --------------------------   ----------");
+*    yUNIT_minval ("... get reuses min"                 , SCRP__shared_get   ('r', 'a') , -999);
+*    yUNIT_minval ("... get reuses middle"              , SCRP__shared_get   ('r', 'm') , -999);
+*    yUNIT_minval ("... get reuses max"                 , SCRP__shared_get   ('r', 'z') , -999);
+*    yUNIT_minval ("... get reuses null"                , SCRP__shared_get   ('r',  0 ) , -999);
+*    yUNIT_minval ("... get reuses master"              , SCRP__shared_get   ('r', 'B') , -999);
+*    yUNIT_minval ("... get reuses dittos"              , SCRP__shared_get   ('r', '4') , -999);
+*    yUNIT_minval ("... get reuses greek"               , SCRP__shared_get   ('r', 'ë') , -999);
+*    yUNIT_minval ("... get reuses symbol"              , SCRP__shared_get   ('r', '-') , -999);
+* 
+*    yUNIT_mincond ("set reuses");
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   --------------------------   ----------");
+*    my.n_line = 60;
+*    yUNIT_minval ("... set reuses min"                 , SCRP__shared_set   ('r', 'a') ,    0);
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-------------------------   ----------");
+*    my.n_line = 75;
+*    yUNIT_minval ("... set reuses middle"              , SCRP__shared_set   ('r', 'm') ,    0);
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m-------------   ----------");
+*    my.n_line = 90;
+*    yUNIT_minval ("... set reuses max"                 , SCRP__shared_set   ('r', 'z') ,    0);
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
+*    yUNIT_mindnoc ();
+* 
+*    yUNIT_mincond ("get reuses after setting");
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
+*    yUNIT_minval ("... get reuses min"                 , SCRP__shared_get   ('r', 'a') ,   60);
+*    yUNIT_minval ("... get reuses middle"              , SCRP__shared_get   ('r', 'm') ,   75);
+*    yUNIT_minval ("... get reuses max"                 , SCRP__shared_get   ('r', 'z') ,   90);
+*    yUNIT_minval ("... get reuses null"                , SCRP__shared_get   ('r',  0 ) , -999);
+*    yUNIT_minval ("... get reuses master"              , SCRP__shared_get   ('r', 'B') , -999);
+*    yUNIT_minval ("... get reuses dittos"              , SCRP__shared_get   ('r', '4') , -999);
+*    yUNIT_minval ("... get reuses greek"               , SCRP__shared_get   ('r', 'ë') , -999);
+*    yUNIT_minval ("... get reuses symbol"              , SCRP__shared_get   ('r', '-') , -999);
+* 
+*    yUNIT_mincond ("get dittos before setting");
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
+*    yUNIT_minval ("... get dittos min"                 , SCRP__shared_get   ('d', 'a') , -999);
+*    yUNIT_minval ("... get dittos middle"              , SCRP__shared_get   ('d', 'm') , -999);
+*    yUNIT_minval ("... get dittos max"                 , SCRP__shared_get   ('d', 'z') , -999);
+*    yUNIT_minval ("... get dittos null"                , SCRP__shared_get   ('d',  0 ) , -999);
+*    yUNIT_minval ("... get dittos master"              , SCRP__shared_get   ('d', 'B') , -999);
+*    yUNIT_minval ("... get dittos reuses"              , SCRP__shared_get   ('d', 'j') , -999);
+*    yUNIT_minval ("... get dittos greek"               , SCRP__shared_get   ('d', 'ë') , -999);
+*    yUNIT_minval ("... get dittos symbol"              , SCRP__shared_get   ('d', '-') , -999);
+* 
+*    yUNIT_mincond ("set dittos");
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   ----------");
+*    my.n_line = 92;
+*    yUNIT_minval ("... set dittos min"                 , SCRP__shared_set   ('d', '0') ,    0);
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---------");
+*    my.n_line = 94;
+*    yUNIT_minval ("... set dittos middle"              , SCRP__shared_set   ('d', '4') ,    0);
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---4-----");
+*    my.n_line = 98;
+*    yUNIT_minval ("... set dittos max"                 , SCRP__shared_set   ('d', '9') ,    0);
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---4----9");
+*    yUNIT_mindnoc ();
+* 
+*    yUNIT_mincond ("get dittos after setting");
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "A--------J---------------Z   a-----------m------------z   0---4----9");
+*    yUNIT_minval ("... get dittos min"                 , SCRP__shared_get   ('d', '0') ,   92);
+*    yUNIT_minval ("... get dittos middle"              , SCRP__shared_get   ('d', '4') ,   94);
+*    yUNIT_minval ("... get dittos max"                 , SCRP__shared_get   ('d', '9') ,   98);
+*    yUNIT_minval ("... get dittos null"                , SCRP__shared_get   ('d',  0 ) , -999);
+*    yUNIT_minval ("... get dittos master"              , SCRP__shared_get   ('d', 'B') , -999);
+*    yUNIT_minval ("... get dittos reuses"              , SCRP__shared_get   ('d', 'j') , -999);
+*    yUNIT_minval ("... get dittos greek"               , SCRP__shared_get   ('d', 'ë') , -999);
+*    yUNIT_minval ("... get dittos symbol"              , SCRP__shared_get   ('d', '-') , -999);
+* 
+*    yUNIT_mincond ("check defaults");
+*    yUNIT_minval ("... run clear"                      , SCRP__shared_purge ()         , 0);
+*    yUNIT_minstr ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+*    yUNIT_mindnoc ();
+* 
+*    yUNIT_minprcs ();
+*    return 0;
+*/
 
 
 
@@ -1707,7 +1966,7 @@ koios__unit_reuse_global (char a_list)
    char        x_desc      [LEN_LONG]  = "";
    char        x_share     =  '-';
 
-   yUNIT_minscrp ("REUSE_parse (global)");
+   yUNIT_minscrp ("REUSE_parse (GLOBAL)");
    if (a_list == 'y')  return 0;
    yURG_err_none ();
 
@@ -1717,13 +1976,54 @@ koios__unit_reuse_global (char a_list)
    yUNIT_mindnoc ();
 
    yURG_err_clear ();
+   yUNIT_mincond ("verify ignoring other verbs");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "exec"     , "  exec      read a line          "   , '-', &x_share),    0);
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "SCRP"     , "SCRP        test the reading     "   , '-', &x_share),    0);
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("attempt reusing a missing identifier");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   1, "REUSE"    , "REUSE  -K-  - - - - - - - - - -  "   , '-', &x_share), -999);
+   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/master.unit:1:0: error: ¶REUSE  -K-¶ verb identifier ¶K¶ never set by GLOBAL");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("attempt reusing a illegal identifier");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   3, "REUSE"    , "REUSE  -ò-  - - - - - - - - - -  "   , '-', &x_share), -999);
+   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/master.unit:3:0: error: ¶REUSE  -ò-¶ verb identifier ¶ò¶ not valid [a-zA-Z]");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
    yUNIT_mincond ("verify simple global identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   5, "GLOBAL"   , "GLOBAL -A-  generate test data   "   , '-', &x_share), 1);
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   4, "GLOBAL"   , "GLOBAL -A-  generate test data   "   , '-', &x_share), 1);
    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
    yUNIT_minchr  ("... check mark"                     , x_share             , 'A');
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc)         ,    5);
+   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc)         ,    4);
    yUNIT_minstr  ("... show desc"                      , x_desc                           , "generate test data");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("verify reusing the identifier (in normal unit)");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   5, "REUSE"    , "REUSE  -A-  - - - - - - - - - -  "   , '-', &x_share), 1);
+   yUNIT_minchr  ("... check mark"                     , x_share             , 'A');
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("verify reusing the identifier (in master unit)");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   5, "REUSE"    , "REUSE  -A-  - - - - - - - - - -  "   , '-', &x_share), 1);
+   yUNIT_minchr  ("... check mark"                     , x_share             , 'A');
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("verify defenses");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, NULL       , "REUSE  -A-  - - - - - - - - - -  "   , '-', &x_share), -999);
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "REUSE"    , NULL                                      , '-', &x_share), -999);
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "REUSE"    , "REUSE  -A-  - - - - - - - - - -  "   , '-', NULL    ), -999);
    yUNIT_mindnoc ();
 
    yURG_err_clear ();
@@ -1816,6 +2116,13 @@ koios__unit_reuse_global (char a_list)
    yUNIT_minstr  ("... show desc"                      , x_desc                           , "final check");
    yUNIT_mindnoc ();
 
+   yURG_err_clear ();
+   yUNIT_mincond ("attempt reusing inside itself");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  35, "REUSE"    , "REUSE  -A-  - - - - - - - - - -  "   , 'A', &x_share), -999);
+   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/master.unit:35:0: error: ¶REUSE  -A-¶ verb identifier ¶A¶ called inside itself, recursive");
+   yUNIT_mindnoc ();
+
    yUNIT_minprcs ();
    return 0;
 }
@@ -1828,13 +2135,33 @@ koios__unit_reuse_shares (char a_list)
    char        x_desc      [LEN_LONG]  = "";
    char        x_share     =  '-';
 
-   yUNIT_minscrp ("REUSE_parse (global)");
+   yUNIT_minscrp ("REUSE_parse (SHARE)");
    if (a_list == 'y')  return 0;
    yURG_err_none ();
 
    yUNIT_mincond ("set to defaults");
    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("verify ignoring other verbs");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "exec"     , "  exec      read a line          "   , '-', &x_share),    0);
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "SCRP"     , "SCRP        test the reading     "   , '-', &x_share),    0);
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("attempt reusing a missing identifier");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   1, "REUSE"    , "REUSE  -k-  - - - - - - - - - -  "   , '-', &x_share), -999);
+   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:0: error: ¶REUSE  -k-¶ verb identifier ¶k¶ never set by SHARED");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("attempt reusing a illegal identifier");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   3, "REUSE"    , "REUSE  -ò-  - - - - - - - - - -  "   , '-', &x_share), -999);
+   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:3:0: error: ¶REUSE  -ò-¶ verb identifier ¶ò¶ not valid [a-zA-Z]");
    yUNIT_mindnoc ();
 
    yURG_err_clear ();
@@ -1845,6 +2172,27 @@ koios__unit_reuse_shares (char a_list)
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc)         ,    5);
    yUNIT_minstr  ("... show desc"                      , x_desc                           , "generate test data");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("verify reusing the identifier (in normal unit)");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   5, "REUSE"    , "REUSE  -a-  - - - - - - - - - -  "   , '-', &x_share), 1);
+   yUNIT_minchr  ("... check mark"                     , x_share             , 'a');
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("attempt reusing the identifier (in master unit)");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   5, "REUSE"    , "REUSE  -a-  - - - - - - - - - -  "   , '-', &x_share), -999);
+   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/master.unit:5:0: error: REUSE verb on ¶a¶ SHARED identifier not allowed inside master.unit");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("verify defenses");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, NULL       , "REUSE  -a-  - - - - - - - - - -  "   , '-', &x_share), -999);
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "REUSE"    , NULL                                      , '-', &x_share), -999);
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "REUSE"    , "REUSE  -a-  - - - - - - - - - -  "   , '-', NULL    ), -999);
    yUNIT_mindnoc ();
 
    yURG_err_clear ();
@@ -1935,6 +2283,13 @@ koios__unit_reuse_shares (char a_list)
    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc)         ,   30);
    yUNIT_minstr  ("... show desc"                      , x_desc                           , "final check");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond ("attempt reusing inside itself");
+   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  35, "REUSE"    , "REUSE  -a-  - - - - - - - - - -  "   , 'a', &x_share), -999);
+   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
+   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:35:0: error: ¶REUSE  -a-¶ verb identifier ¶a¶ called inside itself, recursive");
    yUNIT_mindnoc ();
 
    yUNIT_minprcs ();
@@ -2336,6 +2691,1040 @@ koios__unit_reuse_parse  (char a_list)
    return 0;
 }
 
+
+
+/*====================------------------------------------====================*/
+/*===----                         conversion                           ----===*/
+/*====================------------------------------------====================*/
+static void      o___CONV_NEW________________o (void) {;}
+
+char
+koios__unit_conv_defense (char a_list)
+{
+   char         x_cshare   =  '-';
+
+   yUNIT_minscrp  ("CONV__defense");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   yUNIT_mincond  ("verify a quick success");
+   yUNIT_minval   ("call defense"                       , CONV__defense (0xabcd    , "SHARED"  , "testing description" , "DITTO_parse"    , "x, y, 21"       , "i_lesser"  , "pretty expected", "rc"        , '-', '-', "10", &x_cshare  ),    0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt with various nulls");
+   yUNIT_minval   ("call defense"                       , CONV__defense (NULL      , "SHARED"  , "testing description" , "DITTO_parse"    , "x, y, 21"       , "i_lesser"  , "pretty expected", "rc"        , '-', '-', "10", &x_cshare  ), -999);
+   yUNIT_minval   ("call defense"                       , CONV__defense (0xFFFF    , NULL      , "testing description" , "DITTO_parse"    , "x, y, 21"       , "i_lesser"  , "pretty expected", "rc"        , '-', '-', "10", &x_cshare  ), -999);
+   yUNIT_minval   ("call defense"                       , CONV__defense (0xFFFF    , "SHARED"  , NULL                  , "DITTO_parse"    , "x, y, 21"       , "i_lesser"  , "pretty expected", "rc"        , '-', '-', "10", &x_cshare  ), -999);
+   yUNIT_minval   ("call defense"                       , CONV__defense (0xFFFF    , "SHARED"  , "testing description" , NULL             , "x, y, 21"       , "i_lesser"  , "pretty expected", "rc"        , '-', '-', "10", &x_cshare  ), -999);
+   yUNIT_minval   ("call defense"                       , CONV__defense (0xFFFF    , "SHARED"  , "testing description" , "DITTO_parse"    , NULL             , "i_lesser"  , "pretty expected", "rc"        , '-', '-', "10", &x_cshare  ), -999);
+   yUNIT_minval   ("call defense"                       , CONV__defense (0xFFFF    , "SHARED"  , "testing description" , "DITTO_parse"    , "x, y, 21"       , NULL        , "pretty expected", "rc"        , '-', '-', "10", &x_cshare  ), -999);
+   yUNIT_minval   ("call defense"                       , CONV__defense (0xFFFF    , "SHARED"  , "testing description" , "DITTO_parse"    , "x, y, 21"       , "i_lesser"  , NULL             , "rc"        , '-', '-', "10", &x_cshare  ), -999);
+   yUNIT_minval   ("call defense"                       , CONV__defense (0xFFFF    , "SHARED"  , "testing description" , "DITTO_parse"    , "x, y, 21"       , "i_lesser"  , "pretty expected", NULL        , '-', '-', "10", &x_cshare  ), -999);
+   yUNIT_minval   ("call defense"                       , CONV__defense (0xFFFF    , "SHARED"  , "testing description" , "DITTO_parse"    , "x, y, 21"       , "i_lesser"  , "pretty expected", "rc"        , '-', '-', NULL, &x_cshare  ), -999);
+   yUNIT_minval   ("call defense"                       , CONV__defense (0xFFFF    , "SHARED"  , "testing description" , "DITTO_parse"    , "x, y, 21"       , "i_lesser"  , "pretty expected", "rc"        , '-', '-', "10", NULL       ), -999);
+   yUNIT_mindnoc  ();
+
+
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios__unit_conv_printf  (char a_list)
+{
+   char         x_name     [LEN_HUND] = "/tmp/koios.unit";
+   char         t          [LEN_HUND] = "";
+   FILE        *x_file     = NULL;
+
+   yUNIT_minscrp  ("CONV_printf");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   sprintf (t, "touch %s", x_name);  system (t);
+   yUNIT_mincond  ("open the conversion file");
+   yUNIT_minval   ("open file"                          , READ_open   (x_name, 'w', &x_file, NULL), 0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify printing a format only");
+   yUNIT_minval   ("write line"                         , CONV_printf_new  (x_file    , "format only\n"                  ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "format only"                              );
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt with null file");
+   yUNIT_minval   ("write line"                         , CONV_printf_new  (NULL      , "a mistake\n"                    ), -999);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "format only"                              );
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify printing a single variable");
+   yUNIT_minval   ("write line"                         , CONV_printf_new  (x_file    , "%s\n"                  , "testing"                  ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "format only"                              );
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , "testing"                                  );
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   2)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt with null format");
+   yUNIT_minval   ("write line"                         , CONV_printf_new  (x_file    , NULL                    , "testing"                  ), -999);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "format only"                              );
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , "testing"                                  );
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   2)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify printing a multiple variables");
+   yUNIT_minval   ("write line"                         , CONV_printf_new  (x_file    , "%s (%d) %s\n"          , "whos"  , 52 , "heading"   ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "format only"                              );
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , "testing"                                  );
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   2)      , "whos (52) heading"                        );
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   3)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("close the conversion file");
+   yUNIT_minval   ("close file"                         , READ_close  (&x_file), 0);
+   sprintf (t, "rm -f %s   2> /dev/null", x_name);  system (t);
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios__unit_conv_preps   (char a_list)
+{
+   char         x_name     [LEN_HUND]  = "/tmp/koios.unit";
+   char         t          [LEN_HUND]  = "";
+   FILE        *x_file     = NULL;
+   char         x_cshare   =  '-';
+
+   yUNIT_minscrp  ("CONV_header, CONV_prep, CONV_incl, CONV_footer");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   yUNIT_mincond  ("open the conversion file");
+   yUNIT_minval   ("open file"                          , READ_open       (x_name, 'w', &x_file, NULL), 0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a HEADER");
+   yUNIT_minval   ("write conv line"                    , CONV_break_new  (x_file    ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 5);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   3)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   4)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a PREP");
+   yUNIT_minval   ("write conv line"                    , CONV_prep_new   (x_file    , "PREP"    , "prototype headers"   , ""               , ""               , ""          , ""               , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 11);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   3)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   4)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   7)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   8)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   9)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check resuls"                   , yURG_peek       (x_name    ,  10)      , "PREP          prototype headers                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  11)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing an INCL");
+   yUNIT_minval   ("write conv line"                    , CONV_incl_new   (x_file    , "incl"    , "public header"       , "koios.h"        , ""               , ""          , ""               , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 12);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   3)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   4)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   7)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   8)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   9)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check resuls"                   , yURG_peek       (x_name    ,  10)      , "PREP          prototype headers                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check resuls"                   , yURG_peek       (x_name    ,  11)      , "   incl       public header                        koios.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  12)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a COMMENT");
+   yUNIT_minval   ("write conv line"                    , CONV_comment_new(x_file    , "#>"      , ""                    , ""               , ""               , ""          , "#> comment"     , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 13);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   3)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   4)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   7)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   8)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   9)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check resuls"                   , yURG_peek       (x_name    ,  10)      , "PREP          prototype headers                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check resuls"                   , yURG_peek       (x_name    ,  11)      , "   incl       public header                        koios.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check resuls"                   , yURG_peek       (x_name    ,  12)      , "#> comment");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  13)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("close the conversion file");
+   yUNIT_minval   ("close file"                         , READ_close  (&x_file), 0);
+   sprintf (t, "rm -f %s   2> /dev/null", x_name);  system (t);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify opening file and writing a HEADER");
+   yUNIT_minpoint ("... check file pointer"             , x_file                     ,  0);
+   yUNIT_minval   ("write conv line"                    , CONV_header_new (x_name, &x_file, &x_cshare),    0);
+   yUNIT_minpoint ("... check file pointer"             , x_file                     ,  1);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 2);
+   yUNIT_minstr   ("... header"                         , yURG_peek       (x_name    ,   0)      , "#!/usr/local/bin/koios"                   );
+   yUNIT_minstr   ("... header"                         , yURG_peek       (x_name    ,   1)      , "#   koios-polos (axis of heaven) unit testing meta-language" );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing FOOTER and closing file");
+   yUNIT_minpoint ("... check file pointer"             , x_file                     ,  1);
+   yUNIT_minval   ("write conv line"                    , CONV_footer_new (&x_file)                   ,    0);
+   yUNIT_minpoint ("... check file pointer"             , x_file                     ,  0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 6);
+   yUNIT_minstr   ("... header"                         , yURG_peek       (x_name    ,   0)      , "#!/usr/local/bin/koios"                   );
+   yUNIT_minstr   ("... header"                         , yURG_peek       (x_name    ,   1)      , "#   koios-polos (axis of heaven) unit testing meta-language" );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   3)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   4)      , ""                                         );
+   yUNIT_minstr   ("... footer"                         , yURG_peek       (x_name    ,   5)      , "# end-of-file.  done, finito, completare, whimper [Ï´···");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("close the conversion file");
+   sprintf (t, "rm -f %s   2> /dev/null", x_name);  system (t);
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios__unit_conv_scrps   (char a_list)
+{
+   char         x_suf      [LEN_SHORT] = "";
+   char         x_cnt      [LEN_LABEL] = "";
+   char         x_name     [LEN_HUND]  = "/tmp/koios.unit";
+   char         t          [LEN_HUND]  = "";
+   FILE        *x_file     = NULL;
+   char         x_cshare   =  '-';
+
+   yUNIT_minscrp  ("CONV_cond, CONV_ditto, CONV_group, COND_reuse");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   my.nscrp =  5;  my.ncond =  32;  x_cshare = '-';
+   yUNIT_mincond  ("verify common outputs");
+   yUNIT_minval   ("call for SCRP without stage"        , CONV__scrp_add  ('y' , '-'  , ""    , x_suf, x_cnt, &x_cshare),    0);
+   yUNIT_minstr   ("... check suffix"                   , x_suf            , "");
+   yUNIT_minstr   ("... check count"                    , x_cnt            , "((06.---))");
+   yUNIT_minval   ("... check my.nscrp"                 , my.nscrp         ,   6);
+   yUNIT_minval   ("... check my.ncond"                 , my.ncond         ,   0);
+   yUNIT_minchr   ("... check x_cshare"                 , x_cshare         , '-');
+   yUNIT_minval   ("call for SECT"                      , CONV__scrp_add  ('-' , '-'  , ""    , x_suf, x_cnt, &x_cshare),    0);
+   yUNIT_minstr   ("... check suffix"                   , x_suf            , "");
+   yUNIT_minstr   ("... check count"                    , x_cnt            , "((06.---))");
+   yUNIT_minval   ("... check my.nscrp"                 , my.nscrp         ,   6);
+   yUNIT_minval   ("... check my.ncond"                 , my.ncond         ,   0);
+   yUNIT_minchr   ("... check x_cshare"                 , x_cshare         , '-');
+   yUNIT_minval   ("call for SHARED"                    , CONV__scrp_add  ('y' , 'd'  , ""    , x_suf, x_cnt, &x_cshare),    0);
+   yUNIT_minstr   ("... check suffix"                   , x_suf            , "-d-");
+   yUNIT_minstr   ("... check count"                    , x_cnt            , "((dd.---))");
+   yUNIT_minval   ("... check my.nscrp"                 , my.nscrp         ,   7);
+   yUNIT_minval   ("... check my.ncond"                 , my.ncond         ,   0);
+   yUNIT_minchr   ("... check x_cshare"                 , x_cshare         , 'd');
+   yUNIT_minval   ("call for SCRP with stage"           , CONV__scrp_add  ('y' , '-'  , "Âò"  , x_suf, x_cnt, &x_cshare),    0);
+   yUNIT_minstr   ("... check suffix"                   , x_suf            , "[Âò]");
+   yUNIT_minstr   ("... check count"                    , x_cnt            , "((08.---))");
+   yUNIT_minval   ("... check my.nscrp"                 , my.nscrp         ,   8);
+   yUNIT_minval   ("... check my.ncond"                 , my.ncond         ,   0);
+   yUNIT_minchr   ("... check x_cshare"                 , x_cshare         , '-');
+   yUNIT_minval   ("call for GLOBAL"                    , CONV__scrp_add  ('y' , 'V'  , ""    , x_suf, x_cnt, &x_cshare),    0);
+   yUNIT_minstr   ("... check suffix"                   , x_suf            , "-V-");
+   yUNIT_minstr   ("... check count"                    , x_cnt            , "((VV.---))");
+   yUNIT_minval   ("... check my.nscrp"                 , my.nscrp         ,   9);
+   yUNIT_minval   ("... check my.ncond"                 , my.ncond         ,   0);
+   yUNIT_minchr   ("... check x_cshare"                 , x_cshare         , 'V');
+   yUNIT_mindnoc  ();
+
+   sprintf (t, "touch %s", x_name);  system (t);
+   yUNIT_mincond  ("open the conversion file");
+   yUNIT_minval   ("open file"                          , READ_open       (x_name, 'w', &x_file, NULL), 0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a SCRP without stage");
+   yUNIT_minval   ("write conv line"                    , CONV_scrp_new   (x_file    , "SCRP"    , "test funky thing"    , "func1, func2"   , ""               , "5m"        , ""               , "funky"     , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 6);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   3)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   4)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , "SCRP          test funky thing                                                   5m   funky           func1, func2                                                                 ((10.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a SCRP with stage");
+   yUNIT_minval   ("write conv line"                    , CONV_scrp_new   (x_file    , "SCRP"    , "critical test"       , "yURG_huge"      , ""               , "3s"        , ""               , "BOOMy"     , '-', '-', "Àè", &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 12);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   3)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   4)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , "SCRP          test funky thing                                                   5m   funky           func1, func2                                                                 ((10.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   7)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   8)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   9)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  10)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  11)      , "SCRP    [Àè]  critical test                                                      3s   BOOMy           yURG_huge                                                                    ((11.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  12)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a SECT");
+   yUNIT_minval   ("write conv line"                    , CONV_sect_new   (x_file    , "SECT"    , "big stuff here"      , ""               , ""               , ""          , ""               , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 18);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   3)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   4)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , "SCRP          test funky thing                                                   5m   funky           func1, func2                                                                 ((10.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   7)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   8)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   9)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  10)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  11)      , "SCRP    [Àè]  critical test                                                      3s   BOOMy           yURG_huge                                                                    ((11.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  12)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  13)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  14)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,  15)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  16)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  17)      , "SECT          big stuff here                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  18)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a SHARED");
+   yUNIT_minval   ("write conv line"                    , CONV_shared_new (x_file    , "SHARED"  , "in the same file"    , ""               , ""               , "0s"        , ""               , "simple"    , 'a', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 24);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   3)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   4)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , "SCRP          test funky thing                                                   5m   funky           func1, func2                                                                 ((10.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   7)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   8)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   9)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  10)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  11)      , "SCRP    [Àè]  critical test                                                      3s   BOOMy           yURG_huge                                                                    ((11.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  12)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  13)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  14)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,  15)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  16)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  17)      , "SECT          big stuff here                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  18)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  19)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  20)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,  21)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  22)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  23)      , "SHARED   -a-  in the same file                                                   0s   simple                                                                                       ((aa.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  24)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a GLOBAL");
+   yUNIT_minval   ("write conv line"                    , CONV_global_new (x_file    , "GLOBAL"  , "in the master file"  , ""               , ""               , "5s"        , ""               , "central"   , 'Z', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 30);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   3)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   4)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , "SCRP          test funky thing                                                   5m   funky           func1, func2                                                                 ((10.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   7)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   8)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   9)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  10)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  11)      , "SCRP    [Àè]  critical test                                                      3s   BOOMy           yURG_huge                                                                    ((11.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  12)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  13)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  14)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,  15)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  16)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  17)      , "SECT          big stuff here                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  18)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  19)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  20)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,  21)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  22)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  23)      , "SHARED   -a-  in the same file                                                   0s   simple                                                                                       ((aa.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  24)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  25)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  26)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,  27)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  28)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  29)      , "GLOBAL   -Z-  in the master file                                                 5s   central                                                                                      ((ZZ.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  30)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("close the conversion file");
+   yUNIT_minval   ("close file"                         , READ_close  (&x_file), 0);
+   sprintf (t, "rm -f %s   2> /dev/null", x_name);  system (t);
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios__unit_conv_conds   (char a_list)
+{
+   char         x_suf      [LEN_SHORT] = "";
+   char         x_cnt      [LEN_LABEL] = "";
+   char         x_name     [LEN_HUND]  = "/tmp/koios.unit";
+   char         t          [LEN_HUND]  = "";
+   FILE        *x_file     = NULL;
+   char         x_cshare   =  '-';
+
+   yUNIT_minscrp  ("CONV_cond, CONV_ditto, CONV_group, COND_reuse");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   my.nscrp =  2;  my.ncond =  32;
+   yUNIT_mincond  ("verify common outputs");
+   yUNIT_minval   ("call common"                        , CONV__cond_add  ('-'  , '-'  , x_suf, x_cnt),    0);
+   yUNIT_minstr   ("... check suffix"                   , x_suf            , "");
+   yUNIT_minstr   ("... check count"                    , x_cnt            , "((02.033))");
+   yUNIT_minval   ("call marked"                        , CONV__cond_add  ('2'  , '-'  , x_suf, x_cnt),    0);
+   yUNIT_minstr   ("... check suffix"                   , x_suf            , "(2)");
+   yUNIT_minstr   ("... check count"                    , x_cnt            , "((02.034))");
+   yUNIT_minval   ("call shared"                        , CONV__cond_add  ('-'  , 'b'  , x_suf, x_cnt),    0);
+   yUNIT_minstr   ("... check suffix"                   , x_suf            , "");
+   yUNIT_minstr   ("... check count"                    , x_cnt            , "((bb.035))");
+   yUNIT_mindnoc  ();
+
+   sprintf (t, "touch %s", x_name);  system (t);
+   yUNIT_mincond  ("open the conversion file");
+   yUNIT_minval   ("open file"                          , READ_open       (x_name, 'w', &x_file, NULL), 0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a COND not marked");
+   yUNIT_minval   ("write conv line"                    , CONV_cond_new   (x_file    , "COND"    , "initialize"          , ""               , ""               , ""          , ""               , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 2);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , "   COND       initialize                                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.036))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a COND with mark");
+   yUNIT_minval   ("write conv line"                    , CONV_cond_new   (x_file    , "COND"    , "setting a mark"      , ""               , ""               , ""          , ""               , ""          , '-', '2', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 4);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , "   COND       initialize                                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.036))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   3)      , "   COND  (2)  setting a mark                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.037))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   4)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a COND in a share");
+   yUNIT_minval   ("write conv line"                    , CONV_cond_new   (x_file    , "COND"    , "within a share"      , ""               , ""               , ""          , ""               , ""          , 'b', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 6);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , "   COND       initialize                                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.036))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   3)      , "   COND  (2)  setting a mark                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.037))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   4)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , "   COND       within a share                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.038))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a DITTO");
+   yUNIT_minval   ("write conv line"                    , CONV_ditto_new  (x_file    , "DITTO"   , "call back desc"      , ""               , ""               , ""          , ""               , ""          , '-', '5', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 8);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , "   COND       initialize                                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.036))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   3)      , "   COND  (2)  setting a mark                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.037))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   4)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , "   COND       within a share                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.038))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   7)      , "   DITTO (5)  call back desc                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.039))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   8)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a REUSE");
+   yUNIT_minval   ("write conv line"                    , CONV_reuse_new  (x_file    , "REUSE"   , "call share"          , ""               , ""               , ""          , ""               , ""          , '-', 's', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 10);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , "   COND       initialize                                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.036))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   3)      , "   COND  (2)  setting a mark                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.037))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   4)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , "   COND       within a share                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.038))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   7)      , "   DITTO (5)  call back desc                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.039))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   8)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   9)      , "   REUSE (s)  call share                                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.040))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  10)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a GROUP");
+   yUNIT_minval   ("write conv line"                    , CONV_group_new  (x_file    , "GROUP"   , "connected stuff"     , ""               , ""               , ""          , ""               , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 12);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   0)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   1)      , "   COND       initialize                                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.036))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   3)      , "   COND  (2)  setting a mark                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.037))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   4)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   5)      , "   COND       within a share                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.038))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   6)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   7)      , "   DITTO (5)  call back desc                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.039))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   8)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   9)      , "   REUSE (s)  call share                                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.040))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  10)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  11)      , "   GROUP      connected stuff                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  12)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("close the conversion file");
+   yUNIT_minval   ("close file"                         , READ_close  (&x_file), 0);
+   sprintf (t, "rm -f %s   2> /dev/null", x_name);  system (t);
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios__unit_conv_steps   (char a_list)
+{
+   char         x_name     [LEN_HUND] = "/tmp/koios.unit";
+   char         t          [LEN_HUND] = "";
+   FILE        *x_file     = NULL;
+   char         x_cshare   =  '-';
+
+   yUNIT_minscrp  ("CONV_exec, CONV_load, CONV_file, CONV_appe, CONV_mode, CONV_code, CONV_gvar, CONV_echo");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   sprintf (t, "touch %s", x_name);  system (t);
+   yUNIT_mincond  ("open the conversion file");
+   yUNIT_minval   ("open file"                          , READ_open   (x_name, 'w', &x_file, NULL), 0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing an EXEC");
+   yUNIT_minval   ("write conv line"                    , CONV_exec_new  (x_file    , "exec"    , "call the function"   , "DITTO_parse"    , "x, y, 21"       , "s_equal"   , "pretty expected", "x_str"     , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "     exec     call the function                    DITTO_parse                 x, y, 21                                                                                              s_equal     pretty expected                                                                                       x_str                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a LOAD");
+   yUNIT_minval   ("write conv line"                    , CONV_load_new  (x_file    , "load"    , "prepare input"       , "stdin"          , ""               , ""          , "test § 15 § a"  , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "     exec     call the function                    DITTO_parse                 x, y, 21                                                                                              s_equal     pretty expected                                                                                       x_str                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , "     load     prepare input                        stdin                       test § 15 § a                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   2)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a FILE");
+   yUNIT_minval   ("write conv line"                    , CONV_file_new  (x_file    , "file"    , "read for writing"    , ""               , ""               , ""          , "[[ my.file ]]"  , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "     exec     call the function                    DITTO_parse                 x, y, 21                                                                                              s_equal     pretty expected                                                                                       x_str                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , "     load     prepare input                        stdin                       test § 15 § a                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   2)      , "     file     read for writing                     - - - - - - - - - - - - -   [[ my.file ]]                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   3)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing an APPEND");
+   yUNIT_minval   ("write conv line"                    , CONV_append_new  (x_file    , "append"  , "... add a record"    , ""               , ""               , ""          , "nice data"      , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "     exec     call the function                    DITTO_parse                 x, y, 21                                                                                              s_equal     pretty expected                                                                                       x_str                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , "     load     prepare input                        stdin                       test § 15 § a                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   2)      , "     file     read for writing                     - - - - - - - - - - - - -   [[ my.file ]]                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   3)      , "     append   ... add a record                     - - - - - - - - - - - - -   nice data                                                                                                                                                                                                                  "); 
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   4)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a CODE");
+   yUNIT_minval   ("write conv line"                    , CONV_code_new  (x_file    , "code"    , "update prefix"       , ""               , ""               , ""          , "x_one = 13;"    , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "     exec     call the function                    DITTO_parse                 x, y, 21                                                                                              s_equal     pretty expected                                                                                       x_str                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , "     load     prepare input                        stdin                       test § 15 § a                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   2)      , "     file     read for writing                     - - - - - - - - - - - - -   [[ my.file ]]                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   3)      , "     append   ... add a record                     - - - - - - - - - - - - -   nice data                                                                                                                                                                                                                  "); 
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   4)      , "     code     update prefix                        - - - - - - - - - - - - -   x_one = 13;                                                                                                                                                                                                                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   5)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a global variable");
+   yUNIT_minval   ("write conv line"                    , CONV_gvar_new  (x_file    , "global"  , "global variable"     , ""               , ""               , ""          , "short a = 5;"   , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "     exec     call the function                    DITTO_parse                 x, y, 21                                                                                              s_equal     pretty expected                                                                                       x_str                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , "     load     prepare input                        stdin                       test § 15 § a                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   2)      , "     file     read for writing                     - - - - - - - - - - - - -   [[ my.file ]]                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   3)      , "     append   ... add a record                     - - - - - - - - - - - - -   nice data                                                                                                                                                                                                                  "); 
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   4)      , "     code     update prefix                        - - - - - - - - - - - - -   x_one = 13;                                                                                                                                                                                                                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   5)      , "   global     global variable                      - - - - - - - - - - - - -   short a = 5;                                                                                                                                                                                                               ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   6)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a local variable");
+   yUNIT_minval   ("write conv line"                    , CONV_code_new  (x_file    , "local"   , "local variable"      , ""               , ""               , ""          , "char rc = 0;"   , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "     exec     call the function                    DITTO_parse                 x, y, 21                                                                                              s_equal     pretty expected                                                                                       x_str                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , "     load     prepare input                        stdin                       test § 15 § a                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   2)      , "     file     read for writing                     - - - - - - - - - - - - -   [[ my.file ]]                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   3)      , "     append   ... add a record                     - - - - - - - - - - - - -   nice data                                                                                                                                                                                                                  "); 
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   4)      , "     code     update prefix                        - - - - - - - - - - - - -   x_one = 13;                                                                                                                                                                                                                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   5)      , "   global     global variable                      - - - - - - - - - - - - -   short a = 5;                                                                                                                                                                                                               ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   6)      , "     local    local variable                       - - - - - - - - - - - - -   char rc = 0;                                                                                                                                                                                                               ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   7)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing an ECHO");
+   yUNIT_minval   ("write conv line"                    , CONV_echo_new  (x_file    , "echo"    , "... check value"     , ""               , "x_act"          , "s_equal"   , "[[ x_exp ]]"    , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "     exec     call the function                    DITTO_parse                 x, y, 21                                                                                              s_equal     pretty expected                                                                                       x_str                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , "     load     prepare input                        stdin                       test § 15 § a                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   2)      , "     file     read for writing                     - - - - - - - - - - - - -   [[ my.file ]]                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   3)      , "     append   ... add a record                     - - - - - - - - - - - - -   nice data                                                                                                                                                                                                                  "); 
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   4)      , "     code     update prefix                        - - - - - - - - - - - - -   x_one = 13;                                                                                                                                                                                                                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   5)      , "   global     global variable                      - - - - - - - - - - - - -   short a = 5;                                                                                                                                                                                                               ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   6)      , "     local    local variable                       - - - - - - - - - - - - -   char rc = 0;                                                                                                                                                                                                               ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   7)      , "     echo     ... check value                      - - - - - - - - - - - - -   x_act                                                                                                 s_equal     [[ x_exp ]]                                                                                          ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   8)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("close the conversion file");
+   yUNIT_minval   ("close file"                         , READ_close  (&x_file), 0);
+   sprintf (t, "rm -f %s   2> /dev/null", x_name);  system (t);
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios__unit_conv_driver  (char a_list)
+{
+   char         x_name     [LEN_HUND]  = "/tmp/koios.unit";
+   char         t          [LEN_HUND]  = "";
+   FILE        *x_file     = NULL;
+   char         x_cshare   =  '-';
+
+   yUNIT_minscrp  ("CONV_driver");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   yUNIT_mincond  ("verify creating and writing the opening");
+   yUNIT_minval   ("write conv line"                    , CONV_header_new (x_name, &x_file, &x_cshare),    0);
+   yUNIT_minval   ("write conv line"                    , CONV_prep_new   (x_file    , "PREP"    , "prototype headers"   , ""               , ""               , ""          , ""               , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("write conv line"                    , CONV_incl_new   (x_file    , "incl"    , "public header"       , "koios.h"        , ""               , ""          , ""               , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 9);
+   yUNIT_minstr   ("... header"                         , yURG_peek       (x_name    ,   0)      , "#!/usr/local/bin/koios"                   );
+   yUNIT_minstr   ("... header"                         , yURG_peek       (x_name    ,   1)      , "#   koios-polos (axis of heaven) unit testing meta-language" );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   2)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   3)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   4)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,   5)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,   6)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check resuls"                   , yURG_peek       (x_name    ,   7)      , "PREP          prototype headers                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check resuls"                   , yURG_peek       (x_name    ,   8)      , "   incl       public header                        koios.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   9)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing a SCRP");
+   yUNIT_minval   ("write conv line"                    , CONV_driver     (CONV_scrp_new         , x_file    , "SCRP"    , "sample testing"      , "CONV_scrp"      , ""               , "5s"        , ""               , "test"      , '-', '-', "Âò", &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 15);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,   9)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  10)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  11)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,  12)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  13)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  14)      , "SCRP    [Âò]  sample testing                                                     5s   test            CONV_scrp                                                                    ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  15)      , ""                                         );
+
+   yUNIT_mincond  ("verify writing a COND");               
+   yUNIT_minval   ("write conv line"                    , CONV_driver     (CONV_cond_new         , x_file    , "COND"    , "repeating condition" , ""               , ""               , ""          , ""               , ""          , '-', '2', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("write conv line"                    , CONV_driver     (CONV_exec_new         , x_file    , "exec"    , "call the function"   , "DITTO_parse"    , "x, y, 21"       , "s_equal"   , "pretty expected", "x_str"     , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("write conv line"                    , CONV_driver     (CONV_code_new         , x_file    , "code"    , "update prefix"       , ""               , ""               , ""          , "x_one = 13;"    , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 19);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  15)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  16)      , "   COND  (2)  repeating condition                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  17)      , "     exec     call the function                    DITTO_parse                 x, y, 21                                                                                              s_equal     pretty expected                                                                                       x_str                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  18)      , "     code     update prefix                        - - - - - - - - - - - - -   x_one = 13;                                                                                                                                                                                                                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  19)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing another COND");               
+   yUNIT_minval   ("write conv line"                    , CONV_driver     (CONV_cond_new         , x_file    , "COND"    , "another condition"   , ""               , ""               , ""          , ""               , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("write conv line"                    , CONV_driver     (CONV_echo_new         , x_file    , "echo"    , "... check value"     , ""               , "x_act"          , "s_equal"   , "[[ x_exp ]]"    , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 22);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  19)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  20)      , "   COND       another condition                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  21)      , "     echo     ... check value                      - - - - - - - - - - - - -   x_act                                                                                                 s_equal     [[ x_exp ]]                                                                                          ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  22)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing another SCRP");
+   yUNIT_minval   ("write conv line"                    , CONV_driver     (CONV_scrp_new         , x_file    , "SCRP"    , "check numbering"     , "CONV_cond"      , ""               , "10m"       , ""               , "another"   , '-', '-', "Ãù", &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 28);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  22)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  23)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  24)      , ""                                         );
+   yUNIT_minstr   ("... ruler"                          , yURG_peek       (x_name    ,  25)      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... title"                          , yURG_peek       (x_name    ,  26)      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  27)      , "SCRP    [Ãù]  check numbering                                                    10m  another         CONV_cond                                                                    ((02.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  28)      , ""                                         );
+
+   yUNIT_mincond  ("verify writing COND in second SCRP");               
+   yUNIT_minval   ("write conv line"                    , CONV_driver     (CONV_cond_new         , x_file    , "COND"    , "checking"            , ""               , ""               , ""          , ""               , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("write conv line"                    , CONV_driver     (CONV_code_new         , x_file    , "local"   , "local variable"      , ""               , ""               , ""          , "char rc = 0;"   , ""          , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 31);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  28)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  29)      , "   COND       checking                                                           - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  30)      , "     local    local variable                       - - - - - - - - - - - - -   char rc = 0;                                                                                                                                                                                                               ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  31)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing FOOTER and closing file");
+   yUNIT_minval   ("write conv line"                    , CONV_footer_new (&x_file)                   ,    0);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 35);
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  31)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  32)      , ""                                         );
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  33)      , ""                                         );
+   yUNIT_minstr   ("... footer"                         , yURG_peek       (x_name    ,  34)      , "# end-of-file.  done, finito, completare, whimper [Ï´···");
+   yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  35)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("close the conversion file");
+   sprintf (t, "rm -f %s   2> /dev/null", x_name);  system (t);
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+
+/*====================------------------------------------====================*/
+/*===----                     script reading                           ----===*/
+/*====================------------------------------------====================*/
+static void      o___CODE____________________o (void) {;}
+
+char
+koios__unit_code_display (char a_list)
+{
+   char         x_display  [LEN_RECD]  = "";
+   char         x_system   [LEN_RECD]  = "";
+   char         x_load     [LEN_RECD]  = "";
+
+   yUNIT_minscrp  ("CODE__display");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   yUNIT_mincond  ("verify quick success");
+   yUNIT_minval   ("convert code"                       , CODE__display    ("a = 5;"                                                             , x_display, x_system , x_load   ),    0);
+   yUNIT_minstr   ("... check display"                  , x_display     , "a = 5;");
+   yUNIT_minstr   ("... check system"                   , x_system      , "a = 5;");
+   yUNIT_minstr   ("... check load"                     , x_load        , "a = 5;");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify field and group markers");
+   yUNIT_minval   ("convert code"                       , CODE__display    ("verb § field ¨ 123 §"                                               , x_display, x_system , x_load   ),    0);
+   yUNIT_minstr   ("... check display"                  , x_display     , "verb § field ¨ 123 §");
+   yUNIT_minstr   ("... check system"                   , x_system      , "verb  field  123 ");
+   yUNIT_minstr   ("... check load"                     , x_load        , "verb  field  123 ");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify extended characters");
+   yUNIT_minval   ("convert code"                       , CODE__display    ("´ · ³ ®   é Û Š"                                                    , x_display, x_system , x_load   ),    0);
+   yUNIT_minstr   ("... check display"                  , x_display     , "´ · ³ ®   é Û Š");
+   yUNIT_minstr   ("... check system"                   , x_system      , "´ · ³ ®   é Û Š");
+   yUNIT_minstr   ("... check load"                     , x_load        , "´ · ³ ®   é Û Š");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify quotes");
+   yUNIT_minval   ("convert code"                       , CODE__display    ("the \"quoted\" text"                                                , x_display, x_system , x_load   ),    0);
+   yUNIT_minstr   ("... check display"                  , x_display     , "the ¶quoted¶ text");
+   yUNIT_minstr   ("... check system"                   , x_system      , "the \"quoted\" text");
+   yUNIT_minstr   ("... check load"                     , x_load        , "the ~quoted~ text");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify returns and escapes");
+   yUNIT_minval   ("convert code"                       , CODE__display    (":macro\n or ¦ and \e end or ¥"                                      , x_display, x_system , x_load   ),    0);
+   yUNIT_minstr   ("... check display"                  , x_display     , ":macro¦ or ¦ and ¥ end or ¥");
+   yUNIT_minstr   ("... check system"                   , x_system      , ":macro\\n or ¦ and \\e end or ¥");
+   yUNIT_minstr   ("... check load"                     , x_load        , ":macro\\n or ¦ and \\e end or ¥");
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios__unit_code_prefix  (char a_list)
+{
+   char         x_name     [LEN_HUND] = "/tmp/koios.c";
+   FILE        *x_file     = NULL;
+   char         x_display  [LEN_RECD]  = "";
+   char         x_system   [LEN_RECD]  = "";
+   char         x_load     [LEN_RECD]  = "";
+   char         t          [LEN_HUND] = "";
+
+   yUNIT_minscrp  ("CODE__prefix");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   sprintf (t, "rm -f %s 2> /dev/null", x_name);
+   system (t);
+   yUNIT_mincond ("prepare clean start");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("open code file");
+   yUNIT_minval   ("open the code file"                 , READ_open   (x_name, 'w', &x_file, NULL   ),    0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify quick success (string)");
+   yUNIT_minval   ("convert code"                       , CODE__display    ("\"pretty expected\""                                              , x_display, x_system , x_load   ),    0);
+   yUNIT_minval   ("write prefix code"                  , CODE__prefix     (x_file    , "exec"    , "call the function"   , "DITTO_parse"    , "s_equal"   , x_display, x_system ),    0);
+   CONV_printf_new (x_file, "\n");
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 3);
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   0)      , "      yUNIT_reset_rc ();"                 );
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   1)      , "      if (cyUNIT.exec)  cyUNIT.s_rc = DITTO_parse (\"pretty expected\");");
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   2)      , "      yUNIT_string  (   0,   0, \"call the function\", \"DITTO_parse\", \"¶pretty expected¶\", \"s_equal\", ");
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   3)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify a void");
+   yUNIT_minval   ("convert code"                       , CODE__display    ("15, 67"                                                           , x_display, x_system , x_load   ),    0);
+   yUNIT_minval   ("write prefix code"                  , CODE__prefix     (x_file    , "exec"    , "deal with a void"    , "MAIN_driver"    , "v_void"    , x_display, x_system ),    0);
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 6);
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   3)      , "      yUNIT_reset_rc ();"                 );
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   4)      , "      if (cyUNIT.exec)  MAIN_driver (15, 67);");
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   5)      , "      yUNIT_void    (   0,   0, \"deal with a void\", \"MAIN_driver\", \"15, 67\", \"v_void\", cyUNIT.exec);");
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   6)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify an integer");
+   yUNIT_minval   ("convert code"                       , CODE__display    ("3"                                                                , x_display, x_system , x_load   ),    0);
+   yUNIT_minval   ("write prefix code"                  , CODE__prefix     (x_file    , "exec"    , "cube a number"       , "cube"           , "i_equal"   , x_display, x_system ),    0);
+   CONV_printf_new (x_file, "\n");
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 9);
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   6)      , "      yUNIT_reset_rc ();"                 );
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   7)      , "      if (cyUNIT.exec)  cyUNIT.i_rc = cube (3);");
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   8)      , "      yUNIT_int     (   0,   0, \"cube a number\", \"cube\", \"3\", \"i_equal\", ");
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   9)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("open code file");
+   yUNIT_minval   ("close the script file"              , READ_close  (&x_file)                 , 0);
+   sprintf (t, "rm -f %s 2> /dev/null", x_name);
+   system (t);
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios__unit_code_expect  (char a_list)
+{
+   char         x_name     [LEN_HUND] = "/tmp/koios.c";
+   FILE        *x_file     = NULL;
+   char         x_display  [LEN_RECD]  = "";
+   char         x_system   [LEN_RECD]  = "";
+   char         x_load     [LEN_RECD]  = "";
+   char         t          [LEN_HUND]  = "";
+
+   yUNIT_minscrp  ("CODE__expect");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   sprintf (t, "rm -f %s 2> /dev/null", x_name);
+   system (t);
+   yUNIT_mincond ("prepare clean start");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("open code file");
+   yUNIT_minval   ("open the code file"                 , READ_open   (x_name, 'w', &x_file, NULL   ),    0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify quick success (string)");
+   yUNIT_minval   ("write expect code"                  , CODE__expect     (x_file    , "s_equal"   , "expected result"         ),    1);
+   CONV_printf_new (x_file, "\n");
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 1);
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   0)      , "\"expected result\", "                    );
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   1)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify void does nothing");
+   yUNIT_minval   ("write expect code"                  , CODE__expect     (x_file    , "v_void"    , ""                        ),    0);
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 1);
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   1)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify pointer");
+   yUNIT_minval   ("write expect code"                  , CODE__expect     (x_file    , "p_exists"  , "0x123456"                ),    1);
+   CONV_printf_new (x_file, "\n");
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 2);
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   1)      , "0x123456, "                               );
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   2)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify matching variable");
+   yUNIT_minval   ("write expect code"                  , CODE__expect     (x_file    , "any"       , "[[ x_var ]]"             ),    2);
+   CONV_printf_new (x_file, "\n");
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 3);
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   2)      , "x_var, "                                  );
+   yUNIT_minstr   ("... header"                         , yURG_peek        (x_name    ,   3)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("open code file");
+   yUNIT_minval   ("close the script file"              , READ_close  (&x_file)                 , 0);
+   sprintf (t, "rm -f %s 2> /dev/null", x_name);
+   system (t);
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios__unit_code_suffix  (char a_list)
+{
+   char         x_name     [LEN_HUND] = "/tmp/koios.c";
+   FILE        *x_file     = NULL;
+   char         x_display  [LEN_RECD]  = "";
+   char         x_system   [LEN_RECD]  = "";
+   char         x_load     [LEN_RECD]  = "";
+   char         t          [LEN_HUND]  = "";
+
+   yUNIT_minscrp  ("CODE__suffix");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   sprintf (t, "rm -f %s 2> /dev/null", x_name);
+   system (t);
+   yUNIT_mincond ("prepare clean start");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("open code file");
+   yUNIT_minval   ("open the code file"                 , READ_open   (x_name, 'w', &x_file, NULL   ),    0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify quick success (string)");
+   yUNIT_minval   ("write suffix code"                  , CODE__suffix     (x_file    , "exec"    , "s_equal"   , ""                        , ""          ),    1);
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 1);
+   yUNIT_minstr   ("... check line"                     , yURG_peek        (x_name    ,   0)      , "cyUNIT.s_rc, cyUNIT.exec);"               );
+   yUNIT_minstr   ("... check line"                     , yURG_peek        (x_name    ,   1)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify string with return");
+   yUNIT_minval   ("write suffix code"                  , CODE__suffix     (x_file    , "exec"    , "s_equal"   , ""                        , "x_str"     ),    1);
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 3);
+   yUNIT_minstr   ("... check line"                     , yURG_peek        (x_name    ,   1)      , "cyUNIT.s_rc, cyUNIT.exec);"               );
+   yUNIT_minstr   ("... check line"                     , yURG_peek        (x_name    ,   2)      , "         if (cyUNIT.exec) { if (cyUNIT.s_rc != NULL)  strcpy (x_str, cyUNIT.s_rc); else strcpy (x_str, ""); }");
+   yUNIT_minstr   ("... check line"                     , yURG_peek        (x_name    ,   3)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify void does nothing");
+   yUNIT_minval   ("write suffix code"                  , CODE__suffix     (x_file    , "exec"    , "v_void"    , ""                        , ""          ),    0);
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 3);
+   yUNIT_minstr   ("... check line"                     , yURG_peek        (x_name    ,   3)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify integer with return");
+   yUNIT_minval   ("write suffix code"                  , CODE__suffix     (x_file    , "exec"    , "i_equal"   , ""                        , "n"         ),    1);
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 5);
+   yUNIT_minstr   ("... check line"                     , yURG_peek        (x_name    ,   3)      , "cyUNIT.i_rc, cyUNIT.exec);"               );
+   yUNIT_minstr   ("... check line"                     , yURG_peek        (x_name    ,   4)      , "         if (cyUNIT.exec)  n = cyUNIT.i_rc;");
+   yUNIT_minstr   ("... check line"                     , yURG_peek        (x_name    ,   5)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("open code file");
+   yUNIT_minval   ("close the script file"              , READ_close  (&x_file)                 , 0);
+   sprintf (t, "rm -f %s 2> /dev/null", x_name);
+   system (t);
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios__unit_code_exec    (char a_list)
+{
+   char         x_name     [LEN_HUND] = "/tmp/koios.c";
+   FILE        *x_file     = NULL;
+   char         x_display  [LEN_RECD]  = "";
+   char         x_system   [LEN_RECD]  = "";
+   char         x_load     [LEN_RECD]  = "";
+   char         t          [LEN_HUND]  = "";
+   char         x_cshare   =  '-';
+
+   yUNIT_minscrp  ("CODE_exec");
+   if (a_list == 'y')  return 0;
+   yURG_err_none  ();
+
+   sprintf (t, "rm -f %s 2> /dev/null", x_name);
+   system (t);
+   yUNIT_mincond ("prepare clean start");
+   yUNIT_mindnoc ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("open code file");
+   yUNIT_minval   ("open the code file"                 , READ_open   (x_name, 'w', &x_file, NULL   ),    0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify writing an EXEC");
+   yUNIT_minval   ("write conv line"                    , CONV_exec_new  (x_file    , "exec"    , "call the function"   , "DITTO_parse"    , "x, y, 21"       , "s_equal"   , "pretty expected", "x_str"     , '-', '-', ""  , &x_cshare  ),    0);
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   0)      , "     exec     call the function                    DITTO_parse                 x, y, 21                                                                                              s_equal     pretty expected                                                                                       x_str                ");
+   yUNIT_minstr   ("... check result"                   , yURG_peek      (x_name    ,   1)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify quick success (string)");
+   yUNIT_minval   ("write suffix code"                  , CODE_exec_new    (x_file    , "exec"    , "s_equal"   , ""                        , ""          ),    1);
+   fflush (x_file);
+   yUNIT_minval   ("... check count"                    , yURG_peek_count  (x_name)               , 1);
+   yUNIT_minstr   ("... check line"                     , yURG_peek        (x_name    ,   0)      , "cyUNIT.s_rc, cyUNIT.exec);"               );
+   yUNIT_minstr   ("... check line"                     , yURG_peek        (x_name    ,   1)      , ""                                         );
+   yUNIT_mindnoc  ();
+
+   yURG_err_clear ();
+   yUNIT_mincond  ("open code file");
+   yUNIT_minval   ("close the script file"              , READ_close  (&x_file)                 , 0);
+   sprintf (t, "rm -f %s 2> /dev/null", x_name);
+   system (t);
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs  ();
+   return 0;
+}
 
 
 
@@ -2783,12 +4172,12 @@ koios__unit_scrp__current      (void)
  *>    yUNIT_minstr   ("... check expe"                     , my.expe       , "");                                                                                                      <* 
  *>    yUNIT_minstr   ("... check retn"                     , my.retn       , "UPDATE");                                                                                                <* 
  *>    yUNIT_minstr   ("... check code"                     , my.code       , "");                                                                                                      <* 
- *>    yUNIT_mindnoc  ();                                                                                                                                                               <* 
- *>                                                                                                                                                                                     <* 
- *>    yUNIT_minprcs ();                                                                                                                                                                <* 
- *>    PROG__unit_end  ();                                                                                                                                                              <* 
- *>    return 0;                                                                                                                                                                        <* 
- *> }                                                                                                                                                                                   <*/
+*>    yUNIT_mindnoc  ();                                                                                                                                                               <* 
+*>                                                                                                                                                                                     <* 
+*>    yUNIT_minprcs ();                                                                                                                                                                <* 
+*>    PROG__unit_end  ();                                                                                                                                                              <* 
+*>    return 0;                                                                                                                                                                        <* 
+*> }                                                                                                                                                                                   <*/
 
 char
 koios__unit_scrp_parse   (void)
@@ -2977,290 +4366,290 @@ koios__unit_ditto_setget (void)
 char
 koios__unit_scrp_ditto   (void)
 {
-/*  yUNIT_minscrp ("koios_scrp identifying ditto marks");
- *    yURG_err_none ();
- * 
- *    yUNIT_mincond ("prepare clean start");
- *    system ("rm -f /tmp/koios.unit 2> /dev/null");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("set to conversion mode");
- *    my.run_type = G_RUN_UPDATE;
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("set to defaults");
- *    yUNIT_minval  ("... run clear"                      , SCRP__shared_purge ()         , 0);
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a min cond identifier");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND (0)", my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (0)"), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0---------");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '0');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a middle cond identifier");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND (3)", my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (3)"), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '3');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a missing cond identifier, trunctated");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND ("  , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND ("  ), -999);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND identifier did not follow ( marker");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a missing cond identifier");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND ()" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND ()" ), -999);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND no identifier within () markers");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a missing cond close marker");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND (5" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (5" ), -999);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND identifier å5æ not followed by ) marker");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check cond with an invalid identifier");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND (B)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (B)" ), -999);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND identifier åBæ not valid [0-9]");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a valid cond again (extra spaces)");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND     (8)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND     (8)"), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '8');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a cond masking another");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND     (8)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND     (8)"), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: warning: COND identifier å8æ already set, now overwritten");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '8');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a valid ditto");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO    (3)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO    (3)"), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '3');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a ditto with no lead marker");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO"), -999);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO missing a valid identifier string (?)");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a ditto with no identifier (truncated)");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO (" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO ("), -999);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO identifier did not follow ( marker");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a ditto with no identifier inside markers");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO ()" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO ()"), -999);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO no identifier within () markers");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a ditto with illegal identifier");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO (a)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO (a)"), -999);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO identifier åaæ not valid [0-9]");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check a ditto with an unset identifier");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO (5)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO (5)"), -999);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO identifier å5æ not set by previous COND");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("check another valid ditto");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO    (8)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
- *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
- *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO    (8)"), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
- *    yUNIT_minchr  ("... check mark"                     , my.mark          , '8');
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("set to defaults");
- *    yUNIT_minval  ("... run clear"                      , SCRP__shared_purge ()         , 0);
- *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("set to create/code mode");
- *    my.run_type = G_RUN_CREATE;
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("verify handling dittos");
- *    strcpy (my.n_scrp, "/tmp/koios.unit");
- *    system ("echo \"\"                                                                         >  /tmp/koios.unit");
- *    system ("echo \"  COND (2)   original cond    - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
- *    system ("echo \"    exec     line one         - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
- *    system ("echo \"    exec     line two         - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
- *    system ("echo \"\"                                                                         >> /tmp/koios.unit");
- *    system ("echo \"  DITTO (2)  new cond         - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
- *    system ("echo \"\"                                                                         >> /tmp/koios.unit");
- *    system ("echo \"  COND       after others     - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
- *    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
- *    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("read ditto condition");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
- *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
- *    yUNIT_minstr ("... check the record"               , my.recd       , "  COND (2)  § original cond   § - - - - - - § - § - - - - -  § - - -  §");
- *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("read detailed line");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
- *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
- *    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line one        § - - - - - - § - § - - - - -  § - - -  §");
- *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("read detailed line");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
- *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
- *    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line two        § - - - - - - § - § - - - - -  § - - -  §");
- *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("read ditto call");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
- *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
- *    yUNIT_minstr ("... check the record"               , my.recd       , "  DITTO (2) § new cond        § - - - - - - § - § - - - - -  § - - -  §");
- *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("read ditto condition");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
- *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
- *    yUNIT_minstr ("... check the record"               , my.recd       , "  COND (2)  § original cond   § - - - - - - § - § - - - - -  § - - -  §");
- *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("read detailed line");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
- *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
- *    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line one        § - - - - - - § - § - - - - -  § - - -  §");
- *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("read detailed line");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
- *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
- *    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line two        § - - - - - - § - § - - - - -  § - - -  §");
- *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("read after condition");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
- *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
- *    yUNIT_minstr ("... check the record"               , my.recd       , "  COND      § after others    § - - - - - - § - § - - - - -  § - - -  §");
- *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("read end-of-file");
- *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
- *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 0);
- *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), -999);
- *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
- *    yUNIT_minval ("close the script file"              , SCRP_close  (&(my.f_scrp)), 0);
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_mincond ("clean up after");
- *    system ("rm -f /tmp/koios.unit 2> /dev/null");
- *    yUNIT_mindnoc ();
- * 
- *    yUNIT_minprcs ();
- */
-   return 0;
+   /*  yUNIT_minscrp ("koios_scrp identifying ditto marks");
+    *    yURG_err_none ();
+    * 
+    *    yUNIT_mincond ("prepare clean start");
+    *    system ("rm -f /tmp/koios.unit 2> /dev/null");
+    *    yUNIT_mindnoc ();
+    * 
+    *    yUNIT_mincond ("set to conversion mode");
+    *    my.run_type = G_RUN_UPDATE;
+    *    yUNIT_mindnoc ();
+    * 
+    *    yUNIT_mincond ("set to defaults");
+    *    yUNIT_minval  ("... run clear"                      , SCRP__shared_purge ()         , 0);
+    *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+    *    yUNIT_mindnoc ();
+    * 
+    *    yUNIT_mincond ("check a min cond identifier");
+    *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+    *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND (0)", my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+    *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+    *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (0)"), 0);
+    *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+    *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0---------");
+    *    yUNIT_minchr  ("... check mark"                     , my.mark          , '0');
+    *    yUNIT_mindnoc ();
+    * 
+    *    yUNIT_mincond ("check a middle cond identifier");
+    *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+    *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND (3)", my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+    *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+    *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (3)"), 0);
+    *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+    *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
+    *    yUNIT_minchr  ("... check mark"                     , my.mark          , '3');
+    *    yUNIT_mindnoc ();
+    * 
+    *    yUNIT_mincond ("check a missing cond identifier, trunctated");
+    *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+    *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND ("  , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+    *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+    *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND ("  ), -999);
+    *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND identifier did not follow ( marker");
+    *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
+    *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+    *    yUNIT_mindnoc ();
+    * 
+    *    yUNIT_mincond ("check a missing cond identifier");
+    *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+    *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND ()" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+    *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+    *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND ()" ), -999);
+    *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND no identifier within () markers");
+    *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
+    *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+    *    yUNIT_mindnoc ();
+    * 
+    *    yUNIT_mincond ("check a missing cond close marker");
+    *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+    *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND (5" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+    *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+    *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (5" ), -999);
+    *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND identifier å5æ not followed by ) marker");
+    *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
+    *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+    *    yUNIT_mindnoc ();
+    * 
+    *    yUNIT_mincond ("check cond with an invalid identifier");
+    *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+    *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND (B)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+    *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+    *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND (B)" ), -999);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: COND identifier åBæ not valid [0-9]");
+   *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3------");
+   *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("check a valid cond again (extra spaces)");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND     (8)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+   *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+   *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND     (8)"), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   *    yUNIT_minchr  ("... check mark"                     , my.mark          , '8');
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("check a cond masking another");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "COND     (8)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+   *    yUNIT_minstr  ("... check verb"                     , my.verb          , "COND");
+   *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("COND     (8)"), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: warning: COND identifier å8æ already set, now overwritten");
+   *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   *    yUNIT_minchr  ("... check mark"                     , my.mark          , '8');
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("check a valid ditto");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO    (3)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+   *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO    (3)"), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   *    yUNIT_minchr  ("... check mark"                     , my.mark          , '3');
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("check a ditto with no lead marker");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+   *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO"), -999);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO missing a valid identifier string (?)");
+   *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("check a ditto with no identifier (truncated)");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO (" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+   *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO ("), -999);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO identifier did not follow ( marker");
+   *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("check a ditto with no identifier inside markers");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO ()" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+   *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO ()"), -999);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO no identifier within () markers");
+   *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("check a ditto with illegal identifier");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO (a)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+   *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO (a)"), -999);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO identifier åaæ not valid [0-9]");
+   *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("check a ditto with an unset identifier");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO (5)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+   *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO (5)"), -999);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "/tmp/koios.unit:1:1: error: DITTO identifier å5æ not set by previous COND");
+   *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   *    yUNIT_minchr  ("... check mark"                     , my.mark          , '-');
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("check another valid ditto");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval  ("parse COND"                         , SCRP__parse_verb   (my.n_scrp, my.n_line, "DITTO    (8)" , my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code)), 0);
+   *    yUNIT_minstr  ("... check verb"                     , my.verb          , "DITTO");
+   *    yUNIT_minval  ("check ditto"                        , SCRP__ditto_check ("DITTO    (8)"), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   0--3----8-");
+   *    yUNIT_minchr  ("... check mark"                     , my.mark          , '8');
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("set to defaults");
+   *    yUNIT_minval  ("... run clear"                      , SCRP__shared_purge ()         , 0);
+   *    yUNIT_minstr  ("... check all marks"                , SCRP__shared_used  ()         , "--------------------------   --------------------------   ----------");
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("set to create/code mode");
+   *    my.run_type = G_RUN_CREATE;
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("verify handling dittos");
+   *    strcpy (my.n_scrp, "/tmp/koios.unit");
+   *    system ("echo \"\"                                                                         >  /tmp/koios.unit");
+   *    system ("echo \"  COND (2)   original cond    - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
+   *    system ("echo \"    exec     line one         - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
+   *    system ("echo \"    exec     line two         - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
+   *    system ("echo \"\"                                                                         >> /tmp/koios.unit");
+   *    system ("echo \"  DITTO (2)  new cond         - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
+   *    system ("echo \"\"                                                                         >> /tmp/koios.unit");
+   *    system ("echo \"  COND       after others     - - - - - -  -  - - - - -   - - -  \"  >> /tmp/koios.unit");
+   *    yUNIT_minstr ("... check script name"              , my.n_scrp     , "/tmp/koios.unit");
+   *    yUNIT_minval ("open the script file"               , SCRP_open   (my.n_scrp, &(my.f_scrp), &(my.n_line)), 0);
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("read ditto condition");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
+   *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
+   *    yUNIT_minstr ("... check the record"               , my.recd       , "  COND (2)  § original cond   § - - - - - - § - § - - - - -  § - - -  §");
+   *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("read detailed line");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
+   *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
+   *    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line one        § - - - - - - § - § - - - - -  § - - -  §");
+   *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("read detailed line");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
+   *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
+   *    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line two        § - - - - - - § - § - - - - -  § - - -  §");
+   *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("read ditto call");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
+   *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
+   *    yUNIT_minstr ("... check the record"               , my.recd       , "  DITTO (2) § new cond        § - - - - - - § - § - - - - -  § - - -  §");
+   *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("read ditto condition");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
+   *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
+   *    yUNIT_minstr ("... check the record"               , my.recd       , "  COND (2)  § original cond   § - - - - - - § - § - - - - -  § - - -  §");
+   *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("read detailed line");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
+   *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
+   *    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line one        § - - - - - - § - § - - - - -  § - - -  §");
+   *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("read detailed line");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
+   *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
+   *    yUNIT_minstr ("... check the record"               , my.recd       , "    exec    § line two        § - - - - - - § - § - - - - -  § - - -  §");
+   *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("read after condition");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);
+   *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    strlencode (my.recd, ySTR_NONE, LEN_RECD);
+   *    yUNIT_minstr ("... check the record"               , my.recd       , "  COND      § after others    § - - - - - - § - § - - - - -  § - - -  §");
+   *    yUNIT_minstr ("... check all marks"                 , SCRP__shared_used  ()         , "--------------------------   --------------------------   --2-------");
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("read end-of-file");
+   *    yUNIT_minval  ("clear errors"                       , yURG_err_clear (), 0);
+   *    yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 0);
+   *    yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), -999);
+   *    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
+   *    yUNIT_minval ("close the script file"              , SCRP_close  (&(my.f_scrp)), 0);
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_mincond ("clean up after");
+   *    system ("rm -f /tmp/koios.unit 2> /dev/null");
+   *    yUNIT_mindnoc ();
+   * 
+      *    yUNIT_minprcs ();
+   */
+      return 0;
 }
 
 char
@@ -4319,7 +5708,7 @@ koios__unit_conv_step    (void)
 /*====================------------------------------------====================*/
 /*===----                      code writing                            ----===*/
 /*====================------------------------------------====================*/
-static void      o___CODE____________________o (void) {;}
+/*> static void      o___CODE____________________o (void) {;}                         <*/
 
 char
 koios__unit_code_counts  (void)
@@ -6647,10 +8036,27 @@ main                    (int a_argc, char *a_argv [])
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_getset   (x_list);
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_global   (x_list);
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_shares   (x_list);
+   /*---(koios_conv.c)-------------------*/
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_defense   (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_printf    (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_preps     (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_scrps     (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_conds     (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_steps     (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_driver    (x_list);
+   /*---(koios_code.c)-------------------*/
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_code_display   (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_code_prefix    (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_code_expect    (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_code_suffix    (x_list);
    /*---(koios_read.c)-------------------*/
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_read_defense   (x_list);
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_read_single    (x_list);
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_read_end_ditto (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_read_driver    (x_list);
+   /*---(koios_parse.c)------------------*/
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_field    (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_current  (x_list);
    /*---(script input)-------------------*/
    /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_scrp_comment ();            <* 
     *> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_scrp_limits  ();            <* 
@@ -6680,7 +8086,6 @@ main                    (int a_argc, char *a_argv [])
     *> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_step    ();            <* 
     *> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_full    ();            <*/
    /*---(done)---------------------------*/
-   system ("rm -f /tmp/koios.unit 2> /dev/null");
    yUNIT_mintinu ();
    return 0;
 }

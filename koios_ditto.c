@@ -262,8 +262,7 @@ DITTO_beg               (cchar a_scrp [LEN_TITLE], int a_line, cchar a_name [LEN
       return rce;
    }
    /*---(reopen file)--------------------*/
-   /*> s_fditto = fopen (a_name, "r");                                                <*/
-   rc = READ_open (a_name, &s_fditto, r_dline);
+   rc = READ_open (a_name, 'r', &s_fditto, r_dline);
    DEBUG_INPT   yLOG_value   ("open"      , rc);
    DEBUG_INPT   yLOG_point   ("s_fditto"  , s_fditto);
    --rce;  if (rc < 0 || s_fditto == NULL) {

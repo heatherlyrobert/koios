@@ -18,7 +18,7 @@ tVERB       g_verbs [MAX_VERB] = {
    { "GROUP"        , "grouping of conditions"                , '2', '-',  0,  0, CONV_group    , CODE_group    ,  '-'  },
    { "COND"         , "test condition"                        , '2', '-',  0,  0, CONV_cond     , CODE_cond     ,  '-'  },
    { "DITTO"        , "repeated test condition"               , '1', '-',  0,  0, CONV_ditto    , NULL          ,  '-'  },
-   { "REUSE"        , "inclusion of shared code"              , 'r', '-',  0,  0, CONV_reuse    , CODE_reuse    ,  '-'  },
+   { "REUSE"        , "inclusion of shared code"              , '1', '-',  0,  0, CONV_reuse    , CODE_reuse    ,  '-'  },
    /* --variables---   --------------------------------------- */
    { "global"       , "global/unit variable definition"       , 'p', '-',  0,  0, CONV_gvar     , CODE_gvar     ,  '-'  },
    { "local"        , "local/script variable deinition"       , 'p', '-',  0,  0, CONV_code     , CODE_lvar     ,  '-'  },

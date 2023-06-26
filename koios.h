@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4c"
-#define     P_VERTXT    "GLOBAL and SHARED parsing updated, need to finish REUSE testing"
+#define     P_VERNUM    "1.4d"
+#define     P_VERTXT    "CONV updated/tested, READ and PARSE pretty good and unit tested"
 /*········· ··········· ´·····························´········································*/
 
 /*>                                                                                   <* 
@@ -454,7 +454,7 @@ char        CONV_gvar               (void);
 char        CONV_load               (void);
 char        CONV_file               (void);
 char        CONV_append             (void);
-char        CONV_driver             (void);
+/*> char        CONV_driver             (void);                                       <*/
 char*       CONV__unit              (char *a_question, int a_num);
 
 void        VOID_void          (char *a_one, int a_two);
@@ -500,7 +500,7 @@ char        VERB_parse              (char a_scrp [LEN_TITLE], int a_line, char a
 /*===[[ koios_read.c ]]=======================================================*/
 /*········· ´······················ ´·········································*/
 /*---(file)-----------------*/
-char        READ_open               (cchar a_name [LEN_RECD], FILE **r_file, int *r_line);
+char        READ_open               (cchar a_name [LEN_RECD], cchar a_dir, FILE **r_file, int *r_line);
 char        READ_close              (FILE **b_file);
 /*---(record)---------------*/
 char        READ__defense           (FILE **r_file, int *r_nline, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline, int *r_nrecd, char r_recd [LEN_RECD]);
@@ -527,6 +527,68 @@ char        REUSE_parse             (cchar a_scrp [LEN_TITLE], int a_line, char 
 /*---(debugging)------------*/
 char*       REUSE__used             (void);
 /*---(done)-----------------*/
+
+
+
+/*===[[ koios_conv.c ]]=======================================================*/
+/*········· ´······················ ´·········································*/
+/*---(support)--------------*/
+char        CONV__defense           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_printf_new         (FILE *a_conv, char *a_format, ...);
+/*---(overall)--------------*/
+char        CONV_header_new         (cchar a_name [LEN_PATH], FILE **r_conv, char *r_cshare);
+char        CONV_break_new          (FILE *a_conv);
+char        CONV_prep_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_incl_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_comment_new        (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_footer_new         (FILE **b_conv);
+/*---(scrps)----------------*/
+char        CONV__scrp_add          (cchar a_scrp, cchar a_share, char a_stage [LEN_SHORT], char r_suffix [LEN_SHORT], char r_count [LEN_LABEL], char *r_cshare);
+char        CONV_scrp_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_sect_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_shared_new         (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_global_new         (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+/*---(conds)----------------*/
+char        CONV__cond_add          (cchar a_mark, cchar a_cshare, char r_suffix [LEN_SHORT], char r_count [LEN_LABEL]);
+char        CONV_cond_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_ditto_new          (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_reuse_new          (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_group_new          (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+/*---(steps)----------------*/
+char        CONV_exec_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_load_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_file_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_append_new         (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_mode_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_code_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_gvar_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+char        CONV_echo_new           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+/*---(driver)---------------*/
+char        CONV_driver             (void f_conv (), FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
+/*---(done)-----------------*/
+
+
+
+/*===[[ koios_code.c ]]=======================================================*/
+/*········· ´······················ ´·········································*/
+/*---(support)--------------*/
+char        CODE__defense           (FILE *a_code, cchar a_runtype, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], cchar a_stage [LEN_SHORT]);
+/*---(step-support)---------*/
+char        CODE__display           (cchar a_code [LEN_RECD], char r_display [LEN_RECD], char r_system [LEN_RECD], char r_load [LEN_RECD]);
+char        CODE__prefix            (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_test [LEN_LABEL], cchar a_display [LEN_RECD], cchar a_system [LEN_RECD]);
+char        CODE__expect            (FILE *a_conv, cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD]);
+char        CODE__suffix            (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_test [LEN_LABEL], cchar a_system [LEN_RECD], cchar a_return [LEN_FULL]);
+/*---(done)-----------------*/
+
+
+
+/*===[[ koios_parse.c ]]======================================================*/
+/*········· ´······················ ´·········································*/
+/*---(support)--------------*/
+char        PARSE__default          (char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL]);
+char        PARSE__field            (char n, char *p, cchar a_spec, char *r_max, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL]);
+char        PARSE_current           (cchar a_scrp [LEN_TITLE], int a_line, cchar a_verb [LEN_LABEL], char a_spec, cchar a_recd [LEN_RECD], char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL]);
+
 
 
 #endif

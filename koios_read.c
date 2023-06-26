@@ -9,10 +9,11 @@
 static void  o___FILE____________o () { return; }
 
 char
-READ_open               (cchar a_name [LEN_RECD], FILE **r_file, int *r_line)
+READ_open               (cchar a_name [LEN_RECD], cchar a_dir, FILE **r_file, int *r_line)
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         = -10;           /* return code for errors         */
+   char        x_mode      [LEN_SHORT] = "";
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(default)------------------------*/
@@ -34,8 +35,23 @@ READ_open               (cchar a_name [LEN_RECD], FILE **r_file, int *r_line)
       DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   /*---(mode)---------------------------*/
+   DEBUG_OUTP   yLOG_char    ("a_dir"     , a_dir);
+   --rce;  switch (a_dir) {
+   case 'r'  :
+      strcpy (x_mode, "rt");
+      break;
+   case 'w'  :
+      strcpy (x_mode, "wt");
+      break;
+   default   :
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+      break;
+   }
+   DEBUG_OUTP   yLOG_info    ("x_mode"    , x_mode);
    /*---(open)---------------------------*/
-   *r_file = fopen (a_name, "rt");
+   *r_file = fopen (a_name, x_mode);
    DEBUG_OUTP   yLOG_point   ("*r_file"   , *r_file);
    --rce;  if (*r_file == NULL) {
       yURG_err (YURG_FATAL, "file ¶%s¶ could not be openned", a_name);

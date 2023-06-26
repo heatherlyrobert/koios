@@ -194,6 +194,11 @@ REUSE_parse             (cchar a_scrp [LEN_TITLE], int a_line, char a_verb [LEN_
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   DEBUG_INPT   yLOG_point   ("r_share"   , r_share);
+   --rce;  if (r_share    == NULL) {
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
    /*---(check for right verbs)----------*/
    if      (strcmp (a_verb, "GLOBAL") == 0)  strcpy (x_ex, "-A-");
    else if (strcmp (a_verb, "SHARED") == 0)  strcpy (x_ex, "-a-");
@@ -286,27 +291,36 @@ REUSE_parse             (cchar a_scrp [LEN_TITLE], int a_line, char a_verb [LEN_
    /*---(handle reuses)------------------*/
    --rce;  if (strcmp ("REUSE" , a_verb) == 0) {
       DEBUG_INPT   yLOG_snote   ("handle reuse");
-      if (strchr (YSTR_UPPER YSTR_LOWER, m) == NULL) {
-         DEBUG_INPT   yLOG_snote   ("not set");
-         yURG_err (YURG_FATAL, "%s:%d:0: error: REUSE identifier å%cæ not valid [a-zA-Z]", a_scrp, a_line, m);
-         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-         return rce;
+      if (strchr (YSTR_UPPER, m) != NULL) {
+         if (n <= 0) {
+            DEBUG_INPT   yLOG_snote   ("not set");
+            yURG_err (YURG_FATAL, "%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ never set by GLOBAL", a_scrp, a_line, x_recd, m);
+            DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+            return rce;
+         }
       }
-      if (strchr (YSTR_UPPER, m) == NULL && n < 0) {
+      else if (strchr (YSTR_LOWER, m) != NULL) {
+         if (strstr (a_scrp, "master.unit") != NULL) {
+            DEBUG_INPT   yLOG_snote   ("shared identifiers not allowed in master.unit");
+            yURG_err (YURG_FATAL, "%s:%d:0: error: REUSE verb on ¶%c¶ SHARED identifier not allowed inside master.unit", a_scrp, a_line, m, a_line);
+            DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+            return rce;
+         }
+         if (o <= 0) {
+            DEBUG_INPT   yLOG_snote   ("not set");
+            yURG_err (YURG_FATAL, "%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ never set by SHARED", a_scrp, a_line, x_recd, m);
+            DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+            return rce;
+         }
+      } else {
          DEBUG_INPT   yLOG_snote   ("not set");
-         yURG_err (YURG_FATAL, "%s:%d:0: error: REUSE identifier å%cæ never set by GLOBAL", a_scrp, a_line, m);
-         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
-         return rce;
-      }
-      if (strchr (YSTR_LOWER, m) == NULL && m < 0) {
-         DEBUG_INPT   yLOG_snote   ("not set");
-         yURG_err (YURG_FATAL, "%s:%d:0: error: REUSE identifier å%cæ never set by SHARED", a_scrp, a_line, m);
+         yURG_err (YURG_FATAL, "%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ not valid [a-zA-Z]", a_scrp, a_line, x_recd, m);
          DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
          return rce;
       }
       if (m == a_cshare) {
          DEBUG_INPT   yLOG_snote   ("reuse is recursive");
-         yURG_err (YURG_FATAL, "%s:%d:0: error: REUSE identifier å%cæ called inside itself, recursive", a_scrp, a_line, m);
+         yURG_err (YURG_FATAL, "%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ called inside itself, recursive", a_scrp, a_line, x_recd, m);
          DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
          return rce;
       }
