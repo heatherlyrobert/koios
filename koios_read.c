@@ -106,20 +106,20 @@ READ_close              (FILE **b_file)
 static void  o___RECORD__________o () { return; }
 
 char         /*--> read script record --------------------[ leaf   [ ------ ]-*/
-READ__defense           (FILE **r_file, int *r_nline, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline, int *r_nrecd, char r_recd [LEN_RECD])
+READ__defense           (FILE **a_file, int *r_nline, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline, int *r_nrecd, char r_recd [LEN_RECD])
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         = -10;           /* return code for errors         */
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
    /*---(defense)------------------------*/
-   DEBUG_INPT   yLOG_point   ("r_file"    , r_file);
-   --rce;  if (r_file == NULL) {
+   DEBUG_INPT   yLOG_point   ("a_file"    , a_file);
+   --rce;  if (a_file == NULL) {
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
-   DEBUG_INPT   yLOG_point   ("*r_file"   , *r_file);
-   --rce;  if (*r_file == NULL) {
+   DEBUG_INPT   yLOG_point   ("*a_file"   , *a_file);
+   --rce;  if (*a_file == NULL) {
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
@@ -174,9 +174,9 @@ READ__clear             (void)
    my.verb        [0] = '\0';
    my.p_conv          = NULL;
    my.p_code          = NULL;
-   my.spec            = '-';
-   my.status          = '-';
-   my.vers        [0] = '\0';
+   my.spec            =  '-';
+   my.status          =  '-';
+   my.vers            =   -1;
    my.desc        [0] = '\0';
    my.meth        [0] = '\0';
    my.args        [0] = '\0';
@@ -198,7 +198,7 @@ READ__clear             (void)
 }
 
 char         /*--> read script record --------------------[ leaf   [ ------ ]-*/
-READ__single            (FILE **r_file, int *r_nline, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline, int *r_nrecd, char r_recd [LEN_RECD])
+READ__single            (FILE **b_scrp, int *r_nline, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline, int *r_nrecd, char r_recd [LEN_RECD])
 {
    /*---(locals)-----------+-----------+-*/
    int         rc          = 0;             /* generic return code            */
@@ -214,8 +214,8 @@ READ__single            (FILE **r_file, int *r_nline, char *r_dittoing, char *r_
    if (r_recd != NULL)  strcpy (r_recd, "");
    /*---(read next)-------------------*/
    DEBUG_INPT   yLOG_note    ("read script file");
-   fgets (x_recd, LEN_RECD, *r_file);
-   if (feof (*r_file)) {
+   fgets (x_recd, LEN_RECD, *b_scrp);
+   if (feof (*b_scrp)) {
       DEBUG_INPT   yLOG_note    ("hit end of file");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return 0;
@@ -235,20 +235,20 @@ READ__single            (FILE **r_file, int *r_nline, char *r_dittoing, char *r_
    /*---(filter)----------------------*/
    if (x_recd [0] == '\0') {
       DEBUG_INPT   yLOG_note    ("SKIP, empty");
-      if (*r_dittoing == 'y')  DITTO_end (r_file, r_dittoing, r_dmark, r_ditto, r_dline);
+      if (*r_dittoing == 'y')  DITTO_end (b_scrp, r_dittoing, r_dmark, r_ditto, r_dline);
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, 2);
       return 2;
    }
    if (x_len > 1 && x_recd [0] == '#' && x_recd [1] != '>') {
       DEBUG_INPT   yLOG_note    ("SKIP, comment");
-      if (*r_dittoing == 'y')  DITTO_end (r_file, r_dittoing, r_dmark, r_ditto, r_dline);
+      if (*r_dittoing == 'y')  DITTO_end (b_scrp, r_dittoing, r_dmark, r_ditto, r_dline);
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, 2);
       return 2;
    }
    DEBUG_INPT   yLOG_value   ("length"    , x_len);
    if (x_len <=  5)  {
       DEBUG_INPT   yLOG_note    ("SKIP, too short");
-      if (*r_dittoing == 'y')  DITTO_end (r_file, r_dittoing, r_dmark, r_ditto, r_dline);
+      if (*r_dittoing == 'y')  DITTO_end (b_scrp, r_dittoing, r_dmark, r_ditto, r_dline);
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, 2);
       return 2;
    }
@@ -263,7 +263,7 @@ READ__single            (FILE **r_file, int *r_nline, char *r_dittoing, char *r_
          DEBUG_INPT   yLOG_info    ("p"         , p);
          rc = VERB_dittoable (p);
          DEBUG_INPT   yLOG_value   ("dittoable" , rc);
-         if (rc != 1) DITTO_end (r_file, r_dittoing, r_dmark, r_ditto, r_dline);
+         if (rc != 1) DITTO_end (b_scrp, r_dittoing, r_dmark, r_ditto, r_dline);
       }
    }
    /*---(save-back)-------------------*/
@@ -277,7 +277,7 @@ READ__single            (FILE **r_file, int *r_nline, char *r_dittoing, char *r_
 }
 
 char         /*--> read script record --------------------[ leaf   [ ------ ]-*/
-READ_next               (FILE **r_file, int *r_nline, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline, int *r_nrecd, char r_recd [LEN_RECD])
+READ_next               (FILE **b_scrp, int *r_nline, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline, int *r_nrecd, char r_recd [LEN_RECD])
 {
    /*---(locals)-----------+-----------+-*/
    int         rc          = 0;             /* generic return code            */
@@ -287,7 +287,7 @@ READ_next               (FILE **r_file, int *r_nline, char *r_dittoing, char *r_
    /*---(default)------------------------*/
    if (r_recd != NULL)  strcpy (r_recd, "");
    /*---(defense)------------------------*/
-   rc = READ__defense (r_file, r_nline, r_dittoing, r_dmark, r_ditto, r_dline, r_nrecd, r_recd);
+   rc = READ__defense (b_scrp, r_nline, r_dittoing, r_dmark, r_ditto, r_dline, r_nrecd, r_recd);
    DEBUG_INPT   yLOG_value   ("defense"   , rc);
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
@@ -295,14 +295,14 @@ READ_next               (FILE **r_file, int *r_nline, char *r_dittoing, char *r_
    }
    /*---(prepare)------------------------*/
    /*> READ__clear  ();                                                               <*/
-   if (feof (*r_file)) {
+   if (feof (*b_scrp)) {
       DEBUG_INPT   yLOG_note    ("already at end of file");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return 0;
    }
    /*---(read for a good record)---------*/
    while (1) {
-      rc = READ__single (r_file, r_nline, r_dittoing, r_dmark, r_ditto, r_dline, r_nrecd, r_recd);
+      rc = READ__single (b_scrp, r_nline, r_dittoing, r_dmark, r_ditto, r_dline, r_nrecd, r_recd);
       DEBUG_INPT   yLOG_value   ("single"    , rc);
       if (rc <= 0) {
          DEBUG_INPT   yLOG_note    ("reached end of file");

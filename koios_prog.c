@@ -102,32 +102,32 @@ PROG__init              (void)
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(files)--------------------------*/
-   strlcpy  (my.n_scrp, "", LEN_TITLE);
-   strlcpy  (my.n_code, "", LEN_PATH);
-   strlcpy  (my.n_main, "", LEN_PATH);
-   strlcpy  (my.n_wave, "", LEN_PATH);
-   strlcpy  (my.n_conv, "", LEN_PATH);
-   my.driver    = '-';
+   strlcpy  (my.n_scrp, "", LEN_TITLE);  my.f_scrp = NULL;
+   strlcpy  (my.n_code, "", LEN_TITLE);  my.f_code = NULL;
+   strlcpy  (my.n_main, "", LEN_TITLE);  my.f_main = NULL;
+   strlcpy  (my.n_wave, "", LEN_TITLE);  my.f_wave = NULL;
+   strlcpy  (my.n_conv, "", LEN_TITLE);  my.f_conv = NULL;
+   my.driver = '-';
    strlcpy  (my.last     , "", LEN_LABEL);
    yURG_err_std ();
-   SCRP__shared_purge ();
-   CODE__shared_purge ();
+   DITTO_init ();
+   REUSE_init ();
    /*---(complete)-----------------------*/
    DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
 char
-PROG__file              (char a_name [LEN_PATH], char r_base [LEN_PATH], char r_ext [LEN_TERSE])
+PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char r_ext [LEN_TERSE])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
-   char        x_base      [LEN_PATH]  = "";
-   char        x_unit      [LEN_PATH]  = "";
+   char        x_base      [LEN_TITLE]  = "";
+   char        x_unit      [LEN_TITLE]  = "";
    char        x_ext       [LEN_TERSE] = "";
    int         l           =    0;
-   char       *x_valid     = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_/.";
+   char       *x_valid     = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.";
    int         i           =    0;
    tSTAT       s;
    char       *p           = NULL;
@@ -164,9 +164,21 @@ PROG__file              (char a_name [LEN_PATH], char r_base [LEN_PATH], char r_
       DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
       return rce;
    }
+   /*---(check for path)-----------------*/
+   --rce;  if (strchr (a_name, '/') != NULL) {
+      yURG_err ('f', "script name ¶%s¶ can not include a path (abs or rel)", a_name);
+      DEBUG_ARGS   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(check for hidden)---------------*/
+   --rce;  if (a_name [0] == '.') {
+      yURG_err ('f', "script name ¶%s¶ can not be hidden file (.)", a_name);
+      DEBUG_ARGS   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
    /*---(check characters)---------------*/
    --rce;  for (i = 0; i < l; ++i) {
-      if (strchr (x_valid, a_name [i]) != NULL)  continue;
+      if (strchr (YSTR_ALNUM "_.", a_name [i]) != NULL)  continue;
       yURG_err ('f', "script name ¶%s¶ can not have a '%c' as character %d", a_name, a_name [i], i);
       DEBUG_ARGS  yLOG_char  ("bad char"  , a_name [i]);
       DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
@@ -253,7 +265,7 @@ PROG__file              (char a_name [LEN_PATH], char r_base [LEN_PATH], char r_
    DEBUG_ARGS    yLOG_value   ("stat"      , rc);
    if (rc < 0)   system  ("touch master.h");
    /*---(save back)----------------------*/
-   strncpy (r_base, x_base, LEN_PATH);
+   strncpy (r_base, x_base, LEN_TITLE);
    DEBUG_ARGS  yLOG_info    ("n_base"    , r_base);
    strncpy (r_ext , x_ext , LEN_TERSE);
    DEBUG_ARGS  yLOG_info    ("n_ext"     , r_ext);
@@ -263,14 +275,14 @@ PROG__file              (char a_name [LEN_PATH], char r_base [LEN_PATH], char r_
 }
 
 char
-PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_replace, char r_base [LEN_PATH], char r_ext [LEN_SHORT])
+PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_replace, char r_base [LEN_TITLE], char r_ext [LEN_SHORT])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
    char        x_runtype   = G_RUN_CREATE;
    char        x_replace   = G_RUN_DEFAULT;
-   char        x_base      [LEN_PATH]  = "";
+   char        x_base      [LEN_TITLE]  = "";
    char        x_ext       [LEN_TERSE] = "";
    int         i           =    0;
    char       *a           = NULL;
@@ -341,7 +353,7 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_r
    /*---(save-back)----------------------*/
    if (r_runtype != NULL)  *r_runtype = x_runtype;
    if (r_replace != NULL)  *r_replace = x_replace;
-   if (r_base    != NULL)  strlcpy (r_base, x_base, LEN_PATH);
+   if (r_base    != NULL)  strlcpy (r_base, x_base, LEN_TITLE);
    if (r_ext     != NULL)  strlcpy (r_ext , x_ext , LEN_TERSE);
    /*---(complete)-----------------------*/
    DEBUG_PROG  yLOG_exit  (__FUNCTION__);
@@ -356,22 +368,13 @@ PROG__begin             (void)
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(create names)-------------------*/
-   snprintf (my.n_scrp, LEN_TITLE, "%s%s", my.n_base, my.n_ext);
-   snprintf (my.n_wave, LEN_PATH, "%s.wave"        , my.n_base);
-   switch (my.run_type) {
-   case G_RUN_UPDATE  :
-      snprintf (my.n_conv, LEN_PATH, "%s%s.new"       , my.n_base, my.n_ext);
-      break;
-   case G_RUN_CREATE  :
-      snprintf (my.n_code, LEN_PATH, "%s_unit.cs"     , my.n_base);
-      snprintf (my.n_main, LEN_PATH, "%s_unit.tmp"    , my.n_base);
-      snprintf (my.n_wave, LEN_PATH, "%s.wave"        , my.n_base);
-      break;
-   case G_RUN_DEBUG   :
-      snprintf (my.n_code, LEN_PATH, "%s_unit.c"      , my.n_base);
-      snprintf (my.n_main, LEN_PATH, "%s_unit.tmp"    , my.n_base);
-      break;
-   }
+   snprintf (my.n_scrp, LEN_TITLE, "%s%s"            , my.n_base, my.n_ext);
+   snprintf (my.n_main, LEN_TITLE, "%s_unit.tmp"     , my.n_base);
+   snprintf (my.n_code, LEN_TITLE, "%s_unit.cs"      , my.n_base);
+   snprintf (my.n_wave, LEN_TITLE, "%s.wave"         , my.n_base);
+   snprintf (my.n_conv, LEN_TITLE, "%s%s.new"        , my.n_base, my.n_ext);
+   /*---(special for debug)--------------*/
+   if (my.run_type == G_RUN_DEBUG)   snprintf (my.n_code, LEN_TITLE, "%s_unit.c"      , my.n_base);
    /*---(initialize)---------------------*/
    my.n_line    = 0;
    my.n_recd    = 0;
@@ -422,9 +425,204 @@ PROG_startup            (int a_argc, char *a_argv [])
 
 
 /*====================------------------------------------====================*/
+/*===----                        program execution                     ----===*/
+/*====================------------------------------------====================*/
+static void      o___EXECUTION_______________o (void) {;}
+
+char
+PROG_dawn                (cchar a_runtype, cchar a_nscrp [LEN_TITLE], FILE **r_scrp, int *r_line, cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_nconv [LEN_TITLE], FILE **r_conv, char *r_cshare)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   /*---(open incomming script)----------*/
+   rc = READ_open      (a_nscrp, 'r', r_scrp, r_line);
+   DEBUG_PROG   yLOG_value   ("script"    , rc);
+   --rce;  if (rc < 0) {
+      PROG_shutdown ();
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(open output files)--------------*/
+   --rce;  switch (a_runtype) {
+   case G_RUN_CREATE : case G_RUN_DEBUG :
+      rc = CODE_header (a_nscrp, a_nmain, r_main, a_ncode, r_code, a_nwave, r_wave, r_cshare);
+      break;
+   case G_RUN_UPDATE :
+      rc = CONV_header  (a_nconv, r_conv, r_cshare);
+      break;
+   default  :
+      READ_close (r_scrp);
+      PROG_shutdown ();
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+      break;
+   }
+   DEBUG_PROG   yLOG_value   ("output"    , rc);
+   --rce;  if (rc <  0) {
+      READ_close (r_scrp);
+      PROG_shutdown ();
+      return rc;
+   }
+   /*---(open output files)--------------*/
+   IF_NORMAL {
+      rc = REUSE_import  ("master.globals");
+      DEBUG_PROG   yLOG_value   ("globals"   , rc);
+      --rce;  if (rc <  0) {
+         READ_close (r_scrp);
+         READ_close (r_main);
+         READ_close (r_code);
+         READ_close (r_wave);
+         PROG_shutdown ();
+         return rc;
+      }
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+char
+PROG_terminate           (FILE **r_scrp, FILE **r_main, FILE **r_code, FILE **r_wave, FILE **r_conv)
+{
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   READ_close (r_scrp);
+   READ_close (r_main);
+   READ_close (r_code);
+   READ_close (r_wave);
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   PROG_shutdown ();
+   return 0;
+}
+
+char
+PROG_driver              (cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nline, FILE **b_scrp, FILE *a_main, FILE *a_code, FILE *a_wave, FILE *a_conv, char b_last [LEN_LABEL], int *r_nrecd, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline, char *r_share, char *r_cshare)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_recd      [LEN_RECD]  = "";
+   char        x_spec      =  '-';
+   char        x_vers      =    0;
+   char        x_verb      [LEN_LABEL] = "";
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_meth      [LEN_HUND]  = "";
+   char        x_args      [LEN_FULL]  = "";
+   char        x_test      [LEN_LABEL] = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_retn      [LEN_FULL]  = "";
+   char        x_stage     [LEN_SHORT] = "";
+   char      (*p_conv) (void);
+   char      (*p_code) (void);
+   /*---(header)-------------------------*/
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   /*---(defaulting)------------------*/
+   rc = PARSE_default (my.verb, &(my.spec), &(my.p_conv), &(my.p_code), my.stage, &(my.vers), my.desc, my.meth, my.args, my.test, my.expe, my.retn, &(my.mark), &(my.share));
+   /*---(read next)-------------------*/
+   rc = READ_next     (*b_scrp, r_nline, r_dittoing, r_dmark, r_ditto, r_dline, r_nrecd, x_recd);
+   DEBUG_PROG   yLOG_value   ("read"      , rc);
+   if (rc == 0) {
+      DEBUG_PROG   yLOG_note    ("end of file");
+      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+      return 0;
+   }
+   --rce;  if (rc < 0)  {
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(check flow)------------------*/
+   rc = PARSE_prep    (b_scrp, a_nscrp, *r_nline, a_runtype, x_recd, x_verb, &x_spec, &p_conv, &p_code, x_stage, x_vers, x_desc, x_expe, r_dittoing, r_mark, r_dmark, r_ditto, r_dline, r_share, r_cshare);
+   DEBUG_PROG   yLOG_value   ("flow"      , rc);
+   --rce;  if (rc < 0)  {
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(parse)-----------------------*/
+   rc = PARSE_driver  (a_nscrp, *r_nline, x_vers, x_verb, x_spec, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn);
+   DEBUG_PROG   yLOG_value   ("parse"     , rc);
+   --rce;  if (rc < 0)  {
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(write output)----------------*/
+   switch (a_runtype) {
+   case G_RUN_CREATE:  case  G_RUN_DEBUG :
+      rc = CODE_driver (my.p_code, a_nscrp, a_main, a_code, a_wave, a_runtype, b_last, x_verb, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_stage, *r_dittoing, *r_mark, *r_dmark, *r_nline, *r_dline, *r_share, r_cshare);
+      break;
+   case G_RUN_UPDATE :
+      rc = CONV_driver (my.p_conv, a_conv, x_verb, x_desc, x_meth, x_args, x_test, x_expe, x_retn, *r_share, *r_mark, x_stage, r_cshare);
+      break;
+   }
+   DEBUG_PROG   yLOG_value   ("output"    , rc);
+   --rce;  if (rc < 0)  {
+      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(save-back)-------------------*/
+   strlcpy (my.recd  , x_recd    , LEN_RECD);
+   strlcpy (my.verb  , x_verb    , LEN_LABEL);
+   my.spec     = x_spec;
+   my.p_conv   = p_conv;
+   my.p_code   = p_code;
+   strlcpy (my.stage , x_stage   , LEN_LABEL);
+   my.vers     = x_vers;
+   strlcpy (my.desc  , x_desc    , LEN_LONG);
+   strlcpy (my.meth  , x_meth    , LEN_HUND);
+   strlcpy (my.args  , x_args    , LEN_FULL);
+   strlcpy (my.test  , x_test    , LEN_LABEL);
+   strlcpy (my.expe  , x_expe    , LEN_RECD);
+   strlcpy (my.retn  , x_retn    , LEN_FULL);
+   /*---(complete)-----------------------*/
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   return 1;
+}
+
+char
+PROG_dusk                (cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_TITLE], FILE **r_scrp, cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_nconv [LEN_TITLE], FILE **r_conv)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        t           [LEN_RECD]  = "";
+   /*---(header)-------------------------*/
+   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   /*---(close files)--------------------*/
+   rc = SCRP_close     (r_scrp);
+   switch (a_runtype) {
+   case G_RUN_CREATE : case G_RUN_DEBUG :
+      rc = CODE_footer (a_nmain, r_main, r_code, r_wave);
+      break;
+   case G_RUN_UPDATE :
+      rc = CONV_footer  (r_conv);
+      break;
+   }
+   DEBUG_PROG   yLOG_value   ("footer"    , rc);
+   --rce;  if (rc <  0) {
+      PROG_shutdown ();
+      return rc;
+   }
+   /*---(handle replace)-----------------*/
+   if (a_replace == G_RUN_REPLACE) {
+      sprintf (t, "cp -f %s %s.old", a_nscrp, a_nscrp);
+      system  (t);
+      printf  ("replacing script with update, saved original in .old\n");
+      sprintf (t, "mv -f %s %s"   , a_nconv, a_nscrp);
+      system  (t);
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+
+
+/*====================------------------------------------====================*/
 /*===----                        wrapup functions                      ----===*/
 /*====================------------------------------------====================*/
 static void  o___WRAPUP__________o () { return; }
+
 
 char                /* PURPOSE : shutdown program and free memory ------------*/
 PROG__end          (void)
@@ -462,6 +660,8 @@ PROG__unit_quiet   (void)
    char        rc          =    0;
    char        x_argc      =    2;
    char       *x_argv [2]  = { "koios", "koios" };
+   /*---(prepare)------------------------*/
+   system ("touch koios.unit           2> /dev/null");
    /*---(debugging)----------------------*/
    rc = PROG_urgents (x_argc, x_argv);
    DEBUG_PROG   yLOG_value    ("urgents"   , rc);
@@ -487,6 +687,8 @@ PROG__unit_loud    (void)
    char        rc          =    0;
    char        x_argc      =    3;
    char       *x_argv [3]  = { "koios_unit", "@@kitchen" , "koios"};
+   /*---(prepare)------------------------*/
+   system ("touch koios.unit           2> /dev/null");
    /*---(debugging)----------------------*/
    rc = PROG_urgents (x_argc, x_argv);
    DEBUG_PROG   yLOG_value    ("urgents"   , rc);

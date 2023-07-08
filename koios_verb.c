@@ -7,7 +7,7 @@ tVERB       g_verbs [MAX_VERB] = {
    /* --global------   ---desc-------------------------------- spec file cnt tot  ---conv------   ---code------ , ditto */
    { "GLOBAL"       , "shared code between units"             , 's', 'm',  0,  0, CONV_global   , CODE_global   ,  '-'  },
    /* --units-------   ---------------------------------------   -  */
-   { "PREP"         , "preparation before testing"            , '2', '-',  0,  0, CONV_prep     , CODE_prep     ,  '-'  },
+   { "PREP"         , "preparation before testing"            , '2', '-',  0,  0, CONV_prep     , NULL          ,  '-'  },
    { "incl"         , "c header inclusion"                    , '3', '-',  0,  0, CONV_incl     , CODE_incl     ,  '-'  },
    { "#>"           , "script internal comments"              , 'c', '-',  0,  0, CONV_comment  , NULL          ,  '-'  },
    /* --scrps-------   --------------------------------------- */
@@ -25,7 +25,7 @@ tVERB       g_verbs [MAX_VERB] = {
    /* --steps-------   --------------------------------------- */
    { "exec"         , "function execution"                    , 'f', '-',  0,  0, CONV_exec     , CODE_exec     ,  'y'  },
    { "get"          , "unit test accessor retrieval"          , 'f', '-',  0,  0, CONV_exec     , CODE_exec     ,  'y'  },
-   { "echo"         , "test a variable directly"              , 'f', '-',  0,  0, CONV_echo     , CODE_echo     ,  'y'  },
+   { "echo"         , "test a variable directly"              , 'f', '-',  0,  0, CONV_echo     , CODE_exec     ,  'y'  },
    /* --specialty---   --------------------------------------- */
    { "code"         , "insert c code"                         , 'p', '-',  0,  0, CONV_code     , CODE_code     ,  'y'  },
    { "system"       , "execute shell code"                    , 'p', '-',  0,  0, CONV_code     , CODE_system   ,  'y'  },
@@ -75,7 +75,7 @@ VERB_dittoable          (char a_verb [LEN_LABEL])
 }
 
 char
-VERB_parse              (char a_scrp [LEN_TITLE], int a_line, char a_field [LEN_LABEL], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char *r_locn, char **r_conv, char **r_code)
+VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN_LABEL], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char *r_locn, char **r_conv, char **r_code)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -99,14 +99,14 @@ VERB_parse              (char a_scrp [LEN_TITLE], int a_line, char a_field [LEN_
    if (r_conv  != NULL)  *r_conv = NULL;
    if (r_code  != NULL)  *r_code = NULL;
    /*---(defense)------------------------*/
-   DEBUG_INPT   yLOG_spoint  (a_scrp);
-   --rce;  if (a_scrp == NULL) {
+   DEBUG_INPT   yLOG_spoint  (a_nscrp);
+   --rce;  if (a_nscrp == NULL) {
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_spoint  (a_field);
    --rce;  if (a_field == NULL || strlen (a_field) <= 0) {
-      yURG_err (YURG_FATAL, "%s:%d:0: error: no verb found (empty or null)", a_scrp, a_line);
+      yURG_err (YURG_FATAL, "%s:%d:0: error: no verb found (empty or null)", a_nscrp, a_line);
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
@@ -137,24 +137,24 @@ VERB_parse              (char a_scrp [LEN_TITLE], int a_line, char a_field [LEN_
    }
    /*---(failure)------------------------*/
    --rce;  if (x_indx == -1) {
-      yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ not recognized/found", a_scrp, a_line, x_word);
+      yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ not recognized/found", a_nscrp, a_line, x_word);
       DEBUG_INPT   yLOG_snote   ("verb not found");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(file limitations)---------------*/
-   --rce;  IF_MASTER {
+   --rce;  if (strcmp (a_nscrp, "master.unit") == 0) {
       if (x_locn == 'n') {
          DEBUG_INPT   yLOG_snote   ("verb not allowed in master.unit");
-         yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ good, but not allowed inside master.unit", a_scrp, a_line, x_verb);
+         yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ good, but not allowed inside master.unit", a_nscrp, a_line, x_verb);
          DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
          return rce;
       }
    }
-   --rce;  IF_NORMAL {
+   --rce;  if (strcmp (a_nscrp, "master.unit") != 0) {
       if (x_locn == 'm') {
          DEBUG_INPT   yLOG_snote   ("verb not allowed outside master.unit");
-         yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ good, but not allowed outside master.unit", a_scrp, a_line, x_verb);
+         yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ good, but not allowed outside master.unit", a_nscrp, a_line, x_verb);
          DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
          return rce;
       }
@@ -170,3 +170,27 @@ VERB_parse              (char a_scrp [LEN_TITLE], int a_line, char a_field [LEN_
    DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
    return 0;
 }
+
+char
+VERB_inventory     (FILE *a_main)
+{
+   int         i           = 0;
+   int         c           = 0;
+   CONV_printf (a_main, "\n");
+   CONV_printf (a_main, "char\n");
+   CONV_printf (a_main, "UNIT_verbs (void)\n");
+   CONV_printf (a_main, "{\n");
+   CONV_printf (a_main, "   printf (\"koios, record type summary\\n\");\n");
+   for (i = 0; i < MAX_VERB; ++i) {
+      CONV_printf (a_main, "   printf (\"%-10.10s = %5d   %s\\n\");\n", g_verbs [i].name, g_verbs [i].total, g_verbs [i].desc);
+      c += g_verbs [i].total;
+      if (g_verbs [i].name [0] == '-') break;
+   }
+   CONV_printf (a_main, "   printf (\"%-10.10s = %5d   %s\\n\");\n", "TOTAL"         , c                , "sum of all verbs");
+   CONV_printf (a_main, "   printf (\"%-10.10s = %5d   %s\\n\");\n", "concerns"      , my.n_recd - c    , "records with troubles");
+   CONV_printf (a_main, "   return 0;\n");
+   CONV_printf (a_main, "}\n");
+   CONV_printf (a_main, "\n");
+   return 0;
+}
+

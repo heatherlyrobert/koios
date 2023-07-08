@@ -13,43 +13,6 @@ static  int   s_master [26] = { -1 };
 static  int   s_reuses [26] = { -1 };
 static  int   s_dittos [26] = { -1 };
 
-/*> tVERB       g_verbs [MAX_VERB] = {                                                                                   <* 
- *>    /+ --global------   ---desc-------------------------------- spec file cnt tot  ---conv------   ---code------ +/   <* 
- *>    { "GLOBAL"       , "shared code between units"             , 's', 'm',  0,  0, CONV_global   , CODE_global   },   <* 
- *>    /+ --units-------   ---------------------------------------   -  +/                                               <* 
- *>    { "PREP"         , "preparation before testing"            , '2', '-',  0,  0, CONV_prep     , CODE_prep     },   <* 
- *>    { "incl"         , "c header inclusion"                    , '3', '-',  0,  0, CONV_incl     , CODE_incl     },   <* 
- *>    { "#>"           , "script internal comments"              , 'c', '-',  0,  0, CONV_comment  , NULL          },   <* 
- *>    /+ --scrps-------   --------------------------------------- +/                                                    <* 
- *>    { "SCRP"         , "test script"                           , 's', 'n',  0,  0, CONV_scrp     , CODE_scrp     },   <* 
- *>    { "SECT"         , "grouping of scripts"                   , '2', 'n',  0,  0, CONV_sect     , CODE_sect     },   <* 
- *>    { "SHARED"       , "shared code between scripts"           , 's', 'n',  0,  0, CONV_shared   , CODE_shared   },   <* 
- *>    /+ --conds-------   --------------------------------------- +/                                                    <* 
- *>    { "GROUP"        , "grouping of conditions"                , '2', '-',  0,  0, CONV_group    , CODE_group    },   <* 
- *>    { "COND"         , "test condition"                        , '2', '-',  0,  0, CONV_cond     , CODE_cond     },   <* 
- *>    { "DITTO"        , "repeated test condition"               , '1', '-',  0,  0, CONV_ditto    , NULL          },   <* 
- *>    { "REUSE"        , "inclusion of shared code"              , 'r', '-',  0,  0, CONV_reuse    , CODE_reuse    },   <* 
- *>    /+ --steps-------   --------------------------------------- +/                                                    <* 
- *>    { "exec"         , "function execution"                    , 'f', '-',  0,  0, CONV_exec     , CODE_exec     },   <* 
- *>    { "get"          , "unit test accessor retrieval"          , 'f', '-',  0,  0, CONV_exec     , CODE_exec     },   <* 
- *>    /+ --specialty---   --------------------------------------- +/                                                    <* 
- *>    { "global"       , "global/unit variable definition"       , 'p', '-',  0,  0, CONV_gvar     , CODE_gvar     },   <* 
- *>    { "local"        , "local/script variable deinition"       , 'p', '-',  0,  0, CONV_code     , CODE_lvar     },   <* 
- *>    { "code"         , "insert c code"                         , 'p', '-',  0,  0, CONV_code     , CODE_code     },   <* 
- *>    { "echo"         , "test a variable directly"              , 'f', '-',  0,  0, CONV_echo     , CODE_echo     },   <* 
- *>    { "system"       , "execute shell code"                    , 'p', '-',  0,  0, CONV_code     , CODE_system   },   <* 
- *>    { "load"         , "place data into stdin"                 , 'P', '-',  0,  0, CONV_load     , CODE_load     },   <* 
- *>    { "file"         , "create a temporary file"               , 'p', '-',  0,  0, CONV_file     , CODE_file     },   <* 
- *>    { "append"       , "append data to temporary file"         , 'p', '-',  0,  0, CONV_append   , CODE_append   },   <* 
- *>    { "mode"         , "set pass or forced_fail mode"          , '2', '-',  0,  0, CONV_mode     , CODE_mode     },   <* 
- *>    /+ --ouroboros---   --------------------------------------- +/                                                    <* 
- *>    { "WAVE"         , "testing wave"                          , '2', 'm',  0,  0, NULL          , NULL          },   <* 
- *>    { "stage"        , "testing stage"                         , '2', 'm',  0,  0, NULL          , NULL          },   <* 
- *>    /+ --sentinal----   --------------------------------------- +/                                                    <* 
- *>    { "----"         , "end-of-entries"                        , '-', '-',  0,  0, NULL          , NULL          },   <* 
- *>    /+ --done--------   --------------------------------------- +/                                                    <* 
- *> };                                                                                                                   <*/
-
 
 
 /*====================------------------------------------====================*/
@@ -675,9 +638,9 @@ SCRP_clear         (void)
    my.p_conv          = NULL;
    my.p_code          = NULL;
    my.verb        [0] = '\0';
-   my.spec            = '-';
-   my.status          = '-';
-   my.vers        [0] = '\0';
+   my.spec            =  '-';
+   my.status          =  '-';
+   my.vers            =   -1;
    my.desc        [0] = '\0';
    my.meth        [0] = '\0';
    my.args        [0] = '\0';
@@ -1174,7 +1137,7 @@ SCRP_vers19        (void)
 }
 
 char
-SCRP__parse_defense     (cchar a_scrp [LEN_TITLE], int a_line, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_TERSE], char r_vers [LEN_TERSE], char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD])
+SCRP__parse_defense     (cchar a_scrp [LEN_TITLE], int a_line, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD])
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         = -10;           /* return code for errors         */
@@ -1188,7 +1151,7 @@ SCRP__parse_defense     (cchar a_scrp [LEN_TITLE], int a_line, cchar a_recd [LEN
    if (r_conv   != NULL)  *r_conv = NULL;
    if (r_code   != NULL)  *r_code = NULL;
    if (r_stage  != NULL)  strcpy (r_stage , "");
-   if (r_vers   != NULL)  strcpy (r_vers  , "");
+   if (r_vers   != NULL)  *r_vers = -1;
    if (r_desc   != NULL)  strcpy (r_desc  , "");
    if (r_meth   != NULL)  strcpy (r_meth  , "");
    if (r_args   != NULL)  strcpy (r_args  , "");
@@ -1430,15 +1393,15 @@ SCRP__parse_verb        (char a_scrp [LEN_TITLE], int a_line, char a_field [LEN_
 }
 
 char
-SCRP__parse_save        (char a_verb [LEN_LABEL], char a_indx, char a_spec, char *a_conv, char *a_code, char a_stage [LEN_TERSE], char a_vers [LEN_TERSE])
+SCRP__parse_save        (char a_verb [LEN_LABEL], char a_indx, char a_spec, char *a_conv, char *a_code, char a_stage [LEN_SHORT], char a_vers)
 {
    /*> strlcpy (my.verb    , a_verb   , LEN_LABEL);                                   <* 
     *> my.indx   = a_indx;                                                            <* 
     *> my.spec   = a_spec;                                                            <* 
     *> my.p_conv = a_conv;                                                            <* 
     *> my.p_code = a_code;                                                            <* 
-    *> strlcpy (my.stage   , a_stage  , LEN_TERSE);                                   <* 
-    *> strlcpy (my.vers    , a_vers   , LEN_TERSE);                                   <*/
+    *> strlcpy (my.stage   , a_stage  , LEN_SHORT);                                   <* 
+    *> my.vers   = a_vers;                                                            <*/
    return 0;
 }
 
@@ -1447,175 +1410,135 @@ SCRP__parse_save        (char a_verb [LEN_LABEL], char a_indx, char a_spec, char
                      if (r_spec  != NULL)  *r_spec  = x_spec; \
                      if (r_conv  != NULL)  *r_conv  = x_conv; \
                      if (r_code  != NULL)  *r_code  = x_code; \
-                     if (r_stage != NULL)  strlcpy (r_stage, x_stage, LEN_TERSE); \
-                     if (r_vers  != NULL)  strlcpy (r_vers , x_vers , LEN_TERSE);
+                     if (r_stage != NULL)  strlcpy (r_stage, x_stage, LEN_SHORT); \
+                     if (r_vers  != NULL)  *r_vers  = x_vers;
 
-char
-SCRP_parse              (cchar a_scrp [LEN_TITLE], int a_line, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_TERSE], char r_vers [LEN_TERSE], char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD])
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   int         rc          = 0;             /* generic return code            */
-   char        x_recd      [LEN_RECD];
-   int         x_len       = 0;             /* input record length            */
-   char       *p;
-   char       *q           = "";
-   char       *r           = NULL;
-   char        x_verb      [LEN_LABEL] = "";
-   char        x_indx      = -1;
-   char        x_spec      = '-';
-   void       *x_conv      = NULL;
-   void       *x_code      = NULL;
-   char        x_stage     [LEN_TERSE] = "";
-   char        x_vers      [LEN_TERSE] = "";
-   int         i           = 0;
-   /*---(header)-------------------------*/
-   DEBUG_INPT   yLOG_enter   (__FUNCTION__);
-   /*---(defaults)--------------------*/
-   SCRP__parse_save (x_verb, x_indx, x_spec, x_conv, x_code, x_stage, x_vers);
-   /*---(defense)---------------------*/
-   rc = SCRP__parse_defense (a_scrp, a_line, a_recd, r_verb, r_indx, r_spec, r_conv, r_code, r_stage, r_vers, r_desc, r_meth, r_args, r_test, r_expe, r_retn, r_coding);
-   DEBUG_INPT   yLOG_value   ("defense"   , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   SCRP_SAVE
-   /*> SCRP__parse_save (x_verb, x_indx, x_spec, x_conv, x_code, x_stage, x_vers);    <*/
-   /*---(saved comments)-----------------*/
-   rc = SCRP__parse_comment (a_recd, x_verb, &x_indx, &x_spec, &x_conv, &x_code);
-   DEBUG_INPT   yLOG_value   ("comment"   , rc);
-   --rce;  if (rc != 0) {
-      if (rc == 1) {
-         SCRP_SAVE
-         /*> SCRP__parse_save (x_verb, x_indx, x_spec, x_conv, x_code, x_stage, x_vers);   <*/
-      }
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return 0;
-   }
-   /*---(create a copy of recd)----------*/
-   strlcpy (x_recd, a_recd, LEN_RECD);
-   DEBUG_INPT   yLOG_info    ("x_recd"    , x_recd);
-   p  = strtok (x_recd, q);
-   /*---(get verb)-----------------------*/
-   rc = SCRP__parse_verb (a_scrp, a_line, p, x_verb, &x_indx, &x_spec, &x_conv, &x_code);
-   DEBUG_INPT   yLOG_value   ("verb"      , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(check for shares)---------------*/
-   rc = SCRP__reuses_check (a_scrp, a_line, p, my.indx, &(my.cshare), &(my.share), &(my.dittoing), &(my.dmark), &(my.mark), &(my.ditto), &(my.dline));
-   DEBUG_INPT   yLOG_value   ("reuses"    , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);
-      return rce;
-   }
-   /*---(check for ditto)----------------*/
-   rc = DITTO_parse_handler (a_scrp, a_line, my.run_type, x_verb, p, &(my.cshare), &(my.share), &(my.dittoing), &(my.dmark), &(my.mark), &(my.ditto), &(my.dline));
-   DEBUG_INPT   yLOG_value   ("ditto"     , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);
-      return rce;
-   }
-   if (rc >  0) {
-      DEBUG_INPT   yLOG_note    ("FOUND DITTO, back to reading");
-      SCRP_SAVE
-      /*> SCRP__parse_save (x_verb, x_indx, x_spec, x_conv, x_code, x_stage, x_vers);   <*/
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return 0;
-   }
-   /*---(check for stage marker)---------*/
-   rc = WAVE_parse (a_scrp, a_line, x_indx, x_verb, p, x_stage) ;
-   DEBUG_INPT   yLOG_value   ("stage"     , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);
-      return rce;
-   }
-   /*---(read version)-------------------*/
-   p = strtok (NULL  , q);
-   --rce;  if (p == NULL && x_spec != 'c') {
-      yURG_err (YURG_FATAL, "%s:%d:1: error: verb only, %s requires more fields", a_scrp, a_line, x_verb);
-      DEBUG_INPT   yLOG_note    ("strtok came up empty");
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return rce;
-   }
-   x_len = strlen (p);
-   strltrim (p, ySTR_BOTH, x_len);
-   x_len = strlen (p);
-   if (p[0] == '-')  p[0] = '\0';
-   rc = 0;
-   /*---(handle version)-----------------*/
-   if      (x_len != 3 || p [0] != 'v') {
-      if (x_spec!= 'c')  rc = SCRP__current (a_scrp, a_line, x_verb, x_spec, p, my.desc, my.meth, my.args, my.test, my.expe, my.retn, my.code);
-   } else if (strcmp (p, "v21") == 0) {
-      strlcpy (x_vers       , p    , LEN_LABEL);
-      DEBUG_INPT   yLOG_info    ("vers"      , x_vers );
-      if (x_spec!= 'c')  rc = SCRP_vers21  ();
-   } else if (strcmp (p, "v20") == 0) {
-      strlcpy (x_vers       , p    , LEN_LABEL);
-      DEBUG_INPT   yLOG_info    ("vers"      , x_vers );
-      if (x_spec!= 'c')  rc = SCRP_vers20  ();
-   } else                             {
-      strlcpy (x_vers       , "v19", LEN_LABEL);
-      DEBUG_INPT   yLOG_info    ("vers"      , x_vers );
-      strlcpy (my.desc      , p    , LEN_LONG );
-      DEBUG_INPT   yLOG_info    ("desc"      , my.desc);
-      if (x_spec!= 'c')  rc = SCRP_vers19  ();
-   }
-   /*---(check for trouble)--------------*/
-   if (rc < 0) {
-      DEBUG_INPT   yLOG_note    ("trouble parsing");
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return rce;
-   }
-   /*---(save-back)----------------------*/
-   SCRP_SAVE
-   /*> SCRP__parse_save (x_verb, x_indx, x_spec, x_conv, x_code, x_stage, x_vers);    <*/
-   /*---(complete)-----------------------*/
-   DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-   return 0;
-}
-
-
-char         /*--> close script file ---------------------[ ------ [ ------ ]-*/
-SCRP_verbs         (void)
-{
-   int         i           = 0;
-   int         c           = 0;
-   printf ("verb counts...\n");
-   for (i = 0; i < MAX_VERB; ++i) {
-      printf  ("   %-10s  %4d\n", g_verbs [i].name, g_verbs [i].total);
-      c += g_verbs [i].total;
-      if (g_verbs [i].name [0] == '-') break;
-   }
-   printf  ("   %-10s  %4d\n", "TOTAL"   , c);
-   printf  ("   %-10s  %4d\n", "concerns", my.n_recd - c);
-   return 0;
-}
-
-char         /*--> close script file ---------------------[ ------ [ ------ ]-*/
-SCRP_verbcode      (void)
-{
-   int         i           = 0;
-   int         c           = 0;
-   CODE_printf ("\n");
-   CODE_printf ("char\n");
-   CODE_printf ("UNIT_verbs (void)\n");
-   CODE_printf ("{\n");
-   CODE_printf ("   printf (\"koios, record type summary\\n\");\n");
-   for (i = 0; i < MAX_VERB; ++i) {
-      CODE_printf ("   printf (\"%-10.10s = %5d   %s\\n\");\n", g_verbs [i].name, g_verbs [i].total, g_verbs [i].desc);
-      c += g_verbs [i].total;
-      if (g_verbs [i].name [0] == '-') break;
-   }
-   CODE_printf ("   printf (\"%-10.10s = %5d   %s\\n\");\n", "TOTAL"         , c                , "sum of all verbs");
-   CODE_printf ("   printf (\"%-10.10s = %5d   %s\\n\");\n", "concerns"      , my.n_recd - c    , "records with troubles");
-   CODE_printf ("   return 0;\n");
-   CODE_printf ("}\n");
-   CODE_printf ("\n");
-   return 0;
-}
+/*> char                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *> SCRP_parse              (cchar a_scrp [LEN_TITLE], int a_line, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD])   <* 
+ *> {                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    /+---(locals)-----------+-----+-----+-+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    char        rce         =  -10;                                                                                                                                                                                                                                                                                                                                                              <* 
+ *>    int         rc          = 0;             /+ generic return code            +/                                                                                                                                                                                                                                                                                                                <* 
+ *>    char        x_recd      [LEN_RECD];                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>    int         x_len       = 0;             /+ input record length            +/                                                                                                                                                                                                                                                                                                                <* 
+ *>    char       *p;                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    char       *q           = "";                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    char       *r           = NULL;                                                                                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_verb      [LEN_LABEL] = "";                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    char        x_indx      = -1;                                                                                                                                                                                                                                                                                                                                                                <* 
+ *>    char        x_spec      = '-';                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    void       *x_conv      = NULL;                                                                                                                                                                                                                                                                                                                                                              <* 
+ *>    void       *x_code      = NULL;                                                                                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_stage     [LEN_TERSE] = "";                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    char        x_vers      [LEN_TERSE] = "";                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    int         i           = 0;                                                                                                                                                                                                                                                                                                                                                                 <* 
+ *>    /+---(header)-------------------------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    DEBUG_INPT   yLOG_enter   (__FUNCTION__);                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    /+---(defaults)--------------------+/                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    SCRP__parse_save (x_verb, x_indx, x_spec, x_conv, x_code, x_stage, x_vers);                                                                                                                                                                                                                                                                                                                  <* 
+ *>    /+---(defense)---------------------+/                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    rc = SCRP__parse_defense (a_scrp, a_line, a_recd, r_verb, r_indx, r_spec, r_conv, r_code, r_stage, r_vers, r_desc, r_meth, r_args, r_test, r_expe, r_retn, r_coding);                                                                                                                                                                                                                        <* 
+ *>    DEBUG_INPT   yLOG_value   ("defense"   , rc);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>    --rce;  if (rc < 0) {                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);                                                                                                                                                                                                                                                                                                                                            <* 
+ *>       return rce;                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    SCRP_SAVE                                                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    /+> SCRP__parse_save (x_verb, x_indx, x_spec, x_conv, x_code, x_stage, x_vers);    <+/                                                                                                                                                                                                                                                                                                       <* 
+ *>    /+---(saved comments)-----------------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    rc = SCRP__parse_comment (a_recd, x_verb, &x_indx, &x_spec, &x_conv, &x_code);                                                                                                                                                                                                                                                                                                               <* 
+ *>    DEBUG_INPT   yLOG_value   ("comment"   , rc);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>    --rce;  if (rc != 0) {                                                                                                                                                                                                                                                                                                                                                                       <* 
+ *>       if (rc == 1) {                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>          SCRP_SAVE                                                                                                                                                                                                                                                                                                                                                                              <* 
+ *>          /+> SCRP__parse_save (x_verb, x_indx, x_spec, x_conv, x_code, x_stage, x_vers);   <+/                                                                                                                                                                                                                                                                                                  <* 
+ *>       }                                                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>       DEBUG_INPT   yLOG_exit    (__FUNCTION__);                                                                                                                                                                                                                                                                                                                                                 <* 
+ *>       return 0;                                                                                                                                                                                                                                                                                                                                                                                 <* 
+ *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    /+---(create a copy of recd)----------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    strlcpy (x_recd, a_recd, LEN_RECD);                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>    DEBUG_INPT   yLOG_info    ("x_recd"    , x_recd);                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    p  = strtok (x_recd, q);                                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    /+---(get verb)-----------------------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    rc = SCRP__parse_verb (a_scrp, a_line, p, x_verb, &x_indx, &x_spec, &x_conv, &x_code);                                                                                                                                                                                                                                                                                                       <* 
+ *>    DEBUG_INPT   yLOG_value   ("verb"      , rc);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>    --rce;  if (rc < 0) {                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);                                                                                                                                                                                                                                                                                                                                            <* 
+ *>       return rce;                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    /+---(check for shares)---------------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    rc = SCRP__reuses_check (a_scrp, a_line, p, my.indx, &(my.cshare), &(my.share), &(my.dittoing), &(my.dmark), &(my.mark), &(my.ditto), &(my.dline));                                                                                                                                                                                                                                          <* 
+ *>    DEBUG_INPT   yLOG_value   ("reuses"    , rc);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>    --rce;  if (rc < 0) {                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);                                                                                                                                                                                                                                                                                                                                             <* 
+ *>       return rce;                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    /+---(check for ditto)----------------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    rc = DITTO_parse_handler (a_scrp, a_line, my.run_type, x_verb, p, &(my.cshare), &(my.share), &(my.dittoing), &(my.dmark), &(my.mark), &(my.ditto), &(my.dline));                                                                                                                                                                                                                             <* 
+ *>    DEBUG_INPT   yLOG_value   ("ditto"     , rc);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>    --rce;  if (rc < 0) {                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);                                                                                                                                                                                                                                                                                                                                             <* 
+ *>       return rce;                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    if (rc >  0) {                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>       DEBUG_INPT   yLOG_note    ("FOUND DITTO, back to reading");                                                                                                                                                                                                                                                                                                                               <* 
+ *>       SCRP_SAVE                                                                                                                                                                                                                                                                                                                                                                                 <* 
+ *>       /+> SCRP__parse_save (x_verb, x_indx, x_spec, x_conv, x_code, x_stage, x_vers);   <+/                                                                                                                                                                                                                                                                                                     <* 
+ *>       DEBUG_INPT   yLOG_exit    (__FUNCTION__);                                                                                                                                                                                                                                                                                                                                                 <* 
+ *>       return 0;                                                                                                                                                                                                                                                                                                                                                                                 <* 
+ *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    /+---(check for stage marker)---------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    rc = WAVE_parse (a_scrp, a_line, x_verb, p, x_stage) ;                                                                                                                                                                                                                                                                                                                                       <* 
+ *>    DEBUG_INPT   yLOG_value   ("stage"     , rc);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>    --rce;  if (rc < 0) {                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);                                                                                                                                                                                                                                                                                                                                             <* 
+ *>       return rce;                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    /+---(read version)-------------------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    p = strtok (NULL  , q);                                                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    --rce;  if (p == NULL && x_spec != 'c') {                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>       yURG_err (YURG_FATAL, "%s:%d:1: error: verb only, %s requires more fields", a_scrp, a_line, x_verb);                                                                                                                                                                                                                                                                                      <* 
+ *>       DEBUG_INPT   yLOG_note    ("strtok came up empty");                                                                                                                                                                                                                                                                                                                                       <* 
+ *>       DEBUG_INPT   yLOG_exit    (__FUNCTION__);                                                                                                                                                                                                                                                                                                                                                 <* 
+ *>       return rce;                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    x_len = strlen (p);                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>    strltrim (p, ySTR_BOTH, x_len);                                                                                                                                                                                                                                                                                                                                                              <* 
+ *>    x_len = strlen (p);                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>    if (p[0] == '-')  p[0] = '\0';                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    rc = 0;                                                                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    /+---(handle version)-----------------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    if      (x_len != 3 || p [0] != 'v') {                                                                                                                                                                                                                                                                                                                                                       <* 
+ *>       if (x_spec!= 'c')  rc = SCRP__current (a_scrp, a_line, x_verb, x_spec, p, my.desc, my.meth, my.args, my.test, my.expe, my.retn, my.code);                                                                                                                                                                                                                                                 <* 
+ *>    } else if (strcmp (p, "v21") == 0) {                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>       strlcpy (x_vers       , p    , LEN_LABEL);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>       DEBUG_INPT   yLOG_info    ("vers"      , x_vers );                                                                                                                                                                                                                                                                                                                                        <* 
+ *>       if (x_spec!= 'c')  rc = SCRP_vers21  ();                                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    } else if (strcmp (p, "v20") == 0) {                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>       strlcpy (x_vers       , p    , LEN_LABEL);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>       DEBUG_INPT   yLOG_info    ("vers"      , x_vers );                                                                                                                                                                                                                                                                                                                                        <* 
+ *>       if (x_spec!= 'c')  rc = SCRP_vers20  ();                                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    } else                             {                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>       strlcpy (x_vers       , "v19", LEN_LABEL);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>       DEBUG_INPT   yLOG_info    ("vers"      , x_vers );                                                                                                                                                                                                                                                                                                                                        <* 
+ *>       strlcpy (my.desc      , p    , LEN_LONG );                                                                                                                                                                                                                                                                                                                                                <* 
+ *>       DEBUG_INPT   yLOG_info    ("desc"      , my.desc);                                                                                                                                                                                                                                                                                                                                        <* 
+ *>       if (x_spec!= 'c')  rc = SCRP_vers19  ();                                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    /+---(check for trouble)--------------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    if (rc < 0) {                                                                                                                                                                                                                                                                                                                                                                                <* 
+ *>       DEBUG_INPT   yLOG_note    ("trouble parsing");                                                                                                                                                                                                                                                                                                                                            <* 
+ *>       DEBUG_INPT   yLOG_exit    (__FUNCTION__);                                                                                                                                                                                                                                                                                                                                                 <* 
+ *>       return rce;                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    /+---(save-back)----------------------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    SCRP_SAVE                                                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    /+> SCRP__parse_save (x_verb, x_indx, x_spec, x_conv, x_code, x_stage, x_vers);    <+/                                                                                                                                                                                                                                                                                                       <* 
+ *>    /+---(complete)-----------------------+/                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    DEBUG_INPT   yLOG_exit    (__FUNCTION__);                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    return 0;                                                                                                                                                                                                                                                                                                                                                                                    <* 
+ *> }                                                                                                                                                                                                                                                                                                                                                                                               <*/
 
 
 

@@ -3,12 +3,12 @@
 
 
 static char  w_name [LEN_HUND] = "";
-static FILE *w_file  = NULL;
+/*> static FILE *w_file  = NULL;                                                      <*/
 
 
 
 char
-WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, int a_indx, char a_verb [LEN_LABEL], char a_field [LEN_LABEL], char r_stage [LEN_SHORT])
+WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_field [LEN_LABEL], char r_stage [LEN_SHORT])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -40,7 +40,7 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, int a_indx, char a
       return rce;
    }
    /*---(ward-off)-----------------------*/
-   if (a_indx < 0 || strcmp ("SCRP" , a_verb) != 0) {
+   if (strcmp ("SCRP" , a_verb) != 0) {
       DEBUG_INPT   yLOG_snote   ("only applies to scripts");
       DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
       return 0;
@@ -48,7 +48,9 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, int a_indx, char a
    /*---(prepare)------------------------*/
    strlcpy  (t, a_field, LEN_LABEL);
    strltrim (t, ySTR_BOTH, LEN_LABEL);
-   x_len = strlen (a_field);
+   DEBUG_INPT   yLOG_note    (t);
+   x_len = strlen (t);
+   DEBUG_INPT   yLOG_sint    (x_len);
    --rce;  if (x_len <  4) {
       DEBUG_INPT   yLOG_snote   ("incomplete and bad");
       DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
@@ -133,86 +135,87 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, int a_indx, char a
    return 0;
 }
 
-char
-WAVE_open          (char a_name [LEN_HUND])
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_senter  (__FUNCTION__);
-   /*---(already open)-------------------*/
-   DEBUG_OUTP   yLOG_snote   (a_name);
-   --rce;  if (a_name == NULL) {
-      DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   DEBUG_OUTP   yLOG_spoint  (w_file);
-   --rce;  if (w_file != NULL) {
-      DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(open wave file)-----------------*/
-   w_file = fopen (a_name, "wt");
-   DEBUG_OUTP   yLOG_spoint  (w_file);
-   --rce;  if (w_file == NULL) {
-      DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   DEBUG_OUTP   yLOG_snote   ("open");
-   /*---(save name)----------------------*/
-   strlcpy (w_name, a_name, LEN_HUND);
-   /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_sexit   (__FUNCTION__);
-   return 0;
-}
+/*> char                                                                              <* 
+ *> WAVE_open          (char a_name [LEN_HUND])                                       <* 
+ *> {                                                                                 <* 
+ *>    /+---(locals)-----------+-----+-----+-+/                                       <* 
+ *>    char        rce         =  -10;                                                <* 
+ *>    /+---(header)-------------------------+/                                       <* 
+ *>    DEBUG_PROG   yLOG_senter  (__FUNCTION__);                                      <* 
+ *>    /+---(already open)-------------------+/                                       <* 
+ *>    DEBUG_OUTP   yLOG_snote   (a_name);                                            <* 
+ *>    --rce;  if (a_name == NULL) {                                                  <* 
+ *>       DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);                              <* 
+ *>       return rce;                                                                 <* 
+ *>    }                                                                              <* 
+ *>    DEBUG_OUTP   yLOG_spoint  (w_file);                                            <* 
+ *>    --rce;  if (w_file != NULL) {                                                  <* 
+ *>       DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);                              <* 
+ *>       return rce;                                                                 <* 
+ *>    }                                                                              <* 
+ *>    /+---(open wave file)-----------------+/                                       <* 
+ *>    w_file = fopen (a_name, "wt");                                                 <* 
+ *>    DEBUG_OUTP   yLOG_spoint  (w_file);                                            <* 
+ *>    --rce;  if (w_file == NULL) {                                                  <* 
+ *>       DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);                              <* 
+ *>       return rce;                                                                 <* 
+ *>    }                                                                              <* 
+ *>    DEBUG_OUTP   yLOG_snote   ("open");                                            <* 
+ *>    /+---(save name)----------------------+/                                       <* 
+ *>    strlcpy (w_name, a_name, LEN_HUND);                                            <* 
+ *>    /+---(complete)-----------------------+/                                       <* 
+ *>    DEBUG_PROG   yLOG_sexit   (__FUNCTION__);                                      <* 
+ *>    return 0;                                                                      <* 
+ *> }                                                                                 <*/
 
 char
-WAVE_scrp               (char a_stage, char a_wave, char a_base [LEN_TITLE], char a_scrp, char a_desc [LEN_HUND])
+WAVE_entry              (FILE *a_wave, char a_stageid, char a_waveid, char a_nscrp [LEN_TITLE], char a_seq, char a_desc [LEN_HUND])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_senter  (__FUNCTION__);
    /*---(already open)-------------------*/
-   DEBUG_OUTP   yLOG_spoint  (w_file);
-   --rce;  if (w_file == NULL) {
+   DEBUG_OUTP   yLOG_spoint  (a_wave);
+   --rce;  if (a_wave == NULL) {
       DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(write)--------------------------*/
-   fprintf (w_file, "%c  %c  %-25.25s  %2d  %-65.65s \n", a_stage, a_wave, a_base, a_scrp, a_desc);
+   fprintf (a_wave, "%c  %c  %-30.30s  %2d  %-65.65s \n", a_stageid, a_waveid, a_nscrp, a_seq, a_desc);
+   fflush  (a_wave);
    /*---(complete)-----------------------*/
    DEBUG_PROG   yLOG_sexit   (__FUNCTION__);
    return 0;
 }
 
-char         /*--> close script file ---------------------[ ------ [ ------ ]-*/
-WAVE_close         (void)
-{
-   /*---(locals)-----------+-----------+-*/
-   char        rc          = 0;
-   char        rce         = -10;
-   /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_senter  (__FUNCTION__);
-   /*---(close wave file)----------------*/
-   DEBUG_INPT   yLOG_spoint  (w_file);
-   --rce;  if (w_file == NULL) {
-      DEBUG_PROG   yLOG_snote   ("already open");
-      DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   rc = fclose (w_file);
-   --rce;  if (rc != 0) {
-      DEBUG_PROG   yLOG_snote   ("can not close");
-      DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(ground pointer)-----------------*/
-   strlcpy (w_name, "", LEN_HUND);
-   w_file = NULL;
-   /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
-   return 0;
-}
+/*> char         /+--> close script file ---------------------[ ------ [ ------ ]-+/   <* 
+ *> WAVE_close         (void)                                                          <* 
+ *> {                                                                                  <* 
+ *>    /+---(locals)-----------+-----------+-+/                                        <* 
+ *>    char        rc          = 0;                                                    <* 
+ *>    char        rce         = -10;                                                  <* 
+ *>    /+---(header)-------------------------+/                                        <* 
+ *>    DEBUG_PROG   yLOG_senter  (__FUNCTION__);                                       <* 
+ *>    /+---(close wave file)----------------+/                                        <* 
+ *>    DEBUG_INPT   yLOG_spoint  (w_file);                                             <* 
+ *>    --rce;  if (w_file == NULL) {                                                   <* 
+ *>       DEBUG_PROG   yLOG_snote   ("already open");                                  <* 
+ *>       DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);                               <* 
+ *>       return rce;                                                                  <* 
+ *>    }                                                                               <* 
+ *>    rc = fclose (w_file);                                                           <* 
+ *>    --rce;  if (rc != 0) {                                                          <* 
+ *>       DEBUG_PROG   yLOG_snote   ("can not close");                                 <* 
+ *>       DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);                               <* 
+ *>       return rce;                                                                  <* 
+ *>    }                                                                               <* 
+ *>    /+---(ground pointer)-----------------+/                                        <* 
+ *>    strlcpy (w_name, "", LEN_HUND);                                                 <* 
+ *>    w_file = NULL;                                                                  <* 
+ *>    /+---(complete)-----------------------+/                                        <* 
+ *>    DEBUG_PROG   yLOG_exit    (__FUNCTION__);                                       <* 
+ *>    return 0;                                                                       <* 
+ *> }                                                                                  <*/
 
 
