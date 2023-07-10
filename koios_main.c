@@ -81,6 +81,7 @@ main               (int a_argc, char *a_argv [])
    /*---(main)---------------------------*/
    while (1) {
       rc = PROG_driver (my.run_type, my.n_scrp, &(my.n_line), &(my.f_scrp), my.f_main, my.f_code, my.f_wave, my.f_conv, my.last, &(my.n_recd), &(my.dittoing), &(my.mark), &(my.dmark), &(my.ditto), &(my.dline), &(my.share), &(my.cshare));
+      if (rc == 0)  break;  /* end-of-file */
       /*---(read and parse)--------------*/
       /*> rc = SCRP_read   (my.f_scrp, my.n_line, my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd);   <*/
       /*> rc = SCRP_read   (my.f_scrp, my.n_line, my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd);                                                                                                                                                  <* 

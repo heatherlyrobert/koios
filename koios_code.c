@@ -76,12 +76,12 @@ CODE__line              (char a_dittoing, int a_nline, int a_dline)
 static void  o___PREP____________o () { return; }
 
 char
-CODE__code_beg          (FILE *a_code)
+CODE__code_beg          (cchar a_nscrp [LEN_TITLE], FILE *a_code)
 {
    CONV_printf (a_code, "/*================================= beg-code =================================*/\n");
    CONV_printf (a_code, "/* /usr/local/bin/koios                                                       */\n");
    CONV_printf (a_code, "/*   autogen by %-60.60s  */\n", P_ONELINE);
-   IF_NORMAL {
+   if (strcmp (a_nscrp, "master.unit") != 0) { 
       CONV_printf (a_code, "\n");
       CONV_printf (a_code, "/*---(standard support functions)----*/\n");
       CONV_printf (a_code, "#include    <yUNIT_unit.h>\n");
@@ -111,9 +111,9 @@ CODE__code_stats        (FILE *a_code)
 }
 
 char
-CODE__code_end          (FILE *a_code)
+CODE__code_end          (cchar a_nscrp [LEN_TITLE], FILE *a_code)
 {
-   IF_NORMAL {
+   if (strcmp (a_nscrp, "master.unit") != 0) {
       CONV_printf (a_code, "/*================================ end-script ================================*/\n");
    } else {
       CONV_printf (a_code, "/*================================ end-global ================================*/\n");
@@ -168,13 +168,20 @@ CODE_header             (char a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FI
    if (rc < 0 || x_main == NULL)  return rce;
    /*---(open code)----------------------*/
    rc = READ_open       (a_ncode, 'w', &x_code, NULL);
-   if (rc < 0 || x_code == NULL)  return rce;
+   if (rc < 0 || x_code == NULL) {
+      READ_close (&x_main);
+      return rce;
+   }
    /*---(open wave)----------------------*/
    rc = READ_open       (a_nwave, 'w', &x_wave, NULL);
-   if (rc < 0 || x_wave == NULL)  return rce;
+   if (rc < 0 || x_wave == NULL) {
+      READ_close (&x_main);
+      READ_close (&x_code);
+      return rce;
+   }
    /*---(add headers)--------------------*/
    CODE__main_beg (x_main, a_nscrp);
-   CODE__code_beg (x_code);
+   CODE__code_beg (a_nscrp, x_code);
    /*---(default globals)----------------*/
    s_nscrp  = 0;
    s_ncond  = s_scond = 0;
@@ -189,7 +196,7 @@ CODE_header             (char a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FI
 }
 
 char
-CODE_footer             (cchar a_nmain [LEN_TITLE], FILE **r_main, FILE **r_code, FILE **r_wave)
+CODE_footer             (cchar a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -197,26 +204,34 @@ CODE_footer             (cchar a_nmain [LEN_TITLE], FILE **r_main, FILE **r_code
    char        x_recd      [LEN_RECD]  = "";
    /*---(informational)------------------*/
    CODE__main_end   (*r_main);
+   CODE__code_end   (a_nscrp, *r_code);
    CODE__code_stats (*r_code);
    VERB_inventory   (*r_code);
    /*---(append main)--------------------*/
-   IF_NORMAL {
+   if (strcmp (a_nscrp, "master.unit") != 0) {
       READ_close (r_main);
       READ_open  (a_nmain, 'r', r_main, NULL);
+      /*> printf ("MAIN------------------------------------------\n");                <*/
       while (1) {
          fgets (x_recd, LEN_RECD, *r_main);
          if (feof (*r_main)) break;
+         /*> printf ("MAIN    %s", x_recd);                                           <*/
          CONV_printf (*r_code, x_recd);
       }
+      /*> printf ("MAIN------------------------------------------\n");                <*/
    }
    /*---(export globals)-----------------*/
-   IF_MASTER   REUSE_export ("master.globals");
+   else {
+      REUSE_export ("master.globals");
+   }
    /*---(close files)--------------------*/
    rc = READ_close (r_main);
    rc = READ_close (r_code);
    rc = READ_close (r_wave);
    /*---(transfer master.h)--------------*/
-   IF_MASTER  system  ("mv -f master_unit.cs master.h");
+   if (strcmp (a_nscrp, "master.unit") == 0) {
+      system  ("mv -f master_unit.cs master.h");
+   }
    /*---(complete)-----------------------*/
    return 0;
 }

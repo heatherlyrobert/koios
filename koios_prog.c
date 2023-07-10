@@ -467,7 +467,7 @@ PROG_dawn                (cchar a_runtype, cchar a_nscrp [LEN_TITLE], FILE **r_s
       return rc;
    }
    /*---(open output files)--------------*/
-   IF_NORMAL {
+   if (strcmp (a_nscrp, "master.unit") != 0) {
       rc = REUSE_import  ("master.globals");
       DEBUG_PROG   yLOG_value   ("globals"   , rc);
       --rce;  if (rc <  0) {
@@ -521,7 +521,7 @@ PROG_driver              (cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nli
    /*---(defaulting)------------------*/
    rc = PARSE_default (my.verb, &(my.spec), &(my.p_conv), &(my.p_code), my.stage, &(my.vers), my.desc, my.meth, my.args, my.test, my.expe, my.retn, &(my.mark), &(my.share));
    /*---(read next)-------------------*/
-   rc = READ_next     (*b_scrp, r_nline, r_dittoing, r_dmark, r_ditto, r_dline, r_nrecd, x_recd);
+   rc = READ_next     (b_scrp, r_nline, r_dittoing, r_dmark, r_ditto, r_dline, r_nrecd, x_recd);
    DEBUG_PROG   yLOG_value   ("read"      , rc);
    if (rc == 0) {
       DEBUG_PROG   yLOG_note    ("end of file");
@@ -548,11 +548,11 @@ PROG_driver              (cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nli
    }
    /*---(write output)----------------*/
    switch (a_runtype) {
-   case G_RUN_CREATE:  case  G_RUN_DEBUG :
-      rc = CODE_driver (my.p_code, a_nscrp, a_main, a_code, a_wave, a_runtype, b_last, x_verb, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_stage, *r_dittoing, *r_mark, *r_dmark, *r_nline, *r_dline, *r_share, r_cshare);
-      break;
    case G_RUN_UPDATE :
-      rc = CONV_driver (my.p_conv, a_conv, x_verb, x_desc, x_meth, x_args, x_test, x_expe, x_retn, *r_share, *r_mark, x_stage, r_cshare);
+      rc = CONV_driver (p_conv, a_conv, x_verb, x_desc, x_meth, x_args, x_test, x_expe, x_retn, *r_share, *r_mark, x_stage, r_cshare);
+      break;
+   case G_RUN_CREATE:  case  G_RUN_DEBUG :
+      rc = CODE_driver (p_code, a_nscrp, a_main, a_code, a_wave, a_runtype, b_last, x_verb, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_stage, *r_dittoing, *r_mark, *r_dmark, *r_nline, *r_dline, *r_share, r_cshare);
       break;
    }
    DEBUG_PROG   yLOG_value   ("output"    , rc);
@@ -592,7 +592,7 @@ PROG_dusk                (cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_T
    rc = SCRP_close     (r_scrp);
    switch (a_runtype) {
    case G_RUN_CREATE : case G_RUN_DEBUG :
-      rc = CODE_footer (a_nmain, r_main, r_code, r_wave);
+      rc = CODE_footer (a_nscrp, a_nmain, r_main, a_ncode, r_code, a_nwave, r_wave);
       break;
    case G_RUN_UPDATE :
       rc = CONV_footer  (r_conv);

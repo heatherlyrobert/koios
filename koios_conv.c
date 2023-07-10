@@ -159,12 +159,12 @@ static void  o___SCRIPT__________o () { return; }
 char
 CONV__scrp_add          (cchar a_scrp, cchar a_share, char a_stage [LEN_SHORT], char r_suffix [LEN_SHORT], char r_count [LEN_LABEL], char *r_cshare)
 {
-   printf ("%4d nscrp, %4d ncond\n", s_nscrp, s_ncond);
+   /*> printf ("%4d nscrp, %4d ncond\n", s_nscrp, s_ncond);                           <*/
    if (r_suffix != NULL)  strcpy (r_suffix, "");
    if (r_count  != NULL)  strcpy (r_count , "");
    if (a_scrp == 'y')     ++(s_nscrp);
    s_ncond = 0;
-   printf ("%4d nscrp, %4d ncond\n", s_nscrp, s_ncond);
+   /*> printf ("%4d nscrp, %4d ncond\n", s_nscrp, s_ncond);                           <*/
    *r_cshare = a_share;
    if (a_share  != '-')                    sprintf (r_suffix, "-%c-", a_share);
    else if (strcmp (a_stage, "") != 0)     sprintf (r_suffix, "[%-2.2s]", a_stage);
@@ -235,12 +235,18 @@ static void  o___CONDITION_______o () { return; }
 char
 CONV__cond_add          (cchar a_mark, cchar a_share, char r_suffix [LEN_SHORT], char r_count [LEN_LABEL])
 {
+   /*---(defaults)-----------------------*/
    if (r_suffix != NULL) strcpy (r_suffix, "");
    if (r_count  != NULL) strcpy (r_count , "");
+   /*---(update conds)-------------------*/
    ++(s_ncond);
-   if (a_mark   != '-')  sprintf (r_suffix, "(%c)", a_mark);
-   if (a_share  == '-')  sprintf (r_count , "((%02d.%03d))", s_nscrp, s_ncond);
-   else                  sprintf (r_count , "((%c%c.%03d))", a_share, a_share, s_ncond);
+   /*---(verb suffixes)------------------*/
+   if      (a_mark   != '-')  sprintf (r_suffix, "(%c)", a_mark);
+   else if (a_share  != '-')  sprintf (r_suffix, "-%c-", a_share);
+   /*---(line numbering)-----------------*/
+   if (a_share  == '-')       sprintf (r_count , "((%02d.%03d))", s_nscrp, s_ncond);
+   else                       sprintf (r_count , "((%c%c.%03d))", a_share, a_share, s_ncond);
+   /*---(complete)-----------------------*/
    return 0;
 }
 
@@ -419,7 +425,7 @@ CONV_force              (int a_scrps, int  a_conds)
    CONV_init ();
    s_nscrp = a_scrps;
    s_ncond = a_conds;
-   printf ("%4d nscrp, %4d ncond\n", s_nscrp, s_ncond);
+   /*> printf ("%4d nscrp, %4d ncond\n", s_nscrp, s_ncond);                           <*/
    return 0;
 }
 

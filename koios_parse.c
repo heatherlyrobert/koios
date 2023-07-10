@@ -224,7 +224,7 @@ PARSE_prep              (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
       return rce;
    }
    /*---(get verb)-----------------------*/
-   rc = VERB_parse     (a_nscrp, a_line, p, r_verb, NULL, r_spec, NULL, r_code, r_conv);
+   rc = VERB_parse     (a_nscrp, a_line, p, r_verb, NULL, r_spec, NULL, r_conv, r_code);
    DEBUG_INPT   yLOG_value   ("verb"      , rc);
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
@@ -241,7 +241,7 @@ PARSE_prep              (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
    }
    rc = PARSE__version (v, r_vers);
    /*---(check for shares)---------------*/
-   rc = REUSE_parse    (a_nscrp, a_line, r_verb, a_recd, *r_cshare, r_share);
+   rc = REUSE_parse    (a_nscrp, a_line, r_verb, a_recd, r_desc, *r_cshare, r_share);
    DEBUG_INPT   yLOG_value   ("reuses"    , rc);
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);
@@ -333,16 +333,16 @@ PARSE__current          (char n, char a_field [LEN_RECD], cchar a_spec, char *r_
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   strlcpy (x_field, a_field, LEN_RECD);
-   DEBUG_INPT   yLOG_info    ("x_field"   , x_field);
    /*---(clear spacer bars)--------------*/
+   strlcpy (x_field, a_field, LEN_RECD);
    if (x_field [0] == '-' && n != 6) {
       if (strncmp (x_field, "- - -", 5) == 0)    x_field [0] = '\0';
       if (strncmp (x_field, "-----", 5) == 0)    x_field [0] = '\0';
       if (x_field [1] == '\0')                   x_field [0] = '\0';
    }
-   DEBUG_INPT   yLOG_info    ("x_field"   , x_field);
+   strltrim (x_field, ySTR_BOTH, LEN_RECD);
    l = strlen (x_field);
+   DEBUG_INPT   yLOG_info    ("x_field"   , x_field);
    /*---(handle fields)------------------*/
    switch (n) {
    case  2 :  /*=== always desc ===============*/
@@ -453,6 +453,12 @@ PARSE_driver            (cchar a_nscrp [LEN_TITLE], int a_line, char a_vers, cch
    char        x_retn      [LEN_FULL]  = "";     /* return variable                */
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
+   /*---(quick-out)----------------------*/
+   if (a_spec == '1') {
+      DEBUG_INPT   yLOG_note    ("one field required and already read as verb");
+      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+      return 0;  /* ditto type */
+   }
    /*---(default)---------------------*/
    PARSE__default  (r_desc, r_meth, r_args, r_test, r_expe, r_retn);
    /*---(defense)------------------------*/
@@ -470,12 +476,6 @@ PARSE_driver            (cchar a_nscrp [LEN_TITLE], int a_line, char a_vers, cch
       yURG_err (YURG_FATAL, "%s:%d:0: error: can not identify verb ¶%s¶ with '%c' spec limits", a_nscrp, a_line, a_verb, a_spec);
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
-   }
-   /*---(quick-out)----------------------*/
-   if (a_spec == '1') {
-      DEBUG_INPT   yLOG_note    ("one field required and already read as verb");
-      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
-      return 0;  /* ditto type */
    }
    /*---(prepare)------------------------*/
    p = strtok_r (x_recd, q, &r);
@@ -499,7 +499,7 @@ PARSE_driver            (cchar a_nscrp [LEN_TITLE], int a_line, char a_vers, cch
          DEBUG_INPT   yLOG_note    ("strtok came up empty");
          break;
       }
-      strltrim (p, ySTR_BOTH, LEN_RECD);
+      /*---(done)------------------------*/
    } 
    /*---(stop parsing summ records)---*/
    if (i < x_min) {

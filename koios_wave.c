@@ -2,10 +2,6 @@
 #include    "koios.h"        /* LOCAL  : main header                          */
 
 
-static char  w_name [LEN_HUND] = "";
-/*> static FILE *w_file  = NULL;                                                      <*/
-
-
 
 char
 WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_field [LEN_LABEL], char r_stage [LEN_SHORT])
@@ -135,39 +131,6 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, char a_verb [LEN_L
    return 0;
 }
 
-/*> char                                                                              <* 
- *> WAVE_open          (char a_name [LEN_HUND])                                       <* 
- *> {                                                                                 <* 
- *>    /+---(locals)-----------+-----+-----+-+/                                       <* 
- *>    char        rce         =  -10;                                                <* 
- *>    /+---(header)-------------------------+/                                       <* 
- *>    DEBUG_PROG   yLOG_senter  (__FUNCTION__);                                      <* 
- *>    /+---(already open)-------------------+/                                       <* 
- *>    DEBUG_OUTP   yLOG_snote   (a_name);                                            <* 
- *>    --rce;  if (a_name == NULL) {                                                  <* 
- *>       DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);                              <* 
- *>       return rce;                                                                 <* 
- *>    }                                                                              <* 
- *>    DEBUG_OUTP   yLOG_spoint  (w_file);                                            <* 
- *>    --rce;  if (w_file != NULL) {                                                  <* 
- *>       DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);                              <* 
- *>       return rce;                                                                 <* 
- *>    }                                                                              <* 
- *>    /+---(open wave file)-----------------+/                                       <* 
- *>    w_file = fopen (a_name, "wt");                                                 <* 
- *>    DEBUG_OUTP   yLOG_spoint  (w_file);                                            <* 
- *>    --rce;  if (w_file == NULL) {                                                  <* 
- *>       DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);                              <* 
- *>       return rce;                                                                 <* 
- *>    }                                                                              <* 
- *>    DEBUG_OUTP   yLOG_snote   ("open");                                            <* 
- *>    /+---(save name)----------------------+/                                       <* 
- *>    strlcpy (w_name, a_name, LEN_HUND);                                            <* 
- *>    /+---(complete)-----------------------+/                                       <* 
- *>    DEBUG_PROG   yLOG_sexit   (__FUNCTION__);                                      <* 
- *>    return 0;                                                                      <* 
- *> }                                                                                 <*/
-
 char
 WAVE_entry              (FILE *a_wave, char a_stageid, char a_waveid, char a_nscrp [LEN_TITLE], char a_seq, char a_desc [LEN_HUND])
 {
@@ -189,33 +152,9 @@ WAVE_entry              (FILE *a_wave, char a_stageid, char a_waveid, char a_nsc
    return 0;
 }
 
-/*> char         /+--> close script file ---------------------[ ------ [ ------ ]-+/   <* 
- *> WAVE_close         (void)                                                          <* 
- *> {                                                                                  <* 
- *>    /+---(locals)-----------+-----------+-+/                                        <* 
- *>    char        rc          = 0;                                                    <* 
- *>    char        rce         = -10;                                                  <* 
- *>    /+---(header)-------------------------+/                                        <* 
- *>    DEBUG_PROG   yLOG_senter  (__FUNCTION__);                                       <* 
- *>    /+---(close wave file)----------------+/                                        <* 
- *>    DEBUG_INPT   yLOG_spoint  (w_file);                                             <* 
- *>    --rce;  if (w_file == NULL) {                                                   <* 
- *>       DEBUG_PROG   yLOG_snote   ("already open");                                  <* 
- *>       DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);                               <* 
- *>       return rce;                                                                  <* 
- *>    }                                                                               <* 
- *>    rc = fclose (w_file);                                                           <* 
- *>    --rce;  if (rc != 0) {                                                          <* 
- *>       DEBUG_PROG   yLOG_snote   ("can not close");                                 <* 
- *>       DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);                               <* 
- *>       return rce;                                                                  <* 
- *>    }                                                                               <* 
- *>    /+---(ground pointer)-----------------+/                                        <* 
- *>    strlcpy (w_name, "", LEN_HUND);                                                 <* 
- *>    w_file = NULL;                                                                  <* 
- *>    /+---(complete)-----------------------+/                                        <* 
- *>    DEBUG_PROG   yLOG_exit    (__FUNCTION__);                                       <* 
- *>    return 0;                                                                       <* 
- *> }                                                                                  <*/
+char
+WAVE_to_code            (FILE *a_main, cchar a_nwave [LEN_TITLE])
+{
+}
 
 

@@ -4,39 +4,46 @@
 
 
 tVERB       g_verbs [MAX_VERB] = {
-   /* --global------   ---desc-------------------------------- spec file cnt tot  ---conv------   ---code------ , ditto */
-   { "GLOBAL"       , "shared code between units"             , 's', 'm',  0,  0, CONV_global   , CODE_global   ,  '-'  },
-   /* --units-------   ---------------------------------------   -  */
+   /* --overall-----   ---------------------------------------   -  */
+   { ""             , "overall"                               , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
    { "PREP"         , "preparation before testing"            , '2', '-',  0,  0, CONV_prep     , NULL          ,  '-'  },
    { "incl"         , "c header inclusion"                    , '3', '-',  0,  0, CONV_incl     , CODE_incl     ,  '-'  },
    { "#>"           , "script internal comments"              , 'c', '-',  0,  0, CONV_comment  , NULL          ,  '-'  },
    /* --scrps-------   --------------------------------------- */
-   { "SCRP"         , "test script"                           , 's', 'n',  0,  0, CONV_scrp     , CODE_scrp     ,  '-'  },
-   { "SECT"         , "grouping of scripts"                   , '2', 'n',  0,  0, CONV_sect     , CODE_sect     ,  '-'  },
+   { ""             , "scripts"                               , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
+   { "SCRP"         , "test script header"                    , 's', 'n',  0,  0, CONV_scrp     , CODE_scrp     ,  '-'  },
    { "SHARED"       , "shared code between scripts"           , 's', 'n',  0,  0, CONV_shared   , CODE_shared   ,  '-'  },
+   { "GLOBAL"       , "shared code between units"             , 's', 'm',  0,  0, CONV_global   , CODE_global   ,  '-'  },
+   { "SECT"         , "grouping of scripts"                   , '2', 'n',  0,  0, CONV_sect     , CODE_sect     ,  '-'  },
    /* --conds-------   --------------------------------------- */
-   { "GROUP"        , "grouping of conditions"                , '2', '-',  0,  0, CONV_group    , CODE_group    ,  '-'  },
+   { ""             , "conditions"                            , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
    { "COND"         , "test condition"                        , '2', '-',  0,  0, CONV_cond     , CODE_cond     ,  '-'  },
    { "DITTO"        , "repeated test condition"               , '1', '-',  0,  0, CONV_ditto    , NULL          ,  '-'  },
    { "REUSE"        , "inclusion of shared code"              , '1', '-',  0,  0, CONV_reuse    , CODE_reuse    ,  '-'  },
+   { "GROUP"        , "grouping of conditions"                , '2', '-',  0,  0, CONV_group    , CODE_group    ,  '-'  },
    /* --variables---   --------------------------------------- */
+   { ""             , "variables"                             , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
    { "global"       , "global/unit variable definition"       , 'p', '-',  0,  0, CONV_gvar     , CODE_gvar     ,  '-'  },
-   { "local"        , "local/script variable deinition"       , 'p', '-',  0,  0, CONV_code     , CODE_lvar     ,  '-'  },
+   { "local"        , "local/script variable definition"      , 'p', '-',  0,  0, CONV_code     , CODE_lvar     ,  '-'  },
    /* --steps-------   --------------------------------------- */
+   { ""             , "steps"                                 , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
    { "exec"         , "function execution"                    , 'f', '-',  0,  0, CONV_exec     , CODE_exec     ,  'y'  },
    { "get"          , "unit test accessor retrieval"          , 'f', '-',  0,  0, CONV_exec     , CODE_exec     ,  'y'  },
    { "echo"         , "test a variable directly"              , 'f', '-',  0,  0, CONV_echo     , CODE_exec     ,  'y'  },
    /* --specialty---   --------------------------------------- */
+   { ""             , "specialty"                             , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
    { "code"         , "insert c code"                         , 'p', '-',  0,  0, CONV_code     , CODE_code     ,  'y'  },
    { "system"       , "execute shell code"                    , 'p', '-',  0,  0, CONV_code     , CODE_system   ,  'y'  },
-   { "load"         , "place data into stdin"                 , 'P', '-',  0,  0, CONV_load     , CODE_load     ,  'y'  },
+   { "load"         , "place data into input"                 , 'P', '-',  0,  0, CONV_load     , CODE_load     ,  'y'  },
    { "mode"         , "set pass or forced_fail mode"          , '2', '-',  0,  0, CONV_mode     , CODE_mode     ,  'y'  },
    /* --support-----   --------------------------------------- */
+   { ""             , "support"                               , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
    { "file"         , "create a temporary file"               , 'p', '-',  0,  0, CONV_file     , CODE_file     ,  'y'  },
    { "append"       , "append data to temporary file"         , 'p', '-',  0,  0, CONV_append   , CODE_append   ,  'y'  },
    /* --ouroboros---   --------------------------------------- */
-   { "WAVE"         , "testing wave"                          , '2', 'm',  0,  0, NULL          , NULL          ,  '-'  },
-   { "stage"        , "testing stage"                         , '2', 'm',  0,  0, NULL          , NULL          ,  '-'  },
+   { ""             , "oroboros"                              , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
+   { "WAVE"         , "testing wave definition"               , '2', 'm',  0,  0, NULL          , NULL          ,  '-'  },
+   { "stage"        , "testing stage definition"              , '2', 'm',  0,  0, NULL          , NULL          ,  '-'  },
    /* --sentinal----   --------------------------------------- */
    { "----"         , "end-of-entries"                        , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
    /* --done--------   --------------------------------------- */
@@ -51,7 +58,7 @@ VERB_dittoable          (char a_verb [LEN_LABEL])
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
    /*---(defense)------------------------*/
    DEBUG_INPT   yLOG_spoint  (a_verb);
-   if (a_verb == NULL) {
+   if (a_verb == NULL || a_verb [0] == '\0') {
       DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
       return 0;
    }
@@ -119,6 +126,7 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
    /*---(find verb)----------------------*/
    for (i = 0; i < MAX_VERB; ++i) {
       if (g_verbs [i].name [0] == '-')                break;
+      if (g_verbs [i].name [0] == '\0')               continue;
       if (g_verbs [i].name [0] != x_word[0])          continue;
       if (strcmp (g_verbs [i].name, x_word) != 0)     continue;
       /*---(save values)-----------------*/
@@ -182,12 +190,16 @@ VERB_inventory     (FILE *a_main)
    CONV_printf (a_main, "{\n");
    CONV_printf (a_main, "   printf (\"koios, record type summary\\n\");\n");
    for (i = 0; i < MAX_VERB; ++i) {
-      CONV_printf (a_main, "   printf (\"%-10.10s = %5d   %s\\n\");\n", g_verbs [i].name, g_verbs [i].total, g_verbs [i].desc);
-      c += g_verbs [i].total;
+      if (g_verbs [i].name [0] == '\0' || g_verbs [i].name [0] == '-') {
+         CONV_printf (a_main, "   printf (\"\\n%s...\\n\");\n", g_verbs [i].desc);
+      } else {
+         CONV_printf (a_main, "   printf (\"  %-10.10s = %5d   %s\\n\");\n", g_verbs [i].name, g_verbs [i].total, g_verbs [i].desc);
+         c += g_verbs [i].total;
+      }
       if (g_verbs [i].name [0] == '-') break;
    }
-   CONV_printf (a_main, "   printf (\"%-10.10s = %5d   %s\\n\");\n", "TOTAL"         , c                , "sum of all verbs");
-   CONV_printf (a_main, "   printf (\"%-10.10s = %5d   %s\\n\");\n", "concerns"      , my.n_recd - c    , "records with troubles");
+   CONV_printf (a_main, "   printf (\"%-10.10s   = %5d   %s\\n\");\n", "TOTAL"         , c                , "count of all verb use");
+   CONV_printf (a_main, "   printf (\"%-10.10s   = %5d   %s\\n\");\n", "concerns"      , my.n_recd - c    , "records with troubles");
    CONV_printf (a_main, "   return 0;\n");
    CONV_printf (a_main, "}\n");
    CONV_printf (a_main, "\n");

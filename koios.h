@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4e"
-#define     P_VERTXT    "huge number of updates, was working privately a while"
+#define     P_VERNUM    "1.4f"
+#define     P_VERTXT    "conversion unit testing excellent, including live test from cmdline"
 /*········· ··········· ´·····························´········································*/
 
 /*>                                                                                   <* 
@@ -295,7 +295,7 @@ struct cGLOBALS
 extern      tGLOBALS    my;
 
 
-#define     MAX_VERB         30
+#define     MAX_VERB         50
 typedef     struct cVERB    tVERB;
 struct cVERB {
    char        name        [LEN_FULL];      /* verb                           */
@@ -444,7 +444,7 @@ char        REUSE__set              (cchar a_type, cchar a_mark, int a_line, cha
 char        REUSE__set_recd         (cchar a_type, cchar a_mark, int a_line, char a_recd [LEN_RECD]);
 int         REUSE__get              (cchar a_type, cchar a_mark, char r_desc [LEN_LONG], int *r_conds, int *r_steps);
 /*---(parsing)--------------*/
-char        REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_RECD], char a_cshare, char *r_share);
+char        REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_RECD], char r_desc [LEN_LONG], char a_cshare, char *r_share);
 /*---(in-use)---------------*/
 char        REUSE_update            (cchar a_mark, int a_conds, int a_steps);
 char        REUSE_export            (cchar a_name [LEN_PATH]);
@@ -505,13 +505,13 @@ char        CODE_init               (void);
 char        CODE__defense           (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], cchar a_stage [LEN_SHORT], char *r_cshare);
 int         CODE__line              (char a_dittoing, int a_nline, int a_dline);
 /*---(prep)-----------------*/
-char        CODE__code_beg          (FILE *a_code);
+char        CODE__code_beg          (cchar a_nscrp [LEN_TITLE], FILE *a_code);
 char        CODE__code_stats        (FILE *a_code);
-char        CODE__code_end          (FILE *a_code);
+char        CODE__code_end          (cchar a_nscrp [LEN_TITLE], FILE *a_code);
 char        CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE]);
 char        CODE__main_end          (FILE *a_main);
 char        CODE_header             (char a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, char *r_cshare);
-char        CODE_footer             (cchar a_nmain [LEN_TITLE], FILE **r_main, FILE **r_code, FILE **r_wave);
+char        CODE_footer             (cchar a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave);
 char        CODE_incl               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
 /*---(scrp)-----------------*/
 char        CODE__scrp_end          (FILE *a_code, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_cshare);

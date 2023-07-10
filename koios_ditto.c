@@ -544,7 +544,7 @@ DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
          DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
          return rce;
       }
-      if (r_desc  != NULL)  strlcpy (r_desc, x_desc, LEN_LONG);
+      if (r_desc  != NULL)  snprintf (r_desc, LEN_LONG, "[ %-.70s ]", x_desc);  /* nice stand-out formatting */
       if (r_mark  != NULL)  *r_mark  = m;
       if (a_runtype == G_RUN_CREATE || a_runtype == G_RUN_DEBUG) {
          DEBUG_INPT   yLOG_note    ("begin ditto processing");

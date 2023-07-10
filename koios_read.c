@@ -106,60 +106,60 @@ READ_close              (FILE **b_file)
 static void  o___RECORD__________o () { return; }
 
 char         /*--> read script record --------------------[ leaf   [ ------ ]-*/
-READ__defense           (FILE **a_file, int *r_nline, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline, int *r_nrecd, char r_recd [LEN_RECD])
+READ__defense           (FILE **a_scrp, int *r_nline, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline, int *r_nrecd, char r_recd [LEN_RECD])
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         = -10;           /* return code for errors         */
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
    /*---(defense)------------------------*/
-   DEBUG_INPT   yLOG_point   ("a_file"    , a_file);
-   --rce;  if (a_file == NULL) {
+   DEBUG_INPT   yLOG_point   ("a_scrp"    , a_scrp);
+   --rce;  if (a_scrp == NULL) {
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
-   DEBUG_INPT   yLOG_point   ("*a_file"   , *a_file);
-   --rce;  if (*a_file == NULL) {
+   DEBUG_INPT   yLOG_point   ("*a_scrp"   , *a_scrp);
+   --rce;  if (*a_scrp == NULL) {
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
    DEBUG_INPT   yLOG_point   ("r_nline"   , r_nline);
    --rce;  if (r_nline == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_point   ("r_dittoing", r_dittoing);
    --rce;  if (r_dittoing == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_point   ("r_dmark"   , r_dmark);
    --rce;  if (r_dmark == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_point   ("r_ditto"   , r_ditto);
    --rce;  if (r_ditto == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_point   ("r_dline"   , r_dline);
    --rce;  if (r_dline == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_point   ("r_nrecd"   , r_nrecd);
    --rce;  if (r_nrecd == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    DEBUG_INPT   yLOG_point   ("r_recd"    , r_recd);
    --rce;  if (r_recd == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(complete)-----------------------*/
-   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -295,12 +295,14 @@ READ_next               (FILE **b_scrp, int *r_nline, char *r_dittoing, char *r_
    }
    /*---(prepare)------------------------*/
    /*> READ__clear  ();                                                               <*/
+   DEBUG_INPT   yLOG_value   ("feof"      , feof (*b_scrp));
    if (feof (*b_scrp)) {
       DEBUG_INPT   yLOG_note    ("already at end of file");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return 0;
    }
    /*---(read for a good record)---------*/
+   DEBUG_INPT   yLOG_note    ("read loop");
    while (1) {
       rc = READ__single (b_scrp, r_nline, r_dittoing, r_dmark, r_ditto, r_dline, r_nrecd, r_recd);
       DEBUG_INPT   yLOG_value   ("single"    , rc);
