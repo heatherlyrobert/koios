@@ -18,11 +18,17 @@ static int  s_nscrp  = 0;
 static int  s_ncond  = 0;
 static int  s_nstep  = 0;
 
+static int  s_uscrp  = 0;
+static int  s_ucond  = 0;
+static int  s_ustep  = 0;
+
 static int  s_scond  = 0;
 static int  s_sstep  = 0;
 
 static int  s_cstep  = 0;
 
+static int  s_dcond  = 0;
+static int  s_dstep  = 0;
 
 
 
@@ -34,9 +40,10 @@ static void  o___PROGRAM_________o () { return; }
 char
 CODE_init               (void)
 {
-   s_nscrp  = 0;
-   s_ncond  = s_scond = 0;
-   s_nstep  = s_sstep = s_cstep = 0;
+   s_nscrp  = s_ncond = s_nstep = 0;
+   s_uscrp  = s_ucond = s_ustep = 0;
+   s_scond  = s_sstep = 0;
+   s_cstep  = 0;
    return 0;
 }
 
@@ -103,7 +110,8 @@ CODE__code_stats        (FILE *a_code)
    CONV_printf (a_code, "char\n");
    CONV_printf (a_code, "yUNIT_stats     (void)\n");
    CONV_printf (a_code, "{\n");
-   CONV_printf (a_code, "   yUNIT_unique (%d, %d, %d);\n", s_nscrp, s_ncond, s_nstep);
+   /*> CONV_printf (a_code, "   yUNIT_unique (%d, %d, %d, %d, %d, %d);\n", s_nscrp, s_ncond, s_nstep, s_uscrp, s_ucond - s_dcond, s_ustep - s_dstep);   <*/
+   CONV_printf (a_code, "   yUNIT_unique (%d, %d, %d, %d, %d, %d);\n", s_nscrp, s_ncond, s_nstep, s_nscrp, s_ncond - s_dcond, s_nstep - s_dstep);
    CONV_printf (a_code, "   return 0;\n");
    CONV_printf (a_code, "}\n");
    CONV_printf (a_code, "\n");
@@ -113,6 +121,7 @@ CODE__code_stats        (FILE *a_code)
 char
 CODE__code_end          (cchar a_nscrp [LEN_TITLE], FILE *a_code)
 {
+   CONV_printf (a_code, "\n");
    if (strcmp (a_nscrp, "master.unit") != 0) {
       CONV_printf (a_code, "/*================================ end-script ================================*/\n");
    } else {
@@ -124,7 +133,11 @@ CODE__code_end          (cchar a_nscrp [LEN_TITLE], FILE *a_code)
 char
 CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE])
 {
-   int         i           = 0;
+   char        x_urun      [LEN_TITLE] = "";
+   int         l           =    0;
+   strlcpy (x_urun, a_nscrp, LEN_TITLE);
+   l = strlen (x_urun);
+   if (strcmp (x_urun + l - 5, ".unit") == 0)  x_urun [l - 5] = '\0';
    CONV_printf (a_main, "\n\n\n");
    CONV_printf (a_main, "int\n");
    CONV_printf (a_main, "main                    (int a_argc, char *a_argv[])\n");
@@ -135,7 +148,7 @@ CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE])
    CONV_printf (a_main, "   rc = yUNIT_init ();\n");
    CONV_printf (a_main, "   rc = yUNIT_args (a_argc, a_argv);\n");
    CONV_printf (a_main, "   if (rc < 0)  return -1;\n");
-   CONV_printf (a_main, "   yUNIT_unit (\"%s\", cyUNIT.level, cyUNIT.eterm, cyUNIT.exec);\n", a_nscrp);
+   CONV_printf (a_main, "   yUNIT_unit (\"%s\", cyUNIT.level, cyUNIT.eterm, cyUNIT.exec);\n", x_urun);
    CONV_printf (a_main, "   /*---(beg scripts)--------------------*/\n");
    return 0;
 }
@@ -183,9 +196,11 @@ CODE_header             (char a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FI
    CODE__main_beg (x_main, a_nscrp);
    CODE__code_beg (a_nscrp, x_code);
    /*---(default globals)----------------*/
-   s_nscrp  = 0;
-   s_ncond  = s_scond = 0;
-   s_nstep  = s_sstep = s_cstep = 0;
+   s_nscrp  = s_ncond = s_nstep = 0;
+   s_uscrp  = s_ucond = s_ustep = 0;
+   s_scond  = s_sstep = 0;
+   s_cstep  = 0;
+   s_dcond  = s_dstep = 0;
    if (r_cshare != NULL)  *r_cshare = '-';
    /*---(save-back)----------------------*/
    if (r_main   != NULL)  *r_main   = x_main;
@@ -196,17 +211,22 @@ CODE_header             (char a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FI
 }
 
 char
-CODE_footer             (cchar a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave)
+CODE_footer             (cchar a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_cshare)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
    char        x_recd      [LEN_RECD]  = "";
-   /*---(informational)------------------*/
+   /*---(polish off scripts)-------------*/
+   CODE__scrp_end          (*r_code, "----", "-----", a_cshare);
+   /*---(code endings)-------------------*/
    CODE__main_end   (*r_main);
    CODE__code_end   (a_nscrp, *r_code);
-   CODE__code_stats (*r_code);
-   VERB_inventory   (*r_code);
+   /*---(informational)------------------*/
+   if (strcmp (a_nscrp, "master.unit") != 0) {
+      CODE__code_stats (*r_code);
+      VERB_inventory   (*r_code);
+   }
    /*---(append main)--------------------*/
    if (strcmp (a_nscrp, "master.unit") != 0) {
       READ_close (r_main);
@@ -255,6 +275,9 @@ static void  o___SCRP____________o () { return; }
 char
 CODE__scrp_end          (FILE *a_code, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_cshare)
 {
+   /*---(reset verb counts)--------------*/
+   VERB_script_reset ();
+   /*---(quick out)----------------------*/
    if (strcmp (a_last, "SECT") == 0)    return 0;
    /*---(wrap last cond)-----------------*/
    CODE__cond_end (a_code, a_last, a_verb);
@@ -265,18 +288,21 @@ CODE__scrp_end          (FILE *a_code, cchar a_last [LEN_LABEL], cchar a_verb [L
       if (a_cshare == '-') {
          CONV_printf (a_code, "   /*===[[ script done ]]==========================*/\n");
          CONV_printf (a_code, "   yUNIT_prcs    (cyUNIT.exec);\n");
+         /*> CONV_printf (a_code, "   cyUNIT.offset  = 0;\n");                        <*/
       }
       else if (a_cshare == tolower (a_cshare)) {
          CONV_printf (a_code, "   /*===[[ shared done ]]==========================*/\n");
          CONV_printf (a_code, "   yUNIT_erahs ('%c');\n", a_cshare);
-         s_ncond -= s_scond;
-         s_nstep -= s_sstep;
+         /*> CONV_printf (a_code, "   cyUNIT.offset  = 0;\n");                        <*/
+         s_ucond -= s_scond;
+         s_ustep -= s_sstep;
       }
       else {
          CONV_printf (a_code, "   /*===[[ global done ]]==========================*/\n");
          CONV_printf (a_code, "   yUNIT_labolg ('%c');\n", a_cshare);
-         s_ncond -= s_scond;
-         s_nstep -= s_sstep;
+         /*> CONV_printf (a_code, "   cyUNIT.offset  = 0;\n");                        <*/
+         s_ucond -= s_scond;
+         s_ustep -= s_sstep;
       }
       CONV_printf (a_code, "   /*---(complete)-----------------------*/\n");
       CONV_printf (a_code, "   return 0;\n");
@@ -306,6 +332,7 @@ CODE_scrp               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    *r_cshare = '-';
    /*---(counters)-----------------------*/
    ++(s_nscrp);
+   ++(s_uscrp);
    s_scond  = 0;
    s_sstep  = s_cstep  = 0;
    /*---(open script function)-----------*/
@@ -437,8 +464,11 @@ CODE_cond               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(wrap last cond)-----------------*/
    CODE__cond_end (a_code, a_last, a_verb);
    /*---(increment)----------------------*/
+   s_cstep = 0;
    ++(s_ncond);
+   ++(s_ucond);
    ++(s_scond);
+   if (a_dittoing == 'y')  ++(s_dcond);
    DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10s, %4dn, %4dc", a_last, s_ncond, s_scond);
    /*---(initial comment)----------------*/
    CONV_printf (a_code, "   /*===[[ COND #%03i ]]============================*/\n", s_scond);
@@ -448,12 +478,12 @@ CODE_cond               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    }
    /*---(debugging)----------------------*/
    if (a_dittoing == 'y') {
-      CONV_printf (a_code, "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");\n", CODE__line (a_dittoing, a_nline, a_dline), s_scond, a_dmark , a_desc);
+      CONV_printf (a_code, "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"[ %s ]\");\n", a_nline, s_scond, a_dmark , a_desc);
    } else if (a_mark != '-') {
       a = a_mark - '0' + ' ';
-      CONV_printf (a_code, "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");\n", CODE__line (a_dittoing, a_nline, a_dline), s_scond, a        , a_desc);
+      CONV_printf (a_code, "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");\n",     a_nline, s_scond, a        , a_desc);
    } else {
-      CONV_printf (a_code, "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");\n", CODE__line (a_dittoing, a_nline, a_dline), s_scond, *r_cshare, a_desc);
+      CONV_printf (a_code, "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");\n",     a_nline, s_scond, *r_cshare, a_desc);
    }
    /*---(complete)-----------------------*/
    DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
@@ -768,8 +798,10 @@ CODE__step_add          (FILE *a_code, cchar a_runtype, cchar a_verb [LEN_LABEL]
 {
    /*---(increment)----------------------*/
    ++(s_nstep);
+   ++(s_ustep);
    ++(s_sstep);
    ++(s_cstep);
+   if (a_dittoing == 'y')  ++(s_dstep);
    /*---(comment for code)---------------*/
    switch (a_verb [0]) {
    case  'e'  :

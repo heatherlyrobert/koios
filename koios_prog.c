@@ -110,8 +110,11 @@ PROG__init              (void)
    my.driver = '-';
    strlcpy  (my.last     , "", LEN_LABEL);
    yURG_err_std ();
+   VERB_init  ();
    DITTO_init ();
    REUSE_init ();
+   CODE_init  ();
+   CONV_init  ();
    /*---(complete)-----------------------*/
    DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -470,14 +473,14 @@ PROG_dawn                (cchar a_runtype, cchar a_nscrp [LEN_TITLE], FILE **r_s
    if (strcmp (a_nscrp, "master.unit") != 0) {
       rc = REUSE_import  ("master.globals");
       DEBUG_PROG   yLOG_value   ("globals"   , rc);
-      --rce;  if (rc <  0) {
-         READ_close (r_scrp);
-         READ_close (r_main);
-         READ_close (r_code);
-         READ_close (r_wave);
-         PROG_shutdown ();
-         return rc;
-      }
+      /*> --rce;  if (rc <  0) {                                                      <* 
+       *>    READ_close (r_scrp);                                                     <* 
+       *>    READ_close (r_main);                                                     <* 
+       *>    READ_close (r_code);                                                     <* 
+       *>    READ_close (r_wave);                                                     <* 
+       *>    PROG_shutdown ();                                                        <* 
+       *>    return rc;                                                               <* 
+       *> }                                                                           <*/
    }
    /*---(complete)-----------------------*/
    DEBUG_PROG   yLOG_exit    (__FUNCTION__);
@@ -560,6 +563,8 @@ PROG_driver              (cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nli
       DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   /*---(save last)-------------------*/
+   if (strcmp (x_verb, "DITTO") != 0)  strlcpy (b_last, x_verb, LEN_LABEL);
    /*---(save-back)-------------------*/
    strlcpy (my.recd  , x_recd    , LEN_RECD);
    strlcpy (my.verb  , x_verb    , LEN_LABEL);
@@ -580,7 +585,7 @@ PROG_driver              (cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nli
 }
 
 char
-PROG_dusk                (cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_TITLE], FILE **r_scrp, cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_nconv [LEN_TITLE], FILE **r_conv)
+PROG_dusk                (cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_TITLE], FILE **r_scrp, cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_nconv [LEN_TITLE], FILE **r_conv, cchar a_cshare)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -592,10 +597,10 @@ PROG_dusk                (cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_T
    rc = SCRP_close     (r_scrp);
    switch (a_runtype) {
    case G_RUN_CREATE : case G_RUN_DEBUG :
-      rc = CODE_footer (a_nscrp, a_nmain, r_main, a_ncode, r_code, a_nwave, r_wave);
+      rc = CODE_footer (a_nscrp, a_nmain, r_main, a_ncode, r_code, a_nwave, r_wave, a_cshare);
       break;
    case G_RUN_UPDATE :
-      rc = CONV_footer  (r_conv);
+      rc = CONV_footer  (r_conv, a_nscrp);
       break;
    }
    DEBUG_PROG   yLOG_value   ("footer"    , rc);

@@ -4,7 +4,7 @@
 
 
 tVERB       g_verbs [MAX_VERB] = {
-   /* --overall-----   ---------------------------------------   -  */
+   /* --overall-----   --------------------------------------- ---- ---- scr tst ----conv----    ----code----    ----- */
    { ""             , "overall"                               , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
    { "PREP"         , "preparation before testing"            , '2', '-',  0,  0, CONV_prep     , NULL          ,  '-'  },
    { "incl"         , "c header inclusion"                    , '3', '-',  0,  0, CONV_incl     , CODE_incl     ,  '-'  },
@@ -48,6 +48,33 @@ tVERB       g_verbs [MAX_VERB] = {
    { "----"         , "end-of-entries"                        , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
    /* --done--------   --------------------------------------- */
 };
+
+char
+VERB_init               (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   int         i           =    0;
+   /*---(find verb)----------------------*/
+   for (i = 0; i < MAX_VERB; ++i) {
+      if (g_verbs [i].name [0] == '-')                break;
+      g_verbs [i].count = 0;
+      g_verbs [i].total = 0;
+   }
+   return 0;
+}
+
+char
+VERB_script_reset       (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   int         i           =    0;
+   /*---(find verb)----------------------*/
+   for (i = 0; i < MAX_VERB; ++i) {
+      if (g_verbs [i].name [0] == '-')                break;
+      g_verbs [i].count = 0;
+   }
+   return 0;
+}
 
 char
 VERB_dittoable          (char a_verb [LEN_LABEL])
@@ -186,7 +213,7 @@ VERB_inventory     (FILE *a_main)
    int         c           = 0;
    CONV_printf (a_main, "\n");
    CONV_printf (a_main, "char\n");
-   CONV_printf (a_main, "UNIT_verbs (void)\n");
+   CONV_printf (a_main, "yUNIT_verbs (void)\n");
    CONV_printf (a_main, "{\n");
    CONV_printf (a_main, "   printf (\"koios, record type summary\\n\");\n");
    for (i = 0; i < MAX_VERB; ++i) {

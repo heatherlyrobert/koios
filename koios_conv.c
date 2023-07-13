@@ -137,7 +137,7 @@ CONV_comment            (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [L
 }
 
 char
-CONV_footer             (FILE **b_conv)
+CONV_footer             (FILE **b_conv, cchar a_nscrp [LEN_TITLE])
 {
    char        rce         =  -10;
    char        rc          =    0;
@@ -145,7 +145,10 @@ CONV_footer             (FILE **b_conv)
    --rce;  if (*b_conv  == NULL)   return rce;
    CONV_printf (*b_conv, "\n\n\n");
    CONV_printf (*b_conv, "# end-of-file.  done, finito, completare, whimper [Ï´···\n");
-   return READ_close  (b_conv);
+   READ_close  (b_conv);
+   if (strcmp (a_nscrp, "master.unit") == 0) {
+      REUSE_export ("master.globals");
+   }
    return 0;
 }
 
@@ -194,7 +197,7 @@ CONV_sect               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [L
    char        x_cnt       [LEN_LABEL] = "";
    rc = CONV__defense (a_conv, a_verb, a_desc, a_meth, a_args, a_test, a_expe, a_retn, a_share, a_mark, a_stage, r_cshare);
    if (rc < 0)  return rc;
-   CONV__scrp_add ('y', a_share, a_stage, x_suf, x_cnt, r_cshare);
+   CONV__scrp_add ('-', a_share, a_stage, x_suf, x_cnt, r_cshare);
    CONV_break     (a_conv);
    return CONV_printf (a_conv, "%-6.6s        %-65.65s  %s\n", a_verb, a_desc, s_suffix);
 }
@@ -207,7 +210,7 @@ CONV_shared             (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [L
    char        x_cnt       [LEN_LABEL] = "";
    rc = CONV__defense (a_conv, a_verb, a_desc, a_meth, a_args, a_test, a_expe, a_retn, a_share, a_mark, a_stage, r_cshare);
    if (rc < 0)  return rc;
-   CONV__scrp_add ('y', a_share, a_stage, x_suf, x_cnt, r_cshare);
+   CONV__scrp_add ('-', a_share, a_stage, x_suf, x_cnt, r_cshare);
    CONV_break     (a_conv);
    return CONV_printf (a_conv, "%-6.6s   %-3.3s  %-65.65s  %-3.3s  %-14.14s  %-75.75s  %-10.10s  %s \n", a_verb, x_suf, a_desc, a_test, a_retn, a_meth, x_cnt, s_hund);
 }
@@ -220,7 +223,7 @@ CONV_global             (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [L
    char        x_cnt       [LEN_LABEL] = "";
    rc = CONV__defense (a_conv, a_verb, a_desc, a_meth, a_args, a_test, a_expe, a_retn, a_share, a_mark, a_stage, r_cshare);
    if (rc < 0)  return rc;
-   CONV__scrp_add ('y', a_share, a_stage, x_suf, x_cnt, r_cshare);
+   CONV__scrp_add ('-', a_share, a_stage, x_suf, x_cnt, r_cshare);
    CONV_break     (a_conv);
    return CONV_printf (a_conv, "%-6.6s   %-3.3s  %-65.65s  %-3.3s  %-14.14s  %-75.75s  %-10.10s  %s \n", a_verb, x_suf, a_desc, a_test, a_retn, a_meth, x_cnt, s_hund);
 }
@@ -233,9 +236,10 @@ CONV_global             (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [L
 static void  o___CONDITION_______o () { return; }
 
 char
-CONV__cond_add          (cchar a_mark, cchar a_share, char r_suffix [LEN_SHORT], char r_count [LEN_LABEL])
+CONV__cond_add          (cchar a_mark, cchar a_share, cchar a_cshare, char r_suffix [LEN_SHORT], char r_count [LEN_LABEL])
 {
    /*---(defaults)-----------------------*/
+   /*> printf ("COND_cond   %c mark   %c share  %c cshare\n", a_mark, a_share, a_cshare);   <*/
    if (r_suffix != NULL) strcpy (r_suffix, "");
    if (r_count  != NULL) strcpy (r_count , "");
    /*---(update conds)-------------------*/
@@ -244,8 +248,8 @@ CONV__cond_add          (cchar a_mark, cchar a_share, char r_suffix [LEN_SHORT],
    if      (a_mark   != '-')  sprintf (r_suffix, "(%c)", a_mark);
    else if (a_share  != '-')  sprintf (r_suffix, "-%c-", a_share);
    /*---(line numbering)-----------------*/
-   if (a_share  == '-')       sprintf (r_count , "((%02d.%03d))", s_nscrp, s_ncond);
-   else                       sprintf (r_count , "((%c%c.%03d))", a_share, a_share, s_ncond);
+   if (a_cshare  == '-')      sprintf (r_count , "((%02d.%03d))", s_nscrp, s_ncond);
+   else                       sprintf (r_count , "((%c%c.%03d))", a_cshare, a_cshare, s_ncond);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -258,7 +262,7 @@ CONV_cond               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [L
    char        x_cnt       [LEN_LABEL] = "";
    rc = CONV__defense (a_conv, a_verb, a_desc, a_meth, a_args, a_test, a_expe, a_retn, a_share, a_mark, a_stage, r_cshare);
    if (rc < 0)  return rc;
-   CONV__cond_add (a_mark, a_share, x_suf, x_cnt);
+   CONV__cond_add (a_mark, a_share, *r_cshare, x_suf, x_cnt);
    return CONV_printf (a_conv, "\n   %-5.5s %-3.3s  %-65.65s  %s  %-10.10s  %s \n", a_verb, x_suf, a_desc, s_hund, x_cnt, s_hund);
 }
 
@@ -270,7 +274,7 @@ CONV_ditto              (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [L
    char        x_cnt       [LEN_LABEL] = "   ";
    rc = CONV__defense (a_conv, a_verb, a_desc, a_meth, a_args, a_test, a_expe, a_retn, a_share, a_mark, a_stage, r_cshare);
    if (rc < 0)  return rc;
-   CONV__cond_add (a_mark, a_share, x_suf, x_cnt);
+   CONV__cond_add (a_mark, a_share, *r_cshare, x_suf, x_cnt);
    return CONV_printf (a_conv, "\n   %-5.5s %-3.3s  %-65.65s  %s  %-10.10s  %s \n", a_verb, x_suf, a_desc, s_hund, x_cnt, s_hund);
 }
 
@@ -282,7 +286,7 @@ CONV_reuse              (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [L
    char        x_cnt       [LEN_LABEL] = "   ";
    rc = CONV__defense (a_conv, a_verb, a_desc, a_meth, a_args, a_test, a_expe, a_retn, a_share, a_mark, a_stage, r_cshare);
    if (rc < 0)  return rc;
-   CONV__cond_add (a_mark, a_share, x_suf, x_cnt);
+   CONV__cond_add (a_mark, a_share, *r_cshare, x_suf, x_cnt);
    return CONV_printf (a_conv, "\n   %-5.5s %-3.3s  %-65.65s  %s  %-10.10s  %s \n", a_verb, x_suf, a_desc, s_hund, x_cnt, s_hund);
 }
 

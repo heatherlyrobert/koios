@@ -263,7 +263,11 @@ READ__single            (FILE **b_scrp, int *r_nline, char *r_dittoing, char *r_
          DEBUG_INPT   yLOG_info    ("p"         , p);
          rc = VERB_dittoable (p);
          DEBUG_INPT   yLOG_value   ("dittoable" , rc);
-         if (rc != 1) DITTO_end (b_scrp, r_dittoing, r_dmark, r_ditto, r_dline);
+         if (rc != 1) {
+            DITTO_end (b_scrp, r_dittoing, r_dmark, r_ditto, r_dline);
+            DEBUG_INPT   yLOG_exitr   (__FUNCTION__, 2);
+            return 2;
+         }
       }
    }
    /*---(save-back)-------------------*/

@@ -113,7 +113,7 @@ main               (int a_argc, char *a_argv [])
    DEBUG_PROG  yLOG_break   ();
    DEBUG_PROG  yLOG_note    ("exiting main processing loop");
    /*---(dusk)---------------------------*/
-   rc = PROG_dusk  (my.run_type, my.replace, my.n_scrp, &(my.f_scrp), my.n_main, &(my.f_main), my.n_code, &(my.f_code), my.n_wave, &(my.f_wave), my.n_conv, &(my.f_conv));
+   rc = PROG_dusk  (my.run_type, my.replace, my.n_scrp, &(my.f_scrp), my.n_main, &(my.f_main), my.n_code, &(my.f_code), my.n_wave, &(my.f_wave), my.n_conv, &(my.f_conv), my.cshare);
    DEBUG_PROG   yLOG_value    ("dusk"      , rc);
    --rce;  if (rc <  0) {
       PROG_shutdown ();
