@@ -211,46 +211,58 @@ CODE_header             (char a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FI
 }
 
 char
-CODE_footer             (cchar a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_cshare)
+CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_cshare)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
    char        x_recd      [LEN_RECD]  = "";
+   char        t           [LEN_HUND]  = "";
    /*---(polish off scripts)-------------*/
    CODE__scrp_end          (*r_code, "----", "-----", a_cshare);
    /*---(code endings)-------------------*/
-   CODE__main_end   (*r_main);
-   CODE__code_end   (a_nscrp, *r_code);
+   if (a_good == 'y') {
+      CODE__main_end   (*r_main);
+      CODE__code_end   (a_nscrp, *r_code);
+   }
    /*---(informational)------------------*/
-   if (strcmp (a_nscrp, "master.unit") != 0) {
+   if (a_good == 'y' && strcmp (a_nscrp, "master.unit") != 0) {
       CODE__code_stats (*r_code);
       VERB_inventory   (*r_code);
    }
    /*---(append main)--------------------*/
-   if (strcmp (a_nscrp, "master.unit") != 0) {
-      READ_close (r_main);
-      READ_open  (a_nmain, 'r', r_main, NULL);
-      /*> printf ("MAIN------------------------------------------\n");                <*/
-      while (1) {
-         fgets (x_recd, LEN_RECD, *r_main);
-         if (feof (*r_main)) break;
-         /*> printf ("MAIN    %s", x_recd);                                           <*/
-         CONV_printf (*r_code, x_recd);
+   if (a_good == 'y') {
+      /*---(append main)-----------------*/
+      if (strcmp (a_nscrp, "master.unit") != 0) {
+         READ_close (r_main);
+         READ_open  (a_nmain, 'r', r_main, NULL);
+         /*> printf ("MAIN------------------------------------------\n");                <*/
+         while (1) {
+            fgets (x_recd, LEN_RECD, *r_main);
+            if (feof (*r_main)) break;
+            /*> printf ("MAIN    %s", x_recd);                                           <*/
+            CONV_printf (*r_code, x_recd);
+         }
+         /*> printf ("MAIN------------------------------------------\n");                <*/
       }
-      /*> printf ("MAIN------------------------------------------\n");                <*/
-   }
-   /*---(export globals)-----------------*/
-   else {
-      REUSE_export ("master.globals");
+      /*---(export globals)--------------*/
+      else {
+         REUSE_export ("master.globals");
+      }
    }
    /*---(close files)--------------------*/
    rc = READ_close (r_main);
    rc = READ_close (r_code);
    rc = READ_close (r_wave);
    /*---(transfer master.h)--------------*/
-   if (strcmp (a_nscrp, "master.unit") == 0) {
+   if (a_good == 'y' &&strcmp (a_nscrp, "master.unit") == 0) {
       system  ("mv -f master_unit.cs master.h");
+   }
+   /*---(clean-up)-----------------------*/
+   sprintf (t, "rm -f %s", a_nmain); system  (t);
+   if (a_good != 'y') {
+      sprintf (t, "rm -f %s", a_ncode); system  (t);
+      sprintf (t, "rm -f %s", a_nwave); system  (t);
    }
    /*---(complete)-----------------------*/
    return 0;
@@ -1033,9 +1045,10 @@ CODE_driver             (void f_call (), char a_nscrp [LEN_TITLE], FILE *a_main,
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(defense)------------------------*/
    DEBUG_PROG   yLOG_point   ("f_call"    , f_call);
-   --rce;  if (f_call == NULL) {
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
+   if (f_call == NULL) {
+      DEBUG_PROG   yLOG_note    ("nothing to do");
+      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+      return 0;
    }
    /*---(prepare)------------------------*/
    x_func = f_call;

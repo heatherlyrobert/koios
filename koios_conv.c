@@ -137,18 +137,27 @@ CONV_comment            (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [L
 }
 
 char
-CONV_footer             (FILE **b_conv, cchar a_nscrp [LEN_TITLE])
+CONV_footer             (char a_good, FILE **b_conv, cchar a_nscrp [LEN_TITLE], cchar a_nconv [LEN_TITLE])
 {
    char        rce         =  -10;
    char        rc          =    0;
+   char        t           [LEN_HUND]  = "";
+   /*---(defense)------------------------*/
    --rce;  if (b_conv   == NULL)   return rce;
    --rce;  if (*b_conv  == NULL)   return rce;
+   /*---(finish conversion)--------------*/
    CONV_printf (*b_conv, "\n\n\n");
    CONV_printf (*b_conv, "# end-of-file.  done, finito, completare, whimper [Ï´···\n");
    READ_close  (b_conv);
-   if (strcmp (a_nscrp, "master.unit") == 0) {
+   /*---(export globals)-----------------*/
+   if (a_good == 'y' && strcmp (a_nscrp, "master.unit") == 0) {
       REUSE_export ("master.globals");
    }
+   /*---(clean-up)-----------------------*/
+   if (a_good != 'y') {
+      sprintf (t, "rm -f %s", a_nconv); system  (t);
+   }
+   /*---(complete)-----------------------*/
    return 0;
 }
 
@@ -398,9 +407,10 @@ CONV_driver             (void f_call (), FILE *a_conv, cchar a_verb [LEN_LABEL],
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(defense)------------------------*/
    DEBUG_PROG   yLOG_point   ("f_call"    , f_call);
-   --rce;  if (f_call == NULL) {
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
+   if (f_call == NULL) {
+      DEBUG_PROG   yLOG_note    ("nothing to do");
+      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+      return 0;
    }
    /*---(prepare)------------------------*/
    x_func = f_call;

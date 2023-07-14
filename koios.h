@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4g"
-#define     P_VERTXT    "full unit test passed using new minimal-global design"
+#define     P_VERNUM    "1.4h"
+#define     P_VERTXT    "added back safety to not replace output is it finds errors"
 /*········· ··········· ´·····························´········································*/
 
 /*>                                                                                   <* 
@@ -332,8 +332,8 @@ char        PROG_startup            (int a_argc, char *a_argv []);
 /*---(execution)------------*/
 char        PROG_dawn               (cchar a_runtype, cchar a_nscrp [LEN_TITLE], FILE **r_scrp, int *r_line, cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_nconv [LEN_TITLE], FILE **r_conv, char *r_cshare);
 char        PROG_terminate          (FILE **r_scrp, FILE **r_main, FILE **r_code, FILE **r_wave, FILE **r_conv);
-char        PROG_driver             (cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nline, FILE **b_scrp, FILE *a_main, FILE *a_code, FILE *a_wave, FILE *a_conv, char b_last [LEN_LABEL], int *r_nrecd, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline, char *r_share, char *r_cshare);
-char        PROG_dusk               (cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_TITLE], FILE **r_scrp, cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_nconv [LEN_TITLE], FILE **r_conv, cchar a_cshare);
+char        PROG_driver             (char a_good, cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nline, FILE **b_scrp, FILE *a_main, FILE *a_code, FILE *a_wave, FILE *a_conv, char b_last [LEN_LABEL], int *r_nrecd, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline, char *r_share, char *r_cshare);
+char        PROG_dusk               (char a_good, cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_TITLE], FILE **r_scrp, cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_nconv [LEN_TITLE], FILE **r_conv, cchar a_cshare);
 /*---(shut-down)------------*/
 char        PROG__end               (void);
 char        PROG_shutdown           (void);
@@ -470,7 +470,7 @@ char        CONV_break              (FILE *a_conv);
 char        CONV_prep               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
 char        CONV_incl               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
 char        CONV_comment            (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
-char        CONV_footer             (FILE **b_conv, cchar a_nscrp [LEN_TITLE]);
+char        CONV_footer             (char a_good, FILE **b_conv, cchar a_nscrp [LEN_TITLE], cchar a_nconv [LEN_TITLE]);
 /*---(scrps)----------------*/
 char        CONV__scrp_add          (cchar a_scrp, cchar a_share, char a_stage [LEN_SHORT], char r_suffix [LEN_SHORT], char r_count [LEN_LABEL], char *r_cshare);
 char        CONV_scrp               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
@@ -513,7 +513,7 @@ char        CODE__code_end          (cchar a_nscrp [LEN_TITLE], FILE *a_code);
 char        CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE]);
 char        CODE__main_end          (FILE *a_main);
 char        CODE_header             (char a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, char *r_cshare);
-char        CODE_footer             (cchar a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_cshare);
+char        CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_cshare);
 char        CODE_incl               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
 /*---(scrp)-----------------*/
 char        CODE__scrp_end          (FILE *a_code, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_cshare);

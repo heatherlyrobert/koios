@@ -3760,7 +3760,7 @@ koios__unit_conv_driver  (char a_list)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify writing FOOTER and closing file");
-   yUNIT_minval   ("write conv line"                    , CONV_footer     (&x_file, x_name)           ,    0);
+   yUNIT_minval   ("write conv line"                    , CONV_footer     ('y', &x_file, x_name, "")       ,    0);
    yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 35);
    yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  31)      , ""                                         );
    yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  32)      , ""                                         );
@@ -4660,7 +4660,7 @@ koios__unit_code_preps   (char a_list)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify calling the footer");
-   yUNIT_minval   ("call footer"                        , CODE_footer     (x_nscrp, x_nmain, &x_main, x_ncode, &x_code, x_nwave, &x_wave, '-'),    0);
+   yUNIT_minval   ("call footer"                        , CODE_footer     ('y', x_nscrp, x_nmain, &x_main, x_ncode, &x_code, x_nwave, &x_wave, '-'),    0);
    yUNIT_minpoint ("... check main pointer"              , x_main        , 0x0);
    yUNIT_minpoint ("... check code pointer"              , x_code        , 0x0);
    yUNIT_minpoint ("... check wave pointer"              , x_wave        , 0x0);
@@ -4842,7 +4842,7 @@ koios__unit_code_driver  (char a_list)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify writing FOOTER and closing file");
-   yUNIT_minval   ("write conv line"                    , CONV_footer     (&x_file, x_name)           ,    0);
+   yUNIT_minval   ("write conv line"                    , CONV_footer     ('y', &x_file, x_name, "")       ,    0);
    yUNIT_minval   ("... check count"                    , yURG_peek_count (x_name)               , 35);
    yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  31)      , ""                                         );
    yUNIT_minstr   ("... check result"                   , yURG_peek       (x_name    ,  32)      , ""                                         );
@@ -6600,7 +6600,6 @@ koios__unit_live_step    (char a_list)
    return 0;
 }
 
-
 char
 koios__unit_live_full    (char a_list)
 {
@@ -6720,6 +6719,66 @@ koios__unit_live_full    (char a_list)
    return 0;
 }
 
+char
+koios__unit_live_stop    (char a_list)
+{
+   int         c           =    0;
+   char        x_unit      [LEN_HUND]  = "apate.unit";
+   char        x_conv      [LEN_HUND]  = "apate.unit.unit";
+
+   yUNIT_minscrp ("live FULL testing on unit test result");
+   if (a_list == 'y')  return 0;
+   yURG_err_none ();  /* not to stderr/terminal */
+   rm_working_files ();
+   PROG__unit_quiet  ();
+
+   yUNIT_mincond  ("verify a simple success");
+   system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  apate.unit");
+   system ("echo \"  COND   (1)  repeat code                         \"                                                                                                       >> apate.unit");
+   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
+   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
+   system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond ("call conversion");
+   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   5);
+   yUNIT_minval  ("... run koios"                      , system ("koios --errors --update apate > /dev/null 2>&1"),   0);
+   yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  18);
+   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   0);
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond  ("attempt with a bad verb");
+   system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  apate.unit");
+   system ("echo \"  CONDY  (1)  repeat code                         \"                                                                                                       >> apate.unit");
+   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
+   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
+   system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond ("call conversion");
+   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit) ,   5);
+   yUNIT_minval  ("... run koios"                      , system ("koios --errors --update apate"), 999);
+   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   5);
+   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   2);
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, apate.unit:2:0: error: verb ¶CONDY¶ not recognized/found"               BACK_OFF  );
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), BOLD_ERR "FATAL, apate.unit:5:1: error: DITTO identifier å1æ not set by previous COND"   BACK_OFF  );
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), ""                                                    );
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("call execution");
+   yUNIT_minval  ("... run koios"                      , system ("koios --errors --create apate"), 999);
+   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   2);
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, apate.unit:2:0: error: verb ¶CONDY¶ not recognized/found"               BACK_OFF  );
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), BOLD_ERR "FATAL, apate.unit:5:1: error: DITTO identifier å1æ not set by previous COND"   BACK_OFF  );
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), ""                                                    );
+   yUNIT_mindnoc ();
+
+   PROG__unit_end    ();
+   rm_working_files ();
+   yUNIT_minprcs ();
+   return 0;
+}
+
 
 
 /*====================------------------------------------====================*/
@@ -6805,6 +6864,7 @@ main                    (int a_argc, char *a_argv [])
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_cond      (x_list);
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_step      (x_list);
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_full      (x_list);
+   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_stop      (x_list);
    /*---(done)---------------------------*/
    yUNIT_mintinu ();
    return 0;

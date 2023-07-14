@@ -317,6 +317,7 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_r
       else if (strncmp (a, "--validate"   , 10) == 0)    x_runtype = G_RUN_UPDATE;
       else if (strncmp (a, "--convert"    , 10) == 0)    x_runtype = G_RUN_UPDATE;
       else if (strncmp (a, "--update"     , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_replace = G_RUN_REPLACE; }
+      else if (strncmp (a, "--errors"     , 10) == 0)  { yURG_err_tmp (); yURG_err_live (); yURG_err_clear (); }
       else if (strncmp (a, "-"            ,  1) == 0)  {
          yURG_err ('f', "argument ¶%s¶ is not recognized", a);
          DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce);
@@ -501,7 +502,7 @@ PROG_terminate           (FILE **r_scrp, FILE **r_main, FILE **r_code, FILE **r_
 }
 
 char
-PROG_driver              (cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nline, FILE **b_scrp, FILE *a_main, FILE *a_code, FILE *a_wave, FILE *a_conv, char b_last [LEN_LABEL], int *r_nrecd, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline, char *r_share, char *r_cshare)
+PROG_driver              (char a_good, cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nline, FILE **b_scrp, FILE *a_main, FILE *a_code, FILE *a_wave, FILE *a_conv, char b_last [LEN_LABEL], int *r_nrecd, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline, char *r_share, char *r_cshare)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -550,18 +551,20 @@ PROG_driver              (cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nli
       return rce;
    }
    /*---(write output)----------------*/
-   switch (a_runtype) {
-   case G_RUN_UPDATE :
-      rc = CONV_driver (p_conv, a_conv, x_verb, x_desc, x_meth, x_args, x_test, x_expe, x_retn, *r_share, *r_mark, x_stage, r_cshare);
-      break;
-   case G_RUN_CREATE:  case  G_RUN_DEBUG :
-      rc = CODE_driver (p_code, a_nscrp, a_main, a_code, a_wave, a_runtype, b_last, x_verb, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_stage, *r_dittoing, *r_mark, *r_dmark, *r_nline, *r_dline, *r_share, r_cshare);
-      break;
-   }
-   DEBUG_PROG   yLOG_value   ("output"    , rc);
-   --rce;  if (rc < 0)  {
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
-      return rce;
+   if (a_good == 'y') {
+      switch (a_runtype) {
+      case G_RUN_UPDATE :
+         rc = CONV_driver (p_conv, a_conv, x_verb, x_desc, x_meth, x_args, x_test, x_expe, x_retn, *r_share, *r_mark, x_stage, r_cshare);
+         break;
+      case G_RUN_CREATE:  case  G_RUN_DEBUG :
+         rc = CODE_driver (p_code, a_nscrp, a_main, a_code, a_wave, a_runtype, b_last, x_verb, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_stage, *r_dittoing, *r_mark, *r_dmark, *r_nline, *r_dline, *r_share, r_cshare);
+         break;
+      }
+      DEBUG_PROG   yLOG_value   ("output"    , rc);
+      --rce;  if (rc < 0)  {
+         DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+         return rce;
+      }
    }
    /*---(save last)-------------------*/
    if (strcmp (x_verb, "DITTO") != 0)  strlcpy (b_last, x_verb, LEN_LABEL);
@@ -585,7 +588,7 @@ PROG_driver              (cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nli
 }
 
 char
-PROG_dusk                (cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_TITLE], FILE **r_scrp, cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_nconv [LEN_TITLE], FILE **r_conv, cchar a_cshare)
+PROG_dusk                (char a_good, cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_TITLE], FILE **r_scrp, cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_nconv [LEN_TITLE], FILE **r_conv, cchar a_cshare)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -597,10 +600,10 @@ PROG_dusk                (cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_T
    rc = SCRP_close     (r_scrp);
    switch (a_runtype) {
    case G_RUN_CREATE : case G_RUN_DEBUG :
-      rc = CODE_footer (a_nscrp, a_nmain, r_main, a_ncode, r_code, a_nwave, r_wave, a_cshare);
+      rc = CODE_footer  (a_good, a_nscrp, a_nmain, r_main, a_ncode, r_code, a_nwave, r_wave, a_cshare);
       break;
    case G_RUN_UPDATE :
-      rc = CONV_footer  (r_conv, a_nscrp);
+      rc = CONV_footer  (a_good, r_conv, a_nscrp, a_nconv);
       break;
    }
    DEBUG_PROG   yLOG_value   ("footer"    , rc);
@@ -609,7 +612,7 @@ PROG_dusk                (cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_T
       return rc;
    }
    /*---(handle replace)-----------------*/
-   if (a_replace == G_RUN_REPLACE) {
+   if (a_good == 'y' && a_replace == G_RUN_REPLACE) {
       sprintf (t, "cp -f %s %s.old", a_nscrp, a_nscrp);
       system  (t);
       printf  ("replacing script with update, saved original in .old\n");
