@@ -83,7 +83,7 @@ DITTO__set              (cchar a_mark, int a_line, char a_desc [LEN_LONG])
 }
 
 char
-DITTO__set_recd         (cchar a_mark, int a_line, char a_recd [LEN_RECD])
+DITTO__set_recd         (cchar a_mark, int a_line, char a_vers, char a_recd [LEN_RECD])
 {
    /*---(locals)-------------------------*/
    char        rce         =  -10;
@@ -98,6 +98,10 @@ DITTO__set_recd         (cchar a_mark, int a_line, char a_recd [LEN_RECD])
    --rce;  if (p      == NULL)                     return rce;
    p = strtok_r (NULL  , "", &r);
    --rce;  if (p      == NULL)                     return rce;
+   --rce; if (a_vers > 0) {
+      p = strtok_r (NULL  , "", &r);
+      if (p      == NULL)                     return rce;
+   }
    strltrim (p, ySTR_BOTH, LEN_LONG);
    /*---(complete)-----------------------*/
    return DITTO__set (a_mark, a_line, p);
@@ -418,7 +422,7 @@ DITTO_read_numbering    (char a_dittoing, int a_ditto, int *r_nline, int *r_dlin
 static void  o___PARSING_________o () { return; }
 
 char
-DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_verb [LEN_LABEL], char a_recd [LEN_RECD], char *a_field, char r_desc [LEN_LONG], char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline)
+DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char *a_field, char r_desc [LEN_LONG], char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -526,7 +530,7 @@ DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
             DEBUG_INPT   yLOG_note    ("already set identifier (hidding)");
             yURG_err (YURG_WARN, "%s:%d:1: warning: COND identifier å%cæ already set, now overwritten", a_nscrp, a_line, m);
          }
-         rc = DITTO__set_recd (m, a_line, a_recd);
+         rc = DITTO__set_recd (m, a_line, a_vers, a_recd);
          DEBUG_INPT   yLOG_value   ("saving"    , rc);
          if (r_mark != NULL)  *r_mark = m;
       } else {

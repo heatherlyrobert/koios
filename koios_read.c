@@ -14,6 +14,7 @@ READ_open               (cchar a_name [LEN_RECD], cchar a_dir, FILE **r_file, in
    /*---(locals)-----------+-----------+-*/
    char        rce         = -10;           /* return code for errors         */
    char        x_mode      [LEN_SHORT] = "";
+   char        x_name      [LEN_PATH]  = "";
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(default)------------------------*/
@@ -50,6 +51,9 @@ READ_open               (cchar a_name [LEN_RECD], cchar a_dir, FILE **r_file, in
       break;
    }
    DEBUG_OUTP   yLOG_info    ("x_mode"    , x_mode);
+   /*---(full name)----------------------*/
+   snprintf (x_name, LEN_PATH, "%s/%s", my.cwd, a_name);
+   DEBUG_OUTP   yLOG_info    ("x_name"    , x_name);
    /*---(open)---------------------------*/
    *r_file = fopen (a_name, x_mode);
    DEBUG_OUTP   yLOG_point   ("*r_file"   , *r_file);
@@ -232,6 +236,7 @@ READ__single            (FILE **b_scrp, int *r_nline, char *r_dittoing, char *r_
    /*---(prepare)---------------------*/
    x_len = strllen (x_recd, LEN_RECD);
    if (x_len > 0)  x_recd [--x_len] = '\0';
+   DEBUG_INPT   yLOG_complex ("x_recd"    , "%3då%sæ", x_len, x_recd);
    /*---(filter)----------------------*/
    if (x_recd [0] == '\0') {
       DEBUG_INPT   yLOG_note    ("SKIP, empty");

@@ -115,7 +115,7 @@ REUSE__set              (cchar a_type, cchar a_mark, int a_line, char a_desc [LE
 }
 
 char
-REUSE__set_recd         (cchar a_type, cchar a_mark, int a_line, char a_recd [LEN_RECD])
+REUSE__set_recd         (cchar a_type, cchar a_mark, int a_line, char a_vers, char a_recd [LEN_RECD])
 {
    /*---(locals)-------------------------*/
    char        rce         =  -10;
@@ -130,6 +130,10 @@ REUSE__set_recd         (cchar a_type, cchar a_mark, int a_line, char a_recd [LE
    --rce;  if (p      == NULL)                     return rce;
    p = strtok_r (NULL  , "", &r);
    --rce;  if (p      == NULL)                     return rce;
+   --rce; if (a_vers > 0) {
+      p = strtok_r (NULL  , "", &r);
+      if (p      == NULL)                     return rce;
+   }
    strltrim (p, ySTR_BOTH, LEN_LONG);
    /*---(complete)-----------------------*/
    return REUSE__set (a_type, a_mark, a_line, p);
@@ -173,7 +177,7 @@ REUSE__get              (cchar a_type, cchar a_mark, char r_desc [LEN_LONG], int
 static void  o___PARSING_________o () { return; }
 
 char
-REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_RECD], char r_desc [LEN_LONG], char a_cshare, char *r_share)
+REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char r_desc [LEN_LONG], char a_cshare, char *r_share)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -280,7 +284,7 @@ REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN
          DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
          return rce;
       }
-      rc = REUSE__set_recd (T_MASTER, m, a_line, a_recd);
+      rc = REUSE__set_recd (T_MASTER, m, a_line, a_vers, a_recd);
       DEBUG_INPT   yLOG_value   ("set global", rc);
       *r_share = m;
    }
@@ -305,7 +309,7 @@ REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN
          DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
          return rce;
       }
-      rc = REUSE__set_recd (T_SHARES, m, a_line, a_recd);
+      rc = REUSE__set_recd (T_SHARES, m, a_line, a_vers, a_recd);
       DEBUG_INPT   yLOG_value   ("set share" , rc);
       *r_share = m;
    }
@@ -399,14 +403,16 @@ REUSE_export            (cchar a_name [LEN_PATH])
    int         i           =    0;
    char        x_desc      [LEN_LONG]  = "";
    --rce;  if (a_name == NULL)   return rce;
-   f = fopen (a_name, "wt");
+   /*> f = fopen (a_name, "wt");                                                      <*/
+   READ_open (a_name, "wt", &f, NULL);
    --rce;  if (f == NULL)  return rce;
    for (i = 0; i < 26; ++i) {
       strlcpy    (x_desc, s_master [i].desc, LEN_LONG);
       strlencode (x_desc, ySTR_MAX, LEN_LONG);
       fprintf (f, "%c %4d %-75.75s %4d %4d\n", i + 'A', s_master [i].line, x_desc, s_master [i].conds, s_master [i].steps);
    }
-   fclose (f);
+   /*> fclose (f);                                                                    <*/
+   READ_close (&f);
    return 0;
 }
 
@@ -425,7 +431,8 @@ REUSE_import            (cchar a_name [LEN_PATH])
    int         x_conds     =    0;
    int         x_steps     =    0;
    --rce;  if (a_name == NULL)   return rce;
-   f = fopen (a_name, "rt");
+   /*> f = fopen (a_name, "rt");                                                      <*/
+   READ_open (a_name, "rt", &f, NULL);
    --rce;  if (f == NULL)  return rce;
    for (i = 0; i < 26; ++i) {
       fgets   (x_recd, LEN_RECD, f);
@@ -438,7 +445,8 @@ REUSE_import            (cchar a_name [LEN_PATH])
       rc = REUSE__set   (T_MASTER, 'A' + i, x_line, x_desc);
       rc = REUSE_update ('A' + i, x_conds, x_steps);
    }
-   fclose (f);
+   /*> fclose (f);                                                                    <*/
+   READ_close (&f);
    return 0;
 }
 

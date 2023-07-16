@@ -38,7 +38,9 @@ main               (int a_argc, char *a_argv [])
    DEBUG_PROG   yLOG_note    ("entering main processing loop");
    /*---(main)---------------------------*/
    while (1) {
+      DEBUG_OUTP   yLOG_char    ("x_good"    , x_good);
       rc = PROG_driver (x_good, my.run_type, my.n_scrp, &(my.n_line), &(my.f_scrp), my.f_main, my.f_code, my.f_wave, my.f_conv, my.last, &(my.n_recd), &(my.dittoing), &(my.mark), &(my.dmark), &(my.ditto), &(my.dline), &(my.share), &(my.cshare));
+      DEBUG_OUTP   yLOG_value   ("driver"    , rc);
       if (rc == 0)  break;  /* end-of-file */
       if (rc <  0) {
          x_good = '-';

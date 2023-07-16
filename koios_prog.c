@@ -109,12 +109,13 @@ PROG__init              (void)
    strlcpy  (my.n_conv, "", LEN_TITLE);  my.f_conv = NULL;
    my.driver = '-';
    strlcpy  (my.last     , "", LEN_LABEL);
-   yURG_err_std ();
+   my.noise = '-';
    VERB_init  ();
    DITTO_init ();
    REUSE_init ();
    CODE_init  ();
    CONV_init  ();
+   getcwd (my.cwd, LEN_PATH);
    /*---(complete)-----------------------*/
    DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -278,12 +279,13 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
 }
 
 char
-PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_replace, char r_base [LEN_TITLE], char r_ext [LEN_SHORT])
+PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_noise, char *r_replace, char r_base [LEN_TITLE], char r_ext [LEN_SHORT])
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
    char        x_runtype   = G_RUN_CREATE;
+   char        x_noise     =  '-';
    char        x_replace   = G_RUN_DEFAULT;
    char        x_base      [LEN_TITLE]  = "";
    char        x_ext       [LEN_TERSE] = "";
@@ -298,6 +300,7 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_r
    if (r_replace != NULL)  *r_replace = '·';
    if (r_base    != NULL)  strcpy (r_base, "");
    if (r_ext     != NULL)  strcpy (r_ext , "");
+   yURG_all_off ();
    /*---(defenses)-----------------------*/
    DEBUG_ARGS  yLOG_point   ("a_argv" , a_argv);
    --rce;  if (a_argv == NULL) {
@@ -311,18 +314,44 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_r
       if (a[0] == '@')  continue;
       DEBUG_ARGS  yLOG_info    ("cli arg", a);
       ++x_args;
-      if      (strncmp (a, "--create"     , 10) == 0)    x_runtype = G_RUN_CREATE;
+      /*---(better testing)--------------*/
+      if      (strncmp (a, "--verify"     , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_noise = '-'; }
+      else if (strncmp (a, "--cverify"    , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_noise = 'c'; }
+      else if (strncmp (a, "--everify"    , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_noise = 'e'; }
+      else if (strncmp (a, "--Everify"    , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_noise = 'E'; }
+      else if (strncmp (a, "--vverify"    , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_noise = 'v'; }
+      /*---(better conversion)-----------*/
+      else if (strncmp (a, "--conv"       , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_replace = G_RUN_REPLACE;  x_noise = '-'; }
+      else if (strncmp (a, "--cconv"      , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_replace = G_RUN_REPLACE;  x_noise = 'c'; }
+      else if (strncmp (a, "--econv"      , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_replace = G_RUN_REPLACE;  x_noise = 'e'; }
+      else if (strncmp (a, "--Econv"      , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_replace = G_RUN_REPLACE;  x_noise = 'E'; }
+      else if (strncmp (a, "--vconv"      , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_replace = G_RUN_REPLACE;  x_noise = 'v'; }
+      /*---(better code/create)----------*/
+      else if (strncmp (a, "--code"       , 10) == 0)  { x_runtype = G_RUN_CREATE;  x_noise = '-'; }
+      else if (strncmp (a, "--ccode"      , 10) == 0)  { x_runtype = G_RUN_CREATE;  x_noise = 'c'; }
+      else if (strncmp (a, "--ecode"      , 10) == 0)  { x_runtype = G_RUN_CREATE;  x_noise = 'e'; }
+      else if (strncmp (a, "--Ecode"      , 10) == 0)  { x_runtype = G_RUN_CREATE;  x_noise = 'E'; }
+      else if (strncmp (a, "--vcode"      , 10) == 0)  { x_runtype = G_RUN_CREATE;  x_noise = 'v'; }
+      /*---(better code/debug)-----------*/
+      else if (strncmp (a, "--debug"      , 10) == 0)  { x_runtype = G_RUN_DEBUG;   x_noise = '-'; }
+      else if (strncmp (a, "--cdebug"     , 10) == 0)  { x_runtype = G_RUN_DEBUG;   x_noise = 'c'; }
+      else if (strncmp (a, "--edebug"     , 10) == 0)  { x_runtype = G_RUN_DEBUG;   x_noise = 'e'; }
+      else if (strncmp (a, "--Edebug"     , 10) == 0)  { x_runtype = G_RUN_DEBUG;   x_noise = 'E'; }
+      else if (strncmp (a, "--vdebug"     , 10) == 0)  { x_runtype = G_RUN_DEBUG;   x_noise = 'v'; }
+      /*---(old args)--------------------*/
+      else if (strncmp (a, "--create"     , 10) == 0)    x_runtype = G_RUN_CREATE;
       else if (strncmp (a, "--compile"    , 10) == 0)    x_runtype = G_RUN_CREATE;
       else if (strncmp (a, "--debug"      , 10) == 0)    x_runtype = G_RUN_DEBUG;
       else if (strncmp (a, "--validate"   , 10) == 0)    x_runtype = G_RUN_UPDATE;
       else if (strncmp (a, "--convert"    , 10) == 0)    x_runtype = G_RUN_UPDATE;
       else if (strncmp (a, "--update"     , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_replace = G_RUN_REPLACE; }
-      else if (strncmp (a, "--errors"     , 10) == 0)  { yURG_err_tmp (); yURG_err_live (); yURG_err_clear (); }
+      /*---(unknown arg)-----------------*/
       else if (strncmp (a, "-"            ,  1) == 0)  {
          yURG_err ('f', "argument ¶%s¶ is not recognized", a);
          DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce);
          return rce;
       }
+      /*---(file name)-------------------*/
       else {
          rc = PROG__file (a, x_base, x_ext);
          if (rc < 0) {
@@ -331,6 +360,20 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_r
             return rce;
          }
       }
+      /*---(set noise)----------------------*/
+      switch (x_noise) {
+      case 'E' : 
+         yURG_err_tmp  (); yURG_err_live (); yURG_err_clear ();
+         break;
+      case 'e' : 
+         yURG_err_std  (); yURG_err_live (); yURG_err_clear ();
+         break;
+      case 'v' : 
+         yURG_msg_std  (); yURG_msg_live (); yURG_msg_clear ();
+         yURG_err_std  (); yURG_err_live (); yURG_err_clear ();
+         break;
+      }
+      /*---(done)------------------------*/
    }
    DEBUG_ARGS  yLOG_value  ("entries"   , x_total);
    DEBUG_ARGS  yLOG_value  ("arguments" , x_args);
@@ -356,6 +399,7 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_r
    }
    /*---(save-back)----------------------*/
    if (r_runtype != NULL)  *r_runtype = x_runtype;
+   if (r_noise   != NULL)  *r_noise   = x_noise;
    if (r_replace != NULL)  *r_replace = x_replace;
    if (r_base    != NULL)  strlcpy (r_base, x_base, LEN_TITLE);
    if (r_ext     != NULL)  strlcpy (r_ext , x_ext , LEN_TERSE);
@@ -407,7 +451,7 @@ PROG_startup            (int a_argc, char *a_argv [])
       return rce;
    }
    /*---(arguments)----------------------*/
-   rc = PROG__args   (a_argc, a_argv, &(my.run_type), &(my.replace), my.n_base, my.n_ext);
+   rc = PROG__args   (a_argc, a_argv, &(my.run_type), &(my.noise), &(my.replace), my.n_base, my.n_ext);
    DEBUG_PROG   yLOG_value    ("args"      , rc);
    --rce;  if (rc < 0) {
       DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
@@ -537,7 +581,7 @@ PROG_driver              (char a_good, cchar a_runtype, cchar a_nscrp [LEN_TITLE
       return rce;
    }
    /*---(check flow)------------------*/
-   rc = PARSE_prep    (b_scrp, a_nscrp, *r_nline, a_runtype, x_recd, x_verb, &x_spec, &p_conv, &p_code, x_stage, x_vers, x_desc, x_expe, r_dittoing, r_mark, r_dmark, r_ditto, r_dline, r_share, r_cshare);
+   rc = PARSE_prep    (b_scrp, a_nscrp, *r_nline, a_runtype, x_recd, x_verb, &x_spec, &p_conv, &p_code, x_stage, &x_vers, x_desc, x_expe, r_dittoing, r_mark, r_dmark, r_ditto, r_dline, r_share, r_cshare);
    DEBUG_PROG   yLOG_value   ("flow"      , rc);
    --rce;  if (rc < 0)  {
       DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
@@ -597,7 +641,7 @@ PROG_dusk                (char a_good, cchar a_runtype, cchar a_replace, cchar a
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(close files)--------------------*/
-   rc = SCRP_close     (r_scrp);
+   rc = READ_close     (r_scrp);
    switch (a_runtype) {
    case G_RUN_CREATE : case G_RUN_DEBUG :
       rc = CODE_footer  (a_good, a_nscrp, a_nmain, r_main, a_ncode, r_code, a_nwave, r_wave, a_cshare);
@@ -666,10 +710,10 @@ PROG__unit_quiet   (void)
 {
    char        rce         =  -10;
    char        rc          =    0;
-   char        x_argc      =    2;
-   char       *x_argv [2]  = { "koios", "koios" };
+   char        x_argc      =    3;
+   char       *x_argv [3]  = { "koios", "--verify", "apate" };
    /*---(prepare)------------------------*/
-   system ("touch koios.unit           2> /dev/null");
+   system ("touch apate.unit           2> /dev/null");
    /*---(debugging)----------------------*/
    rc = PROG_urgents (x_argc, x_argv);
    DEBUG_PROG   yLOG_value    ("urgents"   , rc);
@@ -693,10 +737,10 @@ PROG__unit_loud    (void)
 {
    char        rce         =  -10;
    char        rc          =    0;
-   char        x_argc      =    3;
-   char       *x_argv [3]  = { "koios_unit", "@@kitchen" , "koios"};
+   char        x_argc      =    4;
+   char       *x_argv [4]  = { "koios_unit", "@@kitchen" , "--verify", "apate"};
    /*---(prepare)------------------------*/
-   system ("touch koios.unit           2> /dev/null");
+   system ("touch apate.unit           2> /dev/null");
    /*---(debugging)----------------------*/
    rc = PROG_urgents (x_argc, x_argv);
    DEBUG_PROG   yLOG_value    ("urgents"   , rc);

@@ -113,40 +113,40 @@ PARSE__comment          (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LE
    char      (*x_conv) (void)  = NULL;
    char      (*x_code) (void)  = NULL;
    /*---(header)-------------------------*/
-   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   DEBUG_INPT   yLOG_enter   (__FUNCTION__);
    /*---(defense)------------------------*/
-   DEBUG_INPT   yLOG_spoint  (a_nscrp);
+   DEBUG_INPT   yLOG_point   ("a_nscrp"   , a_nscrp);
    --rce;  if (a_nscrp == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_INPT   yLOG_spoint  (a_recd);
+   DEBUG_INPT   yLOG_point   ("a_recd"    , a_recd);
    --rce;  if (a_recd == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    x_len = strlen (a_recd);
    /*---(ward-off)-----------------------*/
-   DEBUG_INPT   yLOG_sint    (x_len);
+   DEBUG_INPT   yLOG_value   ("x_len"     , x_len);
    if (x_len < 2) {
-      DEBUG_INPT   yLOG_snote   ("too short");
-      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      DEBUG_INPT   yLOG_note    ("too short");
+      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return 0;
    }
    if      (strncmp (a_recd, "#> "     , 3) == 0) ;
    else if (strncmp (a_recd, "   #> "  , 6) == 0) ;
    else if (strncmp (a_recd, "     #> ", 8) == 0) ;
    else {
-      DEBUG_INPT   yLOG_snote   ("not prefixed with #>");
-      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      DEBUG_INPT   yLOG_note    ("not prefixed with #>");
+      DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return 0;
    }
    /*---(check for marker)---------------*/
-   DEBUG_INPT   yLOG_snote   ("saved record/comment");
+   DEBUG_INPT   yLOG_note    ("saved record/comment");
    rc = VERB_parse (a_nscrp, a_line, "#>", x_verb, &x_indx, &x_spec, NULL, &x_conv, &x_code);
-   DEBUG_INPT   yLOG_sint    (rc);
+   DEBUG_INPT   yLOG_value   ("verb"      , rc);
    --rce;  if (rc < 0) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(save-back)----------------------*/
@@ -156,7 +156,7 @@ PARSE__comment          (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LE
    if (r_code  != NULL)  *r_code = x_code;
    if (r_expe  != NULL)  strlcpy (r_expe, a_recd, LEN_RECD);
    /*---(complete)-----------------------*/
-   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 1;
 }
 
@@ -174,7 +174,7 @@ PARSE__version          (cchar *a_field, char *r_vers)
    --rce;  if (a_field == NULL)  return rce;
    --rce;  if (r_vers  == NULL)  return rce;
    /*---(prepare)------------------------*/
-   strlcpy (x_field, a_field, LEN_TERSE);
+   strlcpy  (x_field, a_field, LEN_TERSE);
    strltrim (x_field, ySTR_BOTH, LEN_TERSE);
    l = strlen (x_field);
    /*---(assign version)-----------------*/
@@ -241,14 +241,14 @@ PARSE_prep              (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
    }
    rc = PARSE__version (v, r_vers);
    /*---(check for shares)---------------*/
-   rc = REUSE_parse    (a_nscrp, a_line, r_verb, a_recd, r_desc, *r_cshare, r_share);
+   rc = REUSE_parse    (a_nscrp, a_line, r_verb, *r_vers, a_recd, r_desc, *r_cshare, r_share);
    DEBUG_INPT   yLOG_value   ("reuses"    , rc);
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);
       return rce;
    }
    /*---(check for ditto)----------------*/
-   rc = DITTO_parse_handler (b_scrp, a_nscrp, a_line, a_runtype, r_verb, a_recd, p, r_desc, r_dittoing, r_mark, r_dmark, r_ditto, r_dline);
+   rc = DITTO_parse_handler (b_scrp, a_nscrp, a_line, a_runtype, r_verb, *r_vers, a_recd, p, r_desc, r_dittoing, r_mark, r_dmark, r_ditto, r_dline);
    DEBUG_INPT   yLOG_value   ("ditto"     , rc);
    --rce;  if (rc < 0) {
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rc);
@@ -454,7 +454,7 @@ PARSE_driver            (cchar a_nscrp [LEN_TITLE], int a_line, char a_vers, cch
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_enter   (__FUNCTION__);
    /*---(quick-out)----------------------*/
-   if (a_spec == '1') {
+   if (strchr ("1c", a_spec) != NULL) {
       DEBUG_INPT   yLOG_note    ("one field required and already read as verb");
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return 0;  /* ditto type */
@@ -485,11 +485,27 @@ PARSE_driver            (cchar a_nscrp [LEN_TITLE], int a_line, char a_vers, cch
       DEBUG_INPT   yLOG_exit    (__FUNCTION__);
       return rce;
    }
+   --rce;  if (a_vers > 0) {
+      p = strtok_r (NULL  , q, &r);
+      if (p == NULL) {
+         DEBUG_INPT   yLOG_note    ("adjusted to having version number");
+         DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+         return rce;
+      }
+      a_vers = 0;
+   }
    /*---(walk-fields)--------------------*/
    for (i = 2; i < 20; ++i) {
       /*---(parse field)-----------------*/
       switch (a_vers) {
-      case  0 :   rc = PARSE__current  (i, p, a_spec, &(x_max), x_desc, x_meth, x_args, x_test, x_expe, x_retn); break;
+      case  0 :
+         rc = PARSE__current  (i, p, a_spec, &(x_max), x_desc, x_meth, x_args, x_test, x_expe, x_retn);
+         break;
+      default : 
+         DEBUG_INPT   yLOG_note    ("version not recognized");
+         DEBUG_INPT   yLOG_exit    (__FUNCTION__);
+         return rce;
+         break;
       }
       if (i >= x_max)    break;
       /*---(next record)-----------------*/

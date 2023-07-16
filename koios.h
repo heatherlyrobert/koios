@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4h"
-#define     P_VERTXT    "added back safety to not replace output is it finds errors"
+#define     P_VERNUM    "1.4j"
+#define     P_VERTXT    "fixed evil, tiny bug that segfaulted after using chdir in code verb"
 /*········· ··········· ´·····························´········································*/
 
 /*>                                                                                   <* 
@@ -219,6 +219,9 @@
 #define     IF_MASTER     if (strcmp (my.n_base, "master") == 0)
 #define     IF_NORMAL     if (strcmp (my.n_base, "master") != 0)
 
+#define     IF_CONFIRM    if (my.noise == 'c') 
+#define     IF_VERBOSE    if (my.noise == 'v') 
+
 typedef struct stat      tSTAT;
 
 
@@ -227,8 +230,10 @@ struct cGLOBALS
 {
    /*---(general)---------------*/
    char        version     [LEN_FULL];      /* program version info           */
+   char        noise;                       /* how loud of feedback           */
    char        run_type;                    /* unit test code or conversion   */
    char        replace;                     /* convert and replace file       */
+   char        cwd         [LEN_PATH];      /* true working directory         */
    /*---(file names)------------*/
    char        n_ext       [LEN_TERSE];     /* .unit vs .sunit                */
    char        n_base      [LEN_TITLE];     /* base name of files             */
@@ -326,7 +331,7 @@ char        PROG_urgents            (int a_argc, char *a_argv []);
 /*---(start-up)-------------*/
 char        PROG__init              (void);
 char        PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char r_ext [LEN_TERSE]);
-char        PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_replace, char r_base [LEN_TITLE], char r_ext [LEN_SHORT]);
+char        PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_noise, char *r_replace, char r_base [LEN_TITLE], char r_ext [LEN_SHORT]);
 char        PROG__begin             (void);
 char        PROG_startup            (int a_argc, char *a_argv []);
 /*---(execution)------------*/
@@ -346,33 +351,33 @@ char        PROG__unit_end          (void);
 
 /*===[[ SCRP ]]===============================================================*/
 /*---(shared)--------------*/
-char        SCRP__shared_clear      (cchar a_type);
-char        SCRP__shared_purge      (void);
-char        SCRP__shared_index      (cchar a_type, cchar a_mark);
-char        SCRP__shared_set        (cchar a_type, cchar a_mark, int a_line);
-int         SCRP__shared_get        (cchar a_type, cchar a_mark);
-char*       SCRP__shared_used       (void);
+/*> char        SCRP__shared_clear      (cchar a_type);                               <*/
+/*> char        SCRP__shared_purge      (void);                                       <*/
+/*> char        SCRP__shared_index      (cchar a_type, cchar a_mark);                 <*/
+/*> char        SCRP__shared_set        (cchar a_type, cchar a_mark, int a_line);     <*/
+/*> int         SCRP__shared_get        (cchar a_type, cchar a_mark);                 <*/
+/*> char*       SCRP__shared_used       (void);                                       <*/
 /*---(dittos)--------------*/
-char        SCRP__ditto_clear       (void);
-char        SCRP__reuses_check      (cchar a_nscrp [LEN_TITLE], int a_line, char a_indx, char *p, char a_cshare, char *r_share, char *r_dittoing, char *r_dmark, char *r_mark, int *r_ditto, int *r_dline);
-char        SCRP__ditto_check       (cchar a_nscrp [LEN_TITLE], int a_line, char a_indx, char *p);
-char        SCRP_ditto__handler     (char a_dittoing, int a_ditto, int *r_nline, int *r_dline);
+/*> char        SCRP__ditto_clear       (void);                                       <*/
+/*> char        SCRP__reuses_check      (cchar a_nscrp [LEN_TITLE], int a_line, char a_indx, char *p, char a_cshare, char *r_share, char *r_dittoing, char *r_dmark, char *r_mark, int *r_ditto, int *r_dline);   <*/
+/*> char        SCRP__ditto_check       (cchar a_nscrp [LEN_TITLE], int a_line, char a_indx, char *p);   <*/
+/*> char        SCRP_ditto__handler     (char a_dittoing, int a_ditto, int *r_nline, int *r_dline);   <*/
 /*---(file)----------------*/
-char        SCRP_open               (cchar a_name [LEN_RECD], FILE **r_file, int *r_line);
-char        SCRP_close              (FILE **b_file);
-char        SCRP_clear              (void);
-char        SCRP_read               (FILE *a_file, int *r_nline, char a_dittoing, int a_ditto, int *r_dline, int *r_nrecd, int *r_len, char r_recd [LEN_RECD]);
+/*> char        SCRP_open               (cchar a_name [LEN_RECD], FILE **r_file, int *r_line);   <*/
+/*> char        SCRP_close              (FILE **b_file);                              <*/
+/*> char        SCRP_clear              (void);                                       <*/
+/*> char        SCRP_read               (FILE *a_file, int *r_nline, char a_dittoing, int a_ditto, int *r_dline, int *r_nrecd, int *r_len, char r_recd [LEN_RECD]);   <*/
 /*---(parsing)-------------*/
-char        SCRP__parse_defense     (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD]);
-char        SCRP__parse_comment     (cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code);
-char        SCRP__parse_verb        (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN_LABEL], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code);
-char        SCRP__parse_save        (char a_verb [LEN_LABEL], char a_indx, char a_spec, char *a_conv, char *a_code, char a_stage [LEN_SHORT], char a_vers);
-char        SCRP__limits            (char a_spec, char *r_min, char *r_max);
-char        SCRP__current           (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_verb [LEN_LABEL], char a_spec, char *a_first, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD]);
-char        SCRP_vers21             (void);
-char        SCRP_vers20             (void);
-char        SCRP_vers19             (void);
-char        SCRP_parse              (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD]);
+/*> char        SCRP__parse_defense     (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD]);   <*/
+/*> char        SCRP__parse_comment     (cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code);   <*/
+/*> char        SCRP__parse_verb        (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN_LABEL], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code);   <*/
+/*> char        SCRP__parse_save        (char a_verb [LEN_LABEL], char a_indx, char a_spec, char *a_conv, char *a_code, char a_stage [LEN_SHORT], char a_vers);   <*/
+/*> char        SCRP__limits            (char a_spec, char *r_min, char *r_max);      <*/
+/*> char        SCRP__current           (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_verb [LEN_LABEL], char a_spec, char *a_first, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD]);   <*/
+/*> char        SCRP_vers21             (void);                                       <*/
+/*> char        SCRP_vers20             (void);                                       <*/
+/*> char        SCRP_vers19             (void);                                       <*/
+/*> char        SCRP_parse              (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD]);   <*/
 /*---(unittest)------------*/
 char*       SCRP__unit              (char *a_question, int a_num);
 /*---(done)-----------------*/
@@ -399,7 +404,7 @@ char        DITTO_wrap              (void);
 /*---(usage)----------------*/
 char        DITTO__index            (cchar a_mark);
 char        DITTO__set              (cchar a_mark, int a_line, char a_desc [LEN_LONG]);
-char        DITTO__set_recd         (cchar a_mark, int a_line, char a_recd [LEN_RECD]);
+char        DITTO__set_recd         (cchar a_mark, int a_line, char a_vers, char a_recd [LEN_RECD]);
 int         DITTO__get              (cchar a_mark, char r_desc [LEN_LONG]);
 /*---(toggle)---------------*/
 char        DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_ditto, char a_mark, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline);
@@ -407,7 +412,7 @@ char        DITTO_end               (FILE **b_scrp, char *r_dittoing, char *r_dm
 /*---(reading)--------------*/
 char        DITTO_read_numbering    (char a_dittoing, int a_ditto, int *r_nline, int *r_dline);
 /*---(parsing)--------------*/
-char        DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_verb [LEN_LABEL], char a_recd [LEN_RECD], char *a_field, char r_desc [LEN_LONG], char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline);
+char        DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char *a_field, char r_desc [LEN_LONG], char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline);
 /*---(debugging)------------*/
 char*       DITTO__used             (void);
 /*---(done)-----------------*/
@@ -443,10 +448,10 @@ char        REUSE_wrap              (void);
 /*---(usage)----------------*/
 char        REUSE__index            (cchar a_type, cchar a_mark);
 char        REUSE__set              (cchar a_type, cchar a_mark, int a_line, char a_desc [LEN_LONG]);
-char        REUSE__set_recd         (cchar a_type, cchar a_mark, int a_line, char a_recd [LEN_RECD]);
+char        REUSE__set_recd         (cchar a_type, cchar a_mark, int a_line, char a_vers, char a_recd [LEN_RECD]);
 int         REUSE__get              (cchar a_type, cchar a_mark, char r_desc [LEN_LONG], int *r_conds, int *r_steps);
 /*---(parsing)--------------*/
-char        REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_RECD], char r_desc [LEN_LONG], char a_cshare, char *r_share);
+char        REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char r_desc [LEN_LONG], char a_cshare, char *r_share);
 /*---(in-use)---------------*/
 char        REUSE_update            (cchar a_mark, int a_conds, int a_steps);
 char        REUSE_export            (cchar a_name [LEN_PATH]);

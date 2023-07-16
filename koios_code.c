@@ -218,6 +218,9 @@ CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [
    char        rc          =    0;
    char        x_recd      [LEN_RECD]  = "";
    char        t           [LEN_HUND]  = "";
+   /*---(header)-------------------------*/
+   DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
+   DEBUG_OUTP   yLOG_char    ("a_good"    , a_good);
    /*---(polish off scripts)-------------*/
    CODE__scrp_end          (*r_code, "----", "-----", a_cshare);
    /*---(code endings)-------------------*/
@@ -247,6 +250,7 @@ CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [
       }
       /*---(export globals)--------------*/
       else {
+         printf ("handling master.unit\n");
          REUSE_export ("master.globals");
       }
    }
@@ -265,6 +269,7 @@ CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [
       sprintf (t, "rm -f %s", a_nwave); system  (t);
    }
    /*---(complete)-----------------------*/
+   DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
@@ -272,7 +277,8 @@ char
 CODE_incl               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
 {
    char        t           [LEN_HUND]  = "";
-   sprintf (t, "\"%s\"", a_method);
+   if (a_method [0] == '<')   strcpy  (t, a_method);
+   else                       sprintf (t, "\"%s\"", a_method);
    CONV_printf (a_code, "#include    %-22.22s  /* %4i, %-32.32s */\n", t, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
    return 0;
 }
@@ -963,8 +969,8 @@ CODE_code               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
    CODE__display   (a_expect, x_display, x_system, NULL);
    /*---(create)-------------------------*/
-   CONV_printf     (a_code, "      yUNIT_code    (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, x_display);
    CONV_printf     (a_code, "      if (cyUNIT.exec) { %s }\n",  x_system);
+   CONV_printf     (a_code, "      yUNIT_code    (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, x_display);
    /*---(complete)-----------------------*/
    return 0;
 }
