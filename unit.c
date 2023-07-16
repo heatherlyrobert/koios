@@ -17,30 +17,30 @@ rm_working_files        (void)
 {
    yUNIT_mincond ("prepare clean start");
    /*---(unit related)-------------------*/
-   system ("rm    -f apate.unit        2> /dev/null");
-   system ("rm    -f apate.sunit       2> /dev/null");
-   system ("rm    -f apatey.sunit      2> /dev/null");
-   system ("rm    -f linked.unit       2> /dev/null");
-   system ("rm    -f linked.sunit      2> /dev/null");
-   system ("rm    -f apate-a.unit      2> /dev/null");
-   system ("rm    -f apate_a.unit      2> /dev/null");
-   system ("rmdir -f apate_dir.unit    2> /dev/null");
-   system ("rm    -f khaos.unit        2> /dev/null");
-   system ("rm    -f gyges.unit        2> /dev/null");
-   system ("rm    -f hestia.unit       2> /dev/null");
+   system ("rm    -f apate.unit        > /dev/null   2>&1");
+   system ("rm    -f apate.sunit       > /dev/null   2>&1");
+   system ("rm    -f apatey.sunit      > /dev/null   2>&1");
+   system ("rm    -f linked.unit       > /dev/null   2>&1");
+   system ("rm    -f linked.sunit      > /dev/null   2>&1");
+   system ("rm    -f apate-a.unit      > /dev/null   2>&1");
+   system ("rm    -f apate_a.unit      > /dev/null   2>&1");
+   system ("rmdir -f apate_dir.unit    > /dev/null   2>&1");
+   system ("rm    -f khaos.unit        > /dev/null   2>&1");
+   system ("rm    -f gyges.unit        > /dev/null   2>&1");
+   system ("rm    -f hestia.unit       > /dev/null   2>&1");
    /*---(code related)-------------------*/
-   system ("rm    -f apate.c           2> /dev/null");
-   system ("rm    -f apate_unit.tmp    2> /dev/null");
-   system ("rm    -f apate.unit.old    2> /dev/null");
-   system ("rm    -f apate_unit.cs     2> /dev/null");
-   system ("rm    -f apate.wave        2> /dev/null");
+   system ("rm    -f apate.c           > /dev/null   2>&1");
+   system ("rm    -f apate_unit.tmp    > /dev/null   2>&1");
+   system ("rm    -f apate.unit.old    > /dev/null   2>&1");
+   system ("rm    -f apate_unit.cs     > /dev/null   2>&1");
+   system ("rm    -f apate.wave        > /dev/null   2>&1");
    /*---(master related)-----------------*/
-   system ("rm    -f master.h          2> /dev/null");
-   system ("rm    -f master.unit       2> /dev/null");
-   system ("rm    -f master.unit.old   2> /dev/null");
-   system ("rm    -f master.globals    2> /dev/null");
+   system ("rm    -f master.h          > /dev/null   2>&1");
+   system ("rm    -f master.unit       > /dev/null   2>&1");
+   system ("rm    -f master.unit.old   > /dev/null   2>&1");
+   system ("rm    -f master.globals    > /dev/null   2>&1");
    /*---(output)-------------------------*/
-   system ("rm    -f apate.urun        2> /dev/null");
+   system ("rm    -f apate.urun        > /dev/null   2>&1");
    /*---(done)---------------------------*/
    yUNIT_mindnoc ();
    return 0;
@@ -526,7 +526,7 @@ koios__unit_read_open    (char a_list)
    yUNIT_minval   ("open the script file"               , READ_open   (x_name, 'r', &x_file, &x_line), -999);
    yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "file ¶apate.unit¶ could not be openned");
+   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "file åapate.unitæ could not be openned");
    yUNIT_mindnoc  ();
 
    sprintf (t, "touch %s", x_name);
@@ -6623,8 +6623,8 @@ koios__unit_live_full    (char a_list)
    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  16), "  " BACK_GRN "aa) PASS  " BACK_OFF " : check string ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00008]");
    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, 'Ö'), "      method : yUNIT_teststring (0)");
    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, 'Ö'), "      test   : s_equal    (rc =  101, test abbr = e)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  5[hello]");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  5[hello]");
+   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  5åhelloæ");
+   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  5åhelloæ");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
@@ -6632,8 +6632,8 @@ koios__unit_live_full    (char a_list)
    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 418), "  " BACK_RED "aa) FAIL  " BACK_OFF " : check string ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00083]");
    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, 'Ö'), "      method : yUNIT_teststring (1)");
    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, 'Ö'), "      test   : s_equal    (rc = -101, test abbr = e)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  7[" BOLD_RED "hello££" BOLD_OFF "]");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  7[" BOLD_RED "goodbye" BOLD_OFF "]");
+   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  7å" BOLD_RED "hello££" BOLD_OFF "æ");
+   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  7å" BOLD_RED "goodbye" BOLD_OFF "æ");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
@@ -6641,8 +6641,8 @@ koios__unit_live_full    (char a_list)
    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 187), "  " BACK_GRN "aa) " BACK_RED "!FAIL " BACK_OFF " : check string ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00030]");
    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, 'Ö'), "      method : yUNIT_teststring (0)");
    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, 'Ö'), "      test   : s_equal    (rc =  101, test abbr = e)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  5[hello]");                              
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  5[hello]");                              
+   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  5åhelloæ");                              
+   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  5åhelloæ");                              
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
@@ -6650,8 +6650,8 @@ koios__unit_live_full    (char a_list)
    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  22), "  " BACK_GRN "ab) PASS  " BACK_OFF " : check number ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00009]");
    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, 'Ö'), "      method : yUNIT_testreal (5)");
    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, 'Ö'), "      test   : r_greater  (rc =  103, test abbr = g)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  9[15.000000]");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  9[15.707964]");
+   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  9å15.000000æ");
+   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  9å15.707964æ");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
@@ -6659,8 +6659,8 @@ koios__unit_live_full    (char a_list)
    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 424), "  " BACK_RED "ab) FAIL  " BACK_OFF " : check number ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00084]");
    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, 'Ö'), "      method : yUNIT_testreal (2)");
    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, 'Ö'), "      test   : r_greater  (rc = -103, test abbr = g)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  9[15.000000]");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  8[6.283185]");
+   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  9å15.000000æ");
+   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  8å6.283185æ");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
@@ -6668,8 +6668,8 @@ koios__unit_live_full    (char a_list)
    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  28), "  " BACK_GRN "ac) PASS  " BACK_OFF " : check integer · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00010]");
    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, 'Ö'), "      method : yUNIT_testint (32)");
    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, 'Ö'), "      test   : i_equal    (rc =  101, test abbr = e)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  1[2]");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  1[2]");
+   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  1å2æ");
+   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  1å2æ");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
@@ -6677,8 +6677,8 @@ koios__unit_live_full    (char a_list)
    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 430), "  " BACK_RED "ac) FAIL  " BACK_OFF " : check integer · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00085]");
    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, 'Ö'), "      method : yUNIT_testint (64)");
    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, 'Ö'), "      test   : i_equal    (rc = -101, test abbr = e)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  1[2]");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  1[4]");
+   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect :  1å2æ");
+   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      actual :  1å4æ");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
@@ -6689,25 +6689,25 @@ koios__unit_live_full    (char a_list)
 
    yUNIT_mincond ("check code step");                                   
    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 568), "  " BACK_CYN "aa) " BACK_GRN "CODE  " BACK_OFF " : set new value · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00008]");
-   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, 'Ö'), "      code   : 12[h = 32 * 64;]");
+   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, 'Ö'), "      code   : 12åh = 32 * 64;æ");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("check load step");                                   
    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  44), "  " BACK_CYN "aa) " BACK_GRN "LOAD  " BACK_OFF " : prep data for read ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00013]");
-   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, 'Ö'), "      stdin  : 13[one two three]");
+   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, 'Ö'), "      stdin  : 13åone two threeæ");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("check sys step");                                   
    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 143), "  " BACK_CYN "ae) " BACK_RED "!SYS  " BACK_OFF " : run little · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00026]");
-   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, 'Ö'), "      system : 10[/bin/false]");
+   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, 'Ö'), "      system : 10å/bin/falseæ");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("check local step");                                   
    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 129), "  " BACK_CYN "aa) " BACK_GRN "LOCAL " BACK_OFF " : working variables  ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00022]");
-   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, 'Ö'), "      local  : 10[int c = 0;]");
+   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, 'Ö'), "      local  : 10åint c = 0;æ");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
@@ -6742,7 +6742,9 @@ koios__unit_live_stop    (char a_list)
    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   5);
    yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),   0);
    yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  18);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   0);
+   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   1);
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file åmaster.globalsæ could not be openned"                              BACK_OFF  );
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), ""                                                    );
    yUNIT_mindnoc ();
 
    yUNIT_mincond  ("attempt with a bad verb");
@@ -6757,16 +6759,18 @@ koios__unit_live_stop    (char a_list)
    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit) ,   5);
    yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate"), 999);
    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   5);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   2);
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, apate.unit:2:0: error: verb ¶CONDY¶ not recognized/found"               BACK_OFF  );
+   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   3);
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file åmaster.globalsæ could not be openned"                              BACK_OFF  );
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), BOLD_ERR "FATAL, apate.unit:2:0: error: verb ¶CONDY¶ not recognized/found"               BACK_OFF  );
    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), BOLD_ERR "FATAL, apate.unit:5:1: error: DITTO identifier å1æ not set by previous COND"   BACK_OFF  );
    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), ""                                                    );
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("call execution");
    yUNIT_minval  ("... run koios"                      , system ("koios --Ecode apate"), 999);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   2);
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, apate.unit:2:0: error: verb ¶CONDY¶ not recognized/found"               BACK_OFF  );
+   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   3);
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file åmaster.globalsæ could not be openned"                              BACK_OFF  );
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), BOLD_ERR "FATAL, apate.unit:2:0: error: verb ¶CONDY¶ not recognized/found"               BACK_OFF  );
    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), BOLD_ERR "FATAL, apate.unit:5:1: error: DITTO identifier å1æ not set by previous COND"   BACK_OFF  );
    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), ""                                                    );
    yUNIT_mindnoc ();
@@ -6802,7 +6806,9 @@ koios__unit_live_vers    (char a_list)
    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   5);
    yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),   0);
    yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  18);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   0);
+   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   1);
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file åmaster.globalsæ could not be openned"                              BACK_OFF  );
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), ""                                                    );
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify header");
@@ -6877,8 +6883,9 @@ koios__unit_live_comment (char a_list)
    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,  19);
    yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),  999);
    yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  19);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   1);
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, apate.unit:5:0: error: verb ¶#>this¶ not recognized/found"               BACK_OFF  );
+   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   2);
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file åmaster.globalsæ could not be openned"                              BACK_OFF  );
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), BOLD_ERR "FATAL, apate.unit:5:0: error: verb ¶#>this¶ not recognized/found"               BACK_OFF  );
    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), ""                                                    );
    yUNIT_mindnoc ();
 
@@ -6907,7 +6914,9 @@ koios__unit_live_comment (char a_list)
    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,  18);
    yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),    0);
    yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  25);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   0);
+   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   1);
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file åmaster.globalsæ could not be openned"                              BACK_OFF  );
+   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, 'Ö'), ""                                                    );
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify header");
@@ -7017,7 +7026,7 @@ koios__unit_live_code    (char a_list)
    char        x_conv      [LEN_HUND]  = "apate.unit.unit";
    char        x_urun      [LEN_HUND]  = "apate.urun";
 
-   yUNIT_minscrp ("live testing with various versions");
+   yUNIT_minscrp ("live testing with code/chdir lines");
    if (a_list == 'y')  return 0;
    yURG_err_none ();  /* not to stderr/terminal */
    rm_working_files ();
@@ -7036,8 +7045,7 @@ koios__unit_live_code    (char a_list)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond ("call conversion");
-   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   4);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   0);
+   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   8);
    yUNIT_minval  ("... run koios"                      , system ("koios --Ecode apate > /dev/null 2>&1"),   0);
    yUNIT_minval  ("... copy to c"                      , system ("cp  -f apate_unit.{cs,c}"), 0);
    yUNIT_minval  ("... compile"                        , system ("gcc -c apate_unit.c"), 0);
@@ -7047,35 +7055,47 @@ koios__unit_live_code    (char a_list)
 
    yUNIT_mincond ("check results");
    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit")  , 0);
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 28);
+   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 34);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("check header");
    yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, 'º'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
    yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, 'Ö'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···1 ···1 ···1");
    yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, 'Ö'), "   assign output level to (5) YUNIT_FULL                             c ···1 ···1 ···1");
-   yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, 'Ö'), "   assign format/color to (y) ETERM                                  x ···2 ···2 ···2");
+   yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, 'Ö'), "   assign format/color to (y) ETERM                                  x ···4 ···4 ···4");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
 
    yUNIT_mincond ("check script entry");                
    yUNIT_minstr  ("... check (11) separator"           , yURG_peek (x_urun, 'Ö'), "===[[ NEW SCRIPT ]]==================================================================");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, 'Ö'), "SCRP [01] quick test ====================================================[  ]=[00001]");
+   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, 'Ö'), "SCRP [01] quick test ====================================================[  ]=[00003]");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("check condition entry");                
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "  COND [001] verify code  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00002]");
+   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "  COND [001] verify code  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00004]");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
 
    yUNIT_mincond ("check passing string step");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 'Ö'), "  " BACK_CYN "aa) " BACK_GRN "CODE  " BACK_OFF " : change directory · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00003]");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      code   : 23åchdir (¶/home/member¶);æ");
+   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 'Ö'), "  " BACK_CYN "aa) " BACK_GRN "LOCAL " BACK_OFF " : path directory  ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00005]");
+   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      local  : 29åchar  x_name [LEN_HUND] = ¶¶;æ");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("check passing string step");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 'Ö'), "  " BACK_GRN "ab) PASS  " BACK_OFF " : get current directory ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00004]");
+   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 'Ö'), "  " BACK_CYN "ab) " BACK_GRN "CODE  " BACK_OFF " : update directory · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00006]");
+   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      code   : 32åstrcpy (x_name, ¶/home/member¶);æ");
+   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check passing string step");
+   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 'Ö'), "  " BACK_CYN "ac) " BACK_GRN "CODE  " BACK_OFF " : change directory · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00007]");
+   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, 'Ö'), "      code   : 15åchdir (x_name);æ");
+   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("check passing string step");
+   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 'Ö'), "  " BACK_GRN "ad) PASS  " BACK_OFF " : get current directory ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ··[00008]");
    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, 'Ö'), "      method : getcwd (NULL, 0)");
    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, 'Ö'), "      test   : s_equal    (rc =  101, test abbr = e)");
    yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, 'Ö'), "      expect : 12å/home/memberæ");
@@ -7084,11 +7104,11 @@ koios__unit_live_code    (char a_list)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("check urun output");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, 'Ö'), "      " BACK_GRN "DNOC --------------- test=2     [ pass=1     fail=0     badd=0     void=1     ]" BACK_OFF);
+   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, 'Ö'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=1     fail=0     badd=0     void=3     ]" BACK_OFF);
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, 'Ö'), "  " BACK_GRN "PRCS -------- cond=1     test=2     [ pass=1     fail=0     badd=0     void=1     ]" BACK_OFF);
+   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, 'Ö'), "  " BACK_GRN "PRCS -------- cond=1     test=4     [ pass=1     fail=0     badd=0     void=3     ]" BACK_OFF);
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, 'Ö'), BACK_GRN "TINU  scrp=1    cond=1     test=2     [ pass=1     fail=0     badd=0     void=1     ]" BACK_OFF);
+   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, 'Ö'), BACK_GRN "TINU  scrp=1    cond=1     test=4     [ pass=1     fail=0     badd=0     void=3     ]" BACK_OFF);
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 'Ö'), "");
    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, 'Ö'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
@@ -7096,7 +7116,7 @@ koios__unit_live_code    (char a_list)
    yUNIT_mindnoc ();
 
    PROG__unit_end    ();
-   /*> rm_working_files ();                                                           <*/
+   rm_working_files ();
    yUNIT_minprcs ();
    return 0;
 }

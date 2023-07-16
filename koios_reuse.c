@@ -404,7 +404,7 @@ REUSE_export            (cchar a_name [LEN_PATH])
    char        x_desc      [LEN_LONG]  = "";
    --rce;  if (a_name == NULL)   return rce;
    /*> f = fopen (a_name, "wt");                                                      <*/
-   READ_open (a_name, "wt", &f, NULL);
+   READ_open (a_name, 'w', &f, NULL);
    --rce;  if (f == NULL)  return rce;
    for (i = 0; i < 26; ++i) {
       strlcpy    (x_desc, s_master [i].desc, LEN_LONG);
@@ -432,7 +432,7 @@ REUSE_import            (cchar a_name [LEN_PATH])
    int         x_steps     =    0;
    --rce;  if (a_name == NULL)   return rce;
    /*> f = fopen (a_name, "rt");                                                      <*/
-   READ_open (a_name, "rt", &f, NULL);
+   READ_open (a_name, 'r', &f, NULL);
    --rce;  if (f == NULL)  return rce;
    for (i = 0; i < 26; ++i) {
       fgets   (x_recd, LEN_RECD, f);

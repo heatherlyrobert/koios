@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4j"
-#define     P_VERTXT    "fixed evil, tiny bug that segfaulted after using chdir in code verb"
+#define     P_VERNUM    "1.4k"
+#define     P_VERTXT    "full unit test passing again"
 /*········· ··········· ´·····························´········································*/
 
 /*>                                                                                   <* 

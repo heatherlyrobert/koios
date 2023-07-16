@@ -58,7 +58,7 @@ READ_open               (cchar a_name [LEN_RECD], cchar a_dir, FILE **r_file, in
    *r_file = fopen (a_name, x_mode);
    DEBUG_OUTP   yLOG_point   ("*r_file"   , *r_file);
    --rce;  if (*r_file == NULL) {
-      yURG_err (YURG_FATAL, "file ¶%s¶ could not be openned", a_name);
+      yURG_err (YURG_FATAL, "file å%sæ could not be openned", a_name);
       DEBUG_PROG   yLOG_fatal   ("can not open script file");
       DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
       return rce;

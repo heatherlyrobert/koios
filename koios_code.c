@@ -969,8 +969,8 @@ CODE_code               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
    CODE__display   (a_expect, x_display, x_system, NULL);
    /*---(create)-------------------------*/
-   CONV_printf     (a_code, "      if (cyUNIT.exec) { %s }\n",  x_system);
    CONV_printf     (a_code, "      yUNIT_code    (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, x_display);
+   CONV_printf     (a_code, "      if (cyUNIT.exec) { %s }\n",  x_system);
    /*---(complete)-----------------------*/
    return 0;
 }
