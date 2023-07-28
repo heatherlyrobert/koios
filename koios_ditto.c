@@ -176,13 +176,20 @@ static  FILE *s_fditto = NULL;   /* re-opened version to process the ditto    */
  */
 
 /*
- * complexity    [fcC##g·L44·27-·E-2D1-]
- * integration   [-----·--·-------·---·----]
- * watch-points  [?#p-#·4-2--2·----·----]
- * [fcC##g·L44·27-·E-2D1-]¬[-----·--·-------·---·----]¬[?#p-#·4-2--2·----·----]
+ * o                                                   w      c  F G X r  c                            n   w     D                                L          
+ * n          p p           p      %           i   c r ´  m   a  c c c e  a D R  F G     v O m    o s  c o i y   a D D D    m    g     v          s        s 
+ * e   s r p  a a      p    m p  t d %  L F G  n   h e e  e   l  a a a c  l f f  f f     i f y  i u y  u p n g   c s m m D  a    l     i o  V M F t  u s s t 
+ * l   c t r  u r    p b  p u f  o e c  v v v  d l o t r  m   l  l l l u  l u u  u u c y k u s  n t s  r e d r   t t a a w  c  f o c y k t  m m m a  n c t r 
+ * i   o y o  d a  p o o  n l u  t b o  a a a  e o i u r  o   ´  l l l r  ´ n n  n n s l e n t  p p t  s n o a   i y c t a  r  i b s l e h  a a a t  i r e i 
+ * n   p p t  i m  i u t  u t n  a u d  r r r  n o c r o  r   b  e e e s  t c c  c c t i y c r  u u e  e g w p   v l r c r  o  l a t i y e  s s s i  t p p n 
+ * e   e e o  t s  n t h  m i c  l g e  s s s  t p e n r  y   y  r r r e  o s s  s s d b s s y  t t m  s l s h   e e o h n  s  e l d b s r  k k k c  s s s g 
+ * á  å---------------------complexity---------------------æ å-------------------integration------------------æ å----------------watch-points---------------æ
+ * ·   g c g  ´ B  5 5 1  2 1 ·  K 4 5  3 7 ·  1 · D 2 C  á   5  1 4 · ·  # Z 1  á 1 · · · · ·  ´ · ·  ´ · · ·   > l i · ·  4  á 2 · · · 2  ´ · · ·  ´ · · ·
+ *
+ * å´         æ  å 179æ  åæ
  */
-char
-DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_mark, char a_ditto, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline)
+char         /*->  --------------------------------------------[ ´········· ]-*/ /*-ågcg´·Bá551á21·´K45´37·´1·D2Cá·æ¬å5á14··´#Z1á·1·····´···´····æ¬å>li··´4·2···2´····´····æ-*/
+DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_mark, int a_ditto, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline)
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         =  -10;
@@ -234,10 +241,11 @@ DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
       return rce;
    }
    /*---(check mark)---------------------*/
+   DEBUG_INPT   yLOG_value   ("a_ditto"    , a_ditto);
    --rce;  if (a_ditto < 1) {
-      DEBUG_INPT   yLOG_snote   ("unset identifier");
+      DEBUG_INPT   yLOG_note    ("unset identifier");
       yURG_err (YURG_FATAL, "%s:%d:0: error: DITTO '%c' not set by previous COND", a_nscrp, a_line, a_mark);
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(handle runtype)-----------------*/
@@ -532,6 +540,7 @@ DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
          }
          rc = DITTO__set_recd (m, a_line, a_vers, a_recd);
          DEBUG_INPT   yLOG_value   ("saving"    , rc);
+         DEBUG_INPT   yLOG_info    ("SET"       , DITTO__used ());
          if (r_mark != NULL)  *r_mark = m;
       } else {
          DEBUG_INPT   yLOG_note    ("cond () inside ditto, ignored");
@@ -542,6 +551,7 @@ DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
    /*---(handle ditto)-------------------*/
    --rce;  if (strcmp ("DITTO" , a_verb) == 0) {
       DEBUG_INPT   yLOG_note    ("handle ditto");
+      DEBUG_INPT   yLOG_info    ("DITTO"     , DITTO__used ());
       if (n == -1) {
          DEBUG_INPT   yLOG_note    ("unset identifier");
          yURG_err (YURG_FATAL, "%s:%d:1: error: DITTO identifier å%cæ not set by previous COND", a_nscrp, a_line, m);

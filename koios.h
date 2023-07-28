@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4k"
-#define     P_VERTXT    "full unit test passing again"
+#define     P_VERNUM    "1.4l"
+#define     P_VERTXT    "stupid mistake in DITTO_beg char vs int.  WOW!  caught in gregg testing"
 /*········· ··········· ´·····························´········································*/
 
 /*>                                                                                   <* 
@@ -407,7 +407,7 @@ char        DITTO__set              (cchar a_mark, int a_line, char a_desc [LEN_
 char        DITTO__set_recd         (cchar a_mark, int a_line, char a_vers, char a_recd [LEN_RECD]);
 int         DITTO__get              (cchar a_mark, char r_desc [LEN_LONG]);
 /*---(toggle)---------------*/
-char        DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_ditto, char a_mark, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline);
+char        DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_mark, int a_ditto, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline);
 char        DITTO_end               (FILE **b_scrp, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline);
 /*---(reading)--------------*/
 char        DITTO_read_numbering    (char a_dittoing, int a_ditto, int *r_nline, int *r_dline);
