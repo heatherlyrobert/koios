@@ -608,13 +608,13 @@ CODE__display           (cchar a_code [LEN_RECD], char r_display [LEN_RECD], cha
          sprintf (t, "%c", G_KEY_TILDA);
          strlcat (x_load, t, LEN_RECD);
          break;
-      case  G_KEY_RETURN :
+      case  G_KEY_RETURN : case  G_CHAR_RETURN :
          x_disp [i]  = G_CHAR_RETURN;
          sprintf (t, "\\n");
          strlcat (x_syst, t, LEN_RECD);
          strlcat (x_load, t, LEN_RECD);
          break;
-      case  G_KEY_ESCAPE :
+      case  G_KEY_ESCAPE : case  G_CHAR_ESCAPE :
          x_disp [i]  = G_CHAR_ESCAPE;
          sprintf (t, "\\e");
          strlcat (x_syst, t, LEN_RECD);
