@@ -76,7 +76,7 @@ DITTO__set              (cchar a_mark, int a_line, char a_desc [LEN_LONG])
    if (i < 0) return i;
    /*---(update list)--------------------*/
    s_dittos [i].line = a_line;
-   if (a_desc != NULL)  strlcpy (s_dittos [i].desc, a_desc, LEN_LONG);
+   if (a_desc != NULL)  ystrlcpy (s_dittos [i].desc, a_desc, LEN_LONG);
    else                 strcpy  (s_dittos [i].desc, "");
    /*---(complete)-----------------------*/
    return 0;
@@ -92,7 +92,7 @@ DITTO__set_recd         (cchar a_mark, int a_line, char a_vers, char a_recd [LEN
    char        x_recd      [LEN_RECD]  = "";
    /*---(defense)------------------------*/
    --rce;  if (a_recd == NULL)                     return rce;
-   strlcpy (x_recd, a_recd, LEN_RECD);
+   ystrlcpy (x_recd, a_recd, LEN_RECD);
    /*---(parse desc)---------------------*/
    p = strtok_r (x_recd, "", &r);
    --rce;  if (p      == NULL)                     return rce;
@@ -102,7 +102,7 @@ DITTO__set_recd         (cchar a_mark, int a_line, char a_vers, char a_recd [LEN
       p = strtok_r (NULL  , "", &r);
       if (p      == NULL)                     return rce;
    }
-   strltrim (p, ySTR_BOTH, LEN_LONG);
+   ystrltrim (p, ySTR_BOTH, LEN_LONG);
    /*---(complete)-----------------------*/
    return DITTO__set (a_mark, a_line, p);
 }
@@ -120,7 +120,7 @@ DITTO__get              (cchar a_mark, char r_desc [LEN_LONG])
    if (i < 0) return i;
    /*---(update list)--------------------*/
    x_line = s_dittos [i].line;
-   if (r_desc != NULL)  strlcpy (r_desc, s_dittos [i].desc, LEN_LONG);
+   if (r_desc != NULL)  ystrlcpy (r_desc, s_dittos [i].desc, LEN_LONG);
    /*---(complete)-----------------------*/
    return x_line;
 }

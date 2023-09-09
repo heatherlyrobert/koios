@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4m"
-#define     P_VERTXT    "stupid mistake caught in gregg testing.  CODE_load string handled enter wrong"
+#define     P_VERNUM    "1.4n"
+#define     P_VERTXT    "updated ySTR functions to ¶ystr¶ prefix"
 /*········· ··········· ´·····························´········································*/
 
 /*>                                                                                   <* 

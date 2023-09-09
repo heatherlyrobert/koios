@@ -102,13 +102,13 @@ PROG__init              (void)
    /*---(header)-------------------------*/
    DEBUG_PROG   yLOG_enter   (__FUNCTION__);
    /*---(files)--------------------------*/
-   strlcpy  (my.n_scrp, "", LEN_TITLE);  my.f_scrp = NULL;
-   strlcpy  (my.n_code, "", LEN_TITLE);  my.f_code = NULL;
-   strlcpy  (my.n_main, "", LEN_TITLE);  my.f_main = NULL;
-   strlcpy  (my.n_wave, "", LEN_TITLE);  my.f_wave = NULL;
-   strlcpy  (my.n_conv, "", LEN_TITLE);  my.f_conv = NULL;
+   ystrlcpy  (my.n_scrp, "", LEN_TITLE);  my.f_scrp = NULL;
+   ystrlcpy  (my.n_code, "", LEN_TITLE);  my.f_code = NULL;
+   ystrlcpy  (my.n_main, "", LEN_TITLE);  my.f_main = NULL;
+   ystrlcpy  (my.n_wave, "", LEN_TITLE);  my.f_wave = NULL;
+   ystrlcpy  (my.n_conv, "", LEN_TITLE);  my.f_conv = NULL;
    my.driver = '-';
-   strlcpy  (my.last     , "", LEN_LABEL);
+   ystrlcpy  (my.last     , "", LEN_LABEL);
    my.noise = '-';
    VERB_init  ();
    DITTO_init ();
@@ -401,8 +401,8 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_n
    if (r_runtype != NULL)  *r_runtype = x_runtype;
    if (r_noise   != NULL)  *r_noise   = x_noise;
    if (r_replace != NULL)  *r_replace = x_replace;
-   if (r_base    != NULL)  strlcpy (r_base, x_base, LEN_TITLE);
-   if (r_ext     != NULL)  strlcpy (r_ext , x_ext , LEN_TERSE);
+   if (r_base    != NULL)  ystrlcpy (r_base, x_base, LEN_TITLE);
+   if (r_ext     != NULL)  ystrlcpy (r_ext , x_ext , LEN_TERSE);
    /*---(complete)-----------------------*/
    DEBUG_PROG  yLOG_exit  (__FUNCTION__);
    return 0;
@@ -611,21 +611,21 @@ PROG_driver              (char a_good, cchar a_runtype, cchar a_nscrp [LEN_TITLE
       }
    }
    /*---(save last)-------------------*/
-   if (strcmp (x_verb, "DITTO") != 0)  strlcpy (b_last, x_verb, LEN_LABEL);
+   if (strcmp (x_verb, "DITTO") != 0)  ystrlcpy (b_last, x_verb, LEN_LABEL);
    /*---(save-back)-------------------*/
-   strlcpy (my.recd  , x_recd    , LEN_RECD);
-   strlcpy (my.verb  , x_verb    , LEN_LABEL);
+   ystrlcpy (my.recd  , x_recd    , LEN_RECD);
+   ystrlcpy (my.verb  , x_verb    , LEN_LABEL);
    my.spec     = x_spec;
    my.p_conv   = p_conv;
    my.p_code   = p_code;
-   strlcpy (my.stage , x_stage   , LEN_LABEL);
+   ystrlcpy (my.stage , x_stage   , LEN_LABEL);
    my.vers     = x_vers;
-   strlcpy (my.desc  , x_desc    , LEN_LONG);
-   strlcpy (my.meth  , x_meth    , LEN_HUND);
-   strlcpy (my.args  , x_args    , LEN_FULL);
-   strlcpy (my.test  , x_test    , LEN_LABEL);
-   strlcpy (my.expe  , x_expe    , LEN_RECD);
-   strlcpy (my.retn  , x_retn    , LEN_FULL);
+   ystrlcpy (my.desc  , x_desc    , LEN_LONG);
+   ystrlcpy (my.meth  , x_meth    , LEN_HUND);
+   ystrlcpy (my.args  , x_args    , LEN_FULL);
+   ystrlcpy (my.test  , x_test    , LEN_LABEL);
+   ystrlcpy (my.expe  , x_expe    , LEN_RECD);
+   ystrlcpy (my.retn  , x_retn    , LEN_FULL);
    /*---(complete)-----------------------*/
    DEBUG_PROG   yLOG_exit    (__FUNCTION__);
    return 1;

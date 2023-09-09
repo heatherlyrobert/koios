@@ -150,11 +150,11 @@ PARSE__comment          (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LE
       return rce;
    }
    /*---(save-back)----------------------*/
-   if (r_verb  != NULL)  strlcpy (r_verb, x_verb, LEN_LABEL);
+   if (r_verb  != NULL)  ystrlcpy (r_verb, x_verb, LEN_LABEL);
    if (r_spec  != NULL)  *r_spec = x_spec;
    if (r_conv  != NULL)  *r_conv = x_conv;
    if (r_code  != NULL)  *r_code = x_code;
-   if (r_expe  != NULL)  strlcpy (r_expe, a_recd, LEN_RECD);
+   if (r_expe  != NULL)  ystrlcpy (r_expe, a_recd, LEN_RECD);
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 1;
@@ -174,8 +174,8 @@ PARSE__version          (cchar *a_field, char *r_vers)
    --rce;  if (a_field == NULL)  return rce;
    --rce;  if (r_vers  == NULL)  return rce;
    /*---(prepare)------------------------*/
-   strlcpy  (x_field, a_field, LEN_TERSE);
-   strltrim (x_field, ySTR_BOTH, LEN_TERSE);
+   ystrlcpy  (x_field, a_field, LEN_TERSE);
+   ystrltrim (x_field, ySTR_BOTH, LEN_TERSE);
    l = strlen (x_field);
    /*---(assign version)-----------------*/
    if      (l != 3)                            *r_vers =  0;   /* current */
@@ -215,7 +215,7 @@ PARSE_prep              (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
       return 1;
    }
    /*---(create a copy of recd)----------*/
-   strlcpy (x_recd, a_recd, LEN_RECD);
+   ystrlcpy (x_recd, a_recd, LEN_RECD);
    DEBUG_INPT   yLOG_info    ("x_recd"    , x_recd);
    p  = strtok_r (x_recd, q, &r);
    DEBUG_INPT   yLOG_point   ("p"         , p);
@@ -334,21 +334,21 @@ PARSE__current          (char n, char a_field [LEN_RECD], cchar a_spec, char *r_
       return rce;
    }
    /*---(clear spacer bars)--------------*/
-   strlcpy (x_field, a_field, LEN_RECD);
+   ystrlcpy (x_field, a_field, LEN_RECD);
    if (x_field [0] == '-' && n != 6) {
       if (strncmp (x_field, "- - -", 5) == 0)    x_field [0] = '\0';
       if (strncmp (x_field, "-----", 5) == 0)    x_field [0] = '\0';
       if (x_field [1] == '\0')                   x_field [0] = '\0';
    }
-   strltrim (x_field, ySTR_BOTH, LEN_RECD);
+   ystrltrim (x_field, ySTR_BOTH, LEN_RECD);
    l = strlen (x_field);
    DEBUG_INPT   yLOG_info    ("x_field"   , x_field);
    /*---(handle fields)------------------*/
    switch (n) {
    case  2 :  /*=== always desc ===============*/
       if (r_desc != NULL) {
-         strlcpy  (r_desc, x_field        , LEN_LONG);
-         strltrim (r_desc, ySTR_BOTH, LEN_LONG);
+         ystrlcpy  (r_desc, x_field        , LEN_LONG);
+         ystrltrim (r_desc, ySTR_BOTH, LEN_LONG);
       }
       break;
    case  3 :  /*=== typically, method =========*/
@@ -356,13 +356,13 @@ PARSE__current          (char n, char a_field [LEN_RECD], cchar a_spec, char *r_
       if (a_spec == 's') {
          if (l == 0 || l > 10)  {
             if (r_meth != NULL) {
-               strlcpy (r_meth, x_field, LEN_HUND );
+               ystrlcpy (r_meth, x_field, LEN_HUND );
                DEBUG_INPT   yLOG_info    ("focus"     , r_meth);
             }
             if (r_max != NULL)  *r_max = 3;
          } else {
             if (r_test != NULL) {
-               strlcpy (r_test, x_field, LEN_LABEL);
+               ystrlcpy (r_test, x_field, LEN_LABEL);
                DEBUG_INPT   yLOG_info    ("duration"  , r_test);
             }
          }
@@ -370,7 +370,7 @@ PARSE__current          (char n, char a_field [LEN_RECD], cchar a_spec, char *r_
       /*---(others, except sepciality)---*/
       else if (a_spec != 'p') {
          if (r_meth != NULL) {
-            strlcpy (r_meth, x_field, LEN_HUND );
+            ystrlcpy (r_meth, x_field, LEN_HUND );
             DEBUG_INPT   yLOG_info    ("meth"      , r_meth);
          }
       }
@@ -379,21 +379,21 @@ PARSE__current          (char n, char a_field [LEN_RECD], cchar a_spec, char *r_
       /*---(script types)----------------*/
       if      (a_spec == 's') {
          if (r_retn != NULL) {
-            strlcpy (r_retn, x_field, LEN_FULL);
+            ystrlcpy (r_retn, x_field, LEN_FULL);
             DEBUG_INPT   yLOG_info    ("terse tag" , r_retn);
          }
       }
       /*---(specialty types)-------------*/
       else if (a_spec == 'P' || a_spec == 'p') {
          if (r_expe != NULL) {
-            strlcpy (r_expe, x_field, LEN_RECD);
+            ystrlcpy (r_expe, x_field, LEN_RECD);
             DEBUG_INPT   yLOG_info    ("expe"      , r_expe);
          }
       }
       /*---(all others)------------------*/
       else {
          if (r_args != NULL) {
-            strlcpy (r_args, x_field, LEN_FULL);
+            ystrlcpy (r_args, x_field, LEN_FULL);
             DEBUG_INPT   yLOG_info    ("args"      , r_args);
          }
       }
@@ -402,27 +402,27 @@ PARSE__current          (char n, char a_field [LEN_RECD], cchar a_spec, char *r_
       /*---(script types)----------------*/
       if (a_spec == 's') {
          if (r_meth != NULL) {
-            strlcpy (r_meth, x_field, LEN_HUND );
+            ystrlcpy (r_meth, x_field, LEN_HUND );
             DEBUG_INPT   yLOG_info    ("focus"     , r_meth);
          }
       }
       /*---(all others)------------------*/
       else {
          if (r_test != NULL) {
-            strlcpy (r_test, x_field, LEN_LABEL);
+            ystrlcpy (r_test, x_field, LEN_LABEL);
             DEBUG_INPT   yLOG_info    ("test"      , r_test);
          }
       }
       break;
    case  6 :  /*=== expected result ===========*/
       if (r_expe != NULL) {
-         strlcpy (r_expe, x_field, LEN_RECD);
+         ystrlcpy (r_expe, x_field, LEN_RECD);
          DEBUG_INPT   yLOG_info    ("expe"      , r_expe);
       }
       break;
    case  7 :  /*=== return variable ===========*/
       if (r_retn != NULL) {
-         strlcpy (r_retn, x_field, LEN_FULL);
+         ystrlcpy (r_retn, x_field, LEN_FULL);
          DEBUG_INPT   yLOG_info    ("retn"      , r_retn);
       }
       break;
@@ -467,7 +467,7 @@ PARSE_driver            (cchar a_nscrp [LEN_TITLE], int a_line, char a_vers, cch
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   strlcpy (x_recd, a_recd, LEN_RECD);
+   ystrlcpy (x_recd, a_recd, LEN_RECD);
    /*---(read limits)--------------------*/
    DEBUG_INPT   yLOG_char    ("spec"      , a_spec);
    rc = PARSE__limits (a_spec, &x_min, &x_max);
@@ -525,12 +525,12 @@ PARSE_driver            (cchar a_nscrp [LEN_TITLE], int a_line, char a_vers, cch
       return rce;
    }
    /*---(save-back)-------------------*/
-   if (r_desc   != NULL)  strlcpy (r_desc  , x_desc  , LEN_LONG);
-   if (r_meth   != NULL)  strlcpy (r_meth  , x_meth  , LEN_HUND);
-   if (r_args   != NULL)  strlcpy (r_args  , x_args  , LEN_FULL);
-   if (r_test   != NULL)  strlcpy (r_test  , x_test  , LEN_LABEL);
-   if (r_expe   != NULL)  strlcpy (r_expe  , x_expe  , LEN_RECD);
-   if (r_retn   != NULL)  strlcpy (r_retn  , x_retn  , LEN_FULL);
+   if (r_desc   != NULL)  ystrlcpy (r_desc  , x_desc  , LEN_LONG);
+   if (r_meth   != NULL)  ystrlcpy (r_meth  , x_meth  , LEN_HUND);
+   if (r_args   != NULL)  ystrlcpy (r_args  , x_args  , LEN_FULL);
+   if (r_test   != NULL)  ystrlcpy (r_test  , x_test  , LEN_LABEL);
+   if (r_expe   != NULL)  ystrlcpy (r_expe  , x_expe  , LEN_RECD);
+   if (r_retn   != NULL)  ystrlcpy (r_retn  , x_retn  , LEN_FULL);
    /*---(complete)--------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 0;

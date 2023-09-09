@@ -97,14 +97,14 @@ REUSE__set              (cchar a_type, cchar a_mark, int a_line, char a_desc [LE
    switch (a_type) {
    case T_MASTER :
       s_master [i].line = a_line;
-      if (a_desc != NULL)  strlcpy (s_master [i].desc, a_desc, LEN_LONG);
+      if (a_desc != NULL)  ystrlcpy (s_master [i].desc, a_desc, LEN_LONG);
       else                 strcpy  (s_master [i].desc, "");
       s_master [i].conds =  0;
       s_master [i].steps =  0;
       break;
    case T_SHARES :
       s_shares [i].line = a_line;
-      if (a_desc != NULL)  strlcpy (s_shares [i].desc, a_desc, LEN_LONG);
+      if (a_desc != NULL)  ystrlcpy (s_shares [i].desc, a_desc, LEN_LONG);
       else                 strcpy  (s_shares [i].desc, "");
       s_shares [i].conds =  0;
       s_shares [i].steps =  0;
@@ -124,7 +124,7 @@ REUSE__set_recd         (cchar a_type, cchar a_mark, int a_line, char a_vers, ch
    char        x_recd      [LEN_RECD]  = "";
    /*---(defense)------------------------*/
    --rce;  if (a_recd == NULL)                     return rce;
-   strlcpy (x_recd, a_recd, LEN_RECD);
+   ystrlcpy (x_recd, a_recd, LEN_RECD);
    /*---(parse desc)---------------------*/
    p = strtok_r (x_recd, "", &r);
    --rce;  if (p      == NULL)                     return rce;
@@ -134,7 +134,7 @@ REUSE__set_recd         (cchar a_type, cchar a_mark, int a_line, char a_vers, ch
       p = strtok_r (NULL  , "", &r);
       if (p      == NULL)                     return rce;
    }
-   strltrim (p, ySTR_BOTH, LEN_LONG);
+   ystrltrim (p, ySTR_BOTH, LEN_LONG);
    /*---(complete)-----------------------*/
    return REUSE__set (a_type, a_mark, a_line, p);
 }
@@ -154,13 +154,13 @@ REUSE__get              (cchar a_type, cchar a_mark, char r_desc [LEN_LONG], int
    switch (a_type) {
    case T_MASTER :
       x_line = s_master [i].line;
-      if (r_desc  != NULL)  strlcpy (r_desc, s_master [i].desc, LEN_LONG);
+      if (r_desc  != NULL)  ystrlcpy (r_desc, s_master [i].desc, LEN_LONG);
       if (r_conds != NULL)  *r_conds = s_master [i].conds;
       if (r_steps != NULL)  *r_steps = s_master [i].steps;
       break;
    case T_SHARES :
       x_line = s_shares [i].line;
-      if (r_desc  != NULL)  strlcpy (r_desc, s_shares [i].desc, LEN_LONG);
+      if (r_desc  != NULL)  ystrlcpy (r_desc, s_shares [i].desc, LEN_LONG);
       if (r_conds != NULL)  *r_conds = s_shares [i].conds;
       if (r_steps != NULL)  *r_steps = s_shares [i].steps;
       break;
@@ -229,7 +229,7 @@ REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN
    }
    DEBUG_INPT   yLOG_info    ("x_ex"      , x_ex);
    /*---(check for marker)---------------*/
-   strlcpy (x_recd, a_recd, LEN_RECD);
+   ystrlcpy (x_recd, a_recd, LEN_RECD);
    DEBUG_INPT   yLOG_info    ("x_recd"    , x_recd);
    p = strchr (x_recd, '');
    DEBUG_INPT   yLOG_point   ("p"         , p);
@@ -238,7 +238,7 @@ REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN
       return rce;
    }
    p [0] = '\0';
-   strltrim (x_recd, ySTR_BOTH, LEN_LABEL);
+   ystrltrim (x_recd, ySTR_BOTH, LEN_LABEL);
    DEBUG_INPT   yLOG_info    ("x_recd"    , x_recd);
    p = strchr (x_recd, '-');
    DEBUG_INPT   yLOG_point   ("p"         , p);
@@ -248,8 +248,8 @@ REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN
       DEBUG_INPT   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
-   strlcpy  (x_label, p, LEN_LABEL);
-   strltrim (x_label, ySTR_BOTH, LEN_LABEL);
+   ystrlcpy  (x_label, p, LEN_LABEL);
+   ystrltrim (x_label, ySTR_BOTH, LEN_LABEL);
    m = x_label [1];
    DEBUG_INPT   yLOG_char    ("m"         , m);
    --rce;  if (x_label [2] != '-') {
@@ -407,8 +407,8 @@ REUSE_export            (cchar a_name [LEN_PATH])
    READ_open (a_name, 'w', &f, NULL);
    --rce;  if (f == NULL)  return rce;
    for (i = 0; i < 26; ++i) {
-      strlcpy    (x_desc, s_master [i].desc, LEN_LONG);
-      strlencode (x_desc, ySTR_MAX, LEN_LONG);
+      ystrlcpy    (x_desc, s_master [i].desc, LEN_LONG);
+      ystrlencode (x_desc, ySTR_MAX, LEN_LONG);
       fprintf (f, "%c %4d %-75.75s %4d %4d\n", i + 'A', s_master [i].line, x_desc, s_master [i].conds, s_master [i].steps);
    }
    /*> fclose (f);                                                                    <*/
@@ -441,7 +441,7 @@ REUSE_import            (cchar a_name [LEN_PATH])
       if (x_recd [l - 1] == '\n')   x_recd [--l] = '\0';
       rc = sscanf  (x_recd, "%c %4d %s %4d %4d", &x_abbr, &x_line, x_desc, &x_conds, &x_steps);
       if (x_line < 1)  continue;
-      strldecode (x_desc, LEN_LONG);
+      ystrldecode (x_desc, LEN_LONG);
       rc = REUSE__set   (T_MASTER, 'A' + i, x_line, x_desc);
       rc = REUSE_update ('A' + i, x_conds, x_steps);
    }

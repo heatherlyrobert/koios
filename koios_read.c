@@ -173,7 +173,7 @@ READ__clear             (void)
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
    /*---(save value)---------------------*/
-   if (strcmp (my.verb, "DITTO") != 0)  strlcpy (my.last, my.verb, LEN_LABEL);
+   if (strcmp (my.verb, "DITTO") != 0)  ystrlcpy (my.last, my.verb, LEN_LABEL);
    /*---(input vars)---------------------*/
    my.verb        [0] = '\0';
    my.p_conv          = NULL;
@@ -234,7 +234,7 @@ READ__single            (FILE **b_scrp, int *r_nline, char *r_dittoing, char *r_
       return 2;
    }
    /*---(prepare)---------------------*/
-   x_len = strllen (x_recd, LEN_RECD);
+   x_len = ystrllen (x_recd, LEN_RECD);
    if (x_len > 0)  x_recd [--x_len] = '\0';
    DEBUG_INPT   yLOG_complex ("x_recd"    , "%3då%sæ", x_len, x_recd);
    /*---(filter)----------------------*/
@@ -259,12 +259,12 @@ READ__single            (FILE **b_scrp, int *r_nline, char *r_dittoing, char *r_
    }
    /*---(check other end ditto)-------*/
    if (*r_dittoing == 'y' && *r_dline != *r_ditto)  {
-      strlcpy (t, x_recd, LEN_LABEL);
+      ystrlcpy (t, x_recd, LEN_LABEL);
       p = strtok (t, "");
       p = strtok (p, " ");
       DEBUG_INPT   yLOG_point   ("p"         , p);
       if (p != NULL) {
-         strltrim (p, ySTR_BOTH, LEN_LABEL);
+         ystrltrim (p, ySTR_BOTH, LEN_LABEL);
          DEBUG_INPT   yLOG_info    ("p"         , p);
          rc = VERB_dittoable (p);
          DEBUG_INPT   yLOG_value   ("dittoable" , rc);
@@ -277,9 +277,9 @@ READ__single            (FILE **b_scrp, int *r_nline, char *r_dittoing, char *r_
    }
    /*---(save-back)-------------------*/
    DEBUG_INPT   yLOG_note    ("save copy of source record");
-   strlundelay (x_recd, LEN_RECD);
+   ystrlundelay (x_recd, LEN_RECD);
    ++(*r_nrecd);
-   if (r_recd != NULL)  strlcpy (r_recd, x_recd, LEN_RECD);
+   if (r_recd != NULL)  ystrlcpy (r_recd, x_recd, LEN_RECD);
    /*---(complete)-----------------------*/
    DEBUG_INPT   yLOG_exit    (__FUNCTION__);
    return 1;

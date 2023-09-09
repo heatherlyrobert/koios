@@ -126,7 +126,7 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
    /*---(default)------------------------*/
-   if (r_verb  != NULL)  strlcpy  (r_verb , "", LEN_LABEL);
+   if (r_verb  != NULL)  ystrlcpy  (r_verb , "", LEN_LABEL);
    if (r_indx  != NULL)  *r_indx = -1;
    if (r_spec  != NULL)  *r_spec = '-';
    if (r_locn  != NULL)  *r_locn = '-';
@@ -145,8 +145,8 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
       return rce;
    }
    /*---(prepare)------------------------*/
-   strlcpy  (x_word, a_field, LEN_FULL);
-   strltrim (x_word, ySTR_BOTH, LEN_FULL);
+   ystrlcpy  (x_word, a_field, LEN_FULL);
+   ystrltrim (x_word, ySTR_BOTH, LEN_FULL);
    p = strchr (x_word, ' ');
    if (p != NULL)  p [0] = '\0';
    DEBUG_INPT   yLOG_snote   (x_word);
@@ -158,7 +158,7 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
       if (strcmp (g_verbs [i].name, x_word) != 0)     continue;
       /*---(save values)-----------------*/
       DEBUG_INPT   yLOG_snote   ("verb found");
-      strlcpy (x_verb, g_verbs [i].name, LEN_LABEL);
+      ystrlcpy (x_verb, g_verbs [i].name, LEN_LABEL);
       x_indx  = i;
       x_spec  = g_verbs [i].spec;
       x_locn  = g_verbs [i].files;
@@ -195,7 +195,7 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
       }
    }
    /*---(save-back)----------------------*/
-   if (r_verb  != NULL)  strlcpy (r_verb, x_verb, LEN_LABEL);
+   if (r_verb  != NULL)  ystrlcpy (r_verb, x_verb, LEN_LABEL);
    if (r_indx  != NULL)  *r_indx = x_indx;
    if (r_spec  != NULL)  *r_spec = x_spec;
    if (r_locn  != NULL)  *r_locn = x_locn;

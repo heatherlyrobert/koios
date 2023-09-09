@@ -661,7 +661,7 @@ koios__unit_read_single  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    0);
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "exec    ß read a line     ß SCRP_read   ß   ß i_lesser   ß 0      ß");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -683,7 +683,7 @@ koios__unit_read_single  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    0);
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -705,7 +705,7 @@ koios__unit_read_single  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    0);
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "SCRP    ß testing         ß 0s  ß  tbd   ß - - - - -  ß");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -727,7 +727,7 @@ koios__unit_read_single  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    0);
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -749,7 +749,7 @@ koios__unit_read_single  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    0);
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -772,7 +772,7 @@ koios__unit_read_single  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    0);
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -843,7 +843,7 @@ koios__unit_read_end_ditto  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    2);
    yUNIT_minval   ("... dline"                          , x_dline                  ,    1);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    0);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -863,7 +863,7 @@ koios__unit_read_end_ditto  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    2);
    yUNIT_minval   ("... dline"                          , x_dline                  ,    2);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd                   , "COND  (0) ß ditto stuff     ß");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -877,7 +877,7 @@ koios__unit_read_end_ditto  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    2);
    yUNIT_minval   ("... dline"                          , x_dline                  ,    3);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "  exec    ß read a line     ß SCRP_read   ß   ß i_lesser   ß 0      ß");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -891,7 +891,7 @@ koios__unit_read_end_ditto  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -905,7 +905,7 @@ koios__unit_read_end_ditto  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -919,7 +919,7 @@ koios__unit_read_end_ditto  (char a_list)
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    3);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "  get     ß next step       ß SCRP_read   ß   ß i_lesser   ß 0      ß");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -978,7 +978,7 @@ koios__unit_read_driver  (char a_list)
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    yUNIT_minval   ("... line"                           , x_line                   ,    3);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "SCRP         ß (CATS) verify preparation and defaulting                          ß 0s  ß prepare        ß CATS__prepare                                                               ß ((01.---)) ß - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ß");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -988,7 +988,7 @@ koios__unit_read_driver  (char a_list)
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    yUNIT_minval   ("... line"                           , x_line                   ,    5);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "   COND  (0) ß verify the defaults                                               ß - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ß ((01.001)) ß - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ß");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -998,7 +998,7 @@ koios__unit_read_driver  (char a_list)
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    yUNIT_minval   ("... line"                           , x_line                   ,    6);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    3);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "     exec    ß call prepare                        ß CATS__prepare              ß \"∑ ∑  ∑ ∑ ∑   ∑ ∑\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq        ß i_equal    ß 0                                                                                                    ß");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -1008,7 +1008,7 @@ koios__unit_read_driver  (char a_list)
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    yUNIT_minval   ("... line"                           , x_line                   ,    8);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    4);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "   COND      ß make global changes                                               ß - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ß ((01.001)) ß - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ß");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -1018,7 +1018,7 @@ koios__unit_read_driver  (char a_list)
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    yUNIT_minval   ("... line"                           , x_line                   ,    9);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    5);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "     code    ß ... change part                     ß - - - - - - - - - - - - -  ß x_part      = 'v';                                                                                                                                                                                                         ß");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -1028,7 +1028,7 @@ koios__unit_read_driver  (char a_list)
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    0);
    yUNIT_minval   ("... line"                           , x_line                   ,   10);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    5);
-   strlencode (x_recd, ySTR_NONE, LEN_RECD);
+   ystrlencode (x_recd, ySTR_NONE, LEN_RECD);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
    yUNIT_mindnoc  ();
@@ -5039,7 +5039,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read very detailed exec line");                                                                                                                                                                                                                   <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "exec         ß read a line     ß SCRP_read   ß   ß i_lesser   ß 0      ß my_var   ß");                                                                                                      <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "exec");                                                                                                                                                                                     <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5058,7 +5058,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read saved comment line");                                                                                                                                                                                                                        <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "#> this is a saved comment");                                                                                                                                                               <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "#>");                                                                                                                                                                                       <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5077,7 +5077,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read get/accessor line");                                                                                                                                                                                                                         <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "     get     ß ... check on script ß SCRP__unit  ß file , -1 ß s_equal ß SCRP file      : apate.unit ß");                                                                                   <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "get");                                                                                                                                                                                      <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5096,7 +5096,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read code line");                                                                                                                                                                                                                                 <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "   code      ß add lines                           ß - - - - - - - - - - - - -  ß system ();        ß");                                                                                    <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "code");                                                                                                                                                                                     <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5115,7 +5115,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read condition line");                                                                                                                                                                                                                            <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "  COND       ß parse a code record  ß - - - - - - - - - - - - -  ß ((01.001)) ß - - - - - - - - - ß");                                                                                      <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "COND");                                                                                                                                                                                     <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5134,7 +5134,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read prep line");                                                                                                                                                                                                                                 <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "PREP         ß include the prototype headers                           ß - - - - - - - - - -  ß - - - - -  ß - - - - - - - - - -  ß>>");                                                    <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "PREP");                                                                                                                                                                                     <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5153,7 +5153,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read include line");                                                                                                                                                                                                                              <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "   incl      ß include public header               ß apate.h          ß - - - - - - - - - -  ß - - - - -  ß - - - - - - - - - -  ß");                                                       <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "incl");                                                                                                                                                                                     <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5172,7 +5172,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read script header line");                                                                                                                                                                                                                        <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "SCRP    [¡Ï] ß (SCRP  ) verify openning and closin ß                                         ß ((01.---)) ß - - - - - - - - - -  ß");                                                       <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "SCRP");                                                                                                                                                                                     <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "¡Ï");                                                                                                                                                                                       <* 
@@ -5191,7 +5191,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read stdin load line");                                                                                                                                                                                                                           <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "  load       ß add a line to stdin   ß stdin ß * * * * *                      : basic line                  : - - - - -  :  /bin/true > /dev/nullß");                                       <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "load");                                                                                                                                                                                     <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5210,7 +5210,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read stdin load line");                                                                                                                                                                                                                              <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                                <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), -999);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                           <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                           <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "  toad       ß add a line to stdin 2 ß stdin ß * * * * *                      : basic line                  : - - - - -  :  /bin/true > /dev/nullß");                                          <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "");                                                                                                                                                                                            <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                            <* 
@@ -5229,7 +5229,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read verbless line");                                                                                                                                                                                                                                <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                                <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), -999);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                           <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                           <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "             ß (SCRP  ) verify openning and closin ß                                         ß ((01.---)) ß - - - - - - - - - -  ß");                                                          <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "");                                                                                                                                                                                            <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                            <* 
@@ -5248,7 +5248,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read group divider line");                                                                                                                                                                                                                        <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "GROUP        ß complete              ß - - - - - - - - - - - - - - -  ß - - - - -  ß - - - - - - - - - - - - - - - - - - - - - - - - -  ß");                                                <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "GROUP");                                                                                                                                                                                    <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5267,7 +5267,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read section header line");                                                                                                                                                                                                                       <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "SECT         ß internal testing      ß - - - - - - - - - - - - - - -  ß - - - - -  ß - - - - - - - - - - - - - - - - - - - - - - - - -  ß");                                                <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "SECT");                                                                                                                                                                                     <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5286,7 +5286,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read echo line");                                                                                                                                                                                                                                 <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "    echo     ß ...check y location   ß - - - - - - - - - - - - -  ß y       ß r_norm93   ß -125.381                                     ß");                                                <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "echo");                                                                                                                                                                                     <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5305,7 +5305,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read system line");                                                                                                                                                                                                                               <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "    system   ß remove a file                       ß - - - - - - - - - - - - -  ß rm -fv test.txt   ß");                                                                                    <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "system");                                                                                                                                                                                   <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5324,7 +5324,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read shared section line");                                                                                                                                                                                                                       <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , "SHARED   -a- ß setup cron files and lines          ß - - - - - - - -  ß ((CC.---)) ß - - - - - - - - - - - - - - - - - - - - - - - - -  ß");                                                <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "SHARED");                                                                                                                                                                                   <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 
@@ -5343,7 +5343,7 @@ koios__unit_scrp_variety (void)
    /*> yUNIT_mincond ("read use shared line");                                                                                                                                                                                                                           <* 
     *> yUNIT_minval ("read a line"                        , SCRP_read   (my.f_scrp, &(my.n_line), my.dittoing, my.ditto, &(my.dline), &(my.n_recd), &(my.len), my.recd), 1);                                                                                             <* 
     *> /+> yUNIT_minval ("parse a line"                       , SCRP_parse  (my.n_scrp, my.n_line, my.recd, my.verb, &(my.indx), &(my.spec), &(my.p_conv), &(my.p_code), my.stage, my.vers , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   , NULL   ), 0);   <+/   <* 
-    *> strlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
+    *> ystrlencode (my.recd, ySTR_NONE, LEN_RECD);                                                                                                                                                                                                                        <* 
     *> yUNIT_minstr ("... check the record"               , my.recd       , " REUSE -a-   ß - - - - - - - - - - - -  ß - - - - - - - - - - - - - - -  ß ((03.---)) ß - - - - - - - - - - - - - - - - - - - -  ß");                                                       <* 
     *> yUNIT_minstr ("... check verb"                     , my.verb       , "REUSE");                                                                                                                                                                                    <* 
     *> yUNIT_minstr ("... check stage"                    , my.stage      , "");                                                                                                                                                                                         <* 

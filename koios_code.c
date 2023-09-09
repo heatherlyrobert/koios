@@ -135,7 +135,7 @@ CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE])
 {
    char        x_urun      [LEN_TITLE] = "";
    int         l           =    0;
-   strlcpy (x_urun, a_nscrp, LEN_TITLE);
+   ystrlcpy (x_urun, a_nscrp, LEN_TITLE);
    l = strlen (x_urun);
    if (strcmp (x_urun + l - 5, ".unit") == 0)  x_urun [l - 5] = '\0';
    CONV_printf (a_main, "\n\n\n");
@@ -583,55 +583,57 @@ CODE__display           (cchar a_code [LEN_RECD], char r_display [LEN_RECD], cha
    --rce;  if (a_code == NULL)  return rce;
    /*---(prepare)------------------------*/
    x_len = strlen (a_code);
-   strlcpy (x_disp, a_code , LEN_RECD);
-   strlcpy (x_syst, ""     , LEN_RECD);
-   strlcpy (x_load, ""     , LEN_RECD);
+   ystrlcpy (x_disp, a_code , LEN_RECD);
+   ystrlcpy (x_syst, ""     , LEN_RECD);
+   ystrlcpy (x_load, ""     , LEN_RECD);
    /*---(cleanse)------------------------*/
    for (i = 0; i < x_len; ++i) {
       switch ((unsigned char) a_code [i]) {
       case  G_CHAR_FIELD  : case  G_KEY_FIELD   :
          x_disp [i]  = G_CHAR_FIELD;
          sprintf (t, "%c", G_KEY_FIELD);
-         strlcat (x_syst, t, LEN_RECD);
-         strlcat (x_load, t, LEN_RECD);
+         ystrlcat (x_syst, t, LEN_RECD);
+         ystrlcat (x_load, t, LEN_RECD);
          break;
       case  G_CHAR_GROUP  : case  G_KEY_GROUP   :
          x_disp [i]  = G_CHAR_GROUP;
          sprintf (t, "%c", G_KEY_FIELD);
-         strlcat (x_syst, t, LEN_RECD);
-         strlcat (x_load, t, LEN_RECD);
+         ystrlcat (x_syst, t, LEN_RECD);
+         ystrlcat (x_load, t, LEN_RECD);
          break;
       case  G_KEY_DQUOTE  :
          x_disp [i]  = G_CHAR_DDQUOTE;
          sprintf (t, "%c", G_KEY_DQUOTE);
-         strlcat (x_syst, t, LEN_RECD);
+         ystrlcat (x_syst, t, LEN_RECD);
          sprintf (t, "%c", G_KEY_TILDA);
-         strlcat (x_load, t, LEN_RECD);
+         ystrlcat (x_load, t, LEN_RECD);
          break;
-      case  G_KEY_RETURN : case  G_CHAR_RETURN :
+      case  G_KEY_RETURN :
+      /*> case  G_CHAR_RETURN :                                                       <*/
          x_disp [i]  = G_CHAR_RETURN;
          sprintf (t, "\\n");
-         strlcat (x_syst, t, LEN_RECD);
-         strlcat (x_load, t, LEN_RECD);
+         ystrlcat (x_syst, t, LEN_RECD);
+         ystrlcat (x_load, t, LEN_RECD);
          break;
-      case  G_KEY_ESCAPE : case  G_CHAR_ESCAPE :
+      case  G_KEY_ESCAPE :
+      /*> case  G_CHAR_ESCAPE :                                                       <*/
          x_disp [i]  = G_CHAR_ESCAPE;
          sprintf (t, "\\e");
-         strlcat (x_syst, t, LEN_RECD);
-         strlcat (x_load, t, LEN_RECD);
+         ystrlcat (x_syst, t, LEN_RECD);
+         ystrlcat (x_load, t, LEN_RECD);
          break;
       default  :
          x_disp [i]  = a_code [i];
          sprintf (t, "%c", a_code [i]);
-         strlcat (x_syst, t, LEN_RECD);
-         strlcat (x_load, t, LEN_RECD);
+         ystrlcat (x_syst, t, LEN_RECD);
+         ystrlcat (x_load, t, LEN_RECD);
          break;
       }
    }
    /*---(save-back)----------------------*/
-   if (r_display  != NULL)  strlcpy (r_display, x_disp, LEN_RECD);
-   if (r_system   != NULL)  strlcpy (r_system , x_syst, LEN_RECD);
-   if (r_load     != NULL)  strlcpy (r_load   , x_load, LEN_RECD);
+   if (r_display  != NULL)  ystrlcpy (r_display, x_disp, LEN_RECD);
+   if (r_system   != NULL)  ystrlcpy (r_system , x_syst, LEN_RECD);
+   if (r_load     != NULL)  ystrlcpy (r_load   , x_load, LEN_RECD);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -664,14 +666,14 @@ CODE__prefix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_desc [L
    }
    /*---(determine function)-------------*/
    switch (a_test [0]) {
-   case 'v'  : strlcpy (x_func, "yUNIT_void"     , LEN_FULL);    break;
-   case 's'  : strlcpy (x_func, "yUNIT_string"   , LEN_FULL);    break;
-   case 'w'  : strlcpy (x_func, "yUNIT_wrap"     , LEN_FULL);    break;
-   case 'u'  : strlcpy (x_func, "yUNIT_round"    , LEN_FULL);    break;
-   case 'i'  : strlcpy (x_func, "yUNIT_int"      , LEN_FULL);    break;
-   case 'r'  : strlcpy (x_func, "yUNIT_real"     , LEN_FULL);    break;
-   case 'p'  : strlcpy (x_func, "yUNIT_point"    , LEN_FULL);    break;
-   default   : strlcpy (x_func, "yUNIT_unknown"  , LEN_FULL);    break;
+   case 'v'  : ystrlcpy (x_func, "yUNIT_void"     , LEN_FULL);    break;
+   case 's'  : ystrlcpy (x_func, "yUNIT_string"   , LEN_FULL);    break;
+   case 'w'  : ystrlcpy (x_func, "yUNIT_wrap"     , LEN_FULL);    break;
+   case 'u'  : ystrlcpy (x_func, "yUNIT_round"    , LEN_FULL);    break;
+   case 'i'  : ystrlcpy (x_func, "yUNIT_int"      , LEN_FULL);    break;
+   case 'r'  : ystrlcpy (x_func, "yUNIT_real"     , LEN_FULL);    break;
+   case 'p'  : ystrlcpy (x_func, "yUNIT_point"    , LEN_FULL);    break;
+   default   : ystrlcpy (x_func, "yUNIT_unknown"  , LEN_FULL);    break;
    }
    /*---(write prefix)-------------------*/
    CONV_printf (a_code, "      ");
@@ -721,7 +723,7 @@ CODE__expect            (FILE *a_code, cchar a_test [LEN_LABEL], cchar a_expect 
    }
    /*---(check for var)------------------*/
    else {
-      strlcpy (x_var, a_expect + 3, LEN_RECD);
+      ystrlcpy (x_var, a_expect + 3, LEN_RECD);
       x_expe = x_var;
       p = strtok_r (x_var, q, &r);
       if (p == NULL) CONV_printf (a_code, "\"%s\", " , "unknown");
@@ -792,7 +794,7 @@ CODE__specialty         (FILE *a_code, cchar a_load [LEN_RECD])
    if (strncmp (a_load, "[[ ", 3) != 0) {
       CONV_printf (a_code, "\"%s\"", a_load);
    } else {
-      strlcpy (x_temp, a_load + 3, LEN_FULL);
+      ystrlcpy (x_temp, a_load + 3, LEN_FULL);
       x_var = x_temp;
       p = strtok_r (x_temp, q, &r);
       if (p == NULL) CONV_printf (a_code, "\"%s\"" , "unknown");

@@ -632,7 +632,7 @@ static void      o___READING_________________o (void) {;}
  *>    /+---(header)-------------------------+/                                        <* 
  *>    DEBUG_INPT   yLOG_senter  (__FUNCTION__);                                       <* 
  *>    /+---(save value)---------------------+/                                        <* 
- *>    if (strcmp (my.verb, "DITTO") != 0)  strlcpy (my.last, my.verb, LEN_LABEL);     <* 
+ *>    if (strcmp (my.verb, "DITTO") != 0)  ystrlcpy (my.last, my.verb, LEN_LABEL);     <* 
  *>    /+---(input vars)---------------------+/                                        <* 
  *>    my.verb        [0] = '\0';                                                      <* 
  *>    my.p_conv          = NULL;                                                      <* 
@@ -720,7 +720,7 @@ static void      o___READING_________________o (void) {;}
  *>       DEBUG_INPT   yLOG_value   ("ditto prep", rc);                                                                                                  <* 
  *>       if (rc < 0)  continue;                                                                                                                         <* 
  *>       /+---(prepare)---------------------+/                                                                                                          <* 
- *>       x_len = strllen (x_recd, LEN_RECD);                                                                                                            <* 
+ *>       x_len = ystrllen (x_recd, LEN_RECD);                                                                                                            <* 
  *>       if (x_len > 0)  x_recd [--x_len] = '\0';                                                                                                       <* 
  *>       /+---(filter)----------------------+/                                                                                                          <* 
  *>       if (x_recd [0] == '\0') {                                                                                                                      <* 
@@ -741,12 +741,12 @@ static void      o___READING_________________o (void) {;}
  *>       }                                                                                                                                              <* 
  *>       /+---(check other end ditto)-------+/                                                                                                          <* 
  *>       if (a_dittoing == 'y' && *r_dline != a_ditto)  {                                                                                               <* 
- *>          strlcpy (t, x_recd, LEN_LABEL);                                                                                                             <* 
+ *>          ystrlcpy (t, x_recd, LEN_LABEL);                                                                                                             <* 
  *>          p = strtok (t, "");                                                                                                                        <* 
  *>          p = strtok (p, " ");                                                                                                                        <* 
  *>          DEBUG_INPT   yLOG_point   ("p"         , p);                                                                                                <* 
  *>          if (p != NULL) {                                                                                                                            <* 
- *>             strltrim (p, ySTR_BOTH, LEN_LABEL);                                                                                                      <* 
+ *>             ystrltrim (p, ySTR_BOTH, LEN_LABEL);                                                                                                      <* 
  *>             DEBUG_INPT   yLOG_info    ("p"         , p);                                                                                             <* 
  *>             if (strstr ("PREP SCRP SECT SHARED GLOBAL COND GROUP DITTO REUSE", p) != NULL) {                                                         <* 
  *>                SCRP_ditto__end ();                                                                                                                   <* 
@@ -758,10 +758,10 @@ static void      o___READING_________________o (void) {;}
  *>          }                                                                                                                                           <* 
  *>       }                                                                                                                                              <* 
  *>       /+---(translate delayed chars)-----+/                                                                                                          <* 
- *>       strlundelay (x_recd, LEN_RECD);                                                                                                                <* 
+ *>       ystrlundelay (x_recd, LEN_RECD);                                                                                                                <* 
  *>       /+---(copy)------------------------+/                                                                                                          <* 
  *>       DEBUG_INPT   yLOG_note    ("save copy of source record");                                                                                      <* 
- *>       if (r_recd != NULL)  strlcpy (r_recd, x_recd, LEN_RECD);                                                                                       <* 
+ *>       if (r_recd != NULL)  ystrlcpy (r_recd, x_recd, LEN_RECD);                                                                                       <* 
  *>       if (r_len  != NULL)  *r_len   = x_len;                                                                                                         <* 
  *>       ++(*r_nrecd);                                                                                                                                  <* 
  *>       break;                                                                                                                                         <* 
@@ -858,47 +858,47 @@ static void      o___READING_________________o (void) {;}
  *>       }                                                                                                                                                                                                                                                                                      <* 
  *>       /+---(handle fields)---------------+/                                                                                                                                                                                                                                                  <* 
  *>       switch (i) {                                                                                                                                                                                                                                                                           <* 
- *>       case  2 : strlcpy  (x_desc, p        , LEN_LONG);                                                                                                                                                                                                                                      <* 
- *>                 strltrim (x_desc, ySTR_BOTH, LEN_LONG);                                                                                                                                                                                                                                      <* 
+ *>       case  2 : ystrlcpy  (x_desc, p        , LEN_LONG);                                                                                                                                                                                                                                      <* 
+ *>                 ystrltrim (x_desc, ySTR_BOTH, LEN_LONG);                                                                                                                                                                                                                                      <* 
  *>                 break;                                                                                                                                                                                                                                                                       <* 
  *>       case  3 :   if (a_spec == 's') {                                                                                                                                                                                                                                                       <* 
  *>                      if (l == 0 || l > 10)  {                                                                                                                                                                                                                                                <* 
- *>                         strlcpy (x_meth      , p, LEN_HUND );                                                                                                                                                                                                                                <* 
+ *>                         ystrlcpy (x_meth      , p, LEN_HUND );                                                                                                                                                                                                                                <* 
  *>                         DEBUG_INPT   yLOG_info    ("focus"     , x_meth);                                                                                                                                                                                                                    <* 
  *>                         x_max = 3;                                                                                                                                                                                                                                                           <* 
  *>                      } else {                                                                                                                                                                                                                                                                <* 
- *>                         strlcpy (x_test      , p, LEN_LABEL);                                                                                                                                                                                                                                <* 
+ *>                         ystrlcpy (x_test      , p, LEN_LABEL);                                                                                                                                                                                                                                <* 
  *>                         DEBUG_INPT   yLOG_info    ("duration"  , x_test);                                                                                                                                                                                                                    <* 
  *>                      }                                                                                                                                                                                                                                                                       <* 
  *>                   } else if (a_spec != 'p') {                                                                                                                                                                                                                                                <* 
- *>                      strlcpy (x_meth      , p, LEN_HUND );                                                                                                                                                                                                                                   <* 
+ *>                      ystrlcpy (x_meth      , p, LEN_HUND );                                                                                                                                                                                                                                   <* 
  *>                      DEBUG_INPT   yLOG_info    ("meth"      , x_meth);                                                                                                                                                                                                                       <* 
  *>                   }                                                                                                                                                                                                                                                                          <* 
  *>                   break;                                                                                                                                                                                                                                                                     <* 
  *>       case  4 :   if      (a_spec == 's') {                                                                                                                                                                                                                                                  <* 
- *>                      strlcpy (x_retn      , p, LEN_FULL);                                                                                                                                                                                                                                    <* 
+ *>                      ystrlcpy (x_retn      , p, LEN_FULL);                                                                                                                                                                                                                                    <* 
  *>                      DEBUG_INPT   yLOG_info    ("terse tag" , x_retn);                                                                                                                                                                                                                       <* 
  *>                   } else if (a_spec == 'P' || a_spec == 'p') {                                                                                                                                                                                                                               <* 
- *>                      strlcpy (x_coding    , p, LEN_RECD);                                                                                                                                                                                                                                    <* 
+ *>                      ystrlcpy (x_coding    , p, LEN_RECD);                                                                                                                                                                                                                                    <* 
  *>                      DEBUG_INPT   yLOG_info    ("code"      , x_coding);                                                                                                                                                                                                                     <* 
  *>                   } else {                                                                                                                                                                                                                                                                   <* 
- *>                      strlcpy (x_args      , p, LEN_FULL);                                                                                                                                                                                                                                    <* 
- *>                      strlcpy (x_coding    , p, LEN_RECD);                                                                                                                                                                                                                                    <* 
+ *>                      ystrlcpy (x_args      , p, LEN_FULL);                                                                                                                                                                                                                                    <* 
+ *>                      ystrlcpy (x_coding    , p, LEN_RECD);                                                                                                                                                                                                                                    <* 
  *>                      DEBUG_INPT   yLOG_info    ("args"      , x_args);                                                                                                                                                                                                                       <* 
  *>                   }                                                                                                                                                                                                                                                                          <* 
  *>                   break;                                                                                                                                                                                                                                                                     <* 
  *>       case  5 :   if (a_spec == 's') {                                                                                                                                                                                                                                                       <* 
- *>                      strlcpy (x_meth      , p, LEN_HUND );                                                                                                                                                                                                                                   <* 
+ *>                      ystrlcpy (x_meth      , p, LEN_HUND );                                                                                                                                                                                                                                   <* 
  *>                      DEBUG_INPT   yLOG_info    ("focus"     , x_meth);                                                                                                                                                                                                                       <* 
  *>                   } else {                                                                                                                                                                                                                                                                   <* 
- *>                      strlcpy (x_test      , p, LEN_LABEL);                                                                                                                                                                                                                                   <* 
+ *>                      ystrlcpy (x_test      , p, LEN_LABEL);                                                                                                                                                                                                                                   <* 
  *>                      DEBUG_INPT   yLOG_info    ("test"      , x_test);                                                                                                                                                                                                                       <* 
  *>                   }                                                                                                                                                                                                                                                                          <* 
  *>                   break;                                                                                                                                                                                                                                                                     <* 
- *>       case  6 :   strlcpy (x_expe      , p, LEN_RECD);                                                                                                                                                                                                                                       <* 
+ *>       case  6 :   ystrlcpy (x_expe      , p, LEN_RECD);                                                                                                                                                                                                                                       <* 
  *>                   DEBUG_INPT   yLOG_info    ("expe"      , x_expe);                                                                                                                                                                                                                          <* 
  *>                   break;                                                                                                                                                                                                                                                                     <* 
- *>       case  7 :   strlcpy (x_retn      , p, LEN_FULL);                                                                                                                                                                                                                                       <* 
+ *>       case  7 :   ystrlcpy (x_retn      , p, LEN_FULL);                                                                                                                                                                                                                                       <* 
  *>                   DEBUG_INPT   yLOG_info    ("retn"      , x_retn);                                                                                                                                                                                                                          <* 
  *>                   break;                                                                                                                                                                                                                                                                     <* 
  *>       }                                                                                                                                                                                                                                                                                      <* 
@@ -912,7 +912,7 @@ static void      o___READING_________________o (void) {;}
  *>          break;                                                                                                                                                                                                                                                                              <* 
  *>       }                                                                                                                                                                                                                                                                                      <* 
  *>       l = strlen (p);                                                                                                                                                                                                                                                                        <* 
- *>       strltrim (p, ySTR_BOTH, LEN_RECD);                                                                                                                                                                                                                                                     <* 
+ *>       ystrltrim (p, ySTR_BOTH, LEN_RECD);                                                                                                                                                                                                                                                     <* 
  *>    }                                                                                                                                                                                                                                                                                         <* 
  *>    /+---(stop parsing summ records)---+/                                                                                                                                                                                                                                                     <* 
  *>    if (i < x_min) {                                                                                                                                                                                                                                                                          <* 
@@ -922,13 +922,13 @@ static void      o___READING_________________o (void) {;}
  *>       return rce;                                                                                                                                                                                                                                                                            <* 
  *>    }                                                                                                                                                                                                                                                                                         <* 
  *>    /+---(save-back)-------------------+/                                                                                                                                                                                                                                                     <* 
- *>    if (r_desc   != NULL)  strlcpy (r_desc  , x_desc  , LEN_LONG);                                                                                                                                                                                                                            <* 
- *>    if (r_meth   != NULL)  strlcpy (r_meth  , x_meth  , LEN_HUND);                                                                                                                                                                                                                            <* 
- *>    if (r_args   != NULL)  strlcpy (r_args  , x_args  , LEN_FULL);                                                                                                                                                                                                                            <* 
- *>    if (r_test   != NULL)  strlcpy (r_test  , x_test  , LEN_LABEL);                                                                                                                                                                                                                           <* 
- *>    if (r_expe   != NULL)  strlcpy (r_expe  , x_expe  , LEN_RECD);                                                                                                                                                                                                                            <* 
- *>    if (r_retn   != NULL)  strlcpy (r_retn  , x_retn  , LEN_FULL);                                                                                                                                                                                                                            <* 
- *>    if (r_coding != NULL)  strlcpy (r_coding, x_coding, LEN_RECD);                                                                                                                                                                                                                            <* 
+ *>    if (r_desc   != NULL)  ystrlcpy (r_desc  , x_desc  , LEN_LONG);                                                                                                                                                                                                                            <* 
+ *>    if (r_meth   != NULL)  ystrlcpy (r_meth  , x_meth  , LEN_HUND);                                                                                                                                                                                                                            <* 
+ *>    if (r_args   != NULL)  ystrlcpy (r_args  , x_args  , LEN_FULL);                                                                                                                                                                                                                            <* 
+ *>    if (r_test   != NULL)  ystrlcpy (r_test  , x_test  , LEN_LABEL);                                                                                                                                                                                                                           <* 
+ *>    if (r_expe   != NULL)  ystrlcpy (r_expe  , x_expe  , LEN_RECD);                                                                                                                                                                                                                            <* 
+ *>    if (r_retn   != NULL)  ystrlcpy (r_retn  , x_retn  , LEN_FULL);                                                                                                                                                                                                                            <* 
+ *>    if (r_coding != NULL)  ystrlcpy (r_coding, x_coding, LEN_RECD);                                                                                                                                                                                                                            <* 
  *>    /+---(complete)--------------------+/                                                                                                                                                                                                                                                     <* 
  *>    DEBUG_INPT   yLOG_exit    (__FUNCTION__);                                                                                                                                                                                                                                                 <* 
  *>    return 0;                                                                                                                                                                                                                                                                                 <* 
@@ -959,7 +959,7 @@ static void      o___READING_________________o (void) {;}
  *>          DEBUG_INPT   yLOG_exit    (__FUNCTION__);                                 <* 
  *>          break;                                                                    <* 
  *>       }                                                                            <* 
- *>       strltrim (p, ySTR_BOTH, LEN_RECD);                                           <* 
+ *>       ystrltrim (p, ySTR_BOTH, LEN_RECD);                                           <* 
  *>       /+---(clear spacer bars)-----------+/                                        <* 
  *>       if (p[0] == '-') {  /+ begin careful to avoid negative numbers ;)) +/        <* 
  *>          switch (p[1]) {                                                           <* 
@@ -972,30 +972,30 @@ static void      o___READING_________________o (void) {;}
  *>       }                                                                            <* 
  *>       /+---(handle fields)---------------+/                                        <* 
  *>       switch (i) {                                                                 <* 
- *>       case  2 :   strlcpy (my.desc      , p, LEN_LONG );                           <* 
+ *>       case  2 :   ystrlcpy (my.desc      , p, LEN_LONG );                           <* 
  *>                   DEBUG_INPT   yLOG_info    ("desc"      , my.desc);               <* 
  *>                   break;                                                           <* 
  *>       case  3 :   if (my.spec != 'p') {                                            <* 
- *>                      strlcpy (my.meth      , p, LEN_HUND );                        <* 
+ *>                      ystrlcpy (my.meth      , p, LEN_HUND );                        <* 
  *>                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);            <* 
  *>                   }                                                                <* 
  *>                   break;                                                           <* 
  *>       case  4 :   if (my.spec == 'P' || my.spec == 'p') {                          <* 
- *>                      strlcpy (my.code      , p, LEN_RECD);                         <* 
+ *>                      ystrlcpy (my.code      , p, LEN_RECD);                         <* 
  *>                      DEBUG_INPT   yLOG_info    ("code"      , my.code);            <* 
  *>                   } else {                                                         <* 
- *>                      strlcpy (my.args      , p, LEN_FULL);                         <* 
- *>                      strlcpy (my.code      , p, LEN_FULL);                         <* 
+ *>                      ystrlcpy (my.args      , p, LEN_FULL);                         <* 
+ *>                      ystrlcpy (my.code      , p, LEN_FULL);                         <* 
  *>                      DEBUG_INPT   yLOG_info    ("args"      , my.args);            <* 
  *>                   }                                                                <* 
  *>                   break;                                                           <* 
- *>       case  5 :   strlcpy (my.test      , p, LEN_LABEL);                           <* 
+ *>       case  5 :   ystrlcpy (my.test      , p, LEN_LABEL);                           <* 
  *>                   DEBUG_INPT   yLOG_info    ("test"      , my.test);               <* 
  *>                   break;                                                           <* 
- *>       case  6 :   strlcpy (my.expe      , p, LEN_RECD);                            <* 
+ *>       case  6 :   ystrlcpy (my.expe      , p, LEN_RECD);                            <* 
  *>                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);               <* 
  *>                   break;                                                           <* 
- *>       case  7 :   strlcpy (my.retn      , p, LEN_FULL);                            <* 
+ *>       case  7 :   ystrlcpy (my.retn      , p, LEN_FULL);                            <* 
  *>                   DEBUG_INPT   yLOG_info    ("retn"      , my.retn);               <* 
  *>                   break;                                                           <* 
  *>       }                                                                            <* 
@@ -1034,7 +1034,7 @@ static void      o___READING_________________o (void) {;}
  *>          DEBUG_INPT   yLOG_exit    (__FUNCTION__);                                 <* 
  *>          break;                                                                    <* 
  *>       }                                                                            <* 
- *>       strltrim (p, ySTR_BOTH, LEN_RECD);                                           <* 
+ *>       ystrltrim (p, ySTR_BOTH, LEN_RECD);                                           <* 
  *>       /+---(clear spacer bars)-----------+/                                        <* 
  *>       if (p[0] == '-' && i != 6) {                                                 <* 
  *>          switch (p[1]) {                                                           <* 
@@ -1047,28 +1047,28 @@ static void      o___READING_________________o (void) {;}
  *>       }                                                                            <* 
  *>       /+---(handle fields)---------------+/                                        <* 
  *>       switch (i) {                                                                 <* 
- *>       case  2 :   strlcpy (my.desc      , p, LEN_LONG );                           <* 
+ *>       case  2 :   ystrlcpy (my.desc      , p, LEN_LONG );                           <* 
  *>                   DEBUG_INPT   yLOG_info    ("desc"      , my.desc);               <* 
  *>                   break;                                                           <* 
  *>       case  3 :   if (my.spec == 'p') {                                            <* 
- *>                      strlcpy (my.code      , p, LEN_RECD);                         <* 
+ *>                      ystrlcpy (my.code      , p, LEN_RECD);                         <* 
  *>                      DEBUG_INPT   yLOG_info    ("code"      , my.code);            <* 
  *>                   } else {                                                         <* 
- *>                      strlcpy (my.meth      , p, LEN_HUND );                        <* 
+ *>                      ystrlcpy (my.meth      , p, LEN_HUND );                        <* 
  *>                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);            <* 
  *>                   }                                                                <* 
  *>                   break;                                                           <* 
- *>       case  4 :   strlcpy (my.args      , p, LEN_FULL);                            <* 
- *>                   strlcpy (my.code      , p, LEN_FULL);                            <* 
+ *>       case  4 :   ystrlcpy (my.args      , p, LEN_FULL);                            <* 
+ *>                   ystrlcpy (my.code      , p, LEN_FULL);                            <* 
  *>                   DEBUG_INPT   yLOG_info    ("args"      , my.args);               <* 
  *>                   break;                                                           <* 
- *>       case  5 :   strlcpy (my.test      , p, LEN_LABEL);                           <* 
+ *>       case  5 :   ystrlcpy (my.test      , p, LEN_LABEL);                           <* 
  *>                   DEBUG_INPT   yLOG_info    ("test"      , my.test);               <* 
  *>                   break;                                                           <* 
- *>       case  6 :   strlcpy (my.expe      , p, LEN_RECD);                            <* 
+ *>       case  6 :   ystrlcpy (my.expe      , p, LEN_RECD);                            <* 
  *>                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);               <* 
  *>                   break;                                                           <* 
- *>       case  7 :   strlcpy (my.retn      , p, LEN_FULL);                            <* 
+ *>       case  7 :   ystrlcpy (my.retn      , p, LEN_FULL);                            <* 
  *>                   DEBUG_INPT   yLOG_info    ("retn"      , my.retn);               <* 
  *>                   break;                                                           <* 
  *>       }                                                                            <* 
@@ -1102,7 +1102,7 @@ static void      o___READING_________________o (void) {;}
  *>          DEBUG_INPT   yLOG_exit    (__FUNCTION__);                                 <* 
  *>          break;                                                                    <* 
  *>       }                                                                            <* 
- *>       strltrim (p, ySTR_BOTH, LEN_RECD);                                           <* 
+ *>       ystrltrim (p, ySTR_BOTH, LEN_RECD);                                           <* 
  *>       /+---(clear spacer bars)-----------+/                                        <* 
  *>       if (p [0] == '-') {                                                          <* 
  *>          if (strncmp (p, "- - -", 5) == 0)    p [0] = '\0';                        <* 
@@ -1112,21 +1112,21 @@ static void      o___READING_________________o (void) {;}
  *>       /+---(handle fields)---------------+/                                        <* 
  *>       switch (i) {                                                                 <* 
  *>       case  2 :   if (my.spec == 'p') {                                            <* 
- *>                      strlcpy (my.code      , p, LEN_RECD);                         <* 
+ *>                      ystrlcpy (my.code      , p, LEN_RECD);                         <* 
  *>                      DEBUG_INPT   yLOG_info    ("code"      , my.code);            <* 
  *>                   } else {                                                         <* 
- *>                      strlcpy (my.meth      , p, LEN_HUND );                        <* 
+ *>                      ystrlcpy (my.meth      , p, LEN_HUND );                        <* 
  *>                      DEBUG_INPT   yLOG_info    ("meth"      , my.meth);            <* 
  *>                   }                                                                <* 
  *>                   break;                                                           <* 
- *>       case  3 :   strlcpy (my.args      , p, LEN_FULL);                            <* 
- *>                   strlcpy (my.code      , p, LEN_FULL);                            <* 
+ *>       case  3 :   ystrlcpy (my.args      , p, LEN_FULL);                            <* 
+ *>                   ystrlcpy (my.code      , p, LEN_FULL);                            <* 
  *>                   DEBUG_INPT   yLOG_info    ("args"      , my.args);               <* 
  *>                   break;                                                           <* 
- *>       case  4 :   strlcpy (my.test      , p, LEN_LABEL);                           <* 
+ *>       case  4 :   ystrlcpy (my.test      , p, LEN_LABEL);                           <* 
  *>                   DEBUG_INPT   yLOG_info    ("test"      , my.test);               <* 
  *>                   break;                                                           <* 
- *>       case  5 :   strlcpy (my.expe      , p, LEN_RECD);                            <* 
+ *>       case  5 :   ystrlcpy (my.expe      , p, LEN_RECD);                            <* 
  *>                   DEBUG_INPT   yLOG_info    ("expe"      , my.expe);               <* 
  *>                   break;                                                           <* 
  *>       }                                                                            <* 
@@ -1238,7 +1238,7 @@ static void      o___READING_________________o (void) {;}
  *>    /+---(header)-------------------------+/                                                                                            <* 
  *>    DEBUG_INPT   yLOG_senter  (__FUNCTION__);                                                                                           <* 
  *>    /+---(default)------------------------+/                                                                                            <* 
- *>    if (r_verb  != NULL)  strlcpy  (r_verb , "", LEN_LABEL);                                                                            <* 
+ *>    if (r_verb  != NULL)  ystrlcpy  (r_verb , "", LEN_LABEL);                                                                            <* 
  *>    if (r_indx  != NULL)  *r_indx = -1;                                                                                                 <* 
  *>    if (r_spec  != NULL)  *r_spec = '-';                                                                                                <* 
  *>    if (r_conv  != NULL)  *r_conv = NULL;                                                                                               <* 
@@ -1266,7 +1266,7 @@ static void      o___READING_________________o (void) {;}
  *>    DEBUG_INPT   yLOG_snote   ("saved record/comment");                                                                                 <* 
  *>    for (i = 0; i < MAX_VERB; ++i) {                                                                                                    <* 
  *>       if (strcmp (g_verbs [i].name, "#>") != 0) continue;                                                                              <* 
- *>       strlcpy (x_verb, g_verbs [i].name, LEN_LABEL);                                                                                   <* 
+ *>       ystrlcpy (x_verb, g_verbs [i].name, LEN_LABEL);                                                                                   <* 
  *>       x_indx  = i;                                                                                                                     <* 
  *>       x_spec  = g_verbs [i].spec;                                                                                                      <* 
  *>       x_conv  = g_verbs [i].conv;                                                                                                      <* 
@@ -1276,7 +1276,7 @@ static void      o___READING_________________o (void) {;}
  *>       DEBUG_INPT   yLOG_sint    (g_verbs [i].count);                                                                                   <* 
  *>    }                                                                                                                                   <* 
  *>    /+---(save-back)----------------------+/                                                                                            <* 
- *>    if (r_verb  != NULL)  strlcpy (r_verb, x_verb, LEN_LABEL);                                                                          <* 
+ *>    if (r_verb  != NULL)  ystrlcpy (r_verb, x_verb, LEN_LABEL);                                                                          <* 
  *>    if (r_indx  != NULL)  *r_indx = x_indx;                                                                                             <* 
  *>    if (r_spec  != NULL)  *r_spec = x_spec;                                                                                             <* 
  *>    if (r_conv  != NULL)  *r_conv = x_conv;                                                                                             <* 
@@ -1303,7 +1303,7 @@ static void      o___READING_________________o (void) {;}
  *>    /+---(header)-------------------------+/                                                                                                                                  <* 
  *>    DEBUG_INPT   yLOG_senter  (__FUNCTION__);                                                                                                                                 <* 
  *>    /+---(default)------------------------+/                                                                                                                                  <* 
- *>    if (r_verb  != NULL)  strlcpy  (r_verb , "", LEN_LABEL);                                                                                                                  <* 
+ *>    if (r_verb  != NULL)  ystrlcpy  (r_verb , "", LEN_LABEL);                                                                                                                  <* 
  *>    if (r_indx  != NULL)  *r_indx = -1;                                                                                                                                       <* 
  *>    if (r_spec  != NULL)  *r_spec = '-';                                                                                                                                      <* 
  *>    if (r_conv  != NULL)  *r_conv = NULL;                                                                                                                                     <* 
@@ -1321,8 +1321,8 @@ static void      o___READING_________________o (void) {;}
  *>       return rce;                                                                                                                                                            <* 
  *>    }                                                                                                                                                                         <* 
  *>    /+---(prepare)------------------------+/                                                                                                                                  <* 
- *>    strlcpy  (x_word, a_field, LEN_FULL);                                                                                                                                     <* 
- *>    strltrim (x_word, ySTR_BOTH, LEN_FULL);                                                                                                                                   <* 
+ *>    ystrlcpy  (x_word, a_field, LEN_FULL);                                                                                                                                     <* 
+ *>    ystrltrim (x_word, ySTR_BOTH, LEN_FULL);                                                                                                                                   <* 
  *>    p = strchr (x_word, ' ');                                                                                                                                                 <* 
  *>    if (p != NULL)  p [0] = '\0';                                                                                                                                             <* 
  *>    x_len = strlen (x_word);                                                                                                                                                  <* 
@@ -1346,7 +1346,7 @@ static void      o___READING_________________o (void) {;}
  *>       if (strcmp (g_verbs [i].name, x_word) != 0)     continue;                                                                                                              <* 
  *>       /+---(save values)-----------------+/                                                                                                                                  <* 
  *>       DEBUG_INPT   yLOG_snote   ("verb found");                                                                                                                              <* 
- *>       strlcpy (x_verb, g_verbs [i].name, LEN_LABEL);                                                                                                                         <* 
+ *>       ystrlcpy (x_verb, g_verbs [i].name, LEN_LABEL);                                                                                                                         <* 
  *>       x_indx  = i;                                                                                                                                                           <* 
  *>       x_spec  = g_verbs [i].spec;                                                                                                                                            <* 
  *>       x_conv  = g_verbs [i].conv;                                                                                                                                            <* 
@@ -1382,7 +1382,7 @@ static void      o___READING_________________o (void) {;}
  *>       }                                                                                                                                                                      <* 
  *>    }                                                                                                                                                                         <* 
  *>    /+---(save-back)----------------------+/                                                                                                                                  <* 
- *>    if (r_verb  != NULL)  strlcpy (r_verb, x_verb, LEN_LABEL);                                                                                                                <* 
+ *>    if (r_verb  != NULL)  ystrlcpy (r_verb, x_verb, LEN_LABEL);                                                                                                                <* 
  *>    if (r_indx  != NULL)  *r_indx = x_indx;                                                                                                                                   <* 
  *>    if (r_spec  != NULL)  *r_spec = x_spec;                                                                                                                                   <* 
  *>    if (r_conv  != NULL)  *r_conv = x_conv;                                                                                                                                   <* 
@@ -1395,22 +1395,22 @@ static void      o___READING_________________o (void) {;}
 /*> char                                                                                                                                             <* 
  *> SCRP__parse_save        (char a_verb [LEN_LABEL], char a_indx, char a_spec, char *a_conv, char *a_code, char a_stage [LEN_SHORT], char a_vers)   <* 
  *> {                                                                                                                                                <* 
- *>    /+> strlcpy (my.verb    , a_verb   , LEN_LABEL);                                   <*                                                         <* 
+ *>    /+> ystrlcpy (my.verb    , a_verb   , LEN_LABEL);                                   <*                                                         <* 
  *>     *> my.indx   = a_indx;                                                            <*                                                         <* 
  *>     *> my.spec   = a_spec;                                                            <*                                                         <* 
  *>     *> my.p_conv = a_conv;                                                            <*                                                         <* 
  *>     *> my.p_code = a_code;                                                            <*                                                         <* 
- *>     *> strlcpy (my.stage   , a_stage  , LEN_SHORT);                                   <*                                                         <* 
+ *>     *> ystrlcpy (my.stage   , a_stage  , LEN_SHORT);                                   <*                                                         <* 
  *>     *> my.vers   = a_vers;                                                            <+/                                                        <* 
  *>    return 0;                                                                                                                                     <* 
  *> }                                                                                                                                                <*/
 
-/*> #define   SCRP_SAVE  if (r_verb  != NULL)  strlcpy (r_verb , x_verb , LEN_LABEL); \   <* 
+/*> #define   SCRP_SAVE  if (r_verb  != NULL)  ystrlcpy (r_verb , x_verb , LEN_LABEL); ²  <* 
  *>                      if (r_indx  != NULL)  *r_indx  = x_indx; \                       <* 
  *>                      if (r_spec  != NULL)  *r_spec  = x_spec; \                       <* 
  *>                      if (r_conv  != NULL)  *r_conv  = x_conv; \                       <* 
  *>                      if (r_code  != NULL)  *r_code  = x_code; \                       <* 
- *>                      if (r_stage != NULL)  strlcpy (r_stage, x_stage, LEN_SHORT); \   <* 
+ *>                      if (r_stage != NULL)  ystrlcpy (r_stage, x_stage, LEN_SHORT); ²  <* 
  *>                      if (r_vers  != NULL)  *r_vers  = x_vers;                         <*/
 
 /*> char                                                                                                                                                                                                                                                                                                                                                                                            <* 
@@ -1457,7 +1457,7 @@ static void      o___READING_________________o (void) {;}
  *>       return 0;                                                                                                                                                                                                                                                                                                                                                                                 <* 
  *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
  *>    /+---(create a copy of recd)----------+/                                                                                                                                                                                                                                                                                                                                                     <* 
- *>    strlcpy (x_recd, a_recd, LEN_RECD);                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>    ystrlcpy (x_recd, a_recd, LEN_RECD);                                                                                                                                                                                                                                                                                                                                                          <* 
  *>    DEBUG_INPT   yLOG_info    ("x_recd"    , x_recd);                                                                                                                                                                                                                                                                                                                                            <* 
  *>    p  = strtok (x_recd, q);                                                                                                                                                                                                                                                                                                                                                                     <* 
  *>    /+---(get verb)-----------------------+/                                                                                                                                                                                                                                                                                                                                                     <* 
@@ -1504,7 +1504,7 @@ static void      o___READING_________________o (void) {;}
  *>       return rce;                                                                                                                                                                                                                                                                                                                                                                               <* 
  *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
  *>    x_len = strlen (p);                                                                                                                                                                                                                                                                                                                                                                          <* 
- *>    strltrim (p, ySTR_BOTH, x_len);                                                                                                                                                                                                                                                                                                                                                              <* 
+ *>    ystrltrim (p, ySTR_BOTH, x_len);                                                                                                                                                                                                                                                                                                                                                              <* 
  *>    x_len = strlen (p);                                                                                                                                                                                                                                                                                                                                                                          <* 
  *>    if (p[0] == '-')  p[0] = '\0';                                                                                                                                                                                                                                                                                                                                                               <* 
  *>    rc = 0;                                                                                                                                                                                                                                                                                                                                                                                      <* 
@@ -1512,17 +1512,17 @@ static void      o___READING_________________o (void) {;}
  *>    if      (x_len != 3 || p [0] != 'v') {                                                                                                                                                                                                                                                                                                                                                       <* 
  *>       if (x_spec!= 'c')  rc = SCRP__current (a_scrp, a_line, x_verb, x_spec, p, my.desc, my.meth, my.args, my.test, my.expe, my.retn, my.code);                                                                                                                                                                                                                                                 <* 
  *>    } else if (strcmp (p, "v21") == 0) {                                                                                                                                                                                                                                                                                                                                                         <* 
- *>       strlcpy (x_vers       , p    , LEN_LABEL);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>       ystrlcpy (x_vers       , p    , LEN_LABEL);                                                                                                                                                                                                                                                                                                                                                <* 
  *>       DEBUG_INPT   yLOG_info    ("vers"      , x_vers );                                                                                                                                                                                                                                                                                                                                        <* 
  *>       if (x_spec!= 'c')  rc = SCRP_vers21  ();                                                                                                                                                                                                                                                                                                                                                  <* 
  *>    } else if (strcmp (p, "v20") == 0) {                                                                                                                                                                                                                                                                                                                                                         <* 
- *>       strlcpy (x_vers       , p    , LEN_LABEL);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>       ystrlcpy (x_vers       , p    , LEN_LABEL);                                                                                                                                                                                                                                                                                                                                                <* 
  *>       DEBUG_INPT   yLOG_info    ("vers"      , x_vers );                                                                                                                                                                                                                                                                                                                                        <* 
  *>       if (x_spec!= 'c')  rc = SCRP_vers20  ();                                                                                                                                                                                                                                                                                                                                                  <* 
  *>    } else                             {                                                                                                                                                                                                                                                                                                                                                         <* 
- *>       strlcpy (x_vers       , "v19", LEN_LABEL);                                                                                                                                                                                                                                                                                                                                                <* 
+ *>       ystrlcpy (x_vers       , "v19", LEN_LABEL);                                                                                                                                                                                                                                                                                                                                                <* 
  *>       DEBUG_INPT   yLOG_info    ("vers"      , x_vers );                                                                                                                                                                                                                                                                                                                                        <* 
- *>       strlcpy (my.desc      , p    , LEN_LONG );                                                                                                                                                                                                                                                                                                                                                <* 
+ *>       ystrlcpy (my.desc      , p    , LEN_LONG );                                                                                                                                                                                                                                                                                                                                                <* 
  *>       DEBUG_INPT   yLOG_info    ("desc"      , my.desc);                                                                                                                                                                                                                                                                                                                                        <* 
  *>       if (x_spec!= 'c')  rc = SCRP_vers19  ();                                                                                                                                                                                                                                                                                                                                                  <* 
  *>    }                                                                                                                                                                                                                                                                                                                                                                                            <* 
@@ -1555,14 +1555,14 @@ static void      o___UNITTEST________________o (void) {;};
  *>    char        s           [LEN_LABEL];                                                                                                 <* 
  *>    char        t           [LEN_RECD ];                                                                                                 <* 
  *>    /+---(preprare)-----------------------+/                                                                                             <* 
- *>    strlcpy  (my.answer, "SCRP unit      : question not understood", LEN_FULL);                                                          <* 
+ *>    ystrlcpy  (my.answer, "SCRP unit      : question not understood", LEN_FULL);                                                          <* 
  *>    if      (strcmp (a_question, "file"      ) == 0) {                                                                                   <* 
  *>       sprintf (my.answer, "SCRP file      : %-35.35s %p", my.n_scrp, my.f_scrp);                                                        <* 
  *>    }                                                                                                                                    <* 
  *>    else if (strcmp (a_question, "recd"      ) == 0) {                                                                                   <* 
- *>       strlcpy    (t, my.recd, LEN_RECD);                                                                                                <* 
- *>       strlencode (t, ySTR_NONE, LEN_RECD);                                                                                              <* 
- *>       sprintf (my.answer, "SCRP recd      : %2d %3d[%.40s]", my.n_line, strlen (t), t);                                                 <* 
+ *>       ystrlcpy    (t, my.recd, LEN_RECD);                                                                                                <* 
+ *>       ystrlencode (t, ySTR_NONE, LEN_RECD);                                                                                              <* 
+ *>       sprintf (my.answer, "SCRP recd      : %2d %3d[%.40s]", my.n_line, ystrlen (t), t);                                                 <* 
  *>    }                                                                                                                                    <* 
  *>    else if (strcmp (a_question, "verb"      ) == 0) {                                                                                   <* 
  *>       sprintf (my.answer, "SCRP verb      : %-10.10s %3d[%.30s]", my.verb, strlen (my.desc), my.desc);                                  <* 
@@ -1578,8 +1578,8 @@ static void      o___UNITTEST________________o (void) {;};
  *>       sprintf (my.answer, "SCRP retn      : %c          %3d[%.30s]", my.test [0], strlen (my.retn), my.retn);                           <* 
  *>    }                                                                                                                                    <* 
  *>    else if (strcmp (a_question, "code"      ) == 0) {                                                                                   <* 
- *>       strlcpy    (t, my.code, LEN_RECD);                                                                                                <* 
- *>       strlencode (t, ySTR_NONE, LEN_RECD);                                                                                              <* 
+ *>       ystrlcpy    (t, my.code, LEN_RECD);                                                                                                <* 
+ *>       ystrlencode (t, ySTR_NONE, LEN_RECD);                                                                                              <* 
  *>       sprintf (my.answer, "SCRP code      : %3d[%.40s]", strlen (t), t);                                                                <* 
  *>    }                                                                                                                                    <* 
  *>    else if (strcmp (a_question, "mark"      ) == 0) {                                                                                   <* 
@@ -1589,11 +1589,11 @@ static void      o___UNITTEST________________o (void) {;};
  *>       sprintf (my.answer, "SCRP ditto     : %2d  %c  %-10p  %-10p  %3d", my.ditto, my.dittoing, s_file_save, s_file_ditto, my.dline);   <* 
  *>    }                                                                                                                                    <* 
  *>    else if (strcmp (a_question, "dittos"    ) == 0) {                                                                                   <* 
- *>       strlcpy (t, "", LEN_RECD);                                                                                                        <* 
+ *>       ystrlcpy (t, "", LEN_RECD);                                                                                                        <* 
  *>       for (i = 0; i < 15; ++i) {                                                                                                        <* 
  *>          if (s_dittos [i] > 0)  sprintf (s, " %2d", s_dittos [i]);                                                                      <* 
  *>          else                   sprintf (s, "  -");                                                                                     <* 
- *>          strlcat (t, s, LEN_RECD);                                                                                                      <* 
+ *>          ystrlcat (t, s, LEN_RECD);                                                                                                      <* 
  *>       }                                                                                                                                 <* 
  *>       sprintf (my.answer, "SCRP dittos A-O:%s", t);                                                                                     <* 
  *>    }                                                                                                                                    <* 

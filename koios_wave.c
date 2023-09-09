@@ -18,7 +18,7 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, char a_verb [LEN_L
    /*---(header)-------------------------*/
    DEBUG_INPT   yLOG_senter  (__FUNCTION__);
    /*---(default)------------------------*/
-   if (r_stage != NULL)  strlcpy  (r_stage, "", LEN_SHORT);
+   if (r_stage != NULL)  ystrlcpy  (r_stage, "", LEN_SHORT);
    /*---(defense)------------------------*/
    DEBUG_INPT   yLOG_spoint  (a_scrp);
    --rce;  if (a_scrp == NULL) {
@@ -42,8 +42,8 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, char a_verb [LEN_L
       return 0;
    }
    /*---(prepare)------------------------*/
-   strlcpy  (t, a_field, LEN_LABEL);
-   strltrim (t, ySTR_BOTH, LEN_LABEL);
+   ystrlcpy  (t, a_field, LEN_LABEL);
+   ystrltrim (t, ySTR_BOTH, LEN_LABEL);
    DEBUG_INPT   yLOG_note    (t);
    x_len = strlen (t);
    DEBUG_INPT   yLOG_sint    (x_len);
@@ -57,8 +57,8 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, char a_verb [LEN_L
       DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
       return 0;
    }
-   strlcpy  (t, a_field + 4, LEN_LABEL);
-   strltrim (t, ySTR_BOTH, LEN_LABEL);
+   ystrlcpy  (t, a_field + 4, LEN_LABEL);
+   ystrltrim (t, ySTR_BOTH, LEN_LABEL);
    /*---(check begin marker)-------------*/
    x_pos = 0;
    DEBUG_INPT   yLOG_schar   (t [x_pos]);
