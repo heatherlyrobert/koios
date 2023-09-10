@@ -853,7 +853,7 @@ CODE__step_add          (FILE *a_code, cchar a_runtype, cchar a_verb [LEN_LABEL]
       break;
    }
    /*---(debugging)----------------------*/
-   if (a_runtype == G_RUN_DEBUG) {
+   if (a_runtype == G_RUN_DEBUG && strcmp (a_verb, "global") != 0) {
       CONV_printf (a_code, "      %sUG_PROG    %sOG_unitstep (cyUNIT.origin, cyUNIT.offset + %3i, %3i, %4i, \"%s\");\n", "DEB", "yL", s_scond, s_cstep, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
    }
    /*---(complete)-----------------------*/
