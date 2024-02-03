@@ -653,7 +653,7 @@ CODE__prefix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_desc [L
       case 's'  : case 'u'  : case 'w'  :
          CONV_printf (a_code, "      if (cyUNIT.exec)  cyUNIT.s_rc = %s (%s);\n", a_method , a_system);
          break;
-      case 'i'  :
+      case 'i'  : case 'c'  :
          CONV_printf (a_code, "      if (cyUNIT.exec)  cyUNIT.i_rc = %s (%s);\n", a_method , a_system);
          break;
       case 'r'  :
@@ -670,6 +670,7 @@ CODE__prefix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_desc [L
    case 's'  : ystrlcpy (x_func, "yUNIT_string"   , LEN_FULL);    break;
    case 'w'  : ystrlcpy (x_func, "yUNIT_wrap"     , LEN_FULL);    break;
    case 'u'  : ystrlcpy (x_func, "yUNIT_round"    , LEN_FULL);    break;
+   case 'c'  : ystrlcpy (x_func, "yUNIT_char"     , LEN_FULL);    break;
    case 'i'  : ystrlcpy (x_func, "yUNIT_int"      , LEN_FULL);    break;
    case 'r'  : ystrlcpy (x_func, "yUNIT_real"     , LEN_FULL);    break;
    case 'p'  : ystrlcpy (x_func, "yUNIT_point"    , LEN_FULL);    break;
@@ -712,6 +713,9 @@ CODE__expect            (FILE *a_code, cchar a_test [LEN_LABEL], cchar a_expect 
       case 's' : case 'u' : case 'w' :      /* stringish   */
          CONV_printf (a_code, "\"%s\", " , a_expect);
          break;
+      case 'c' :                            /* character   */
+         CONV_printf (a_code, "%s, "     , a_expect);
+         break;
       case 'i' : case 'p' : case 'r' :      /* numberish   */
          CONV_printf (a_code, "%s, "     , a_expect);
          break;
@@ -749,7 +753,7 @@ CODE__suffix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_test [L
       case 's'  : case 'u'  : case 'w'  :
          CONV_printf (a_code, "cyUNIT.s_rc, cyUNIT.exec);\n");
          break;
-      case 'i'  :
+      case 'i'  : case 'c'  :
          CONV_printf (a_code, "cyUNIT.i_rc, cyUNIT.exec);\n");
          break;
       case 'r'  :
@@ -766,7 +770,7 @@ CODE__suffix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_test [L
       case 's'  : case 'u'  : case 'w'  :
          CONV_printf (a_code, "      if (cyUNIT.exec) { if (cyUNIT.s_rc != NULL)  strcpy (%s, cyUNIT.s_rc); else strcpy (x_str, \"\"); }\n", a_return);
          break;
-      case 'i'  :
+      case 'i'  : case 'c'  :
          CONV_printf (a_code, "      if (cyUNIT.exec)  %s = cyUNIT.i_rc;\n", a_return);
          break;
       case 'r'  :
