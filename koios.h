@@ -37,9 +37,25 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4p"
-#define     P_VERTXT    "added character-specific tests to make unit testing more clear"
+#define     P_VERNUM    "1.4q"
+#define     P_VERTXT    "now creates new WAVE style records when creating a unit test"
 /*········· ··········· ´·····························´········································*/
+
+/*
+ * [0a] [0b] [0c] [0d] [0e]
+ * [1a] [1b] [1c] [1d] [1e]
+ * [2a] [2b] [2c] [2d] [2e]
+ * [3a] [3b] [3c] [3d] [3e]
+ * [4a] [4b] [4c] [4d] [4e]
+ * [5a] [5b] [5c] [5d] [5e]
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 
 /*>                                                                                   <* 
  *> 24 testing phases in 6 loose blocks to help sequence (like visual look)           <* 
@@ -198,7 +214,6 @@
 #include    <sys/types.h>    /* stat, lstat                                   */
 
 /*===[[ CUSTOM LIBRARIES ]]===================================================*/
-#include    <yUNIT.h>        /* CUSTOM : heatherly unit testing               */
 #include    <yLOG.h>         /* CUSTOM : heatherly program logging            */
 #include    <ySTR.h>         /* CUSTOM : heatherly safer string handling      */
 #include    <yURG.h>         /* CUSTOM : heatherly urgent processing          */
@@ -223,6 +238,7 @@
 #define     IF_VERBOSE    if (my.noise == 'v') 
 
 typedef struct stat      tSTAT;
+typedef struct tm        tTIME;
 
 
 typedef     struct cGLOBALS     tGLOBALS;
@@ -235,6 +251,7 @@ struct cGLOBALS
    char        replace;                     /* convert and replace file       */
    char        cwd         [LEN_PATH];      /* true working directory         */
    /*---(file names)------------*/
+   char        n_proj      [LEN_LABEL];     /* base project name              */
    char        n_ext       [LEN_TERSE];     /* .unit vs .sunit                */
    char        n_base      [LEN_TITLE];     /* base name of files             */
    char        n_scrp      [LEN_TITLE];     /* name of input script file      */
@@ -391,6 +408,7 @@ char*       SCRP__unit              (char *a_question, int a_num);
 /*---(program)--------------*/
 char        WAVE_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_field [LEN_LABEL], char r_stage [LEN_SHORT]);
 char        WAVE_entry              (FILE *a_wave, char a_stageid, char a_waveid, char a_nscrp [LEN_TITLE], char a_seq, char a_desc [LEN_HUND]);
+char        WAVE_entry_new          (FILE *f, char a_proj [LEN_LABEL], char a_unit [LEN_TITLE], char a_scrp, char a_desc [LEN_LONG], char a_terse [LEN_LABEL], char a_wave, char a_stage, char a_nunit, char a_nscrp, short a_ncond, short a_nstep, char a_expe [LEN_SHORT], short a_expect, char a_result, short a_npass, short a_nfail, short a_nbadd, short a_nvoid, short a_actual);
 /*---(done)-----------------*/
 
 

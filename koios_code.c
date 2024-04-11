@@ -1,5 +1,6 @@
 /*===============================[[ beg-code ]]===============================*/
 #include    "koios.h"        /* LOCAL  : main header                          */
+#include    <yUNIT_solo.h>        /* CUSTOM : heatherly unit testing               */
 
 
 
@@ -338,14 +339,15 @@ CODE_scrp               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
-   char        x_stage     = '-';
-   char        x_wave      = '-';
+   char        x_stage     = '·';
+   char        x_wave      = '·';
    /*---(header)-------------------------*/
    DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
    /*---(defense)------------------------*/
    rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
    if (rc < 0)  return rc;
    /*---(wrap last script)---------------*/
+   if (s_nscrp >  0 && *r_cshare == '-')   yUNIT_wave_end (a_wave, 0, 1, s_scond, s_sstep);
    CODE__scrp_end (a_code, a_last, a_verb, *r_cshare);
    *r_cshare = '-';
    /*---(counters)-----------------------*/
@@ -367,10 +369,11 @@ CODE_scrp               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    CONV_printf (a_main, "   if (yUNIT_run_scrp (%2i) == 1)  yUNIT_script_%02d ();\n", s_nscrp, s_nscrp);
    /*---(script entry in wave)-----------*/
    if (strlen (a_stage) == 2) {
-      x_stage = a_stage [0];
-      x_wave  = a_stage [1];
+      x_wave  = a_stage [0];
+      x_stage = a_stage [1];
    }
-   WAVE_entry  (a_wave, x_stage, x_wave, a_nscrp, s_nscrp, a_desc);
+   yUNIT_wave_beg (my.n_proj, my.n_base, s_nscrp, a_desc, a_return, x_wave, x_stage, a_test);
+   /*> WAVE_entry  (a_wave, x_stage, x_wave, a_nscrp, s_nscrp, a_desc);               <*/
    /*---(complete)-----------------------*/
    DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -609,14 +612,14 @@ CODE__display           (cchar a_code [LEN_RECD], char r_display [LEN_RECD], cha
          ystrlcat (x_load, t, LEN_RECD);
          break;
       case  G_KEY_RETURN :
-      /*> case  G_CHAR_RETURN :                                                       <*/
+         /*> case  G_CHAR_RETURN :                                                       <*/
          x_disp [i]  = G_CHAR_RETURN;
          sprintf (t, "\\n");
          ystrlcat (x_syst, t, LEN_RECD);
          ystrlcat (x_load, t, LEN_RECD);
          break;
       case  G_KEY_ESCAPE :
-      /*> case  G_CHAR_ESCAPE :                                                       <*/
+         /*> case  G_CHAR_ESCAPE :                                                       <*/
          x_disp [i]  = G_CHAR_ESCAPE;
          sprintf (t, "\\e");
          ystrlcat (x_syst, t, LEN_RECD);

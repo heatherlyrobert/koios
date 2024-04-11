@@ -127,6 +127,7 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   char        x_proj      [LEN_LABEL]  = "";
    char        x_base      [LEN_TITLE]  = "";
    char        x_unit      [LEN_TITLE]  = "";
    char        x_ext       [LEN_TERSE] = "";
@@ -264,11 +265,21 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
       DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   /*---(get project name)---------------*/
+   p = strchr (x_base, '_');
+   if (p == NULL)  strcpy (x_proj, x_base);
+   else {
+      l = p - x_base;
+      strncpy (x_proj, x_base, l);
+   }
    /*---(check master.h)-----------------*/
    rc = lstat ("master.h", &s);
    DEBUG_ARGS    yLOG_value   ("stat"      , rc);
    if (rc < 0)   system  ("touch master.h");
    /*---(save back)----------------------*/
+   strncpy (my.n_proj, x_proj, LEN_LABEL);
+   /*> printf ("%s\n", my.n_proj);                                                    <*/
+   DEBUG_ARGS  yLOG_info    ("n_proj"    , my.n_proj);
    strncpy (r_base, x_base, LEN_TITLE);
    DEBUG_ARGS  yLOG_info    ("n_base"    , r_base);
    strncpy (r_ext , x_ext , LEN_TERSE);
@@ -287,6 +298,7 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_n
    char        x_runtype   = G_RUN_CREATE;
    char        x_noise     =  '-';
    char        x_replace   = G_RUN_DEFAULT;
+   char        x_proj      [LEN_LABEL]  = "";
    char        x_base      [LEN_TITLE]  = "";
    char        x_ext       [LEN_TERSE] = "";
    int         i           =    0;
@@ -401,6 +413,7 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_n
    if (r_runtype != NULL)  *r_runtype = x_runtype;
    if (r_noise   != NULL)  *r_noise   = x_noise;
    if (r_replace != NULL)  *r_replace = x_replace;
+   if (r_base    != NULL)  ystrlcpy (r_base, x_base, LEN_TITLE);
    if (r_base    != NULL)  ystrlcpy (r_base, x_base, LEN_TITLE);
    if (r_ext     != NULL)  ystrlcpy (r_ext , x_ext , LEN_TERSE);
    /*---(complete)-----------------------*/
