@@ -37,18 +37,18 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4q"
-#define     P_VERTXT    "now creates new WAVE style records when creating a unit test"
+#define     P_VERNUM    "1.4r"
+#define     P_VERTXT    "little better WAVE style record handling after yUNIT update or actuals"
 /*········· ··········· ´·····························´········································*/
 
 /*
- * [0a] [0b] [0c] [0d] [0e]
- * [1a] [1b] [1c] [1d] [1e]
- * [2a] [2b] [2c] [2d] [2e]
- * [3a] [3b] [3c] [3d] [3e]
- * [4a] [4b] [4c] [4d] [4e]
- * [5a] [5b] [5c] [5d] [5e]
- *
+ * [0a] [0b] [0c] [0d] [0e] ...
+ * [1a] [1b] [1c] [1d] [1e] ...
+ * [2a] [2b] [2c] [2d] [2e] ...
+ * [3a] [3b] [3c] [3d] [3e] ...
+ * [4a] [4b] [4c] [4d] [4e] ...
+ * [5a] [5b] [5c] [5d] [5e] ...
+ * ...
  *
  *
  *
@@ -217,6 +217,7 @@
 #include    <yLOG.h>         /* CUSTOM : heatherly program logging            */
 #include    <ySTR.h>         /* CUSTOM : heatherly safer string handling      */
 #include    <yURG.h>         /* CUSTOM : heatherly urgent processing          */
+#include    <yUNIT.h>
 
 
 

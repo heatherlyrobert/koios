@@ -255,6 +255,8 @@ CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [
          REUSE_export ("master.globals");
       }
    }
+   /*---(write wave footer)--------------*/
+   if (r_wave != NULL && *r_wave != NULL)  fprintf (*r_wave, "\n");
    /*---(close files)--------------------*/
    rc = READ_close (r_main);
    rc = READ_close (r_code);
