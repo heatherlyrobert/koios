@@ -223,6 +223,7 @@ CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [
    DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
    DEBUG_OUTP   yLOG_char    ("a_good"    , a_good);
    /*---(polish off scripts)-------------*/
+   if (s_nscrp >  0 && a_cshare == '-')   yUNIT_wave_end (my.f_wave, 0, 1, s_scond, s_sstep);
    CODE__scrp_end          (*r_code, "----", "-----", a_cshare);
    /*---(code endings)-------------------*/
    if (a_good == 'y') {
@@ -375,7 +376,6 @@ CODE_scrp               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
       x_stage = a_stage [1];
    }
    yUNIT_wave_beg (my.n_proj, my.n_base, s_nscrp, a_desc, a_return, x_wave, x_stage, a_test);
-   /*> WAVE_entry  (a_wave, x_stage, x_wave, a_nscrp, s_nscrp, a_desc);               <*/
    /*---(complete)-----------------------*/
    DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -391,6 +391,7 @@ CODE_shared             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
    if (rc < 0)  return rc;
    /*---(end last script)----------------*/
+   if (s_nscrp >  0 && *r_cshare == '-')   yUNIT_wave_end (a_wave, 0, 1, s_scond, s_sstep);
    CODE__scrp_end (a_code, a_last, a_verb, *r_cshare);
    /*---(counters)-----------------------*/
    *r_cshare = a_share;
@@ -416,6 +417,7 @@ CODE_global             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
    if (rc < 0)  return rc;
    /*---(end last script)----------------*/
+   if (s_nscrp >  0 && *r_cshare == '-')   yUNIT_wave_end (a_wave, 0, 1, s_scond, s_sstep);
    CODE__scrp_end (a_code, a_last, a_verb, *r_cshare);
    /*---(counters)-----------------------*/
    *r_cshare = a_share;
@@ -435,6 +437,7 @@ char
 CODE_sect               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
 {
    /*---(end last script)----------------*/
+   if (s_nscrp >  0 && *r_cshare == '-')   yUNIT_wave_end (a_wave, 0, 1, s_scond, s_sstep);
    CODE__scrp_end (a_code, a_last, a_verb, *r_cshare);
    /*---(add section)--------------------*/
    CONV_printf (a_main, "   if (cyUNIT.all          == 1)  yUNIT_sect      (\"%s\");\n", a_desc);
