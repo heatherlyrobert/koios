@@ -1,10 +1,22 @@
 /*===============================[[ beg-code ]]===============================*/
 #include    "koios.h"        /* LOCAL  : main header                          */
 
+/*
+ * location -- what type of unit test file can it appear in...
+ *    m  master.unit only
+ *    n  non-master.unit only
+ *    -  any and all
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 
 
 tVERB       g_verbs [MAX_VERB] = {
-   /* --overall-----   --------------------------------------- ---- ---- scr tst ----conv----    ----code----    ----- */
+   /* --overall-----   --------------------------------------- ---- ---- cnt tot ----conv----    ----code----    ----- */
    { ""             , "overall"                               , '-', '-',  0,  0, NULL          , NULL          ,  '-'  },
    { "PREP"         , "preparation before testing"            , '2', '-',  0,  0, CONV_prep     , NULL          ,  '-'  },
    { "incl"         , "c header inclusion"                    , '3', '-',  0,  0, CONV_incl     , CODE_incl     ,  '-'  },
@@ -82,11 +94,11 @@ VERB_dittoable          (char a_verb [LEN_LABEL])
    /*---(locals)-----------+-----+-----+-*/
    int         i           =    0;
    /*---(header)-------------------------*/
-   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   DEBUG_UVER   yLOG_senter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   DEBUG_INPT   yLOG_spoint  (a_verb);
+   DEBUG_UVER   yLOG_spoint  (a_verb);
    if (a_verb == NULL || a_verb [0] == '\0') {
-      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      DEBUG_UVER   yLOG_sexit   (__FUNCTION__);
       return 0;
    }
    /*---(find verb)----------------------*/
@@ -95,16 +107,16 @@ VERB_dittoable          (char a_verb [LEN_LABEL])
       if (g_verbs [i].name [0] != a_verb [0])         continue;
       if (strcmp (g_verbs [i].name, a_verb) != 0)     continue;
       /*---(save values)-----------------*/
-      DEBUG_INPT   yLOG_snote   ("verb found");
+      DEBUG_UVER   yLOG_snote   ("verb found");
       if (g_verbs [i].ditto == 'y') {
-         DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+         DEBUG_UVER   yLOG_sexit   (__FUNCTION__);
          return 1;
       }
       break;
       /*---(done)------------------------*/
    }
    /*---(complete)-----------------------*/
-   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   DEBUG_UVER   yLOG_sexit   (__FUNCTION__);
    return 0;
 }
 
@@ -124,32 +136,32 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
    char      (*x_conv) (void)  = NULL;
    char      (*x_code) (void)  = NULL;
    /*---(header)-------------------------*/
-   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   DEBUG_UVER   yLOG_senter  (__FUNCTION__);
    /*---(default)------------------------*/
-   if (r_verb  != NULL)  ystrlcpy  (r_verb , "", LEN_LABEL);
+   if (r_verb  != NULL)  strlcpy  (r_verb , "", LEN_LABEL);
    if (r_indx  != NULL)  *r_indx = -1;
    if (r_spec  != NULL)  *r_spec = '-';
    if (r_locn  != NULL)  *r_locn = '-';
    if (r_conv  != NULL)  *r_conv = NULL;
    if (r_code  != NULL)  *r_code = NULL;
    /*---(defense)------------------------*/
-   DEBUG_INPT   yLOG_spoint  (a_nscrp);
+   DEBUG_UVER   yLOG_spoint  (a_nscrp);
    --rce;  if (a_nscrp == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_INPT   yLOG_spoint  (a_field);
+   DEBUG_UVER   yLOG_spoint  (a_field);
    --rce;  if (a_field == NULL || strlen (a_field) <= 0) {
-      yURG_err (YURG_FATAL, "%s:%d:0: error: no verb found (empty or null)", a_nscrp, a_line);
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      /*> yURG_err (YURG_FATAL, "%s:%d:0: error: no verb found (empty or null)", a_nscrp, a_line);   <*/
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(prepare)------------------------*/
-   ystrlcpy  (x_word, a_field, LEN_FULL);
-   ystrltrim (x_word, ySTR_BOTH, LEN_FULL);
+   strlcpy  (x_word, a_field, LEN_FULL);
+   koios_ystr_trim (x_word, LEN_FULL);
    p = strchr (x_word, ' ');
    if (p != NULL)  p [0] = '\0';
-   DEBUG_INPT   yLOG_snote   (x_word);
+   DEBUG_UVER   yLOG_snote   (x_word);
    /*---(find verb)----------------------*/
    for (i = 0; i < MAX_VERB; ++i) {
       if (g_verbs [i].name [0] == '-')                break;
@@ -157,8 +169,8 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
       if (g_verbs [i].name [0] != x_word[0])          continue;
       if (strcmp (g_verbs [i].name, x_word) != 0)     continue;
       /*---(save values)-----------------*/
-      DEBUG_INPT   yLOG_snote   ("verb found");
-      ystrlcpy (x_verb, g_verbs [i].name, LEN_LABEL);
+      DEBUG_UVER   yLOG_snote   ("verb found");
+      strlcpy (x_verb, g_verbs [i].name, LEN_LABEL);
       x_indx  = i;
       x_spec  = g_verbs [i].spec;
       x_locn  = g_verbs [i].files;
@@ -166,44 +178,44 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
       x_code  = g_verbs [i].code;
       ++g_verbs [i].count;
       ++g_verbs [i].total;
-      DEBUG_INPT   yLOG_sint    (g_verbs [i].count);
+      DEBUG_UVER   yLOG_sint    (g_verbs [i].count);
       break;
       /*---(done)------------------------*/
    }
    /*---(failure)------------------------*/
    --rce;  if (x_indx == -1) {
-      yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ not recognized/found", a_nscrp, a_line, x_word);
-      DEBUG_INPT   yLOG_snote   ("verb not found");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      /*> yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ not recognized/found", a_nscrp, a_line, x_word);   <*/
+      DEBUG_UVER   yLOG_snote   ("verb not found");
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(file limitations)---------------*/
    --rce;  if (strcmp (a_nscrp, "master.unit") == 0) {
       if (x_locn == 'n') {
-         DEBUG_INPT   yLOG_snote   ("verb not allowed in master.unit");
-         yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ good, but not allowed inside master.unit", a_nscrp, a_line, x_verb);
-         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         DEBUG_UVER   yLOG_snote   ("verb not allowed in master.unit");
+         /*> yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ good, but not allowed inside master.unit", a_nscrp, a_line, x_verb);   <*/
+         DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
          return rce;
       }
    }
    --rce;  if (strcmp (a_nscrp, "master.unit") != 0) {
       if (x_locn == 'm') {
-         DEBUG_INPT   yLOG_snote   ("verb not allowed outside master.unit");
-         yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ good, but not allowed outside master.unit", a_nscrp, a_line, x_verb);
-         DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+         DEBUG_UVER   yLOG_snote   ("verb not allowed outside master.unit");
+         /*> yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ good, but not allowed outside master.unit", a_nscrp, a_line, x_verb);   <*/
+         DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
          return rce;
       }
    }
    /*---(save-back)----------------------*/
-   if (r_verb  != NULL)  ystrlcpy (r_verb, x_verb, LEN_LABEL);
+   if (r_verb  != NULL)  strlcpy (r_verb, x_verb, LEN_LABEL);
    if (r_indx  != NULL)  *r_indx = x_indx;
    if (r_spec  != NULL)  *r_spec = x_spec;
    if (r_locn  != NULL)  *r_locn = x_locn;
    if (r_conv  != NULL)  *r_conv = x_conv;
    if (r_code  != NULL)  *r_code = x_code;
    /*---(complete)-----------------------*/
-   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
-   return 0;
+   DEBUG_UVER   yLOG_sexit   (__FUNCTION__);
+   return 1;
 }
 
 char

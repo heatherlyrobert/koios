@@ -1,9 +1,13 @@
 /*===============================[[ beg-code ]]===============================*/
 #include    "koios.h"        /* LOCAL  : main header                          */
 
+#include    <yLOG_uver.h>
+
 /*> tDEBUG      debug;                                                                <*/
 tGLOBALS    my;
 
+
+char    g_print     [LEN_RECD] = "";
 
 
 /*====================------------------------------------====================*/
@@ -40,19 +44,17 @@ char       /*----: very first setup ------------------s-----------------------*/
 PROG__header            (void)
 {
    /*---(header)----------------------*/
-   DEBUG_PROG   yLOG_enter (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter(__FUNCTION__);
    /*---(versioning)------------------*/
-   DEBUG_PROG   yLOG_info     ("gregg"   , PROG_version      ());
-   DEBUG_PROG   yLOG_info     ("purpose" , P_PURPOSE);
-   DEBUG_PROG   yLOG_info     ("namesake", P_NAMESAKE);
-   DEBUG_PROG   yLOG_info     ("heritage", P_HERITAGE);
-   DEBUG_PROG   yLOG_info     ("imagery" , P_IMAGERY);
-   DEBUG_PROG   yLOG_note     ("custom core");
-   DEBUG_PROG   yLOG_info     ("yURG"    , yURG_version      ());
-   DEBUG_PROG   yLOG_info     ("yLOG"    , yLOGS_version     ());
-   DEBUG_PROG   yLOG_info     ("ySTR"    , ySTR_version      ());
+   DEBUG_UVER   yLOG_uinfo    ("gregg"   , PROG_version      ());
+   DEBUG_UVER   yLOG_uinfo    ("purpose" , P_PURPOSE);
+   DEBUG_UVER   yLOG_uinfo    ("namesake", P_NAMESAKE);
+   DEBUG_UVER   yLOG_uinfo    ("heritage", P_HERITAGE);
+   DEBUG_UVER   yLOG_uinfo    ("imagery" , P_IMAGERY);
+   DEBUG_UVER   yLOG_unote    ("custom core");
+   DEBUG_UVER   yLOG_uinfo    ("yUNIT"   , yUNIT_version     ());
    /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_exit  (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit (__FUNCTION__);
    return 0;
 }
 
@@ -62,27 +64,16 @@ PROG_urgents            (int a_argc, char *a_argv [])
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
-   /*---(set mute)-----------------------*/
-   yURG_all_mute ();
    /*---(start logger)-------------------*/
-   rc = yURG_logger  (a_argc, a_argv);
-   DEBUG_PROG   yLOG_value    ("logger"    , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(process urgents)----------------*/
-   rc = yURG_urgs    (a_argc, a_argv);
-   DEBUG_PROG   yLOG_value    ("logger"    , rc);
-   --rce;  if (rc < 0) {
-      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
-      return rce;
+   my.debug = '-';
+   if (strcmp (a_argv [0], "koios_debug") == 0) {
+      my.debug = 'y';
    }
    /*---(process urgents)----------------*/
    rc = PROG__header ();
-   DEBUG_PROG   yLOG_value    ("header"    , rc);
+   DEBUG_UVER   yLOG_uvalue   ("header"    , rc);
    --rce;  if (rc < 0) {
-      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(complete)-----------------------*/
@@ -100,15 +91,15 @@ char         /*--> shutdown program ----------------------[ ------ [ ------ ]-*/
 PROG__init              (void)
 {
    /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(files)--------------------------*/
-   ystrlcpy  (my.n_scrp, "", LEN_TITLE);  my.f_scrp = NULL;
-   ystrlcpy  (my.n_code, "", LEN_TITLE);  my.f_code = NULL;
-   ystrlcpy  (my.n_main, "", LEN_TITLE);  my.f_main = NULL;
-   ystrlcpy  (my.n_wave, "", LEN_TITLE);  my.f_wave = NULL;
-   ystrlcpy  (my.n_conv, "", LEN_TITLE);  my.f_conv = NULL;
+   strlcpy  (my.n_scrp, "", LEN_TITLE);  my.f_scrp = NULL;
+   strlcpy  (my.n_code, "", LEN_TITLE);  my.f_code = NULL;
+   strlcpy  (my.n_main, "", LEN_TITLE);  my.f_main = NULL;
+   strlcpy  (my.n_wave, "", LEN_TITLE);  my.f_wave = NULL;
+   strlcpy  (my.n_conv, "", LEN_TITLE);  my.f_conv = NULL;
    my.driver = '-';
-   ystrlcpy  (my.last     , "", LEN_LABEL);
+   strlcpy  (my.last     , "", LEN_LABEL);
    my.noise = '-';
    VERB_init  ();
    DITTO_init ();
@@ -117,7 +108,7 @@ PROG__init              (void)
    CONV_init  ();
    getcwd (my.cwd, LEN_PATH);
    /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -139,54 +130,54 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
    tSTAT       r;
    char        t           [LEN_FULL]  = "";
    /*---(header)-------------------------*/
-   DEBUG_ARGS   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(default)------------------------*/
    if (r_base != NULL)  strcpy (r_base, "");
    if (r_ext  != NULL)  strcpy (r_ext , "");
    /*---(defense)------------------------*/
-   DEBUG_ARGS  yLOG_point   ("a_name"    , a_name);
+   DEBUG_UVER  yLOG_upoint  ("a_name"    , a_name);
    --rce;  if (a_name == NULL) {
-      yURG_err ('f', "script name can not be null");
-      DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
+      /*> yURG_err ('f', "script name can not be null");                              <*/
+      DEBUG_UVER  yLOG_uexitr(__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_ARGS  yLOG_info    ("a_name"    , a_name);
-   DEBUG_ARGS  yLOG_point   ("r_base"    , r_base);
+   DEBUG_UVER  yLOG_uinfo   ("a_name"    , a_name);
+   DEBUG_UVER  yLOG_upoint  ("r_base"    , r_base);
    --rce;  if (r_base == NULL) {
-      DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
+      DEBUG_UVER  yLOG_uexitr(__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_ARGS  yLOG_point   ("r_ext"     , r_ext);
+   DEBUG_UVER  yLOG_upoint  ("r_ext"     , r_ext);
    --rce;  if (r_ext  == NULL) {
-      DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
+      DEBUG_UVER  yLOG_uexitr(__FUNCTION__, rce);
       return rce;
    }
    /*---(check length)-------------------*/
    l = strlen (a_name);
-   DEBUG_ARGS  yLOG_value   ("l"         , l);
+   DEBUG_UVER  yLOG_uvalue  ("l"         , l);
    --rce;  if (l <= 0) {
-      yURG_err ('f', "script name can not be blank/empty");
-      DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
+      /*> yURG_err ('f', "script name can not be blank/empty");                       <*/
+      DEBUG_UVER  yLOG_uexitr(__FUNCTION__, rce);
       return rce;
    }
    /*---(check for path)-----------------*/
    --rce;  if (strchr (a_name, '/') != NULL) {
-      yURG_err ('f', "script name ¶%s¶ can not include a path (abs or rel)", a_name);
-      DEBUG_ARGS   yLOG_exitr   (__FUNCTION__, rce);
+      /*> yURG_err ('f', "script name ¶%s¶ can not include a path (abs or rel)", a_name);   <*/
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(check for hidden)---------------*/
    --rce;  if (a_name [0] == '.') {
-      yURG_err ('f', "script name ¶%s¶ can not be hidden file (.)", a_name);
-      DEBUG_ARGS   yLOG_exitr   (__FUNCTION__, rce);
+      /*> yURG_err ('f', "script name ¶%s¶ can not be hidden file (.)", a_name);      <*/
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(check characters)---------------*/
    --rce;  for (i = 0; i < l; ++i) {
       if (strchr (YSTR_ALNUM "_.", a_name [i]) != NULL)  continue;
-      yURG_err ('f', "script name ¶%s¶ can not have a '%c' as character %d", a_name, a_name [i], i);
-      DEBUG_ARGS  yLOG_char  ("bad char"  , a_name [i]);
-      DEBUG_ARGS  yLOG_exitr (__FUNCTION__, rce);
+      /*> yURG_err ('f', "script name ¶%s¶ can not have a '%c' as character %d", a_name, a_name [i], i);   <*/
+      DEBUG_UVER  yLOG_uchar ("bad char"  , a_name [i]);
+      DEBUG_UVER  yLOG_uexitr(__FUNCTION__, rce);
       return rce;
    }
    /*---(check for extentions)-----------*/
@@ -197,18 +188,18 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
    if (p != NULL)   p [0] = '\0';
    /*---(check unit file)----------------*/
    sprintf (x_unit, "%s.unit", x_base);
-   DEBUG_ARGS    yLOG_value   ("x_unit"    , rc);
+   DEBUG_UVER    yLOG_uvalue  ("x_unit"    , rc);
    rc = lstat (x_unit, &s);
-   DEBUG_ARGS    yLOG_value   ("stat"      , rc);
+   DEBUG_UVER    yLOG_uvalue  ("stat"      , rc);
    --rce;  if (rc < 0) {
       sprintf (x_unit, "%s.sunit", x_base);
-      DEBUG_ARGS    yLOG_value   ("x_unit"    , rc);
+      DEBUG_UVER    yLOG_uvalue  ("x_unit"    , rc);
       rc = lstat (x_unit, &s);
-      DEBUG_ARGS    yLOG_value   ("stat"      , rc);
+      DEBUG_UVER    yLOG_uvalue  ("stat"      , rc);
       if (rc < 0) {
-         yURG_err ('f', "script name ¶%s¶ can not be found as .unit or .sunit", a_name);
-         DEBUG_ARGS    yLOG_note    ("can not find source either .unit or .sunit");
-         DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
+         /*> yURG_err ('f', "script name ¶%s¶ can not be found as .unit or .sunit", a_name);   <*/
+         DEBUG_UVER    yLOG_unote   ("can not find source either .unit or .sunit");
+         DEBUG_UVER    yLOG_uexitr (__FUNCTION__, rce);
          return rce;
       } else {
          strcpy (x_ext, ".sunit");
@@ -217,52 +208,52 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
       strcpy (x_ext, ".unit");
    }
    --rce;  if (S_ISDIR (s.st_mode))  {
-      yURG_err ('f', "script name ¶%s¶ refers to a directory, illegal", a_name);
-      DEBUG_ARGS    yLOG_note    ("can not use a directory");
-      DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
+      /*> yURG_err ('f', "script name ¶%s¶ refers to a directory, illegal", a_name);   <*/
+      DEBUG_UVER    yLOG_unote   ("can not use a directory");
+      DEBUG_UVER    yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    --rce;  if (S_ISLNK (s.st_mode))  {
-      DEBUG_ARGS    yLOG_note    ("is a link, figure it out");
+      DEBUG_UVER    yLOG_unote   ("is a link, figure it out");
       if (strcmp (x_ext, ".sunit") == 0) {
-         yURG_err ('f', "script name ¶%s¶ is a .sunit can can not be a symlink", a_name);
+         /*> yURG_err ('f', "script name ¶%s¶ is a .sunit can can not be a symlink", a_name);   <*/
          printf ("FATAL, .sunit can not be a symlink\n");
-         DEBUG_ARGS    yLOG_note    ("can not use a symlink");
-         DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
+         DEBUG_UVER    yLOG_unote   ("can not use a symlink");
+         DEBUG_UVER    yLOG_uexitr  (__FUNCTION__, rce);
          return rce;
       } else {
          rc = readlink (x_unit, t, LEN_FULL);
-         DEBUG_ARGS    yLOG_value   ("readlink"  , rc);
+         DEBUG_UVER    yLOG_uvalue  ("readlink"  , rc);
          if (rc < 0) {
-            DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
+            DEBUG_UVER    yLOG_uexitr (__FUNCTION__, rce);
             return rce;
          }
-         DEBUG_ARGS  yLOG_info    ("t"         , t);
+         DEBUG_UVER  yLOG_uinfo   ("t"         , t);
          l = strlen (t);
-         DEBUG_ARGS  yLOG_value   ("l"         , l);
+         DEBUG_UVER  yLOG_uvalue  ("l"         , l);
          if (l < 7) {
-            DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
+            DEBUG_UVER    yLOG_uexitr (__FUNCTION__, rce);
             return rce;
          }
-         DEBUG_ARGS  yLOG_info    ("suffix"    , t + l - 6);
+         DEBUG_UVER  yLOG_uinfo   ("suffix"    , t + l - 6);
          if (strcmp (t + l - 6, ".sunit") != 0) {
-            yURG_err ('f', "script name ¶%s¶ is a symlink to ¶%s¶, only .sunit is legal", a_name, t);
-            DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
+            /*> yURG_err ('f', "script name ¶%s¶ is a symlink to ¶%s¶, only .sunit is legal", a_name, t);   <*/
+            DEBUG_UVER    yLOG_uexitr (__FUNCTION__, rce);
             return rce;
          }
          rc = stat (t, &r);
-         DEBUG_ARGS    yLOG_value   ("stat"      , rc);
+         DEBUG_UVER    yLOG_uvalue  ("stat"      , rc);
          if (rc < 0) {
-            yURG_err ('f', "script name ¶%s¶ is a symlink to .sunit ¶%s¶, but source does not exist", a_name, t);
-            DEBUG_ARGS    yLOG_exitr  (__FUNCTION__, rce);
+            /*> yURG_err ('f', "script name ¶%s¶ is a symlink to .sunit ¶%s¶, but source does not exist", a_name, t);   <*/
+            DEBUG_UVER    yLOG_uexitr (__FUNCTION__, rce);
             return rce;
          }
       }
    }
    else if (!S_ISREG (s.st_mode)) {
-      yURG_err ('f', "script name ¶%s¶ is not a regular file, illegal", a_name);
-      DEBUG_ARGS    yLOG_note    ("can only use regular file");
-      DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
+      /*> yURG_err ('f', "script name ¶%s¶ is not a regular file, illegal", a_name);   <*/
+      DEBUG_UVER    yLOG_unote   ("can only use regular file");
+      DEBUG_UVER    yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(get project name)---------------*/
@@ -274,18 +265,18 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
    }
    /*---(check master.h)-----------------*/
    rc = lstat ("master.h", &s);
-   DEBUG_ARGS    yLOG_value   ("stat"      , rc);
+   DEBUG_UVER    yLOG_uvalue  ("stat"      , rc);
    if (rc < 0)   system  ("touch master.h");
    /*---(save back)----------------------*/
    strncpy (my.n_proj, x_proj, LEN_LABEL);
    /*> printf ("%s\n", my.n_proj);                                                    <*/
-   DEBUG_ARGS  yLOG_info    ("n_proj"    , my.n_proj);
+   DEBUG_UVER  yLOG_uinfo   ("n_proj"    , my.n_proj);
    strncpy (r_base, x_base, LEN_TITLE);
-   DEBUG_ARGS  yLOG_info    ("n_base"    , r_base);
+   DEBUG_UVER  yLOG_uinfo   ("n_base"    , r_base);
    strncpy (r_ext , x_ext , LEN_TERSE);
-   DEBUG_ARGS  yLOG_info    ("n_ext"     , r_ext);
+   DEBUG_UVER  yLOG_uinfo   ("n_ext"     , r_ext);
    /*---(complete)-----------------------*/
-   DEBUG_ARGS   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -306,17 +297,17 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_n
    int         x_total     =    0;
    int         x_args      =    0;
    /*---(begin)--------------------------*/
-   DEBUG_PROG  yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER  yLOG_uenter  (__FUNCTION__);
    /*---(default)------------------------*/
    if (r_runtype != NULL)  *r_runtype = '·';
    if (r_replace != NULL)  *r_replace = '·';
    if (r_base    != NULL)  strcpy (r_base, "");
    if (r_ext     != NULL)  strcpy (r_ext , "");
-   yURG_all_off ();
+   /*> yURG_all_off ();                                                               <*/
    /*---(defenses)-----------------------*/
-   DEBUG_ARGS  yLOG_point   ("a_argv" , a_argv);
+   DEBUG_UVER  yLOG_upoint  ("a_argv" , a_argv);
    --rce;  if (a_argv == NULL) {
-      DEBUG_ARGS    yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_UVER    yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(process)------------------------*/
@@ -324,7 +315,7 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_n
       a = a_argv[i];
       ++x_total;
       if (a[0] == '@')  continue;
-      DEBUG_ARGS  yLOG_info    ("cli arg", a);
+      DEBUG_UVER  yLOG_uinfo   ("cli arg", a);
       ++x_args;
       /*---(better testing)--------------*/
       if      (strncmp (a, "--verify"     , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_noise = '-'; }
@@ -359,53 +350,53 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_n
       else if (strncmp (a, "--update"     , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_replace = G_RUN_REPLACE; }
       /*---(unknown arg)-----------------*/
       else if (strncmp (a, "-"            ,  1) == 0)  {
-         yURG_err ('f', "argument ¶%s¶ is not recognized", a);
-         DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce);
+         /*> yURG_err ('f', "argument ¶%s¶ is not recognized", a);                    <*/
+         DEBUG_UVER  yLOG_uexitr (__FUNCTION__, rce);
          return rce;
       }
       /*---(file name)-------------------*/
       else {
          rc = PROG__file (a, x_base, x_ext);
          if (rc < 0) {
-            DEBUG_PROG  yLOG_note   ("base name is invalid or not found");
-            DEBUG_PROG  yLOG_exitr  (__FUNCTION__, rce);
+            DEBUG_UVER  yLOG_unote  ("base name is invalid or not found");
+            DEBUG_UVER  yLOG_uexitr (__FUNCTION__, rce);
             return rce;
          }
       }
       /*---(set noise)----------------------*/
       switch (x_noise) {
       case 'E' : 
-         yURG_err_tmp  (); yURG_err_live (); yURG_err_clear ();
+         /*> yURG_err_tmp  (); yURG_err_live (); yURG_err_clear ();                   <*/
          break;
       case 'e' : 
-         yURG_err_std  (); yURG_err_live (); yURG_err_clear ();
+         /*> yURG_err_std  (); yURG_err_live (); yURG_err_clear ();                   <*/
          break;
       case 'v' : 
-         yURG_msg_std  (); yURG_msg_live (); yURG_msg_clear ();
-         yURG_err_std  (); yURG_err_live (); yURG_err_clear ();
+         /*> yURG_msg_std  (); yURG_msg_live (); yURG_msg_clear ();                   <*/
+         /*> yURG_err_std  (); yURG_err_live (); yURG_err_clear ();                   <*/
          break;
       }
       /*---(done)------------------------*/
    }
-   DEBUG_ARGS  yLOG_value  ("entries"   , x_total);
-   DEBUG_ARGS  yLOG_value  ("arguments" , x_args);
+   DEBUG_UVER  yLOG_uvalue ("entries"   , x_total);
+   DEBUG_UVER  yLOG_uvalue ("arguments" , x_args);
    if (x_args == 0) {
-      DEBUG_ARGS  yLOG_note   ("no arguments identified");
+      DEBUG_UVER  yLOG_unote  ("no arguments identified");
    }
-   DEBUG_ARGS  yLOG_char   ("run_type"  , x_runtype);
-   DEBUG_ARGS  yLOG_info   ("basename"  , x_base);
+   DEBUG_UVER  yLOG_uchar  ("run_type"  , x_runtype);
+   DEBUG_UVER  yLOG_uinfo  ("basename"  , x_base);
    /*---(defense)------------------------*/
-   DEBUG_PROG   yLOG_info    ("basename"  , x_base);
+   DEBUG_UVER   yLOG_uinfo   ("basename"  , x_base);
    --rce;  if (strcmp (x_base, "") == 0) {
-      yURG_err ('f', "script name/base was not provided on command line");
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      /*> yURG_err ('f', "script name/base was not provided on command line");        <*/
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(defense)------------------------*/
    --rce;  if (strcmp (x_ext, ".sunit") == 0) {
       if (x_runtype != G_RUN_UPDATE) {
-         yURG_err ('f', "can not compile ¶%s¶ as .sunit, must compile in linked .unit location", x_base);
-         DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+         /*> yURG_err ('f', "can not compile ¶%s¶ as .sunit, must compile in linked .unit location", x_base);   <*/
+         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
          return rce;
       }
    }
@@ -413,11 +404,11 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_n
    if (r_runtype != NULL)  *r_runtype = x_runtype;
    if (r_noise   != NULL)  *r_noise   = x_noise;
    if (r_replace != NULL)  *r_replace = x_replace;
-   if (r_base    != NULL)  ystrlcpy (r_base, x_base, LEN_TITLE);
-   if (r_base    != NULL)  ystrlcpy (r_base, x_base, LEN_TITLE);
-   if (r_ext     != NULL)  ystrlcpy (r_ext , x_ext , LEN_TERSE);
+   if (r_base    != NULL)  strlcpy (r_base, x_base, LEN_TITLE);
+   if (r_base    != NULL)  strlcpy (r_base, x_base, LEN_TITLE);
+   if (r_ext     != NULL)  strlcpy (r_ext , x_ext , LEN_TERSE);
    /*---(complete)-----------------------*/
-   DEBUG_PROG  yLOG_exit  (__FUNCTION__);
+   DEBUG_UVER  yLOG_uexit (__FUNCTION__);
    return 0;
 }
 
@@ -427,7 +418,7 @@ PROG__begin             (void)
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(create names)-------------------*/
    snprintf (my.n_scrp, LEN_TITLE, "%s%s"            , my.n_base, my.n_ext);
    snprintf (my.n_main, LEN_TITLE, "%s_unit.tmp"     , my.n_base);
@@ -443,7 +434,7 @@ PROG__begin             (void)
    my.dmark     = '-';
    my.ditto     = -1;
    /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -454,32 +445,32 @@ PROG_startup            (int a_argc, char *a_argv [])
    char        rce         =  -10;
    char        rc          =    0;
    /*---(header)----------------------*/
-   yURG_stage_check (YURG_BEG);
-   DEBUG_PROG  yLOG_enter   (__FUNCTION__);
+   /*> yURG_stage_check (YURG_BEG);                                                   <*/
+   DEBUG_UVER  yLOG_uenter  (__FUNCTION__);
    /*---(initialize)---------------------*/
    rc = PROG__init   ();
-   DEBUG_PROG   yLOG_value    ("init"      , rc);
+   DEBUG_UVER   yLOG_uvalue   ("init"      , rc);
    --rce;  if (rc < 0) {
-      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(arguments)----------------------*/
    rc = PROG__args   (a_argc, a_argv, &(my.run_type), &(my.noise), &(my.replace), my.n_base, my.n_ext);
-   DEBUG_PROG   yLOG_value    ("args"      , rc);
+   DEBUG_UVER   yLOG_uvalue   ("args"      , rc);
    --rce;  if (rc < 0) {
-      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(begin)--------------------------*/
    rc = PROG__begin  ();
-   DEBUG_PROG   yLOG_value    ("begin"     , rc);
+   DEBUG_UVER   yLOG_uvalue   ("begin"     , rc);
    --rce;  if (rc < 0) {
-      DEBUG_PROG   yLOG_exitr    (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr   (__FUNCTION__, rce);
       return rce;
    }
    /*---(complete)-----------------------*/
-   DEBUG_PROG  yLOG_exit  (__FUNCTION__);
-   yURG_stage_check (YURG_MID);
+   DEBUG_UVER  yLOG_uexit (__FUNCTION__);
+   /*> yURG_stage_check (YURG_MID);                                                   <*/
    return rc;
 }
 
@@ -497,13 +488,13 @@ PROG_dawn                (cchar a_runtype, cchar a_nscrp [LEN_TITLE], FILE **r_s
    char        rce         =  -10;
    char        rc          =    0;
    /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(open incomming script)----------*/
    rc = READ_open      (a_nscrp, 'r', r_scrp, r_line);
-   DEBUG_PROG   yLOG_value   ("script"    , rc);
+   DEBUG_UVER   yLOG_uvalue  ("script"    , rc);
    --rce;  if (rc < 0) {
       PROG_shutdown ();
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(open output files)--------------*/
@@ -517,11 +508,11 @@ PROG_dawn                (cchar a_runtype, cchar a_nscrp [LEN_TITLE], FILE **r_s
    default  :
       READ_close (r_scrp);
       PROG_shutdown ();
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
       break;
    }
-   DEBUG_PROG   yLOG_value   ("output"    , rc);
+   DEBUG_UVER   yLOG_uvalue  ("output"    , rc);
    --rce;  if (rc <  0) {
       READ_close (r_scrp);
       PROG_shutdown ();
@@ -530,7 +521,7 @@ PROG_dawn                (cchar a_runtype, cchar a_nscrp [LEN_TITLE], FILE **r_s
    /*---(open output files)--------------*/
    if (strcmp (a_nscrp, "master.unit") != 0) {
       rc = REUSE_import  ("master.globals");
-      DEBUG_PROG   yLOG_value   ("globals"   , rc);
+      DEBUG_UVER   yLOG_uvalue  ("globals"   , rc);
       /*> --rce;  if (rc <  0) {                                                      <* 
        *>    READ_close (r_scrp);                                                     <* 
        *>    READ_close (r_main);                                                     <* 
@@ -541,19 +532,19 @@ PROG_dawn                (cchar a_runtype, cchar a_nscrp [LEN_TITLE], FILE **r_s
        *> }                                                                           <*/
    }
    /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
 PROG_terminate           (FILE **r_scrp, FILE **r_main, FILE **r_code, FILE **r_wave, FILE **r_conv)
 {
-   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    READ_close (r_scrp);
    READ_close (r_main);
    READ_close (r_code);
    READ_close (r_wave);
-   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    PROG_shutdown ();
    return 0;
 }
@@ -578,33 +569,33 @@ PROG_driver              (char a_good, cchar a_runtype, cchar a_nscrp [LEN_TITLE
    char      (*p_conv) (void);
    char      (*p_code) (void);
    /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(defaulting)------------------*/
    rc = PARSE_default (my.verb, &(my.spec), &(my.p_conv), &(my.p_code), my.stage, &(my.vers), my.desc, my.meth, my.args, my.test, my.expe, my.retn, &(my.mark), &(my.share));
    /*---(read next)-------------------*/
    rc = READ_next     (b_scrp, r_nline, r_dittoing, r_dmark, r_ditto, r_dline, r_nrecd, x_recd);
-   DEBUG_PROG   yLOG_value   ("read"      , rc);
+   DEBUG_UVER   yLOG_uvalue  ("read"      , rc);
    if (rc == 0) {
-      DEBUG_PROG   yLOG_note    ("end of file");
-      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+      DEBUG_UVER   yLOG_unote   ("end of file");
+      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
       return 0;
    }
    --rce;  if (rc < 0)  {
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(check flow)------------------*/
    rc = PARSE_prep    (b_scrp, a_nscrp, *r_nline, a_runtype, x_recd, x_verb, &x_spec, &p_conv, &p_code, x_stage, &x_vers, x_desc, x_expe, r_dittoing, r_mark, r_dmark, r_ditto, r_dline, r_share, r_cshare);
-   DEBUG_PROG   yLOG_value   ("flow"      , rc);
+   DEBUG_UVER   yLOG_uvalue  ("flow"      , rc);
    --rce;  if (rc < 0)  {
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(parse)-----------------------*/
    rc = PARSE_driver  (a_nscrp, *r_nline, x_vers, x_verb, x_spec, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn);
-   DEBUG_PROG   yLOG_value   ("parse"     , rc);
+   DEBUG_UVER   yLOG_uvalue  ("parse"     , rc);
    --rce;  if (rc < 0)  {
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(write output)----------------*/
@@ -617,30 +608,30 @@ PROG_driver              (char a_good, cchar a_runtype, cchar a_nscrp [LEN_TITLE
          rc = CODE_driver (p_code, a_nscrp, a_main, a_code, a_wave, a_runtype, b_last, x_verb, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_stage, *r_dittoing, *r_mark, *r_dmark, *r_nline, *r_dline, *r_share, r_cshare);
          break;
       }
-      DEBUG_PROG   yLOG_value   ("output"    , rc);
+      DEBUG_UVER   yLOG_uvalue  ("output"    , rc);
       --rce;  if (rc < 0)  {
-         DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
          return rce;
       }
    }
    /*---(save last)-------------------*/
-   if (strcmp (x_verb, "DITTO") != 0)  ystrlcpy (b_last, x_verb, LEN_LABEL);
+   if (strcmp (x_verb, "DITTO") != 0)  strlcpy (b_last, x_verb, LEN_LABEL);
    /*---(save-back)-------------------*/
-   ystrlcpy (my.recd  , x_recd    , LEN_RECD);
-   ystrlcpy (my.verb  , x_verb    , LEN_LABEL);
+   strlcpy (my.recd  , x_recd    , LEN_RECD);
+   strlcpy (my.verb  , x_verb    , LEN_LABEL);
    my.spec     = x_spec;
    my.p_conv   = p_conv;
    my.p_code   = p_code;
-   ystrlcpy (my.stage , x_stage   , LEN_LABEL);
+   strlcpy (my.stage , x_stage   , LEN_LABEL);
    my.vers     = x_vers;
-   ystrlcpy (my.desc  , x_desc    , LEN_LONG);
-   ystrlcpy (my.meth  , x_meth    , LEN_HUND);
-   ystrlcpy (my.args  , x_args    , LEN_FULL);
-   ystrlcpy (my.test  , x_test    , LEN_LABEL);
-   ystrlcpy (my.expe  , x_expe    , LEN_RECD);
-   ystrlcpy (my.retn  , x_retn    , LEN_FULL);
+   strlcpy (my.desc  , x_desc    , LEN_LONG);
+   strlcpy (my.meth  , x_meth    , LEN_HUND);
+   strlcpy (my.args  , x_args    , LEN_FULL);
+   strlcpy (my.test  , x_test    , LEN_LABEL);
+   strlcpy (my.expe  , x_expe    , LEN_RECD);
+   strlcpy (my.retn  , x_retn    , LEN_FULL);
    /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 1;
 }
 
@@ -652,7 +643,7 @@ PROG_dusk                (char a_good, cchar a_runtype, cchar a_replace, cchar a
    char        rc          =    0;
    char        t           [LEN_RECD]  = "";
    /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(close files)--------------------*/
    rc = READ_close     (r_scrp);
    switch (a_runtype) {
@@ -663,7 +654,7 @@ PROG_dusk                (char a_good, cchar a_runtype, cchar a_replace, cchar a
       rc = CONV_footer  (a_good, r_conv, a_nscrp, a_nconv);
       break;
    }
-   DEBUG_PROG   yLOG_value   ("footer"    , rc);
+   DEBUG_UVER   yLOG_uvalue  ("footer"    , rc);
    --rce;  if (rc <  0) {
       PROG_shutdown ();
       return rc;
@@ -677,7 +668,7 @@ PROG_dusk                (char a_good, cchar a_runtype, cchar a_replace, cchar a
       system  (t);
    }
    /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -692,8 +683,8 @@ static void  o___WRAPUP__________o () { return; }
 char                /* PURPOSE : shutdown program and free memory ------------*/
 PROG__end          (void)
 {
-   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
-   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -701,13 +692,13 @@ char             /* [------] drive the program closure activities ------------*/
 PROG_shutdown           (void)
 {
    /*---(stage-check)--------------------*/
-   yURG_stage_check (YURG_END);
+   /*> yURG_stage_check (YURG_END);                                                   <*/
    /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_enter    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter   (__FUNCTION__);
    PROG__end ();
    /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_exit     (__FUNCTION__);
-   DEBUG_PROG   yLOGS_end    ();
+   DEBUG_UVER   yLOG_uexit    (__FUNCTION__);
+   DEBUG_UVER   yLOGS_end    ();
    return 0;
 }
 
@@ -729,14 +720,14 @@ PROG__unit_quiet   (void)
    system ("touch apate.unit           2> /dev/null");
    /*---(debugging)----------------------*/
    rc = PROG_urgents (x_argc, x_argv);
-   DEBUG_PROG   yLOG_value    ("urgents"   , rc);
+   DEBUG_UVER   yLOG_uvalue   ("urgents"   , rc);
    --rce;  if (rc <  0) { 
       PROG_shutdown ();
       return rce;
    }
    /*---(initialization)-----------------*/
    rc = PROG_startup (x_argc, x_argv);
-   DEBUG_PROG   yLOG_value    ("startup"   , rc);
+   DEBUG_UVER   yLOG_uvalue   ("startup"   , rc);
    --rce;  if (rc <  0) {
       PROG_shutdown ();
       return rce;
@@ -756,14 +747,14 @@ PROG__unit_loud    (void)
    system ("touch apate.unit           2> /dev/null");
    /*---(debugging)----------------------*/
    rc = PROG_urgents (x_argc, x_argv);
-   DEBUG_PROG   yLOG_value    ("urgents"   , rc);
+   DEBUG_UVER   yLOG_uvalue   ("urgents"   , rc);
    --rce;  if (rc <  0) { 
       PROG_shutdown ();
       return rce;
    }
    /*---(initialization)-----------------*/
    rc = PROG_startup (x_argc, x_argv);
-   DEBUG_PROG   yLOG_value    ("startup"   , rc);
+   DEBUG_UVER   yLOG_uvalue   ("startup"   , rc);
    --rce;  if (rc <  0) {
       PROG_shutdown ();
       return rce;

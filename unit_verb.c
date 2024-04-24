@@ -1,0 +1,382 @@
+/*===============================[[ beg-code ]]===============================*/
+#include    "koios.h"
+
+#include    <yUNIT_solo.h>
+#include    <ySTR_solo.h>
+#include    <yCOLOR_solo.h>
+
+
+char  *s_wave     = "/tmp/master.wave";
+
+char
+unit_verb_parse          (void)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        x_unit      [LEN_LABEL] = "apate.unit";
+   char        x_mast      [LEN_LABEL] = "master.unit";
+   char        x_verb      [LEN_LABEL] = "";
+   char        x_index     =  '·';
+   char        x_spec      =  '·';
+   char        x_locn      =  '·';
+   void       *x_code      = NULL;
+   void       *x_conv      = NULL;
+   /*---(header)-------------------------*/
+   yUNIT_minscrpy ("koios", "koios_verb", "(VERB) parse verb information");
+   /*> yURG_err_none  ();  /+ not to stderr/terminal +/                               <*/
+   PROG__unit_quiet  ();
+
+   yUNIT_mincond  ("verify quick success");
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_minval   ("parse verb"                         , VERB_parse  (x_unit,  1, "SCRP        ", x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1   );
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "SCRP");
+   yUNIT_minval   ("... check index"                    , x_index     , 5);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , 's');
+   yUNIT_minchr   ("... check location"                 , x_locn      , 'n');
+   yUNIT_minpoint ("... check conv"                     , x_conv      , CONV_scrp);
+   yUNIT_minpoint ("... check code"                     , x_code      , CODE_scrp);
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");   <*/
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt a missing verb");
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_minval   ("parse verb"                         , VERB_parse  (x_unit, 25, "handler     ", x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), -999);
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "");
+   yUNIT_minval   ("... check index"                    , x_index     , -1);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , '-');
+   yUNIT_minchr   ("... check location"                 , x_locn      , '-');
+   yUNIT_minpoint ("... check conv"                     , x_conv      , 0);
+   yUNIT_minpoint ("... check code"                     , x_code      , 0);
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "apate.unit:25:0: error: verb ¶handler¶ not recognized/found");   <*/
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify SCRP with stage data");
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_minval   ("parse verb"                         , VERB_parse  (x_unit,  1, "SCRP    [1a]", x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1   );
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "SCRP");
+   yUNIT_minval   ("... check index"                    , x_index     , 5);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , 's');
+   yUNIT_minchr   ("... check location"                 , x_locn      , 'n');
+   yUNIT_minpoint ("... check conv"                     , x_conv      , CONV_scrp);
+   yUNIT_minpoint ("... check code"                     , x_code      , CODE_scrp);
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");   <*/
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt with null unit");
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_minval   ("parse verb"                         , VERB_parse  (NULL             ,  1, "SCRP        ", x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), -999);
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "");
+   yUNIT_minval   ("... check index"                    , x_index     , -1);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , '-');
+   yUNIT_minchr   ("... check location"                 , x_locn      , '-');
+   yUNIT_minpoint ("... check conv"                     , x_conv      , 0);
+   yUNIT_minpoint ("... check code"                     , x_code      , 0);
+   yUNIT_mindnoc  ();
+
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_mincond  ("verify parsing a COND verb");
+   yUNIT_minval   ("parse COND"                         , VERB_parse (x_unit , 10, " COND"      , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1);
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "COND");
+   yUNIT_minval   ("... check index"                    , x_index     , 999);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , '2');
+   yUNIT_minchr   ("... check location"                 , x_locn      , '-');
+   yUNIT_minpoint ("... check conv pointer"             , x_conv      , CONV_cond);
+   yUNIT_minpoint ("... check code pointer"             , x_code      , CODE_cond);
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");   <*/
+   yUNIT_mindnoc  ();
+
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_mincond  ("verify parsing a COND again with ditto number");
+   yUNIT_minval   ("parse COND"                         , VERB_parse (x_unit , 40, " COND (1)"  , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1);
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "COND");
+   yUNIT_minval   ("... check index"                    , x_index     , 999);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , '2');
+   yUNIT_minchr   ("... check location"                 , x_locn      , '-');
+   yUNIT_minpoint ("... check conv pointer"             , x_conv      , CONV_cond);
+   yUNIT_minpoint ("... check code pointer"             , x_code      , CODE_cond);
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");   <*/
+
+   yUNIT_mincond  ("attempt with null field");
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_minval   ("parse verb"                         , VERB_parse  (x_unit,  1, NULL          , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), -999);
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "");
+   yUNIT_minval   ("... check index"                    , x_index     , -1);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , '-');
+   yUNIT_minchr   ("... check location"                 , x_locn      , '-');
+   yUNIT_minpoint ("... check conv"                     , x_conv      , 0);
+   yUNIT_minpoint ("... check code"                     , x_code      , 0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify GLOBAL in master");
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_minval   ("parse verb"                         , VERB_parse  (x_mast, 75, "GLOBAL   -A-", x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1   );
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "GLOBAL");
+   yUNIT_minval   ("... check index"                    , x_index     , 7);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , 's');
+   yUNIT_minchr   ("... check location"                 , x_locn      , 'm');
+   yUNIT_minpoint ("... check conv"                     , x_conv      , CONV_global);
+   yUNIT_minpoint ("... check code"                     , x_code      , CODE_global);
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");   <*/
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt GLOBAL in normal unit");
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_minval   ("parse verb"                         , VERB_parse  (x_unit, 75, "GLOBAL   -A-", x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), -999);
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "");
+   yUNIT_minval   ("... check index"                    , x_index     , -1);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , '-');
+   yUNIT_minchr   ("... check location"                 , x_locn      , '-');
+   yUNIT_minpoint ("... check conv"                     , x_conv      , 0);
+   yUNIT_minpoint ("... check code"                     , x_code      , 0);
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "apate.unit:75:0: error: verb ¶GLOBAL¶ good, but not allowed outside master.unit");   <*/
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify SHARED in normal unit");
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_minval   ("parse verb"                         , VERB_parse  (x_unit, 95, "SHARED   -a-", x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1);
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "SHARED");
+   yUNIT_minval   ("... check index"                    , x_index     , 999);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , 's');
+   yUNIT_minchr   ("... check location"                 , x_locn      , 'n');
+   yUNIT_minpoint ("... check conv"                     , x_conv      , CONV_shared);
+   yUNIT_minpoint ("... check code"                     , x_code      , CODE_shared);
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");   <*/
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt SHARED in master unit");
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_minval   ("parse verb"                         , VERB_parse  (x_mast, 95, "SHARED   -a-", x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), -999);
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "");
+   yUNIT_minval   ("... check index"                    , x_index     , -1);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , '-');
+   yUNIT_minchr   ("... check location"                 , x_locn      , '-');
+   yUNIT_minpoint ("... check conv"                     , x_conv      , 0);
+   yUNIT_minpoint ("... check code"                     , x_code      , 0);
+   /*> yUNIT_minstr   ("... check error message"             , yURG_err_last (), "master.unit:95:0: error: verb ¶SHARED¶ good, but not allowed inside master.unit");   <*/
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify step verbs (exec)");
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_minval   ("parse verb"                         , VERB_parse  (x_unit,  1, "     exec   ", x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1   );
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "exec");
+   yUNIT_minval   ("... check index"                    , x_index     , 18);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , 'f');
+   yUNIT_minchr   ("... check location"                 , x_locn      , '-');
+   yUNIT_minpoint ("... check conv"                     , x_conv      , CONV_exec);
+   yUNIT_minpoint ("... check code"                     , x_code      , CODE_exec);
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");   <*/
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify another step verbs (get)");
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_minval   ("parse verb"                         , VERB_parse  (x_unit,  1, "     get    ", x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1   );
+   yUNIT_minstr   ("... check verb"                     , x_verb      , "get");
+   yUNIT_minval   ("... check index"                    , x_index     , 19);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , 'f');
+   yUNIT_minchr   ("... check location"                 , x_locn      , '-');
+   yUNIT_minpoint ("... check conv"                     , x_conv      , CONV_exec);
+   yUNIT_minpoint ("... check code"                     , x_code      , CODE_exec);
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");   <*/
+   yUNIT_mindnoc  ();
+
+   /*---(complete)-----------------------*/
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios__unit_verb_parse   (char a_list)
+{
+   char        x_unit      [LEN_LABEL] = "apate.unit";
+   char        x_mast      [LEN_LABEL] = "master.unit";
+   char        x_verb      [LEN_LABEL] = "";
+   char        x_index      = -1;
+   char        x_spec      = '-';
+   char        x_locn      = '-';
+   void       *x_conv      = NULL;
+   void       *x_code      = NULL;
+
+   /*> yUNIT_minscrp ("VERB_parse");                                                  <* 
+    *> if (a_list == 'y')  return 0;                                                  <* 
+    *> rm_working_files ();                                                           <* 
+    *> PROG__unit_quiet  ();                                                          <*/
+
+   /*> yURG_err_clear ();                                                                                                                                          <* 
+    *> yUNIT_mincond  ("parse SCRP verb");                                                                                                                         <* 
+    *> yUNIT_minval   ("parse SCRP"                          , VERB_parse (x_unit ,  5, "SCRP"       , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 0);   <* 
+    *> yUNIT_minstr   ("... check verb"                      , x_verb        , "SCRP");                                                                            <* 
+    *> yUNIT_minval   ("... check index"                     , x_index        , 999);                                                                               <* 
+    *> yUNIT_minchr   ("... check spec"                      , x_spec        , 's');                                                                               <* 
+    *> yUNIT_minchr   ("... check location"                  , x_locn        , 'n');                                                                               <* 
+    *> yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_scrp);                                                                         <* 
+    *> yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_scrp);                                                                         <* 
+    *> yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                              <* 
+    *> yUNIT_mindnoc  () ;                                                                                                                                         <*/
+
+   /*> yURG_err_clear ();                                                                                                                                             <* 
+    *> yUNIT_mincond  ("attempt to parse a non-existant verb");                                                                                                       <* 
+    *> yUNIT_minval   ("parse trouble"                       , VERB_parse (x_unit , 25, "handler"    , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), -999);   <* 
+    *> yUNIT_minstr   ("... check verb"                      , x_verb        , "");                                                                                   <* 
+    *> yUNIT_minval   ("... check index"                     , x_index        , -999);                                                                                 <* 
+    *> yUNIT_minchr   ("... check spec"                      , x_spec        , '-');                                                                                  <* 
+    *> yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                  <* 
+    *> yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);                                                                                 <* 
+    *> yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);                                                                                 <* 
+    *> yUNIT_minstr   ("... check error message"             , yURG_err_last (), "apate.unit:25:0: error: verb ¶handler¶ not recognized/found");                      <* 
+    *> yUNIT_mindnoc  ();                                                                                                                                             <*/
+
+   /*> yURG_err_clear ();                                                                                                                                           <* 
+    *> yUNIT_mincond  ("verify parsing a COND verb");                                                                                                               <* 
+    *> yUNIT_minval   ("parse COND"                          , VERB_parse (x_unit , 10, " COND"      , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 0);   <* 
+    *> yUNIT_minstr   ("... check verb"                      , x_verb        , "COND");                                                                             <* 
+    *> yUNIT_minval   ("... check index"                     , x_index        , 999);                                                                               <* 
+    *> yUNIT_minchr   ("... check spec"                      , x_spec        , '2');                                                                                <* 
+    *> yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                <* 
+    *> yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_cond);                                                                          <* 
+    *> yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_cond);                                                                          <* 
+    *> yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                               <* 
+    *> yUNIT_mindnoc  ();                                                                                                                                           <*/
+
+   /*> yURG_err_clear ();                                                                                                                                           <* 
+    *> yUNIT_mincond  ("verify parsing a COND again with ditto number");                                                                                            <* 
+    *> yUNIT_minval   ("parse COND"                          , VERB_parse (x_unit , 40, " COND (1)"  , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 0);   <* 
+    *> yUNIT_minstr   ("... check verb"                      , x_verb        , "COND");                                                                             <* 
+    *> yUNIT_minval   ("... check index"                     , x_index        , 999);                                                                               <* 
+    *> yUNIT_minchr   ("... check spec"                      , x_spec        , '2');                                                                                <* 
+    *> yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                <* 
+    *> yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_cond);                                                                          <* 
+    *> yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_cond);                                                                          <* 
+    *> yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                               <*/
+
+   /*> yURG_err_clear ();                                                                                                                                              <* 
+    *> yUNIT_mincond  ("attempt a null input");                                                                                                                        <* 
+    *> yUNIT_minval   ("parse NULL"                          , VERB_parse (x_unit , 50, NULL         , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), -999);   <* 
+    *> yUNIT_minstr   ("... check verb"                      , x_verb        , "");                                                                                    <* 
+    *> yUNIT_minval   ("... check index"                     , x_index        , -999);                                                                                 <* 
+    *> yUNIT_minchr   ("... check spec"                      , x_spec        , '-');                                                                                   <* 
+    *> yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                   <* 
+    *> yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);                                                                                  <* 
+    *> yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);                                                                                  <* 
+    *> yUNIT_minstr   ("... check error message"             , yURG_err_last (), "apate.unit:50:0: error: no verb found (empty or null)");                             <* 
+    *> yUNIT_mindnoc  ();                                                                                                                                              <*/
+
+   /*> yURG_err_clear ();                                                                                                                                           <* 
+    *> yUNIT_mincond  ("verify parsing an EXEC verb");                                                                                                              <* 
+    *> yUNIT_minval   ("parse exec"                          , VERB_parse (x_unit , 15, "  exec"     , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 0);   <* 
+    *> yUNIT_minstr   ("... check verb"                      , x_verb        , "exec");                                                                             <* 
+    *> yUNIT_minval   ("... check index"                     , x_index        , 999);                                                                               <* 
+    *> yUNIT_minchr   ("... check spec"                      , x_spec        , 'f');                                                                                <* 
+    *> yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                <* 
+    *> yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_exec);                                                                          <* 
+    *> yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_exec);                                                                          <* 
+    *> yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                               <* 
+    *> yUNIT_mindnoc  ();                                                                                                                                           <*/
+
+   /*> yURG_err_clear ();                                                                                                                                           <* 
+    *> yUNIT_mincond  ("verify parsing a SHARED (normal only) verb with suffix");                                                                                   <* 
+    *> yURG_err_clear ();                                                                                                                                           <* 
+    *> yUNIT_minval   ("parse SHARED (in normal)"            , VERB_parse (x_unit , 35, "SHARED -a-" , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 0);   <* 
+    *> yUNIT_minstr   ("... check verb"                      , x_verb        , "SHARED");                                                                           <* 
+    *> yUNIT_minval   ("... check index"                     , x_index        , 999);                                                                               <* 
+    *> yUNIT_minchr   ("... check spec"                      , x_spec        , 's');                                                                                <* 
+    *> yUNIT_minchr   ("... check location"                  , x_locn        , 'n');                                                                                <* 
+    *> yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_shared);                                                                        <* 
+    *> yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_shared);                                                                        <* 
+    *> yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                               <* 
+    *> yUNIT_mindnoc  ();                                                                                                                                           <*/
+
+   /*> yURG_err_clear ();                                                                                                                                              <* 
+    *> yUNIT_mincond  ("attempt parsing a GLOBAL (master only) verb with suffix");                                                                                     <* 
+    *> yURG_err_clear ();                                                                                                                                              <* 
+    *> yUNIT_minval   ("parse GLOBAL (in normal)"            , VERB_parse (x_unit , 75, "GLOBAL -a-" , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), -999);   <* 
+    *> yUNIT_minstr   ("... check verb"                      , x_verb        , "");                                                                                    <* 
+    *> yUNIT_minval   ("... check index"                     , x_index        , -999);                                                                                 <* 
+    *> yUNIT_minchr   ("... check spec"                      , x_spec        , '-');                                                                                   <* 
+    *> yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                   <* 
+    *> yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);                                                                                  <* 
+    *> yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);                                                                                  <* 
+    *> yUNIT_minstr   ("... check error message"             , yURG_err_last (), "apate.unit:75:0: error: verb ¶GLOBAL¶ good, but not allowed outside master.unit");   <* 
+    *> yUNIT_mindnoc  ();                                                                                                                                              <*/
+
+   /*> yURG_err_clear ();                                                                                                                                           <* 
+    *> yUNIT_mincond  ("verify parsing a GLOBAL (master only) verb with suffix");                                                                                   <* 
+    *> yURG_err_clear ();                                                                                                                                           <* 
+    *> yUNIT_minval   ("parse GLOBAL (in master)"            , VERB_parse (x_mast , 85, "GLOBAL -a-" , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 0);   <* 
+    *> yUNIT_minstr   ("... check verb"                      , x_verb        , "GLOBAL");                                                                           <* 
+    *> yUNIT_minval   ("... check index"                     , x_index        , 999);                                                                               <* 
+    *> yUNIT_minchr   ("... check spec"                      , x_spec        , 's');                                                                                <* 
+    *> yUNIT_minchr   ("... check location"                  , x_locn        , 'm');                                                                                <* 
+    *> yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_global);                                                                        <* 
+    *> yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_global);                                                                        <* 
+    *> yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                               <* 
+    *> yUNIT_mindnoc  ();                                                                                                                                           <*/
+
+   /*> yURG_err_clear ();                                                                                                                                              <* 
+    *> yUNIT_mincond  ("attempt parsing a SHARED (normal only) verb with suffix");                                                                                     <* 
+    *> yURG_err_clear ();                                                                                                                                              <* 
+    *> yUNIT_minval   ("parse SHARED (in master)"            , VERB_parse (x_mast , 95, "SHARED -a-" , x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), -999);   <* 
+    *> yUNIT_minstr   ("... check verb"                      , x_verb        , "");                                                                                    <* 
+    *> yUNIT_minval   ("... check index"                     , x_index        , -999);                                                                                 <* 
+    *> yUNIT_minchr   ("... check spec"                      , x_spec        , '-');                                                                                   <* 
+    *> yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                   <* 
+    *> yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);                                                                                  <* 
+    *> yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);                                                                                  <* 
+    *> yUNIT_minstr   ("... check error message"             , yURG_err_last (), "master.unit:95:0: error: verb ¶SHARED¶ good, but not allowed inside master.unit");   <* 
+    *> yUNIT_mindnoc  ();                                                                                                                                              <*/
+
+   /*> PROG__unit_end    ();                                                          <* 
+    *> rm_working_files ();                                                           <* 
+    *> yUNIT_minprcs ();                                                              <*/
+   return 0;
+}
+
+char
+unit_verb_ditto          (void)
+{
+   yUNIT_minscrpy ("koios", "koios_verb", "(VERB) check dittoable verification");
+   /*> yURG_err_none ();                                                              <*/
+   PROG__unit_quiet  ();
+
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_mincond  ("verify non-dittoable verbs");
+   yUNIT_minval   ("call for SCRP"                       , VERB_dittoable ("SCRP"       ), 0);
+   yUNIT_minval   ("call for COND"                       , VERB_dittoable ("COND"       ), 0);
+   yUNIT_minval   ("call for local"                      , VERB_dittoable ("local"      ), 0);
+   yUNIT_mindnoc  () ;
+
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_mincond  ("verify dittoable verbs");
+   yUNIT_minval   ("call for exec"                       , VERB_dittoable ("exec"       ), 1);
+   yUNIT_minval   ("call for system"                     , VERB_dittoable ("system"     ), 1);
+   yUNIT_minval   ("call for echo"                       , VERB_dittoable ("echo"       ), 1);
+   yUNIT_minval   ("call for file"                       , VERB_dittoable ("file"       ), 1);
+   yUNIT_mindnoc  () ;
+
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_mincond  ("attempt non-existant verbs");
+   yUNIT_minval   ("call for trouble"                    , VERB_dittoable ("trouble"    ), 0);
+   yUNIT_minval   ("call for hazmat"                     , VERB_dittoable ("hazmat"     ), 0);
+   yUNIT_minval   ("call for comment"                    , VERB_dittoable ("#huh"       ), 0);
+   yUNIT_mindnoc  () ;
+
+   /*> yURG_err_clear ();                                                             <*/
+   yUNIT_mincond  ("attempt empty and null");
+   yUNIT_minval   ("call for null"                       , VERB_dittoable (NULL         ), 0);
+   yUNIT_minval   ("call for empty"                      , VERB_dittoable (""           ), 0);
+   yUNIT_mindnoc  () ;
+
+   PROG__unit_end    ();
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+main                    (void)
+{
+   /*---(program wide)-------------------*/
+   system ("rm -f koios_verb.wave");
+   unit_verb_parse  ();
+   unit_verb_ditto  ();
+
+   yUNIT_mintinu    ();
+   return 0;
+}

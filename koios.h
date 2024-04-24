@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4s"
-#define     P_VERTXT    "little cleanup for ouroboros"
+#define     P_VERNUM    "1.4u"
+#define     P_VERTXT    "detailed update to dis-entangle and remove yURG references"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -214,9 +214,8 @@
 #include    <sys/types.h>    /* stat, lstat                                   */
 
 /*===[[ CUSTOM LIBRARIES ]]===================================================*/
-#include    <yLOG.h>         /* CUSTOM : heatherly program logging            */
-#include    <ySTR.h>         /* CUSTOM : heatherly safer string handling      */
-#include    <yURG.h>         /* CUSTOM : heatherly urgent processing          */
+#include    <yLOG_solo.h>    /* CUSTOM : heatherly program logging            */
+#include    <ySTR_solo.h>
 #include    <yUNIT.h>
 
 
@@ -238,8 +237,13 @@
 #define     IF_CONFIRM    if (my.noise == 'c') 
 #define     IF_VERBOSE    if (my.noise == 'v') 
 
+
+#define     DEBUG_UVER    if (my.debug == 'y')
+
+
 typedef struct stat      tSTAT;
 typedef struct tm        tTIME;
+typedef unsigned char    uchar;
 
 
 typedef     struct cGLOBALS     tGLOBALS;
@@ -251,6 +255,7 @@ struct cGLOBALS
    char        run_type;                    /* unit test code or conversion   */
    char        replace;                     /* convert and replace file       */
    char        cwd         [LEN_PATH];      /* true working directory         */
+   char        debug;                       /* turn on limited debugging      */
    /*---(file names)------------*/
    char        n_proj      [LEN_LABEL];     /* base project name              */
    char        n_ext       [LEN_TERSE];     /* .unit vs .sunit                */
@@ -334,13 +339,14 @@ struct cVERB {
 extern      tVERB       g_verbs [MAX_VERB];
 
 
-extern char g_print     [LEN_LABEL];
+extern char g_print     [LEN_RECD];
 
 
 
 
 
-/*===[[ PROG ]]===============================================================*/
+/*===[[ koios_prog.c ]]=======================================================*/
+/*········· ´······················ ´·········································*/
 /*---(support)--------------*/
 char*       PROG_version            (void);
 /*---(pre-init)-------------*/
@@ -367,49 +373,12 @@ char        PROG__unit_end          (void);
 
 
 
-/*===[[ SCRP ]]===============================================================*/
-/*---(shared)--------------*/
-/*> char        SCRP__shared_clear      (cchar a_type);                               <*/
-/*> char        SCRP__shared_purge      (void);                                       <*/
-/*> char        SCRP__shared_index      (cchar a_type, cchar a_mark);                 <*/
-/*> char        SCRP__shared_set        (cchar a_type, cchar a_mark, int a_line);     <*/
-/*> int         SCRP__shared_get        (cchar a_type, cchar a_mark);                 <*/
-/*> char*       SCRP__shared_used       (void);                                       <*/
-/*---(dittos)--------------*/
-/*> char        SCRP__ditto_clear       (void);                                       <*/
-/*> char        SCRP__reuses_check      (cchar a_nscrp [LEN_TITLE], int a_line, char a_indx, char *p, char a_cshare, char *r_share, char *r_dittoing, char *r_dmark, char *r_mark, int *r_ditto, int *r_dline);   <*/
-/*> char        SCRP__ditto_check       (cchar a_nscrp [LEN_TITLE], int a_line, char a_indx, char *p);   <*/
-/*> char        SCRP_ditto__handler     (char a_dittoing, int a_ditto, int *r_nline, int *r_dline);   <*/
-/*---(file)----------------*/
-/*> char        SCRP_open               (cchar a_name [LEN_RECD], FILE **r_file, int *r_line);   <*/
-/*> char        SCRP_close              (FILE **b_file);                              <*/
-/*> char        SCRP_clear              (void);                                       <*/
-/*> char        SCRP_read               (FILE *a_file, int *r_nline, char a_dittoing, int a_ditto, int *r_dline, int *r_nrecd, int *r_len, char r_recd [LEN_RECD]);   <*/
-/*---(parsing)-------------*/
-/*> char        SCRP__parse_defense     (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD]);   <*/
-/*> char        SCRP__parse_comment     (cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code);   <*/
-/*> char        SCRP__parse_verb        (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN_LABEL], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code);   <*/
-/*> char        SCRP__parse_save        (char a_verb [LEN_LABEL], char a_indx, char a_spec, char *a_conv, char *a_code, char a_stage [LEN_SHORT], char a_vers);   <*/
-/*> char        SCRP__limits            (char a_spec, char *r_min, char *r_max);      <*/
-/*> char        SCRP__current           (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_verb [LEN_LABEL], char a_spec, char *a_first, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD]);   <*/
-/*> char        SCRP_vers21             (void);                                       <*/
-/*> char        SCRP_vers20             (void);                                       <*/
-/*> char        SCRP_vers19             (void);                                       <*/
-/*> char        SCRP_parse              (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_coding [LEN_RECD]);   <*/
-/*---(unittest)------------*/
-char*       SCRP__unit              (char *a_question, int a_num);
-/*---(done)-----------------*/
-
-
-
 
 
 /*===[[ koios_wave.c ]]=======================================================*/
 /*········· ´······················ ´·········································*/
 /*---(program)--------------*/
 char        WAVE_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_field [LEN_LABEL], char r_stage [LEN_SHORT]);
-char        WAVE_entry              (FILE *a_wave, char a_stageid, char a_waveid, char a_nscrp [LEN_TITLE], char a_seq, char a_desc [LEN_HUND]);
-char        WAVE_entry_new          (FILE *f, char a_proj [LEN_LABEL], char a_unit [LEN_TITLE], char a_scrp, char a_desc [LEN_LONG], char a_terse [LEN_LABEL], char a_wave, char a_stage, char a_nunit, char a_nscrp, short a_ncond, short a_nstep, char a_expe [LEN_SHORT], short a_expect, char a_result, short a_npass, short a_nfail, short a_nbadd, short a_nvoid, short a_actual);
 /*---(done)-----------------*/
 
 
@@ -588,6 +557,10 @@ char        PARSE_driver            (cchar a_nscrp [LEN_TITLE], int a_line, char
 /*---(done)-----------------*/
 
 
+char        koios_ystr_trim         (uchar *b_src, int a_max);
+char        koios_ystr_encode       (uchar *b_src);
+char        koios_ystr_decode       (uchar *b_src);
+char        koios_ystr_undelay      (uchar *a_src, int a_max);
 
 /*===[[ koios_flow.c ]]=======================================================*/
 /*········· ´······················ ´·········································*/

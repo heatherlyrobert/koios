@@ -404,25 +404,25 @@ CONV_driver             (void f_call (), FILE *a_conv, cchar a_verb [LEN_LABEL],
    char        rc          =    0;
    char      (*x_func) (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_SHORT], char *r_cshare);
    /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   DEBUG_PROG   yLOG_point   ("f_call"    , f_call);
+   DEBUG_UVER   yLOG_upoint  ("f_call"    , f_call);
    if (f_call == NULL) {
-      DEBUG_PROG   yLOG_note    ("nothing to do");
-      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+      DEBUG_UVER   yLOG_unote   ("nothing to do");
+      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
       return 0;
    }
    /*---(prepare)------------------------*/
    x_func = f_call;
    /*---(call function)------------------*/
    rc = x_func (a_conv, a_verb, a_desc, a_meth, a_args, a_test, a_expe, a_retn, a_share, a_mark, a_stage, r_cshare);
-   DEBUG_PROG   yLOG_value   ("call"      , rc);
+   DEBUG_UVER   yLOG_uvalue  ("call"      , rc);
    --rce;  if (rc < 0) {
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 

@@ -1,5 +1,5 @@
 /*===============================[[ beg-code ]]===============================*/
-#include    "koios.h"        /* LOCAL  : main header                          */
+#include    "koios.h"
 
 
 
@@ -8,170 +8,141 @@ WAVE_parse              (char a_scrp [LEN_TITLE], int a_line, char a_verb [LEN_L
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
-   int         x_len       =    0;
+   int         l           =    0;
    char        t           [LEN_LABEL] = "";
    char       *q           = NULL;
    char        x_beg       =    0;
    char        x_pos       =    0;
    char        x_wave      =  '·';
    char        x_stage     =  '·';
+   char        x_rating    =  '·';
    /*---(header)-------------------------*/
-   DEBUG_INPT   yLOG_senter  (__FUNCTION__);
+   DEBUG_UVER   yLOG_senter  (__FUNCTION__);
    /*---(default)------------------------*/
-   if (r_stage != NULL)  ystrlcpy  (r_stage, "", LEN_SHORT);
+   if (r_stage != NULL)  strlcpy  (r_stage, "··/·", LEN_SHORT);
    /*---(defense)------------------------*/
-   DEBUG_INPT   yLOG_spoint  (a_scrp);
+   DEBUG_UVER   yLOG_spoint  (a_scrp);
    --rce;  if (a_scrp == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_INPT   yLOG_spoint  (a_verb);
+   DEBUG_UVER   yLOG_spoint  (a_verb);
    --rce;  if (a_verb == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_INPT   yLOG_spoint  (a_field);
+   DEBUG_UVER   yLOG_spoint  (a_field);
    --rce;  if (a_field == NULL) {
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(ward-off)-----------------------*/
    if (strcmp ("SCRP" , a_verb) != 0) {
-      DEBUG_INPT   yLOG_snote   ("only applies to scripts");
-      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+      DEBUG_UVER   yLOG_snote   ("only applies to scripts");
+      DEBUG_UVER   yLOG_sexit   (__FUNCTION__);
       return 0;
    }
    /*---(prepare)------------------------*/
-   ystrlcpy  (t, a_field, LEN_LABEL);
-   ystrltrim (t, ySTR_BOTH, LEN_LABEL);
-   DEBUG_INPT   yLOG_note    (t);
-   x_len = strlen (t);
-   DEBUG_INPT   yLOG_sint    (x_len);
-   --rce;  if (x_len <  4) {
-      DEBUG_INPT   yLOG_snote   ("incomplete and bad");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+   strlcpy  (t, a_field, LEN_LABEL);
+   koios_ystr_trim (t, LEN_LABEL);
+   DEBUG_UVER   yLOG_unote   (t);
+   l = strlen (t);
+   DEBUG_UVER   yLOG_sint    (l);
+   --rce;  if (l <  4) {
+      DEBUG_UVER   yLOG_snote   ("incomplete and bad");
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   if (x_len == 4) {
-      DEBUG_INPT   yLOG_snote   ("only the verb, nothing to do");
-      DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
+   if (l == 4) {
+      DEBUG_UVER   yLOG_snote   ("only the verb, nothing to do");
+      DEBUG_UVER   yLOG_sexit   (__FUNCTION__);
       return 0;
    }
-   ystrlcpy  (t, a_field + 4, LEN_LABEL);
-   ystrltrim (t, ySTR_BOTH, LEN_LABEL);
+   strlcpy  (t, a_field + 4, LEN_LABEL);
+   koios_ystr_trim (t, LEN_LABEL);
    /*---(check begin marker)-------------*/
    x_pos = 0;
-   DEBUG_INPT   yLOG_schar   (t [x_pos]);
+   DEBUG_UVER   yLOG_schar   (t [x_pos]);
    --rce;  if (t [x_pos] != '[') {
       /*> yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, illegal char '%c' after verb, maybe stage, e.g., [Áì]", a_scrp, a_line, x_pos, a_verb, t [x_pos]);   <*/
-      DEBUG_INPT   yLOG_snote   ("meaningless junk found after SCRP verb");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_snote   ("meaningless junk found after SCRP verb");
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    q = strchr (a_field, '[');
    x_beg = q - a_field;
-   DEBUG_INPT   yLOG_sint    (x_beg);
+   DEBUG_UVER   yLOG_sint    (x_beg);
    /*---(check begin marker)-------------*/
    x_pos = 0;
-   x_len = strlen (t);
-   DEBUG_INPT   yLOG_sint    (x_len);
-   --rce;  if (x_len != 4) {
-      /*> yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, stage ¶%s¶ must be exactly 4 characters, e.g., [Áì]", a_scrp, a_line, x_beg + x_pos, a_verb, t);   <*/
-      DEBUG_INPT   yLOG_snote   ("stage identifier must be 4 characters");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+   l = strlen (t);
+   DEBUG_UVER   yLOG_sint    (l);
+   --rce;  if (l == 4) {
+      DEBUG_UVER   yLOG_snote   ("short form");
+   } else if  (l == 6) {
+      DEBUG_UVER   yLOG_snote   ("long form");
+   } else {
+      /*> yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, stage ¶%s¶ must be 4c ¶[1a]¶ or 6c ¶[1a/B]", a_scrp, a_line, x_beg + x_pos, a_verb, t);   <*/
+      DEBUG_UVER   yLOG_snote   ("stage identifier must be 4 or 6 characters");
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(check end marker)---------------*/
-   x_pos = 3;
-   DEBUG_INPT   yLOG_schar   (q [x_pos]);
+   if (l == 4)  x_pos = 3;
+   else         x_pos = 5;
+   DEBUG_UVER   yLOG_schar   (q [x_pos]);
    --rce;  if (q [x_pos] != ']') {
       /*> yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, stage uses wrong end bracket '%c' vs ']', e.g., [Áì]", a_scrp, a_line, x_beg + x_pos, a_verb, q [x_pos]);   <*/
-      DEBUG_INPT   yLOG_snote   ("no end stage ']' marker found");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_snote   ("no end stage ']' marker found");
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(check wave)---------------------*/
    x_pos = 1;
-   DEBUG_INPT   yLOG_schar   (q [x_pos]);
-   --rce;  if (strchr (YSTR_NUMBER, q [x_pos]) == NULL) {
+   DEBUG_UVER   yLOG_schar   (q [x_pos]);
+   --rce;  if (strchr ("·" YSTR_NUMBER, q [x_pos]) == NULL) {
       /*> yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, wave (%c) not a number, e.g., [1a]", a_scrp, a_line, x_beg + x_pos, a_verb, q [x_pos]);   <*/
-      DEBUG_INPT   yLOG_snote   ("stage is not a number");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_snote   ("wave is not a number");
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   x_wave  = q [x_pos];
+   x_wave   = q [x_pos];
    /*---(check stage)--------------------*/
    x_pos = 2;
-   DEBUG_INPT   yLOG_schar   (q [x_pos]);
-   --rce;  if (strchr (YSTR_LOWER, q [x_pos]) == NULL) {
+   DEBUG_UVER   yLOG_schar   (q [x_pos]);
+   --rce;  if (strchr ("·" YSTR_LOWER, q [x_pos]) == NULL) {
       /*> yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, stage (%c) not a lower-case letter, e.g., [1a]", a_scrp, a_line, x_beg + x_pos, a_verb, q [x_pos]);   <*/
-      DEBUG_INPT   yLOG_snote   ("does not end with greek letter");
-      DEBUG_INPT   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_snote   ("stage is not lower-case");
+      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
-   x_stage = q [x_pos];
+   x_stage  = q [x_pos];
+   /*---(check rating)-------------------*/
+   if (l == 6) {
+      DEBUG_UVER   yLOG_snote   ("long-form");
+      x_pos = 3;
+      DEBUG_UVER   yLOG_schar   (t [x_pos]);
+      --rce;  if (t [x_pos] != '/') {
+         /*> yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, illegal char '%c' within long form, e.g., [1a/K]", a_scrp, a_line, x_pos, a_verb, t [x_pos]);   <*/
+         DEBUG_UVER   yLOG_snote   ("meaningless junk found after SCRP verb");
+         DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      x_pos = 4;
+      DEBUG_UVER   yLOG_schar   (q [x_pos]);
+      --rce;  if (strchr ("·" YSTR_UPLOW, q [x_pos]) == NULL) {
+         /*> yURG_err (YURG_FATAL, "%s:%d:%d: error: %s identifier, rating (%c) not a upper-case letter, e.g., [1a/K]", a_scrp, a_line, x_beg + x_pos, a_verb, q [x_pos]);   <*/
+         DEBUG_UVER   yLOG_snote   ("rating is not upper-case");
+         DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      x_rating = q [x_pos];
+   }
+   /*> printf ("%c %c %c\n", x_wave, x_stage, x_rating);                              <*/
    /*---(save)---------------------------*/
-   if (r_stage != NULL)  sprintf (r_stage, "%c%c", x_wave, x_stage);
+   if (r_stage != NULL)  sprintf (r_stage, "%c%c/%c", x_wave, x_stage, x_rating);
    /*---(complete)-----------------------*/
-   DEBUG_INPT   yLOG_sexit   (__FUNCTION__);
-   return 0;
-}
-
-char
-WAVE_entry              (FILE *a_wave, char a_stageid, char a_waveid, char a_nscrp [LEN_TITLE], char a_seq, char a_desc [LEN_HUND])
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_senter  (__FUNCTION__);
-   /*---(already open)-------------------*/
-   DEBUG_OUTP   yLOG_spoint  (a_wave);
-   --rce;  if (a_wave == NULL) {
-      DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(write)--------------------------*/
-   fprintf (a_wave, "%c  %c  %-30.30s  %2d  %-65.65s \n", a_stageid, a_waveid, a_nscrp, a_seq, a_desc);
-   fflush  (a_wave);
-   /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_sexit   (__FUNCTION__);
-   return 0;
-}
-
-/*>                                                                                                                                                                                                                                                                                                 <* 
- *> WAVE § 24.04.09.04.37.46.2.15.100 § 1234567890 § koios                § koios_code.unit                §  2 § (CODE) verify handling of script verbs                            § script               § 1 § a §   0 §   1 §  12 § 105 § 12s §    12 § F §  97 §   6 §   2 §   1 §     9 §     <* 
- *> § 1 § a §   0 §   1 §  12 § 105 § 12s §    12 § F §  97 §   6 §   2 §   1 §     9 §     <* 
- *>                                                                                                                                                                                                                                                                                                 <*/
-
-char
-WAVE_entry_new          (FILE *f, char a_proj [LEN_LABEL], char a_unit [LEN_TITLE], char a_scrp, char a_desc [LEN_LONG], char a_terse [LEN_LABEL], char a_wave, char a_stage, char a_nunit, char a_nscrp, short a_ncond, short a_nstep, char a_expe [LEN_SHORT], short a_expect, char a_result, short a_npass, short a_nfail, short a_nbadd, short a_nvoid, short a_actual)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   long        x_now       =    0;
-   tTIME      *x_broke     = NULL;
-   char        t           [LEN_TITLE] = "";
-   /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_senter  (__FUNCTION__);
-   /*---(already open)-------------------*/
-   DEBUG_OUTP   yLOG_spoint  (f);
-   --rce;  if (f == NULL) {
-      DEBUG_PROG   yLOG_sexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   x_now  = time (NULL);
-   strftime (t, LEN_TITLE, "%y.%m.%d.%H.%M.%S.%u.%W.%j", x_broke);
-   /*---(write)--------------------------*/
-   fprintf (f, "WAVE  %-26.26s  %10ld  %-20.20s  %-30.30s  %2d  %-70.70s  %-20.20s  %3d  %3d  %3d  %3d  %-3.3s  %3d  %c  %3d  %3d  %3d  %3d  %3d ", t, x_now, a_proj, a_unit, a_scrp, a_desc, a_terse, a_wave, a_stage, a_nunit, a_nscrp, a_ncond, a_nstep, a_expe, a_expect, a_result, a_npass, a_nfail, a_nbadd, a_nvoid, a_actual);
-   fflush  (f);
-   /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_sexit   (__FUNCTION__);
-   return 0;
-}
-
-char
-WAVE_to_code            (FILE *a_main, cchar a_nwave [LEN_TITLE])
-{
+   DEBUG_UVER   yLOG_sexit   (__FUNCTION__);
+   return 1;
 }
 
 

@@ -284,195 +284,195 @@ koios__unit_prog_args    (char a_list)
 /*====================------------------------------------====================*/
 static void      o___VERBS___________________o (void) {;}
 
-char
-koios__unit_verb_parse   (char a_list)
-{
-   char        x_name      [LEN_LABEL] = "apate.unit";
-   char        x_mast      [LEN_LABEL] = "master.unit";
-   char        x_verb      [LEN_LABEL] = "";
-   char        x_indx      = -1;
-   char        x_spec      = '-';
-   char        x_locn      = '-';
-   void       *x_conv      = NULL;
-   void       *x_code      = NULL;
+/*> char                                                                                                                                                               <* 
+ *> koios__unit_verb_parse   (char a_list)                                                                                                                             <* 
+ *> {                                                                                                                                                                  <* 
+ *>    char        x_name      [LEN_LABEL] = "apate.unit";                                                                                                             <* 
+ *>    char        x_mast      [LEN_LABEL] = "master.unit";                                                                                                            <* 
+ *>    char        x_verb      [LEN_LABEL] = "";                                                                                                                       <* 
+ *>    char        x_indx      = -1;                                                                                                                                   <* 
+ *>    char        x_spec      = '-';                                                                                                                                  <* 
+ *>    char        x_locn      = '-';                                                                                                                                  <* 
+ *>    void       *x_conv      = NULL;                                                                                                                                 <* 
+ *>    void       *x_code      = NULL;                                                                                                                                 <* 
+ *>                                                                                                                                                                    <* 
+ *>    yUNIT_minscrp ("VERB_parse");                                                                                                                                   <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                   <* 
+ *>    yURG_err_none ();                                                                                                                                               <* 
+ *>    rm_working_files ();                                                                                                                                            <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                           <* 
+ *>                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("parse SCRP verb");                                                                                                                             <* 
+ *>    yUNIT_minval   ("parse SCRP"                          , VERB_parse (x_name ,  5, "SCRP"       , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);       <* 
+ *>    yUNIT_minstr   ("... check verb"                      , x_verb        , "SCRP");                                                                                <* 
+ *>    yUNIT_minval   ("... check index"                     , x_indx        , 999);                                                                                   <* 
+ *>    yUNIT_minchr   ("... check spec"                      , x_spec        , 's');                                                                                   <* 
+ *>    yUNIT_minchr   ("... check location"                  , x_locn        , 'n');                                                                                   <* 
+ *>    yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_scrp);                                                                             <* 
+ *>    yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_scrp);                                                                             <* 
+ *>    yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                                  <* 
+ *>    yUNIT_mindnoc  () ;                                                                                                                                             <* 
+ *>                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("attempt to parse a non-existant verb");                                                                                                        <* 
+ *>    yUNIT_minval   ("parse trouble"                       , VERB_parse (x_name , 25, "handler"    , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), -999);    <* 
+ *>    yUNIT_minstr   ("... check verb"                      , x_verb        , "");                                                                                    <* 
+ *>    yUNIT_minval   ("... check index"                     , x_indx        , -999);                                                                                  <* 
+ *>    yUNIT_minchr   ("... check spec"                      , x_spec        , '-');                                                                                   <* 
+ *>    yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                   <* 
+ *>    yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);                                                                                  <* 
+ *>    yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);                                                                                  <* 
+ *>    yUNIT_minstr   ("... check error message"             , yURG_err_last (), "apate.unit:25:0: error: verb ¶handler¶ not recognized/found");                       <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                              <* 
+ *>                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("verify parsing a COND verb");                                                                                                                  <* 
+ *>    yUNIT_minval   ("parse COND"                          , VERB_parse (x_name , 10, " COND"      , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);       <* 
+ *>    yUNIT_minstr   ("... check verb"                      , x_verb        , "COND");                                                                                <* 
+ *>    yUNIT_minval   ("... check index"                     , x_indx        , 999);                                                                                   <* 
+ *>    yUNIT_minchr   ("... check spec"                      , x_spec        , '2');                                                                                   <* 
+ *>    yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                   <* 
+ *>    yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_cond);                                                                             <* 
+ *>    yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_cond);                                                                             <* 
+ *>    yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                                  <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                              <* 
+ *>                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("verify parsing a COND again with ditto number");                                                                                               <* 
+ *>    yUNIT_minval   ("parse COND"                          , VERB_parse (x_name , 40, " COND (1)"  , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);       <* 
+ *>    yUNIT_minstr   ("... check verb"                      , x_verb        , "COND");                                                                                <* 
+ *>    yUNIT_minval   ("... check index"                     , x_indx        , 999);                                                                                   <* 
+ *>    yUNIT_minchr   ("... check spec"                      , x_spec        , '2');                                                                                   <* 
+ *>    yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                   <* 
+ *>    yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_cond);                                                                             <* 
+ *>    yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_cond);                                                                             <* 
+ *>    yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                                  <* 
+ *>                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("attempt a null input");                                                                                                                        <* 
+ *>    yUNIT_minval   ("parse NULL"                          , VERB_parse (x_name , 50, NULL         , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), -999);    <* 
+ *>    yUNIT_minstr   ("... check verb"                      , x_verb        , "");                                                                                    <* 
+ *>    yUNIT_minval   ("... check index"                     , x_indx        , -999);                                                                                  <* 
+ *>    yUNIT_minchr   ("... check spec"                      , x_spec        , '-');                                                                                   <* 
+ *>    yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                   <* 
+ *>    yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);                                                                                  <* 
+ *>    yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);                                                                                  <* 
+ *>    yUNIT_minstr   ("... check error message"             , yURG_err_last (), "apate.unit:50:0: error: no verb found (empty or null)");                             <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                              <* 
+ *>                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("verify parsing an EXEC verb");                                                                                                                 <* 
+ *>    yUNIT_minval   ("parse exec"                          , VERB_parse (x_name , 15, "  exec"     , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);       <* 
+ *>    yUNIT_minstr   ("... check verb"                      , x_verb        , "exec");                                                                                <* 
+ *>    yUNIT_minval   ("... check index"                     , x_indx        , 999);                                                                                   <* 
+ *>    yUNIT_minchr   ("... check spec"                      , x_spec        , 'f');                                                                                   <* 
+ *>    yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                   <* 
+ *>    yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_exec);                                                                             <* 
+ *>    yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_exec);                                                                             <* 
+ *>    yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                                  <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                              <* 
+ *>                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("verify parsing a SHARED (normal only) verb with suffix");                                                                                      <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_minval   ("parse SHARED (in normal)"            , VERB_parse (x_name , 35, "SHARED -a-" , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);       <* 
+ *>    yUNIT_minstr   ("... check verb"                      , x_verb        , "SHARED");                                                                              <* 
+ *>    yUNIT_minval   ("... check index"                     , x_indx        , 999);                                                                                   <* 
+ *>    yUNIT_minchr   ("... check spec"                      , x_spec        , 's');                                                                                   <* 
+ *>    yUNIT_minchr   ("... check location"                  , x_locn        , 'n');                                                                                   <* 
+ *>    yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_shared);                                                                           <* 
+ *>    yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_shared);                                                                           <* 
+ *>    yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                                  <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                              <* 
+ *>                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("attempt parsing a GLOBAL (master only) verb with suffix");                                                                                     <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_minval   ("parse GLOBAL (in normal)"            , VERB_parse (x_name , 75, "GLOBAL -a-" , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), -999);    <* 
+ *>    yUNIT_minstr   ("... check verb"                      , x_verb        , "");                                                                                    <* 
+ *>    yUNIT_minval   ("... check index"                     , x_indx        , -999);                                                                                  <* 
+ *>    yUNIT_minchr   ("... check spec"                      , x_spec        , '-');                                                                                   <* 
+ *>    yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                   <* 
+ *>    yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);                                                                                  <* 
+ *>    yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);                                                                                  <* 
+ *>    yUNIT_minstr   ("... check error message"             , yURG_err_last (), "apate.unit:75:0: error: verb ¶GLOBAL¶ good, but not allowed outside master.unit");   <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                              <* 
+ *>                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("verify parsing a GLOBAL (master only) verb with suffix");                                                                                      <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_minval   ("parse GLOBAL (in master)"            , VERB_parse (x_mast , 85, "GLOBAL -a-" , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);       <* 
+ *>    yUNIT_minstr   ("... check verb"                      , x_verb        , "GLOBAL");                                                                              <* 
+ *>    yUNIT_minval   ("... check index"                     , x_indx        , 999);                                                                                   <* 
+ *>    yUNIT_minchr   ("... check spec"                      , x_spec        , 's');                                                                                   <* 
+ *>    yUNIT_minchr   ("... check location"                  , x_locn        , 'm');                                                                                   <* 
+ *>    yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_global);                                                                           <* 
+ *>    yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_global);                                                                           <* 
+ *>    yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");                                                                                  <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                              <* 
+ *>                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("attempt parsing a SHARED (normal only) verb with suffix");                                                                                     <* 
+ *>    yURG_err_clear ();                                                                                                                                              <* 
+ *>    yUNIT_minval   ("parse SHARED (in master)"            , VERB_parse (x_mast , 95, "SHARED -a-" , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), -999);    <* 
+ *>    yUNIT_minstr   ("... check verb"                      , x_verb        , "");                                                                                    <* 
+ *>    yUNIT_minval   ("... check index"                     , x_indx        , -999);                                                                                  <* 
+ *>    yUNIT_minchr   ("... check spec"                      , x_spec        , '-');                                                                                   <* 
+ *>    yUNIT_minchr   ("... check location"                  , x_locn        , '-');                                                                                   <* 
+ *>    yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);                                                                                  <* 
+ *>    yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);                                                                                  <* 
+ *>    yUNIT_minstr   ("... check error message"             , yURG_err_last (), "master.unit:95:0: error: verb ¶SHARED¶ good, but not allowed inside master.unit");   <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                              <* 
+ *>                                                                                                                                                                    <* 
+ *>    PROG__unit_end    ();                                                                                                                                           <* 
+ *>    rm_working_files ();                                                                                                                                            <* 
+ *>    yUNIT_minprcs ();                                                                                                                                               <* 
+ *>    return 0;                                                                                                                                                       <* 
+ *> }                                                                                                                                                                  <*/
 
-   yUNIT_minscrp ("VERB_parse");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("parse SCRP verb");
-   yUNIT_minval   ("parse SCRP"                          , VERB_parse (x_name ,  5, "SCRP"       , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);
-   yUNIT_minstr   ("... check verb"                      , x_verb        , "SCRP");
-   yUNIT_minval   ("... check index"                     , x_indx        , 999);
-   yUNIT_minchr   ("... check spec"                      , x_spec        , 's');
-   yUNIT_minchr   ("... check location"                  , x_locn        , 'n');
-   yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_scrp);
-   yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_scrp);
-   yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");
-   yUNIT_mindnoc  () ;
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("attempt to parse a non-existant verb");
-   yUNIT_minval   ("parse trouble"                       , VERB_parse (x_name , 25, "handler"    , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), -999);
-   yUNIT_minstr   ("... check verb"                      , x_verb        , "");
-   yUNIT_minval   ("... check index"                     , x_indx        , -999);
-   yUNIT_minchr   ("... check spec"                      , x_spec        , '-');
-   yUNIT_minchr   ("... check location"                  , x_locn        , '-');
-   yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);
-   yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);
-   yUNIT_minstr   ("... check error message"             , yURG_err_last (), "apate.unit:25:0: error: verb ¶handler¶ not recognized/found");
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("verify parsing a COND verb");
-   yUNIT_minval   ("parse COND"                          , VERB_parse (x_name , 10, " COND"      , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);
-   yUNIT_minstr   ("... check verb"                      , x_verb        , "COND");
-   yUNIT_minval   ("... check index"                     , x_indx        , 999);
-   yUNIT_minchr   ("... check spec"                      , x_spec        , '2');
-   yUNIT_minchr   ("... check location"                  , x_locn        , '-');
-   yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_cond);
-   yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_cond);
-   yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("verify parsing a COND again with ditto number");
-   yUNIT_minval   ("parse COND"                          , VERB_parse (x_name , 40, " COND (1)"  , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);
-   yUNIT_minstr   ("... check verb"                      , x_verb        , "COND");
-   yUNIT_minval   ("... check index"                     , x_indx        , 999);
-   yUNIT_minchr   ("... check spec"                      , x_spec        , '2');
-   yUNIT_minchr   ("... check location"                  , x_locn        , '-');
-   yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_cond);
-   yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_cond);
-   yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("attempt a null input");
-   yUNIT_minval   ("parse NULL"                          , VERB_parse (x_name , 50, NULL         , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), -999);
-   yUNIT_minstr   ("... check verb"                      , x_verb        , "");
-   yUNIT_minval   ("... check index"                     , x_indx        , -999);
-   yUNIT_minchr   ("... check spec"                      , x_spec        , '-');
-   yUNIT_minchr   ("... check location"                  , x_locn        , '-');
-   yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);
-   yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);
-   yUNIT_minstr   ("... check error message"             , yURG_err_last (), "apate.unit:50:0: error: no verb found (empty or null)");
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("verify parsing an EXEC verb");
-   yUNIT_minval   ("parse exec"                          , VERB_parse (x_name , 15, "  exec"     , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);
-   yUNIT_minstr   ("... check verb"                      , x_verb        , "exec");
-   yUNIT_minval   ("... check index"                     , x_indx        , 999);
-   yUNIT_minchr   ("... check spec"                      , x_spec        , 'f');
-   yUNIT_minchr   ("... check location"                  , x_locn        , '-');
-   yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_exec);
-   yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_exec);
-   yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("verify parsing a SHARED (normal only) verb with suffix");
-   yURG_err_clear ();
-   yUNIT_minval   ("parse SHARED (in normal)"            , VERB_parse (x_name , 35, "SHARED -a-" , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);
-   yUNIT_minstr   ("... check verb"                      , x_verb        , "SHARED");
-   yUNIT_minval   ("... check index"                     , x_indx        , 999);
-   yUNIT_minchr   ("... check spec"                      , x_spec        , 's');
-   yUNIT_minchr   ("... check location"                  , x_locn        , 'n');
-   yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_shared);
-   yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_shared);
-   yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("attempt parsing a GLOBAL (master only) verb with suffix");
-   yURG_err_clear ();
-   yUNIT_minval   ("parse GLOBAL (in normal)"            , VERB_parse (x_name , 75, "GLOBAL -a-" , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), -999);
-   yUNIT_minstr   ("... check verb"                      , x_verb        , "");
-   yUNIT_minval   ("... check index"                     , x_indx        , -999);
-   yUNIT_minchr   ("... check spec"                      , x_spec        , '-');
-   yUNIT_minchr   ("... check location"                  , x_locn        , '-');
-   yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);
-   yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);
-   yUNIT_minstr   ("... check error message"             , yURG_err_last (), "apate.unit:75:0: error: verb ¶GLOBAL¶ good, but not allowed outside master.unit");
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("verify parsing a GLOBAL (master only) verb with suffix");
-   yURG_err_clear ();
-   yUNIT_minval   ("parse GLOBAL (in master)"            , VERB_parse (x_mast , 85, "GLOBAL -a-" , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), 0);
-   yUNIT_minstr   ("... check verb"                      , x_verb        , "GLOBAL");
-   yUNIT_minval   ("... check index"                     , x_indx        , 999);
-   yUNIT_minchr   ("... check spec"                      , x_spec        , 's');
-   yUNIT_minchr   ("... check location"                  , x_locn        , 'm');
-   yUNIT_minpoint ("... check conv pointer"              , x_conv        , CONV_global);
-   yUNIT_minpoint ("... check code pointer"              , x_code        , CODE_global);
-   yUNIT_minstr   ("... check error message"             , yURG_err_last (), "");
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("attempt parsing a SHARED (normal only) verb with suffix");
-   yURG_err_clear ();
-   yUNIT_minval   ("parse SHARED (in master)"            , VERB_parse (x_mast , 95, "SHARED -a-" , x_verb, &x_indx, &x_spec, &x_locn, &x_conv, &x_code), -999);
-   yUNIT_minstr   ("... check verb"                      , x_verb        , "");
-   yUNIT_minval   ("... check index"                     , x_indx        , -999);
-   yUNIT_minchr   ("... check spec"                      , x_spec        , '-');
-   yUNIT_minchr   ("... check location"                  , x_locn        , '-');
-   yUNIT_minpoint ("... check conv pointer"              , x_conv        , NULL);
-   yUNIT_minpoint ("... check code pointer"              , x_code        , NULL);
-   yUNIT_minstr   ("... check error message"             , yURG_err_last (), "master.unit:95:0: error: verb ¶SHARED¶ good, but not allowed inside master.unit");
-   yUNIT_mindnoc  ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_verb_ditto   (char a_list)
-{
-   yUNIT_minscrp ("VERB_dittoable");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("verify non-dittoable verbs");
-   yUNIT_minval   ("call for SCRP"                       , VERB_dittoable ("SCRP"       ), 0);
-   yUNIT_minval   ("call for COND"                       , VERB_dittoable ("COND"       ), 0);
-   yUNIT_minval   ("call for local"                      , VERB_dittoable ("local"      ), 0);
-   yUNIT_mindnoc  () ;
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("verify dittoable verbs");
-   yUNIT_minval   ("call for exec"                       , VERB_dittoable ("exec"       ), 1);
-   yUNIT_minval   ("call for system"                     , VERB_dittoable ("system"     ), 1);
-   yUNIT_minval   ("call for echo"                       , VERB_dittoable ("echo"       ), 1);
-   yUNIT_minval   ("call for file"                       , VERB_dittoable ("file"       ), 1);
-   yUNIT_mindnoc  () ;
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("attempt non-existant verbs");
-   yUNIT_minval   ("call for trouble"                    , VERB_dittoable ("trouble"    ), 0);
-   yUNIT_minval   ("call for hazmat"                     , VERB_dittoable ("hazmat"     ), 0);
-   yUNIT_minval   ("call for comment"                    , VERB_dittoable ("#huh"       ), 0);
-   yUNIT_mindnoc  () ;
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("attempt empty and null");
-   yUNIT_minval   ("call for null"                       , VERB_dittoable (NULL         ), 0);
-   yUNIT_minval   ("call for empty"                      , VERB_dittoable (""           ), 0);
-   yUNIT_mindnoc  () ;
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
+/*> char                                                                                             <* 
+ *> koios__unit_verb_ditto   (char a_list)                                                           <* 
+ *> {                                                                                                <* 
+ *>    yUNIT_minscrp ("VERB_dittoable");                                                             <* 
+ *>    if (a_list == 'y')  return 0;                                                                 <* 
+ *>    yURG_err_none ();                                                                             <* 
+ *>    rm_working_files ();                                                                          <* 
+ *>    PROG__unit_quiet  ();                                                                         <* 
+ *>                                                                                                  <* 
+ *>    yURG_err_clear ();                                                                            <* 
+ *>    yUNIT_mincond  ("verify non-dittoable verbs");                                                <* 
+ *>    yUNIT_minval   ("call for SCRP"                       , VERB_dittoable ("SCRP"       ), 0);   <* 
+ *>    yUNIT_minval   ("call for COND"                       , VERB_dittoable ("COND"       ), 0);   <* 
+ *>    yUNIT_minval   ("call for local"                      , VERB_dittoable ("local"      ), 0);   <* 
+ *>    yUNIT_mindnoc  () ;                                                                           <* 
+ *>                                                                                                  <* 
+ *>    yURG_err_clear ();                                                                            <* 
+ *>    yUNIT_mincond  ("verify dittoable verbs");                                                    <* 
+ *>    yUNIT_minval   ("call for exec"                       , VERB_dittoable ("exec"       ), 1);   <* 
+ *>    yUNIT_minval   ("call for system"                     , VERB_dittoable ("system"     ), 1);   <* 
+ *>    yUNIT_minval   ("call for echo"                       , VERB_dittoable ("echo"       ), 1);   <* 
+ *>    yUNIT_minval   ("call for file"                       , VERB_dittoable ("file"       ), 1);   <* 
+ *>    yUNIT_mindnoc  () ;                                                                           <* 
+ *>                                                                                                  <* 
+ *>    yURG_err_clear ();                                                                            <* 
+ *>    yUNIT_mincond  ("attempt non-existant verbs");                                                <* 
+ *>    yUNIT_minval   ("call for trouble"                    , VERB_dittoable ("trouble"    ), 0);   <* 
+ *>    yUNIT_minval   ("call for hazmat"                     , VERB_dittoable ("hazmat"     ), 0);   <* 
+ *>    yUNIT_minval   ("call for comment"                    , VERB_dittoable ("#huh"       ), 0);   <* 
+ *>    yUNIT_mindnoc  () ;                                                                           <* 
+ *>                                                                                                  <* 
+ *>    yURG_err_clear ();                                                                            <* 
+ *>    yUNIT_mincond  ("attempt empty and null");                                                    <* 
+ *>    yUNIT_minval   ("call for null"                       , VERB_dittoable (NULL         ), 0);   <* 
+ *>    yUNIT_minval   ("call for empty"                      , VERB_dittoable (""           ), 0);   <* 
+ *>    yUNIT_mindnoc  () ;                                                                           <* 
+ *>                                                                                                  <* 
+ *>    PROG__unit_end    ();                                                                         <* 
+ *>    rm_working_files ();                                                                          <* 
+ *>    yUNIT_minprcs ();                                                                             <* 
+ *>    return 0;                                                                                     <* 
+ *> }                                                                                                <*/
 
 
 
@@ -1767,630 +1767,630 @@ koios__unit_parse_version   (char a_list)
 /*====================------------------------------------====================*/
 static void      o___DITTO___________________o (void) {;}
 
-char
-koios__unit_ditto_index  (char a_list)
-{
-   yUNIT_minscrp ("DITTO__index");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
+/*> char                                                                                  <* 
+ *> koios__unit_ditto_index  (char a_list)                                                <* 
+ *> {                                                                                     <* 
+ *>    yUNIT_minscrp ("DITTO__index");                                                    <* 
+ *>    if (a_list == 'y')  return 0;                                                      <* 
+ *>    yURG_err_none ();                                                                  <* 
+ *>    rm_working_files ();                                                               <* 
+ *>    PROG__unit_quiet  ();                                                              <* 
+ *>                                                                                       <* 
+ *>    yUNIT_mincond ("verify on valid indexes");                                         <* 
+ *>    yUNIT_minval  ("... run 0"                          , DITTO__index ('0'), 0);      <* 
+ *>    yUNIT_minval  ("... run 1"                          , DITTO__index ('1'), 1);      <* 
+ *>    yUNIT_minval  ("... run 4"                          , DITTO__index ('4'), 4);      <* 
+ *>    yUNIT_minval  ("... run 8"                          , DITTO__index ('8'), 8);      <* 
+ *>    yUNIT_minval  ("... run 9"                          , DITTO__index ('9'), 9);      <* 
+ *>    yUNIT_mindnoc ();                                                                  <* 
+ *>                                                                                       <* 
+ *>    yUNIT_mincond ("verify null handling");                                            <* 
+ *>    yUNIT_minval  ("... run NULL"                       , DITTO__index ( 0 ), -999);   <* 
+ *>    yUNIT_mindnoc ();                                                                  <* 
+ *>                                                                                       <* 
+ *>    yUNIT_mincond ("verify defaultish");                                               <* 
+ *>    yUNIT_minval  ("... run space"                      , DITTO__index (' '), -999);   <* 
+ *>    yUNIT_minval  ("... run -"                          , DITTO__index ('-'), -999);   <* 
+ *>    yUNIT_minval  ("... run ·"                          , DITTO__index ('·'), -999);   <* 
+ *>    yUNIT_mindnoc ();                                                                  <* 
+ *>                                                                                       <* 
+ *>    yUNIT_mincond ("attempt invalid indexes");                                         <* 
+ *>    yUNIT_minval  ("... run a"                          , DITTO__index ('a'), -999);   <* 
+ *>    yUNIT_minval  ("... run D"                          , DITTO__index ('D'), -999);   <* 
+ *>    yUNIT_minval  ("... run +"                          , DITTO__index ('+'), -999);   <* 
+ *>    yUNIT_minval  ("... run ê"                          , DITTO__index ('ê'), -999);   <* 
+ *>    yUNIT_minval  ("... run ´"                          , DITTO__index ('´'), -999);   <* 
+ *>    yUNIT_mindnoc ();                                                                  <* 
+ *>                                                                                       <* 
+ *>    PROG__unit_end    ();                                                              <* 
+ *>    rm_working_files ();                                                               <* 
+ *>    yUNIT_minprcs ();                                                                  <* 
+ *>    return 0;                                                                          <* 
+ *> }                                                                                     <*/
 
-   yUNIT_mincond ("verify on valid indexes");
-   yUNIT_minval  ("... run 0"                          , DITTO__index ('0'), 0);
-   yUNIT_minval  ("... run 1"                          , DITTO__index ('1'), 1);
-   yUNIT_minval  ("... run 4"                          , DITTO__index ('4'), 4);
-   yUNIT_minval  ("... run 8"                          , DITTO__index ('8'), 8);
-   yUNIT_minval  ("... run 9"                          , DITTO__index ('9'), 9);
-   yUNIT_mindnoc ();
+/*> char                                                                                                                                      <* 
+ *> koios__unit_ditto_getset (char a_list)                                                                                                    <* 
+ *> {                                                                                                                                         <* 
+ *>                                                                                                                                           <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                              <* 
+ *>                                                                                                                                           <* 
+ *>    yUNIT_minscrp ("DITTO__set, DITTO__get, DITTO__used");                                                                                 <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                          <* 
+ *>    yURG_err_none ();                                                                                                                      <* 
+ *>    rm_working_files ();                                                                                                                   <* 
+ *>    PROG__unit_quiet  ();                                                                                                                  <* 
+ *>                                                                                                                                           <* 
+ *>    yUNIT_mincond ("verify clean start");                                                                                                  <* 
+ *>    yUNIT_minval  ("... init"                           , DITTO_init ()       , 0);                                                        <* 
+ *>    yUNIT_minstr  ("... review"                         , DITTO__used ()      , "----------");                                             <* 
+ *>    yUNIT_minval  ("call get NULL"                      , DITTO__get ( 0 , x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get ?"                         , DITTO__get ('?', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get -"                         , DITTO__get ('-', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get a"                         , DITTO__get ('a', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                      <* 
+ *>                                                                                                                                           <* 
+ *>    yUNIT_mincond ("verify setting a ditto mark");                                                                                         <* 
+ *>    yUNIT_minval  ("call set"                           , DITTO__set ('0', 123, "verify something")    , 0);                               <* 
+ *>    yUNIT_minstr  ("... review"                         , DITTO__used ()      , "0---------");                                             <* 
+ *>    yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,  123);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "verify something");                          <* 
+ *>    yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                      <* 
+ *>                                                                                                                                           <* 
+ *>    yUNIT_mincond ("verify re-setting a ditto mark");                                                                                      <* 
+ *>    yUNIT_minval  ("call set"                           , DITTO__set ('0',  52, "check other"     )    , 0);                               <* 
+ *>    yUNIT_minstr  ("... review"                         , DITTO__used ()      , "0---------");                                             <* 
+ *>    yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,   52);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");                               <* 
+ *>    yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                      <* 
+ *>                                                                                                                                           <* 
+ *>    yUNIT_mincond ("attempt to set illegal marks");                                                                                        <* 
+ *>    yUNIT_minval  ("call set"                           , DITTO__set ('/',   1, "verify something")    , -999);                            <* 
+ *>    yUNIT_minval  ("call set"                           , DITTO__set ('a',   1, "verify something")    , -999);                            <* 
+ *>    yUNIT_minval  ("call set"                           , DITTO__set ('K',   1, "verify something")    , -999);                            <* 
+ *>    yUNIT_minval  ("call set"                           , DITTO__set ('ò',   1, "verify something")    , -999);                            <* 
+ *>    yUNIT_minstr  ("... review"                         , DITTO__used ()      , "0---------");                                             <* 
+ *>    yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,   52);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");                               <* 
+ *>    yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                      <* 
+ *>                                                                                                                                           <* 
+ *>    yUNIT_mincond ("verify setting another ditto mark");                                                                                   <* 
+ *>    yUNIT_minval  ("call set"                           , DITTO__set ('6',  22, "monster trouble" )    , 0);                               <* 
+ *>    yUNIT_minstr  ("... review"                         , DITTO__used ()      , "0-----6---");                                             <* 
+ *>    yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,   52);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");                               <* 
+ *>    yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         ,   22);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "monster trouble");                           <* 
+ *>    yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                      <* 
+ *>                                                                                                                                           <* 
+ *>    yUNIT_mincond ("verify setting two more");                                                                                             <* 
+ *>    yUNIT_minval  ("call set"                           , DITTO__set ('1',   8, NULL              )    , 0);                               <* 
+ *>    yUNIT_minval  ("call set"                           , DITTO__set ('9',1000, "!"               )    , 0);                               <* 
+ *>    yUNIT_minstr  ("... review"                         , DITTO__used ()      , "01----6--9");                                             <* 
+ *>    yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,   52);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");                               <* 
+ *>    yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         ,    8);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         ,   22);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "monster trouble");                           <* 
+ *>    yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , 1000);                                        <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "!");                                         <* 
+ *>    yUNIT_mindnoc ();                                                                                                                      <* 
+ *>                                                                                                                                           <* 
+ *>    yUNIT_mincond ("verify purging marks");                                                                                                <* 
+ *>    yUNIT_minval  ("... purge"                          , DITTO_init ()       , 0);                                                        <* 
+ *>    yUNIT_minstr  ("... review"                         , DITTO__used ()      , "----------");                                             <* 
+ *>    yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                      <* 
+ *>                                                                                                                                           <* 
+ *>    yUNIT_mincond ("verify setting by record");                                                                                            <* 
+ *>    yUNIT_minval  ("call set"                           , DITTO__set_recd ('1', 987,  0, "COND (1)  description field " )    , 0);       <* 
+ *>    yUNIT_minstr  ("... review"                         , DITTO__used ()      , "-1--------");                                             <* 
+ *>    yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , 987);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "description field");                         <* 
+ *>    yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                      <* 
+ *>                                                                                                                                           <* 
+ *>    yUNIT_mincond ("verify setting by record (with spaces)");                                                                              <* 
+ *>    yUNIT_minval  ("call set"                           , DITTO__set_recd ('6', 789,  0, "COND (6)        indented        " )    , 0);   <* 
+ *>    yUNIT_minstr  ("... review"                         , DITTO__used ()      , "-1----6---");                                             <* 
+ *>    yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , 987);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "description field");                         <* 
+ *>    yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         , 789);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "indented");                                  <* 
+ *>    yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         ,-999);                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                      <* 
+ *>                                                                                                                                           <* 
+ *>    PROG__unit_end    ();                                                                                                                  <* 
+ *>    rm_working_files ();                                                                                                                   <* 
+ *>    yUNIT_minprcs ();                                                                                                                      <* 
+ *>    return 0;                                                                                                                              <* 
+ *> }                                                                                                                                         <*/
 
-   yUNIT_mincond ("verify null handling");
-   yUNIT_minval  ("... run NULL"                       , DITTO__index ( 0 ), -999);
-   yUNIT_mindnoc ();
+/*> char                                                                                                                                                                                         <* 
+ *> koios__unit_ditto_toggle (char a_list)                                                                                                                                                       <* 
+ *> {                                                                                                                                                                                            <* 
+ *>    char        x_nscrp    [LEN_TITLE] = "apate.unit";                                                                                                                                        <* 
+ *>    char        x_name     [LEN_PATH]  = "apate.unit";                                                                                                                                        <* 
+ *>    int         x_line     =    1;                                                                                                                                                            <* 
+ *>    FILE       *x_main     = NULL;                                                                                                                                                            <* 
+ *>    FILE       *x_scrp     = NULL;                                                                                                                                                            <* 
+ *>    char        x_dittoing =  '-';                                                                                                                                                            <* 
+ *>    char        x_mark     =  '-';                                                                                                                                                            <* 
+ *>    char        x_dmark    =  '-';                                                                                                                                                            <* 
+ *>    int         x_ditto    =    0;                                                                                                                                                            <* 
+ *>    int         x_dline    =    0;                                                                                                                                                            <* 
+ *>                                                                                                                                                                                              <* 
+ *>    yUNIT_minscrp  ("DITTO_beg, DITTO_end");                                                                                                                                                  <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                             <* 
+ *>    yURG_err_none  ();                                                                                                                                                                        <* 
+ *>    rm_working_files ();                                                                                                                                                                      <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                              <* 
+ *>    yURG_err_clear ();                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("prepare clean start");                                                                                                                                                   <* 
+ *>    system ("touch apate.unit           2> /dev/null");                                                                                                                                       <* 
+ *>    x_main = fopen (x_name, "rt");                                                                                                                                                            <* 
+ *>    x_scrp = x_main;                                                                                                                                                                          <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                              <* 
+ *>    yURG_err_clear ();                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify beginning a ditto");                                                                                                                                              <* 
+ *>    x_line =  100;  x_dittoing = '-';  x_dmark = '-';  x_mark = '-';  x_ditto =   -1;  x_dline =   -1;                                                                                        <* 
+ *>    yUNIT_minval   ("... line"                           , x_line                   ,  100);                                                                                                  <* 
+ *>    yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);                                                                                                <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');                                                                                                  <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_minval   ("call ditto begin"                   , DITTO_beg   (&x_scrp, x_nscrp, x_line, G_RUN_CREATE , '0',   20, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline)    , 1);      <* 
+ *>    yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');                                                                                                  <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   20);                                                                                                  <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);                                                                                                  <* 
+ *>    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");                                                                                                             <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                              <* 
+ *>    yURG_err_clear ();                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("attempt to begin a ditto (when already begun");                                                                                                                          <* 
+ *>    yUNIT_minval   ("... line"                           , x_line                   ,  100);                                                                                                  <* 
+ *>    yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');                                                                                                  <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   20);                                                                                                  <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);                                                                                                  <* 
+ *>    yUNIT_minval   ("call ditto begin"                   , DITTO_beg   (&x_scrp, x_nscrp, x_line, G_RUN_CREATE , '0',   20, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline)    , -999);   <* 
+ *>    yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');                                                                                                  <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   20);                                                                                                  <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);                                                                                                  <* 
+ *>    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "apate.unit:100:0: error: DITTO '0' can not start as dittoing already active");                                  <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                              <* 
+ *>    yURG_err_clear ();                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify ending a ditto");                                                                                                                                                 <* 
+ *>    yUNIT_minval   ("... line"                           , x_line                   ,  100);                                                                                                  <* 
+ *>    yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');                                                                                                  <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   20);                                                                                                  <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);                                                                                                  <* 
+ *>    yUNIT_minval   ("call ditto end"                     , DITTO_end   (&x_scrp, &x_dittoing, &x_dmark, &x_ditto, &x_dline)    , 1);                                                          <* 
+ *>    yUNIT_minval   ("... line"                           , x_line                   ,  100);                                                                                                  <* 
+ *>    yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);                                                                                                <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');                                                                                                  <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");                                                                                                             <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                              <* 
+ *>    yURG_err_clear ();                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("attempt to end a ditto (when not begun");                                                                                                                                <* 
+ *>    yUNIT_minval   ("... line"                           , x_line                   ,  100);                                                                                                  <* 
+ *>    yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);                                                                                                <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');                                                                                                  <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_minval   ("call ditto end"                     , DITTO_end   (&x_scrp, &x_dittoing, &x_dmark, &x_ditto, &x_dline)    , 0);                                                          <* 
+ *>    yUNIT_minval   ("... line"                           , x_line                   ,  100);                                                                                                  <* 
+ *>    yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);                                                                                                <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');                                                                                                  <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                              <* 
+ *>    yURG_err_clear ();                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("attempt to start ditto on bad identifier");                                                                                                                              <* 
+ *>    yUNIT_minval   ("... line"                           , x_line                   ,  100);                                                                                                  <* 
+ *>    yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);                                                                                                <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');                                                                                                  <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_minval   ("call ditto begin"                   , DITTO_beg   (&x_scrp, x_nscrp, x_line, G_RUN_CREATE , '5',   -1, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline)    , -999);   <* 
+ *>    yUNIT_minval   ("... line"                           , x_line                   ,  100);                                                                                                  <* 
+ *>    yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);                                                                                                <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                  <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');                                                                                                  <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                  <* 
+ *>    yUNIT_minstr   ("... check error message"            , yURG_err_last (), "apate.unit:100:0: error: DITTO '5' not set by previous COND");                                                  <* 
+ *>                                                                                                                                                                                              <* 
+ *>    yURG_err_clear ();                                                                                                                                                                        <* 
+ *>    yUNIT_mincond ("wrap up");                                                                                                                                                                <* 
+ *>    fclose (x_main);                                                                                                                                                                          <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                              <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                     <* 
+ *>    rm_working_files ();                                                                                                                                                                      <* 
+ *>    yUNIT_minprcs  ();                                                                                                                                                                        <* 
+ *>    return 0;                                                                                                                                                                                 <* 
+ *> }                                                                                                                                                                                            <*/
 
-   yUNIT_mincond ("verify defaultish");
-   yUNIT_minval  ("... run space"                      , DITTO__index (' '), -999);
-   yUNIT_minval  ("... run -"                          , DITTO__index ('-'), -999);
-   yUNIT_minval  ("... run ·"                          , DITTO__index ('·'), -999);
-   yUNIT_mindnoc ();
+/*> char                                                                                                                           <* 
+ *> koios__unit_ditto_read   (char a_list)                                                                                         <* 
+ *> {                                                                                                                              <* 
+ *>    int         x_ditto  =    0;                                                                                                <* 
+ *>    int         x_line   =    0;                                                                                                <* 
+ *>    int         x_dline  =    0;                                                                                                <* 
+ *>                                                                                                                                <* 
+ *>    yUNIT_minscrp ("DITTO_read_numbering");                                                                                     <* 
+ *>    if (a_list == 'y')  return 0;                                                                                               <* 
+ *>    yURG_err_none ();                                                                                                           <* 
+ *>    rm_working_files ();                                                                                                        <* 
+ *>    PROG__unit_quiet  ();                                                                                                       <* 
+ *>                                                                                                                                <* 
+ *>    yUNIT_mincond ("verify normal, non-ditto action");                                                                          <* 
+ *>    x_ditto =    0;  x_line =    1; x_dline =    0;                                                                             <* 
+ *>    yUNIT_minval  ("... ditto"                          , x_ditto                  ,   0);                                      <* 
+ *>    yUNIT_minval  ("... line"                           , x_line                   ,   1);                                      <* 
+ *>    yUNIT_minval  ("... dline"                          , x_dline                  ,   0);                                      <* 
+ *>    yUNIT_minval  ("call read handler"                  , DITTO_read_numbering ('-', x_ditto, &x_line , &x_dline)    , 0);      <* 
+ *>    yUNIT_minval  ("... line"                           , x_line                   ,   2);                                      <* 
+ *>    yUNIT_minval  ("... dline"                          , x_dline                  ,   0);                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                           <* 
+ *>                                                                                                                                <* 
+ *>    yUNIT_mincond ("verify again, non-ditto action");                                                                           <* 
+ *>    x_ditto =    0;  x_line =  321; x_dline =    0;                                                                             <* 
+ *>    yUNIT_minval  ("... ditto"                          , x_ditto                  ,   0);                                      <* 
+ *>    yUNIT_minval  ("... line"                           , x_line                   , 321);                                      <* 
+ *>    yUNIT_minval  ("... dline"                          , x_dline                  ,   0);                                      <* 
+ *>    yUNIT_minval  ("call read handler"                  , DITTO_read_numbering ('-', x_ditto, &x_line , &x_dline)    , 0);      <* 
+ *>    yUNIT_minval  ("... line"                           , x_line                   , 322);                                      <* 
+ *>    yUNIT_minval  ("... dline"                          , x_dline                  ,   0);                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                           <* 
+ *>                                                                                                                                <* 
+ *>    yUNIT_mincond ("attempt with nulls");                                                                                       <* 
+ *>    x_ditto =    0;  x_line =  321; x_dline =    0;                                                                             <* 
+ *>    yUNIT_minval  ("call with null line"                , DITTO_read_numbering ('-', x_ditto, NULL    , &x_dline)    , -999);   <* 
+ *>    yUNIT_minval  ("call read null dline"               , DITTO_read_numbering ('-', x_ditto, &x_line , NULL    )    , -999);   <* 
+ *>    yUNIT_mindnoc ();                                                                                                           <* 
+ *>                                                                                                                                <* 
+ *>    yUNIT_mincond ("verify in ditto");                                                                                          <* 
+ *>    x_ditto =   40;  x_line =  100; x_dline =   45;                                                                             <* 
+ *>    yUNIT_minval  ("... ditto"                          , x_ditto                  ,  40);                                      <* 
+ *>    yUNIT_minval  ("... line"                           , x_line                   , 100);                                      <* 
+ *>    yUNIT_minval  ("... dline"                          , x_dline                  ,  45);                                      <* 
+ *>    yUNIT_minval  ("call read handler"                  , DITTO_read_numbering ('y', x_ditto, &x_line , &x_dline)    , 1);      <* 
+ *>    yUNIT_minval  ("... line"                           , x_line                   , 100);                                      <* 
+ *>    yUNIT_minval  ("... dline"                          , x_dline                  ,  46);                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                           <* 
+ *>                                                                                                                                <* 
+ *>    yUNIT_mincond ("verify in ditto");                                                                                          <* 
+ *>    x_ditto =   40;  x_line =  100; x_dline =   45;                                                                             <* 
+ *>    yUNIT_minval  ("... ditto"                          , x_ditto                  ,  40);                                      <* 
+ *>    yUNIT_minval  ("... line"                           , x_line                   , 100);                                      <* 
+ *>    yUNIT_minval  ("... dline"                          , x_dline                  ,  45);                                      <* 
+ *>    yUNIT_minval  ("call read handler"                  , DITTO_read_numbering ('y', x_ditto, &x_line , &x_dline)    , 1);      <* 
+ *>    yUNIT_minval  ("... line"                           , x_line                   , 100);                                      <* 
+ *>    yUNIT_minval  ("... dline"                          , x_dline                  ,  46);                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                           <* 
+ *>                                                                                                                                <* 
+ *>    PROG__unit_end    ();                                                                                                       <* 
+ *>    rm_working_files ();                                                                                                        <* 
+ *>    yUNIT_minprcs ();                                                                                                           <* 
+ *>    return 0;                                                                                                                   <* 
+ *> }                                                                                                                              <*/
 
-   yUNIT_mincond ("attempt invalid indexes");
-   yUNIT_minval  ("... run a"                          , DITTO__index ('a'), -999);
-   yUNIT_minval  ("... run D"                          , DITTO__index ('D'), -999);
-   yUNIT_minval  ("... run +"                          , DITTO__index ('+'), -999);
-   yUNIT_minval  ("... run ê"                          , DITTO__index ('ê'), -999);
-   yUNIT_minval  ("... run ´"                          , DITTO__index ('´'), -999);
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_ditto_getset (char a_list)
-{
-
-   char        x_desc      [LEN_LONG]  = "";
-
-   yUNIT_minscrp ("DITTO__set, DITTO__get, DITTO__used");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond ("verify clean start");
-   yUNIT_minval  ("... init"                           , DITTO_init ()       , 0);
-   yUNIT_minstr  ("... review"                         , DITTO__used ()      , "----------");
-   yUNIT_minval  ("call get NULL"                      , DITTO__get ( 0 , x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get ?"                         , DITTO__get ('?', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get -"                         , DITTO__get ('-', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get a"                         , DITTO__get ('a', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify setting a ditto mark");
-   yUNIT_minval  ("call set"                           , DITTO__set ('0', 123, "verify something")    , 0);
-   yUNIT_minstr  ("... review"                         , DITTO__used ()      , "0---------");
-   yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,  123);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "verify something");
-   yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify re-setting a ditto mark");
-   yUNIT_minval  ("call set"                           , DITTO__set ('0',  52, "check other"     )    , 0);
-   yUNIT_minstr  ("... review"                         , DITTO__used ()      , "0---------");
-   yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,   52);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");
-   yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("attempt to set illegal marks");
-   yUNIT_minval  ("call set"                           , DITTO__set ('/',   1, "verify something")    , -999);
-   yUNIT_minval  ("call set"                           , DITTO__set ('a',   1, "verify something")    , -999);
-   yUNIT_minval  ("call set"                           , DITTO__set ('K',   1, "verify something")    , -999);
-   yUNIT_minval  ("call set"                           , DITTO__set ('ò',   1, "verify something")    , -999);
-   yUNIT_minstr  ("... review"                         , DITTO__used ()      , "0---------");
-   yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,   52);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");
-   yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify setting another ditto mark");
-   yUNIT_minval  ("call set"                           , DITTO__set ('6',  22, "monster trouble" )    , 0);
-   yUNIT_minstr  ("... review"                         , DITTO__used ()      , "0-----6---");
-   yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,   52);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");
-   yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         ,   22);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "monster trouble");
-   yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify setting two more");
-   yUNIT_minval  ("call set"                           , DITTO__set ('1',   8, NULL              )    , 0);
-   yUNIT_minval  ("call set"                           , DITTO__set ('9',1000, "!"               )    , 0);
-   yUNIT_minstr  ("... review"                         , DITTO__used ()      , "01----6--9");
-   yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,   52);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");
-   yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         ,    8);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         ,   22);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "monster trouble");
-   yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         , 1000);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "!");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify purging marks");
-   yUNIT_minval  ("... purge"                          , DITTO_init ()       , 0);
-   yUNIT_minstr  ("... review"                         , DITTO__used ()      , "----------");
-   yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify setting by record");
-   yUNIT_minval  ("call set"                           , DITTO__set_recd ('1', 987,  0, "COND (1)  description field " )    , 0);
-   yUNIT_minstr  ("... review"                         , DITTO__used ()      , "-1--------");
-   yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , 987);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "description field");
-   yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify setting by record (with spaces)");
-   yUNIT_minval  ("call set"                           , DITTO__set_recd ('6', 789,  0, "COND (6)        indented        " )    , 0);
-   yUNIT_minstr  ("... review"                         , DITTO__used ()      , "-1----6---");
-   yUNIT_minval  ("call get 0"                         , DITTO__get ('0', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 1"                         , DITTO__get ('1', x_desc)         , 987);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "description field");
-   yUNIT_minval  ("call get 2"                         , DITTO__get ('2', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 6"                         , DITTO__get ('6', x_desc)         , 789);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "indented");
-   yUNIT_minval  ("call get 9"                         , DITTO__get ('9', x_desc)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_ditto_toggle (char a_list)
-{
-   char        x_nscrp    [LEN_TITLE] = "apate.unit";
-   char        x_name     [LEN_PATH]  = "apate.unit";
-   int         x_line     =    1;
-   FILE       *x_main     = NULL;
-   FILE       *x_scrp     = NULL;
-   char        x_dittoing =  '-';
-   char        x_mark     =  '-';
-   char        x_dmark    =  '-';
-   int         x_ditto    =    0;
-   int         x_dline    =    0;
-
-   yUNIT_minscrp  ("DITTO_beg, DITTO_end");
-   if (a_list == 'y')  return 0;
-   yURG_err_none  ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("prepare clean start");
-   system ("touch apate.unit           2> /dev/null");
-   x_main = fopen (x_name, "rt");
-   x_scrp = x_main;
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("verify beginning a ditto");
-   x_line =  100;  x_dittoing = '-';  x_dmark = '-';  x_mark = '-';  x_ditto =   -1;  x_dline =   -1;
-   yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_minval   ("call ditto begin"                   , DITTO_beg   (&x_scrp, x_nscrp, x_line, G_RUN_CREATE , '0',   20, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline)    , 1);
-   yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   20);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
-   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("attempt to begin a ditto (when already begun");
-   yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   20);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
-   yUNIT_minval   ("call ditto begin"                   , DITTO_beg   (&x_scrp, x_nscrp, x_line, G_RUN_CREATE , '0',   20, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline)    , -999);
-   yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   20);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
-   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "apate.unit:100:0: error: DITTO '0' can not start as dittoing already active");
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("verify ending a ditto");
-   yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   20);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
-   yUNIT_minval   ("call ditto end"                     , DITTO_end   (&x_scrp, &x_dittoing, &x_dmark, &x_ditto, &x_dline)    , 1);
-   yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("attempt to end a ditto (when not begun");
-   yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_minval   ("call ditto end"                     , DITTO_end   (&x_scrp, &x_dittoing, &x_dmark, &x_ditto, &x_dline)    , 0);
-   yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_mindnoc  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond  ("attempt to start ditto on bad identifier");
-   yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_minval   ("call ditto begin"                   , DITTO_beg   (&x_scrp, x_nscrp, x_line, G_RUN_CREATE , '5',   -1, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline)    , -999);
-   yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_minstr   ("... check error message"            , yURG_err_last (), "apate.unit:100:0: error: DITTO '5' not set by previous COND");
-
-   yURG_err_clear ();
-   yUNIT_mincond ("wrap up");
-   fclose (x_main);
-   yUNIT_mindnoc  ();
-
-   PROG__unit_quiet  ();
-   rm_working_files ();
-   yUNIT_minprcs  ();
-   return 0;
-}
-
-char
-koios__unit_ditto_read   (char a_list)
-{
-   int         x_ditto  =    0;
-   int         x_line   =    0;
-   int         x_dline  =    0;
-
-   yUNIT_minscrp ("DITTO_read_numbering");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond ("verify normal, non-ditto action");
-   x_ditto =    0;  x_line =    1; x_dline =    0;
-   yUNIT_minval  ("... ditto"                          , x_ditto                  ,   0);
-   yUNIT_minval  ("... line"                           , x_line                   ,   1);
-   yUNIT_minval  ("... dline"                          , x_dline                  ,   0);
-   yUNIT_minval  ("call read handler"                  , DITTO_read_numbering ('-', x_ditto, &x_line , &x_dline)    , 0);
-   yUNIT_minval  ("... line"                           , x_line                   ,   2);
-   yUNIT_minval  ("... dline"                          , x_dline                  ,   0);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify again, non-ditto action");
-   x_ditto =    0;  x_line =  321; x_dline =    0;
-   yUNIT_minval  ("... ditto"                          , x_ditto                  ,   0);
-   yUNIT_minval  ("... line"                           , x_line                   , 321);
-   yUNIT_minval  ("... dline"                          , x_dline                  ,   0);
-   yUNIT_minval  ("call read handler"                  , DITTO_read_numbering ('-', x_ditto, &x_line , &x_dline)    , 0);
-   yUNIT_minval  ("... line"                           , x_line                   , 322);
-   yUNIT_minval  ("... dline"                          , x_dline                  ,   0);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("attempt with nulls");
-   x_ditto =    0;  x_line =  321; x_dline =    0;
-   yUNIT_minval  ("call with null line"                , DITTO_read_numbering ('-', x_ditto, NULL    , &x_dline)    , -999);
-   yUNIT_minval  ("call read null dline"               , DITTO_read_numbering ('-', x_ditto, &x_line , NULL    )    , -999);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify in ditto");
-   x_ditto =   40;  x_line =  100; x_dline =   45;
-   yUNIT_minval  ("... ditto"                          , x_ditto                  ,  40);
-   yUNIT_minval  ("... line"                           , x_line                   , 100);
-   yUNIT_minval  ("... dline"                          , x_dline                  ,  45);
-   yUNIT_minval  ("call read handler"                  , DITTO_read_numbering ('y', x_ditto, &x_line , &x_dline)    , 1);
-   yUNIT_minval  ("... line"                           , x_line                   , 100);
-   yUNIT_minval  ("... dline"                          , x_dline                  ,  46);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify in ditto");
-   x_ditto =   40;  x_line =  100; x_dline =   45;
-   yUNIT_minval  ("... ditto"                          , x_ditto                  ,  40);
-   yUNIT_minval  ("... line"                           , x_line                   , 100);
-   yUNIT_minval  ("... dline"                          , x_dline                  ,  45);
-   yUNIT_minval  ("call read handler"                  , DITTO_read_numbering ('y', x_ditto, &x_line , &x_dline)    , 1);
-   yUNIT_minval  ("... line"                           , x_line                   , 100);
-   yUNIT_minval  ("... dline"                          , x_dline                  ,  46);
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_ditto_parse  (char a_list)
-{
-   char         x_nscrp    [LEN_LABEL] = "apate.unit";
-   FILE        *x_scrp     = NULL;
-   int          x_nline    =    0;
-   char         x_dittoing =  '-';
-   char         x_mark     =  '-';
-   char         x_dmark    =  '-';
-   int          x_ditto    =   -1;
-   int          x_dline    =   -1;
-   int          x_nrecd    =    0;
-   char         x_recd     [LEN_RECD] = "";
-   char         x_back     [LEN_RECD] = "";
-   char        *p          = NULL;
-   char         x_desc     [LEN_LONG] = "";
-
-   yUNIT_minscrp ("DITTO_parse_handler");
-   if (a_list == 'y')  return 0;
-   yURG_err_none  ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond  ("create a test script");
-   system ("echo \"\"                                                                                                                        > apate.unit");
-   system ("echo \"COND  (3)  ditto stuff     \"                                                                                        >> apate.unit");
-   system ("echo \"  exec     read a line      SCRP_read       i_lesser    0      \"                                            >> apate.unit");
-   system ("echo \"\"                                                                                                                       >> apate.unit");
-   system ("echo \"DITTO (3)  junk text       \"                                                                                        >> apate.unit");
-   system ("echo \"\"                                                                                                                       >> apate.unit");
-   system ("echo \"  get      next step        SCRP_read       i_lesser    0      \"                                            >> apate.unit");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("prepare for conversion run");
-   yUNIT_minval   ("open the script file"               , READ_open   (x_nscrp, 'r', &x_scrp, &x_nline), 0);
-   yUNIT_minval   ("... init"                           , DITTO_init ()       , 0);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "----------");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify a new ditto mark");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
-   yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
-   strcpy (x_back, x_recd);
-   p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "COND"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
-   yUNIT_minval   ("... nline"                          , x_nline                  ,    2);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '3');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify passing over exec line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
-   yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
-   strcpy (x_back, x_recd);
-   p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "exec"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
-   yUNIT_minval   ("... nline"                          , x_nline                  ,    3);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify using the ditto mark");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
-   yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
-   strcpy (x_back, x_recd);
-   p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "DITTO" ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    1);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
-   yUNIT_minval   ("... nline"                          , x_nline                  ,    5);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "[ ditto stuff ]");
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '3');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify continuing on in UPDATE mode");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
-   yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
-   strcpy (x_back, x_recd);
-   p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "get"   ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
-   yUNIT_minval   ("... nline"                          , x_nline                  ,    7);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("close conversion run");
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_scrp)    ,    0);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("prepare for code run");
-   yUNIT_minval   ("open the script file"               , READ_open   (x_nscrp, 'r', &x_scrp, &x_nline), 0);
-   yUNIT_minval   ("... init"                           , DITTO_init ()       , 0);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "----------");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify a new ditto mark");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
-   yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
-   strcpy (x_back, x_recd);
-   p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "COND"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
-   yUNIT_minval   ("... nline"                          , x_nline                  ,    2);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '3');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify passing over exec line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
-   yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
-   strcpy (x_back, x_recd);
-   p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "exec"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
-   yUNIT_minval   ("... nline"                          , x_nline                  ,    3);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify using the ditto mark");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
-   yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
-   strcpy (x_back, x_recd);
-   p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "DITTO" ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    1);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
-   yUNIT_minval   ("... nline"                          , x_nline                  ,    5);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "[ ditto stuff ]");
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '3');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '3');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,    2);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify pushing to the first line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
-   yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
-   strcpy (x_back, x_recd);
-   p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "COND"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
-   yUNIT_minval   ("... nline"                          , x_nline                  ,    5);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '3');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,    2);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,    2);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify passing over exec line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
-   yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
-   strcpy (x_back, x_recd);
-   p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "exec"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
-   yUNIT_minval   ("... nline"                          , x_nline                  ,    5);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '3');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,    2);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,    3);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify returning after DITTO line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
-   yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
-   strcpy (x_back, x_recd);
-   p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "get"   ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
-   yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
-   yUNIT_minval   ("... nline"                          , x_nline                  ,    7);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
-   yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
-   yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');
-   yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
-   yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
-   yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("close update run");
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_scrp)    ,    0);
-   yUNIT_mindnoc  ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs  ();
-   return 0;
-}
+/*> char                                                                                                                                                                                                                   <* 
+ *> koios__unit_ditto_parse  (char a_list)                                                                                                                                                                                 <* 
+ *> {                                                                                                                                                                                                                      <* 
+ *>    char         x_nscrp    [LEN_LABEL] = "apate.unit";                                                                                                                                                                 <* 
+ *>    FILE        *x_scrp     = NULL;                                                                                                                                                                                     <* 
+ *>    int          x_nline    =    0;                                                                                                                                                                                     <* 
+ *>    char         x_dittoing =  '-';                                                                                                                                                                                     <* 
+ *>    char         x_mark     =  '-';                                                                                                                                                                                     <* 
+ *>    char         x_dmark    =  '-';                                                                                                                                                                                     <* 
+ *>    int          x_ditto    =   -1;                                                                                                                                                                                     <* 
+ *>    int          x_dline    =   -1;                                                                                                                                                                                     <* 
+ *>    int          x_nrecd    =    0;                                                                                                                                                                                     <* 
+ *>    char         x_recd     [LEN_RECD] = "";                                                                                                                                                                            <* 
+ *>    char         x_back     [LEN_RECD] = "";                                                                                                                                                                            <* 
+ *>    char        *p          = NULL;                                                                                                                                                                                     <* 
+ *>    char         x_desc     [LEN_LONG] = "";                                                                                                                                                                            <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minscrp ("DITTO_parse_handler");                                                                                                                                                                              <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                                       <* 
+ *>    yURG_err_none  ();                                                                                                                                                                                                  <* 
+ *>    rm_working_files ();                                                                                                                                                                                                <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("create a test script");                                                                                                                                                                            <* 
+ *>    system ("echo \"\"                                                                                                                        > apate.unit");                                                           <* 
+ *>    system ("echo \"COND  (3)  ditto stuff     \"                                                                                        >> apate.unit");                                                             <* 
+ *>    system ("echo \"  exec     read a line      SCRP_read       i_lesser    0      \"                                            >> apate.unit");                                                                 <* 
+ *>    system ("echo \"\"                                                                                                                       >> apate.unit");                                                           <* 
+ *>    system ("echo \"DITTO (3)  junk text       \"                                                                                        >> apate.unit");                                                             <* 
+ *>    system ("echo \"\"                                                                                                                       >> apate.unit");                                                           <* 
+ *>    system ("echo \"  get      next step        SCRP_read       i_lesser    0      \"                                            >> apate.unit");                                                                 <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("prepare for conversion run");                                                                                                                                                                      <* 
+ *>    yUNIT_minval   ("open the script file"               , READ_open   (x_nscrp, 'r', &x_scrp, &x_nline), 0);                                                                                                           <* 
+ *>    yUNIT_minval   ("... init"                           , DITTO_init ()       , 0);                                                                                                                                    <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "----------");                                                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify a new ditto mark");                                                                                                                                                                         <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);             <* 
+ *>    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);                                                 <* 
+ *>    strcpy (x_back, x_recd);                                                                                                                                                                                            <* 
+ *>    p = strtok (x_back, "");                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "COND"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);   <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");                                                                                                                         <* 
+ *>    yUNIT_minval   ("... nline"                          , x_nline                  ,    2);                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '3');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify passing over exec line");                                                                                                                                                                   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);             <* 
+ *>    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);                                                 <* 
+ *>    strcpy (x_back, x_recd);                                                                                                                                                                                            <* 
+ *>    p = strtok (x_back, "");                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "exec"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);   <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");                                                                                                                         <* 
+ *>    yUNIT_minval   ("... nline"                          , x_nline                  ,    3);                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify using the ditto mark");                                                                                                                                                                     <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);             <* 
+ *>    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);                                                 <* 
+ *>    strcpy (x_back, x_recd);                                                                                                                                                                                            <* 
+ *>    p = strtok (x_back, "");                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "DITTO" ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    1);   <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");                                                                                                                         <* 
+ *>    yUNIT_minval   ("... nline"                          , x_nline                  ,    5);                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "[ ditto stuff ]");                                                                                                             <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '3');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify continuing on in UPDATE mode");                                                                                                                                                             <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);             <* 
+ *>    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);                                                 <* 
+ *>    strcpy (x_back, x_recd);                                                                                                                                                                                            <* 
+ *>    p = strtok (x_back, "");                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "get"   ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);   <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");                                                                                                                         <* 
+ *>    yUNIT_minval   ("... nline"                          , x_nline                  ,    7);                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("close conversion run");                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("close the script file"              , READ_close  (&x_scrp)    ,    0);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("prepare for code run");                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("open the script file"               , READ_open   (x_nscrp, 'r', &x_scrp, &x_nline), 0);                                                                                                           <* 
+ *>    yUNIT_minval   ("... init"                           , DITTO_init ()       , 0);                                                                                                                                    <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "----------");                                                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify a new ditto mark");                                                                                                                                                                         <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);             <* 
+ *>    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);                                                 <* 
+ *>    strcpy (x_back, x_recd);                                                                                                                                                                                            <* 
+ *>    p = strtok (x_back, "");                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "COND"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);   <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");                                                                                                                         <* 
+ *>    yUNIT_minval   ("... nline"                          , x_nline                  ,    2);                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '3');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify passing over exec line");                                                                                                                                                                   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);             <* 
+ *>    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);                                                 <* 
+ *>    strcpy (x_back, x_recd);                                                                                                                                                                                            <* 
+ *>    p = strtok (x_back, "");                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "exec"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);   <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");                                                                                                                         <* 
+ *>    yUNIT_minval   ("... nline"                          , x_nline                  ,    3);                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify using the ditto mark");                                                                                                                                                                     <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);             <* 
+ *>    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);                                                 <* 
+ *>    strcpy (x_back, x_recd);                                                                                                                                                                                            <* 
+ *>    p = strtok (x_back, "");                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "DITTO" ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    1);   <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");                                                                                                                         <* 
+ *>    yUNIT_minval   ("... nline"                          , x_nline                  ,    5);                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "[ ditto stuff ]");                                                                                                             <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '3');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '3');                                                                                                                            <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    2);                                                                                                                            <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify pushing to the first line");                                                                                                                                                                <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);             <* 
+ *>    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);                                                 <* 
+ *>    strcpy (x_back, x_recd);                                                                                                                                                                                            <* 
+ *>    p = strtok (x_back, "");                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "COND"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);   <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");                                                                                                                         <* 
+ *>    yUNIT_minval   ("... nline"                          , x_nline                  ,    5);                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '3');                                                                                                                            <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    2);                                                                                                                            <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,    2);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify passing over exec line");                                                                                                                                                                   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);             <* 
+ *>    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);                                                 <* 
+ *>    strcpy (x_back, x_recd);                                                                                                                                                                                            <* 
+ *>    p = strtok (x_back, "");                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "exec"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);   <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");                                                                                                                         <* 
+ *>    yUNIT_minval   ("... nline"                          , x_nline                  ,    5);                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '3');                                                                                                                            <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,    2);                                                                                                                            <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,    3);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("verify returning after DITTO line");                                                                                                                                                               <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);             <* 
+ *>    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);                                                 <* 
+ *>    strcpy (x_back, x_recd);                                                                                                                                                                                            <* 
+ *>    p = strtok (x_back, "");                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "get"   ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);   <* 
+ *>    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");                                                                                                                         <* 
+ *>    yUNIT_minval   ("... nline"                          , x_nline                  ,    7);                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');                                                                                                                            <* 
+ *>    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond  ("close update run");                                                                                                                                                                                <* 
+ *>    yUNIT_minval   ("close the script file"              , READ_close  (&x_scrp)    ,    0);                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                        <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                               <* 
+ *>    rm_working_files ();                                                                                                                                                                                                <* 
+ *>    yUNIT_minprcs  ();                                                                                                                                                                                                  <* 
+ *>    return 0;                                                                                                                                                                                                           <* 
+ *> }                                                                                                                                                                                                                      <*/
 
 
 
@@ -2399,678 +2399,678 @@ koios__unit_ditto_parse  (char a_list)
 /*====================------------------------------------====================*/
 static void      o___REUSE___________________o (void) {;}
 
-char
-koios__unit_reuse_index  (char a_list)
-{
-   yUNIT_minscrp ("REUSE__index");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond ("verify on valid indexes");
-   yUNIT_minval  ("... run A"                          , REUSE__index (T_MASTER, 'A'),  0);
-   yUNIT_minval  ("... run E"                          , REUSE__index (T_SHARES, 'e'),  4);
-   yUNIT_minval  ("... run L"                          , REUSE__index (T_MASTER, 'L'), 11);
-   yUNIT_minval  ("... run Q"                          , REUSE__index (T_SHARES, 'q'), 16);
-   yUNIT_minval  ("... run L"                          , REUSE__index (T_MASTER, 'M'), 12);
-   yUNIT_minval  ("... run Z"                          , REUSE__index (T_SHARES, 'z'), 25);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify null handling");
-   yUNIT_minval  ("... run NULL"                       , REUSE__index (T_MASTER,  0 ), -999);
-   yUNIT_minval  ("... run NULL"                       , REUSE__index (T_SHARES,  0 ), -999);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify defaultish");
-   yUNIT_minval  ("... run space"                      , REUSE__index (T_MASTER, ' '), -999);
-   yUNIT_minval  ("... run -"                          , REUSE__index (T_SHARES, '-'), -999);
-   yUNIT_minval  ("... run ·"                          , REUSE__index (T_MASTER, '·'), -999);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("attempt invalid indexes");
-   yUNIT_minval  ("... run a"                          , REUSE__index (T_MASTER, 'a'), -999);
-   yUNIT_minval  ("... run ?"                          , REUSE__index (T_MASTER, '5'), -999);
-   yUNIT_minval  ("... run +"                          , REUSE__index (T_MASTER, '+'), -999);
-   yUNIT_minval  ("... run ê"                          , REUSE__index (T_MASTER, 'ê'), -999);
-   yUNIT_minval  ("... run ´"                          , REUSE__index (T_MASTER, '´'), -999);
-   yUNIT_minval  ("... run a"                          , REUSE__index (T_SHARES, 'A'), -999);
-   yUNIT_minval  ("... run ?"                          , REUSE__index (T_SHARES, '5'), -999);
-   yUNIT_minval  ("... run +"                          , REUSE__index (T_SHARES, '+'), -999);
-   yUNIT_minval  ("... run ê"                          , REUSE__index (T_SHARES, 'ê'), -999);
-   yUNIT_minval  ("... run ´"                          , REUSE__index (T_SHARES, '´'), -999);
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_reuse_getset (char a_list)
-{
-
-   char        x_desc      [LEN_LONG]  = "";
-
-   yUNIT_minscrp ("REUSE__set, REUSE__get, REUSE__used");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond ("verify clean start");
-   yUNIT_minval  ("... init"                           , REUSE_init ()       , 0);
-   yUNIT_minstr  ("... review"                         , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minval  ("call get NULL"                      , REUSE__get (T_MASTER,  0 , x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get ?"                         , REUSE__get (T_SHARES, '?', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get -"                         , REUSE__get (T_SHARES, '-', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get a"                         , REUSE__get (T_MASTER, 'a', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get 5"                         , REUSE__get (T_MASTER, '5', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify setting a reuse mark");
-   yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, 'A', 123, "verify something")    , 0);
-   yUNIT_minstr  ("... review"                         , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,  123);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "verify something");
-   yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify re-setting a reuse mark");
-   yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, 'A',  52, "check other"     )    , 0);
-   yUNIT_minstr  ("... review"                         , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,   52);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");
-   yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("attempt to set illegal marks");
-   yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, '/',   1, "verify something")    , -999);
-   yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, 'a',   1, "verify something")    , -999);
-   yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, '5',   1, "verify something")    , -999);
-   yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, 'ò',   1, "verify something")    , -999);
-   yUNIT_minstr  ("... review"                         , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,   52);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");
-   yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify setting another reuse mark");
-   yUNIT_minval  ("call set"                           , REUSE__set (T_SHARES, 'z',  22, "monster trouble" )    , 0);
-   yUNIT_minstr  ("... review"                         , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´z");
-   yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,   52);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");
-   yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         ,   22);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "monster trouble");
-   yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify setting two more");
-   yUNIT_minval  ("call set"                           , REUSE__set (T_SHARES, 'f',   8, NULL              )    , 0);
-   yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, 'M',1000, "!"               )    , 0);
-   yUNIT_minstr  ("... review"                         , REUSE__used ()      , "A-----´-----M-----´-----´-   ´----f´-----´-----´-----´z");
-   yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,   52);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");
-   yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         ,    8);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         ,   22);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "monster trouble");
-   yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , 1000);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "!");
-   yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify purging marks");
-   yUNIT_minval  ("... purge"                          , REUSE_init  ()      , 0);
-   yUNIT_minstr  ("... review"                         , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify setting by record");
-   yUNIT_minval  ("call set"                           , REUSE__set_recd (T_SHARES, 'f', 987,  0, "SHARE -f-  description field " )    , 0);
-   yUNIT_minstr  ("... review"                         , REUSE__used ()      , "´-----´-----´-----´-----´-   ´----f´-----´-----´-----´-");
-   yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , 987);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "description field");
-   yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify setting by record (with spaces)");
-   yUNIT_minval  ("call set"                           , REUSE__set_recd (T_MASTER, 'M', 789,  0, "GLOBAL -M-        indented        " )    , 0);
-   yUNIT_minstr  ("... review"                         , REUSE__used ()      , "´-----´-----M-----´-----´-   ´----f´-----´-----´-----´-");
-   yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , 987);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "description field");
-   yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , 789);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "indented");
-   yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         ,-999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_reuse_global (char a_list)
-{
-   char        x_master    [LEN_TITLE] = "master.unit";
-   char        x_name      [LEN_TITLE] = "apate.unit";
-   char        x_desc      [LEN_LONG]  = "";
-   char        x_share     =  '-';
-
-   yUNIT_minscrp ("REUSE_parse (GLOBAL)");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond ("set to defaults");
-   yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify ignoring other verbs");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "exec"     ,  0, "  exec      read a line          "   , x_desc, '-', &x_share),    0);
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "SCRP"     ,  0, "SCRP        test the reading     "   , x_desc, '-', &x_share),    0);
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt reusing a missing identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   1, "REUSE"    ,  0, "REUSE  -K-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:1:0: error: ¶REUSE  -K-¶ verb identifier ¶K¶ never set by GLOBAL");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt reusing a illegal identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   3, "REUSE"    ,  0, "REUSE  -ò-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:3:0: error: ¶REUSE  -ò-¶ verb identifier ¶ò¶ not valid [a-zA-Z]");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify simple global identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   4, "GLOBAL"   ,  0, "GLOBAL -A-  generate test data   "   , x_desc, '-', &x_share), 1);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , 'A');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         ,    4);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "generate test data");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify reusing the identifier (in normal unit)");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   5, "REUSE"    ,  0, "REUSE  -A-  - - - - - - - - - -  "   , x_desc, '-', &x_share), 1);
-   yUNIT_minchr  ("... check mark"                     , x_share             , 'A');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify reusing the identifier (in master unit)");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   5, "REUSE"    ,  0, "REUSE  -A-  - - - - - - - - - -  "   , x_desc, '-', &x_share), 1);
-   yUNIT_minchr  ("... check mark"                     , x_share             , 'A');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify defenses");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, NULL       ,  0, "REUSE  -A-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "REUSE"    ,  0, NULL                                      , x_desc, '-', &x_share), -999);
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "REUSE"    ,  0, "REUSE  -A-  - - - - - - - - - -  "   , x_desc, '-', NULL    ), -999);
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt without a identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   6, "GLOBAL"   ,  0, "GLOBAL      oops                 "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:6:0: error: ¶GLOBAL¶ missing valid identifier string, e.g., -A-");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with weird delimiters");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   7, "GLOBAL"   ,  0, "GLOBAL (M)  oops                 "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:7:0: error: ¶GLOBAL (M)¶ missing valid identifier string, e.g., -A-");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with no suffix");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   8, "GLOBAL"   ,  0, "GLOBAL -M   oops                 "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:8:0: error: ¶GLOBAL -M¶ identifier ¶-M¶ does not end with -, e.g., -A-");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with just suffix");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   9, "GLOBAL"   ,  0, "GLOBAL -M)  oops                 "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:9:0: error: ¶GLOBAL -M)¶ identifier ¶-M)¶ does not end with -, e.g., -A-");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify another global identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  10, "GLOBAL"   ,  0, "GLOBAL -M-  some repeating stuff "   , x_desc, '-', &x_share), 1);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----M-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , 'M');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         ,   10);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "some repeating stuff");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with just suffix");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  15, "GLOBAL"   ,  0, "GLOBAL -c-  wrong case           "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----M-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:15:0: error: ¶GLOBAL -c-¶ identifier ¶c¶ not valid åABCDEFGHIJKLMNOPQRSTUVWXYZæ");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt to redefine idenfitier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  15, "GLOBAL"   ,  0, "GLOBAL -M-  re-defining          "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----M-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:15:0: error: ¶GLOBAL -M-¶ identifier ¶M¶ already in use");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt to define outside master.unit");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  20, "GLOBAL"   ,  0, "GLOBAL -M-  re-defining          "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----M-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:20:0: error: GLOBAL verb not allowed outside master.unit");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify another global identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  30, "GLOBAL"   ,  0, "GLOBAL -Y-  final check          "   , x_desc, '-', &x_share), 1);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----M-----´-----Y-   ´-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , 'Y');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         ,   30);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "final check");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt reusing inside itself");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  35, "REUSE"    ,  0, "REUSE  -A-  - - - - - - - - - -  "   , x_desc, 'A', &x_share), -999);
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:35:0: error: ¶REUSE  -A-¶ verb identifier ¶A¶ called inside itself, recursive");
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_reuse_shares (char a_list)
-{
-   char        x_master    [LEN_TITLE] = "master.unit";
-   char        x_name      [LEN_TITLE] = "apate.unit";
-   char        x_desc      [LEN_LONG]  = "";
-   char        x_share     =  '-';
-
-   yUNIT_minscrp ("REUSE_parse (SHARE)");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond ("set to defaults");
-   yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify ignoring other verbs");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "exec"     ,  0, "  exec      read a line          "   , x_desc, '-', &x_share),    0);
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "SCRP"     ,  0, "SCRP        test the reading     "   , x_desc, '-', &x_share),    0);
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt reusing a missing identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   1, "REUSE"    ,  0, "REUSE  -k-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:1:0: error: ¶REUSE  -k-¶ verb identifier ¶k¶ never set by SHARED");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt reusing a illegal identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   3, "REUSE"    ,  0, "REUSE  -ò-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:3:0: error: ¶REUSE  -ò-¶ verb identifier ¶ò¶ not valid [a-zA-Z]");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify simple share identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   5, "SHARED"   ,  0, "SHARED -a-  generate test data   "   , x_desc, '-', &x_share), 1);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , 'a');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         ,    5);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "generate test data");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify reusing the identifier (in normal unit)");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   5, "REUSE"    ,  0, "REUSE  -a-  - - - - - - - - - -  "   , x_desc, '-', &x_share), 1);
-   yUNIT_minchr  ("... check mark"                     , x_share             , 'a');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt reusing the identifier (in master unit)");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   5, "REUSE"    ,  0, "REUSE  -a-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:5:0: error: REUSE verb on ¶a¶ SHARED identifier not allowed inside master.unit");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify defenses");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, NULL       ,  0, "REUSE  -a-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "REUSE"    ,  0, NULL                                      , x_desc, '-', &x_share), -999);
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "REUSE"    ,  0, "REUSE  -a-  - - - - - - - - - -  "   , x_desc, '-', NULL    ), -999);
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt without a identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   6, "SHARED"   ,  0, "SHARED      oops                 "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:6:0: error: ¶SHARED¶ missing valid identifier string, e.g., -a-");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with weird delimiters");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   7, "SHARED"   ,  0, "SHARED (r)  oops                 "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:7:0: error: ¶SHARED (r)¶ missing valid identifier string, e.g., -a-");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with no suffix");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   8, "SHARED"   ,  0, "SHARED -r   oops                 "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:8:0: error: ¶SHARED -r¶ identifier ¶-r¶ does not end with -, e.g., -a-");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with just suffix");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   9, "SHARED"   ,  0, "SHARED -r)  oops                 "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´-----´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:9:0: error: ¶SHARED -r)¶ identifier ¶-r)¶ does not end with -, e.g., -a-");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify another global identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  10, "SHARED"   ,  0, "SHARED -r-  some repeating stuff "   , x_desc, '-', &x_share), 1);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´----r´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , 'r');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         ,   10);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "some repeating stuff");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with just suffix");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  15, "SHARED"   ,  0, "SHARED -C-  wrong case           "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´----r´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:15:0: error: ¶SHARED -C-¶ identifier ¶C¶ not valid åabcdefghijklmnopqrstuvwxyzæ");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt to redefine idenfitier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  15, "SHARED"   ,  0, "SHARED -r-  re-defining          "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´----r´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:15:0: error: ¶SHARED -r-¶ identifier ¶r¶ already in use");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt to define inside master.unit");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  20, "SHARED"   ,  0, "SHARED -r-  re-defining          "   , x_desc, '-', &x_share), -999);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´----r´-----´-");
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:20:0: error: SHARED verb not allowed inside master.unit");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify another global identifier");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  30, "SHARED"   ,  0, "SHARED -z-  final check          "   , x_desc, '-', &x_share), 1);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´----r´-----´z");
-   yUNIT_minchr  ("... check mark"                     , x_share             , 'z');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         ,   30);
-   yUNIT_minstr  ("... show desc"                      , x_desc                           , "final check");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt reusing inside itself");
-   yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  35, "REUSE"    ,  0, "REUSE  -a-  - - - - - - - - - -  "   , x_desc, 'a', &x_share), -999);
-   yUNIT_minchr  ("... check mark"                     , x_share             , '-');
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:35:0: error: ¶REUSE  -a-¶ verb identifier ¶a¶ called inside itself, recursive");
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_reuse_update (char a_list)
-{
-   char        x_master    [LEN_TITLE] = "master.globals";
-   char        x_name      [LEN_TITLE] = "apate.unit";
-   char        x_desc      [LEN_LONG]  = "";
-   int         x_conds     =    0;
-   int         x_steps     =    0;
-   char        x_share     =  '-';
-
-   yUNIT_minscrp ("REUSE_update, REUSE_export, REUSE_import, REUSE_add");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond ("set to defaults");
-   yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify updating a mark with stats");
-   yUNIT_minval  ("call set"                           , REUSE__set   (T_MASTER, 'A', 123, "verify something")         , 0);
-   yUNIT_minval  ("call update"                        , REUSE_update ('A',   5,  15)                                  , 0);
-   yUNIT_minstr  ("... review"                         , REUSE__used  ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minval  ("call get mark"                      , REUSE__get   (T_MASTER, 'A', x_desc, &x_conds, &x_steps)      , 123);
-   yUNIT_minstr  ("... show desc"                      , x_desc       , "verify something");
-   yUNIT_minval  ("... show conds"                     , x_conds      , 5);
-   yUNIT_minval  ("... show steps"                     , x_steps      , 15);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify updating a second mark with stats");
-   yUNIT_minval  ("call set"                           , REUSE__set   (T_MASTER, 'J', 678, "big shared global")        , 0);
-   yUNIT_minval  ("call update"                        , REUSE_update ('J',  21,  62)                                  , 0);
-   yUNIT_minstr  ("... review"                         , REUSE__used  ()      , "A-----´--J--´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minval  ("call get mark"                      , REUSE__get   (T_MASTER, 'J', x_desc, &x_conds, &x_steps)      , 678);
-   yUNIT_minstr  ("... show desc"                      , x_desc       , "big shared global");
-   yUNIT_minval  ("... show conds"                     , x_conds      , 21);
-   yUNIT_minval  ("... show steps"                     , x_steps      , 62);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify exporting");
-   yUNIT_minval  ("call export"                        , REUSE_export (x_master)                                       , 0);
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master,   0), "A  123 verify·something                                                               5   15");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "B   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "C   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "D   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "E   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "F   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "G   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "H   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "I   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "J  678 big·shared·global                                                             21   62");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "K   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "L   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "M   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "N   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "O   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "P   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "Q   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "R   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "S   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "T   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "U   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "V   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "W   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "X   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "Y   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "Z   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), ""                                                                                            );
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("set to defaults");
-   yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
-   yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify importing");
-   yUNIT_minval  ("call import"                        , REUSE_import (x_master)                                       , 0);
-   yUNIT_minstr  ("... review"                         , REUSE__used  ()      , "A-----´--J--´-----´-----´-   ´-----´-----´-----´-----´-");
-   yUNIT_minval  ("call get mark"                      , REUSE__get   (T_MASTER, 'A', x_desc, &x_conds, &x_steps)      , 123);
-
-   x_conds =  25;  x_steps = 100;
-   yUNIT_mincond ("verify adding to counters");
-   yUNIT_minval  ("call add"                           , REUSE_add    ('J', &x_conds, &x_steps)              , 0);
-   yUNIT_minstr  ("... show desc"                      , x_desc       , "verify something");
-   yUNIT_minval  ("... show conds"                     , x_conds      , 46);
-   yUNIT_minval  ("... show steps"                     , x_steps      , 162);
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
+/*> char                                                                                            <* 
+ *> koios__unit_reuse_index  (char a_list)                                                          <* 
+ *> {                                                                                               <* 
+ *>    yUNIT_minscrp ("REUSE__index");                                                              <* 
+ *>    if (a_list == 'y')  return 0;                                                                <* 
+ *>    yURG_err_none ();                                                                            <* 
+ *>    rm_working_files ();                                                                         <* 
+ *>    PROG__unit_quiet  ();                                                                        <* 
+ *>                                                                                                 <* 
+ *>    yUNIT_mincond ("verify on valid indexes");                                                   <* 
+ *>    yUNIT_minval  ("... run A"                          , REUSE__index (T_MASTER, 'A'),  0);     <* 
+ *>    yUNIT_minval  ("... run E"                          , REUSE__index (T_SHARES, 'e'),  4);     <* 
+ *>    yUNIT_minval  ("... run L"                          , REUSE__index (T_MASTER, 'L'), 11);     <* 
+ *>    yUNIT_minval  ("... run Q"                          , REUSE__index (T_SHARES, 'q'), 16);     <* 
+ *>    yUNIT_minval  ("... run L"                          , REUSE__index (T_MASTER, 'M'), 12);     <* 
+ *>    yUNIT_minval  ("... run Z"                          , REUSE__index (T_SHARES, 'z'), 25);     <* 
+ *>    yUNIT_mindnoc ();                                                                            <* 
+ *>                                                                                                 <* 
+ *>    yUNIT_mincond ("verify null handling");                                                      <* 
+ *>    yUNIT_minval  ("... run NULL"                       , REUSE__index (T_MASTER,  0 ), -999);   <* 
+ *>    yUNIT_minval  ("... run NULL"                       , REUSE__index (T_SHARES,  0 ), -999);   <* 
+ *>    yUNIT_mindnoc ();                                                                            <* 
+ *>                                                                                                 <* 
+ *>    yUNIT_mincond ("verify defaultish");                                                         <* 
+ *>    yUNIT_minval  ("... run space"                      , REUSE__index (T_MASTER, ' '), -999);   <* 
+ *>    yUNIT_minval  ("... run -"                          , REUSE__index (T_SHARES, '-'), -999);   <* 
+ *>    yUNIT_minval  ("... run ·"                          , REUSE__index (T_MASTER, '·'), -999);   <* 
+ *>    yUNIT_mindnoc ();                                                                            <* 
+ *>                                                                                                 <* 
+ *>    yUNIT_mincond ("attempt invalid indexes");                                                   <* 
+ *>    yUNIT_minval  ("... run a"                          , REUSE__index (T_MASTER, 'a'), -999);   <* 
+ *>    yUNIT_minval  ("... run ?"                          , REUSE__index (T_MASTER, '5'), -999);   <* 
+ *>    yUNIT_minval  ("... run +"                          , REUSE__index (T_MASTER, '+'), -999);   <* 
+ *>    yUNIT_minval  ("... run ê"                          , REUSE__index (T_MASTER, 'ê'), -999);   <* 
+ *>    yUNIT_minval  ("... run ´"                          , REUSE__index (T_MASTER, '´'), -999);   <* 
+ *>    yUNIT_minval  ("... run a"                          , REUSE__index (T_SHARES, 'A'), -999);   <* 
+ *>    yUNIT_minval  ("... run ?"                          , REUSE__index (T_SHARES, '5'), -999);   <* 
+ *>    yUNIT_minval  ("... run +"                          , REUSE__index (T_SHARES, '+'), -999);   <* 
+ *>    yUNIT_minval  ("... run ê"                          , REUSE__index (T_SHARES, 'ê'), -999);   <* 
+ *>    yUNIT_minval  ("... run ´"                          , REUSE__index (T_SHARES, '´'), -999);   <* 
+ *>    yUNIT_mindnoc ();                                                                            <* 
+ *>                                                                                                 <* 
+ *>    PROG__unit_end    ();                                                                        <* 
+ *>    rm_working_files ();                                                                         <* 
+ *>    yUNIT_minprcs ();                                                                            <* 
+ *>    return 0;                                                                                    <* 
+ *> }                                                                                               <*/
+
+/*> char                                                                                                                                                  <* 
+ *> koios__unit_reuse_getset (char a_list)                                                                                                                <* 
+ *> {                                                                                                                                                     <* 
+ *>                                                                                                                                                       <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                                          <* 
+ *>                                                                                                                                                       <* 
+ *>    yUNIT_minscrp ("REUSE__set, REUSE__get, REUSE__used");                                                                                             <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                      <* 
+ *>    yURG_err_none ();                                                                                                                                  <* 
+ *>    rm_working_files ();                                                                                                                               <* 
+ *>    PROG__unit_quiet  ();                                                                                                                              <* 
+ *>                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify clean start");                                                                                                              <* 
+ *>    yUNIT_minval  ("... init"                           , REUSE_init ()       , 0);                                                                    <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");            <* 
+ *>    yUNIT_minval  ("call get NULL"                      , REUSE__get (T_MASTER,  0 , x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get ?"                         , REUSE__get (T_SHARES, '?', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get -"                         , REUSE__get (T_SHARES, '-', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get a"                         , REUSE__get (T_MASTER, 'a', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get 5"                         , REUSE__get (T_MASTER, '5', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                  <* 
+ *>                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify setting a reuse mark");                                                                                                     <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, 'A', 123, "verify something")    , 0);                                 <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");            <* 
+ *>    yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,  123);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "verify something");                                      <* 
+ *>    yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                  <* 
+ *>                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify re-setting a reuse mark");                                                                                                  <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, 'A',  52, "check other"     )    , 0);                                 <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");            <* 
+ *>    yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,   52);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");                                           <* 
+ *>    yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                  <* 
+ *>                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("attempt to set illegal marks");                                                                                                    <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, '/',   1, "verify something")    , -999);                              <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, 'a',   1, "verify something")    , -999);                              <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, '5',   1, "verify something")    , -999);                              <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, 'ò',   1, "verify something")    , -999);                              <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");            <* 
+ *>    yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,   52);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");                                           <* 
+ *>    yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                  <* 
+ *>                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify setting another reuse mark");                                                                                               <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set (T_SHARES, 'z',  22, "monster trouble" )    , 0);                                 <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´z");            <* 
+ *>    yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,   52);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");                                           <* 
+ *>    yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         ,   22);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "monster trouble");                                       <* 
+ *>    yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                  <* 
+ *>                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify setting two more");                                                                                                         <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set (T_SHARES, 'f',   8, NULL              )    , 0);                                 <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set (T_MASTER, 'M',1000, "!"               )    , 0);                                 <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used ()      , "A-----´-----M-----´-----´-   ´----f´-----´-----´-----´z");            <* 
+ *>    yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,   52);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "check other");                                           <* 
+ *>    yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         ,    8);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         , -999);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         ,   22);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "monster trouble");                                       <* 
+ *>    yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , 1000);                              <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "!");                                                     <* 
+ *>    yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                  <* 
+ *>                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify purging marks");                                                                                                            <* 
+ *>    yUNIT_minval  ("... purge"                          , REUSE_init  ()      , 0);                                                                    <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");            <* 
+ *>    yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                  <* 
+ *>                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify setting by record");                                                                                                        <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set_recd (T_SHARES, 'f', 987,  0, "SHARE -f-  description field " )    , 0);        <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used ()      , "´-----´-----´-----´-----´-   ´----f´-----´-----´-----´-");            <* 
+ *>    yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , 987);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "description field");                                     <* 
+ *>    yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                  <* 
+ *>                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify setting by record (with spaces)");                                                                                          <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set_recd (T_MASTER, 'M', 789,  0, "GLOBAL -M-        indented        " )    , 0);   <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used ()      , "´-----´-----M-----´-----´-   ´----f´-----´-----´-----´-");            <* 
+ *>    yUNIT_minval  ("call get A"                         , REUSE__get (T_MASTER, 'A', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get f"                         , REUSE__get (T_SHARES, 'f', x_desc, NULL, NULL)         , 987);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "description field");                                     <* 
+ *>    yUNIT_minval  ("call get K"                         , REUSE__get (T_MASTER, 'K', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get z"                         , REUSE__get (T_SHARES, 'z', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_minval  ("call get M"                         , REUSE__get (T_MASTER, 'M', x_desc, NULL, NULL)         , 789);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "indented");                                              <* 
+ *>    yUNIT_minval  ("call get p"                         , REUSE__get (T_SHARES, 'p', x_desc, NULL, NULL)         ,-999);                               <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                  <* 
+ *>                                                                                                                                                       <* 
+ *>    PROG__unit_end    ();                                                                                                                              <* 
+ *>    rm_working_files ();                                                                                                                               <* 
+ *>    yUNIT_minprcs ();                                                                                                                                  <* 
+ *>    return 0;                                                                                                                                          <* 
+ *> }                                                                                                                                                     <*/
+
+/*> char                                                                                                                                                                               <* 
+ *> koios__unit_reuse_global (char a_list)                                                                                                                                             <* 
+ *> {                                                                                                                                                                                  <* 
+ *>    char        x_master    [LEN_TITLE] = "master.unit";                                                                                                                            <* 
+ *>    char        x_name      [LEN_TITLE] = "apate.unit";                                                                                                                             <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                       <* 
+ *>    char        x_share     =  '-';                                                                                                                                                 <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yUNIT_minscrp ("REUSE_parse (GLOBAL)");                                                                                                                                         <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                   <* 
+ *>    yURG_err_none ();                                                                                                                                                               <* 
+ *>    rm_working_files ();                                                                                                                                                            <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                           <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("set to defaults");                                                                                                                                              <* 
+ *>    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);                                                                                                 <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify ignoring other verbs");                                                                                                                                  <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "exec"     ,  0, "  exec      read a line          "   , x_desc, '-', &x_share),    0);     <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "SCRP"     ,  0, "SCRP        test the reading     "   , x_desc, '-', &x_share),    0);     <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt reusing a missing identifier");                                                                                                                         <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   1, "REUSE"    ,  0, "REUSE  -K-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:1:0: error: ¶REUSE  -K-¶ verb identifier ¶K¶ never set by GLOBAL");                        <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt reusing a illegal identifier");                                                                                                                         <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   3, "REUSE"    ,  0, "REUSE  -ò-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:3:0: error: ¶REUSE  -ò-¶ verb identifier ¶ò¶ not valid [a-zA-Z]");                         <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify simple global identifier");                                                                                                                              <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   4, "GLOBAL"   ,  0, "GLOBAL -A-  generate test data   "   , x_desc, '-', &x_share), 1);        <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , 'A');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                    <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         ,    4);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "generate test data");                                                                 <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify reusing the identifier (in normal unit)");                                                                                                               <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   5, "REUSE"    ,  0, "REUSE  -A-  - - - - - - - - - -  "   , x_desc, '-', &x_share), 1);        <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , 'A');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                    <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify reusing the identifier (in master unit)");                                                                                                               <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   5, "REUSE"    ,  0, "REUSE  -A-  - - - - - - - - - -  "   , x_desc, '-', &x_share), 1);        <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , 'A');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                    <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify defenses");                                                                                                                                              <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, NULL       ,  0, "REUSE  -A-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "REUSE"    ,  0, NULL                                      , x_desc, '-', &x_share), -999);   <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   0, "REUSE"    ,  0, "REUSE  -A-  - - - - - - - - - -  "   , x_desc, '-', NULL    ), -999);     <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt without a identifier");                                                                                                                                 <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   6, "GLOBAL"   ,  0, "GLOBAL      oops                 "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:6:0: error: ¶GLOBAL¶ missing valid identifier string, e.g., -A-");                         <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt with weird delimiters");                                                                                                                                <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   7, "GLOBAL"   ,  0, "GLOBAL (M)  oops                 "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:7:0: error: ¶GLOBAL (M)¶ missing valid identifier string, e.g., -A-");                     <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt with no suffix");                                                                                                                                       <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   8, "GLOBAL"   ,  0, "GLOBAL -M   oops                 "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:8:0: error: ¶GLOBAL -M¶ identifier ¶-M¶ does not end with -, e.g., -A-");                  <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt with just suffix");                                                                                                                                     <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   9, "GLOBAL"   ,  0, "GLOBAL -M)  oops                 "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:9:0: error: ¶GLOBAL -M)¶ identifier ¶-M)¶ does not end with -, e.g., -A-");                <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify another global identifier");                                                                                                                             <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  10, "GLOBAL"   ,  0, "GLOBAL -M-  some repeating stuff "   , x_desc, '-', &x_share), 1);        <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----M-----´-----´-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , 'M');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                    <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         ,   10);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "some repeating stuff");                                                               <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt with just suffix");                                                                                                                                     <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  15, "GLOBAL"   ,  0, "GLOBAL -c-  wrong case           "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----M-----´-----´-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:15:0: error: ¶GLOBAL -c-¶ identifier ¶c¶ not valid åABCDEFGHIJKLMNOPQRSTUVWXYZæ");         <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt to redefine idenfitier");                                                                                                                               <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  15, "GLOBAL"   ,  0, "GLOBAL -M-  re-defining          "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----M-----´-----´-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:15:0: error: ¶GLOBAL -M-¶ identifier ¶M¶ already in use");                                 <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt to define outside master.unit");                                                                                                                        <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  20, "GLOBAL"   ,  0, "GLOBAL -M-  re-defining          "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----M-----´-----´-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:20:0: error: GLOBAL verb not allowed outside master.unit");                                 <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify another global identifier");                                                                                                                             <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  30, "GLOBAL"   ,  0, "GLOBAL -Y-  final check          "   , x_desc, '-', &x_share), 1);        <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "A-----´-----M-----´-----Y-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , 'Y');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                    <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_MASTER, x_share, x_desc, NULL, NULL)         ,   30);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "final check");                                                                        <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt reusing inside itself");                                                                                                                                <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  35, "REUSE"    ,  0, "REUSE  -A-  - - - - - - - - - -  "   , x_desc, 'A', &x_share), -999);     <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:35:0: error: ¶REUSE  -A-¶ verb identifier ¶A¶ called inside itself, recursive");           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    PROG__unit_end    ();                                                                                                                                                           <* 
+ *>    rm_working_files ();                                                                                                                                                            <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                               <* 
+ *>    return 0;                                                                                                                                                                       <* 
+ *> }                                                                                                                                                                                  <*/
+
+/*> char                                                                                                                                                                               <* 
+ *> koios__unit_reuse_shares (char a_list)                                                                                                                                             <* 
+ *> {                                                                                                                                                                                  <* 
+ *>    char        x_master    [LEN_TITLE] = "master.unit";                                                                                                                            <* 
+ *>    char        x_name      [LEN_TITLE] = "apate.unit";                                                                                                                             <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                       <* 
+ *>    char        x_share     =  '-';                                                                                                                                                 <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yUNIT_minscrp ("REUSE_parse (SHARE)");                                                                                                                                          <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                   <* 
+ *>    yURG_err_none ();                                                                                                                                                               <* 
+ *>    rm_working_files ();                                                                                                                                                            <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                           <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("set to defaults");                                                                                                                                              <* 
+ *>    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);                                                                                                 <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify ignoring other verbs");                                                                                                                                  <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "exec"     ,  0, "  exec      read a line          "   , x_desc, '-', &x_share),    0);     <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "SCRP"     ,  0, "SCRP        test the reading     "   , x_desc, '-', &x_share),    0);     <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt reusing a missing identifier");                                                                                                                         <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   1, "REUSE"    ,  0, "REUSE  -k-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:1:0: error: ¶REUSE  -k-¶ verb identifier ¶k¶ never set by SHARED");                         <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt reusing a illegal identifier");                                                                                                                         <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   3, "REUSE"    ,  0, "REUSE  -ò-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:3:0: error: ¶REUSE  -ò-¶ verb identifier ¶ò¶ not valid [a-zA-Z]");                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify simple share identifier");                                                                                                                               <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   5, "SHARED"   ,  0, "SHARED -a-  generate test data   "   , x_desc, '-', &x_share), 1);        <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , 'a');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                    <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         ,    5);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "generate test data");                                                                 <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify reusing the identifier (in normal unit)");                                                                                                               <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   5, "REUSE"    ,  0, "REUSE  -a-  - - - - - - - - - -  "   , x_desc, '-', &x_share), 1);        <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , 'a');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                    <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt reusing the identifier (in master unit)");                                                                                                              <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,   5, "REUSE"    ,  0, "REUSE  -a-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:5:0: error: REUSE verb on ¶a¶ SHARED identifier not allowed inside master.unit");          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify defenses");                                                                                                                                              <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, NULL       ,  0, "REUSE  -a-  - - - - - - - - - -  "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "REUSE"    ,  0, NULL                                      , x_desc, '-', &x_share), -999);   <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   0, "REUSE"    ,  0, "REUSE  -a-  - - - - - - - - - -  "   , x_desc, '-', NULL    ), -999);     <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt without a identifier");                                                                                                                                 <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   6, "SHARED"   ,  0, "SHARED      oops                 "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:6:0: error: ¶SHARED¶ missing valid identifier string, e.g., -a-");                          <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt with weird delimiters");                                                                                                                                <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   7, "SHARED"   ,  0, "SHARED (r)  oops                 "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:7:0: error: ¶SHARED (r)¶ missing valid identifier string, e.g., -a-");                      <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt with no suffix");                                                                                                                                       <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   8, "SHARED"   ,  0, "SHARED -r   oops                 "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:8:0: error: ¶SHARED -r¶ identifier ¶-r¶ does not end with -, e.g., -a-");                   <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt with just suffix");                                                                                                                                     <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,   9, "SHARED"   ,  0, "SHARED -r)  oops                 "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´-----´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:9:0: error: ¶SHARED -r)¶ identifier ¶-r)¶ does not end with -, e.g., -a-");                 <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify another global identifier");                                                                                                                             <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  10, "SHARED"   ,  0, "SHARED -r-  some repeating stuff "   , x_desc, '-', &x_share), 1);        <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´----r´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , 'r');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                    <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         ,   10);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "some repeating stuff");                                                               <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt with just suffix");                                                                                                                                     <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  15, "SHARED"   ,  0, "SHARED -C-  wrong case           "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´----r´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:15:0: error: ¶SHARED -C-¶ identifier ¶C¶ not valid åabcdefghijklmnopqrstuvwxyzæ");          <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt to redefine idenfitier");                                                                                                                               <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  15, "SHARED"   ,  0, "SHARED -r-  re-defining          "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´----r´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:15:0: error: ¶SHARED -r-¶ identifier ¶r¶ already in use");                                  <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt to define inside master.unit");                                                                                                                         <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_master,  20, "SHARED"   ,  0, "SHARED -r-  re-defining          "   , x_desc, '-', &x_share), -999);     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´----r´-----´-");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "master.unit:20:0: error: SHARED verb not allowed inside master.unit");                                 <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         , -999);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");                                                                                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("verify another global identifier");                                                                                                                             <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  30, "SHARED"   ,  0, "SHARED -z-  final check          "   , x_desc, '-', &x_share), 1);        <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   a-----´-----´----r´-----´z");                                         <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , 'z');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                    <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get (T_SHARES, x_share, x_desc, NULL, NULL)         ,   30);                                                       <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc                           , "final check");                                                                        <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    yURG_err_clear ();                                                                                                                                                              <* 
+ *>    yUNIT_mincond ("attempt reusing inside itself");                                                                                                                                <* 
+ *>    yUNIT_minval  ("check reuses"                       , REUSE_parse (x_name  ,  35, "REUSE"    ,  0, "REUSE  -a-  - - - - - - - - - -  "   , x_desc, 'a', &x_share), -999);     <* 
+ *>    yUNIT_minchr  ("... check mark"                     , x_share             , '-');                                                                                               <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:35:0: error: ¶REUSE  -a-¶ verb identifier ¶a¶ called inside itself, recursive");            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                    <* 
+ *>    PROG__unit_end    ();                                                                                                                                                           <* 
+ *>    rm_working_files ();                                                                                                                                                            <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                               <* 
+ *>    return 0;                                                                                                                                                                       <* 
+ *> }                                                                                                                                                                                  <*/
+
+/*> char                                                                                                                                                                                   <* 
+ *> koios__unit_reuse_update (char a_list)                                                                                                                                                 <* 
+ *> {                                                                                                                                                                                      <* 
+ *>    char        x_master    [LEN_TITLE] = "master.globals";                                                                                                                             <* 
+ *>    char        x_name      [LEN_TITLE] = "apate.unit";                                                                                                                                 <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                           <* 
+ *>    int         x_conds     =    0;                                                                                                                                                     <* 
+ *>    int         x_steps     =    0;                                                                                                                                                     <* 
+ *>    char        x_share     =  '-';                                                                                                                                                     <* 
+ *>                                                                                                                                                                                        <* 
+ *>    yUNIT_minscrp ("REUSE_update, REUSE_export, REUSE_import, REUSE_add");                                                                                                              <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                       <* 
+ *>    yURG_err_none ();                                                                                                                                                                   <* 
+ *>    rm_working_files ();                                                                                                                                                                <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                               <* 
+ *>                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond ("set to defaults");                                                                                                                                                  <* 
+ *>    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);                                                                                                     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");                                             <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                   <* 
+ *>                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond ("verify updating a mark with stats");                                                                                                                                <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set   (T_MASTER, 'A', 123, "verify something")         , 0);                                                           <* 
+ *>    yUNIT_minval  ("call update"                        , REUSE_update ('A',   5,  15)                                  , 0);                                                           <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used  ()      , "A-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");                                            <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get   (T_MASTER, 'A', x_desc, &x_conds, &x_steps)      , 123);                                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc       , "verify something");                                                                                           <* 
+ *>    yUNIT_minval  ("... show conds"                     , x_conds      , 5);                                                                                                            <* 
+ *>    yUNIT_minval  ("... show steps"                     , x_steps      , 15);                                                                                                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                   <* 
+ *>                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond ("verify updating a second mark with stats");                                                                                                                         <* 
+ *>    yUNIT_minval  ("call set"                           , REUSE__set   (T_MASTER, 'J', 678, "big shared global")        , 0);                                                           <* 
+ *>    yUNIT_minval  ("call update"                        , REUSE_update ('J',  21,  62)                                  , 0);                                                           <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used  ()      , "A-----´--J--´-----´-----´-   ´-----´-----´-----´-----´-");                                            <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get   (T_MASTER, 'J', x_desc, &x_conds, &x_steps)      , 678);                                                         <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc       , "big shared global");                                                                                          <* 
+ *>    yUNIT_minval  ("... show conds"                     , x_conds      , 21);                                                                                                           <* 
+ *>    yUNIT_minval  ("... show steps"                     , x_steps      , 62);                                                                                                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                   <* 
+ *>                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond ("verify exporting");                                                                                                                                                 <* 
+ *>    yUNIT_minval  ("call export"                        , REUSE_export (x_master)                                       , 0);                                                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master,   0), "A  123 verify·something                                                               5   15");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "B   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "C   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "D   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "E   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "F   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "G   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "H   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "I   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "J  678 big·shared·global                                                             21   62");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "K   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "L   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "M   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "N   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "O   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "P   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "Q   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "R   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "S   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "T   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "U   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "V   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "W   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "X   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "Y   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), "Z   -1                                                                                0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_master, 'Ö'), ""                                                                                            );   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                   <* 
+ *>                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond ("set to defaults");                                                                                                                                                  <* 
+ *>    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);                                                                                                     <* 
+ *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");                                             <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                   <* 
+ *>                                                                                                                                                                                        <* 
+ *>    yUNIT_mincond ("verify importing");                                                                                                                                                 <* 
+ *>    yUNIT_minval  ("call import"                        , REUSE_import (x_master)                                       , 0);                                                           <* 
+ *>    yUNIT_minstr  ("... review"                         , REUSE__used  ()      , "A-----´--J--´-----´-----´-   ´-----´-----´-----´-----´-");                                            <* 
+ *>    yUNIT_minval  ("call get mark"                      , REUSE__get   (T_MASTER, 'A', x_desc, &x_conds, &x_steps)      , 123);                                                         <* 
+ *>                                                                                                                                                                                        <* 
+ *>    x_conds =  25;  x_steps = 100;                                                                                                                                                      <* 
+ *>    yUNIT_mincond ("verify adding to counters");                                                                                                                                        <* 
+ *>    yUNIT_minval  ("call add"                           , REUSE_add    ('J', &x_conds, &x_steps)              , 0);                                                                     <* 
+ *>    yUNIT_minstr  ("... show desc"                      , x_desc       , "verify something");                                                                                           <* 
+ *>    yUNIT_minval  ("... show conds"                     , x_conds      , 46);                                                                                                           <* 
+ *>    yUNIT_minval  ("... show steps"                     , x_steps      , 162);                                                                                                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                   <* 
+ *>                                                                                                                                                                                        <* 
+ *>    PROG__unit_end    ();                                                                                                                                                               <* 
+ *>    rm_working_files ();                                                                                                                                                                <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                   <* 
+ *>    return 0;                                                                                                                                                                           <* 
+ *> }                                                                                                                                                                                      <*/
 
 
 
@@ -4871,126 +4871,126 @@ koios__unit_code_driver  (char a_list)
 /*====================------------------------------------====================*/
 static void      o___SCRP____________________o (void) {;}
 
-char
-koios__unit_wave_stage   (char a_list)
-{
-   char        x_stage     [LEN_SHORT] = "";
-   yUNIT_minscrp ("WAVE_parse");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify without stage");
-   yUNIT_minval  ("parse"                              , WAVE_parse      ("apate.unit", 25, "SCRP", "SCRP"        , x_stage), 0);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify parse good stage 0 (first)");
-   yUNIT_minval  ("parse [Àè]"                         , WAVE_parse      ("apate.unit", 25, "SCRP", "SCRP    [Àè]", x_stage), 0);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "Àè");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with an illegal wave");
-   yUNIT_minval  ("parse [aè]"                         , WAVE_parse      ("apate.unit", 26, "SCRP", "SCRP    [aè]", x_stage), -999);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:26:9: error: SCRP identifier, wave (a) not a subscript (ÀÁÂÃÄÅ), e.g., [Áì]");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with an illegal stage");
-   yUNIT_minval  ("parse [ÀA]"                         , WAVE_parse      ("apate.unit", 27, "SCRP", "SCRP    [ÀA]", x_stage), -999);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:27:10: error: SCRP identifier, stage (A) not a greek letter (èéêëìíîïðñòóôõö÷øùúûüýþÿ), e.g., [Áì]");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify parse good stage 1");
-   yUNIT_minval  ("parse [Áí]"                         , WAVE_parse      ("apate.unit", 28, "SCRP", "SCRP    [Áí]", x_stage), 0);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "Áí");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with mismatched stage");
-   yUNIT_minval  ("parse [Âí]"                         , WAVE_parse      ("apate.unit", 29, "SCRP", "SCRP    [Âí]", x_stage), -999);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:29:9: error: SCRP identifier, wave (Â) and stage (í) mismatched, e.g., [Áì]");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify parse good stage 2");
-   yUNIT_minval  ("parse [Âò]"                         , WAVE_parse      ("apate.unit", 30, "SCRP", "SCRP    [Âò]", x_stage), 0);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "Âò");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with wrong start");        
-   yUNIT_minval  ("parse (Âò]"                         , WAVE_parse      ("apate.unit", 22, "SCRP", "SCRP    (Âò]", x_stage), -999);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:22:0: error: SCRP identifier, illegal char '(' after verb, maybe stage, e.g., [Áì]");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with wrong parens");        
-   yUNIT_minval  ("parse [Âò)"                         , WAVE_parse      ("apate.unit", 31, "SCRP", "SCRP    [Âò)", x_stage), -999);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:31:11: error: SCRP identifier, stage uses wrong end bracket ')' vs ']', e.g., [Áì]");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify parse good stage 3");
-   yUNIT_minval  ("parse [Ã÷]"                         , WAVE_parse      ("apate.unit", 32, "SCRP", "SCRP    [Ã÷]", x_stage), 0);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "Ã÷");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt with no close paren");      
-   yUNIT_minval  ("parse [Ã÷"                          , WAVE_parse      ("apate.unit", 33, "SCRP", "SCRP    [Ã÷", x_stage ), -999);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:33:8: error: SCRP identifier, stage ¶[Ã÷¶ must be exactly 4 characters, e.g., [Áì]");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify parse good stage 4");
-   yUNIT_minval  ("parse [Äù]"                         , WAVE_parse      ("apate.unit", 34, "SCRP", "SCRP    [Äù]", x_stage), 0);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "Äù");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt on an empty");                
-   yUNIT_minval  ("parse "                             , WAVE_parse      ("apate.unit", 35, "SCRP", ""            , x_stage), -999);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("verify parse good stage 5 (last)");
-   yUNIT_minval  ("parse [Åÿ]"                         , WAVE_parse      ("apate.unit", 36, "SCRP", "SCRP    [Åÿ]", x_stage), 0);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "Åÿ");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   yURG_err_clear ();
-   yUNIT_mincond ("attempt on a null");                
-   yUNIT_minval  ("parse "                             , WAVE_parse      ("apate.unit", 37, "SCRP", NULL          , x_stage), -999);
-   yUNIT_minstr  ("... check stage"                    , x_stage       , "");
-   yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
+/*> char                                                                                                                                                                                           <* 
+ *> koios__unit_wave_stage   (char a_list)                                                                                                                                                         <* 
+ *> {                                                                                                                                                                                              <* 
+ *>    char        x_stage     [LEN_SHORT] = "";                                                                                                                                                   <* 
+ *>    yUNIT_minscrp ("WAVE_parse");                                                                                                                                                               <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                               <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                             <* 
+ *>    rm_working_files ();                                                                                                                                                                        <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("verify without stage");                                                                                                                                                     <* 
+ *>    yUNIT_minval  ("parse"                              , WAVE_parse      ("apate.unit", 25, "SCRP", "SCRP"        , x_stage), 0);                                                              <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "");                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("verify parse good stage 0 (first)");                                                                                                                                        <* 
+ *>    yUNIT_minval  ("parse [Àè]"                         , WAVE_parse      ("apate.unit", 25, "SCRP", "SCRP    [Àè]", x_stage), 0);                                                              <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "Àè");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("attempt with an illegal wave");                                                                                                                                             <* 
+ *>    yUNIT_minval  ("parse [aè]"                         , WAVE_parse      ("apate.unit", 26, "SCRP", "SCRP    [aè]", x_stage), -999);                                                           <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "");                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:26:9: error: SCRP identifier, wave (a) not a subscript (ÀÁÂÃÄÅ), e.g., [Áì]");                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("attempt with an illegal stage");                                                                                                                                            <* 
+ *>    yUNIT_minval  ("parse [ÀA]"                         , WAVE_parse      ("apate.unit", 27, "SCRP", "SCRP    [ÀA]", x_stage), -999);                                                           <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "");                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:27:10: error: SCRP identifier, stage (A) not a greek letter (èéêëìíîïðñòóôõö÷øùúûüýþÿ), e.g., [Áì]");   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("verify parse good stage 1");                                                                                                                                                <* 
+ *>    yUNIT_minval  ("parse [Áí]"                         , WAVE_parse      ("apate.unit", 28, "SCRP", "SCRP    [Áí]", x_stage), 0);                                                              <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "Áí");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("attempt with mismatched stage");                                                                                                                                            <* 
+ *>    yUNIT_minval  ("parse [Âí]"                         , WAVE_parse      ("apate.unit", 29, "SCRP", "SCRP    [Âí]", x_stage), -999);                                                           <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "");                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:29:9: error: SCRP identifier, wave (Â) and stage (í) mismatched, e.g., [Áì]");                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("verify parse good stage 2");                                                                                                                                                <* 
+ *>    yUNIT_minval  ("parse [Âò]"                         , WAVE_parse      ("apate.unit", 30, "SCRP", "SCRP    [Âò]", x_stage), 0);                                                              <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "Âò");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("attempt with wrong start");                                                                                                                                                 <* 
+ *>    yUNIT_minval  ("parse (Âò]"                         , WAVE_parse      ("apate.unit", 22, "SCRP", "SCRP    (Âò]", x_stage), -999);                                                           <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "");                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:22:0: error: SCRP identifier, illegal char '(' after verb, maybe stage, e.g., [Áì]");                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("attempt with wrong parens");                                                                                                                                                <* 
+ *>    yUNIT_minval  ("parse [Âò)"                         , WAVE_parse      ("apate.unit", 31, "SCRP", "SCRP    [Âò)", x_stage), -999);                                                           <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "");                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:31:11: error: SCRP identifier, stage uses wrong end bracket ')' vs ']', e.g., [Áì]");                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("verify parse good stage 3");                                                                                                                                                <* 
+ *>    yUNIT_minval  ("parse [Ã÷]"                         , WAVE_parse      ("apate.unit", 32, "SCRP", "SCRP    [Ã÷]", x_stage), 0);                                                              <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "Ã÷");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("attempt with no close paren");                                                                                                                                              <* 
+ *>    yUNIT_minval  ("parse [Ã÷"                          , WAVE_parse      ("apate.unit", 33, "SCRP", "SCRP    [Ã÷", x_stage ), -999);                                                           <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "");                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "apate.unit:33:8: error: SCRP identifier, stage ¶[Ã÷¶ must be exactly 4 characters, e.g., [Áì]");                   <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("verify parse good stage 4");                                                                                                                                                <* 
+ *>    yUNIT_minval  ("parse [Äù]"                         , WAVE_parse      ("apate.unit", 34, "SCRP", "SCRP    [Äù]", x_stage), 0);                                                              <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "Äù");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("attempt on an empty");                                                                                                                                                      <* 
+ *>    yUNIT_minval  ("parse "                             , WAVE_parse      ("apate.unit", 35, "SCRP", ""            , x_stage), -999);                                                           <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "");                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("verify parse good stage 5 (last)");                                                                                                                                         <* 
+ *>    yUNIT_minval  ("parse [Åÿ]"                         , WAVE_parse      ("apate.unit", 36, "SCRP", "SCRP    [Åÿ]", x_stage), 0);                                                              <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "Åÿ");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    yURG_err_clear ();                                                                                                                                                                          <* 
+ *>    yUNIT_mincond ("attempt on a null");                                                                                                                                                        <* 
+ *>    yUNIT_minval  ("parse "                             , WAVE_parse      ("apate.unit", 37, "SCRP", NULL          , x_stage), -999);                                                           <* 
+ *>    yUNIT_minstr  ("... check stage"                    , x_stage       , "");                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error message"            , yURG_err_last (), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                       <* 
+ *>    rm_working_files ();                                                                                                                                                                        <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                           <* 
+ *>    return 0;                                                                                                                                                                                   <* 
+ *> }                                                                                                                                                                                              <*/
 
 char
 koios__unit_scrp_variety (void)
@@ -7144,23 +7144,23 @@ main                    (int a_argc, char *a_argv [])
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_prog_file      (x_list);
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_prog_args      (x_list);
    /*---(koios_verb.c)-------------------*/
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_verb_parse     (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_verb_ditto     (x_list);
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_verb_parse     (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_verb_ditto     (x_list);    <*/
    /*---(koios_wave.c)-------------------*/
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_wave_stage     (x_list);
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_wave_stage     (x_list);    <*/
    /*---(koios_read.c)-------------------*/
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_read_open      (x_list);
    /*---(koios_ditto.c)------------------*/
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_ditto_index    (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_ditto_getset   (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_ditto_toggle   (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_ditto_read     (x_list);
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_ditto_index    (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_ditto_getset   (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_ditto_toggle   (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_ditto_read     (x_list);    <*/
    /*---(koios_reuse.c)------------------*/
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_index    (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_getset   (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_global   (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_shares   (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_update   (x_list);
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_index    (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_getset   (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_global   (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_shares   (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_reuse_update   (x_list);    <*/
    /*---(koios_conv.c)-------------------*/
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_defense   (x_list);
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_conv_printf    (x_list);
@@ -7187,7 +7187,7 @@ main                    (int a_argc, char *a_argv [])
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_read_end_ditto (x_list);
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_read_driver    (x_list);
    /*---(koios_ditto.c MORE)-------------*/
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_ditto_parse    (x_list);
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_ditto_parse    (x_list);    <*/
    /*---(koios_parse.c)------------------*/
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_default  (x_list);
    ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_comment  (x_list);

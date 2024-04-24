@@ -136,7 +136,7 @@ CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE])
 {
    char        x_urun      [LEN_TITLE] = "";
    int         l           =    0;
-   ystrlcpy (x_urun, a_nscrp, LEN_TITLE);
+   strlcpy (x_urun, a_nscrp, LEN_TITLE);
    l = strlen (x_urun);
    if (strcmp (x_urun + l - 5, ".unit") == 0)  x_urun [l - 5] = '\0';
    CONV_printf (a_main, "\n\n\n");
@@ -220,8 +220,8 @@ CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [
    char        x_recd      [LEN_RECD]  = "";
    char        t           [LEN_HUND]  = "";
    /*---(header)-------------------------*/
-   DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
-   DEBUG_OUTP   yLOG_char    ("a_good"    , a_good);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   DEBUG_UVER   yLOG_uchar   ("a_good"    , a_good);
    /*---(polish off scripts)-------------*/
    if (s_nscrp >  0 && a_cshare == '-')   yUNIT_wave_end (my.f_wave, 0, 1, s_scond, s_sstep);
    CODE__scrp_end          (*r_code, "----", "-----", a_cshare);
@@ -273,7 +273,7 @@ CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [
       sprintf (t, "rm -f %s", a_nwave); system  (t);
    }
    /*---(complete)-----------------------*/
-   DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -342,10 +342,12 @@ CODE_scrp               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
-   char        x_stage     = '·';
-   char        x_wave      = '·';
+   char        l           =    0;
+   char        x_stage     =  '·';
+   char        x_wave      =  '·';
+   char        x_rating    =  '·';
    /*---(header)-------------------------*/
-   DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
    rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
    if (rc < 0)  return rc;
@@ -371,13 +373,16 @@ CODE_scrp               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(function call to main)----------*/
    CONV_printf (a_main, "   if (yUNIT_run_scrp (%2i) == 1)  yUNIT_script_%02d ();\n", s_nscrp, s_nscrp);
    /*---(script entry in wave)-----------*/
-   if (strlen (a_stage) == 2) {
-      x_wave  = a_stage [0];
-      x_stage = a_stage [1];
-   }
-   yUNIT_wave_beg (my.n_proj, my.n_base, s_nscrp, a_desc, a_return, x_wave, x_stage, a_test);
+   DEBUG_UVER   yLOG_uinfo   ("a_stage"   , a_stage);
+   l = strlen (a_stage);
+   DEBUG_UVER   yLOG_uvalue  ("l"         , l);
+   if (l > 0)   x_wave   = a_stage [0];
+   if (l > 1)   x_stage  = a_stage [1];
+   if (l > 3)   x_rating = a_stage [3];
+   DEBUG_UVER   yLOG_ucomplex("stage"     , "%d %c %c %c", l, x_wave, x_stage, x_rating);
+   yUNIT_wave_beg (my.n_proj, my.n_base, s_nscrp, a_desc, a_return, x_wave, x_stage, x_rating, a_test);
    /*---(complete)-----------------------*/
-   DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -456,11 +461,11 @@ char
 CODE__cond_end          (FILE *a_code, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL])
 {
    /*---(header)-------------------------*/
-   DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
-   DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10s, %-10.10s, %4dn, %4dc", a_last, a_verb, s_ncond, s_scond);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   DEBUG_UVER   yLOG_ucomplex("counters"  , "%-10.10s, %-10.10s, %4dn, %4dc", a_last, a_verb, s_ncond, s_scond);
    /*---(quick-out)----------------------*/
    if (strstr ("GROUP REUSE", a_last) != NULL) {
-      DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
+      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
       return 0;
    }
    /*---(end condition)------------------*/
@@ -472,7 +477,7 @@ CODE__cond_end          (FILE *a_code, cchar a_last [LEN_LABEL], cchar a_verb [L
    /*---(reset step counter)-------------*/
    s_cstep  = 0;
    /*---(complete)-----------------------*/
-   DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -483,7 +488,7 @@ CODE_cond               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    char        rc          =    0;
    char        a           =    0;
    /*---(header)-------------------------*/
-   DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
    rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
    if (rc < 0)  return rc;
@@ -495,7 +500,7 @@ CODE_cond               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    ++(s_ucond);
    ++(s_scond);
    if (a_dittoing == 'y')  ++(s_dcond);
-   DEBUG_OUTP   yLOG_complex ("counters"  , "%-10.10s, %4dn, %4dc", a_last, s_ncond, s_scond);
+   DEBUG_UVER   yLOG_ucomplex("counters"  , "%-10.10s, %4dn, %4dc", a_last, s_ncond, s_scond);
    /*---(initial comment)----------------*/
    CONV_printf (a_code, "   /*===[[ COND #%03i ]]============================*/\n", s_scond);
    /*---(debugging)----------------------*/
@@ -512,7 +517,7 @@ CODE_cond               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
       CONV_printf (a_code, "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");\n",     a_nline, s_scond, *r_cshare, a_desc);
    }
    /*---(complete)-----------------------*/
-   DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -522,7 +527,7 @@ CODE_group              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
    /*---(header)-------------------------*/
-   DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
    rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
    if (rc < 0)  return rc;
@@ -542,7 +547,7 @@ CODE_reuse              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    char        rc          =    0;
    char        rce         =  -10;
    /*---(header)-------------------------*/
-   DEBUG_OUTP   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
    rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
    if (rc < 0)  return rc;
@@ -557,7 +562,7 @@ CODE_reuse              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    REUSE_add (a_share, &(s_scond), &(s_sstep));
    s_cstep = s_sstep;
    /*---(complete)-----------------------*/
-   DEBUG_OUTP   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -591,57 +596,57 @@ CODE__display           (cchar a_code [LEN_RECD], char r_display [LEN_RECD], cha
    --rce;  if (a_code == NULL)  return rce;
    /*---(prepare)------------------------*/
    x_len = strlen (a_code);
-   ystrlcpy (x_disp, a_code , LEN_RECD);
-   ystrlcpy (x_syst, ""     , LEN_RECD);
-   ystrlcpy (x_load, ""     , LEN_RECD);
+   strlcpy (x_disp, a_code , LEN_RECD);
+   strlcpy (x_syst, ""     , LEN_RECD);
+   strlcpy (x_load, ""     , LEN_RECD);
    /*---(cleanse)------------------------*/
    for (i = 0; i < x_len; ++i) {
       switch ((unsigned char) a_code [i]) {
       case  G_CHAR_FIELD  : case  G_KEY_FIELD   :
          x_disp [i]  = G_CHAR_FIELD;
          sprintf (t, "%c", G_KEY_FIELD);
-         ystrlcat (x_syst, t, LEN_RECD);
-         ystrlcat (x_load, t, LEN_RECD);
+         strlcat (x_syst, t, LEN_RECD);
+         strlcat (x_load, t, LEN_RECD);
          break;
       case  G_CHAR_GROUP  : case  G_KEY_GROUP   :
          x_disp [i]  = G_CHAR_GROUP;
          sprintf (t, "%c", G_KEY_FIELD);
-         ystrlcat (x_syst, t, LEN_RECD);
-         ystrlcat (x_load, t, LEN_RECD);
+         strlcat (x_syst, t, LEN_RECD);
+         strlcat (x_load, t, LEN_RECD);
          break;
       case  G_KEY_DQUOTE  :
          x_disp [i]  = G_CHAR_DDQUOTE;
          sprintf (t, "%c", G_KEY_DQUOTE);
-         ystrlcat (x_syst, t, LEN_RECD);
+         strlcat (x_syst, t, LEN_RECD);
          sprintf (t, "%c", G_KEY_TILDA);
-         ystrlcat (x_load, t, LEN_RECD);
+         strlcat (x_load, t, LEN_RECD);
          break;
       case  G_KEY_RETURN :
          /*> case  G_CHAR_RETURN :                                                       <*/
          x_disp [i]  = G_CHAR_RETURN;
          sprintf (t, "\\n");
-         ystrlcat (x_syst, t, LEN_RECD);
-         ystrlcat (x_load, t, LEN_RECD);
+         strlcat (x_syst, t, LEN_RECD);
+         strlcat (x_load, t, LEN_RECD);
          break;
       case  G_KEY_ESCAPE :
          /*> case  G_CHAR_ESCAPE :                                                       <*/
          x_disp [i]  = G_CHAR_ESCAPE;
          sprintf (t, "\\e");
-         ystrlcat (x_syst, t, LEN_RECD);
-         ystrlcat (x_load, t, LEN_RECD);
+         strlcat (x_syst, t, LEN_RECD);
+         strlcat (x_load, t, LEN_RECD);
          break;
       default  :
          x_disp [i]  = a_code [i];
          sprintf (t, "%c", a_code [i]);
-         ystrlcat (x_syst, t, LEN_RECD);
-         ystrlcat (x_load, t, LEN_RECD);
+         strlcat (x_syst, t, LEN_RECD);
+         strlcat (x_load, t, LEN_RECD);
          break;
       }
    }
    /*---(save-back)----------------------*/
-   if (r_display  != NULL)  ystrlcpy (r_display, x_disp, LEN_RECD);
-   if (r_system   != NULL)  ystrlcpy (r_system , x_syst, LEN_RECD);
-   if (r_load     != NULL)  ystrlcpy (r_load   , x_load, LEN_RECD);
+   if (r_display  != NULL)  strlcpy (r_display, x_disp, LEN_RECD);
+   if (r_system   != NULL)  strlcpy (r_system , x_syst, LEN_RECD);
+   if (r_load     != NULL)  strlcpy (r_load   , x_load, LEN_RECD);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -674,15 +679,15 @@ CODE__prefix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_desc [L
    }
    /*---(determine function)-------------*/
    switch (a_test [0]) {
-   case 'v'  : ystrlcpy (x_func, "yUNIT_void"     , LEN_FULL);    break;
-   case 's'  : ystrlcpy (x_func, "yUNIT_string"   , LEN_FULL);    break;
-   case 'w'  : ystrlcpy (x_func, "yUNIT_wrap"     , LEN_FULL);    break;
-   case 'u'  : ystrlcpy (x_func, "yUNIT_round"    , LEN_FULL);    break;
-   case 'c'  : ystrlcpy (x_func, "yUNIT_char"     , LEN_FULL);    break;
-   case 'i'  : ystrlcpy (x_func, "yUNIT_int"      , LEN_FULL);    break;
-   case 'r'  : ystrlcpy (x_func, "yUNIT_real"     , LEN_FULL);    break;
-   case 'p'  : ystrlcpy (x_func, "yUNIT_point"    , LEN_FULL);    break;
-   default   : ystrlcpy (x_func, "yUNIT_unknown"  , LEN_FULL);    break;
+   case 'v'  : strlcpy (x_func, "yUNIT_void"     , LEN_FULL);    break;
+   case 's'  : strlcpy (x_func, "yUNIT_string"   , LEN_FULL);    break;
+   case 'w'  : strlcpy (x_func, "yUNIT_wrap"     , LEN_FULL);    break;
+   case 'u'  : strlcpy (x_func, "yUNIT_round"    , LEN_FULL);    break;
+   case 'c'  : strlcpy (x_func, "yUNIT_char"     , LEN_FULL);    break;
+   case 'i'  : strlcpy (x_func, "yUNIT_int"      , LEN_FULL);    break;
+   case 'r'  : strlcpy (x_func, "yUNIT_real"     , LEN_FULL);    break;
+   case 'p'  : strlcpy (x_func, "yUNIT_point"    , LEN_FULL);    break;
+   default   : strlcpy (x_func, "yUNIT_unknown"  , LEN_FULL);    break;
    }
    /*---(write prefix)-------------------*/
    CONV_printf (a_code, "      ");
@@ -735,7 +740,7 @@ CODE__expect            (FILE *a_code, cchar a_test [LEN_LABEL], cchar a_expect 
    }
    /*---(check for var)------------------*/
    else {
-      ystrlcpy (x_var, a_expect + 3, LEN_RECD);
+      strlcpy (x_var, a_expect + 3, LEN_RECD);
       x_expe = x_var;
       p = strtok_r (x_var, q, &r);
       if (p == NULL) CONV_printf (a_code, "\"%s\", " , "unknown");
@@ -806,7 +811,7 @@ CODE__specialty         (FILE *a_code, cchar a_load [LEN_RECD])
    if (strncmp (a_load, "[[ ", 3) != 0) {
       CONV_printf (a_code, "\"%s\"", a_load);
    } else {
-      ystrlcpy (x_temp, a_load + 3, LEN_FULL);
+      strlcpy (x_temp, a_load + 3, LEN_FULL);
       x_var = x_temp;
       p = strtok_r (x_temp, q, &r);
       if (p == NULL) CONV_printf (a_code, "\"%s\"" , "unknown");
@@ -1062,25 +1067,25 @@ CODE_driver             (void f_call (), char a_nscrp [LEN_TITLE], FILE *a_main,
    char        rc          =    0;
    char      (*x_func) (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
    /*---(header)-------------------------*/
-   DEBUG_PROG   yLOG_enter   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   DEBUG_PROG   yLOG_point   ("f_call"    , f_call);
+   DEBUG_UVER   yLOG_upoint  ("f_call"    , f_call);
    if (f_call == NULL) {
-      DEBUG_PROG   yLOG_note    ("nothing to do");
-      DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+      DEBUG_UVER   yLOG_unote   ("nothing to do");
+      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
       return 0;
    }
    /*---(prepare)------------------------*/
    x_func = f_call;
    /*---(call function)------------------*/
    rc = x_func (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_dittoing, a_mark, a_dmark, a_nline, a_dline, a_share, r_cshare);
-   DEBUG_PROG   yLOG_value   ("call"      , rc);
+   DEBUG_UVER   yLOG_uvalue  ("call"      , rc);
    --rce;  if (rc < 0) {
-      DEBUG_PROG   yLOG_exitr   (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(complete)-----------------------*/
-   DEBUG_PROG   yLOG_exit    (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 

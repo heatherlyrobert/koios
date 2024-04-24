@@ -8,7 +8,7 @@ NAME_BASE  = koios
 # additional standard and outside libraries
 LIB_STD    = 
 # all heatherly libraries used, debug versions whenever available
-LIB_MINE   = -lySTR_debug -lyURG_debug -lyUNIT_debug
+LIB_MINE   = -lyUNIT_debug
 # directory for production code, no trailing slash
 INST_DIR   = /usr/local/bin
 
@@ -33,18 +33,24 @@ LIB_UTIL   =
 
 #===(master template)======================================#
 include /usr/local/sbin/make_program
+LIB_HERE := $<  $(filter-out %_main.os,$(OBJ_NORM)) $(LIB_STD)  $(LIB_MINE)
 
 
 
 #===(post-processing)======================================#
 # create a rule for...
-install_post       :
-#	gcc -c unit.c
-#	gcc -o unit unit.o koios_code.o koios_conv.o koios_ditto.o koios_parse.o koios_prog.o koios_read.o koios_reuse.o koios_scrp.o koios_verb.o koios_wave.o -lyUNIT -lySTR -lyURG -lyLOG
-#	gcc -c unit_wave.c
-#	gcc -o unit_wave unit_wave.o koios_wave.o -lyUNIT -lySTR -lyURG -lyLOG
-
 #remove_post        :
+install_post       :
+	gcc -c unit_conv.c
+	gcc -o unit_conv  unit_conv.o  $(LIB_HERE)
+	gcc -c unit_ditto.c
+	gcc -o unit_ditto unit_ditto.o $(LIB_HERE)
+	gcc -c unit_reuse.c
+	gcc -o unit_reuse unit_reuse.o $(LIB_HERE)
+	gcc -c unit_verb.c
+	gcc -o unit_verb  unit_verb.o  $(LIB_HERE)
+	gcc -c unit_wave.c
+	gcc -o unit_wave  unit_wave.o  $(LIB_HERE)
 
 
 
