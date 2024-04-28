@@ -33,7 +33,6 @@ main               (int a_argc, char *a_argv [])
       return rce;
    }
    /*---(main-loop)----------------------*/
-   DEBUG_UVER   yLOG_break   ();
    DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    DEBUG_UVER   yLOG_unote   ("entering main processing loop");
    /*---(main)---------------------------*/
@@ -47,8 +46,8 @@ main               (int a_argc, char *a_argv [])
          ++x_error;
       }
    }
-   DEBUG_UVER  yLOG_break   ();
-   DEBUG_UVER  yLOG_unote   ("exiting main processing loop");
+   DEBUG_UVER   yLOG_unote   ("exiting main processing loop");
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    /*---(dusk)---------------------------*/
    rc = PROG_dusk  (x_good, my.run_type, my.replace, my.n_scrp, &(my.f_scrp), my.n_main, &(my.f_main), my.n_code, &(my.f_code), my.n_wave, &(my.f_wave), my.n_conv, &(my.f_conv), my.cshare);
    DEBUG_UVER   yLOG_uvalue   ("dusk"      , rc);
@@ -57,7 +56,6 @@ main               (int a_argc, char *a_argv [])
       return rce;
    }
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    PROG_shutdown ();
    return -x_error;
 }

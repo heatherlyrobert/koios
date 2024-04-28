@@ -41,16 +41,16 @@ LIB_HERE := $<  $(filter-out %_main.os,$(OBJ_NORM)) $(LIB_STD)  $(LIB_MINE)
 # create a rule for...
 #remove_post        :
 install_post       :
-	gcc -c unit_conv.c
-	gcc -o unit_conv  unit_conv.o  $(LIB_HERE)
-	gcc -c unit_ditto.c
-	gcc -o unit_ditto unit_ditto.o $(LIB_HERE)
-	gcc -c unit_reuse.c
-	gcc -o unit_reuse unit_reuse.o $(LIB_HERE)
-	gcc -c unit_verb.c
-	gcc -o unit_verb  unit_verb.o  $(LIB_HERE)
-	gcc -c unit_wave.c
-	gcc -o unit_wave  unit_wave.o  $(LIB_HERE)
+#	gcc -c unit_conv.c
+#	gcc -o unit_conv  unit_conv.o  $(LIB_HERE)
+#	gcc -c unit_ditto.c
+#	gcc -o unit_ditto unit_ditto.o $(LIB_HERE)
+#	gcc -c unit_reuse.c
+#	gcc -o unit_reuse unit_reuse.o $(LIB_HERE)
+#	gcc -c unit_verb.c
+#	gcc -o unit_verb  unit_verb.o  $(LIB_HERE)
+#	gcc -c unit_wave.c
+#	gcc -o unit_wave  unit_wave.o  $(LIB_HERE)
 
 
 

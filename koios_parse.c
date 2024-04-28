@@ -29,7 +29,7 @@ PARSE__defense          (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LE
    char        rce         = -10;           /* return code for errors         */
    int         l           =   0;
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_senter  (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(default)------------------------*/
    if (r_verb   != NULL)  strcpy (r_verb  , "");
    if (r_spec   != NULL)  *r_spec =  '-';
@@ -38,62 +38,62 @@ PARSE__defense          (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LE
    if (r_stage  != NULL)  strcpy (r_stage , "");
    if (r_vers   != NULL)  *r_vers =   -1;
    /*---(feeder fields)------------------*/
-   DEBUG_UVER   yLOG_spoint  (a_nscrp);
+   DEBUG_UVER   yLOG_upoint  ("a_ncrp"    , a_nscrp);
    --rce;  if (a_nscrp == NULL) {
-      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_sint    (a_line);
+   DEBUG_UVER   yLOG_uvalue  ("a_line"    , a_line);
    /*---(record)-------------------------*/
-   DEBUG_UVER   yLOG_spoint  (a_recd);
+   DEBUG_UVER   yLOG_upoint  ("a_recd"    , a_recd);
    --rce;  if (a_recd == NULL) {
-      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_schar   (a_recd [0]);
+   DEBUG_UVER   yLOG_uchar   ("a_recd [0]", a_recd [0]);
    --rce;  if (a_recd [0] == '\0') {
-      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    l = strlen (a_recd);
-   DEBUG_UVER   yLOG_sint    (l);
+   DEBUG_UVER   yLOG_uvalue  ("l"         , l);
    --rce;  if (l <  5 && a_recd [0] != '#') {
-      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(return fields)------------------*/
-   DEBUG_UVER   yLOG_spoint  (r_verb);
+   DEBUG_UVER   yLOG_upoint  ("r_verb"    , r_verb);
    --rce;  if (r_verb == NULL) {
-      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_spoint  (r_spec);
+   DEBUG_UVER   yLOG_upoint  ("r_spec"    , r_spec);
    --rce;  if (r_spec == NULL) {
-      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_spoint  (r_conv);
+   DEBUG_UVER   yLOG_upoint  ("r_conv"    , r_conv);
    --rce;  if (r_conv == NULL) {
-      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_spoint  (r_code);
+   DEBUG_UVER   yLOG_upoint  ("r_code"    , r_code);
    --rce;  if (r_code == NULL) {
-      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_spoint  (r_stage);
+   DEBUG_UVER   yLOG_upoint  ("r_stage"   , r_stage);
    --rce;  if (r_stage == NULL) {
-      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_spoint  (r_vers);
+   DEBUG_UVER   yLOG_upoint  ("r_vers"    , r_vers);
    --rce;  if (r_vers == NULL) {
-      DEBUG_UVER   yLOG_sexitr  (__FUNCTION__, rce);
+      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_sexit   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -175,7 +175,7 @@ PARSE__version          (cchar *a_field, char *r_vers)
    --rce;  if (r_vers  == NULL)  return rce;
    /*---(prepare)------------------------*/
    strlcpy  (x_field, a_field, LEN_TERSE);
-   koios_ystr_trim (x_field, LEN_TERSE);
+   ystrutrim (x_field, LEN_TERSE);
    l = strlen (x_field);
    /*---(assign version)-----------------*/
    if      (l != 3)                            *r_vers =  0;   /* current */
@@ -234,7 +234,7 @@ PARSE_prep              (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
    /*---(read version)-------------------*/
    v = strtok_r (NULL  , q, &r);
    --rce;  if (v == NULL && *r_spec != 'c') {
-      /*> yURG_err (YURG_FATAL, "%s:%d:1: error: verb only, %s requires more fields", a_nscrp, a_line, r_verb);   <*/
+      yLOGS_err ("%s:%d:1: error: verb only, %s requires more fields", a_nscrp, a_line, r_verb);
       DEBUG_UVER   yLOG_unote   ("strtok came up empty");
       DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
       return rce;
@@ -340,7 +340,7 @@ PARSE__current          (char n, char a_field [LEN_RECD], cchar a_spec, char *r_
       if (strncmp (x_field, "-----", 5) == 0)    x_field [0] = '\0';
       if (x_field [1] == '\0')                   x_field [0] = '\0';
    }
-   koios_ystr_trim (x_field, LEN_RECD);
+   ystrutrim (x_field, LEN_RECD);
    l = strlen (x_field);
    DEBUG_UVER   yLOG_uinfo   ("x_field"   , x_field);
    /*---(handle fields)------------------*/
@@ -348,7 +348,7 @@ PARSE__current          (char n, char a_field [LEN_RECD], cchar a_spec, char *r_
    case  2 :  /*=== always desc ===============*/
       if (r_desc != NULL) {
          strlcpy  (r_desc, x_field        , LEN_LONG);
-         koios_ystr_trim (r_desc, LEN_LONG);
+         ystrutrim (r_desc, LEN_LONG);
       }
       break;
    case  3 :  /*=== typically, method =========*/
@@ -473,7 +473,7 @@ PARSE_driver            (cchar a_nscrp [LEN_TITLE], int a_line, char a_vers, cch
    rc = PARSE__limits (a_spec, &x_min, &x_max);
    DEBUG_UVER   yLOG_ucomplex("limits"    , "%4d rc, %d min, %d max", rc, x_min, x_max);
    --rce;  if (rc < 0) {
-      /*> yURG_err (YURG_FATAL, "%s:%d:0: error: can not identify verb ¶%s¶ with '%c' spec limits", a_nscrp, a_line, a_verb, a_spec);   <*/
+      yLOGS_err ("%s:%d:0: error: can not identify verb ¶%s¶ with '%c' spec limits", a_nscrp, a_line, a_verb, a_spec);
       DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
@@ -519,7 +519,7 @@ PARSE_driver            (cchar a_nscrp [LEN_TITLE], int a_line, char a_vers, cch
    } 
    /*---(stop parsing summ records)---*/
    if (i < x_min) {
-      /*> yURG_err (YURG_FATAL, "%s:%d:0: error: verb ¶%s¶ included %d fields, requires at least %d", a_nscrp, a_line, a_verb, i, x_min);   <*/
+      yLOGS_err ("%s:%d:0: error: verb ¶%s¶ included %d fields, requires at least %d", a_nscrp, a_line, a_verb, i, x_min);
       DEBUG_UVER   yLOG_ucomplex("too few"   , "%d actual < %d min", i, x_min);
       DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;

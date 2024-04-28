@@ -2,6 +2,7 @@
 #include    "koios.h"        /* LOCAL  : main header                          */
 
 #include    <yLOG_uver.h>
+#include    <ySTR_uver.h>
 
 /*> tDEBUG      debug;                                                                <*/
 tGLOBALS    my;
@@ -137,7 +138,7 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
    /*---(defense)------------------------*/
    DEBUG_UVER  yLOG_upoint  ("a_name"    , a_name);
    --rce;  if (a_name == NULL) {
-      /*> yURG_err ('f', "script name can not be null");                              <*/
+      yLOGS_err ("script name can not be null");
       DEBUG_UVER  yLOG_uexitr(__FUNCTION__, rce);
       return rce;
    }
@@ -156,26 +157,26 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
    l = strlen (a_name);
    DEBUG_UVER  yLOG_uvalue  ("l"         , l);
    --rce;  if (l <= 0) {
-      /*> yURG_err ('f', "script name can not be blank/empty");                       <*/
+      yLOGS_err ("script name can not be blank/empty");
       DEBUG_UVER  yLOG_uexitr(__FUNCTION__, rce);
       return rce;
    }
    /*---(check for path)-----------------*/
    --rce;  if (strchr (a_name, '/') != NULL) {
-      /*> yURG_err ('f', "script name ¶%s¶ can not include a path (abs or rel)", a_name);   <*/
+      yLOGS_err ("script name ¶%s¶ can not include a path (abs or rel)", a_name);
       DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(check for hidden)---------------*/
    --rce;  if (a_name [0] == '.') {
-      /*> yURG_err ('f', "script name ¶%s¶ can not be hidden file (.)", a_name);      <*/
+      yLOGS_err ("script name ¶%s¶ can not be hidden file (.)", a_name);
       DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(check characters)---------------*/
    --rce;  for (i = 0; i < l; ++i) {
       if (strchr (YSTR_ALNUM "_.", a_name [i]) != NULL)  continue;
-      /*> yURG_err ('f', "script name ¶%s¶ can not have a '%c' as character %d", a_name, a_name [i], i);   <*/
+      yLOGS_err ("script name ¶%s¶ can not have a '%c' as character %d", a_name, a_name [i], i);
       DEBUG_UVER  yLOG_uchar ("bad char"  , a_name [i]);
       DEBUG_UVER  yLOG_uexitr(__FUNCTION__, rce);
       return rce;
@@ -197,7 +198,7 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
       rc = lstat (x_unit, &s);
       DEBUG_UVER    yLOG_uvalue  ("stat"      , rc);
       if (rc < 0) {
-         /*> yURG_err ('f', "script name ¶%s¶ can not be found as .unit or .sunit", a_name);   <*/
+         yLOGS_err ("script name ¶%s¶ can not be found as .unit or .sunit", a_name);
          DEBUG_UVER    yLOG_unote   ("can not find source either .unit or .sunit");
          DEBUG_UVER    yLOG_uexitr (__FUNCTION__, rce);
          return rce;
@@ -208,7 +209,7 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
       strcpy (x_ext, ".unit");
    }
    --rce;  if (S_ISDIR (s.st_mode))  {
-      /*> yURG_err ('f', "script name ¶%s¶ refers to a directory, illegal", a_name);   <*/
+      yLOGS_err ("script name ¶%s¶ refers to a directory, illegal", a_name);
       DEBUG_UVER    yLOG_unote   ("can not use a directory");
       DEBUG_UVER    yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
@@ -216,7 +217,7 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
    --rce;  if (S_ISLNK (s.st_mode))  {
       DEBUG_UVER    yLOG_unote   ("is a link, figure it out");
       if (strcmp (x_ext, ".sunit") == 0) {
-         /*> yURG_err ('f', "script name ¶%s¶ is a .sunit can can not be a symlink", a_name);   <*/
+         yLOGS_err ("script name ¶%s¶ is a .sunit can can not be a symlink", a_name);
          printf ("FATAL, .sunit can not be a symlink\n");
          DEBUG_UVER    yLOG_unote   ("can not use a symlink");
          DEBUG_UVER    yLOG_uexitr  (__FUNCTION__, rce);
@@ -237,21 +238,21 @@ PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char 
          }
          DEBUG_UVER  yLOG_uinfo   ("suffix"    , t + l - 6);
          if (strcmp (t + l - 6, ".sunit") != 0) {
-            /*> yURG_err ('f', "script name ¶%s¶ is a symlink to ¶%s¶, only .sunit is legal", a_name, t);   <*/
+            yLOGS_err ("script name ¶%s¶ is a symlink to ¶%s¶, only .sunit is legal", a_name, t);
             DEBUG_UVER    yLOG_uexitr (__FUNCTION__, rce);
             return rce;
          }
          rc = stat (t, &r);
          DEBUG_UVER    yLOG_uvalue  ("stat"      , rc);
          if (rc < 0) {
-            /*> yURG_err ('f', "script name ¶%s¶ is a symlink to .sunit ¶%s¶, but source does not exist", a_name, t);   <*/
+            yLOGS_err ("script name ¶%s¶ is a symlink to .sunit ¶%s¶, but source does not exist", a_name, t);
             DEBUG_UVER    yLOG_uexitr (__FUNCTION__, rce);
             return rce;
          }
       }
    }
    else if (!S_ISREG (s.st_mode)) {
-      /*> yURG_err ('f', "script name ¶%s¶ is not a regular file, illegal", a_name);   <*/
+      yLOGS_err ("script name ¶%s¶ is not a regular file, illegal", a_name);
       DEBUG_UVER    yLOG_unote   ("can only use regular file");
       DEBUG_UVER    yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
@@ -350,7 +351,7 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_n
       else if (strncmp (a, "--update"     , 10) == 0)  { x_runtype = G_RUN_UPDATE;  x_replace = G_RUN_REPLACE; }
       /*---(unknown arg)-----------------*/
       else if (strncmp (a, "-"            ,  1) == 0)  {
-         /*> yURG_err ('f', "argument ¶%s¶ is not recognized", a);                    <*/
+         yLOGS_err ("argument ¶%s¶ is not recognized", a);
          DEBUG_UVER  yLOG_uexitr (__FUNCTION__, rce);
          return rce;
       }
@@ -388,14 +389,14 @@ PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_n
    /*---(defense)------------------------*/
    DEBUG_UVER   yLOG_uinfo   ("basename"  , x_base);
    --rce;  if (strcmp (x_base, "") == 0) {
-      /*> yURG_err ('f', "script name/base was not provided on command line");        <*/
+      yLOGS_err ("script name/base was not provided on command line");
       DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(defense)------------------------*/
    --rce;  if (strcmp (x_ext, ".sunit") == 0) {
       if (x_runtype != G_RUN_UPDATE) {
-         /*> yURG_err ('f', "can not compile ¶%s¶ as .sunit, must compile in linked .unit location", x_base);   <*/
+         yLOGS_err ("can not compile ¶%s¶ as .sunit, must compile in linked .unit location", x_base);
          DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
          return rce;
       }
@@ -698,7 +699,6 @@ PROG_shutdown           (void)
    PROG__end ();
    /*---(complete)-----------------------*/
    DEBUG_UVER   yLOG_uexit    (__FUNCTION__);
-   DEBUG_UVER   yLOGS_end    ();
    return 0;
 }
 

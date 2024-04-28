@@ -1,0 +1,17 @@
+/*===============================[[ beg-code ]]===============================*/
+#include    "koios.h"
+
+#include    <yURG_solo.h>
+#include    <yURG_uver.h>
+#include    <yUNIT_solo.h>
+#include    <ySTR_solo.h>
+#include    <yCOLOR_solo.h>
+
+
+char
+main                    (void)
+{
+   yUNIT_mintinu    ();
+   return 0;
+}
+

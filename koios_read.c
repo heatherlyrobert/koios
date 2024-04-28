@@ -58,8 +58,8 @@ READ_open               (cchar a_name [LEN_RECD], cchar a_dir, FILE **r_file, in
    *r_file = fopen (a_name, x_mode);
    DEBUG_UVER   yLOG_upoint  ("*r_file"   , *r_file);
    --rce;  if (*r_file == NULL) {
-      /*> yURG_err (YURG_FATAL, "file å%sæ could not be openned", a_name);            <*/
-      DEBUG_UVER   yLOG_fatal   ("can not open script file");
+      yLOGS_err ("file å%sæ could not be openned", a_name);
+      DEBUG_UVER   yLOG_unote   ("can not open script file");
       DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
       return rce;
    }
@@ -171,7 +171,7 @@ char         /*--> clean a script record -----------------[ leaf   [ ------ ]-*/
 READ__clear             (void)
 {
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_senter  (__FUNCTION__);
+   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
    /*---(save value)---------------------*/
    if (strcmp (my.verb, "DITTO") != 0)  strlcpy (my.last, my.verb, LEN_LABEL);
    /*---(input vars)---------------------*/
@@ -197,7 +197,7 @@ READ__clear             (void)
    my.disp        [0] = '\0';
    my.load        [0] = '\0';
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_sexit   (__FUNCTION__);
+   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -264,7 +264,7 @@ READ__single            (FILE **b_scrp, int *r_nline, char *r_dittoing, char *r_
       p = strtok (p, " ");
       DEBUG_UVER   yLOG_upoint  ("p"         , p);
       if (p != NULL) {
-         koios_ystr_trim (p, LEN_LABEL);
+         ystrutrim (p, LEN_LABEL);
          DEBUG_UVER   yLOG_uinfo   ("p"         , p);
          rc = VERB_dittoable (p);
          DEBUG_UVER   yLOG_uvalue  ("dittoable" , rc);
@@ -277,7 +277,7 @@ READ__single            (FILE **b_scrp, int *r_nline, char *r_dittoing, char *r_
    }
    /*---(save-back)-------------------*/
    DEBUG_UVER   yLOG_unote   ("save copy of source record");
-   koios_ystr_undelay (x_recd, LEN_RECD);
+   ystruundelay (x_recd, LEN_RECD);
    ++(*r_nrecd);
    if (r_recd != NULL)  strlcpy (r_recd, x_recd, LEN_RECD);
    /*---(complete)-----------------------*/
