@@ -14,8 +14,9 @@
 #define   MAX_DITTO   10
 typedef struct cDITTO tDITTO;
 struct cDITTO {
-   int         line;
-   char        desc    [LEN_LONG];
+   int         d_line;
+   char        d_desc    [LEN_LONG];
+   char        d_called;
 };
 static tDITTO  s_dittos [MAX_DITTO];
 
@@ -33,8 +34,9 @@ DITTO_purge             (void)
    int         i           =    0;
    /*---(set defaults)-------------------*/
    for (i = 0; i < MAX_DITTO; ++i) {
-      s_dittos [i].line = -1;
-      strcpy (s_dittos [i].desc, "");
+      s_dittos [i].d_line   = -1;
+      strcpy (s_dittos [i].d_desc, "");
+      s_dittos [i].d_called =  0;
    }
    /*---(complete)-----------------------*/
    return 0;
@@ -75,9 +77,9 @@ DITTO__set              (cchar a_mark, int a_line, char a_desc [LEN_LONG])
    i = DITTO__index (a_mark);
    if (i < 0) return i;
    /*---(update list)--------------------*/
-   s_dittos [i].line = a_line;
-   if (a_desc != NULL)  strlcpy (s_dittos [i].desc, a_desc, LEN_LONG);
-   else                 strcpy  (s_dittos [i].desc, "");
+   s_dittos [i].d_line = a_line;
+   if (a_desc != NULL)  strlcpy (s_dittos [i].d_desc, a_desc, LEN_LONG);
+   else                 strcpy  (s_dittos [i].d_desc, "");
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -119,10 +121,24 @@ DITTO__get              (cchar a_mark, char r_desc [LEN_LONG])
    i = DITTO__index (a_mark);
    if (i < 0) return i;
    /*---(update list)--------------------*/
-   x_line = s_dittos [i].line;
-   if (r_desc != NULL)  strlcpy (r_desc, s_dittos [i].desc, LEN_LONG);
+   x_line = s_dittos [i].d_line;
+   if (r_desc != NULL)  strlcpy (r_desc, s_dittos [i].d_desc, LEN_LONG);
    /*---(complete)-----------------------*/
    return x_line;
+}
+
+char
+DITTO_called            (char a_mark)
+{
+   /*---(locals)-------------------------*/
+   char        i           =   -1;
+   /*---(get index)----------------------*/
+   i = DITTO__index (a_mark);
+   if (i < 0) return i;
+   /*---(update list)--------------------*/
+   ++(s_dittos [i].d_called);
+   /*---(complete)-----------------------*/
+   return 1;
 }
 
 
@@ -189,105 +205,105 @@ static  FILE *s_fditto = NULL;   /* re-opened version to process the ditto    */
  * å´         æ  å 179æ  åæ
  */
 char         /*->  --------------------------------------------[ ´········· ]-*/ /*-ågcg´·Bá551á21·´K45´37·´1·D2Cá·æ¬å5á14··´#Z1á·1·····´···´····æ¬å>li··´4·2···2´····´····æ-*/
-DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_mark, int a_ditto, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline)
+DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_mark, int a_ditto, char *r_dittoing, char *r_mark, char *r_dmark, int *r_dstart, int *r_dline)
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         =  -10;
    char        rc          =    0;
    char       *p           = NULL;
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   DEBUG_UVER   yLOG_upoint  ("b_scrp"    , b_scrp);
+   debug_uver   ylog_upoint  ("b_scrp"    , b_scrp);
    --rce;  if (b_scrp       == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("a_nscrp"    , a_nscrp);
+   debug_uver   ylog_upoint  ("a_nscrp"    , a_nscrp);
    --rce;  if (a_nscrp       == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("r_dittoing", r_dittoing);
+   debug_uver   ylog_upoint  ("r_dittoing", r_dittoing);
    --rce;  if (r_dittoing   == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("r_mark"    , r_mark);
+   debug_uver   ylog_upoint  ("r_mark"    , r_mark);
    --rce;  if (r_mark       == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("r_dmark"   , r_dmark);
+   debug_uver   ylog_upoint  ("r_dmark"   , r_dmark);
    --rce;  if (r_dmark      == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("r_ditto"   , r_ditto);
-   --rce;  if (r_ditto      == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+   debug_uver   ylog_upoint  ("r_dstart"   , r_dstart);
+   --rce;  if (r_dstart      == NULL) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("r_dline"   , r_dline);
+   debug_uver   ylog_upoint  ("r_dline"   , r_dline);
    --rce;  if (r_dline      == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(quick-out)----------------------*/
-   DEBUG_UVER   yLOG_uchar   ("*r_dittoing", *r_dittoing);
+   debug_uver   ylog_uchar   ("*r_dittoing", *r_dittoing);
    --rce;  if (*r_dittoing  == 'y') {
-      yLOGS_err ("%s:%d:0: error: DITTO '%c' can not start as dittoing already active", a_nscrp, a_line, a_mark);
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      yerr_uerror ("%s:%d:0: error: DITTO '%c' can not start as dittoing already active", a_nscrp, a_line, a_mark);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(check mark)---------------------*/
-   DEBUG_UVER   yLOG_uvalue  ("a_ditto"    , a_ditto);
+   debug_uver   ylog_uvalue  ("a_ditto"    , a_ditto);
    --rce;  if (a_ditto < 1) {
-      DEBUG_UVER   yLOG_unote   ("unset identifier");
-      yLOGS_err ("%s:%d:0: error: DITTO '%c' not set by previous COND", a_nscrp, a_line, a_mark);
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_unote   ("unset identifier");
+      yerr_uerror ("%s:%d:0: error: DITTO '%c' not set by previous COND", a_nscrp, a_line, a_mark);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(handle runtype)-----------------*/
    if (a_runtype != G_RUN_CREATE && a_runtype != G_RUN_DEBUG) {
-      DEBUG_UVER   yLOG_unote   ("create/debug mode, ditto_beg processing done");
-      *r_ditto = a_ditto;
-      *r_mark  = a_mark;
-      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+      debug_uver   ylog_unote   ("create/debug mode, ditto_beg processing done");
+      *r_mark   = a_mark;
+      *r_dstart = a_ditto;
+      debug_uver   ylog_uexit   (__FUNCTION__);
       return 0;
    }
    /*---(check files)--------------------*/
-   DEBUG_UVER   yLOG_upoint  ("*b_scrp"   , *b_scrp);
+   debug_uver   ylog_upoint  ("*b_scrp"   , *b_scrp);
    --rce;  if (*b_scrp      == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("s_fditto"  , s_fditto);
+   debug_uver   ylog_upoint  ("s_fditto"  , s_fditto);
    --rce;  if (s_fditto     != NULL) {
-      DEBUG_UVER   yLOG_unote   ("already have second version open");
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_unote   ("already have second version open");
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(reopen file)--------------------*/
-   rc = READ_open (a_nscrp, 'r', &s_fditto, r_dline);
-   DEBUG_UVER   yLOG_uvalue  ("open"      , rc);
-   DEBUG_UVER   yLOG_upoint  ("s_fditto"  , s_fditto);
+   rc = READ_open (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nscrp, 'r', &s_fditto, r_dline);
+   debug_uver   ylog_uvalue  ("open"      , rc);
+   debug_uver   ylog_upoint  ("s_fditto"  , s_fditto);
    --rce;  if (rc < 0 || s_fditto == NULL) {
-      DEBUG_UVER   yLOG_unote   ("scrp file, can not re-open script file");
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_unote   ("scrp file, can not re-open script file");
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(swap files)---------------------*/
-   DEBUG_UVER   yLOG_unote   ("swap file for script");
+   debug_uver   ylog_unote   ("swap file for script");
    s_fmain      = *b_scrp;
    *b_scrp      = s_fditto;
-   *r_ditto     = a_ditto;
    *r_mark      = a_mark;
-   *r_dmark     = a_mark;
-   *r_dline     = 0;
    *r_dittoing  = 'y';
+   *r_dmark     = a_mark;
+   *r_dstart    = a_ditto;
+   *r_dline     = 0;
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 1;
 }
 
@@ -298,47 +314,47 @@ DITTO_end               (FILE **b_scrp, char *r_dittoing, char *r_dmark, int *r_
    char        rce         =  -10;
    char        rc          =    0;
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   DEBUG_UVER   yLOG_upoint  ("b_scrp"    , b_scrp);
+   debug_uver   ylog_upoint  ("b_scrp"    , b_scrp);
    --rce;  if (b_scrp       == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("r_dittoing", r_dittoing);
+   debug_uver   ylog_upoint  ("r_dittoing", r_dittoing);
    --rce;  if (r_dittoing   == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("r_dmark"   , r_dmark);
+   debug_uver   ylog_upoint  ("r_dmark"   , r_dmark);
    --rce;  if (r_dmark      == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("r_ditto"   , r_ditto);
+   debug_uver   ylog_upoint  ("r_ditto"   , r_ditto);
    --rce;  if (r_ditto      == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("r_dline"   , r_dline);
+   debug_uver   ylog_upoint  ("r_dline"   , r_dline);
    --rce;  if (r_dline      == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(quick-out)----------------------*/
-   DEBUG_UVER   yLOG_uchar   ("dittoing"  , *r_dittoing);
+   debug_uver   ylog_uchar   ("dittoing"  , *r_dittoing);
    if (*r_dittoing  != 'y') {
-      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+      debug_uver   ylog_uexit   (__FUNCTION__);
       return 0;
    }
-   DEBUG_UVER   yLOG_upoint  ("s_file_sav", s_fmain);
+   debug_uver   ylog_upoint  ("s_file_sav", s_fmain);
    --rce;  if (s_fmain == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("s_file_dit", s_fditto);
+   debug_uver   ylog_upoint  ("s_file_dit", s_fditto);
    --rce;  if (s_fditto == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(reset ditto)--------------------*/
@@ -346,15 +362,15 @@ DITTO_end               (FILE **b_scrp, char *r_dittoing, char *r_dmark, int *r_
    *r_dmark    = '-';
    *r_ditto    = -1;
    /*---(swap files)---------------------*/
-   DEBUG_UVER   yLOG_unote   ("swap file for script");
+   debug_uver   ylog_unote   ("swap file for script");
    *b_scrp     = s_fmain;
    /*---(close detail report)------------*/
-   DEBUG_UVER   yLOG_upoint  ("file_ditto", s_fditto);
+   debug_uver   ylog_upoint  ("file_ditto", s_fditto);
    /*> rc = fclose (s_fditto);                                                        <*/
-   rc = READ_close (&s_fditto);
-   DEBUG_UVER   yLOG_uvalue  ("close"     , rc);
+   rc = READ_close (__FILE__, __FUNCTION__, __LINE__, "???", &s_fditto);
+   debug_uver   ylog_uvalue  ("close"     , rc);
    --rce;  if (rc < 0 || s_fditto != NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(null closed pointers)-----------*/
@@ -362,7 +378,7 @@ DITTO_end               (FILE **b_scrp, char *r_dittoing, char *r_dmark, int *r_
    s_fmain     = NULL;
    *r_dline    = -1;
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 1;
 }
 
@@ -385,40 +401,40 @@ DITTO_read_numbering    (char a_dittoing, int a_ditto, int *r_nline, int *r_dlin
    /*---(locals)-----------+-----------+-*/
    char        rce         =  -10;
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   DEBUG_UVER   yLOG_upoint  ("r_nline"   , r_nline);
+   debug_uver   ylog_upoint  ("r_nline"   , r_nline);
    --rce;  if (r_nline == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("r_dline"   , r_dline);
+   debug_uver   ylog_upoint  ("r_dline"   , r_dline);
    --rce;  if (r_dline == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(check for no ditto)-------------*/
-   DEBUG_UVER   yLOG_uchar   ("a_dittoing", a_dittoing);
+   debug_uver   ylog_uchar   ("a_dittoing", a_dittoing);
    if (a_dittoing != 'y') {
-      DEBUG_UVER   yLOG_unote   ("not dittoing");
+      debug_uver   ylog_unote   ("not dittoing");
       ++(*r_nline);
-      DEBUG_UVER   yLOG_uvalue  ("*r_nline"  , *r_nline);
-      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+      debug_uver   ylog_uvalue  ("*r_nline"  , *r_nline);
+      debug_uver   ylog_uexit   (__FUNCTION__);
       return 0;
    }
    /*---(update ditto line)--------------*/
    ++(*r_dline);
-   DEBUG_UVER   yLOG_uvalue  ("*rdline"  , *r_dline);
-   DEBUG_UVER   yLOG_uvalue  ("a_ditto"  , a_ditto);
+   debug_uver   ylog_uvalue  ("*rdline"  , *r_dline);
+   debug_uver   ylog_uvalue  ("a_ditto"  , a_ditto);
    /*---(check for pre-ditto)------------*/
    if (*r_dline <   a_ditto) {
-      DEBUG_UVER   yLOG_unote   ("pre-ditto source line (or original COND)");
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, 2);
+      debug_uver   ylog_unote   ("pre-ditto source line (or original COND)");
+      debug_uver   ylog_uexitr  (__FUNCTION__, 2);
       return 2;
    }
    /*---(dittoing)-----------------------*/
-   DEBUG_UVER   yLOG_unote   ("in sweet spot");
-   DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, 1);
+   debug_uver   ylog_unote   ("in sweet spot");
+   debug_uver   ylog_uexitr  (__FUNCTION__, 1);
    return 1;
 }
 
@@ -430,157 +446,196 @@ DITTO_read_numbering    (char a_dittoing, int a_ditto, int *r_nline, int *r_dlin
 static void  o___PARSING_________o () { return; }
 
 char
-DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char *a_field, char r_desc [LEN_LONG], char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline)
+DITTO_parse__desc       (char a_prev [LEN_LONG], char r_desc [LEN_LONG])
+{
+   char        rce         =  -10;
+   int         l           =    0;
+   int         i           =    0;
+   char        x_desc      [LEN_LONG]  = "[  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ";
+   if (r_desc  == NULL)  return rce;
+   l = strlen (a_prev);
+   for (i = 0; i < l; ++i)  x_desc [i + 2] = a_prev [i];
+   x_desc [l + 2] = ' ';
+   x_desc [l + 3] = ']';
+   strlcpy (r_desc, x_desc, LEN_LONG);
+   return 0;
+}
+
+char
+DITTO_parse__group      (char a_prev [LEN_LONG], char r_desc [LEN_LONG])
+{
+   char        rce         =  -10;
+   int         l           =    0;
+   int         i           =    0;
+   char        x_desc      [LEN_LONG]  = "===[[ ===============================================================";
+   if (a_prev  == NULL)  return rce;
+   if (r_desc  == NULL)  return rce;
+   if (strncmp (a_prev, "===[[ ", 6) == 0) {
+      strlcpy (r_desc, a_prev, LEN_LONG);
+      return 0;
+   }
+   l = strlen (a_prev);
+   for (i = 0; i < l; ++i)  x_desc [i + 6] = a_prev [i];
+   x_desc [l + 6] = ' ';
+   x_desc [l + 7] = ']';
+   x_desc [l + 8] = ']';
+   strlcpy (r_desc, x_desc, LEN_LONG);
+   return 1;
+}
+
+char
+DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char *a_field, char r_desc [LEN_LONG], char *r_ditto, char *r_dittoing, char *r_dtarget, int *r_dstart, int *r_dline)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
    char       *q           = NULL;
-   char        m           =  '-';
-   int         n           =   -1;
+   char        x_mark      =  '-';
+   int         x_line      =   -1;
    char        t           [LEN_LABEL] = "";
    char        x_desc      [LEN_LONG]  = "";
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   DEBUG_UVER   yLOG_upoint  ("a_nscrp"    , a_nscrp);
+   debug_uver   ylog_upoint  ("a_nscrp"    , a_nscrp);
    --rce;  if (a_nscrp     == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_uinfo   ("a_nscrp"    , a_nscrp);
-   DEBUG_UVER   yLOG_upoint  ("a_verb"    , a_verb);
+   debug_uver   ylog_uinfo   ("a_nscrp"    , a_nscrp);
+   debug_uver   ylog_upoint  ("a_verb"    , a_verb);
    --rce;  if (a_verb     == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("a_field"   , a_field);
+   debug_uver   ylog_upoint  ("a_field"   , a_field);
    --rce;  if (a_field    == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("r_dittoing", r_dittoing);
+   debug_uver   ylog_upoint  ("r_dittoing", r_dittoing);
    --rce;  if (r_dittoing == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(default)------------------------*/
-   if (r_mark != NULL)  *r_mark = '-';
+   if (r_ditto != NULL)  *r_ditto = '-';
    /*---(defense)------------------------*/
-   DEBUG_UVER   yLOG_upoint  ("a_field"   , a_field);
+   debug_uver   ylog_upoint  ("a_field"   , a_field);
    --rce;  if (a_field == NULL) {
-      yLOGS_err ("%s:%d:1: error: COND/DITTO called with a null string", a_nscrp, a_line);
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      yerr_uerror ("%s:%d:0: error: COND/DITTO called with a null string", a_nscrp, a_line);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_uinfo   ("a_field"   , a_field);
+   debug_uver   ylog_uinfo   ("a_field"   , a_field);
    /*---(check for reset)----------------*/
    strcpy (t, a_verb);
    if (strstr (" SCRP SHARED " , t) != NULL) {
-      DEBUG_UVER   yLOG_unote   ("found SCRP/SHARED, resetting dittos");
+      debug_uver   ylog_unote   ("found SCRP/SHARED, resetting dittos");
       DITTO_purge ();
-      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+      debug_uver   ylog_uexit   (__FUNCTION__);
       return 0;
    }
    /*---(quick-out)----------------------*/
    if (strstr (" COND DITTO " , t) == NULL) {
-      DEBUG_UVER   yLOG_unote   ("this only applies to COND/DITTO");
-      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+      debug_uver   ylog_unote   ("this only applies to COND/DITTO");
+      debug_uver   ylog_uexit   (__FUNCTION__);
       return 0;
    }
    /*---(check for marker)---------------*/
    q = strchr (a_field, '(');
-   DEBUG_UVER   yLOG_upoint  ("q"         , q);
+   debug_uver   ylog_upoint  ("q"         , q);
    --rce;  if (q == NULL) {
       if (strcmp (t, "DITTO") == 0) {
-         yLOGS_err ("%s:%d:1: error: DITTO missing a valid identifier string (?)", a_nscrp, a_line);
-         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+         yerr_uerror ("%s:%d:0: error: DITTO missing a valid identifier string (?)", a_nscrp, a_line);
+         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
          return rce;
       }
-      DEBUG_UVER   yLOG_unote   ("no openning marker");
-      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+      debug_uver   ylog_unote   ("no openning marker");
+      debug_uver   ylog_uexit   (__FUNCTION__);
       return 0;
    }
    --rce;  if (q [1] == NULL) {
-      yLOGS_err ("%s:%d:1: error: %s identifier did not follow ( marker", a_nscrp, a_line, t);
-      DEBUG_UVER   yLOG_unote   ("no identifer");
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      yerr_uerror ("%s:%d:0: error: %s identifier did not follow ( marker", a_nscrp, a_line, t);
+      debug_uver   ylog_unote   ("no identifer");
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    --rce;  if (q [1] == ')') {
-      yLOGS_err ("%s:%d:1: error: %s no identifier within () markers", a_nscrp, a_line, t);
-      DEBUG_UVER   yLOG_unote   ("no identifer");
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      yerr_uerror ("%s:%d:0: error: %s no identifier within () markers", a_nscrp, a_line, t);
+      debug_uver   ylog_unote   ("no identifer");
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   m = q [1];
-   DEBUG_UVER   yLOG_uchar   ("m"          , m);
+   x_mark = q [1];
+   debug_uver   ylog_uchar   ("x_mark"     , x_mark);
    --rce;  if (q [2] != ')') {
-      yLOGS_err ("%s:%d:1: error: %s identifier å%cæ not followed by ) marker", a_nscrp, a_line, t, m);
-      DEBUG_UVER   yLOG_unote   ("no close marker");
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      yerr_uerror ("%s:%d:0: error: %s identifier (%c) not followed by ) marker", a_nscrp, a_line, t, x_mark);
+      debug_uver   ylog_unote   ("no close marker");
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(validate marker)----------------*/
-   n  = DITTO__get (m, x_desc);
-   DEBUG_UVER   yLOG_uvalue  ("n"         , n);
-   if (n < -1) {
-      DEBUG_UVER   yLOG_unote   ("invalid identifier");
-      yLOGS_err ("%s:%d:1: error: %s identifier å%cæ not valid [0-9]", a_nscrp, a_line, t, m);
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+   x_line = DITTO__get (x_mark, x_desc);
+   debug_uver   ylog_uvalue  ("x_line"    , x_line);
+   if (x_line < -1) {
+      debug_uver   ylog_unote   ("invalid identifier");
+      yerr_uerror ("%s:%d:0: error: %s identifier (%c) not valid [0-9]", a_nscrp, a_line, t, x_mark);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(handle condition)---------------*/
    --rce;  if (strcmp ("COND" , a_verb) == 0) {
       if (*r_dittoing != 'y') {
-         DEBUG_UVER   yLOG_unote   ("handle cond");
-         if (n > 0) {
-            DEBUG_UVER   yLOG_unote   ("already set identifier (hidding)");
-            yLOGS_err ("%s:%d:1: warning: COND identifier å%cæ already set, now overwritten", a_nscrp, a_line, m);
+         debug_uver   ylog_unote   ("handle cond");
+         if (x_line > 0) {
+            debug_uver   ylog_unote   ("already set identifier (hidding)");
+            yerr_uerror ("%s:%d:0: warning: COND identifier (%c) already set, now overwritten", a_nscrp, a_line, x_mark);
          }
-         rc = DITTO__set_recd (m, a_line, a_vers, a_recd);
-         DEBUG_UVER   yLOG_uvalue  ("saving"    , rc);
-         DEBUG_UVER   yLOG_uinfo   ("SET"       , DITTO__used ());
-         if (r_mark != NULL)  *r_mark = m;
+         rc = DITTO__set_recd (x_mark, a_line, a_vers, a_recd);
+         debug_uver   ylog_uvalue  ("saving"    , rc);
+         debug_uver   ylog_uinfo   ("SET"       , DITTO__used ());
+         if (r_ditto != NULL)  *r_ditto = x_mark;
       } else {
-         DEBUG_UVER   yLOG_unote   ("cond () inside ditto, ignored");
+         debug_uver   ylog_unote   ("cond () inside ditto, ignored");
       }
-      if (r_mark != NULL) {
-         DEBUG_UVER   yLOG_uchar   ("*r_mark"   , *r_mark);
+      if (r_ditto != NULL) {
+         debug_uver   ylog_uchar   ("*r_ditto"   , *r_ditto);
       }
-      DEBUG_UVER   yLOG_uvalue  ("a_line"    , a_line);
+      debug_uver   ylog_uvalue  ("a_line"    , a_line);
    }
    /*---(handle ditto)-------------------*/
    --rce;  if (strcmp ("DITTO" , a_verb) == 0) {
-      DEBUG_UVER   yLOG_unote   ("handle ditto");
-      DEBUG_UVER   yLOG_uinfo   ("DITTO"     , DITTO__used ());
-      if (n == -1) {
-         DEBUG_UVER   yLOG_unote   ("unset identifier");
-         yLOGS_err ("%s:%d:1: error: DITTO identifier å%cæ not set by previous COND", a_nscrp, a_line, m);
-         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_unote   ("handle ditto");
+      debug_uver   ylog_uinfo   ("DITTO"     , DITTO__used ());
+      if (x_line == -1) {
+         debug_uver   ylog_unote   ("unset identifier");
+         yerr_uerror ("%s:%d:0: error: DITTO identifier (%c) not set by previous COND in current SCRP/SHARE", a_nscrp, a_line, x_mark);
+         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
          return rce;
       }
-      if (r_desc  != NULL)  snprintf (r_desc, LEN_LONG, "[ %-.70s ]", x_desc);  /* nice stand-out formatting */
-      if (r_mark  != NULL)  *r_mark  = m;
+      /*> if (r_desc  != NULL)  snprintf (r_desc, LEN_LONG, "[ %-.70s ]", x_desc);  /+ nice stand-out formatting +/   <*/
+      if (r_desc  != NULL)  DITTO_parse__desc (x_desc, r_desc);                 /* nice stand-out formatting */
+      if (r_ditto  != NULL)  *r_ditto  = x_mark;
       if (a_runtype == G_RUN_CREATE || a_runtype == G_RUN_DEBUG) {
-         DEBUG_UVER   yLOG_unote   ("begin ditto processing");
-         DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
-         if (r_ditto != NULL)  *r_ditto = n;
-         if (r_dmark != NULL)  *r_dmark = m;
-         rc = DITTO_beg (b_scrp, a_nscrp, a_line, a_runtype, m, n, r_dittoing, r_mark, r_dmark, r_ditto, r_dline);
+         debug_uver   ylog_unote   ("begin ditto processing");
+         debug_uver   ylog_uexit   (__FUNCTION__);
+         if (r_dtarget != NULL)  *r_dtarget = x_mark;
+         if (r_dstart  != NULL)  *r_dstart  = x_line;
+         rc = DITTO_beg (b_scrp, a_nscrp, a_line, a_runtype, x_mark, x_line, r_dittoing, r_ditto, r_dtarget, r_dstart, r_dline);
          if (rc >= 0)  rc = 1;
          return rc;
       }
-      DEBUG_UVER   yLOG_unote   ("using position");
-      if (r_mark != NULL) {
-         DEBUG_UVER   yLOG_uchar   ("*r_mark"   , *r_mark);
+      debug_uver   ylog_unote   ("using position");
+      if (r_ditto != NULL) {
+         debug_uver   ylog_uchar   ("*r_ditto"   , *r_ditto);
       }
-      DEBUG_UVER   yLOG_uvalue  ("a_line"    , a_line);
-      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+      debug_uver   ylog_uvalue  ("a_line"    , a_line);
+      debug_uver   ylog_uexit   (__FUNCTION__);
       return 1;
    }
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -592,14 +647,32 @@ DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
 static void  o___DEBUGGING_______o () { return; }
 
 char*
+DITTO__actuals          (void)
+{
+   /*---(locals)-------------------------*/
+   int         i           =    0;
+   /*---(dittos)-------------------------*/
+   strcpy (g_print, "");
+   for (i = 0; i < MAX_DITTO; ++i) {
+      if      (s_dittos [i].d_called == 0)  g_print [i] = '·';
+      else if (s_dittos [i].d_called >  9)  g_print [i] = '*';
+      else                                  g_print [i] = '0' + s_dittos [i].d_called;
+   }
+   g_print [i] = '\0';
+   /*---(complete)-----------------------*/
+   return g_print;
+}
+
+char*
 DITTO__used             (void)
 {
    /*---(locals)-------------------------*/
    int         i           =    0;
    /*---(dittos)-------------------------*/
+   strcpy (g_print, "");
    for (i = 0; i < MAX_DITTO; ++i) {
-      if (s_dittos [i].line < 0)    g_print [i] = '-';
-      else                          g_print [i] = '0' + i;
+      if (s_dittos [i].d_line < 0)    g_print [i] = '-';
+      else                            g_print [i] = '0' + i;
    }
    g_print [i] = '\0';
    /*---(complete)-----------------------*/

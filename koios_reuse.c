@@ -2,25 +2,33 @@
 #include    "koios.h"        /* LOCAL  : main header                          */
 
 /*
+ *  ZERO globals referenced in file
+ */
+
+/*
  *  PURPOSE : allows code to be written once and reused (REUSE) in several
  *  places, either globally (GLOBAL) or within a file (SHARED)
  *
  *  creates separate function and calls when needed
  *
  */
+/*> f(a__FILE__, __FUNCTION__, __SLINE__, €ý5n                                     <*/
 
 
 
-#define   MAX_SHARE   26
-typedef struct cSHARE tSHARE;
-struct cSHARE {
-   int         line;
-   char        desc    [LEN_LONG];
-   short       conds;
-   short       steps;
+static char      *x_marks     = YSTR_UPPER YSTR_LOWER YSTR_GREEK;
+#define   MAX_MARKS   76
+typedef struct cMARKS tMARKS;
+struct cMARKS {
+   char        m_abbr;
+   char        m_type;
+   int         m_line;
+   char        m_desc    [LEN_LONG];
+   short       m_conds;
+   short       m_steps;
+   char        m_called;
 };
-static tSHARE  s_master [MAX_SHARE];
-static tSHARE  s_shares [MAX_SHARE];
+static tMARKS  s_marks   [MAX_MARKS];
 
 
 
@@ -29,34 +37,78 @@ static tSHARE  s_shares [MAX_SHARE];
 /*====================------------------------------------====================*/
 static void  o___PROGRAM_________o () { return; }
 
-char
-REUSE_purge             (cchar a_type)
-{
-   /*---(locals)-------------------------*/
-   int         i           =    0;
-   /*---(set defaults)-------------------*/
-   for (i = 0; i < MAX_SHARE; ++i) {
-      switch (a_type) {
-      case T_MASTER :
-         s_master [i].line  = -1;
-         strcpy (s_master [i].desc, "");
-         s_master [i].conds =  0;
-         s_master [i].steps =  0;
-         break;
-      case T_SHARES :
-         s_shares [i].line  = -1;
-         strcpy (s_shares [i].desc, "");
-         s_shares [i].conds =  0;
-         s_shares [i].steps =  0;
-         break;
-      }
-   }
-   /*---(complete)-----------------------*/
-   return 0;
-}
+/*> char                                                                              <* 
+ *> REUSE__type             (char a_abbr)                                             <* 
+ *> {                                                                                 <* 
+ *>    if      (a_abbr == 0)                          return '-';                     <* 
+ *>    else if (strchr (YSTR_UPPER, a_abbr) != NULL)  return T_MASTER;                <* 
+ *>    else if (strchr (YSTR_LOWER, a_abbr) != NULL)  return T_SHARES;                <* 
+ *>    else if (strchr (YSTR_GREEK, a_abbr) != NULL)  return T_CONFIG;                <* 
+ *>    return '-';                                                                    <* 
+ *> }                                                                                 <*/
 
-char REUSE_init              (void)  { REUSE_purge (T_MASTER) ;REUSE_purge (T_SHARES); return 0; }
-char REUSE_wrap              (void)  { REUSE_purge (T_MASTER) ;REUSE_purge (T_SHARES); return 0; }
+/*> int                                                                               <* 
+ *> REUSE__index            (char a_abbr)                                             <* 
+ *> {                                                                                 <* 
+ *>    int         i           =    0;                                                <* 
+ *>    for (i = 0; i < MAX_MARKS; ++i) {                                              <* 
+ *>       if (s_marks [i].m_abbr == a_abbr)  return i;                                <* 
+ *>    }                                                                              <* 
+ *>    /+---(trouble)------------------------+/                                       <* 
+ *>    return -1;                                                                     <* 
+ *> }                                                                                 <*/
+
+/*> char                                                                                                                                                                 <* 
+ *> REUSE__data             (char a_abbr, char *r_type, char r_tdesc [LEN_TERSE], int *r_line, char r_desc [LEN_LONG], short *r_conds, short *r_steps, char *r_called)   <* 
+ *> {                                                                                                                                                                    <* 
+ *>    char        rce         =  -10;                                                                                                                                   <* 
+ *>    int         n           =    0;                                                                                                                                   <* 
+ *>    if (r_type  != NULL)  *r_type   = '-';                                                                                                                            <* 
+ *>    if (r_line  != NULL)  *r_line   =  -1;                                                                                                                            <* 
+ *>    if (r_tdesc != NULL)  strcpy (r_tdesc, "");                                                                                                                       <* 
+ *>    if (r_desc  != NULL)  strcpy (r_desc , "");                                                                                                                       <* 
+ *>    if (r_conds != NULL)  *r_conds  =  -1;                                                                                                                            <* 
+ *>    if (r_steps != NULL)  *r_steps  =  -1;                                                                                                                            <* 
+ *>    n = REUSE__index (a_abbr);                                                                                                                                        <* 
+ *>    --rce;  if (n < 0)  return rce;                                                                                                                                   <* 
+ *>    if (r_type  != NULL)  *r_type   = s_marks [n].m_type;                                                                                                             <* 
+ *>    if (r_tdesc != NULL) {                                                                                                                                            <* 
+ *>       switch (s_marks [n].m_type) {                                                                                                                                  <* 
+ *>       case T_MASTER : strlcpy (r_tdesc, "GLOBAL" , LEN_TERSE);  break;                                                                                               <* 
+ *>       case T_SHARES : strlcpy (r_tdesc, "SHARED" , LEN_TERSE);  break;                                                                                               <* 
+ *>       case T_CONFIG : strlcpy (r_tdesc, "CONFIG" , LEN_TERSE);  break;                                                                                               <* 
+ *>       default       : strlcpy (r_tdesc, "(error)", LEN_TERSE);  break;                                                                                               <* 
+ *>       }                                                                                                                                                              <* 
+ *>    }                                                                                                                                                                 <* 
+ *>    if (r_line  != NULL)  *r_line   = s_marks [n].m_line;                                                                                                             <* 
+ *>    if (r_desc  != NULL)  strlcpy (r_desc, s_marks [n].m_desc, LEN_LONG);                                                                                             <* 
+ *>    if (r_conds != NULL)  *r_conds  = s_marks [n].m_conds;                                                                                                            <* 
+ *>    if (r_steps != NULL)  *r_steps  = s_marks [n].m_steps;                                                                                                            <* 
+ *>    return 1;                                                                                                                                                         <* 
+ *> }                                                                                                                                                                    <*/
+
+/*> char                                                                                        <* 
+ *> REUSE_purge             (void)                                                              <* 
+ *> {                                                                                           <* 
+ *>    yUNIT_reuse_purge ('*');                                                                 <* 
+ *>    /+> /+---(locals)-------------------------+/                                       <*    <* 
+ *>     *> int         i           =    0;                                                <*    <* 
+ *>     *> /+---(set defaults)-------------------+/                                       <*    <* 
+ *>     *> for (i = 0; i < MAX_MARKS; ++i) {                                              <*    <* 
+ *>     *>    s_marks [i].m_abbr   = x_marks [i];                                         <*    <* 
+ *>     *>    s_marks [i].m_type   = REUSE__type (s_marks [i].m_abbr);                    <*    <* 
+ *>     *>    s_marks [i].m_line   = -1;                                                  <*    <* 
+ *>     *>    strcpy (s_marks [i].m_desc, "");                                            <*    <* 
+ *>     *>    s_marks [i].m_conds  =  0;                                                  <*    <* 
+ *>     *>    s_marks [i].m_steps  =  0;                                                  <*    <* 
+ *>     *>    s_marks [i].m_called =  0;                                                  <*    <* 
+ *>     *> }                                                                              <*    <* 
+ *>     *> /+---(complete)-----------------------+/                                       <+/   <* 
+ *>    return 0;                                                                                <* 
+ *> }                                                                                           <*/
+
+char REUSE_init              (void)  { yUNIT_reuse_purge ('*'); }
+char REUSE_wrap              (void)  { yUNIT_reuse_purge ('*'); }
 
 
 
@@ -65,57 +117,27 @@ char REUSE_wrap              (void)  { REUSE_purge (T_MASTER) ;REUSE_purge (T_SH
 /*====================------------------------------------====================*/
 static void  o___USAGE___________o () { return; }
 
-char
-REUSE__index            (cchar a_type, cchar a_mark)
-{
-   /*---(locals)-------------------------*/
-   char        rce         =  -10;
-   char        x_valid     [LEN_TITLE] = YSTR_UPPER;
-   char        i           =  -10;
-   /*---(defense)------------------------*/
-   switch (a_type) {
-   case T_MASTER :  strcpy (x_valid, YSTR_UPPER);   break;
-   case T_SHARES :  strcpy (x_valid, YSTR_LOWER);   break;
-   }
-   --rce;  if (a_mark == 0)                        return rce;
-   --rce;  if (strchr (x_valid , a_mark) == NULL)  return rce;
-   /*---(update list)--------------------*/
-   i = a_mark - x_valid [0];
-   /*---(complete)-----------------------*/
-   return i;
-}
+/*> char                                                                              <* 
+ *> REUSE__set              (char a_abbr, int a_line, char a_desc [LEN_LONG])         <* 
+ *> {                                                                                 <* 
+ *>    /+---(locals)-------------------------+/                                       <* 
+ *>    char        n           =   -1;                                                <* 
+ *>    /+---(get index)----------------------+/                                       <* 
+ *>    n = REUSE__index (a_abbr);                                                     <* 
+ *>    if (n < 0) return n;                                                           <* 
+ *>    /+---(update list)--------------------+/                                       <* 
+ *>    s_marks [n].m_line = a_line;                                                   <* 
+ *>    if (a_desc != NULL)  strlcpy (s_marks [n].m_desc, a_desc, LEN_LONG);           <* 
+ *>    else                 strcpy  (s_marks [n].m_desc, "");                         <* 
+ *>    /+---(default counts)-----------------+/                                       <* 
+ *>    s_marks [n].m_conds =  0;                                                      <* 
+ *>    s_marks [n].m_steps =  0;                                                      <* 
+ *>    /+---(complete)-----------------------+/                                       <* 
+ *>    return 1;                                                                      <* 
+ *> }                                                                                 <*/
 
 char
-REUSE__set              (cchar a_type, cchar a_mark, int a_line, char a_desc [LEN_LONG])
-{
-   /*---(locals)-------------------------*/
-   char        i           =  -10;
-   /*---(get index)----------------------*/
-   i = REUSE__index (a_type, a_mark);
-   if (i < 0) return i;
-   /*---(update list)--------------------*/
-   switch (a_type) {
-   case T_MASTER :
-      s_master [i].line = a_line;
-      if (a_desc != NULL)  strlcpy (s_master [i].desc, a_desc, LEN_LONG);
-      else                 strcpy  (s_master [i].desc, "");
-      s_master [i].conds =  0;
-      s_master [i].steps =  0;
-      break;
-   case T_SHARES :
-      s_shares [i].line = a_line;
-      if (a_desc != NULL)  strlcpy (s_shares [i].desc, a_desc, LEN_LONG);
-      else                 strcpy  (s_shares [i].desc, "");
-      s_shares [i].conds =  0;
-      s_shares [i].steps =  0;
-      break;
-   }
-   /*---(complete)-----------------------*/
-   return 0;
-}
-
-char
-REUSE__set_recd         (cchar a_type, cchar a_mark, int a_line, char a_vers, char a_recd [LEN_RECD])
+REUSE__set_recd         (char a_abbr, int a_line, char a_vers, char a_recd [LEN_RECD])
 {
    /*---(locals)-------------------------*/
    char        rce         =  -10;
@@ -136,38 +158,46 @@ REUSE__set_recd         (cchar a_type, cchar a_mark, int a_line, char a_vers, ch
    }
    ystrutrim (p, LEN_LONG);
    /*---(complete)-----------------------*/
-   return REUSE__set (a_type, a_mark, a_line, p);
+   return yUNIT_reuse_set (a_abbr, a_line, p);
 }
 
-int
-REUSE__get              (cchar a_type, cchar a_mark, char r_desc [LEN_LONG], int *r_conds, int *r_steps)
-{
-   /*---(locals)-------------------------*/
-   char        i           =  -10;
-   int         x_line      =   -1;
-   /*---(default)------------------------*/
-   if (r_desc != NULL)   strcpy  (r_desc, "");
-   /*---(get index)----------------------*/
-   i = REUSE__index (a_type, a_mark);
-   if (i < 0) return i;
-   /*---(update list)--------------------*/
-   switch (a_type) {
-   case T_MASTER :
-      x_line = s_master [i].line;
-      if (r_desc  != NULL)  strlcpy (r_desc, s_master [i].desc, LEN_LONG);
-      if (r_conds != NULL)  *r_conds = s_master [i].conds;
-      if (r_steps != NULL)  *r_steps = s_master [i].steps;
-      break;
-   case T_SHARES :
-      x_line = s_shares [i].line;
-      if (r_desc  != NULL)  strlcpy (r_desc, s_shares [i].desc, LEN_LONG);
-      if (r_conds != NULL)  *r_conds = s_shares [i].conds;
-      if (r_steps != NULL)  *r_steps = s_shares [i].steps;
-      break;
-   }
-   /*---(complete)-----------------------*/
-   return x_line;
-}
+/*> int                                                                                             <* 
+ *> REUSE__get              (char a_abbr, char r_desc [LEN_LONG], short *r_conds, short *r_steps)   <* 
+ *> {                                                                                               <* 
+ *>    int         x_line      =   -1;                                                              <* 
+ *>    yUNIT_reuse_data (a_abbr, NULL, NULL, &x_line, r_desc, r_conds, r_steps, NULL);              <* 
+ *>    return x_line;                                                                               <* 
+ *> }                                                                                               <*/
+
+/*> int                                                                               <* 
+ *> REUSE__get_line         (char a_abbr)                                             <* 
+ *> {                                                                                 <* 
+ *>    int         x_line      =   -1;                                                <* 
+ *>    yUNIT_reuse_data (a_abbr, NULL, NULL, &x_line, NULL, NULL, NULL, NULL);        <* 
+ *>    return x_line;                                                                 <* 
+ *> }                                                                                 <*/
+
+/*> int                                                                                       <* 
+ *> REUSE__get_desc         (char a_abbr, char r_tdesc [LEN_TERSE], char r_desc [LEN_LONG])   <* 
+ *> {                                                                                         <* 
+ *>    int         x_line      =   -1;                                                        <* 
+ *>    yUNIT_reuse_data (a_abbr, NULL, r_tdesc, &x_line, r_desc, NULL, NULL, NULL);           <* 
+ *>    return x_line;                                                                         <* 
+ *> }                                                                                         <*/
+
+/*> char                                                                              <* 
+ *> REUSE_called            (char a_abbr)                                             <* 
+ *> {                                                                                 <* 
+ *>    /+---(locals)-------------------------+/                                       <* 
+ *>    char        n           =   -1;                                                <* 
+ *>    /+---(get index)----------------------+/                                       <* 
+ *>    n = REUSE__index (a_abbr);                                                     <* 
+ *>    if (n < 0) return n;                                                           <* 
+ *>    /+---(update list)--------------------+/                                       <* 
+ *>    ++(s_marks [n].m_called);                                                      <* 
+ *>    /+---(complete)-----------------------+/                                       <* 
+ *>    return 1;                                                                      <* 
+ *> }                                                                                 <*/
 
 
 
@@ -177,186 +207,479 @@ REUSE__get              (cchar a_type, cchar a_mark, char r_desc [LEN_LONG], int
 static void  o___PARSING_________o () { return; }
 
 char
-REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char r_desc [LEN_LONG], char a_cshare, char *r_share)
+REUSE__parse_delimit    (char a_func [LEN_LABEL], char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_SHORT], char a_pos, char a_char, char a_example [LEN_SHORT])
+{
+   char        rce         =  -10;
+   char        c           =  '?';
+   char        x_label     [LEN_LABEL] = "";
+   /*---(prepare)------------------------*/
+   switch (a_pos) {
+   case 0  :  c = a_label [0];  strcpy (x_label, "leading");   break;
+   case 1  :  c = a_label [1];  strcpy (x_label, "middle");    break;
+   case 2  :  c = a_label [1];  strcpy (x_label, "trailing");  break;
+   default :  return rce;
+   }
+   /*---(check)--------------------------*/
+   debug_uver   ylog_uchar   (x_label     , c);
+   if (c != a_char) {
+      yerr_uerror ("%s:%d:0: error: verb å%sæ from prefix å%sæ with label å%sæ has %s (%c) instead of (%c), e.g., å%sæ", a_nscrp, a_line, a_verb, a_prefix, a_label, x_label, c, a_char, a_example);
+      debug_uver   ylog_uexitr  (a_func, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   return 0;
+}
+
+char
+REUSE__parse_global     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
-   char        x_recd      [LEN_RECD]  = "";
+   char        x_label     =  '?';
+   char        c           =  '?';
+   int         n           =   -1;
+   char        x_type      =  '?';
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
+   /*---(quick-out)----------------------*/
+   debug_uver   ylog_uinfo   ("a_verb"    , a_verb);
+   if (strcmp ("GLOBAL" , a_verb) == 0)  x_type = 'G';
+   if (strcmp ("CONFIG" , a_verb) == 0)  x_type = 'F';
+   if (x_type == '?') {
+      debug_uver   ylog_unote   ("not a GLOBAL/CONFIG");
+      debug_uver   ylog_uexit   (__FUNCTION__);
+      return 0;
+   }
+   debug_uver   ylog_uchar   ("x_type"    , x_type);
+   /*---(check label)--------------------*/
+   rc = REUSE__parse_delimit (__FUNCTION__, a_nscrp, a_line, a_verb, a_prefix, a_label, 0, '-', a_example);
+   --rce;  if (rc < 0)  return rce;
+   /*> debug_uver   ylog_uchar   ("pre 0"     , c);                                   <*/
+   /*> --rce;  if (c != '-') {                                                                                                  <* 
+    *>    yerr_uerror ("%s:%d:0: error: ¶%s¶ missing valid identifier string, e.g., %s", a_nscrp, a_line, a_prefix, a_example);   <* 
+    *>    debug_uver   ylog_unote   ("no openning marker");                                                                     <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rce);                                                                        <* 
+    *>    return rce;                                                                                                           <* 
+    *> }                                                                                                                        <*/
+   x_label = a_label [1];
+   debug_uver   ylog_uchar   ("x_label"   , x_label);
+   --rce;  if (x_type == 'G' && strchr (YSTR_UPPER, x_label) == NULL) {
+      debug_uver   ylog_unote   ("GLOBAL identifier must be A-Z");
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ not valid å%sæ", a_nscrp, a_line, a_prefix, x_label, YSTR_UPPER);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (x_type == 'F' && strchr (YSTR_GREEK, x_label) == NULL) {
+      debug_uver   ylog_unote   ("CONFIG identifier must be è-ÿ");
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ not valid å%sæ", a_nscrp, a_line, a_prefix, x_label, YSTR_GREEK);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   c = a_label [2];
+   debug_uver   ylog_uchar   ("pre 2"     , c);
+   --rce;  if (c != '-') {
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ does not end with dash (-), e.g., %s", a_nscrp, a_line, a_prefix, x_label, a_example);
+      debug_uver   ylog_unote   ("no close marker");
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(prepare)------------------------*/
+   if (x_type == 'G')  n  = yUNIT_reuse_line (x_label);
+   if (x_type == 'F')  n  = yUNIT_reuse_line (x_label);
+   debug_uver   ylog_uvalue  ("n"         , n);
+   /*---(defense)------------------------*/
+   --rce;  if (strstr (a_nscrp, "master.unit") == NULL) {
+      debug_uver   ylog_unote   ("GLOBAL/CONFIG only allowed in master.unit");
+      yerr_uerror ("%s:%d:0: error: åGLOBAL/CONFIGæ verbs not allowed outside master.unit", a_nscrp, a_line);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (n >= 0) {
+      debug_uver   ylog_unote   ("already set");
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ already in use", a_nscrp, a_line, a_prefix, x_label);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(handle)-------------------------*/
+   if (x_type == 'G')  rc = REUSE__set_recd (x_label, a_line, a_vers, a_recd);
+   if (x_type == 'F')  rc = REUSE__set_recd (x_label, a_line, a_vers, a_recd);
+   debug_uver   ylog_uvalue  ("set"       , rc);
+   if (r_major != NULL)  *r_major = x_label;
+   /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
+   return 1;
+}
+
+char
+REUSE__parse_shared     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_label     =  '?';
+   char        c           =  '?';
+   int         n           =   -1;
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
+   /*---(quick-out)----------------------*/
+   debug_uver   ylog_uinfo   ("a_verb"    , a_verb);
+   if (strcmp ("SHARED" , a_verb) != 0) {
+      debug_uver   ylog_unote   ("not a SHARED");
+      debug_uver   ylog_uexit   (__FUNCTION__);
+      return 0;
+   }
+   /*---(check label)--------------------*/
+   c = a_label [0];
+   debug_uver   ylog_uchar   ("pre 0"     , c);
+   --rce;  if (c != '-') {
+      yerr_uerror ("%s:%d:0: error: å%sæ missing valid identifier string, e.g., å%sæ", a_nscrp, a_line, a_prefix, a_example);
+      debug_uver   ylog_unote   ("no openning marker");
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   x_label = a_label [1];
+   debug_uver   ylog_uchar   ("x_label"   , x_label);
+   --rce;  if (strchr (YSTR_LOWER, x_label) == NULL) {
+      debug_uver   ylog_unote   ("SHARED identifier must be A-Zè-ÿ");
+      yerr_uerror ("%s:%d:0: error: å%sæ identifier (%c) not valid å%sæ", a_nscrp, a_line, a_prefix, x_label, YSTR_UPPER);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   c = a_label [2];
+   debug_uver   ylog_uchar   ("pre 2"     , c);
+   --rce;  if (c != '-') {
+      yerr_uerror ("%s:%d:0: error: å%sæ identifier (%c) does not end with dash (-) , e.g., å%sæ", a_nscrp, a_line, a_prefix, x_label, a_example);
+      debug_uver   ylog_unote   ("no close marker");
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(prepare)------------------------*/
+   n  = yUNIT_reuse_line (x_label);
+   debug_uver   ylog_uvalue  ("n"         , n);
+   /*---(defense)------------------------*/
+   --rce;  if (strstr (a_nscrp, "master.unit") != NULL) {
+      debug_uver   ylog_unote   ("SHARED not allowed inside master.unit");
+      yerr_uerror ("%s:%d:0: error: åSHAREDæ verb not allowed inside master.unit", a_nscrp, a_line);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (n >= 0) {
+      debug_uver   ylog_unote   ("already set");
+      yerr_uerror ("%s:%d:0: error: å%sæ identifier (%c) already in use", a_nscrp, a_line, a_prefix, x_label);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(handle)-------------------------*/
+   rc = REUSE__set_recd (x_label, a_line, a_vers, a_recd);
+   debug_uver   ylog_uvalue  ("set"       , rc);
+   if (r_major != NULL)  *r_major = x_label;
+   /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
+   return 1;
+}
+
+char
+REUSE__parse_reuse_old  (char a_nscrp [LEN_TITLE], int a_line, char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char *r_major, char *r_minor)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_label     =  '?';
+   char        c           =  '?';
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
+   /*---(default)------------------------*/
+   if (r_major != NULL)  *r_major = '-';
+   if (r_minor != NULL)  *r_minor = '-';
+   /*---(quick-out)----------------------*/
+   debug_uver   ylog_uinfo   ("a_label"   , a_label);
+   c = a_label [0];
+   if (c != '-') {
+      debug_uver   ylog_unote   ("not a old-style reuse");
+      debug_uver   ylog_uexit   (__FUNCTION__);
+      return 0;
+   }
+   /*---(check label)--------------------*/
+   x_label = a_label [1];
+   debug_uver   ylog_uchar   ("x_label"   , x_label);
+   --rce;  if (strchr (YSTR_LOWER YSTR_UPPER YSTR_GREEK, x_label) == NULL) {
+      debug_uver   ylog_unote   ("REUSE identifier must be A-Za-zè-ÿ");
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ not valid å%sæ", a_nscrp, a_line, a_prefix, x_label, YSTR_UPPER YSTR_LOWER YSTR_GREEK);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(check trailer)------------------*/
+   c = a_label [2];
+   debug_uver   ylog_uchar   ("pre 2"     , c);
+   --rce;  if (c != '-') {
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ does not end with dash (-) , e.g., å-A-æ", a_nscrp, a_line, a_prefix, x_label);
+      debug_uver   ylog_unote   ("no close marker");
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(save-back)----------------------*/
+   if (r_major != NULL)  *r_major = x_label;
+   if (r_minor != NULL)  *r_minor = '*';
+   /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
+   return 1;
+}
+
+char
+REUSE__parse_reuse_new  (char a_nscrp [LEN_TITLE], int a_line, char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char *r_major, char *r_minor)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_major     =  '?';
+   char        x_minor     =  '?';
+   char        c           =  '?';
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
+   /*---(default)------------------------*/
+   if (r_major != NULL)  *r_major = '-';
+   if (r_minor != NULL)  *r_minor = '-';
+   /*---(quick-out)----------------------*/
+   debug_uver   ylog_uinfo   ("a_label"   , a_label);
+   c = a_label [1];
+   if (c != '/') {
+      debug_uver   ylog_unote   ("not a new-style reuse");
+      debug_uver   ylog_uexit   (__FUNCTION__);
+      return 0;
+   }
+   /*---(check label)--------------------*/
+   x_major = a_label [0];
+   debug_uver   ylog_uchar   ("x_major"   , x_major);
+   --rce;  if (strchr (YSTR_LOWER YSTR_UPPER YSTR_GREEK, x_major) == NULL) {
+      debug_uver   ylog_unote   ("REUSE identifier must be A-Za-zè-ÿ");
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ not valid å%sæ", a_nscrp, a_line, a_prefix, x_major, YSTR_UPPER YSTR_LOWER YSTR_GREEK);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(check trailer)------------------*/
+   x_minor = a_label [2];
+   debug_uver   ylog_uchar   ("pre 2"     , x_minor);
+   --rce;  if (strchr ("*" YSTR_LOWER, x_minor) == NULL) {
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ does not end with å*abcdefghijklmnopqrstuvwxyzæ, e.g., åA/aæ", a_nscrp, a_line, a_prefix, x_minor);
+      debug_uver   ylog_unote   ("no close marker");
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(save-back)----------------------*/
+   if (r_major != NULL)  *r_major = x_major;
+   if (r_minor != NULL)  *r_minor = x_minor;
+   /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
+   return 1;
+}
+
+char
+REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_share, char r_desc [LEN_LONG], char *r_major, char *r_minor)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_major     =  '-';
+   char        x_minor     =  '-';
+   char        c           =  '?';
+   int         n           =   -1;
+   char        x_tdesc     [LEN_TERSE] = "";
+   char        x_desc      [LEN_LONG]  = "";
+   int         l           =    0;
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
+   /*---(quick-out)----------------------*/
+   debug_uver   ylog_upoint  ("a_verb"    , a_verb);
+   if (a_verb == NULL || strcmp ("REUSE"  , a_verb) != 0) {
+      debug_uver   ylog_unote   ("not a REUSE");
+      debug_uver   ylog_uexit   (__FUNCTION__);
+      return 0;
+   }
+   /*---(default)------------------------*/
+   if (r_desc  != NULL)  strcpy (r_desc, "");
+   if (r_major != NULL)  *r_major = '-';
+   if (r_minor != NULL)  *r_minor = '-';
+   /*---(defense)------------------------*/
+   --rce;  if (strstr (a_nscrp, "master.unit") != NULL) {
+      debug_uver   ylog_unote   ("REUSE not allowed inside master.unit");
+      yerr_uerror ("%s:%d:0: error: åREUSEæ verb not allowed inside master.unit", a_nscrp, a_line);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   l = strlen (a_label);
+   --rce;  if (l != 3) {
+      debug_uver   ylog_unote   ("REUSE label is not three characters");
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ label is %då%sæ chars, not 3", a_nscrp, a_line, a_prefix, l, a_label);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(quick-out)----------------------*/
+   rc = REUSE__parse_reuse_old (a_nscrp, a_line, a_prefix, a_label, &x_major, &x_minor);
+   --rce;  if (rc < 0) {
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ failed on old-style reuse label å-A-æ", a_nscrp, a_line, a_prefix);
+      debug_uver   ylog_unote   ("not a valid REUSE label");
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   --rce;  if (rc == 0) {
+      rc = REUSE__parse_reuse_new (a_nscrp, a_line, a_prefix, a_label, &x_major, &x_minor);
+      if (rc <= 0) {
+         yerr_uerror ("%s:%d:0: error: ¶%s¶ failed on new-style reuse label åA/aæ", a_nscrp, a_line, a_prefix);
+         debug_uver   ylog_unote   ("not a valid REUSE label");
+         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+   }
+   /*---(global)-------------------------*/
+   --rce;  if (strchr (YSTR_UPPER, x_major) != NULL) {
+      n  = yUNIT_reuse_desc (x_major, x_tdesc, x_desc);
+      debug_uver   ylog_uvalue  ("n"         , n);
+      if (n < 0) {
+         debug_uver   ylog_unote   ("not set");
+         yerr_uerror ("%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ never set by GLOBAL", a_nscrp, a_line, a_prefix, x_major);
+         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+   }
+   /*---(config)-------------------------*/
+   else if (strchr (YSTR_GREEK, x_major) != NULL) {
+      n  = yUNIT_reuse_desc (x_major, x_tdesc, x_desc);
+      debug_uver   ylog_uvalue  ("n"         , n);
+      if (n < 0) {
+         debug_uver   ylog_unote   ("not set");
+         yerr_uerror ("%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ never set by CONFIG", a_nscrp, a_line, a_prefix, x_major);
+         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+   }
+   /*---(shared)-------------------------*/
+   else if (strchr (YSTR_LOWER, x_major) != NULL) {
+      n  = yUNIT_reuse_desc (x_major, x_tdesc, x_desc);
+      debug_uver   ylog_uvalue  ("n"         , n);
+      if (n < 0) {
+         debug_uver   ylog_unote   ("not set");
+         yerr_uerror ("%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ never set by SHARED", a_nscrp, a_line, a_prefix, x_major);
+         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+   }
+   /*---(nobody)-------------------------*/
+   else {
+      debug_uver   ylog_unote   ("not set");
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ not valid [a-zA-Z]", a_nscrp, a_line, a_prefix, x_major);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(check recursion)----------------*/
+   if (x_major == a_share) {
+      debug_uver   ylog_unote   ("reuse is recursive");
+      yerr_uerror ("%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ called inside itself, recursive", a_nscrp, a_line, a_prefix, x_major);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(save-back)----------------------*/
+   if (r_desc  != NULL)  DITTO_parse__desc (x_desc, r_desc);  /* nice stand-out formatting */
+   if (r_major != NULL)  *r_major = x_major;
+   if (r_minor != NULL)  *r_minor = x_minor;
+   /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
+   return 1;
+}
+
+char
+REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char a_share, char r_desc [LEN_LONG], char *r_major, char *r_minor)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_prefix    [LEN_RECD]  = "";
    char       *p           = NULL;
    char        m           =  '-';
-   int         n           =   -1;
    int         o           =   -1;
+   int         c           =   -1;
    char        x_check     =   -1;
    char        x_label     [LEN_LABEL] = "";
    char        x_desc      [LEN_LONG]  = "";
    char        x_ex        [LEN_SHORT] = "-A-";
+   int         l           =    0;
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(default)------------------------*/
-   if (r_share != NULL)  *r_share = '-';
+   if (r_desc  != NULL)  strcpy (r_desc, "");
+   if (r_major != NULL)  *r_major = '-';
+   if (r_minor != NULL)  *r_minor = '-';
    /*---(defense)------------------------*/
-   DEBUG_UVER   yLOG_upoint  ("a_nscrp"   , a_nscrp);
+   debug_uver   ylog_upoint  ("a_nscrp"   , a_nscrp);
    --rce;  if (a_nscrp     == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("a_verb"    , a_verb);
+   debug_uver   ylog_upoint  ("a_verb"    , a_verb);
    --rce;  if (a_verb     == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   DEBUG_UVER   yLOG_upoint  ("a_recd"    , a_recd);
+   debug_uver   ylog_upoint  ("a_recd"    , a_recd);
    --rce;  if (a_recd     == NULL) {
-      yLOGS_err ("%s:%d:0: error: GLOBAL/SHARED/REUSE called with a null string", a_nscrp, a_line);
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   DEBUG_UVER   yLOG_upoint  ("r_share"   , r_share);
-   --rce;  if (r_share    == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      yerr_uerror ("%s:%d:0: error: GLOBAL/SHARED/REUSE called with a null string", a_nscrp, a_line);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(check for right verbs)----------*/
-   DEBUG_UVER   yLOG_unote   ("check examples");
+   debug_uver   ylog_unote   ("check examples");
    if      (strcmp (a_verb, "GLOBAL") == 0)  strcpy (x_ex, "-A-");
    else if (strcmp (a_verb, "SHARED") == 0)  strcpy (x_ex, "-a-");
-   else if (strcmp (a_verb, "REUSE" ) == 0)  strcpy (x_ex, "-a-");
+   else if (strcmp (a_verb, "CONFIG") == 0)  strcpy (x_ex, "-ò-");
+   else if (strcmp (a_verb, "REUSE" ) == 0)  strcpy (x_ex, "A/a");
    else {
-      DEBUG_UVER   yLOG_unote   ("this only applies to GLOBAL/SHARED/REUSE");
-      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+      debug_uver   ylog_unote   ("this only applies to GLOBAL/SHARED/CONFIG/REUSE");
+      debug_uver   ylog_uexit   (__FUNCTION__);
       return 0;
    }
-   DEBUG_UVER   yLOG_uinfo   ("x_ex"      , x_ex);
+   debug_uver   ylog_uinfo   ("x_ex"      , x_ex);
    /*---(check for marker)---------------*/
-   strlcpy (x_recd, a_recd, LEN_RECD);
-   DEBUG_UVER   yLOG_uinfo   ("x_recd"    , x_recd);
-   p = strchr (x_recd, '');
-   DEBUG_UVER   yLOG_upoint  ("p"         , p);
+   strlcpy (x_prefix, a_recd, LEN_RECD);
+   debug_uver   ylog_uinfo   ("x_prefix"  , x_prefix);
+   p = strchr (x_prefix, '');
+   debug_uver   ylog_upoint  ("p"         , p);
    --rce;  if (p == NULL) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    p [0] = '\0';
-   ystrutrim (x_recd, LEN_LABEL);
-   DEBUG_UVER   yLOG_uinfo   ("x_recd"    , x_recd);
-   p = strchr (x_recd, '-');
-   DEBUG_UVER   yLOG_upoint  ("p"         , p);
-   --rce;  if (p == NULL) {
-      yLOGS_err ("%s:%d:0: error: ¶%s¶ missing valid identifier string, e.g., %s", a_nscrp, a_line, x_recd, x_ex);
-      DEBUG_UVER   yLOG_unote   ("no openning marker");
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   strlcpy  (x_label, p, LEN_LABEL);
-   ystrutrim (x_label, LEN_LABEL);
-   m = x_label [1];
-   DEBUG_UVER   yLOG_uchar   ("m"         , m);
-   --rce;  if (x_label [2] != '-') {
-      yLOGS_err ("%s:%d:0: error: ¶%s¶ identifier ¶%s¶ does not end with -, e.g., %s", a_nscrp, a_line, x_recd, x_label, x_ex);
-      DEBUG_UVER   yLOG_unote   ("no close marker");
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(find indexes)-------------------*/
-   n  = REUSE__get (T_MASTER, m, NULL, NULL, NULL);
-   DEBUG_UVER   yLOG_uvalue  ("n"         , n);
-   o  = REUSE__get (T_SHARES, m, NULL, NULL, NULL);
-   DEBUG_UVER   yLOG_uvalue  ("o"         , o);
+   ystrutrim (x_prefix, LEN_LABEL);
+   debug_uver   ylog_uinfo   ("x_prefix"  , x_prefix);
+   l = strlen (x_prefix);
+   strlcpy (x_label, x_prefix + l - 3, LEN_LABEL);
    /*---(handle global)------------------*/
-   --rce;  if (strcmp ("GLOBAL" , a_verb) == 0) {
-      DEBUG_UVER   yLOG_unote   ("handle global");
-      if (strstr (a_nscrp, "master.unit") == NULL) {
-         DEBUG_UVER   yLOG_unote   ("GLOBAL only allowed in master.unit");
-         yLOGS_err ("%s:%d:0: error: GLOBAL verb not allowed outside master.unit", a_nscrp, a_line);
-         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-         return rce;
-      }
-      if (strchr (YSTR_UPPER, m) == NULL) {
-         DEBUG_UVER   yLOG_unote   ("global identifier must be A-Z");
-         yLOGS_err ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ not valid å%sæ", a_nscrp, a_line, x_recd, m, YSTR_UPPER);
-         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-         return rce;
-      }
-      if (n >= 0) {
-         DEBUG_UVER   yLOG_unote   ("already set");
-         yLOGS_err ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ already in use", a_nscrp, a_line, x_recd, m);
-         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-         return rce;
-      }
-      rc = REUSE__set_recd (T_MASTER, m, a_line, a_vers, a_recd);
-      DEBUG_UVER   yLOG_uvalue  ("set global", rc);
-      *r_share = m;
+   rc = REUSE__parse_global (a_nscrp, a_line, a_verb, a_recd, x_prefix, x_label, x_ex, a_vers, r_major);
+   debug_uver   ylog_uvalue  ("global"    , rc);
+   --rce;  if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
    }
    /*---(handle shared)------------------*/
-   --rce;  if (strcmp ("SHARED" , a_verb) == 0) {
-      DEBUG_UVER   yLOG_unote   ("handle shared");
-      if (strstr (a_nscrp, "master.unit") != NULL) {
-         DEBUG_UVER   yLOG_unote   ("SHARED verb not allowed in master.unit");
-         yLOGS_err ("%s:%d:0: error: SHARED verb not allowed inside master.unit", a_nscrp, a_line);
-         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+   --rce;  if (rc == 0) {
+      rc = REUSE__parse_shared (a_nscrp, a_line, a_verb, a_recd, x_prefix, x_label, x_ex, a_vers, r_major);
+      debug_uver   ylog_uvalue  ("shared"    , rc);
+      if (rc < 0) {
+         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
          return rce;
       }
-      if (strchr (YSTR_LOWER, m) == NULL) {
-         DEBUG_UVER   yLOG_unote   ("shared identifier must be a-z");
-         yLOGS_err ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ not valid å%sæ", a_nscrp, a_line, x_recd, m, YSTR_LOWER);
-         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-         return rce;
-      }
-      if (o >= 0) {
-         DEBUG_UVER   yLOG_unote   ("already set");
-         yLOGS_err ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ already in use", a_nscrp, a_line, x_recd, m);
-         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-         return rce;
-      }
-      rc = REUSE__set_recd (T_SHARES, m, a_line, a_vers, a_recd);
-      DEBUG_UVER   yLOG_uvalue  ("set share" , rc);
-      *r_share = m;
    }
    /*---(handle reuses)------------------*/
-   --rce;  if (strcmp ("REUSE" , a_verb) == 0) {
-      DEBUG_UVER   yLOG_unote   ("handle reuse");
-      if (strchr (YSTR_UPPER, m) != NULL) {
-         if (n <= 0) {
-            DEBUG_UVER   yLOG_unote   ("not set");
-            yLOGS_err ("%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ never set by GLOBAL", a_nscrp, a_line, x_recd, m);
-            DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-            return rce;
-         }
-         REUSE__get (T_MASTER, m, x_desc, NULL, NULL);
-      }
-      else if (strchr (YSTR_LOWER, m) != NULL) {
-         if (strstr (a_nscrp, "master.unit") != NULL) {
-            DEBUG_UVER   yLOG_unote   ("shared identifiers not allowed in master.unit");
-            yLOGS_err ("%s:%d:0: error: REUSE verb on ¶%c¶ SHARED identifier not allowed inside master.unit", a_nscrp, a_line, m, a_line);
-            DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-            return rce;
-         }
-         if (o <= 0) {
-            DEBUG_UVER   yLOG_unote   ("not set");
-            yLOGS_err ("%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ never set by SHARED", a_nscrp, a_line, x_recd, m);
-            DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-            return rce;
-         }
-         REUSE__get (T_SHARES, m, x_desc, NULL, NULL);
-      } else {
-         DEBUG_UVER   yLOG_unote   ("not set");
-         yLOGS_err ("%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ not valid [a-zA-Z]", a_nscrp, a_line, x_recd, m);
-         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+   --rce;  if (rc == 0) {
+      rc = REUSE__parse_reuse  (a_nscrp, a_line, a_verb, a_recd, x_prefix, x_label, a_share, r_desc, r_major, r_minor);
+      debug_uver   ylog_uvalue  ("reuse"     , rc);
+      if (rc < 0) {
+         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
          return rce;
       }
-      if (m == a_cshare) {
-         DEBUG_UVER   yLOG_unote   ("reuse is recursive");
-         yLOGS_err ("%s:%d:0: error: ¶%s¶ verb identifier ¶%c¶ called inside itself, recursive", a_nscrp, a_line, x_recd, m);
-         DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
-         return rce;
-      }
-      *r_share = m;
-      if (r_desc  != NULL)  snprintf (r_desc, LEN_LONG, "[ %-.70s ]", x_desc);  /* nice stand-out formatting */
    }
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
-   return 1;
+   debug_uver   ylog_uexit   (__FUNCTION__);
+   return rc;
 }
 
 
@@ -367,115 +690,74 @@ REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN
 static void  o___IN_USE__________o () { return; }
 
 char
-REUSE_update            (cchar a_mark, int a_conds, int a_steps)
+REUSE_update            (char a_abbr, int a_conds, int a_steps)
 {
    /*---(locals)-------------------------*/
-   char        i           =  -10;
-   char        x_type      =  '-';
-   /*---(pick type)----------------------*/
-   if (a_mark == tolower (a_mark))  x_type = T_SHARES;
-   else                             x_type = T_MASTER;
-   /*---(get index)----------------------*/
-   i = REUSE__index (x_type, a_mark);
-   if (i < 0) return i;
+   char        rce         =  -10;
+   int         n           =  -10;
+   /*---(lookup)-------------------------*/
+   n = yUNIT_reuse_index (a_abbr);
+   --rce;  if (n < 0)                   return rce;
+   --rce;  if (s_marks [n].m_line < 0)  return rce;
    /*---(update list)--------------------*/
-   switch (x_type) {
-   case T_MASTER :
-      if (s_master [i].line < 0)   return -1;
-      s_master [i].conds = a_conds;
-      s_master [i].steps = a_steps;
-      break;
-   case T_SHARES :
-      if (s_shares [i].line < 0)   return -2;
-      s_shares [i].conds = a_conds;
-      s_shares [i].steps = a_steps;
-      break;
-   }
+   s_marks [n].m_conds = a_conds;
+   s_marks [n].m_steps = a_steps;
    /*---(complete)-----------------------*/
-   return 0;
+   return 1;
 }
+
+char
+REUSE_addback           (char a_abbr, int *b_conds, int *b_steps)
+{
+   /*---(locals)-------------------------*/
+   char        rce         =  -10;
+   int         n           =  -10;
+   /*---(lookup)-------------------------*/
+   n = yUNIT_reuse_index (a_abbr);
+   --rce;  if (n < 0)                     return rce;
+   --rce;  if (s_marks [n].m_line  <  0)  return rce;
+   --rce;  if (s_marks [n].m_conds <= 0)  return rce;
+   /*---(update list)--------------------*/
+   if (b_conds != NULL)  *b_conds += s_marks [n].m_conds;
+   if (b_steps != NULL)  *b_steps += s_marks [n].m_steps;
+   /*---(complete)-----------------------*/
+   return 1;
+}
+
+
+
+/*====================------------------------------------====================*/
+/*===----                     export/import                            ----===*/
+/*====================------------------------------------====================*/
+static void  o___EXIM____________o () { return; }
 
 char
 REUSE_export            (cchar a_name [LEN_PATH])
 {
    char        rce         =  -10;
    FILE       *f           = NULL;
-   int         i           =    0;
-   char        x_desc      [LEN_LONG]  = "";
+   int         c           =    0;
    --rce;  if (a_name == NULL)   return rce;
-   /*> f = fopen (a_name, "wt");                                                      <*/
-   READ_open (a_name, 'w', &f, NULL);
+   READ_open (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_name, 'w', &f, NULL);
    --rce;  if (f == NULL)  return rce;
-   for (i = 0; i < 26; ++i) {
-      strlcpy    (x_desc, s_master [i].desc, LEN_LONG);
-      ystruencode (x_desc);
-      fprintf (f, "%c %4d %-75.75s %4d %4d\n", i + 'A', s_master [i].line, x_desc, s_master [i].conds, s_master [i].steps);
-   }
-   /*> fclose (f);                                                                    <*/
-   READ_close (&f);
-   return 0;
+   c = yUNIT_reuse_export (f);
+   READ_close (__FILE__, __FUNCTION__, __LINE__, "???", &f);
+   return c;
 }
 
 char
 REUSE_import            (cchar a_name [LEN_PATH])
 {
    char        rce         =  -10;
-   char        rc          =    0;
    FILE       *f           = NULL;
-   int         i           =    0;
-   char        x_recd      [LEN_RECD]  = "";
-   int         l           =    0;
-   char        x_abbr      =  '-';
-   int         x_line      =    0;
-   char        x_desc      [LEN_LONG]  = "";
-   int         x_conds     =    0;
-   int         x_steps     =    0;
+   int         c           =    0;
    --rce;  if (a_name == NULL)   return rce;
-   /*> f = fopen (a_name, "rt");                                                      <*/
-   READ_open (a_name, 'r', &f, NULL);
+   READ_open (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_name, 'r', &f, NULL);
    --rce;  if (f == NULL)  return rce;
-   for (i = 0; i < 26; ++i) {
-      fgets   (x_recd, LEN_RECD, f);
-      if (feof (f))  break;
-      l = strlen (x_recd);
-      if (x_recd [l - 1] == '\n')   x_recd [--l] = '\0';
-      rc = sscanf  (x_recd, "%c %4d %s %4d %4d", &x_abbr, &x_line, x_desc, &x_conds, &x_steps);
-      if (x_line < 1)  continue;
-      ystrudecode (x_desc);
-      rc = REUSE__set   (T_MASTER, 'A' + i, x_line, x_desc);
-      rc = REUSE_update ('A' + i, x_conds, x_steps);
-   }
-   /*> fclose (f);                                                                    <*/
-   READ_close (&f);
-   return 0;
-}
-
-char
-REUSE_add               (cchar a_mark, int *b_conds, int *b_steps)
-{
-   /*---(locals)-------------------------*/
-   char        rce         =  -10;
-   char        i           =  -10;
-   char        x_type      =  '-';
-   /*---(pick type)----------------------*/
-   if (a_mark == tolower (a_mark))  x_type = T_SHARES;
-   else                             x_type = T_MASTER;
-   /*---(get index)----------------------*/
-   i = REUSE__index (x_type, a_mark);
-   if (i < 0) return i;
-   /*---(update list)--------------------*/
-   switch (x_type) {
-   case T_MASTER : 
-      if (b_conds != NULL)  *b_conds += s_master [i].conds;
-      if (b_steps != NULL)  *b_steps += s_master [i].steps;
-      break;
-   case T_SHARES :
-      if (b_conds != NULL)  *b_conds += s_shares [i].conds;
-      if (b_steps != NULL)  *b_steps += s_shares [i].steps;
-      break;
-   }
-   /*---(complete)-----------------------*/
-   return 0;
+   c = yUNIT_reuse_import (f);
+   READ_close (__FILE__, __FUNCTION__, __LINE__, "???", &f);
+   /*> yUNIT_reuse_list ();                                                           <*/
+   return c;
 }
 
 
@@ -486,21 +768,124 @@ REUSE_add               (cchar a_mark, int *b_conds, int *b_steps)
 static void  o___DEBUGGING_______o () { return; }
 
 char*
-REUSE__used             (void)
+REUSE__actuals          (void)
 {
    /*---(locals)-------------------------*/
    int         i           =    0;
+   int         x_off       =    0;
    /*---(dittos)-------------------------*/
-   strcpy (g_print, "´-----´-----´-----´-----´-   ´-----´-----´-----´-----´-");
-   for (i = 0; i < MAX_SHARE; ++i) {
-      if (s_master [i].line >= 0)   g_print [i +  0] = 'A' + i;
+   strcpy (g_print, "GL                              SH                              CO                            Ï");
+   /*---(global)-------------------------*/
+   x_off = 3;
+   for (i = 0; i < MAX_MARKS; ++i) {
+      if (s_marks [i].m_type == T_MASTER) {
+         if      (s_marks [i].m_called >= 10)   g_print [i + x_off] = '*';
+         else if (s_marks [i].m_called >   0)   g_print [i + x_off] = '0' + s_marks [i].m_called;
+         else if (s_marks [i].m_line   >=  0)   g_print [i + x_off] = '´';
+      }
    }
-   for (i = 0; i < MAX_SHARE; ++i) {
-      if (s_shares [i].line >= 0)   g_print [i + 29] = 'a' + i;
+   /*---(shared)-------------------------*/
+   x_off += 6;
+   for (i = 0; i < MAX_MARKS; ++i) {
+      if (s_marks [i].m_type == T_SHARES) {
+         if      (s_marks [i].m_called >= 10)   g_print [i + x_off] = '*';
+         else if (s_marks [i].m_called >   0)   g_print [i + x_off] = '0' + s_marks [i].m_called;
+         else if (s_marks [i].m_line   >=  0)   g_print [i + x_off] = '´';
+      }
+   }
+   /*---(config)-------------------------*/
+   x_off += 6;
+   for (i = 0; i < MAX_MARKS - 2; ++i) {
+      if (s_marks [i].m_type == T_CONFIG) {
+         if      (s_marks [i].m_called >= 10)   g_print [i + x_off] = '*';
+         else if (s_marks [i].m_called >   0)   g_print [i + x_off] = '0' + s_marks [i].m_called;
+         else if (s_marks [i].m_line   >=  0)   g_print [i + x_off] = '´';
+      }
    }
    /*---(complete)-----------------------*/
    return g_print;
 }
+
+char*
+REUSE__used             (void)
+{
+   /*---(locals)-------------------------*/
+   int         i           =    0;
+   int         x_off       =    0;
+   /*---(dittos)-------------------------*/
+   strcpy (g_print, "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");
+   /*---(global)-------------------------*/
+   x_off = 3;
+   for (i = 0; i < MAX_MARKS; ++i) {
+      if (s_marks [i].m_type == T_MASTER) {
+         if (s_marks [i].m_line >= 0)   g_print [i + x_off] = s_marks [i].m_abbr;
+      }
+   }
+   /*---(shared)-------------------------*/
+   x_off += 6;
+   for (i = 0; i < MAX_MARKS; ++i) {
+      if (s_marks [i].m_type == T_SHARES) {
+         if (s_marks [i].m_line >= 0)   g_print [i + x_off] = s_marks [i].m_abbr;
+      }
+   }
+   /*---(config)-------------------------*/
+   x_off += 6;
+   for (i = 0; i < MAX_MARKS - 2; ++i) {
+      if (s_marks [i].m_type == T_CONFIG) {
+         if (s_marks [i].m_line >= 0)   g_print [i + x_off] = s_marks [i].m_abbr;
+      }
+   }
+   /*---(complete)-----------------------*/
+   return g_print;
+}
+
+char*
+REUSE__detail         (char a_abbr)
+{
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_type      =  '-';
+   char        x_tdesc     [LEN_TERSE] = "";
+   int         x_line      =  '-';
+   char        x_desc      [LEN_LONG]  = "";
+   short       x_conds     =    0;
+   short       x_steps     =    0;
+   strcpy (g_print, "");
+   rc = yUNIT_reuse_data (a_abbr, &x_type, x_tdesc, &x_line, x_desc, &x_conds, &x_steps, NULL);
+   if (rc <= 0) {
+      sprintf (g_print, "- · ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  ·········  Ï");
+   } else if (x_conds > 0) {
+      ystruencode (x_desc);
+      sprintf (g_print, "%c %c %4d  %-51.51s  %4d %4d  %-9.9s  Ï", a_abbr, x_type, x_line, x_desc, x_conds, x_steps, x_tdesc);
+   } else if (x_line  > 0) {
+      ystruencode (x_desc);
+      sprintf (g_print, "%c %c %4d  %-51.51s  ···· ····  %-9.9s  Ï", a_abbr, x_type, x_line, x_desc, x_tdesc);
+   } else {
+      sprintf (g_print, "%c %c ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  %-9.9s  Ï", a_abbr, x_type, x_tdesc);
+   }
+   return g_print;
+}
+
+char
+REUSE_totals         (char a_verb [LEN_LABEL], char a_recd [LEN_RECD])
+{
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_good      =  '-';
+   /*---(defense)------------------------*/
+   --rce;  if (a_verb == NULL)  return rce;
+   --rce;  if (a_recd == NULL)  return rce;
+   /*---(quick-out)----------------------*/
+   if      (strcmp (a_verb, "DERAHS") == 0)  x_good = 'y';
+   else if (strcmp (a_verb, "LABOLG") == 0)  x_good = 'y';
+   else if (strcmp (a_verb, "GIFNOC") == 0)  x_good = 'y';
+   if (x_good != 'y')  return 0;
+   /*---(parse)--------------------------*/
+   rc = yUNIT_reuse_parse ('u', a_recd);
+   /*---(complete)-----------------------*/
+   return 1;
+}
+
 
 
 

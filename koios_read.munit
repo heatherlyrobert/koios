@@ -1,115 +1,118 @@
 /*===============================[[ beg-code ]]===============================*/
 #include    "koios.h"
 
-#include    <yURG_solo.h>
-#include    <yURG_uver.h>
-#include    <yUNIT_solo.h>
-#include    <ySTR_solo.h>
-#include    <yCOLOR_solo.h>
+/*>   f(a__FILE__, __FUNCTION__, __SLINE__, €ý5n                                     <*/
+
 
 char
-koios_read_open    (void)
+koios_read_open    (char a_scrp, char a_list, char a_unit)
 {
+   char        x_cwd       [LEN_FULL]  = "";
    char         x_name     [LEN_HUND] = "/tmp/apate.unit";
    FILE        *x_file     = NULL;
    int          x_line     =    0;
    char         t          [LEN_HUND] = "";
-   FILE        *x_errors   = NULL;
 
    yUNIT_minscrpy ("koios", "koios_read", "(CODE) verify openning and closing");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
    PROG__unit_quiet  ();
+   PROG__unit_bigclean ();
    system ("rm -f /tmp/apate.unit        2> /dev/null");
 
-   x_errors = yLOG_ufile ("/tmp/apate_errors.txt");
-
-   x_line = 25;
-   yLOG_uclear    ();
    yUNIT_mincond  ("attempt to open a null name");
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
+   x_line = 25;
+   yerr_ureset   ();
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 25);
-   yUNIT_minval   ("open the script file"               , READ_open   (NULL  , 'r', &x_file, &x_line), -999);
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
+   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , NULL  , 'r', &x_file, &x_line), -999);
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:31:0: error: file name requested for openning is NULL/empty");
    yUNIT_mindnoc  ();
 
-   x_line = 35;
-   yLOG_uclear    ();
    yUNIT_mincond  ("attempt to open with no name");
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
+   x_line = 35;
+   yerr_ureset   ();
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 35);
-   yUNIT_minval   ("open the script file"               , READ_open   (""    , 'r', &x_file, &x_line), -999);
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
+   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , ""    , 'r', &x_file, &x_line), -999);
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:42:0: error: file name requested for openning is NULL/empty");
    yUNIT_mindnoc  ();
 
-   x_line = 45;
-   yLOG_uclear    ();
    yUNIT_mincond  ("attempt to open with a non-existant file");
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
+   x_line = 45;
+   yerr_ureset   ();
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 45);
-   yUNIT_minval   ("open the script file"               , READ_open   (x_name, 'r', &x_file, &x_line), -999);
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
+   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), -999);
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "file å/tmp/apate.unitæ could not be openned");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:53:0: error: file å/tmp/apate.unitæ could not be found/openned for (r)");
    yUNIT_mindnoc  ();
 
+   yUNIT_mincond  ("verify openning a valid file");
    sprintf (t, "touch %s", x_name);
    system (t);
    x_line = 55;
-   yLOG_uclear    ();
-   yUNIT_mincond  ("verify openning a valid file");
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
+   yerr_ureset   ();
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 55);
-   yUNIT_minval   ("open the script file"               , READ_open   (x_name, 'r', &x_file, &x_line), 0);
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 1);
+   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 1);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
-   x_line = 65;
-   yLOG_uclear    ();
    yUNIT_mincond  ("attempt to re-open an open file");
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 1);
+   x_line = 65;
+   yerr_ureset   ();
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 1);
    yUNIT_minval   ("... check line number"              , x_line        , 65);
-   yUNIT_minval   ("open the script file"               , READ_open   (x_name, 'r', &x_file, &x_line), -999);
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 1);
+   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), -999);
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 1);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:77:0: error: file å/tmp/apate.unitæ passed with already used file pointer");
    yUNIT_mindnoc  ();
 
-   yLOG_uclear    ();
    yUNIT_mincond  ("verify closing an open file");
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 1);
+   yerr_ureset   ();
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 1);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_file)                 , 0);
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file)                 , 0);
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
-   yLOG_uclear    ();
    yUNIT_mincond  ("attempt to re-close a closed file");
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
+   yerr_ureset   ();
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minval   ("open the script file"               , READ_close  (&x_file)                 , -999);
-   yUNIT_minpoint ("... check script pointer"           , x_file        , 0);
+   yUNIT_minval   ("open the script file"               , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file)                 , -999);
+   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
    yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:97:0: error: file å/tmp/apate.unitæ passed with already grounded file pointer");
    yUNIT_mindnoc  ();
 
    PROG__unit_end    ();
    sync ();
-   fclose (x_errors);
    system ("rm -f /tmp/apate.unit 2> /dev/null");
+   chdir   (x_cwd);
+   PROG__unit_bigclean ();
    yUNIT_minprcs ();
    return 0;
 }
 
 char
-koios_read_defense (void)
+koios_read_defense (char a_scrp, char a_list, char a_unit)
 {
+   char        x_cwd       [LEN_FULL]  = "";
    FILE        *x_file     = 0xFF;
    int          x_line     =    0;
    char         x_dittoing =  '-';
@@ -121,7 +124,14 @@ koios_read_defense (void)
    char         x_recd     [LEN_RECD] = "";
 
    yUNIT_minscrpy ("koios", "koios_read", "(CODE) verify read defense");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
    PROG__unit_quiet  ();
+   PROG__unit_bigclean ();
+
 
    yUNIT_mincond  ("attempt with various nulls");
    yUNIT_minval   ("call defense"                       , READ__defense (NULL   , &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), -999);
@@ -146,13 +156,16 @@ koios_read_defense (void)
    yUNIT_mincond  ("attempt to read an empty file");
    yUNIT_mindnoc  ();
 
+   chdir   (x_cwd);
+   PROG__unit_bigclean ();
    yUNIT_minprcs  ();
    return 0;
 }
 
 char
-koios_read_single  (void)
+koios_read_single  (char a_scrp, char a_list, char a_unit)
 {
+   char        x_cwd       [LEN_FULL]  = "";
    char         x_name     [LEN_HUND] = "/tmp/apate.unit";
    FILE        *x_file     = NULL;
    int          x_line     =    0;
@@ -163,17 +176,23 @@ koios_read_single  (void)
    int          x_nrecd    =    0;
    int          x_len      =    0;
    char         x_recd     [LEN_RECD] = "";
-   FILE        *x_errors   = NULL;
 
    yUNIT_minscrpy ("koios", "koios_read", "(CODE) verify openning and closing");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
    PROG__unit_quiet  ();
+   PROG__unit_bigclean ();
    system ("rm -f /tmp//tmp/apate.unit        2> /dev/null");
 
-   x_errors = yLOG_ufile ("/tmp/apate_errors.txt");
+
 
    yUNIT_mincond  ("verify reading a single record");
+   yerr_ureset   ();
    system ("echo \"exec     read a line      SCRP_read       i_lesser    0      \"                                             > /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -181,7 +200,7 @@ koios_read_single  (void)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    0);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 1);
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_file), 0);
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -190,12 +209,13 @@ koios_read_single  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
    ystruencode (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "exec····§·read·a·line·····§·SCRP_read···§···§·i_lesser···§·0······§");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify an empty line");
+   yerr_ureset   ();
    system ("echo \"\"                                                                                                                       > /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -203,7 +223,7 @@ koios_read_single  (void)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 2);
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_file), 0);
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -212,12 +232,13 @@ koios_read_single  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
    ystruencode (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify another good line");
+   yerr_ureset   ();
    system ("echo \"SCRP     testing          0s    tbd    - - - - -  \"                                                       > /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -225,7 +246,7 @@ koios_read_single  (void)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 1);
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_file), 0);
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -234,12 +255,13 @@ koios_read_single  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    ystruencode (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "SCRP····§·testing·········§·0s··§··tbd···§·-·-·-·-·-··§");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify a comment");
+   yerr_ureset   ();
    system ("echo \"## the descripion of something else\"                                                                              > /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -247,7 +269,7 @@ koios_read_single  (void)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 2);
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_file), 0);
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -256,12 +278,13 @@ koios_read_single  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    ystruencode (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify a short line");
+   yerr_ureset   ();
    system ("echo \"SCRP\"                                                                                                             > /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -269,7 +292,7 @@ koios_read_single  (void)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 2);
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_file), 0);
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -278,13 +301,14 @@ koios_read_single  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    ystruencode (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify at end-of-file");
+   yerr_ureset   ();
    system ("rm -f /tmp/apate.unit 2> /dev/null");
    system ("touch /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -292,7 +316,7 @@ koios_read_single  (void)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 0);
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_file), 0);
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -301,19 +325,21 @@ koios_read_single  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    ystruencode (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast    (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    PROG__unit_end    ();
-   fclose (x_errors);
    system ("rm -f /tmp/apate.unit 2> /dev/null");
+   chdir   (x_cwd);
+   PROG__unit_bigclean ();
    yUNIT_minprcs ();
    return 0;
 }
 
 char
-koios_read_end_ditto  (void)
+koios_read_end_ditto  (char a_scrp, char a_list, char a_unit)
 {
+   char        x_cwd       [LEN_FULL]  = "";
    char         x_name     [LEN_HUND] = "/tmp/apate.unit";
    FILE        *x_file     = NULL;
    FILE        *x_main     = NULL;
@@ -328,7 +354,14 @@ koios_read_end_ditto  (void)
    char         x_recd     [LEN_RECD] = "";
 
    yUNIT_minscrpy ("koios", "koios_read", "(CODE) verify ending dittos");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
    PROG__unit_quiet  ();
+   PROG__unit_bigclean ();
+
 
    yUNIT_mincond  ("create a test script");
    system ("echo \"\"                                                                                                                        > /tmp/apate.unit");
@@ -341,7 +374,7 @@ koios_read_end_ditto  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("open script, roll forward to DITTO, then start a ditto");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
    x_main     = x_file;
    fgets (x_recd, LEN_RECD, x_main);
    fgets (x_recd, LEN_RECD, x_main);
@@ -354,6 +387,7 @@ koios_read_end_ditto  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify reading from the top again");
+   yerr_ureset   ();
    yUNIT_minval   ("... line"                           , x_line                   ,    5);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
@@ -361,7 +395,7 @@ koios_read_end_ditto  (void)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    0);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 2);
-   yUNIT_minpoint ("... file"                           , x_file                   , x_save);
+   yUNIT_minptr   ("... file"                           , x_file                   , x_save);
    yUNIT_minval   ("... line"                           , x_line                   ,    5);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
@@ -370,10 +404,11 @@ koios_read_end_ditto  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    0);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify a record to continue ditto");
+   yerr_ureset   ();
    yUNIT_minval   ("... line"                           , x_line                   ,    5);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
@@ -381,7 +416,7 @@ koios_read_end_ditto  (void)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    1);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    0);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 1);
-   yUNIT_minpoint ("... file"                           , x_file                   , x_save);
+   yUNIT_minptr   ("... file"                           , x_file                   , x_save);
    yUNIT_minval   ("... line"                           , x_line                   ,    5);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
@@ -390,12 +425,13 @@ koios_read_end_ditto  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd                   , "COND··(0)·§·ditto·stuff·····§");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify another continuation of ditto");
+   yerr_ureset   ();
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 1);
-   yUNIT_minpoint ("... file"                           , x_file                   , x_save);
+   yUNIT_minptr   ("... file"                           , x_file                   , x_save);
    yUNIT_minval   ("... line"                           , x_line                   ,    5);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
@@ -404,12 +440,13 @@ koios_read_end_ditto  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "··exec····§·read·a·line·····§·SCRP_read···§···§·i_lesser···§·0······§");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify an empty line ends ditto");
+   yerr_ureset   ();
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 2);
-   yUNIT_minpoint ("... file"                           , x_file                   , x_main);
+   yUNIT_minptr   ("... file"                           , x_file                   , x_main);
    yUNIT_minval   ("... line"                           , x_line                   ,    5);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -418,12 +455,13 @@ koios_read_end_ditto  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify empty line after ditto");
+   yerr_ureset   ();
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 2);
-   yUNIT_minpoint ("... file"                           , x_file                   , x_main);
+   yUNIT_minptr   ("... file"                           , x_file                   , x_main);
    yUNIT_minval   ("... line"                           , x_line                   ,    6);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -432,12 +470,13 @@ koios_read_end_ditto  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify reading the next line");
+   yerr_ureset   ();
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 1);
-   yUNIT_minpoint ("... file"                           , x_file                   , x_main);
+   yUNIT_minptr   ("... file"                           , x_file                   , x_main);
    yUNIT_minval   ("... line"                           , x_line                   ,    7);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -446,22 +485,25 @@ koios_read_end_ditto  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    3);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "··get·····§·next·step·······§·SCRP_read···§···§·i_lesser···§·0······§");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("close out the script");
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_file), 0);
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
    yUNIT_mindnoc ();
 
    PROG__unit_end    ();
    system ("rm -f /tmp/apate.unit 2> /dev/null");
+   chdir   (x_cwd);
+   PROG__unit_bigclean ();
    yUNIT_minprcs ();
    return 0;
 }
 
 char
-koios_read_driver  (void)
+koios_read_driver  (char a_scrp, char a_list, char a_unit)
 {
+   char        x_cwd       [LEN_FULL]  = "";
    char         x_name     [LEN_HUND] = "/tmp/apate.unit";
    FILE        *x_file     = NULL;
    int          x_line     =    0;
@@ -474,7 +516,14 @@ koios_read_driver  (void)
    char         x_recd     [LEN_RECD] = "";
 
    yUNIT_minscrpy ("koios", "koios_read", "(CODE) verify read driver");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
    PROG__unit_quiet  ();
+   PROG__unit_bigclean ();
+
 
    yUNIT_mincond  ("create an input file");
    system ("echo \"##\"                                                                                                                                                                                                                                                                                                                                  > /tmp/apate.unit");
@@ -490,10 +539,11 @@ koios_read_driver  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("open the script");
-   yUNIT_minval   ("open the script file"               , READ_open    (x_name, 'r', &x_file, &x_line), 0);
+   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify first good line");
+   yerr_ureset   ();
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    0);
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
@@ -501,72 +551,102 @@ koios_read_driver  (void)
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "SCRP·········§·(CATS)·verify·preparation·and·defaulting··························§·0s··§·prepare········§·CATS__prepare·······························································§·((01.---))·§·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-··§");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify next good line");
+   yerr_ureset   ();
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    yUNIT_minval   ("... line"                           , x_line                   ,    5);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "···COND··(0)·§·verify·the·defaults···············································§·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-··§·((01.001))·§·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-··§");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify next good line");
+   yerr_ureset   ();
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    yUNIT_minval   ("... line"                           , x_line                   ,    6);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    3);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "·····exec····§·call·prepare························§·CATS__prepare··············§·\"················\"···,·&x_len·,·&x_part,·&x_sub·,·&x_src·,·&x_cat·,·&x_page,·&x_grp·,·&x_freq········§·i_equal····§·0····································································································§");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify next good line");
+   yerr_ureset   ();
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    yUNIT_minval   ("... line"                           , x_line                   ,    8);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    4);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "···COND······§·make·global·changes···············································§·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-··§·((01.001))·§·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-·-··§");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify next good line");
+   yerr_ureset   ();
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    yUNIT_minval   ("... line"                           , x_line                   ,    9);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    5);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "·····code····§·...·change·part·····················§·-·-·-·-·-·-·-·-·-·-·-·-·-··§·x_part······=·'v';·········································································································································································································§");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify hitting end-of-file");
+   yerr_ureset   ();
    yUNIT_minval   ("read the line"                      , READ_next    (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    0);
    yUNIT_minval   ("... line"                           , x_line                   ,   10);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    5);
    ystruencode    (x_recd);
    yUNIT_minstr   ("... check the record"               , x_recd        , "");
-   yUNIT_minstr   ("... check error message"            , yLOG_ulast (), "");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("close out the script");
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_file), 0);
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
    yUNIT_mindnoc ();
 
    PROG__unit_end    ();
+   chdir   (x_cwd);
+   PROG__unit_bigclean ();
    yUNIT_minprcs ();
    return 0;
 }
 
 char
-main                    (void)
+main                    (int a_argc, char *a_argv [])
 {
-   koios_read_open      ();
-   koios_read_defense   ();
-   koios_read_single    ();
-   koios_read_end_ditto ();
-   koios_read_driver    ();
-   yUNIT_mintinu        ();
+   /*---(locals)-----------+-----+-----+-*/
+   int         x_unit      =    0;
+   int         n           =    0;
+   char        x_list      =    0;
+   /*---(arguments)----------------------*/
+   printf ("## %s\n", P_ONELINE);
+   printf ("## pre-yUNIT unit testing : %s\n", a_argv [0]);
+   if (a_argc >= 2) {
+      if (strcmp (a_argv [1], "--list") == 0)       x_list = 'y';
+      else if (strcmp (a_argv [1], "--inst") == 0)  x_list = '!';
+      else                                          x_unit = atoi (a_argv [1]);
+   }
+   if (x_unit  >  0 )         printf ("## selected single script (%2d)\n", x_unit);
+   else                       printf ("## selected all scripts\n");
+   if (x_list == 'y')         printf ("## list script(s) only\n");
+   else if (x_list == '!')    printf ("## generate initial wave file\n");
+   else                       printf ("## execute conditions and steps\n");
+   printf ("\n");
+   /*---(startup)------------------------*/
+   yUNIT_minunit ("koios_read");
+   /*---(scripts)------------------------*/
+   koios_read_open      (++n, x_list, x_unit);
+   koios_read_defense   (++n, x_list, x_unit);
+   koios_read_single    (++n, x_list, x_unit);
+   koios_read_end_ditto (++n, x_list, x_unit);
+   koios_read_driver    (++n, x_list, x_unit);
+   /*---(wrapup)-------------------------*/
+   yUNIT_mintinu    ();
+   /*---(complete)-----------------------*/
    return 0;
 }
 

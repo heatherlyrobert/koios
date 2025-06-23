@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4v"
-#define     P_VERTXT    "much of the unit-test restructured into new munit's"
+#define     P_VERNUM    "1.4w"
+#define     P_VERTXT    "massive updates to output formatting"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -238,8 +238,13 @@
 #include    <sys/types.h>    /* stat, lstat                                   */
 
 /*===[[ CUSTOM LIBRARIES ]]===================================================*/
-#include    <yLOG_solo.h>    /* CUSTOM : heatherly program logging            */
 #include    <ySTR_solo.h>
+#include    <yENV_solo.h>
+#include    <yLOG_solo.h>    /* CUSTOM : heatherly program logging            */
+#include    <yCOLOR_solo.h>
+#include    <yUNIT_solo.h>
+#include    <yDLST_solo.h>
+
 #include    <yUNIT.h>
 
 
@@ -248,21 +253,22 @@
 #define     G_RUN_CREATE    'c'
 #define     G_RUN_DEBUG     'd'
 #define     G_RUN_UPDATE    'u'
-#define     G_RUN_REPLACE   'r'
+#define     G_AND_REPLACE   'r'
 
 
 #define     T_MASTER    'm'
 #define     T_SHARES    'r'
+#define     T_CONFIG    'c'
 #define     T_DITTOS    'd'
 
-#define     IF_MASTER     if (strcmp (my.n_base, "master") == 0)
-#define     IF_NORMAL     if (strcmp (my.n_base, "master") != 0)
+#define     IF_MASTER     if (strcmp (my_loc.l_base, "master") == 0)
+#define     IF_NORMAL     if (strcmp (my_loc.l_base, "master") != 0)
 
 #define     IF_CONFIRM    if (my.noise == 'c') 
 #define     IF_VERBOSE    if (my.noise == 'v') 
 
 
-#define     DEBUG_UVER    if (my.debug == 'y')
+#define     debug_uver    if (my.debug == 'y')
 
 
 typedef struct stat      tSTAT;
@@ -274,93 +280,89 @@ typedef     struct cGLOBALS     tGLOBALS;
 struct cGLOBALS
 {
    /*---(general)---------------*/
-   char        version     [LEN_FULL];      /* program version info           */
+   char        version     [LEN_FULL ];     /* program version info           */
    char        noise;                       /* how loud of feedback           */
    char        run_type;                    /* unit test code or conversion   */
    char        replace;                     /* convert and replace file       */
-   char        cwd         [LEN_PATH];      /* true working directory         */
+   char        cwd         [LEN_PATH ];     /* true working directory         */
    char        debug;                       /* turn on limited debugging      */
-   /*---(file names)------------*/
-   char        n_proj      [LEN_LABEL];     /* base project name              */
-   char        n_ext       [LEN_TERSE];     /* .unit vs .sunit                */
-   char        n_base      [LEN_TITLE];     /* base name of files             */
-   char        n_scrp      [LEN_TITLE];     /* name of input script file      */
-   char        n_code      [LEN_TITLE];     /* name of output code file       */
-   char        n_main      [LEN_TITLE];     /* name of output main file       */
-   char        n_wave      [LEN_TITLE];     /* name of master code file       */
-   char        n_conv      [LEN_TITLE];     /* name of output script file     */
-   /*---(file handles)----------*/
-   FILE       *f_scrp;                      /* pointer to input script file   */
-   FILE       *f_code;                      /* pointer to output code file    */
-   FILE       *f_main;                      /* pointer to output main file    */
-   FILE       *f_wave;                      /* pointer to output wave file    */
-   FILE       *f_conv;                      /* pointer to output script file  */
-   /*---(counters)--------------*/
-   int         n_line;                      /* file   all lines               */
-   int         n_recd;                      /* file   good records            */
-   int         nscrp;                       /* total count of scripts         */
-   int         ncond;                       /* total count of conditions      */
-   int         nstep;                       /* total count of steps           */
-   int         scond;                       /* curr scrp count of conditions  */
-   int         sstep;                       /* curr scrp count of steps       */
-   int         cstep;                       /* current step number            */
-   /*---(script)---------------*/
-   char        recd        [LEN_RECD ];     /* script record                  */
-   int         len;                         /* record length                  */
-   char        status;                      /* record processing status       */
-   int         indx;                        /* verb index in tVERB structure  */
-   char        verb        [LEN_LABEL];     /* verb                           */
-   char      (*p_conv) (void);;
-   char      (*p_code) (void);;
-   char        last        [LEN_LABEL];     /* last verb used                 */
-   char        spec;                        /* specialty verb (y/n)           */
-   char        vers;                        /* version number                 */
-   char        desc        [LEN_LONG ];     /* descriptive text               */
-   char        meth        [LEN_HUND ];     /* function/method name           */
-   char        args        [LEN_FULL];      /* function/method args           */
-   char        test        [LEN_LABEL];     /* test type for yVAR             */
-   char        expe        [LEN_RECD];      /* expected results               */
-   char        retn        [LEN_FULL];      /* return variable                */
-   char        code        [LEN_RECD ];     /* code/load/sys string           */
-   /*---(special marks)---------*/
-   char        stage       [LEN_SHORT];     /* master sequence                */
-   char        cshare;                      /* current share                  */
-   char        share;                       /* share marking                  */
-   char        dittoing;                    /* currently dittoing             */
-   char        dmark;                       /* current ditto mark             */
-   int         ditto;                       /* current ditto position         */
-   int         dline;                       /* current dittoing source line   */
-   char        mark;                        /* ditto marking                  */
-   char        d_used      [LEN_HUND];      /* ditto markes used              */
-   /*---(working)---------------*/
-   char        disp        [LEN_RECD ];     /* display ver " = ~, 1D = |      */
-   char        syst        [LEN_RECD ];     /* system ver  " = ", 1D = 1F     */
-   char        load        [LEN_RECD ];     /* load ver    " = ~, 1D = 1F     */
-   /*---(flag)------------------*/
-   char        driver;                      /* has main/driver been written   */
    /*---(debug/test)------------*/
    char        answer      [LEN_RECD ];     /* unit testing answer string     */
-   char        updated     [LEN_RECD ];     /* converted record               */
-   char        compiled    [LEN_RECD ];     /* converted record               */
    /*---(done)------------------*/
 };
 extern      tGLOBALS    my;
 
-
-#define     MAX_VERB         50
-typedef     struct cVERB    tVERB;
-struct cVERB {
-   char        name        [LEN_FULL];      /* verb                           */
-   char        desc        [LEN_FULL];      /* description                    */
-   char        spec;                        /* verb type for parsing          */
-   char        files;                       /* master vs normal vs both       */
-   int         count;                       /* number found in script         */
-   int         total;                       /* number found in unit test      */
-   char      (*conv) (void);                /* conversion function            */ 
-   char      (*code) (void);                /* code function                  */ 
-   char        ditto;                       /* can be within a DITTO          */
+typedef     struct cLOC   tLOC;
+struct cLOC {
+   /*---(location data)---------*/
+   char        l_proj      [LEN_LABEL];     /* base project name              */
+   char        l_extn      [LEN_TERSE];     /* .unit vs .sunit                */
+   char        l_base      [LEN_TITLE];     /* base name of files             */
+   /*---(file names)------------*/
+   char        l_scrp      [LEN_TITLE];     /* name of input script file      */
+   char        l_main      [LEN_TITLE];     /* name of output main file       */
+   char        l_code      [LEN_TITLE];     /* name of output code file       */
+   char        l_wave      [LEN_TITLE];     /* name of master code file       */
+   char        l_conv      [LEN_TITLE];     /* name of output script file     */
+   /*---(file handles)----------*/
+   FILE       *l_SCRP;                      /* pointer to input script file   */
+   FILE       *l_MAIN;                      /* pointer to output main file    */
+   FILE       *l_CODE;                      /* pointer to output code file    */
+   FILE       *l_WAVE;                      /* pointer to output wave file    */
+   FILE       *l_CONV;                      /* pointer to output script file  */
+   /*---(done)------------------*/
 };
-extern      tVERB       g_verbs [MAX_VERB];
+extern      tLOC        my_loc;
+
+typedef     struct cCUR    tCUR;
+struct cCUR {
+   /*---(current record)-------*/
+   char        c_recd      [LEN_RECD ];     /* script record                  */
+   char        c_verb      [LEN_LABEL];     /* verb                           */
+   char      (*c_conv) (void);;             /* pointer to code function       */
+   char      (*c_code) (void);;             /* pointer to conversion function */
+   char        c_spec;                      /* specialty verb (y/n)           */
+   char        c_vers;                      /* version number                 */
+   char        c_desc      [LEN_LONG ];     /* descriptive text               */
+   char        c_method    [LEN_HUND ];     /* function/method name           */
+   char        c_args      [LEN_FULL ];     /* function/method args           */
+   char        c_test      [LEN_LABEL];     /* test type for yVAR             */
+   char        c_expect    [LEN_RECD ];     /* expected results               */
+   char        c_return    [LEN_FULL ];     /* return variable                */
+   /*---(extracted)------------*/
+   char        c_stage     [LEN_SHORT];     /* master sequencing              */
+   char        c_ditto;                     /* parsed ditto mark              */
+   char        c_major;                     /* parsed share -- major          */
+   char        c_minor;                     /* parsed share -- minor          */
+   char        c_which     [LEN_TITLE];     /* minors to run                  */
+   /*---(working)---------------*/
+   char        c_disp      [LEN_RECD ];     /* display ver " = ~, 1D = |      */
+   char        c_syst      [LEN_RECD ];     /* system ver  " = ", 1D = 1F     */
+   char        c_load      [LEN_RECD ];     /* load ver    " = ~, 1D = 1F     */
+   /*---(done)------------------*/
+};
+extern      tCUR    my_cur;
+
+typedef     struct cRUN    tRUN;
+struct cRUN {
+   /*---(counters)--------------*/
+   int         r_nline;                     /* file   all lines               */
+   int         r_nrecd;                     /* file   good records            */
+   /*---(verb)------------------*/
+   char        r_last      [LEN_LABEL];     /* last verb used                 */
+   char        r_under;                     /* next higher structure          */
+   /*---(ditto)-----------------*/
+   char        r_dittoing;                  /* currently dittoing             */
+   char        r_dtarget;                   /* target ditto mark              */
+   int         r_dstart;                    /* target ditto start             */
+   int         r_dline;                     /* target dittoing source line    */
+   /*---(reuse)-----------------*/
+   char        r_share;                     /* run-time active share          */
+   char        r_select;                    /* run-time active exec select    */
+   /*---(done)------------------*/
+};
+extern      tRUN    my_run;
+
 
 
 extern char g_print     [LEN_RECD];
@@ -378,19 +380,21 @@ char        PROG__header            (void);
 char        PROG_urgents            (int a_argc, char *a_argv []);
 /*---(start-up)-------------*/
 char        PROG__init              (void);
-char        PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char r_ext [LEN_TERSE]);
-char        PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_noise, char *r_replace, char r_base [LEN_TITLE], char r_ext [LEN_SHORT]);
+char        PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char r_proj [LEN_LABEL], char r_ext [LEN_TERSE]);
+char        PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_noise, char *r_replace, char r_base [LEN_TITLE], char r_proj [LEN_LABEL], char r_ext [LEN_SHORT]);
 char        PROG__begin             (void);
 char        PROG_startup            (int a_argc, char *a_argv []);
 /*---(execution)------------*/
-char        PROG_dawn               (cchar a_runtype, cchar a_nscrp [LEN_TITLE], FILE **r_scrp, int *r_line, cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_nconv [LEN_TITLE], FILE **r_conv, char *r_cshare);
+char        PROG_dawn               (char a_runtype, char a_nscrp [LEN_TITLE], FILE **r_scrp, int *r_line, char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char a_nconv [LEN_TITLE], FILE **r_conv, char *b_share, char *b_select);
 char        PROG_terminate          (FILE **r_scrp, FILE **r_main, FILE **r_code, FILE **r_wave, FILE **r_conv);
-char        PROG_driver             (char a_good, cchar a_runtype, cchar a_nscrp [LEN_TITLE], int *r_nline, FILE **b_scrp, FILE *a_main, FILE *a_code, FILE *a_wave, FILE *a_conv, char b_last [LEN_LABEL], int *r_nrecd, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline, char *r_share, char *r_cshare);
-char        PROG_dusk               (char a_good, cchar a_runtype, cchar a_replace, cchar a_nscrp [LEN_TITLE], FILE **r_scrp, cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_nconv [LEN_TITLE], FILE **r_conv, cchar a_cshare);
+char        PROG_driver             (char a_good, char a_runtype, char a_nscrp [LEN_TITLE], int *r_nline, FILE **b_scrp, FILE *a_main, FILE *a_code, FILE *a_wave, FILE *a_conv, char b_last [LEN_LABEL], int *r_nrecd, char *r_under, char *r_ditto, char *r_dittoing, char *r_dtarget, int *r_dstart, int *r_dline, char *r_major, char *r_minor, char *r_share, char *r_select);
+char        PROG_dusk               (char a_good, char a_runtype, char a_replace, char a_nscrp [LEN_TITLE], FILE **r_scrp, int a_nline, char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char a_nconv [LEN_TITLE], FILE **r_conv, char a_share, char a_select);
+char        PROG_loop               (int a_argc, char *a_argv []);
 /*---(shut-down)------------*/
 char        PROG__end               (void);
 char        PROG_shutdown           (void);
 /*---(unittest)------------*/
+char        PROG__unit_bigclean     (void);
 char        PROG__unit_quiet        (void);
 char        PROG__unit_loud         (void);
 char        PROG__unit_end          (void);
@@ -418,30 +422,42 @@ char        DITTO__index            (cchar a_mark);
 char        DITTO__set              (cchar a_mark, int a_line, char a_desc [LEN_LONG]);
 char        DITTO__set_recd         (cchar a_mark, int a_line, char a_vers, char a_recd [LEN_RECD]);
 int         DITTO__get              (cchar a_mark, char r_desc [LEN_LONG]);
+char        DITTO_called            (char a_mark);
 /*---(toggle)---------------*/
-char        DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_mark, int a_ditto, char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline);
-char        DITTO_end               (FILE **b_scrp, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline);
+char        DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_mark, int a_ditto, char *r_mark, char *r_dittoing, char *r_dtarget, int *r_dstart, int *r_dline);
+char        DITTO_end               (FILE **b_scrp, char *r_dittoing, char *r_dtarget, int *r_dstart, int *r_dline);
 /*---(reading)--------------*/
 char        DITTO_read_numbering    (char a_dittoing, int a_ditto, int *r_nline, int *r_dline);
 /*---(parsing)--------------*/
-char        DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char *a_field, char r_desc [LEN_LONG], char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline);
+char        DITTO_parse__desc       (char a_prev [LEN_LONG], char r_desc [LEN_LONG]);
+char        DITTO_parse__group      (char a_prev [LEN_LONG], char r_desc [LEN_LONG]);
+char        DITTO_parse_handler     (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char *a_field, char r_desc [LEN_LONG], char *r_ditto, char *r_dittoing, char *r_dtarget, int *r_dstart, int *r_dline);
 /*---(debugging)------------*/
+char*       DITTO__actuals          (void);
 char*       DITTO__used             (void);
 /*---(done)-----------------*/
 
 
 char        VERB_init               (void);
+char        VERB__by_name           (char a_verb [LEN_LABEL], char *r_indent, char r_desc [LEN_DESC], char *r_spec, char *r_locn, char *r_is, char *r_under, int *r_count, int *r_total, void **r_conv, void **r_code, char *r_ditto, char *r_select);
+char        VERB__by_cursor         (char a_scope, char a_dir, char r_verb [LEN_LABEL], char *r_indent, char r_desc [LEN_DESC], char *r_spec, char *r_locn, char *r_is, char *r_under, int *r_count, int *r_total, void **r_conv, void **r_code, char *r_ditto, char *r_select);
+char        VERB__by_index          (char n, char r_verb [LEN_LABEL], char *r_indent, char r_desc [LEN_DESC], char *r_spec, char *r_locn, char *r_is, char *r_under, int *r_count, int *r_total, void **r_conv, void **r_code, char *r_ditto, char *r_select);
+char        VERB__index             (char a_verb [LEN_LABEL]);
+char        VERB__count             (void);
+char*       VERB__detail            (char n, char a_verb [LEN_LABEL]);
 char        VERB_script_reset       (void);
 char        VERB_dittoable          (char a_verb [LEN_LABEL]);
-char        VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN_LABEL], char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char *r_locn, char **r_conv, char **r_code);
+char        VERB_selectable         (char a_verb [LEN_LABEL]);
+char        VERB__parse_under       (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_is, char a_under, char *b_under);
+char        VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN_LABEL], char *b_under, char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char *r_locn, char **r_conv, char **r_code);
 char        VERB_inventory          (FILE *a_main);
 
 
 /*===[[ koios_read.c ]]=======================================================*/
 /*········· ´······················ ´·········································*/
 /*---(file)-----------------*/
-char        READ_open               (cchar a_name [LEN_RECD], cchar a_dir, FILE **r_file, int *r_line);
-char        READ_close              (FILE **b_file);
+char        READ_open               (char a_sfile [LEN_TITLE], char a_sfunc [LEN_TITLE], int a_sline, char a_dir [LEN_PATH], char a_name [LEN_TITLE], char a_mode, FILE **r_file, int *r_line);
+char        READ_close              (char a_sfile [LEN_TITLE], char a_sfunc [LEN_TITLE], int a_sline, char a_name [LEN_TITLE], FILE **b_file);
 /*---(record)---------------*/
 char        READ__defense           (FILE **a_file, int *r_nline, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline, int *r_nrecd, char r_recd [LEN_RECD]);
 char        READ__clear             (void);
@@ -454,23 +470,38 @@ char        READ_next               (FILE **b_file, int *r_nline, char *r_dittoi
 /*===[[ koios_reuse.c ]]======================================================*/
 /*········· ´······················ ´·········································*/
 /*---(program)--------------*/
-char        REUSE_purge             (cchar a_type);
+/*> char        REUSE_purge             (void);                                       <*/
 char        REUSE_init              (void);
 char        REUSE_wrap              (void);
+/*---(basics)---------------*/
+/*> char        REUSE__type             (char a_abbr);                                <*/
+/*> int         REUSE__index            (char a_abbr);                                <*/
+/*> char        REUSE__data             (char a_abbr, char *r_type, char r_tdesc [LEN_TERSE], int *r_line, char r_desc [LEN_LONG], short *r_conds, short *r_steps, char *r_called);   <*/
 /*---(usage)----------------*/
-char        REUSE__index            (cchar a_type, cchar a_mark);
-char        REUSE__set              (cchar a_type, cchar a_mark, int a_line, char a_desc [LEN_LONG]);
-char        REUSE__set_recd         (cchar a_type, cchar a_mark, int a_line, char a_vers, char a_recd [LEN_RECD]);
-int         REUSE__get              (cchar a_type, cchar a_mark, char r_desc [LEN_LONG], int *r_conds, int *r_steps);
+/*> char        REUSE__set              (char a_abbr, int a_line, char a_desc [LEN_LONG]);   <*/
+char        REUSE__set_recd         (char a_abbr, int a_line, char a_vers, char a_recd [LEN_RECD]);
+/*> int         REUSE__get              (char a_abbr, char r_desc [LEN_LONG], short *r_conds, short *r_steps);   <*/
+/*> char        REUSE_called            (char a_abbr);                                <*/
 /*---(parsing)--------------*/
-char        REUSE_parse             (cchar a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char r_desc [LEN_LONG], char a_cshare, char *r_share);
+char        REUSE__parse_delimit    (char a_func [LEN_LABEL], char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_SHORT], char a_pos, char a_char, char a_example [LEN_SHORT]);
+char        REUSE__parse_global     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major);
+char        REUSE__parse_shared     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major);
+char        REUSE__parse_reuse_old  (char a_nscrp [LEN_TITLE], int a_line, char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char *r_major, char *r_minor);
+char        REUSE__parse_reuse_new  (char a_nscrp [LEN_TITLE], int a_line, char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char *r_major, char *r_minor);
+char        REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_share, char r_desc [LEN_LONG], char *r_major, char *r_minor);
+char        REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char a_share, char r_desc [LEN_LONG], char *r_major, char *r_minor);
 /*---(in-use)---------------*/
-char        REUSE_update            (cchar a_mark, int a_conds, int a_steps);
+char        REUSE_update            (char a_abbr, int a_conds, int a_steps);
+char        REUSE_addback           (char a_abbr, int *b_conds, int *b_steps);
+/*---(exim)-----------------*/
 char        REUSE_export            (cchar a_name [LEN_PATH]);
 char        REUSE_import            (cchar a_name [LEN_PATH]);
-char        REUSE_add               (cchar a_mark, int *b_conds, int *b_steps);
 /*---(debugging)------------*/
+char*       REUSE__actuals          (void);
 char*       REUSE__used             (void);
+char*       REUSE__detail           (char a_abbr);
+/*---(totals)---------------*/
+char        REUSE_totals            (char a_verb [LEN_LABEL], char a_recd [LEN_RECD]);
 /*---(done)-----------------*/
 
 
@@ -479,38 +510,37 @@ char*       REUSE__used             (void);
 /*········· ´······················ ´·········································*/
 /*---(support)--------------*/
 char        CONV_init               (void);
-char        CONV__defense           (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
+char        CONV__defense           (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *r_share, char *b_select);
 char        CONV_printf             (FILE *a_conv, char *a_format, ...);
 /*---(overall)--------------*/
-char        CONV_header             (cchar a_name [LEN_PATH], FILE **r_conv, char *r_cshare);
-char        CONV_break              (FILE *a_conv);
-char        CONV_prep               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_incl               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_comment            (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_footer             (char a_good, FILE **b_conv, cchar a_nscrp [LEN_TITLE], cchar a_nconv [LEN_TITLE]);
+char        CONV_header             (char a_name [LEN_PATH], FILE **r_conv, char *r_share, char *r_select);
+char        CONV__break             (FILE *a_conv);
+char        CONV__prep              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__incl              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__comment           (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV_footer             (char a_good, FILE **b_conv, char a_nscrp [LEN_TITLE], char a_nconv [LEN_TITLE]);
 /*---(scrps)----------------*/
-char        CONV__scrp_add          (cchar a_scrp, cchar a_share, char a_stage [LEN_TERSE], char r_suffix [LEN_TERSE], char r_count [LEN_LABEL], char *r_cshare);
-char        CONV_scrp               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_sect               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_shared             (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_global             (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
+char        CONV__scrp_add          (char a_scrp, char a_verb [LEN_LABEL], char a_major, char a_stage [LEN_SHORT], char r_suffix [LEN_TERSE], char r_count [LEN_LABEL], char *b_share);
+char        CONV__scrp              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__shared            (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__sect              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
 /*---(conds)----------------*/
-char        CONV__cond_add          (cchar a_mark, cchar a_share, cchar a_cshare, char r_suffix [LEN_TERSE], char r_count [LEN_LABEL]);
-char        CONV_cond               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_ditto              (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_reuse              (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_group              (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
+char        CONV__cond_add          (char a_ditto, char a_major, char a_minor, char a_share, char r_suffix [LEN_TERSE], char r_count [LEN_LABEL]);
+char        CONV__cond              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__ditto             (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__reuse             (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__group             (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
 /*---(steps)----------------*/
-char        CONV_exec               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_load               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_file               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_append             (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_mode               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_code               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_gvar               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
-char        CONV_echo               (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
+char        CONV__gvar              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__exec              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__code              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__echo              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__load              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__mode              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__file              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
+char        CONV__append            (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
 /*---(driver)---------------*/
-char        CONV_driver             (void f_conv (), FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], char a_share, char a_mark, char a_stage [LEN_TERSE], char *r_cshare);
+char        CONV_driver             (void f_call (), FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(unitest)--------------*/
 char        CONV_force              (int a_scrps, int  a_conds);
 /*---(done)-----------------*/
@@ -521,47 +551,49 @@ char        CONV_force              (int a_scrps, int  a_conds);
 /*········· ´······················ ´·········································*/
 /*---(support)--------------*/
 char        CODE_init               (void);
-char        CODE__defense           (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], cchar a_stage [LEN_SHORT], char *r_cshare);
+char        CODE__defense           (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_meth [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expe [LEN_RECD], char a_retn [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_major, char a_minor, char *b_share, char *b_select);
 int         CODE__line              (char a_dittoing, int a_nline, int a_dline);
 /*---(prep)-----------------*/
-char        CODE__code_beg          (cchar a_nscrp [LEN_TITLE], FILE *a_code);
+char        CODE__code_beg          (char a_nscrp [LEN_TITLE], FILE *a_code);
 char        CODE__code_stats        (FILE *a_code);
-char        CODE__code_end          (cchar a_nscrp [LEN_TITLE], FILE *a_code);
+char        CODE__code_end          (char a_nscrp [LEN_TITLE], FILE *a_code);
 char        CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE]);
 char        CODE__main_end          (FILE *a_main);
-char        CODE_header             (char a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, char *r_cshare);
-char        CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_cshare);
-char        CODE_incl               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
+char        CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char *r_share, char *b_select);
+char        CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, int a_nline, char a_share, char a_select, char a_unit);
+char        CODE__incl              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+/*---(select)---------------*/
+char        CODE__select_beg        (FILE* a_code, char a_verb [LEN_TERSE], char a_which [LEN_TITLE], char a_share, char r_pre [LEN_TERSE]);
+char        CODE__select_end        (FILE* a_code, char a_verb [LEN_TERSE], char a_which [LEN_TITLE], char a_share);
 /*---(scrp)-----------------*/
-char        CODE__scrp_end          (FILE *a_code, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_cshare);
-char        CODE_scrp               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_shared             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_global             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_sect               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
+char        CODE__scrp_end          (FILE *a_code, char a_last [LEN_LABEL], char a_nline, char a_verb [LEN_LABEL], char a_share);
+char        CODE__scrp              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__shared            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__sect              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(cond)-----------------*/
-char        CODE__cond_end          (FILE *a_code, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL]);
-char        CODE_cond               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_group              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_reuse              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
+char        CODE__cond_end          (FILE *a_code, char a_last [LEN_LABEL], char a_verb [LEN_LABEL], char a_nline, char a_share);
+char        CODE__cond              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__group             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__reuse             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(step-support)---------*/
-char        CODE__display           (cchar a_code [LEN_RECD], char r_display [LEN_RECD], char r_system [LEN_RECD], char r_load [LEN_RECD]);
-char        CODE__prefix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_display [LEN_RECD], char a_dittoing, int a_nline, int a_dline);
-char        CODE__expect            (FILE *a_conv, cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD]);
-char        CODE__suffix            (FILE *a_conv, cchar a_verb [LEN_LABEL], cchar a_test [LEN_LABEL], cchar a_system [LEN_RECD], cchar a_return [LEN_FULL]);
-char        CODE__specialty         (FILE *a_code, cchar a_load [LEN_RECD]);
+char        CODE__display           (char a_code [LEN_RECD], char r_display [LEN_RECD], char r_system [LEN_RECD], char r_load [LEN_RECD]);
+char        CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_display [LEN_RECD], char a_dittoing, int a_nline, int a_dline, char a_pre [LEN_TERSE]);
+char        CODE__expect            (FILE *a_conv, char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_dittoing);
+char        CODE__suffix            (FILE *a_code, char a_verb [LEN_LABEL], char a_test [LEN_LABEL], char a_system [LEN_RECD], char a_return [LEN_FULL], char a_pre [LEN_TERSE], char a_dittoing, char a_share);
+char        CODE__specialty         (FILE *a_code, char a_load [LEN_RECD], char a_dittoing, char a_share);
 /*---(step)-----------------*/
-char        CODE__step_add          (FILE *a_code, cchar a_runtype, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], char a_dittoing, int a_nline, int a_dline);
-char        CODE_exec               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_load               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_file               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_append             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_mode               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_code               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_gvar               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_lvar               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
-char        CODE_system             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
+char        CODE__step_add          (FILE *a_code, char a_runtype, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_dittoing, int a_nline, int a_dline);
+char        CODE__exec              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__load              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__file              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__append            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__mode              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__code              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__gvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__lvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__system            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(driver)---------------*/
-char        CODE_driver             (void f_call (), char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
+char        CODE_driver             (void f_call (), char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(unitest)--------------*/
 char        CODE_force              (int a_scrps, int  a_conds);
 /*---(done)-----------------*/
@@ -570,14 +602,15 @@ char        CODE_force              (int a_scrps, int  a_conds);
 
 /*===[[ koios_parse.c ]]======================================================*/
 /*········· ´······················ ´·········································*/
-char        PARSE_default           (char r_verb [LEN_LABEL], char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char *r_mark, char *r_share);
-char        PARSE__comment          (cchar a_nscrp [LEN_TITLE], int a_line, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_spec, char **r_conv, char **r_code, char r_expe [LEN_RECD]);
+char        PARSE_default           (char r_verb [LEN_LABEL], char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char *r_ditto, char *r_major, char *r_minor, char r_which [LEN_TITLE]);
+char        PARSE__comment          (char a_nscrp [LEN_TITLE], int a_line, char a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_under, char *r_spec, char **r_conv, char **r_code, char r_expe [LEN_RECD]);
 char        PARSE__default          (char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL]);
-char        PARSE__version          (cchar *a_field, char *r_vers);
+char        PARSE__version          (char *a_field, char *r_vers);
 char        PARSE__limits           (char a_spec, char *r_min, char *r_max);
-char        PARSE__current          (char n, char *p, cchar a_spec, char *r_max, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL]);
-char        PARSE_prep              (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, cchar a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_expe [LEN_RECD], char *r_dittoing, char *r_mark, char *r_dmark, int *r_ditto, int *r_dline, char *r_share, char *r_cshare);
-char        PARSE_driver            (cchar a_nscrp [LEN_TITLE], int a_line, char a_vers, cchar a_verb [LEN_LABEL], char a_spec, cchar a_recd [LEN_RECD], char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL]);
+char        PARSE__which            (char a_nscrp [LEN_TITLE], int a_line, char a_desc [LEN_LONG], char r_which [LEN_TITLE]);
+char        PARSE__current          (char n, char *p, char a_spec, char *r_max, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL]);
+char        PARSE_prep              (FILE **b_scrp, char a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_under, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_expe [LEN_RECD], char *r_ditto, char *r_dittoing, char *r_dtarget, int *r_dstart, int *r_dline, char *r_major, char *r_minor, char *r_share, char *r_select);
+char        PARSE_driver            (char a_nscrp [LEN_TITLE], int a_line, char a_vers, char a_verb [LEN_LABEL], char a_spec, char a_recd [LEN_RECD], char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_which [LEN_TITLE]);
 /*---(done)-----------------*/
 
 

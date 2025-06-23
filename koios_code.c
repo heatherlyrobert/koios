@@ -5,6 +5,10 @@
 
 
 
+static int  s_cunit  = 0;
+static int  s_cscrp  = 0;
+static int  s_ccond  = 0;
+static int  s_cstep  = 0;
 
 
 
@@ -15,18 +19,21 @@ static int  s_reuses_step   [26];          /* count of step in each share    */
 
 
 
-static int  s_nscrp  = 0;
-static int  s_ncond  = 0;
-static int  s_nstep  = 0;
+static char s_in_cond  = '-';
 
-static int  s_uscrp  = 0;
-static int  s_ucond  = 0;
-static int  s_ustep  = 0;
 
-static int  s_scond  = 0;
-static int  s_sstep  = 0;
+/*> static int  s_nscrp  = 0;                                                         <*/
+/*> static int  s_ncond  = 0;                                                         <*/
+/*> static int  s_nstep  = 0;                                                         <*/
 
-static int  s_cstep  = 0;
+/*> static int  s_uscrp  = 0;                                                         <*/
+/*> static int  s_ucond  = 0;                                                         <*/
+/*> static int  s_ustep  = 0;                                                         <*/
+
+/*> static int  s_scond  = 0;                                                         <*/
+/*> static int  s_sstep  = 0;                                                         <*/
+
+/*> static int  s_cstep  = 0;                                                         <*/
 
 static int  s_dcond  = 0;
 static int  s_dstep  = 0;
@@ -41,15 +48,17 @@ static void  o___PROGRAM_________o () { return; }
 char
 CODE_init               (void)
 {
-   s_nscrp  = s_ncond = s_nstep = 0;
-   s_uscrp  = s_ucond = s_ustep = 0;
-   s_scond  = s_sstep = 0;
-   s_cstep  = 0;
+   /*> s_nscrp  = s_ncond = s_nstep = 0;                                              <* 
+    *> s_uscrp  = s_ucond = s_ustep = 0;                                              <* 
+    *> s_scond  = s_sstep = 0;                                                        <* 
+    *> s_cstep  = 0;                                                                  <*/
+   s_in_cond = '-';
+   yUNIT_stats_purge (YUNIT_BUILD  , &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    return 0;
 }
 
 char
-CODE__defense           (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_meth [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expe [LEN_RECD], cchar a_retn [LEN_FULL], cchar a_stage [LEN_SHORT], char *r_cshare)
+CODE__defense           (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_meth [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expe [LEN_RECD], char a_retn [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        rce         =  -10;
    --rce;  if (a_nscrp  == NULL)  return rce;
@@ -64,7 +73,11 @@ CODE__defense           (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    --rce;  if (a_expe   == NULL)  return rce;
    --rce;  if (a_retn   == NULL)  return rce;
    --rce;  if (a_stage  == NULL)  return rce;
-   --rce;  if (r_cshare == NULL)  return rce;
+   --rce;  if (a_which  == NULL)  return rce;
+   --rce;  if (a_major  == 0)     return rce;
+   --rce;  if (a_minor  == 0)     return rce;
+   --rce;  if (b_share  == NULL)  return rce;
+   --rce;  if (b_select == NULL)  return rce;
    return 0;
 }
 
@@ -79,19 +92,64 @@ CODE__line              (char a_dittoing, int a_nline, int a_dline)
 
 
 /*====================------------------------------------====================*/
+/*===----                     selectable execution                     ----===*/
+/*====================------------------------------------====================*/
+static void  o___SELECT__________o () { return; }
+
+char
+CODE__select_beg        (FILE* a_code, char a_verb [LEN_TERSE], char a_which [LEN_TITLE], char a_share, char r_pre [LEN_TERSE])
+{
+   /*---(only cond/step level)-----------*/
+   if (r_pre != NULL)  strcpy (r_pre, "");
+   /*---(in scripts)---------------------*/
+   if (a_share == '-' || VERB_selectable (a_verb) == 0)  {
+      if (strchr ("CGR", a_verb [0]) != NULL)  { CONV_printf (a_code, "   {  ++mykoios_ncond;\n");  return 0; }
+      else                                     { CONV_printf (a_code, "      ++mykoios_nstep;\n");  return 0; }
+   }
+   /*---(share selectable)---------------*/
+   if (strcmp (a_which, "") != 0) {
+      if      (strchr ("CGR", a_verb [0]) != NULL)   CONV_printf (a_code, "   if (strchr (\"*%s\", a_select) != NULL) {  ++mykoios_ncond;\n"   , a_which);
+      else                                           CONV_printf (a_code, "      if (strchr (\"*%s\", a_select) != NULL) {  ++mykoios_nstep;\n", a_which);
+      if (r_pre != NULL)  strcpy (r_pre, "   ");
+   }
+   /*---(share always)-------------------*/
+   else {
+      if (strchr ("CGR", a_verb [0]) != NULL)   CONV_printf (a_code, "   {  ++mykoios_ncond;\n");
+      else                                      CONV_printf (a_code, "      ++mykoios_nstep;\n");
+   }
+   /*---(complete)-----------------------*/
+   return 1;
+}
+
+char
+CODE__select_end        (FILE* a_code, char a_verb [LEN_TERSE], char a_which [LEN_TITLE], char a_share)
+{
+   if (a_share == '-')                 { if (strchr ("CGR", a_verb [0]) != NULL)   CONV_printf (a_code, "   }\n");  return 0;  }
+   if (VERB_selectable (a_verb) == 0)  { if (strchr ("CGR", a_verb [0]) != NULL)   CONV_printf (a_code, "   }\n");  return 0;  }
+   if      (strchr ("CGR", a_verb [0]) != NULL)   CONV_printf (a_code, "   }\n");
+   else if (strcmp (a_which, "") != 0)            CONV_printf (a_code, "      }\n");
+   return 1;
+}
+
+
+
+/*====================------------------------------------====================*/
 /*===----                         preparations                         ----===*/
 /*====================------------------------------------====================*/
 static void  o___PREP____________o () { return; }
 
 char
-CODE__code_beg          (cchar a_nscrp [LEN_TITLE], FILE *a_code)
+CODE__code_beg          (char a_nscrp [LEN_TITLE], FILE *a_code)
 {
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    CONV_printf (a_code, "/*================================= beg-code =================================*/\n");
    CONV_printf (a_code, "/* /usr/local/bin/koios                                                       */\n");
    CONV_printf (a_code, "/*   autogen by %-60.60s  */\n", P_ONELINE);
    if (strcmp (a_nscrp, "master.unit") != 0) { 
       CONV_printf (a_code, "\n");
       CONV_printf (a_code, "/*---(standard support functions)----*/\n");
+      CONV_printf (a_code, "#include    <yURG.h>\n");
       CONV_printf (a_code, "#include    <yUNIT_unit.h>\n");
       CONV_printf (a_code, "#include    \"master.h\"\n");
       CONV_printf (a_code, "\n");
@@ -101,33 +159,39 @@ CODE__code_beg          (cchar a_nscrp [LEN_TITLE], FILE *a_code)
       CONV_printf (a_code, "/*================================ beg-global ================================*/\n");
    }
    /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
 CODE__code_stats        (FILE *a_code)
 {
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    CONV_printf (a_code, "\n");
    CONV_printf (a_code, "char\n");
    CONV_printf (a_code, "yUNIT_stats     (void)\n");
    CONV_printf (a_code, "{\n");
-   /*> CONV_printf (a_code, "   yUNIT_unique (%d, %d, %d, %d, %d, %d);\n", s_nscrp, s_ncond, s_nstep, s_uscrp, s_ucond - s_dcond, s_ustep - s_dstep);   <*/
-   CONV_printf (a_code, "   yUNIT_unique (%d, %d, %d, %d, %d, %d);\n", s_nscrp, s_ncond, s_nstep, s_nscrp, s_ncond - s_dcond, s_nstep - s_dstep);
+   CONV_printf (a_code, "   yUNIT_unique (%d, %d, %d, %d, %d, %d);\n", s_cscrp, s_ccond, s_cstep, s_cscrp, s_ccond - s_dcond, s_cstep - s_dstep);
    CONV_printf (a_code, "   return 0;\n");
    CONV_printf (a_code, "}\n");
    CONV_printf (a_code, "\n");
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE__code_end          (cchar a_nscrp [LEN_TITLE], FILE *a_code)
+CODE__code_end          (char a_nscrp [LEN_TITLE], FILE *a_code)
 {
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    CONV_printf (a_code, "\n");
    if (strcmp (a_nscrp, "master.unit") != 0) {
       CONV_printf (a_code, "/*================================ end-script ================================*/\n");
    } else {
       CONV_printf (a_code, "/*================================ end-global ================================*/\n");
    }
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -136,6 +200,8 @@ CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE])
 {
    char        x_urun      [LEN_TITLE] = "";
    int         l           =    0;
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    strlcpy (x_urun, a_nscrp, LEN_TITLE);
    l = strlen (x_urun);
    if (strcmp (x_urun + l - 5, ".unit") == 0)  x_urun [l - 5] = '\0';
@@ -151,12 +217,15 @@ CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE])
    CONV_printf (a_main, "   if (rc < 0)  return -1;\n");
    CONV_printf (a_main, "   yUNIT_unit (\"%s\", cyUNIT.level, cyUNIT.eterm, cyUNIT.exec);\n", x_urun);
    CONV_printf (a_main, "   /*---(beg scripts)--------------------*/\n");
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
 CODE__main_end          (FILE *a_main)
 {
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    CONV_printf (a_main, "   /*---(end scripts)--------------------*/\n");
    CONV_printf (a_main, "   rc = yUNIT_tinu (cyUNIT.exec);\n");
    CONV_printf (a_main, "   /*---(complete)-----------------------*/\n");
@@ -165,11 +234,12 @@ CODE__main_end          (FILE *a_main)
    CONV_printf (a_main, "\n\n\n");
    CONV_printf (a_main, "/* end-of-file.  done, finito, completare, whimper [Ï´···                     */\n");
    CONV_printf (a_main, "/*================================= end-code =================================*/\n");
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_header             (char a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, char *r_cshare)
+CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -177,42 +247,52 @@ CODE_header             (char a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FI
    FILE       *x_main      = NULL;
    FILE       *x_code      = NULL;
    FILE       *x_wave      = NULL;
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(open main)----------------------*/
-   rc = READ_open       (a_nmain, 'w', &x_main, NULL);
-   if (rc < 0 || x_main == NULL)  return rce;
+   rc = READ_open       (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nmain, 'w', &x_main, NULL);
+   --rce;  if (rc < 0 || x_main == NULL) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
    /*---(open code)----------------------*/
-   rc = READ_open       (a_ncode, 'w', &x_code, NULL);
-   if (rc < 0 || x_code == NULL) {
-      READ_close (&x_main);
+   rc = READ_open       (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_ncode, 'w', &x_code, NULL);
+   --rce;  if (rc < 0 || x_code == NULL) {
+      READ_close (__FILE__, __FUNCTION__, __LINE__, a_nmain, &x_main);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(open wave)----------------------*/
-   rc = READ_open       (a_nwave, 'w', &x_wave, NULL);
-   if (rc < 0 || x_wave == NULL) {
-      READ_close (&x_main);
-      READ_close (&x_code);
+   rc = READ_open       (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nwave, 'w', &x_wave, NULL);
+   --rce;  if (rc < 0 || x_wave == NULL) {
+      READ_close (__FILE__, __FUNCTION__, __LINE__, a_nmain, &x_main);
+      READ_close (__FILE__, __FUNCTION__, __LINE__, a_ncode, &x_code);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(add headers)--------------------*/
    CODE__main_beg (x_main, a_nscrp);
    CODE__code_beg (a_nscrp, x_code);
    /*---(default globals)----------------*/
-   s_nscrp  = s_ncond = s_nstep = 0;
-   s_uscrp  = s_ucond = s_ustep = 0;
-   s_scond  = s_sstep = 0;
-   s_cstep  = 0;
-   s_dcond  = s_dstep = 0;
-   if (r_cshare != NULL)  *r_cshare = '-';
+   yUNIT_stats_purge (YUNIT_BUILD  , &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   /*> s_nscrp  = s_ncond = s_nstep = 0;                                              <* 
+    *> s_uscrp  = s_ucond = s_ustep = 0;                                              <* 
+    *> s_scond  = s_sstep = 0;                                                        <* 
+    *> s_cstep  = 0;                                                                  <* 
+    *> s_dcond  = s_dstep = 0;                                                        <*/
+   if (b_share  != NULL)  *b_share  = '-';
+   if (b_select != NULL)  *b_select = '-';
    /*---(save-back)----------------------*/
    if (r_main   != NULL)  *r_main   = x_main;
    if (r_code   != NULL)  *r_code   = x_code;
    if (r_wave   != NULL)  *r_wave   = x_wave;
    /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [LEN_TITLE], FILE **r_main, cchar a_ncode [LEN_TITLE], FILE **r_code, cchar a_nwave [LEN_TITLE], FILE **r_wave, cchar a_cshare)
+CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, int a_nline, char a_share, char a_select, char a_unit)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -220,11 +300,11 @@ CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [
    char        x_recd      [LEN_RECD]  = "";
    char        t           [LEN_HUND]  = "";
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
-   DEBUG_UVER   yLOG_uchar   ("a_good"    , a_good);
+   debug_uver   ylog_uenter  (__FUNCTION__);
+   debug_uver   ylog_uchar   ("a_good"    , a_good);
    /*---(polish off scripts)-------------*/
-   if (s_nscrp >  0 && a_cshare == '-')   yUNIT_wave_end (my.f_wave, 0, 1, s_scond, s_sstep);
-   CODE__scrp_end          (*r_code, "----", "-----", a_cshare);
+   if (s_cscrp >  0 && a_share == '-')   yUNIT_wave_end (my_loc.l_WAVE);
+   CODE__scrp_end          (*r_code, "----", a_nline, "----", a_share);
    /*---(code endings)-------------------*/
    if (a_good == 'y') {
       CODE__main_end   (*r_main);
@@ -239,8 +319,8 @@ CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [
    if (a_good == 'y') {
       /*---(append main)-----------------*/
       if (strcmp (a_nscrp, "master.unit") != 0) {
-         READ_close (r_main);
-         READ_open  (a_nmain, 'r', r_main, NULL);
+         READ_close (__FILE__, __FUNCTION__, __LINE__, a_nmain, r_main);
+         READ_open  (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nmain, 'r', r_main, NULL);
          /*> printf ("MAIN------------------------------------------\n");                <*/
          while (1) {
             fgets (x_recd, LEN_RECD, *r_main);
@@ -252,38 +332,43 @@ CODE_footer             (char a_good, cchar a_nscrp [LEN_TITLE], cchar a_nmain [
       }
       /*---(export globals)--------------*/
       else {
-         printf ("handling master.unit\n");
+         /*> printf ("handling master.unit\n");                                       <*/
          REUSE_export ("master.globals");
       }
    }
    /*---(write wave footer)--------------*/
    if (r_wave != NULL && *r_wave != NULL)  fprintf (*r_wave, "\n");
    /*---(close files)--------------------*/
-   rc = READ_close (r_main);
-   rc = READ_close (r_code);
-   rc = READ_close (r_wave);
+   rc = READ_close (__FILE__, __FUNCTION__, __LINE__, a_nmain, r_main);
+   rc = READ_close (__FILE__, __FUNCTION__, __LINE__, a_ncode, r_code);
+   rc = READ_close (__FILE__, __FUNCTION__, __LINE__, a_nwave, r_wave);
    /*---(transfer master.h)--------------*/
    if (a_good == 'y' &&strcmp (a_nscrp, "master.unit") == 0) {
       system  ("mv -f master_unit.cs master.h");
    }
    /*---(clean-up)-----------------------*/
-   sprintf (t, "rm -f %s", a_nmain); system  (t);
-   if (a_good != 'y') {
-      sprintf (t, "rm -f %s", a_ncode); system  (t);
-      sprintf (t, "rm -f %s", a_nwave); system  (t);
+   if (a_unit != 'y') {
+      sprintf (t, "rm -f %s", a_nmain); system  (t);
+      if (a_good != 'y') {
+         sprintf (t, "rm -f %s", a_ncode); system  (t);
+         sprintf (t, "rm -f %s", a_nwave); system  (t);
+      }
    }
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_incl               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__incl              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        t           [LEN_HUND]  = "";
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    if (a_method [0] == '<')   strcpy  (t, a_method);
    else                       sprintf (t, "\"%s\"", a_method);
-   CONV_printf (a_code, "#include    %-22.22s  /* %4i, %-32.32s */\n", t, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
+   CONV_printf (a_code, "#include    %-22.22s               /* %4i, %-32.32s */\n", t, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -295,50 +380,61 @@ CODE_incl               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 static void  o___SCRP____________o () { return; }
 
 char
-CODE__scrp_end          (FILE *a_code, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_cshare)
+CODE__scrp_end          (FILE *a_code, char a_last [LEN_LABEL], char a_nline, char a_verb [LEN_LABEL], char a_share)
 {
+   short       x_conds     =    0;
+   short       x_steps     =    0;
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(reset verb counts)--------------*/
    VERB_script_reset ();
    /*---(quick out)----------------------*/
-   if (strcmp (a_last, "SECT") == 0)    return 0;
+   if (strcmp (a_last, "SECT") == 0) {
+      debug_uver   ylog_uexit   (__FUNCTION__);
+      return 0;
+   }
    /*---(wrap last cond)-----------------*/
-   CODE__cond_end (a_code, a_last, a_verb);
+   CODE__cond_end (a_code, a_last, a_verb, a_nline, a_share);
    /*---(end share)----------------------*/
-   if (a_cshare != '-')   REUSE_update (a_cshare, s_scond, s_sstep);
+   /*> if (a_share != '-')   REUSE_update (a_share, s_ccond, s_cstep);                <*/
    /*---(close script/share)-------------*/
-   if (s_nscrp >  0 || a_cshare != '-') {
-      if (a_cshare == '-') {
+   if (s_cscrp >  0 || a_share != '-') {
+      if (a_share == '-') {
          CONV_printf (a_code, "   /*===[[ script done ]]==========================*/\n");
-         CONV_printf (a_code, "   yUNIT_prcs    (cyUNIT.exec);\n");
-         /*> CONV_printf (a_code, "   cyUNIT.offset  = 0;\n");                        <*/
+         CONV_printf (a_code, "   yUNIT_prcs    (cyUNIT.exec);                   /* %4d */\n", a_nline);
       }
-      else if (a_cshare == tolower (a_cshare)) {
+      else if (strchr (YSTR_LOWER, a_share) != NULL)  {
+         yUNIT_reuse_data (a_share, NULL, NULL, NULL, NULL, &x_conds, &x_steps, NULL);
          CONV_printf (a_code, "   /*===[[ shared done ]]==========================*/\n");
-         CONV_printf (a_code, "   yUNIT_erahs ('%c');\n", a_cshare);
-         /*> CONV_printf (a_code, "   cyUNIT.offset  = 0;\n");                        <*/
-         s_ucond -= s_scond;
-         s_ustep -= s_sstep;
+         CONV_printf (a_code, "   yUNIT_rahs   ('%c', a_select, %3d, %3d, mykoios_ncond, mykoios_nstep);   /* %4d */\n", a_share, x_conds, x_steps, a_nline);
+         /*> s_ucond -= s_scond;                                                      <* 
+          *> s_ustep -= s_sstep;                                                      <*/
       }
-      else {
+      else if (strchr (YSTR_UPPER, a_share) != NULL)  {
+         yUNIT_reuse_data (a_share, NULL, NULL, NULL, NULL, &x_conds, &x_steps, NULL);
          CONV_printf (a_code, "   /*===[[ global done ]]==========================*/\n");
-         CONV_printf (a_code, "   yUNIT_labolg ('%c');\n", a_cshare);
-         /*> CONV_printf (a_code, "   cyUNIT.offset  = 0;\n");                        <*/
-         s_ucond -= s_scond;
-         s_ustep -= s_sstep;
+         CONV_printf (a_code, "   yUNIT_bolg   ('%c', a_select, %3d, %3d, mykoios_ncond, mykoios_nstep);   /* %4d */\n", a_share, x_conds, x_steps, a_nline);
+         /*> s_ucond -= s_scond;                                                      <* 
+          *> s_ustep -= s_sstep;                                                      <*/
+      }
+      else if (strchr (YSTR_GREEK, a_share) != NULL)  {
+         yUNIT_reuse_data (a_share, NULL, NULL, NULL, NULL, &x_conds, &x_steps, NULL);
+         CONV_printf (a_code, "   /*===[[ config done ]]==========================*/\n");
+         CONV_printf (a_code, "   yUNIT_fnoc   ('%c', a_select, %3d, %3d, mykoios_ncond, mykoios_nstep);   /* %4d */\n", a_share, x_conds, x_steps, a_nline);
+         /*> s_ucond -= s_scond;                                                      <* 
+          *> s_ustep -= s_sstep;                                                      <*/
       }
       CONV_printf (a_code, "   /*---(complete)-----------------------*/\n");
-      CONV_printf (a_code, "   return 0;\n");
+      CONV_printf (a_code, "   return mykoios_ncond;\n");
       CONV_printf (a_code, "}\n");
    }
-   /*---(initialize vars)----------------*/
-   s_scond  = 0;
-   s_sstep  = s_cstep  = 0;
    /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_scrp               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__scrp              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -347,106 +443,112 @@ CODE_scrp               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    char        x_wave      =  '·';
    char        x_rating    =  '·';
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
    /*---(wrap last script)---------------*/
-   if (s_nscrp >  0 && *r_cshare == '-')   yUNIT_wave_end (a_wave, 0, 1, s_scond, s_sstep);
-   CODE__scrp_end (a_code, a_last, a_verb, *r_cshare);
-   *r_cshare = '-';
-   /*---(counters)-----------------------*/
-   ++(s_nscrp);
-   ++(s_uscrp);
-   s_scond  = 0;
-   s_sstep  = s_cstep  = 0;
+   if (s_cscrp >  0 && *b_share == '-')   yUNIT_wave_end (a_wave);
+   CODE__scrp_end (a_code, a_last, a_nline, a_verb, *b_share);
+   *b_share  = '-';
+   *b_select = '-';
+   /*---(statistics)---------------------*/
+   yUNIT_stats_scrp  (YUNIT_BUILD  , NULL, "", YUNIT_IS_SCRP, a_verb, a_major, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(open script function)-----------*/
    CONV_printf (a_code, "\n");
-   CONV_printf (a_code, "char\n");
-   CONV_printf (a_code, "yUNIT_script_%02d          (void)\n", s_nscrp);
+   CONV_printf (a_code, "int\n");
+   CONV_printf (a_code, "yUNIT_script_%02d          (void)\n", s_cscrp);
    CONV_printf (a_code, "{\n");
    CONV_printf (a_code, "   /*===[[ script header ]]========================*/\n");
    CONV_printf (a_code, "   cyUNIT.offset  = 0;\n");
-   CONV_printf (a_code, "   cyUNIT.origin  = %d;\n", s_nscrp);
+   CONV_printf (a_code, "   cyUNIT.origin  = %d;\n", s_cscrp);
    CONV_printf (a_code, "   yUNIT_mode_reset ();\n");
-   CONV_printf (a_code, "   yUNIT_scrp    (%4i, %3i, \"%s\", \"%s\", \"%s\", \"%s\", \"%s\");\n", CODE__line (a_dittoing, a_nline, a_dline), s_nscrp, a_stage, a_desc, a_test, a_return, a_method);
+   CONV_printf (a_code, "   yUNIT_scrp    (%4i, %3i, \"%s\", \"%s\", \"%s\", \"%s\", \"%s\");\n", CODE__line (a_dittoing, a_nline, a_dline), s_cscrp, a_stage, a_desc, a_test, a_return, a_method);
+   CONV_printf (a_code, "   int mykoios_ncond  = 0;\n");
+   CONV_printf (a_code, "   int mykoios_nstep  = 0;\n");
+   CONV_printf (a_code, "   int mykoios_ncurr  = 0;\n");
+   CONV_printf (a_code, "   int mykoios_nshar  = 0;\n");
    /*---(function call to main)----------*/
-   CONV_printf (a_main, "   if (yUNIT_run_scrp (%2i) == 1)  yUNIT_script_%02d ();\n", s_nscrp, s_nscrp);
+   CONV_printf (a_main, "   if (yUNIT_run_scrp (%2i) == 1)  yUNIT_script_%02d ();\n", s_cscrp, s_cscrp);
    /*---(script entry in wave)-----------*/
-   DEBUG_UVER   yLOG_uinfo   ("a_stage"   , a_stage);
+   debug_uver   ylog_uinfo   ("a_stage"   , a_stage);
    l = strlen (a_stage);
-   DEBUG_UVER   yLOG_uvalue  ("l"         , l);
+   debug_uver   ylog_uvalue  ("l"         , l);
    if (l > 0)   x_wave   = a_stage [0];
    if (l > 1)   x_stage  = a_stage [1];
    if (l > 3)   x_rating = a_stage [3];
-   DEBUG_UVER   yLOG_ucomplex("stage"     , "%d %c %c %c", l, x_wave, x_stage, x_rating);
-   yUNIT_wave_beg (my.n_proj, my.n_base, s_nscrp, a_desc, a_return, x_wave, x_stage, x_rating, a_test);
+   debug_uver   ylog_ucomplex("stage"     , "%d %c %c %c", l, x_wave, x_stage, x_rating);
+   yUNIT_wave_beg (my_loc.l_proj, my_loc.l_base, s_cscrp, a_desc, a_return, x_wave, x_stage, x_rating, a_test);
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_shared             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__shared            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   char        t           [LEN_TERSE] = "";
+   uchar       x_char      =  '-';
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*> CONV_printf ("CODE__shared (%c) %d\n", a_major, a_nline);                      <*/
    /*---(end last script)----------------*/
-   if (s_nscrp >  0 && *r_cshare == '-')   yUNIT_wave_end (a_wave, 0, 1, s_scond, s_sstep);
-   CODE__scrp_end (a_code, a_last, a_verb, *r_cshare);
+   if (s_cscrp >  0 && *b_share == '-')   yUNIT_wave_end (a_wave);
+   CODE__scrp_end (a_code, a_last, a_nline, a_verb, *b_share);
+   /*---(statistics)---------------------*/
+   yUNIT_stats_scrp  (YUNIT_BUILD  , NULL, "", YUNIT_IS_SHAR, a_verb, a_major, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(counters)-----------------------*/
-   *r_cshare = a_share;
-   REUSE_update (a_share,  0,  0);
+   *b_share  = a_major;
+   *b_select = a_minor;
+   /*> REUSE_update (a_major,  0,  0);                                                <*/
+   /*---(prepare)------------------------*/
+   switch (a_verb [0]) {
+   case 'G'  :  strcpy (t, "global");  x_char = a_major;  break;
+   case 'S'  :  strcpy (t, "shared");  x_char = a_major;  break;
+   case 'C'  :  strcpy (t, "config");  x_char  = a_major; x_char -= (uchar) 'è'; x_char += 'a';  break;
+   }
    /*---(open script function)-----------*/
    CONV_printf (a_code, "\n");
-   CONV_printf (a_code, "char\n");
-   CONV_printf (a_code, "yUNIT_shared_%c           (void)\n", a_share);
+   CONV_printf (a_code, "int\n");
+   CONV_printf (a_code, "yUNIT_%-6.6s_%c           (char a_select)         /* %4d, %c, %-32.32s */\n", t, x_char, a_nline, a_major, a_desc);
    CONV_printf (a_code, "{\n");
-   CONV_printf (a_code, "   /*===[[ shared header ]]========================*/\n");
-   CONV_printf (a_code, "   yUNIT_share ('%c', \"%s\");\n", a_share, a_desc);
+   CONV_printf (a_code, "   /*===[[ %-6.6s header ]]========================*/\n", t);
+   CONV_printf (a_code, "   yUNIT_%-4.4s ('%c', %d, a_select, \"%s\");\n", t, a_major, a_nline, a_desc);
+   CONV_printf (a_code, "   int mykoios_ncond  = 0;\n");
+   CONV_printf (a_code, "   int mykoios_nstep  = 0;\n");
    /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_global             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__sect              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   char        rc          =    0;
-   /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(end last script)----------------*/
-   if (s_nscrp >  0 && *r_cshare == '-')   yUNIT_wave_end (a_wave, 0, 1, s_scond, s_sstep);
-   CODE__scrp_end (a_code, a_last, a_verb, *r_cshare);
-   /*---(counters)-----------------------*/
-   *r_cshare = a_share;
-   REUSE_update (a_share,  0,  0);
-   /*---(open script function)-----------*/
-   CONV_printf (a_code, "\n");
-   CONV_printf (a_code, "char\n");
-   CONV_printf (a_code, "yUNIT_shared_%c           (void)\n", a_share);
-   CONV_printf (a_code, "{\n");
-   CONV_printf (a_code, "   /*===[[ global header ]]========================*/\n");
-   CONV_printf (a_code, "   yUNIT_global ('%c', \"%s\");\n", a_share, a_desc);
-   /*---(complete)-----------------------*/
-   return 0;
-}
-
-char
-CODE_sect               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
-{
-   /*---(end last script)----------------*/
-   if (s_nscrp >  0 && *r_cshare == '-')   yUNIT_wave_end (a_wave, 0, 1, s_scond, s_sstep);
-   CODE__scrp_end (a_code, a_last, a_verb, *r_cshare);
+   if (s_cscrp >  0 && *b_share == '-')   yUNIT_wave_end (a_wave);
+   CODE__scrp_end (a_code, a_last, a_nline, a_verb, *b_share);
+   /*---(statistics)---------------------*/
+   yUNIT_stats_scrp  (YUNIT_BUILD  , NULL, "", YUNIT_IS_SECT, a_verb, a_major, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(add section)--------------------*/
    CONV_printf (a_main, "   if (cyUNIT.all          == 1)  yUNIT_sect      (\"%s\");\n", a_desc);
    /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -458,111 +560,167 @@ CODE_sect               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 static void  o___COND____________o () { return; }
 
 char
-CODE__cond_end          (FILE *a_code, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL])
+CODE__cond_end          (FILE *a_code, char a_last [LEN_LABEL], char a_verb [LEN_LABEL], char a_nline, char a_share)
 {
+   char        x_pre       [LEN_TERSE] = "";
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
-   DEBUG_UVER   yLOG_ucomplex("counters"  , "%-10.10s, %-10.10s, %4dn, %4dc", a_last, a_verb, s_ncond, s_scond);
+   debug_uver   ylog_uenter  (__FUNCTION__);
+   debug_uver   ylog_ucomplex("counters"  , "%-10.10s, %-10.10s, %4dn, %4dc", a_last, a_verb, s_ccond, s_ccond);
    /*---(quick-out)----------------------*/
    if (strstr ("GROUP REUSE", a_last) != NULL) {
-      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+      debug_uver   ylog_uexit   (__FUNCTION__);
       return 0;
    }
+   /*> CONV_printf      (a_code, "   /+ cond_end w/s_in_cond = %c +/\n", s_in_cond);   <*/
    /*---(end condition)------------------*/
-   if (s_scond > 0) {
+   /*> if (strcmp (a_last, "----") != 0 && s_ccond > 0) {                             <*/
+   /*> if (s_ccond > 0) {                                                             <*/
+   if (s_in_cond == 'y') {
+      /*> CONV_printf (a_code, "      /+ last = å%sæ, verb = å%sæ+/\n", a_last, a_verb);   <*/
       CONV_printf (a_code, "      /*---(summary)---------------------*/\n");
-      CONV_printf (a_code, "      yUNIT_dnoc    (cyUNIT.exec);\n");
+      CONV_printf (a_code, "      yUNIT_dnoc    (cyUNIT.exec);                /* %4d */\n", a_nline);
       CONV_printf (a_code, "      /*---(done)------------------------*/\n");
+      CODE__select_end (a_code, "COND", "", a_share);
+      s_in_cond = '-';
    }
-   /*---(reset step counter)-------------*/
-   s_cstep  = 0;
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_cond               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__cond              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
+   char        x_pre       [LEN_TERSE] = "";
    char        a           =    0;
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
    /*---(wrap last cond)-----------------*/
-   CODE__cond_end (a_code, a_last, a_verb);
-   /*---(increment)----------------------*/
-   s_cstep = 0;
-   ++(s_ncond);
-   ++(s_ucond);
-   ++(s_scond);
-   if (a_dittoing == 'y')  ++(s_dcond);
-   DEBUG_UVER   yLOG_ucomplex("counters"  , "%-10.10s, %4dn, %4dc", a_last, s_ncond, s_scond);
+   CODE__cond_end (a_code, a_last, a_verb, a_nline, *b_share);
+   /*> CONV_printf      (a_code, "   /+ COND = %4d, s_in_cond = %c +/\n", s_ccond, s_in_cond);   <*/
+   s_in_cond = 'y';
+   /*---(statistics)---------------------*/
+   rc = yUNIT_stats_cond  (YUNIT_BUILD  , NULL, "", YUNIT_IS_COND, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   /*> printf ("rc = %4d, %4du, %4ds, %4dc, %4ds\n", rc, s_cunit, s_cscrp, s_ccond, s_cstep);   <*/
+   debug_uver   ylog_ucomplex("counters"  , "%-10.10s, %4dn, %4dc", a_last, s_ccond, s_ccond);
    /*---(initial comment)----------------*/
-   CONV_printf (a_code, "   /*===[[ COND #%03i ]]============================*/\n", s_scond);
+   /*> CONV_printf      (a_code, "   /+ cond = %4d, s_in_cond = %c +/\n", s_ccond, s_in_cond);   <*/
+   CONV_printf      (a_code, "   /*===[[ COND #%03d ]]============================*/\n", s_ccond);
+   CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
    /*---(debugging)----------------------*/
    if (a_runtype == G_RUN_DEBUG) {
-      CONV_printf (a_code, "   %sUG_PROG    %sOG_unitcond (cyUNIT.origin, cyUNIT.offset + %3i, %4i, \"%s\");\n", "DEB", "yL", s_scond, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
+      CONV_printf (a_code, "      %sUG_UNIT    %sOG_unitcond (cyUNIT.origin, cyUNIT.offset + mykoios_ncond, %4i, \"%s\");\n", "DEB", "yL", CODE__line (a_dittoing, a_nline, a_dline), a_desc);
    }
-   /*---(debugging)----------------------*/
-   if (a_dittoing == 'y') {
-      CONV_printf (a_code, "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"[ %s ]\");\n", a_nline, s_scond, a_dmark , a_desc);
-   } else if (a_mark != '-') {
-      a = a_mark - '0' + ' ';
-      CONV_printf (a_code, "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");\n",     a_nline, s_scond, a        , a_desc);
-   } else {
-      CONV_printf (a_code, "   yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', \"%s\");\n",     a_nline, s_scond, *r_cshare, a_desc);
-   }
+   /*---(code)---------------------------*/
+   /*> CONV_printf (a_code, "      yUNIT_printf  (\"DEBUG  %%4d offset, %%4d ncond, %%4d nstep\\n\", cyUNIT.offset, mykoios_ncond, mykoios_nstep);\n");   <*/
+   /*> printf ("%5d %c %c %c %c\n", a_nline, a_dittoing, a_ditto, a_dtarget, a_major);   <*/
+   /*> CONV_printf (a_code, "      yUNIT_cond    (%4i, cyUNIT.offset + %3i, '%c', '%c', '%c', '%c', \"%s\");\n", a_nline, s_ccond, a_dittoing, a_ditto, a_dtarget, *b_share, a_desc);   <*/
+   CONV_printf (a_code, "      yUNIT_cond    (%4i, cyUNIT.offset + mykoios_ncond, '%c', '%c', '%c', '%c', \"%s\");\n", a_nline, a_dittoing, a_ditto, a_dtarget, *b_share, a_desc);
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_group              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__group             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
+   char        t           [LEN_FULL]  = "";
+   int         l           =    0;
+   char        x_desc      [LEN_FULL]  = "";
+   char       *p           = NULL;
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
    /*---(wrap last cond)-----------------*/
-   CODE__cond_end (a_code, a_last, a_verb);
+   CODE__cond_end (a_code, a_last, a_verb, a_nline, *b_share);
    /*---(create)-------------------------*/
-   CONV_printf (a_code, "   /*---(group)--------------------------*/\n");
-   CONV_printf (a_code, "   yUNIT_group   (\"%s\");\n", a_desc);
+   CONV_printf (a_code, "   /*===[[ GROUP ]]================================*/\n");
+   /*> CODE__select_beg (a_code, a_verb, a_which, *b_share, NULL);                    <*/
+   if (strncmp (a_desc, "===[[ ", 6) == 0) {
+      strlcpy (x_desc, a_desc + 6, LEN_FULL);
+      p = strstr (x_desc, " ]]=");
+      if (p != NULL)  p [0] = '\0';
+   } else {
+      strlcpy (x_desc, a_desc, LEN_FULL);
+   }
+   sprintf (t     , "(\"%s\");", x_desc);
+   l = strlen (t);
+   if (l <= 29)  CONV_printf (a_code, "   yUNIT_group   %-29.29s /* %4d, %-32.32s */\n", t, a_nline, x_desc); 
+   else          CONV_printf (a_code, "   yUNIT_group   %s /* %4d, %-32.32s */\n", t, a_nline, x_desc); 
+   /*> CODE__select_end (a_code, a_verb, a_which, *b_share);                          <*/
    /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_reuse              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__reuse             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
    char        rce         =  -10;
+   char        x_type      =  '-';
+   uchar       x_char      =  '-';
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
-   --rce;  if (strchr (YSTR_CHARS, a_share) == NULL)  return rce;
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
    /*---(wrap last cond)-----------------*/
-   CODE__cond_end (a_code, a_last, a_verb);
+   CODE__cond_end (a_code, a_last, a_verb, a_nline, *b_share);
+   /*---(statistics)---------------------*/
+   yUNIT_stats_cond  (YUNIT_BUILD  , NULL, "", YUNIT_IS_REUS, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   /*> CONV_printf (a_code, "   /+ cond = %4d +/", s_ccond);                          <*/
    /*---(create)-------------------------*/
-   CONV_printf (a_code, "   /*---(shared code)--------------------*/\n");
-   CONV_printf (a_code, "   cyUNIT.offset = %d;\n", s_scond);
-   CONV_printf (a_code, "   yUNIT_shared_%c ();\n", a_share);
-   CONV_printf (a_code, "   cyUNIT.offset = 0;\n");
-   REUSE_add (a_share, &(s_scond), &(s_sstep));
-   s_cstep = s_sstep;
+   CONV_printf (a_code, "   /*===[[ REUSE SHARE ]]==========================*/\n");
+   CODE__select_beg (a_code, a_verb, a_which, *b_share, NULL);
+   CONV_printf (a_code, "      cyUNIT.offset = mykoios_ncond - 1;\n");
+   if      (strchr (YSTR_UPPER, a_major) != NULL)  x_type = 'g';
+   else if (strchr (YSTR_LOWER, a_major) != NULL)  x_type = 's';
+   else if (strchr (YSTR_GREEK, a_major) != NULL)  x_type = 'c';
+   switch (x_type) {
+   case 'g'  :
+      CONV_printf (a_code, "      mykoios_ncurr = yUNIT_global_%c ('%c');                       /* %4d, %-32.32s */\n", a_major, a_minor, a_nline, a_desc);
+      break;
+   case 's'  :
+      CONV_printf (a_code, "      mykoios_ncurr = yUNIT_shared_%c ('%c');                       /* %4d, %-32.32s */\n", a_major, a_minor, a_nline, a_desc);
+      break;
+   case 'c'  :
+      x_char  = a_major;
+      x_char -= 'è';
+      x_char += 'a';
+      CONV_printf (a_code, "      mykoios_ncurr = yUNIT_config_%c ('%c');     /* %c */           /* %4d, %-32.32s */\n", x_char, a_minor, a_major, a_nline, a_desc);
+      break;
+   }
+   CONV_printf (a_code, "      mykoios_ncond += mykoios_ncurr - 1;\n");
+   CONV_printf (a_code, "      mykoios_nshar += mykoios_ncurr - 1;\n");
+   CONV_printf (a_code, "      cyUNIT.offset  = 0;\n");
+   CODE__select_end (a_code, a_verb, a_which, *b_share);
+   yUNIT_reuse_called (a_major);
+   /*> REUSE_addback (a_major, &(s_ccond), &(s_cstep));                               <*/
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -578,7 +736,7 @@ static char   s_syst       [LEN_RECD]  = "";
 static char   s_load       [LEN_RECD]  = "";
 
 char
-CODE__display           (cchar a_code [LEN_RECD], char r_display [LEN_RECD], char r_system [LEN_RECD], char r_load [LEN_RECD])
+CODE__display           (char a_code [LEN_RECD], char r_display [LEN_RECD], char r_system [LEN_RECD], char r_load [LEN_RECD])
 {
    /*---(locals)-----------+-----------+-*/
    char        rce         =  -10;
@@ -622,7 +780,6 @@ CODE__display           (cchar a_code [LEN_RECD], char r_display [LEN_RECD], cha
          strlcat (x_load, t, LEN_RECD);
          break;
       case  G_KEY_RETURN :
-         /*> case  G_CHAR_RETURN :                                                       <*/
          x_disp [i]  = G_CHAR_RETURN;
          sprintf (t, "\\n");
          strlcat (x_syst, t, LEN_RECD);
@@ -652,28 +809,28 @@ CODE__display           (cchar a_code [LEN_RECD], char r_display [LEN_RECD], cha
 }
 
 char
-CODE__prefix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_test [LEN_LABEL], cchar a_display [LEN_RECD], cchar a_system [LEN_RECD], char a_dittoing, int a_nline, int a_dline)
+CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_test [LEN_LABEL], char a_display [LEN_RECD], char a_system [LEN_RECD], char a_dittoing, int a_nline, int a_dline, char a_pre [LEN_TERSE])
 {
    /*---(locals)-----------+-----------+-*/
    char        x_func      [LEN_FULL]   = "";
    /*---(run function)-------------------*/
    if (strcmp (a_verb, "echo") != 0) {
-      CONV_printf (a_code, "      yUNIT_reset_rc ();\n");
+      CONV_printf (a_code, "%s      yUNIT_reset_rc ();\n", a_pre);
       switch (a_test [0]) {
       case 'v'  :
-         CONV_printf (a_code, "      if (cyUNIT.exec)  %s (%s);\n", a_method , a_system);
+         CONV_printf (a_code, "%s      if (cyUNIT.exec)  %s (%s);\n", a_pre, a_method , a_system);
          break;
       case 's'  : case 'u'  : case 'w'  :
-         CONV_printf (a_code, "      if (cyUNIT.exec)  cyUNIT.s_rc = %s (%s);\n", a_method , a_system);
+         CONV_printf (a_code, "%s      if (cyUNIT.exec)  cyUNIT.s_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
       case 'i'  : case 'c'  :
-         CONV_printf (a_code, "      if (cyUNIT.exec)  cyUNIT.i_rc = %s (%s);\n", a_method , a_system);
+         CONV_printf (a_code, "%s      if (cyUNIT.exec)  cyUNIT.i_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
       case 'r'  :
-         CONV_printf (a_code, "      if (cyUNIT.exec)  cyUNIT.r_rc = %s (%s);\n", a_method , a_system);
+         CONV_printf (a_code, "%s      if (cyUNIT.exec)  cyUNIT.r_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
       case 'p'  :
-         CONV_printf (a_code, "      if (cyUNIT.exec)  cyUNIT.p_rc = %s (%s);\n", a_method , a_system);
+         CONV_printf (a_code, "%s      if (cyUNIT.exec)  cyUNIT.p_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
       }
    }
@@ -690,7 +847,7 @@ CODE__prefix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_desc [L
    default   : strlcpy (x_func, "yUNIT_unknown"  , LEN_FULL);    break;
    }
    /*---(write prefix)-------------------*/
-   CONV_printf (a_code, "      ");
+   CONV_printf (a_code, "%s      "             , a_pre);
    CONV_printf (a_code, "%-13s ("              , x_func);
    CONV_printf (a_code, "%4i, %3i, "           , CODE__line (a_dittoing, a_nline, a_dline), s_cstep);
    CONV_printf (a_code, "\"%s\", "             , a_desc);
@@ -698,7 +855,7 @@ CODE__prefix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_desc [L
    /*---(write test)---------------------*/
    switch (a_test [0]) {
    case 'v' :    /* pure void        */
-      CONV_printf (a_code, "\"%s\", cyUNIT.exec);\n", a_test);
+      CONV_printf (a_code, "\"%s\", cyUNIT.exec, '%c');\n", a_test, a_dittoing);
       break;
    default  :    /* all others       */
       CONV_printf (a_code, "\"%s\", "          , a_test);
@@ -710,7 +867,7 @@ CODE__prefix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_desc [L
 }
 
 char
-CODE__expect            (FILE *a_code, cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD])
+CODE__expect            (FILE *a_code, char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_dittoing)
 {
    /*---(locals)-----------+-----------+-*/
    char       *p           = NULL;
@@ -733,7 +890,7 @@ CODE__expect            (FILE *a_code, cchar a_test [LEN_LABEL], cchar a_expect 
          CONV_printf (a_code, "%s, "     , a_expect);
          break;
       default  :
-         CONV_printf (a_code, "\"%s\", cyUNIT.exec);\n"         , a_expect);
+         CONV_printf (a_code, "\"%s\", cyUNIT.exec, '%c');\n"         , a_expect, a_dittoing);
          break;
       }
       return 1;
@@ -752,28 +909,28 @@ CODE__expect            (FILE *a_code, cchar a_test [LEN_LABEL], cchar a_expect 
 }
 
 char
-CODE__suffix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_test [LEN_LABEL], cchar a_system [LEN_RECD], cchar a_return [LEN_FULL])
+CODE__suffix            (FILE *a_code, char a_verb [LEN_LABEL], char a_test [LEN_LABEL], char a_system [LEN_RECD], char a_return [LEN_FULL], char a_pre [LEN_TERSE], char a_dittoing, char a_share)
 {
    /*---(defense)------------------------*/
    if (a_test [0] == 'v')    return 0;
    /*---(handle echos)-------------------*/
    if (strcmp (a_verb, "echo") == 0) {
-      CONV_printf (a_code, "%s, cyUNIT.exec);\n"      , a_system);
+      CONV_printf (a_code, "%s, cyUNIT.exec, '%c', '%c');\n"      , a_system, a_dittoing, a_share);
    }
    /*---(check for simple end)-----------*/
    else {
       switch (a_test [0]) {
       case 's'  : case 'u'  : case 'w'  :
-         CONV_printf (a_code, "cyUNIT.s_rc, cyUNIT.exec);\n");
+         CONV_printf (a_code, "cyUNIT.s_rc, cyUNIT.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
       case 'i'  : case 'c'  :
-         CONV_printf (a_code, "cyUNIT.i_rc, cyUNIT.exec);\n");
+         CONV_printf (a_code, "cyUNIT.i_rc, cyUNIT.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
       case 'r'  :
-         CONV_printf (a_code, "cyUNIT.r_rc, cyUNIT.exec);\n");
+         CONV_printf (a_code, "cyUNIT.r_rc, cyUNIT.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
       case 'p'  :
-         CONV_printf (a_code, "cyUNIT.p_rc, cyUNIT.exec);\n");
+         CONV_printf (a_code, "cyUNIT.p_rc, cyUNIT.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
       }
    }
@@ -781,16 +938,16 @@ CODE__suffix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_test [L
    if (strcmp (a_return, "") != 0) {
       switch (a_test [0]) {
       case 's'  : case 'u'  : case 'w'  :
-         CONV_printf (a_code, "      if (cyUNIT.exec) { if (cyUNIT.s_rc != NULL)  strcpy (%s, cyUNIT.s_rc); else strcpy (x_str, \"\"); }\n", a_return);
+         CONV_printf (a_code, "%s      if (cyUNIT.exec) { if (cyUNIT.s_rc != NULL)  strcpy (%s, cyUNIT.s_rc); }\n", a_pre, a_return);
          break;
       case 'i'  : case 'c'  :
-         CONV_printf (a_code, "      if (cyUNIT.exec)  %s = cyUNIT.i_rc;\n", a_return);
+         CONV_printf (a_code, "%s      if (cyUNIT.exec)  %s = cyUNIT.i_rc;\n", a_pre, a_return);
          break;
       case 'r'  :
-         CONV_printf (a_code, "      if (cyUNIT.exec)  %s = cyUNIT.r_rc;\n", a_return);
+         CONV_printf (a_code, "%s      if (cyUNIT.exec)  %s = cyUNIT.r_rc;\n", a_pre, a_return);
          break;
       case 'p'  :
-         CONV_printf (a_code, "      if (cyUNIT.exec)  %s = cyUNIT.p_rc;\n", a_return);
+         CONV_printf (a_code, "%s      if (cyUNIT.exec)  %s = cyUNIT.p_rc;\n", a_pre, a_return);
          break;
       }
    }
@@ -799,7 +956,7 @@ CODE__suffix            (FILE *a_code, cchar a_verb [LEN_LABEL], cchar a_test [L
 }
 
 char
-CODE__specialty         (FILE *a_code, cchar a_load [LEN_RECD])
+CODE__specialty         (FILE *a_code, char a_load [LEN_RECD], char a_dittoing, char a_share)
 {
    /*---(locals)-----------+-----+-----+-*/
    char       *p           = NULL;
@@ -818,7 +975,7 @@ CODE__specialty         (FILE *a_code, cchar a_load [LEN_RECD])
       else           CONV_printf (a_code, "%s" , x_var);
    }
    /*---(finish)-------------------------*/
-   CONV_printf (a_code, ", cyUNIT.exec);\n");
+   CONV_printf (a_code, ", cyUNIT.exec, '%c', '%c');\n", a_dittoing, a_share);
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -831,14 +988,10 @@ CODE__specialty         (FILE *a_code, cchar a_load [LEN_RECD])
 static void  o___STEP____________o () { return; }
 
 char
-CODE__step_add          (FILE *a_code, cchar a_runtype, cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], char a_dittoing, int a_nline, int a_dline)
+CODE__step_add          (FILE *a_code, char a_runtype, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_dittoing, int a_nline, int a_dline)
 {
-   /*---(increment)----------------------*/
-   ++(s_nstep);
-   ++(s_ustep);
-   ++(s_sstep);
-   ++(s_cstep);
-   if (a_dittoing == 'y')  ++(s_dstep);
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(comment for code)---------------*/
    switch (a_verb [0]) {
    case  'e'  :
@@ -847,7 +1000,7 @@ CODE__step_add          (FILE *a_code, cchar a_runtype, cchar a_verb [LEN_LABEL]
       break;
    case  'l'  :
       if      (a_verb [2] == 'a')   CONV_printf (a_code, "      /*---(load input)------------------*/\n");
-      else if (a_verb [2] == 'c')   CONV_printf (a_code, "      /*---(local variable)--------------*/\n");
+      else if (a_verb [2] == 'c')   CONV_printf (a_code, "   /*---(local variable)--------------*/\n");
       break;
    case  'm'  :
       CONV_printf (a_code, "      /*---(unit test mode)--------------*/\n");
@@ -871,184 +1024,299 @@ CODE__step_add          (FILE *a_code, cchar a_runtype, cchar a_verb [LEN_LABEL]
    }
    /*---(debugging)----------------------*/
    if (a_runtype == G_RUN_DEBUG && strcmp (a_verb, "global") != 0) {
-      CONV_printf (a_code, "      %sUG_PROG    %sOG_unitstep (cyUNIT.origin, cyUNIT.offset + %3i, %3i, %4i, \"%s\");\n", "DEB", "yL", s_scond, s_cstep, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
+      CONV_printf (a_code, "      %sUG_UNIT    %sOG_unitstep (cyUNIT.origin, cyUNIT.offset + mykoios_ncond, %3i, %4i, \"%s\");\n", "DEB", "yL", s_cstep, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
    }
    /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_exec               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__exec              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
+   char        x_pre       [LEN_TERSE] = "";
    char        x_display   [LEN_RECD]  = "";
    char        x_system    [LEN_RECD]  = "";
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*---(statistics)---------------------*/
+   yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_EXEC, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(prepare)------------------------*/
-   CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
-   CODE__display   (a_args, x_display, x_system, NULL);
+   CODE__step_add   (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
+   CODE__display    (a_args, x_display, x_system, NULL);
    /*---(create)-------------------------*/
-   CODE__prefix    (a_code, a_verb, a_desc, a_method, a_test, x_display, x_system, a_dittoing, a_nline, a_dline);
-   CODE__expect    (a_code, a_test, a_expect);
-   CODE__suffix    (a_code, a_verb, a_test, x_system, a_return);
+   CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
+   CODE__prefix     (a_code, a_verb, a_desc, a_method, a_test, x_display, x_system, a_dittoing, a_nline, a_dline, x_pre);
+   CODE__expect     (a_code, a_test, a_expect, a_dittoing);
+   CODE__suffix     (a_code, a_verb, a_test, x_system, a_return, x_pre, a_dittoing, *b_share);
+   CODE__select_end (a_code, a_verb, a_which, *b_share);
    /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_load               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__load              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
+   char        x_pre       [LEN_TERSE] = "";
    char        x_display   [LEN_RECD]  = "";
    char        x_load      [LEN_RECD]  = "";
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*---(statistics)---------------------*/
+   yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VOID, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(prepare)------------------------*/
-   CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
-   CODE__display   (a_expect, x_display, NULL, x_load);
+   CODE__step_add   (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
+   CODE__display    (a_expect, x_display, NULL, x_load);
    /*---(create)-------------------------*/
-   CONV_printf     (a_code, "      yUNIT_load    (%4i, %3i, \"%s\", \"%s\", ", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, a_method);
-   CODE__specialty (a_code, x_load);
+   CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
+   CONV_printf      (a_code, "%s      yUNIT_load    (%4i, %3i, \"%s\", \"%s\", ", x_pre, CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, a_method);
+   CODE__specialty  (a_code, x_load, a_dittoing, *b_share);
+   CODE__select_end (a_code, a_verb, a_which, *b_share);
    /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_file               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__file              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rc          =    0;
+   char        x_pre       [LEN_TERSE] = "";
+   char        x_display   [LEN_RECD]  = "";
+   char        x_system    [LEN_RECD]  = "";
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
+   /*---(defense)------------------------*/
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*---(statistics)---------------------*/
+   yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_EXEC, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   /*---(prepare)------------------------*/
+   CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
+   CODE__display   (a_expect, x_display, x_system, NULL);
+   /*---(create)-------------------------*/
+   CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
+   CONV_printf     (a_code, "%s      yUNIT_file    (%4i, %3i, \"%s\", ", x_pre, CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc);
+   CODE__specialty (a_code, x_system, a_dittoing, *b_share);
+   CODE__select_end (a_code, a_verb, a_which, *b_share);
+   /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+CODE__append            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rc          =    0;
+   char        x_pre       [LEN_TERSE] = "";
+   char        x_display   [LEN_RECD]  = "";
+   char        x_system    [LEN_RECD]  = "";
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
+   /*---(defense)------------------------*/
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*---(statistics)---------------------*/
+   yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_EXEC, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   /*---(prepare)------------------------*/
+   CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
+   CODE__display   (a_expect, x_display, x_system, NULL);
+   /*---(create)-------------------------*/
+   CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
+   CONV_printf     (a_code, "%s      yUNIT_append  (%4i, %3i, \"%s\", ", x_pre, CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc);
+   if (strcmp (a_verb, "append") == 0)  CODE__specialty (a_code, x_system , a_dittoing, *b_share);
+   else                                 CODE__specialty (a_code, x_display, a_dittoing, *b_share);
+   CODE__select_end (a_code, a_verb, a_which, *b_share);
+   /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+CODE__mode              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rc          =    0;
+   char        x_pre       [LEN_TERSE] = "";
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
+   /*---(defense)------------------------*/
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*---(statistics)---------------------*/
+   yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VOID, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   /*---(prepare)------------------------*/
+   CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
+   /*---(create)-------------------------*/
+   CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
+   CONV_printf     (a_code, "%s      yUNIT_mode    (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec, '%c', '%c');\n", x_pre, CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, a_method, a_dittoing, *b_share);
+   CODE__select_end (a_code, a_verb, a_which, *b_share);
+   /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+CODE__code              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rc          =    0;
+   char        x_pre       [LEN_TERSE] = "";
+   char        x_display   [LEN_RECD]  = "";
+   char        x_system    [LEN_RECD]  = "";
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
+   /*---(defense)------------------------*/
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*---(statistics)---------------------*/
+   yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VOID, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   /*---(prepare)------------------------*/
+   CODE__step_add   (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
+   CODE__display    (a_expect, x_display, x_system, NULL);
+   /*---(create)-------------------------*/
+   CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
+   CONV_printf      (a_code, "%s      yUNIT_code    (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec, '%c', '%c');\n", x_pre, CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, x_display, a_dittoing, *b_share);
+   CONV_printf      (a_code, "%s      if (cyUNIT.exec) { %s }\n", x_pre, x_system);
+   CODE__select_end (a_code, a_verb, a_which, *b_share);
+   /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+CODE__gvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
    char        x_display   [LEN_RECD]  = "";
    char        x_system    [LEN_RECD]  = "";
+   int         l           =    0;
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*---(statistics)---------------------*/
+   /*> yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VARS, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);   <*/
    /*---(prepare)------------------------*/
    CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
    CODE__display   (a_expect, x_display, x_system, NULL);
    /*---(create)-------------------------*/
-   CONV_printf     (a_code, "      yUNIT_file    (%4i, %3i, \"%s\", ", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc);
-   CODE__specialty (a_code, x_system);
+   l = strlen (x_system);
+   if (l < 48)  CONV_printf     (a_code, "%-48.48s  /* %4i, %-32.32s */\n", x_system, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
+   else         CONV_printf     (a_code, "%s  /* %4i, %-32.32s */\n"      , x_system, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
    /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_append             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__lvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
+   char        x_pre       [LEN_TERSE] = "";
    char        x_display   [LEN_RECD]  = "";
    char        x_system    [LEN_RECD]  = "";
+   int         l           =    0;
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*---(statistics)---------------------*/
+   yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VARS, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(prepare)------------------------*/
    CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
    CODE__display   (a_expect, x_display, x_system, NULL);
    /*---(create)-------------------------*/
-   CONV_printf     (a_code, "      yUNIT_append  (%4i, %3i, \"%s\", ", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc);
-   CODE__specialty (a_code, x_system);
+   CONV_printf     (a_code, "   ++mykoios_nstep;\n");
+   CONV_printf     (a_code, "   yUNIT_local   (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec, '%c', '%c');\n", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, x_display, a_dittoing, *b_share);
+   l = strlen (x_system);
+   if (l < 48)  CONV_printf     (a_code, "   %-48.48s  /* %4i, %-32.32s */\n", x_system, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
+   else         CONV_printf     (a_code, "   %s  /* %4i, %-32.32s */\n"      , x_system, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
    /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
 char
-CODE_mode               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE__system            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
-   /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
-   /*---(prepare)------------------------*/
-   CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
-   /*---(create)-------------------------*/
-   CONV_printf     (a_code, "      yUNIT_mode    (%4i, %3i, \"%s\", cyUNIT.exec);\n", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc);
-   /*---(complete)-----------------------*/
-   return 0;
-}
-
-char
-CODE_code               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rc          =    0;
+   char        x_pre       [LEN_TERSE] = "";
    char        x_display   [LEN_RECD]  = "";
    char        x_system    [LEN_RECD]  = "";
+   char        x_type      =  '-';
+   /*---(header)-------------------------*/
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
+   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*---(statistics)---------------------*/
+   if (strcmp (a_verb, "system") == 0)  x_type = YUNIT_IS_EXEC;
+   else                                 x_type = YUNIT_IS_VOID;
+   yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", x_type, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(prepare)------------------------*/
    CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
    CODE__display   (a_expect, x_display, x_system, NULL);
    /*---(create)-------------------------*/
-   CONV_printf     (a_code, "      yUNIT_code    (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, x_display);
-   CONV_printf     (a_code, "      if (cyUNIT.exec) { %s }\n",  x_system);
+   CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
+   CONV_printf     (a_code, "%s      yUNIT_system  (%4i, %3i, \"%s\", \"%s\", \"%s\", cyUNIT.exec, '%c', '%c');\n", x_pre, CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, x_display, x_system, a_dittoing, *b_share);
+   CODE__select_end (a_code, a_verb, a_which, *b_share);
    /*---(complete)-----------------------*/
-   return 0;
-}
-
-char
-CODE_gvar               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rc          =    0;
-   char        x_display   [LEN_RECD]  = "";
-   char        x_system    [LEN_RECD]  = "";
-   /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
-   /*---(prepare)------------------------*/
-   CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
-   CODE__display   (a_expect, x_display, x_system, NULL);
-   /*---(create)-------------------------*/
-   CONV_printf     (a_code, "%s\n",  x_system);
-   /*---(complete)-----------------------*/
-   return 0;
-}
-
-char
-CODE_lvar               (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rc          =    0;
-   char        x_display   [LEN_RECD]  = "";
-   char        x_system    [LEN_RECD]  = "";
-   /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
-   /*---(prepare)------------------------*/
-   CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
-   CODE__display   (a_expect, x_display, x_system, NULL);
-   /*---(create)-------------------------*/
-   CONV_printf     (a_code, "      yUNIT_local   (%4i, %3i, \"%s\", \"%s\", cyUNIT.exec);\n", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, x_display);
-   CONV_printf     (a_code, "      %s\n",  x_system);
-   /*---(complete)-----------------------*/
-   return 0;
-}
-
-char
-CODE_system             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rc          =    0;
-   char        x_display   [LEN_RECD]  = "";
-   char        x_system    [LEN_RECD]  = "";
-   /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, r_cshare);
-   if (rc < 0)  return rc;
-   /*---(prepare)------------------------*/
-   CODE__step_add  (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
-   CODE__display   (a_expect, x_display, x_system, NULL);
-   /*---(create)-------------------------*/
-   CONV_printf     (a_code, "      yUNIT_system  (%4i, %3i, \"%s\", \"%s\", \"%s\", cyUNIT.exec);\n", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, x_display, x_system);
-   /*---(complete)-----------------------*/
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -1060,32 +1328,32 @@ CODE_system             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 static void  o___DRIVER__________o () { return; }
 
 char
-CODE_driver             (void f_call (), char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare)
+CODE_driver             (void f_call (), char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
-   char      (*x_func) (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, cchar a_runtype, cchar a_last [LEN_LABEL], cchar a_verb [LEN_LABEL], cchar a_desc [LEN_LONG], cchar a_method [LEN_HUND], cchar a_args [LEN_FULL], cchar a_test [LEN_LABEL], cchar a_expect [LEN_RECD], cchar a_return [LEN_FULL], cchar a_stage [LEN_SHORT], char a_dittoing, char a_mark, char a_dmark, int a_nline, int a_dline, char a_share, char *r_cshare);
+   char      (*x_func) (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select);
    /*---(header)-------------------------*/
-   DEBUG_UVER   yLOG_uenter  (__FUNCTION__);
+   debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   DEBUG_UVER   yLOG_upoint  ("f_call"    , f_call);
+   debug_uver   ylog_upoint  ("f_call"    , f_call);
    if (f_call == NULL) {
-      DEBUG_UVER   yLOG_unote   ("nothing to do");
-      DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+      debug_uver   ylog_unote   ("nothing to do");
+      debug_uver   ylog_uexit   (__FUNCTION__);
       return 0;
    }
    /*---(prepare)------------------------*/
    x_func = f_call;
    /*---(call function)------------------*/
-   rc = x_func (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_dittoing, a_mark, a_dmark, a_nline, a_dline, a_share, r_cshare);
-   DEBUG_UVER   yLOG_uvalue  ("call"      , rc);
+   rc = x_func (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_nline, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_dittoing, a_dtarget, a_dline, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("call"      , rc);
    --rce;  if (rc < 0) {
-      DEBUG_UVER   yLOG_uexitr  (__FUNCTION__, rce);
+      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(complete)-----------------------*/
-   DEBUG_UVER   yLOG_uexit   (__FUNCTION__);
+   debug_uver   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 
@@ -1100,8 +1368,8 @@ char
 CODE_force              (int a_scrps, int  a_conds)
 {
    CODE_init ();
-   s_nscrp = a_scrps;
-   s_ncond = a_conds;
+   s_cscrp = a_scrps;
+   s_ccond = a_conds;
    return 0;
 }
 

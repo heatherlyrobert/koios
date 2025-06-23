@@ -1,21 +1,23 @@
 /*===============================[[ beg-code ]]===============================*/
 #include    "koios.h"
 
-#include    <yURG_solo.h>
-#include    <yURG_uver.h>
-#include    <yUNIT_solo.h>
-#include    <ySTR_solo.h>
-#include    <yCOLOR_solo.h>
 
 
 char  *s_wave     = "/tmp/master.wave";
 
 char
-unit_ditto_index  (void)
+koios_ditto_index  (char a_scrp, char a_list, char a_unit)
 {
+   char        x_cwd       [LEN_FULL]  = "";
    /*---(header)-------------------------*/
    yUNIT_minscrpy ("koios", "koios_ditto", "(DITTO) retrieving ditto indexes");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
    PROG__unit_quiet  ();
+
 
    yUNIT_mincond ("verify on valid indexes");
    yUNIT_minval  ("... run 0"                          , DITTO__index ('0'), 0);
@@ -45,18 +47,26 @@ unit_ditto_index  (void)
 
    /*---(complete)-----------------------*/
    PROG__unit_end    ();
+   chdir   (x_cwd);
    yUNIT_minprcs ();
    return 0;
 }
 
 char
-unit_ditto_getset (void)
+koios_ditto_getset (char a_scrp, char a_list, char a_unit)
 {
+   char        x_cwd       [LEN_FULL]  = "";
 
    char        x_desc      [LEN_LONG]  = "";
    /*---(header)-------------------------*/
    yUNIT_minscrpy ("koios", "koios_ditto", "(DITTO) setting and setting ditto marks");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
    PROG__unit_quiet  ();
+
 
    yUNIT_mincond ("verify clean start");
    yUNIT_minval  ("... init"                           , DITTO_init ()       , 0);
@@ -206,15 +216,17 @@ unit_ditto_getset (void)
    yUNIT_mindnoc ();
 
    PROG__unit_end    ();
+   chdir   (x_cwd);
    yUNIT_minprcs ();
    return 0;
 }
 
 char
-unit_ditto_toggle (void)
+koios_ditto_toggle (char a_scrp, char a_list, char a_unit)
 {
-   char        x_nscrp    [LEN_TITLE] = "apate.unit";
-   char        x_name     [LEN_PATH]  = "apate.unit";
+   char        x_cwd       [LEN_FULL]  = "";
+   char        x_nscrp    [LEN_TITLE] = "/tmp/apate.unit";
+   char        x_name     [LEN_PATH]  = "/tmp/apate.unit";
    int         x_line     =    1;
    FILE       *x_main     = NULL;
    FILE       *x_scrp     = NULL;
@@ -225,10 +237,16 @@ unit_ditto_toggle (void)
    int         x_dline    =    0;
    /*---(header)-------------------------*/
    yUNIT_minscrpy ("koios", "koios_ditto", "(DITTO) in-line marking of begin and end points");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
    PROG__unit_quiet  ();
 
+
    yUNIT_mincond  ("prepare clean start");
-   system ("touch apate.unit           2> /dev/null");
+   system ("touch /tmp/apate.unit           2> /dev/null");
    x_main = fopen (x_name, "rt");
    x_scrp = x_main;
    yUNIT_mindnoc  ();
@@ -236,14 +254,14 @@ unit_ditto_toggle (void)
    yUNIT_mincond  ("verify beginning a ditto");
    x_line =  100;  x_dittoing = '-';  x_dmark = '-';  x_mark = '-';  x_ditto =   -1;  x_dline =   -1;
    yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
+   yUNIT_minptr   ("... file"                           , x_scrp                   , x_main);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '-');
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
    yUNIT_minval   ("call ditto begin"                   , DITTO_beg   (&x_scrp, x_nscrp, x_line, G_RUN_CREATE , '0',   20, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline)    , 1);
-   yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);
+   yUNIT_minptr   ("... file"                           , x_scrp                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
@@ -254,25 +272,25 @@ unit_ditto_toggle (void)
 
    yUNIT_mincond  ("attempt to begin a ditto (when already begun");
    yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);
+   yUNIT_minptr   ("... file"                           , x_scrp                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   20);
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("call ditto begin"                   , DITTO_beg   (&x_scrp, x_nscrp, x_line, G_RUN_CREATE , '0',   20, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline)    , -999);
-   yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);
+   yUNIT_minptr   ("... file"                           , x_scrp                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   20);
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
-   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "apate.unit:100:0: error: DITTO '0' can not start as dittoing already active");   <*/
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "/tmp/apate.unit:100:0: error: DITTO '0' can not start as dittoing already active");   <*/
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify ending a ditto");
    yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   ,    1);
+   yUNIT_minptr   ("... file"                           , x_scrp                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '0');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
@@ -280,7 +298,7 @@ unit_ditto_toggle (void)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("call ditto end"                     , DITTO_end   (&x_scrp, &x_dittoing, &x_dmark, &x_ditto, &x_dline)    , 1);
    yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
+   yUNIT_minptr   ("... file"                           , x_scrp                   , x_main);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
@@ -291,7 +309,7 @@ unit_ditto_toggle (void)
 
    yUNIT_mincond  ("attempt to end a ditto (when not begun");
    yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
+   yUNIT_minptr   ("... file"                           , x_scrp                   , x_main);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
@@ -299,7 +317,7 @@ unit_ditto_toggle (void)
    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
    yUNIT_minval   ("call ditto end"                     , DITTO_end   (&x_scrp, &x_dittoing, &x_dmark, &x_ditto, &x_dline)    , 0);
    yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
+   yUNIT_minptr   ("... file"                           , x_scrp                   , x_main);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
@@ -309,7 +327,7 @@ unit_ditto_toggle (void)
 
    yUNIT_mincond  ("attempt to start ditto on bad identifier");
    yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
+   yUNIT_minptr   ("... file"                           , x_scrp                   , x_main);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
@@ -317,35 +335,42 @@ unit_ditto_toggle (void)
    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
    yUNIT_minval   ("call ditto begin"                   , DITTO_beg   (&x_scrp, x_nscrp, x_line, G_RUN_CREATE , '5',   -1, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline)    , -999);
    yUNIT_minval   ("... line"                           , x_line                   ,  100);
-   yUNIT_minpoint ("... file"                           , x_scrp                   , x_main);
+   yUNIT_minptr   ("... file"                           , x_scrp                   , x_main);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '0');
    yUNIT_minval   ("... ditto"                          , x_ditto                  ,   -1);
    yUNIT_minval   ("... dline"                          , x_dline                  ,   -1);
-   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "apate.unit:100:0: error: DITTO '5' not set by previous COND");   <*/
+   /*> yUNIT_minstr   ("... check error message"            , yURG_err_last (), "/tmp/apate.unit:100:0: error: DITTO '5' not set by previous COND");   <*/
 
    /*> yURG_err_clear ();                                                             <*/
    yUNIT_mincond ("wrap up");
    fclose (x_main);
    yUNIT_mindnoc  ();
 
-   PROG__unit_quiet  ();
-   system ("rm    -f apate.unit        > /dev/null   2>&1");
+   PROG__unit_end    ();
+   system ("rm    -f /tmp/apate.unit        > /dev/null   2>&1");
+   chdir   (x_cwd);
    yUNIT_minprcs  ();
    return 0;
 }
 
 char
-unit_ditto_read   (void)
+koios_ditto_read   (char a_scrp, char a_list, char a_unit)
 {
+   char        x_cwd       [LEN_FULL]  = "";
    int         x_ditto  =    0;
    int         x_line   =    0;
    int         x_dline  =    0;
    /*---(header)-------------------------*/
    yUNIT_minscrpy ("koios", "koios_ditto", "(DITTO) read numbering of ditto lines");
-   /*> yURG_err_none ();                                                              <*/
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
    PROG__unit_quiet  ();
+
 
    yUNIT_mincond ("verify normal, non-ditto action");
    x_ditto =    0;  x_line =    1; x_dline =    0;
@@ -394,14 +419,47 @@ unit_ditto_read   (void)
    yUNIT_mindnoc ();
 
    PROG__unit_end    ();
+   chdir   (x_cwd);
    yUNIT_minprcs ();
    return 0;
 }
 
 char
-unit_ditto_parse  (void)
+koios_ditto_desc   (char a_scrp, char a_list, char a_unit)
 {
-   char         x_nscrp    [LEN_LABEL] = "apate.unit";
+   char         x_desc     [LEN_LONG] = "";
+
+   yUNIT_minscrpy ("koios", "koios_ditto", "(DITTO) ditto conversion naming");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   PROG__unit_quiet  ();
+
+   yUNIT_mincond ("verify updating name successfully");
+   yUNIT_minval  ("call naming"                        , DITTO_parse__desc     ("original cond", x_desc)    , 0);
+   yUNIT_minstr  ("... description"                    , x_desc                , "[ original cond ]- - - - - - - - - - - - - - - - - - - - - - - - - - ");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("verify with empty name");
+   yUNIT_minval  ("call naming"                        , DITTO_parse__desc     (""             , x_desc)    , 0);
+   yUNIT_minstr  ("... description"                    , x_desc                , "[  ] - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+   yUNIT_mindnoc ();
+
+   yUNIT_mincond ("verify with default name");
+   yUNIT_minval  ("call naming"                        , DITTO_parse__desc     ("-"            , x_desc)    , 0);
+   yUNIT_minstr  ("... description"                    , x_desc                , "[ - ]- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
+   yUNIT_mindnoc ();
+
+   PROG__unit_end    ();
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios_ditto_parse  (char a_scrp, char a_list, char a_unit)
+{
+   char        x_cwd       [LEN_FULL]  = "";
+   char         x_nscrp    [LEN_LABEL] = "/tmp/apate.unit";
    FILE        *x_scrp     = NULL;
    int          x_nline    =    0;
    char         x_dittoing =  '-';
@@ -415,33 +473,38 @@ unit_ditto_parse  (void)
    char        *p          = NULL;
    char         x_desc     [LEN_LONG] = "";
    /*---(header)-------------------------*/
-   yUNIT_minscrpy ("koios", "koios_ditto", "(DITTO) ditto  parsing");
-   /*> yURG_err_none  ();                                                             <*/
+   yUNIT_minscrpy ("koios", "koios_ditto", "(DITTO) ditto parsing");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
    PROG__unit_quiet  ();
-   system ("rm    -f apate.unit        > /dev/null   2>&1");
+   system ("rm    -f /tmp/apate.unit        > /dev/null   2>&1");
+
 
    yUNIT_mincond  ("create a test script");
-   system ("echo \"\"                                                                                                                        > apate.unit");
-   system ("echo \"COND  (3)  ditto stuff     \"                                                                                        >> apate.unit");
-   system ("echo \"  exec     read a line      SCRP_read       i_lesser    0      \"                                            >> apate.unit");
-   system ("echo \"\"                                                                                                                       >> apate.unit");
-   system ("echo \"DITTO (3)  junk text       \"                                                                                        >> apate.unit");
-   system ("echo \"\"                                                                                                                       >> apate.unit");
-   system ("echo \"  get      next step        SCRP_read       i_lesser    0      \"                                            >> apate.unit");
+   system ("echo \"\"                                                                                                                        > /tmp/apate.unit");
+   system ("echo \"COND  (3)  ditto stuff     \"                                                                                        >> /tmp/apate.unit");
+   system ("echo \"  exec     read a line      SCRP_read       i_lesser    0      \"                                            >> /tmp/apate.unit");
+   system ("echo \"\"                                                                                                                       >> /tmp/apate.unit");
+   system ("echo \"DITTO (3)  junk text       \"                                                                                        >> /tmp/apate.unit");
+   system ("echo \"\"                                                                                                                       >> /tmp/apate.unit");
+   system ("echo \"  get      next step        SCRP_read       i_lesser    0      \"                                            >> /tmp/apate.unit");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("prepare for conversion run");
-   yUNIT_minval   ("open the script file"               , READ_open   (x_nscrp, 'r', &x_scrp, &x_nline), 0);
+   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, "", x_nscrp, 'r', &x_scrp, &x_nline), 0);
    yUNIT_minval   ("... init"                           , DITTO_init ()       , 0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "----------");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify a new ditto mark");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    , NULL    , NULL   ),    0);
    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    strcpy (x_back, x_recd);
    p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "COND"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
+   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "COND"  ,  0, x_recd, p, x_desc, &x_mark, &x_dittoing, &x_dmark, &x_ditto, &x_dline),    0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
    yUNIT_minval   ("... nline"                          , x_nline                  ,    2);
    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
@@ -453,11 +516,11 @@ unit_ditto_parse  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify passing over exec line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    , NULL   , NULL   ),    0);
    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    strcpy (x_back, x_recd);
    p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "exec"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
+   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "exec"  ,  0, x_recd, p, x_desc, &x_mark, &x_dittoing, &x_dmark, &x_ditto, &x_dline),    0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
    yUNIT_minval   ("... nline"                          , x_nline                  ,    3);
    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
@@ -469,14 +532,14 @@ unit_ditto_parse  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify using the ditto mark");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    , NULL   , NULL   ),    0);
    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    strcpy (x_back, x_recd);
    p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "DITTO" ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    1);
+   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "DITTO" ,  0, x_recd, p, x_desc, &x_mark, &x_dittoing, &x_dmark, &x_ditto, &x_dline),    1);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
    yUNIT_minval   ("... nline"                          , x_nline                  ,    5);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "[ ditto stuff ]");
+   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "[ ditto stuff ]- - - - - - - - - - - - - - - - - - - - - - - - - - - ");
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '3');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -485,11 +548,11 @@ unit_ditto_parse  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify continuing on in UPDATE mode");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    , NULL   , NULL   ),    0);
    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    strcpy (x_back, x_recd);
    p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "get"   ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
+   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_UPDATE, "get"   ,  0, x_recd, p, x_desc, &x_mark, &x_dittoing, &x_dmark, &x_ditto, &x_dline),    0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
    yUNIT_minval   ("... nline"                          , x_nline                  ,    7);
    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
@@ -501,21 +564,21 @@ unit_ditto_parse  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("close conversion run");
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_scrp)    ,    0);
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_nscrp, &x_scrp)    ,    0);
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("prepare for code run");
-   yUNIT_minval   ("open the script file"               , READ_open   (x_nscrp, 'r', &x_scrp, &x_nline), 0);
+   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, "", x_nscrp, 'r', &x_scrp, &x_nline), 0);
    yUNIT_minval   ("... init"                           , DITTO_init ()       , 0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "----------");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify a new ditto mark");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    , NULL   , NULL   ),    0);
    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    strcpy (x_back, x_recd);
    p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "COND"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
+   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "COND"  ,  0, x_recd, p, x_desc, &x_mark, &x_dittoing, &x_dmark, &x_ditto, &x_dline),    0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
    yUNIT_minval   ("... nline"                          , x_nline                  ,    2);
    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
@@ -527,11 +590,11 @@ unit_ditto_parse  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify passing over exec line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    , NULL   , NULL   ),    0);
    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    strcpy (x_back, x_recd);
    p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "exec"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
+   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "exec"  ,  0, x_recd, p, x_desc, &x_mark, &x_dittoing, &x_dmark, &x_ditto, &x_dline),    0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
    yUNIT_minval   ("... nline"                          , x_nline                  ,    3);
    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
@@ -543,14 +606,14 @@ unit_ditto_parse  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify using the ditto mark");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    , NULL   , NULL   ),    0);
    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    strcpy (x_back, x_recd);
    p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "DITTO" ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    1);
+   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "DITTO" ,  0, x_recd, p, x_desc, &x_mark, &x_dittoing, &x_dmark, &x_ditto, &x_dline),    1);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
    yUNIT_minval   ("... nline"                          , x_nline                  ,    5);
-   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "[ ditto stuff ]");
+   yUNIT_minstr   ("... desc"                           , x_desc                   ,   "[ ditto stuff ]- - - - - - - - - - - - - - - - - - - - - - - - - - - ");
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  'y');
    yUNIT_minchr   ("... mark"                           , x_mark                   ,  '3');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '3');
@@ -559,11 +622,11 @@ unit_ditto_parse  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify pushing to the first line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    , NULL   , NULL   ),    0);
    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    strcpy (x_back, x_recd);
    p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "COND"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
+   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "COND"  ,  0, x_recd, p, x_desc, &x_mark, &x_dittoing, &x_dmark, &x_ditto, &x_dline),    0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
    yUNIT_minval   ("... nline"                          , x_nline                  ,    5);
    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
@@ -575,11 +638,11 @@ unit_ditto_parse  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify passing over exec line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    , NULL   , NULL   ),    0);
    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    strcpy (x_back, x_recd);
    p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "exec"  ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
+   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "exec"  ,  0, x_recd, p, x_desc, &x_mark, &x_dittoing, &x_dmark, &x_ditto, &x_dline),    0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
    yUNIT_minval   ("... nline"                          , x_nline                  ,    5);
    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
@@ -591,11 +654,11 @@ unit_ditto_parse  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify returning after DITTO line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    ),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , NULL   , NULL   , NULL   , NULL   , NULL   , x_desc, NULL  , NULL  , NULL  , NULL  , NULL  , NULL   , NULL    , NULL   , NULL   ),    0);
    yUNIT_minval   ("read a line"                        , READ_next           (&x_scrp, &x_nline, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd),    1);
    strcpy (x_back, x_recd);
    p = strtok (x_back, "");
-   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "get"   ,  0, x_recd, p, x_desc, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline),    0);
+   yUNIT_minval   ("call parse"                         , DITTO_parse_handler (&x_scrp, x_nscrp, x_nline, G_RUN_CREATE, "get"   ,  0, x_recd, p, x_desc, &x_mark, &x_dittoing, &x_dmark, &x_ditto, &x_dline),    0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "---3------");
    yUNIT_minval   ("... nline"                          , x_nline                  ,    7);
    yUNIT_minstr   ("... desc"                           , x_desc                   ,   "");
@@ -607,27 +670,50 @@ unit_ditto_parse  (void)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("close update run");
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_scrp)    ,    0);
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_nscrp, &x_scrp)    ,    0);
    yUNIT_mindnoc  ();
 
    PROG__unit_end    ();
-   system ("rm    -f apate.unit        > /dev/null   2>&1");
+   system ("rm    -f /tmp/apate.unit        > /dev/null   2>&1");
+   chdir   (x_cwd);
    yUNIT_minprcs  ();
    return 0;
 }
 
-
 char
-main                    (void)
+main                    (int a_argc, char *a_argv [])
 {
-   /*---(program wide)-------------------*/
-   system ("rm -f koios_ditto.wave");
-   unit_ditto_index  ();
-   unit_ditto_getset ();
-   unit_ditto_toggle ();
-   unit_ditto_read   ();
-   unit_ditto_parse  ();
-   yUNIT_mintinu     ();
+   /*---(locals)-----------+-----+-----+-*/
+   int         x_unit      =    0;
+   int         n           =    0;
+   char        x_list      =    0;
+   /*---(arguments)----------------------*/
+   printf ("## %s\n", P_ONELINE);
+   printf ("## pre-yUNIT unit testing : %s\n", a_argv [0]);
+   if (a_argc >= 2) {
+      if (strcmp (a_argv [1], "--list") == 0)       x_list = 'y';
+      else if (strcmp (a_argv [1], "--inst") == 0)  x_list = '!';
+      else                                          x_unit = atoi (a_argv [1]);
+   }
+   if (x_unit  >  0 )         printf ("## selected single script (%2d)\n", x_unit);
+   else                       printf ("## selected all scripts\n");
+   if (x_list == 'y')         printf ("## list script(s) only\n");
+   else if (x_list == '!')    printf ("## generate initial wave file\n");
+   else                       printf ("## execute conditions and steps\n");
+   printf ("\n");
+   /*---(startup)------------------------*/
+   yUNIT_minunit ("koios_ditto");
+   /*---(scripts)------------------------*/
+   koios_ditto_index    (++n, x_list, x_unit);
+   koios_ditto_getset   (++n, x_list, x_unit);
+   koios_ditto_toggle   (++n, x_list, x_unit);
+   koios_ditto_read     (++n, x_list, x_unit);
+   koios_ditto_desc     (++n, x_list, x_unit);
+   koios_ditto_parse    (++n, x_list, x_unit);
+   /*---(wrapup)-------------------------*/
+   yUNIT_mintinu    ();
+   /*---(complete)-----------------------*/
    return 0;
 }
+
 

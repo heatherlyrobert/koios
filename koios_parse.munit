@@ -1,17 +1,912 @@
 /*===============================[[ beg-code ]]===============================*/
 #include    "koios.h"
 
-#include    <yURG_solo.h>
-#include    <yURG_uver.h>
-#include    <yUNIT_solo.h>
-#include    <ySTR_solo.h>
-#include    <yCOLOR_solo.h>
 
 
 char
-main                    (void)
+koios_parse_default   (char a_scrp, char a_list, char a_unit)
 {
+   char        x_cwd       [LEN_FULL]  = "";
+   char        x_verb      [LEN_LABEL] = "";
+   char        x_indx      =    0;
+   char        x_spec      =  '-';
+   void       *x_conv      = NULL;
+   void       *x_code      = NULL;
+   char        x_vers      =   -1;
+   char        x_stage     [LEN_SHORT] = "";
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_meth      [LEN_HUND]  = "";
+   char        x_args      [LEN_FULL]  = "";
+   char        x_test      [LEN_LABEL] = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_retn      [LEN_FULL]  = "";
+   char        x_mark      =  '-';
+   char        x_major     =  '-';
+   char        x_minor     =  '-';
+   char        x_which     [LEN_TITLE] = "";
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing defaults");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
+   PROG__unit_quiet  ();
+
+
+   yUNIT_mincond  ("verify a quick success");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , NULL);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_minchr   ("... check mark"                     , x_mark        , '-');
+   yUNIT_minchr   ("... check major"                    , x_major       , '-');
+   yUNIT_minchr   ("... check minor"                    , x_minor       , '-');
+   yUNIT_minstr   ("... check which"                    , x_which       , "");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify nulling elements");
+   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, NULL   , &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, NULL   , &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, NULL   , x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, NULL   , &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, NULL   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, NULL  , x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL  , x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, NULL  , x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, NULL  , x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, NULL  , x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, NULL  , &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, NULL   , &x_major, &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, NULL    , &x_minor, x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, NULL    , x_which),    0);
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, NULL   ),    0);
+   yUNIT_mindnoc  ();
+
+   strcpy (x_verb   , "test");
+   x_spec    = 's';
+   x_conv    = CONV__scrp;
+   x_code    = CODE__scrp;
+   strcpy (x_stage  , "2b"  );
+   x_vers    = '1';
+   x_mark    = '5';
+   x_major   = 'f';
+   yUNIT_mincond  ("verify prep-related defaulting");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , NULL);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_minchr   ("... check mark"                     , x_mark        , '-');
+   yUNIT_minchr   ("... check share"                    , x_major       , '-');
+   yUNIT_minchr   ("... check minor"                    , x_minor       , '-');
+   yUNIT_minstr   ("... check which"                    , x_which       , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_desc   , "description");
+   strcpy (x_meth   , "method");
+   strcpy (x_args   , "arguments");
+   strcpy (x_test   , "test");
+   strcpy (x_expe   , "expected");
+   strcpy (x_retn   , "return");
+   yUNIT_mincond  ("verify field-related defaulting");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , NULL);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_minchr   ("... check mark"                     , x_mark        , '-');
+   yUNIT_minchr   ("... check share"                    , x_major       , '-');
+   yUNIT_minchr   ("... check minor"                    , x_minor       , '-');
+   yUNIT_minstr   ("... check which"                    , x_which       , "");
+   yUNIT_mindnoc  ();
+
+   PROG__unit_end    ();
+   chdir   (x_cwd);
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios_parse_comment   (char a_scrp, char a_list, char a_unit)
+{
+   char        x_name      [LEN_HUND]  = "/tmp/apate.unit";
+   char        x_recd      [LEN_RECD]  = "";
+   char        x_verb      [LEN_LABEL] = "";
+   char        x_under     =  '-';
+   char        x_indx      =    0;
+   char        x_spec      =  '-';
+   void       *x_conv      = NULL;
+   void       *x_code      = NULL;
+   char        x_vers      =   -1;
+   char        x_stage     [LEN_SHORT] = "";
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_meth      [LEN_HUND]  = "";
+   char        x_args      [LEN_FULL]  = "";
+   char        x_test      [LEN_LABEL] = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_retn      [LEN_FULL]  = "";
+   char        x_mark      =  '-';
+   char        x_share     =  '-';
+   char        x_minor     =  '-';
+   char        x_which     [LEN_TITLE] = "";
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing comments");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   PROG__unit_quiet  ();
+
+   strcpy (x_recd, "#> macro a jklh");
+   yUNIT_mincond  ("verify a quick success");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_expe),    1);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__comment);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "#> macro a jklh");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "     code     ... change part                      - - - - - - - - - - - - -   x_part      = 'v';                                                                                                                                                                                                           ");
+   yUNIT_mincond  ("attempt on a normal line");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_expe),    0);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , NULL);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "     #> insert more code here");
+   yUNIT_mincond  ("verify an indented saved comment");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_expe),    1);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__comment);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "     #> insert more code here");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "######> insert more code here");
+   yUNIT_mincond  ("attempt on correct comment but without spaces first");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_expe),    0);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , NULL);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "## throw away comment ");
+   yUNIT_mincond  ("attempt on a normal line");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_expe),    0);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , NULL);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, ">> wrong prefix");
+   yUNIT_mincond  ("attempt on a normal line");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_expe),    0);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , NULL);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "   #> script level comment");
+   yUNIT_mincond  ("verify an indented saved comment");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_expe),    1);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__comment);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "   #> script level comment");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "#> ");
+   yUNIT_mincond  ("verify comment with just the initial space");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_expe),    1);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__comment);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "#> ");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "#>");
+   yUNIT_mincond  ("verify comment with no initial space");
+   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_expe),    1);
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");
+   yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__comment);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "#>");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   PROG__unit_end    ();
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios_parse_version   (char a_scrp, char a_list, char a_unit)
+{
+   char        x_cwd       [LEN_FULL]  = "";
+   char        x_vers      =  '-';
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing version");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
+   PROG__unit_quiet  ();
+
+
+   yUNIT_mincond  ("verify a quick success");
+   yUNIT_minval   ("call version"                       , PARSE__version  ("v21"              , &x_vers),    0);
+   yUNIT_minval   ("... check version"                  , x_vers        ,  21);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt a bad version");
+   yUNIT_minval   ("call version"                       , PARSE__version  ("v01"              , &x_vers), -999);
+   yUNIT_minval   ("... check version"                  , x_vers        ,  -1);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify current");
+   yUNIT_minval   ("call version"                       , PARSE__version  ("check descripion" , &x_vers),    0);
+   yUNIT_minval   ("... check version"                  , x_vers        ,   0);
+   yUNIT_mindnoc  ();
+
+   PROG__unit_end    ();
+   chdir   (x_cwd);
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios_parse_limits  (char a_scrp, char a_list, char a_unit)
+{
+   char        x_cwd       [LEN_FULL]  = "";
+   char        x_min       =    0;
+   char        x_max       =    0;
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing limits");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
+   PROG__unit_quiet  ();
+
+
+   yUNIT_mincond  ("verify quick success");
+   yUNIT_minval   ("get limits for SCRP"                , PARSE__limits ('s', &x_min, &x_max), 0);
+   yUNIT_minval   ("... check min"                      , x_min         , 3);
+   yUNIT_minval   ("... check max"                      , x_max         , 5);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt with missing min");
+   yUNIT_minval   ("get limits with a null"             , PARSE__limits ('s', NULL  , &x_max), -999);
+   yUNIT_minval   ("... check max"                      , x_max         , 0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt with missing max");
+   yUNIT_minval   ("get limits with a null"             , PARSE__limits ('s', &x_min, NULL  ), -999);
+   yUNIT_minval   ("... check min"                      , x_min         , 0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify quick success");
+   yUNIT_minval   ("get limits for COND"                , PARSE__limits ('2', &x_min, &x_max), 0);
+   yUNIT_minval   ("... check min"                      , x_min         , 2);
+   yUNIT_minval   ("... check max"                      , x_max         , 2);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt with an illegal spec");
+   yUNIT_minval   ("get limits for '*'"                 , PARSE__limits ('*', &x_min, &x_max), -999);
+   yUNIT_minval   ("... check min"                      , x_min         , 0);
+   yUNIT_minval   ("... check max"                      , x_max         , 0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_minprcs ();
+   chdir   (x_cwd);
+   PROG__unit_end  ();
+   return 0;
+}
+
+char
+koios_parse_prep      (char a_scrp, char a_list, char a_unit)
+{
+   char        x_cwd       [LEN_FULL]  = "";
+   FILE       *x_scrp      = NULL;
+   char        x_nscrp     [LEN_HUND]  = "/tmp/apate.unit";
+   char        x_recd      [LEN_RECD]  = "";
+   char        x_verb      [LEN_LABEL] = "";
+   char        x_under     =  '-';
+   char        x_spec      =  '-';
+   void       *x_conv      = NULL;
+   void       *x_code      = NULL;
+   char        x_stage     [LEN_SHORT] = "";
+   char        x_vers      =   -1;
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_dittoing  =  '-';
+   char        x_mark      =  '-';
+   char        x_dtarget   =  '-';
+   int         x_dstart    =    0;
+   int         x_dline     =    0;
+   char        x_major     =  '-';
+   char        x_minor     =  '-';
+   char        x_share     =  '-';
+   char        x_select    =  '-';
+   char        x_which     [LEN_TITLE] = "";
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing preparation");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
+   PROG__unit_quiet  ();
+
+
+   strcpy (x_recd, "SCRP    [2e]  (CATS) verify preparation and defaulting                           0s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_mincond  ("verify scrp in update");
+   yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp,  5, G_RUN_UPDATE , x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_mark, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &x_share, &x_select),    0);
+   yUNIT_minstr   ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");
+   yUNIT_minstr   ("... dittos"                         , DITTO__used (), "----------");
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "SCRP");
+   yUNIT_minchr   ("... check under"                    , x_under       , 'S');
+   yUNIT_minchr   ("... check spec"                     , x_spec        , 's');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__scrp);
+   yUNIT_minptr   ("... check code"                     , x_code        , CODE__scrp);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "2e/·");
+   yUNIT_minval   ("... check vers"                     , x_vers        , 0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minchr   ("... check mark"                     , x_mark        ,  '-');
+   yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  '-');
+   yUNIT_minchr   ("... check dmark"                    , x_dtarget     ,  '-');
+   yUNIT_minval   ("... check ditto"                    , x_dstart      ,    0);
+   yUNIT_minval   ("... check dline"                    , x_dline       ,    0);
+   yUNIT_minchr   ("... check major"                    , x_major       ,  '-');
+   yUNIT_minchr   ("... check minor"                    , x_minor       ,  '-');
+   yUNIT_minchr   ("... check share"                    , x_share       ,  '-');
+   yUNIT_minchr   ("... check select"                   , x_select      ,  '-');
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "   COND  (0)  check initial environment                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_mincond  ("verify cond in update");
+   yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 10, G_RUN_UPDATE , x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_mark, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &x_share, &x_select),    0);
+   yUNIT_minstr   ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");
+   yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "COND");
+   yUNIT_minchr   ("... check under"                    , x_under       , 'C');
+   yUNIT_minchr   ("... check spec"                     , x_spec        , '2');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__cond);
+   yUNIT_minptr   ("... check code"                     , x_code        , CODE__cond);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "··/·");
+   yUNIT_minval   ("... check vers"                     , x_vers        , 0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minchr   ("... check mark"                     , x_mark        ,  '0');
+   yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  '-');
+   yUNIT_minchr   ("... check dmark"                    , x_dtarget     ,  '-');
+   yUNIT_minval   ("... check ditto"                    , x_dstart      ,    0);
+   yUNIT_minval   ("... check dline"                    , x_dline       ,    0);
+   yUNIT_minchr   ("... check major"                    , x_major       ,  '-');
+   yUNIT_minchr   ("... check minor"                    , x_minor       ,  '-');
+   yUNIT_minchr   ("... check share"                    , x_share       ,  '-');
+   yUNIT_minchr   ("... check select"                   , x_select      ,  '-');
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "   DITTO (0)  repeat the condition                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_mincond  ("verify ditto in update");
+   yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 15, G_RUN_UPDATE , x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_mark, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &x_share, &x_select),    1);
+   yUNIT_minstr   ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");
+   yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "DITTO");
+   yUNIT_minchr   ("... check under"                    , x_under       , 'C');
+   yUNIT_minchr   ("... check spec"                     , x_spec        , '1');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__ditto);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , 0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "[ check initial environment ]- - - - - - - - - - - - - - - - - - - - ");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minchr   ("... check mark"                     , x_mark        ,  '0');
+   yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  '-');
+   yUNIT_minchr   ("... check dmark"                    , x_dtarget     ,  '-');
+   yUNIT_minval   ("... check ditto"                    , x_dstart      ,    0);
+   yUNIT_minval   ("... check dline"                    , x_dline       ,    0);
+   yUNIT_minchr   ("... check major"                    , x_major       ,  '-');
+   yUNIT_minchr   ("... check minor"                    , x_minor       ,  '-');
+   yUNIT_minchr   ("... check share"                    , x_share       ,  '-');
+   yUNIT_minchr   ("... check select"                   , x_select      ,  '-');
+   yUNIT_mindnoc  ();
+
+   x_dstart = 0; /* simple reset */
+
+   strcpy (x_recd, "   DITTO (0)  repeat the condition                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_mincond  ("verify ditto in creation");
+   system ("touch /tmp/apate.unit           2> /dev/null");
+   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, "", x_nscrp, 'r', &x_scrp, NULL), 0);
+   yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 20, G_RUN_CREATE , x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_mark, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &x_share, &x_select),    1);
+   yUNIT_minstr   ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");
+   yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "DITTO");
+   yUNIT_minchr   ("... check under"                    , x_under       , 'C');
+   yUNIT_minchr   ("... check spec"                     , x_spec        , '1');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__ditto);
+   yUNIT_minptr   ("... check code"                     , x_code        , NULL);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
+   yUNIT_minval   ("... check vers"                     , x_vers        , 0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "[ check initial environment ]- - - - - - - - - - - - - - - - - - - - ");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minchr   ("... check mark"                     , x_mark        ,  '0');
+   yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  'y');
+   yUNIT_minchr   ("... check dmark"                    , x_dtarget     ,  '0');
+   yUNIT_minval   ("... check ditto"                    , x_dstart      ,   10);
+   yUNIT_minval   ("... check dline"                    , x_dline       ,    0);
+   yUNIT_minchr   ("... check major"                    , x_major       ,  '-');
+   yUNIT_minchr   ("... check minor"                    , x_minor       ,  '-');
+   yUNIT_minchr   ("... check share"                    , x_share       ,  '-');
+   yUNIT_minchr   ("... check select"                   , x_select      ,  '-');
+   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_nscrp, &x_scrp),   0);
+   yUNIT_mindnoc  ();
+
+   x_dtarget = '-';
+   x_dstart = 0; /* simple reset */
+
+   strcpy (x_recd, "SHARED   -g-  reusable code                                                      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_mincond  ("verify shared in update");
+   yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share, &x_minor, x_which),    0);
+   yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 25, G_RUN_UPDATE , x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_mark, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &x_share, &x_select),    0);
+   yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH á·····g·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
+   yUNIT_minstr   ("... dittos (cleared)"               , DITTO__used (), "----------");
+   yUNIT_minstr   ("... check verb"                     , x_verb        , "SHARED");
+   yUNIT_minchr   ("... check under"                    , x_under       , 'S');
+   yUNIT_minchr   ("... check spec"                     , x_spec        , 's');
+   yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__shared);
+   yUNIT_minptr   ("... check code"                     , x_code        , CODE__shared);
+   yUNIT_minstr   ("... check stage"                    , x_stage       , "··/·");
+   yUNIT_minval   ("... check vers"                     , x_vers        , 0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minchr   ("... check mark"                     , x_mark        ,  '-');
+   yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  'y');
+   yUNIT_minchr   ("... check dmark"                    , x_dtarget     ,  '-');
+   yUNIT_minval   ("... check ditto"                    , x_dstart      ,    0);
+   yUNIT_minval   ("... check dline"                    , x_dline       ,    0);
+   yUNIT_minchr   ("... check major"                    , x_major       ,  'g');
+   yUNIT_minchr   ("... check minor"                    , x_minor       ,  '-');
+   yUNIT_minchr   ("... check share"                    , x_share       ,  '-');
+   yUNIT_minchr   ("... check select"                   , x_select      ,  '-');
+   yUNIT_mindnoc  ();
+
+   PROG__unit_end    ();
+   chdir   (x_cwd);
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios_parse_which   (char a_scrp, char a_list, char a_unit)
+{
+   char       *x_name      = "/tmp/apate.unit";
+   char        x_which     [LEN_TITLE] = "";
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing current");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   PROG__unit_quiet  ();
+   yerr_uopen ();
+
+   yUNIT_mincond  ("verify a quick success");
+   yerr_ureset   ();
+   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 15, "åabc··e·æ call parsing"            , x_which),    1);
+   yUNIT_minstr   ("... review marks"                   , x_which             , "abc··e·");
+   yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify with NULL return");
+   yerr_ureset   ();
+   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 16, "åabc··e·æ call parsing"            , NULL   ),    1);
+   yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt with NULL description");
+   yerr_ureset   ();
+   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 17, NULL                                , x_which), -999);
+   yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:17:0: error: full description field is NULL");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify a record without");
+   yerr_ureset   ();
+   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 18, "make sure return is correct"       , x_which),    0);
+   yUNIT_minstr   ("... review marks"                   , x_which             , "");
+   yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt without closing æ");
+   yerr_ureset   ();
+   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 19, "åabc··e· call parsing"             , x_which), -999);
+   yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:19:0: error: description \"åabc··e· call parsing\" starts selectable, but does not cloce, i.e., åabc··d··æ");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt with bad character");
+   yerr_ureset   ();
+   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 20, "åabc··E·æ call parsing"            , x_which), -999);
+   yUNIT_minstr   ("... review marks"                   , x_which             , "");
+   yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:20:0: error: which string åabc··E·æ contains illegal char (E) at pos (5), only allow [a-z·-]");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify with an empty set");
+   yerr_ureset   ();
+   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 21, "åæ make sure return is correct"       , x_which),    1);
+   yUNIT_minstr   ("... review marks"                   , x_which             , "");
+   yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify suffixing selection");
+   yerr_ureset   ();
+   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 21, "call to verify     åcq·yzæ"       , x_which),    1);
+   yUNIT_minstr   ("... review marks"                   , x_which             , "cq·yz");
+   yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yerr_uclose ();
+   PROG__unit_end    ();
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios_parse_current (char a_scrp, char a_list, char a_unit)
+{
+   char        x_cwd       [LEN_FULL]  = "";
+   char        x_spec      =  '-';
+   char        x_max       =    0;
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_meth      [LEN_HUND]  = "";
+   char        x_args      [LEN_FULL]  = "";
+   char        x_test      [LEN_LABEL] = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_retn      [LEN_FULL]  = "";
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing current");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
+   PROG__unit_quiet  ();
+
+
+   x_spec = 's';  x_max = 2;
+   yUNIT_mincond  ("verify script success");
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (1, "SCRP"                     , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "check variable"           , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "extra"                    , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
+   yUNIT_minval   ("... check max"                      , x_max         , 2);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "check variable");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "-");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "0s");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "tbd");
+   yUNIT_mindnoc  ();
+
+   x_spec = 'f';  x_max = 7;
+   yUNIT_mincond  ("verify exec success");
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "call function"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "BIG_function"             , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (4, "27, 86, 't'"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (5, "i_equal"                  , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (6, "42"                       , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (7, "n"                        , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (8, "junk at end"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
+   yUNIT_minval   ("... check max"                      , x_max         , 7);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "call function");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "BIG_function");
+   yUNIT_minstr   ("... check args"                     , x_args        , "27, 86, 't'");
+   yUNIT_minstr   ("... check test"                     , x_test        , "i_equal");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "42");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "n");
+   yUNIT_mindnoc  ();
+
+   x_spec = 'p';  x_max = 4;
+   yUNIT_mincond  ("verify code success");
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "- - - - - - -"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (4, "my.val = 978;"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (5, "more stuff"               , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
+   yUNIT_minval   ("... check max"                      , x_max         , 4);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "update global");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "my.val = 978;");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   x_spec = '1';  x_max = 1;
+   yUNIT_mincond  ("verify ditto success");
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
+   yUNIT_minval   ("... check max"                      , x_max         , 1);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   PROG__unit_end    ();
+   chdir   (x_cwd);
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios_parse_driver    (char a_scrp, char a_list, char a_unit)
+{
+   char        x_cwd       [LEN_FULL]  = "";
+   char        x_name      [LEN_HUND]  = "/tmp/apate.unit";
+   char        x_recd      [LEN_RECD]  = "";
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_meth      [LEN_HUND]  = "";
+   char        x_args      [LEN_FULL]  = "";
+   char        x_test      [LEN_LABEL] = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_retn      [LEN_FULL]  = "";
+   char        x_which     [LEN_TITLE] = "";
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing driver");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   getcwd  (x_cwd, LEN_FULL);
+   chdir   ("/tmp/");
+   PROG__unit_quiet  ();
+
+
+   strcpy (x_recd, "SCRP          (CATS) verify preparation and defaulting                           0s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_mincond  ("verify script success");
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", 's', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "(CATS) verify preparation and defaulting");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "CATS__prepare");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "0s");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "prepare");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "   COND  (0)  verify the defaults                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_mincond  ("verify condition success");
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 10,  0, "COND", '2', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "verify the defaults");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "   COND  (0) ");
+   yUNIT_mincond  ("attempt with verb only");
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 10,  0, "COND", '2', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "     exec     call prepare                         CATS__prepare               \"· ·  · · ·   · ·\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq         i_equal     0                                                                                                    ");
+   yUNIT_mincond  ("verify exec/get success");
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 15,  0, "exec", 'f', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "call prepare");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "CATS__prepare");
+   yUNIT_minstr   ("... check args"                     , x_args        , "\"· ·  · · ·   · ·\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq");
+   yUNIT_minstr   ("... check test"                     , x_test        , "i_equal");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "0");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "     exec     call prepare                         CATS__prepare              ");
+   yUNIT_mincond  ("attempt with not enough fields");
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 15,  0, "exec", 'f', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "     code     ... change part                      - - - - - - - - - - - - -   x_part      = 'v';                                                                                                                                                                                                           ");
+   yUNIT_mincond  ("verify code success");
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 20,  0, "code", 'p', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "... change part");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "x_part      = 'v';");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   strcpy (x_recd, "code         different attempt                       v = 1;  ");
+   yUNIT_mincond  ("verify code with wrong indentation");
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 25,  0, "code", 'p', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "different attempt");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "v = 1;");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   PROG__unit_end    ();
+   chdir   (x_cwd);
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+main                    (int a_argc, char *a_argv [])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   int         x_unit      =    0;
+   int         n           =    0;
+   char        x_list      =    0;
+   /*---(arguments)----------------------*/
+   printf ("## %s\n", P_ONELINE);
+   printf ("## pre-yUNIT unit testing : %s\n", a_argv [0]);
+   if (a_argc >= 2) {
+      if (strcmp (a_argv [1], "--list") == 0)       x_list = 'y';
+      else if (strcmp (a_argv [1], "--inst") == 0)  x_list = '!';
+      else                                          x_unit = atoi (a_argv [1]);
+   }
+   if (x_unit  >  0 )         printf ("## selected single script (%2d)\n", x_unit);
+   else                       printf ("## selected all scripts\n");
+   if (x_list == 'y')         printf ("## list script(s) only\n");
+   else if (x_list == '!')    printf ("## generate initial wave file\n");
+   else                       printf ("## execute conditions and steps\n");
+   printf ("\n");
+   /*---(startup)------------------------*/
+   yUNIT_minunit ("koios_parse");
+   /*---(scripts)------------------------*/
+   koios_parse_default (++n, x_list, x_unit);
+   koios_parse_comment (++n, x_list, x_unit);
+   koios_parse_version (++n, x_list, x_unit);
+   koios_parse_limits  (++n, x_list, x_unit);
+   koios_parse_prep    (++n, x_list, x_unit);
+   koios_parse_which   (++n, x_list, x_unit);
+   koios_parse_current (++n, x_list, x_unit);
+   koios_parse_driver  (++n, x_list, x_unit);
+   /*---(wrapup)-------------------------*/
    yUNIT_mintinu    ();
+   /*---(complete)-----------------------*/
    return 0;
 }
 

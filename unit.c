@@ -1050,715 +1050,715 @@ static void      o___READ____________________o (void) {;}
 /*====================------------------------------------====================*/
 static void      o___PARSE___________________o (void) {;}
 
-char
-koios__unit_parse_default   (char a_list)
-{
-   char        x_verb      [LEN_LABEL] = "";
-   char        x_indx      =    0;
-   char        x_spec      =  '-';
-   void       *x_conv      = NULL;
-   void       *x_code      = NULL;
-   char        x_vers      =   -1;
-   char        x_stage     [LEN_SHORT] = "";
-   char        x_desc      [LEN_LONG]  = "";
-   char        x_meth      [LEN_HUND]  = "";
-   char        x_args      [LEN_FULL]  = "";
-   char        x_test      [LEN_LABEL] = "";
-   char        x_expe      [LEN_RECD]  = "";
-   char        x_retn      [LEN_FULL]  = "";
-   char        x_mark      =  '-';
-   char        x_share     =  '-';
+/*> char                                                                                                                                                                                                         <* 
+ *> koios__unit_parse_default   (char a_list)                                                                                                                                                                    <* 
+ *> {                                                                                                                                                                                                            <* 
+ *>    char        x_verb      [LEN_LABEL] = "";                                                                                                                                                                 <* 
+ *>    char        x_indx      =    0;                                                                                                                                                                           <* 
+ *>    char        x_spec      =  '-';                                                                                                                                                                           <* 
+ *>    void       *x_conv      = NULL;                                                                                                                                                                           <* 
+ *>    void       *x_code      = NULL;                                                                                                                                                                           <* 
+ *>    char        x_vers      =   -1;                                                                                                                                                                           <* 
+ *>    char        x_stage     [LEN_SHORT] = "";                                                                                                                                                                 <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                                                 <* 
+ *>    char        x_meth      [LEN_HUND]  = "";                                                                                                                                                                 <* 
+ *>    char        x_args      [LEN_FULL]  = "";                                                                                                                                                                 <* 
+ *>    char        x_test      [LEN_LABEL] = "";                                                                                                                                                                 <* 
+ *>    char        x_expe      [LEN_RECD]  = "";                                                                                                                                                                 <* 
+ *>    char        x_retn      [LEN_FULL]  = "";                                                                                                                                                                 <* 
+ *>    char        x_mark      =  '-';                                                                                                                                                                           <* 
+ *>    char        x_share     =  '-';                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                              <* 
+ *>    yUNIT_minscrp ("PARSE_default");                                                                                                                                                                          <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                             <* 
+ *>    yURG_err_none ();                                                                                                                                                                                         <* 
+ *>    rm_working_files ();                                                                                                                                                                                      <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("verify a quick success");                                                                                                                                                                <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "");                                                                                                                               <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , '-');                                                                                                                              <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);                                                                                                                             <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                             <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                               <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , -1);                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                               <* 
+ *>    yUNIT_minchr   ("... check mark"                     , x_mark        , '-');                                                                                                                              <* 
+ *>    yUNIT_minchr   ("... check share"                    , x_share       , '-');                                                                                                                              <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                              <* 
+ *>    yUNIT_mincond  ("verify nulling elements");                                                                                                                                                               <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, NULL   , &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, NULL   , &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, NULL   , x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, NULL   , &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, NULL   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, NULL  , x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL  , x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, NULL  , x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, NULL  , x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, NULL  , x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, NULL  , &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, NULL   , &x_share),    0);   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, NULL    ),    0);   <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                              <* 
+ *>    strcpy (x_verb   , "test");                                                                                                                                                                               <* 
+ *>    x_spec    = 's';                                                                                                                                                                                          <* 
+ *>    x_conv    = CONV_scrp;                                                                                                                                                                                    <* 
+ *>    x_code    = CODE_scrp;                                                                                                                                                                                    <* 
+ *>    strcpy (x_stage  , "2b"  );                                                                                                                                                                               <* 
+ *>    x_vers    = '1';                                                                                                                                                                                          <* 
+ *>    x_mark    = '5';                                                                                                                                                                                          <* 
+ *>    x_share   = 'f';                                                                                                                                                                                          <* 
+ *>    yUNIT_mincond  ("verify prep-related defaulting");                                                                                                                                                        <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "");                                                                                                                               <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , '-');                                                                                                                              <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);                                                                                                                             <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                             <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                               <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , -1);                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                               <* 
+ *>    yUNIT_minchr   ("... check mark"                     , x_mark        , '-');                                                                                                                              <* 
+ *>    yUNIT_minchr   ("... check share"                    , x_share       , '-');                                                                                                                              <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                              <* 
+ *>    strcpy (x_desc   , "description");                                                                                                                                                                        <* 
+ *>    strcpy (x_meth   , "method");                                                                                                                                                                             <* 
+ *>    strcpy (x_args   , "arguments");                                                                                                                                                                          <* 
+ *>    strcpy (x_test   , "test");                                                                                                                                                                               <* 
+ *>    strcpy (x_expe   , "expected");                                                                                                                                                                           <* 
+ *>    strcpy (x_retn   , "return");                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("verify field-related defaulting");                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);   <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "");                                                                                                                               <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , '-');                                                                                                                              <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);                                                                                                                             <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                             <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                               <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , -1);                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                               <* 
+ *>    yUNIT_minchr   ("... check mark"                     , x_mark        , '-');                                                                                                                              <* 
+ *>    yUNIT_minchr   ("... check share"                    , x_share       , '-');                                                                                                                              <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                              <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                     <* 
+ *>    rm_working_files ();                                                                                                                                                                                      <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                         <* 
+ *>    return 0;                                                                                                                                                                                                 <* 
+ *> }                                                                                                                                                                                                            <*/
 
-   yUNIT_minscrp ("PARSE_default");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
+/*> char                                                                                                    <* 
+ *> koios__unit_parse_limits  (char a_list)                                                                 <* 
+ *> {                                                                                                       <* 
+ *>    char        x_min       =    0;                                                                      <* 
+ *>    char        x_max       =    0;                                                                      <* 
+ *>                                                                                                         <* 
+ *>    PROG__unit_quiet  ();                                                                                <* 
+ *>    yUNIT_minscrp ("PARSE__limits");                                                                     <* 
+ *>    if (a_list == 'y')  return 0;                                                                        <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                      <* 
+ *>    rm_working_files ();                                                                                 <* 
+ *>    PROG__unit_quiet  ();                                                                                <* 
+ *>                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify quick success");                                                             <* 
+ *>    yUNIT_minval   ("get limits for SCRP"                , PARSE__limits ('s', &x_min, &x_max), 0);      <* 
+ *>    yUNIT_minval   ("... check min"                      , x_min         , 3);                           <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 5);                           <* 
+ *>    yUNIT_mindnoc  ();                                                                                   <* 
+ *>                                                                                                         <* 
+ *>    yUNIT_mincond  ("attempt with missing min");                                                         <* 
+ *>    yUNIT_minval   ("get limits with a null"             , PARSE__limits ('s', NULL  , &x_max), -999);   <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 0);                           <* 
+ *>    yUNIT_mindnoc  ();                                                                                   <* 
+ *>                                                                                                         <* 
+ *>    yUNIT_mincond  ("attempt with missing max");                                                         <* 
+ *>    yUNIT_minval   ("get limits with a null"             , PARSE__limits ('s', &x_min, NULL  ), -999);   <* 
+ *>    yUNIT_minval   ("... check min"                      , x_min         , 0);                           <* 
+ *>    yUNIT_mindnoc  ();                                                                                   <* 
+ *>                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify quick success");                                                             <* 
+ *>    yUNIT_minval   ("get limits for COND"                , PARSE__limits ('2', &x_min, &x_max), 0);      <* 
+ *>    yUNIT_minval   ("... check min"                      , x_min         , 2);                           <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 2);                           <* 
+ *>    yUNIT_mindnoc  ();                                                                                   <* 
+ *>                                                                                                         <* 
+ *>    yUNIT_mincond  ("attempt with an illegal spec");                                                     <* 
+ *>    yUNIT_minval   ("get limits for '*'"                 , PARSE__limits ('*', &x_min, &x_max), -999);   <* 
+ *>    yUNIT_minval   ("... check min"                      , x_min         , 0);                           <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 0);                           <* 
+ *>    yUNIT_mindnoc  ();                                                                                   <* 
+ *>                                                                                                         <* 
+ *>    PROG__unit_end    ();                                                                                <* 
+ *>    rm_working_files ();                                                                                 <* 
+ *>    yUNIT_minprcs ();                                                                                    <* 
+ *>    PROG__unit_end  ();                                                                                  <* 
+ *>    return 0;                                                                                            <* 
+ *> }                                                                                                       <*/
 
-   yUNIT_mincond  ("verify a quick success");
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_minchr   ("... check mark"                     , x_mark        , '-');
-   yUNIT_minchr   ("... check share"                    , x_share       , '-');
-   yUNIT_mindnoc  ();
+/*> char                                                                                                                                                                                 <* 
+ *> koios__unit_parse_current (char a_list)                                                                                                                                              <* 
+ *> {                                                                                                                                                                                    <* 
+ *>    char        x_spec      =  '-';                                                                                                                                                   <* 
+ *>    char        x_max       =    0;                                                                                                                                                   <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                         <* 
+ *>    char        x_meth      [LEN_HUND]  = "";                                                                                                                                         <* 
+ *>    char        x_args      [LEN_FULL]  = "";                                                                                                                                         <* 
+ *>    char        x_test      [LEN_LABEL] = "";                                                                                                                                         <* 
+ *>    char        x_expe      [LEN_RECD]  = "";                                                                                                                                         <* 
+ *>    char        x_retn      [LEN_FULL]  = "";                                                                                                                                         <* 
+ *>                                                                                                                                                                                      <* 
+ *>    yUNIT_minscrp ("PARSE__current");                                                                                                                                                 <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                     <* 
+ *>    yURG_err_none ();                                                                                                                                                                 <* 
+ *>    rm_working_files ();                                                                                                                                                              <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                             <* 
+ *>                                                                                                                                                                                      <* 
+ *>    x_spec = 's';  x_max = 2;                                                                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify script success");                                                                                                                                         <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);                   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (1, "SCRP"                     , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "check variable"           , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "extra"                    , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);   <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 2);                                                                                                        <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "check variable");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                       <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                <* 
+ *>                                                                                                                                                                                      <* 
+ *>    x_spec = 'f';  x_max = 7;                                                                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify exec success");                                                                                                                                           <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);                   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "call function"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "BIG_function"             , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (4, "27, 86, 't'"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (5, "i_equal"                  , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (6, "42"                       , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (7, "n"                        , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (8, "junk at end"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);   <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 7);                                                                                                        <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "call function");                                                                                          <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "BIG_function");                                                                                           <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "27, 86, 't'");                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "i_equal");                                                                                                <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "42");                                                                                                     <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "n");                                                                                                      <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                <* 
+ *>                                                                                                                                                                                      <* 
+ *>    x_spec = 'p';  x_max = 4;                                                                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify code success");                                                                                                                                           <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);                   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "- - - - - - -"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (4, "my.val = 978;"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (5, "more stuff"               , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);   <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 4);                                                                                                        <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "update global");                                                                                          <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "my.val = 978;");                                                                                          <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                       <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                <* 
+ *>                                                                                                                                                                                      <* 
+ *>    x_spec = '1';  x_max = 1;                                                                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify ditto success");                                                                                                                                          <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);                   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);   <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 1);                                                                                                        <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                       <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                <* 
+ *>                                                                                                                                                                                      <* 
+ *>    PROG__unit_end    ();                                                                                                                                                             <* 
+ *>    rm_working_files ();                                                                                                                                                              <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                 <* 
+ *>    return 0;                                                                                                                                                                         <* 
+ *> }                                                                                                                                                                                    <*/
 
-   yUNIT_mincond  ("verify nulling elements");
-   yUNIT_minval   ("call default"                       , PARSE_default   (NULL  , &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, NULL   , &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, NULL   , &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, NULL   , x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, NULL   , &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, NULL   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, NULL  , x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL  , x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, NULL  , x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, NULL  , x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, NULL  , x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, NULL  , &x_mark, &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, NULL   , &x_share),    0);
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, NULL    ),    0);
-   yUNIT_mindnoc  ();
+/*> char                                                                                                                                                                                                                                                                                                                                   <* 
+ *> koios__unit_parse_prep      (char a_list)                                                                                                                                                                                                                                                                                              <* 
+ *> {                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    FILE       *x_scrp      = NULL;                                                                                                                                                                                                                                                                                                     <* 
+ *>    char        x_nscrp     [LEN_HUND]  = "apate.unit";                                                                                                                                                                                                                                                                                 <* 
+ *>    char        x_recd      [LEN_RECD]  = "";                                                                                                                                                                                                                                                                                           <* 
+ *>    char        x_verb      [LEN_LABEL] = "";                                                                                                                                                                                                                                                                                           <* 
+ *>    char        x_spec      =  '-';                                                                                                                                                                                                                                                                                                     <* 
+ *>    void       *x_conv      = NULL;                                                                                                                                                                                                                                                                                                     <* 
+ *>    void       *x_code      = NULL;                                                                                                                                                                                                                                                                                                     <* 
+ *>    char        x_stage     [LEN_SHORT] = "";                                                                                                                                                                                                                                                                                           <* 
+ *>    char        x_vers      =   -1;                                                                                                                                                                                                                                                                                                     <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                                                                                                                                                                           <* 
+ *>    char        x_expe      [LEN_RECD]  = "";                                                                                                                                                                                                                                                                                           <* 
+ *>    char        x_dittoing  =  '-';                                                                                                                                                                                                                                                                                                     <* 
+ *>    char        x_mark      =  '-';                                                                                                                                                                                                                                                                                                     <* 
+ *>    char        x_dmark     =  '-';                                                                                                                                                                                                                                                                                                     <* 
+ *>    int         x_ditto     =    0;                                                                                                                                                                                                                                                                                                     <* 
+ *>    int         x_dline     =    0;                                                                                                                                                                                                                                                                                                     <* 
+ *>    char        x_share     =  '-';                                                                                                                                                                                                                                                                                                     <* 
+ *>    char        x_cshare    =  '-';                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minscrp ("PARSE_prep");                                                                                                                                                                                                                                                                                                       <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                                                                                                                                                       <* 
+ *>    yURG_err_none ();                                                                                                                                                                                                                                                                                                                   <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    strcpy (x_recd, "SCRP    [¡Ï]  (CATS) verify preparation and defaulting                           0s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");     <* 
+ *>    yUNIT_mincond  ("verify scrp in update");                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share),    0);                                                                                                                                     <* 
+ *>    yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp,  5, G_RUN_UPDATE , x_recd, x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline, &x_share, &x_cshare),    0);                                                          <* 
+ *>    yUNIT_minstr   ("... reuses"                         , REUSE__used (), "¥-----¥-----¥-----¥-----¥-   ¥-----¥-----¥-----¥-----¥-");                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "----------");                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "SCRP");                                                                                                                                                                                                                                                     <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , 's');                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_scrp);                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , CODE_scrp);                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "¡Ï");                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , 0);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check mark"                     , x_mark        ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check dmark"                    , x_dmark       ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("... check ditto"                    , x_ditto       ,    0);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("... check dline"                    , x_dline       ,    0);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check share"                    , x_share       ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check cshare"                   , x_cshare      ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    strcpy (x_recd, "   COND  (0)  check initial environment                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");   <* 
+ *>    yUNIT_mincond  ("verify cond in update");                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share),    0);                                                                                                                                     <* 
+ *>    yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 10, G_RUN_UPDATE , x_recd, x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline, &x_share, &x_cshare),    0);                                                          <* 
+ *>    yUNIT_minstr   ("... reuses"                         , REUSE__used (), "¥-----¥-----¥-----¥-----¥-   ¥-----¥-----¥-----¥-----¥-");                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "COND");                                                                                                                                                                                                                                                     <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , '2');                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_cond);                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , CODE_cond);                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , 0);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check mark"                     , x_mark        ,  '0');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check dmark"                    , x_dmark       ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("... check ditto"                    , x_ditto       ,    0);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("... check dline"                    , x_dline       ,    0);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check share"                    , x_share       ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check cshare"                   , x_cshare      ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    strcpy (x_recd, "   DITTO (0)  repeat the condition                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");   <* 
+ *>    yUNIT_mincond  ("verify ditto in update");                                                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share),    0);                                                                                                                                     <* 
+ *>    yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 15, G_RUN_UPDATE , x_recd, x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline, &x_share, &x_cshare),    1);                                                          <* 
+ *>    yUNIT_minstr   ("... reuses"                         , REUSE__used (), "¥-----¥-----¥-----¥-----¥-   ¥-----¥-----¥-----¥-----¥-");                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "DITTO");                                                                                                                                                                                                                                                    <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , '1');                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_ditto);                                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , 0);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "[ check initial environment ]");                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check mark"                     , x_mark        ,  '0');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check dmark"                    , x_dmark       ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("... check ditto"                    , x_ditto       ,    0);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("... check dline"                    , x_dline       ,    0);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check share"                    , x_share       ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check cshare"                   , x_cshare      ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    x_ditto = 0; /+ simple reset +/                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    strcpy (x_recd, "   DITTO (0)  repeat the condition                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");   <* 
+ *>    yUNIT_mincond  ("verify ditto in creation");                                                                                                                                                                                                                                                                                        <* 
+ *>    system ("touch apate.unit           2> /dev/null");                                                                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_minval   ("open the script file"               , READ_open   (x_nscrp, 'r', &x_scrp, NULL), 0);                                                                                                                                                                                                                               <* 
+ *>    yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share),    0);                                                                                                                                     <* 
+ *>    yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 20, G_RUN_CREATE , x_recd, x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline, &x_share, &x_cshare),    1);                                                          <* 
+ *>    yUNIT_minstr   ("... reuses"                         , REUSE__used (), "¥-----¥-----¥-----¥-----¥-   ¥-----¥-----¥-----¥-----¥-");                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "DITTO");                                                                                                                                                                                                                                                    <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , '1');                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_ditto);                                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , 0);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "[ check initial environment ]");                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  'y');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check mark"                     , x_mark        ,  '0');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check dmark"                    , x_dmark       ,  '0');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("... check ditto"                    , x_ditto       ,   10);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("... check dline"                    , x_dline       ,    0);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check share"                    , x_share       ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check cshare"                   , x_cshare      ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("close the script file"              , READ_close  (&x_scrp),   0);                                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    x_ditto = 0; /+ simple reset +/                                                                                                                                                                                                                                                                                                     <* 
+ *>    x_dmark = '-';                                                                                                                                                                                                                                                                                                                      <* 
+ *>                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    strcpy (x_recd, "SHARED   -g-  reusable code                                                      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");   <* 
+ *>    yUNIT_mincond  ("verify shared in update");                                                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share),    0);                                                                                                                                     <* 
+ *>    yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 25, G_RUN_UPDATE , x_recd, x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline, &x_share, &x_cshare),    0);                                                          <* 
+ *>    yUNIT_minstr   ("... reuses"                         , REUSE__used (), "¥-----¥-----¥-----¥-----¥-   ¥-----g-----¥-----¥-----¥-");                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr   ("... dittos (cleared)"               , DITTO__used (), "----------");                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "SHARED");                                                                                                                                                                                                                                                   <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , 's');                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_shared);                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , CODE_shared);                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , 0);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  'y');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check mark"                     , x_mark        ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check dmark"                    , x_dmark       ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("... check ditto"                    , x_ditto       ,    0);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval   ("... check dline"                    , x_dline       ,    0);                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check share"                    , x_share       ,  'g');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minchr   ("... check cshare"                   , x_cshare      ,  '-');                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                                                                                                                                               <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                                                                                                                                                   <* 
+ *>    return 0;                                                                                                                                                                                                                                                                                                                           <* 
+ *> }                                                                                                                                                                                                                                                                                                                                      <*/
 
-   strcpy (x_verb   , "test");
-   x_spec    = 's';
-   x_conv    = CONV_scrp;
-   x_code    = CODE_scrp;
-   strcpy (x_stage  , "2b"  );
-   x_vers    = '1';
-   x_mark    = '5';
-   x_share   = 'f';
-   yUNIT_mincond  ("verify prep-related defaulting");
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_minchr   ("... check mark"                     , x_mark        , '-');
-   yUNIT_minchr   ("... check share"                    , x_share       , '-');
-   yUNIT_mindnoc  ();
+/*> char                                                                                                                                                                                                                                                                                                                                      <* 
+ *> koios__unit_parse_driver    (char a_list)                                                                                                                                                                                                                                                                                                 <* 
+ *> {                                                                                                                                                                                                                                                                                                                                         <* 
+ *>    char        x_name      [LEN_HUND]  = "apate.unit";                                                                                                                                                                                                                                                                                    <* 
+ *>    char        x_recd      [LEN_RECD]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_meth      [LEN_HUND]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_args      [LEN_FULL]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_test      [LEN_LABEL] = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_expe      [LEN_RECD]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_retn      [LEN_FULL]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minscrp ("PARSE_driver");                                                                                                                                                                                                                                                                                                        <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                                                                                                                                                          <* 
+ *>    yURG_err_none ();                                                                                                                                                                                                                                                                                                                      <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                   <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "SCRP          (CATS) verify preparation and defaulting                           0s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");        <* 
+ *>    yUNIT_mincond  ("verify script success");                                                                                                                                                                                                                                                                                              <* 
+ *>    yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", 's', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);                                                                                                                                                                   <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "(CATS) verify preparation and defaulting");                                                                                                                                                                                                                    <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "CATS__prepare");                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "0s");                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "prepare");                                                                                                                                                                                                                                                     <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "   COND  (0)  verify the defaults                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");      <* 
+ *>    yUNIT_mincond  ("verify condition success");                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 10,  0, "COND", '2', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);                                                                                                                                                                   <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "verify the defaults");                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "   COND  (0) ");                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_mincond  ("attempt with verb only");                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 10,  0, "COND", '2', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);                                                                                                                                                                   <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "     exec     call prepare                         CATS__prepare               \"∑ ∑  ∑ ∑ ∑   ∑ ∑\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq         i_equal     0                                                                                                    ");     <* 
+ *>    yUNIT_mincond  ("verify exec/get success");                                                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 15,  0, "exec", 'f', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);                                                                                                                                                                   <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "call prepare");                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "CATS__prepare");                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "\"∑ ∑  ∑ ∑ ∑   ∑ ∑\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq");                                                                                                                                                             <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "i_equal");                                                                                                                                                                                                                                                     <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "0");                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "     exec     call prepare                         CATS__prepare              ");                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_mincond  ("attempt with not enough fields");                                                                                                                                                                                                                                                                                     <* 
+ *>    yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 15,  0, "exec", 'f', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);                                                                                                                                                                   <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "     code     ... change part                      - - - - - - - - - - - - -   x_part      = 'v';                                                                                                                                                                                                           ");   <* 
+ *>    yUNIT_mincond  ("verify code success");                                                                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 20,  0, "code", 'p', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);                                                                                                                                                                   <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "... change part");                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "x_part      = 'v';");                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "code         different attempt                       v = 1;  ");                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_mincond  ("verify code with wrong indentation");                                                                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 25,  0, "code", 'p', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);                                                                                                                                                                   <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "different attempt");                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "v = 1;");                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                                                                                                                                                  <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                   <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                                                                                                                                                      <* 
+ *>    return 0;                                                                                                                                                                                                                                                                                                                              <* 
+ *> }                                                                                                                                                                                                                                                                                                                                         <*/
 
-   strcpy (x_desc   , "description");
-   strcpy (x_meth   , "method");
-   strcpy (x_args   , "arguments");
-   strcpy (x_test   , "test");
-   strcpy (x_expe   , "expected");
-   strcpy (x_retn   , "return");
-   yUNIT_mincond  ("verify field-related defaulting");
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_minchr   ("... check mark"                     , x_mark        , '-');
-   yUNIT_minchr   ("... check share"                    , x_share       , '-');
-   yUNIT_mindnoc  ();
+/*> char                                                                                                                                                                                                                                                                                                                                      <* 
+ *> koios__unit_parse_comment   (char a_list)                                                                                                                                                                                                                                                                                                 <* 
+ *> {                                                                                                                                                                                                                                                                                                                                         <* 
+ *>    char        x_name      [LEN_HUND]  = "apate.unit";                                                                                                                                                                                                                                                                                    <* 
+ *>    char        x_recd      [LEN_RECD]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_verb      [LEN_LABEL] = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_indx      =    0;                                                                                                                                                                                                                                                                                                        <* 
+ *>    char        x_spec      =  '-';                                                                                                                                                                                                                                                                                                        <* 
+ *>    void       *x_conv      = NULL;                                                                                                                                                                                                                                                                                                        <* 
+ *>    void       *x_code      = NULL;                                                                                                                                                                                                                                                                                                        <* 
+ *>    char        x_vers      =   -1;                                                                                                                                                                                                                                                                                                        <* 
+ *>    char        x_stage     [LEN_SHORT] = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_meth      [LEN_HUND]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_args      [LEN_FULL]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_test      [LEN_LABEL] = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_expe      [LEN_RECD]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_retn      [LEN_FULL]  = "";                                                                                                                                                                                                                                                                                              <* 
+ *>    char        x_mark      =  '-';                                                                                                                                                                                                                                                                                                        <* 
+ *>    char        x_share     =  '-';                                                                                                                                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minscrp ("PARSE__comment");                                                                                                                                                                                                                                                                                                      <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                                                                                                                                                          <* 
+ *>    yURG_err_none ();                                                                                                                                                                                                                                                                                                                      <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                   <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "#> macro a jklh");                                                                                                                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond  ("verify a quick success");                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);                                                                                                                                <* 
+ *>    yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    1);                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_comment);                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , -1);                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "#> macro a jklh");                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "     code     ... change part                      - - - - - - - - - - - - -   x_part      = 'v';                                                                                                                                                                                                           ");   <* 
+ *>    yUNIT_mincond  ("attempt on a normal line");                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);                                                                                                                                <* 
+ *>    yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    0);                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , '-');                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , -1);                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "     #> insert more code here");                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_mincond  ("verify an indented saved comment");                                                                                                                                                                                                                                                                                   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);                                                                                                                                <* 
+ *>    yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    1);                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_comment);                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , -1);                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "     #> insert more code here");                                                                                                                                                                                                                               <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "######> insert more code here");                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_mincond  ("attempt on correct comment but without spaces first");                                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);                                                                                                                                <* 
+ *>    yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    0);                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , '-');                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , -1);                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "## throw away comment ");                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("attempt on a normal line");                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);                                                                                                                                <* 
+ *>    yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    0);                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , '-');                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , -1);                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, ">> wrong prefix");                                                                                                                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond  ("attempt on a normal line");                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);                                                                                                                                <* 
+ *>    yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    0);                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , '-');                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , -1);                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "   #> script level comment");                                                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify an indented saved comment");                                                                                                                                                                                                                                                                                   <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);                                                                                                                                <* 
+ *>    yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    1);                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_comment);                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , -1);                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "   #> script level comment");                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    strcpy (x_recd, "#> ");                                                                                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_mincond  ("verify comment with just the initial space");                                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);                                                                                                                                <* 
+ *>    yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    1);                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_comment);                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minpoint ("... check code"                     , x_code        , NULL);                                                                                                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check stage"                    , x_stage       , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("... check vers"                     , x_vers        , -1);                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "#> ");                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                                                                                                                                                  <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                   <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                                                                                                                                                      <* 
+ *>    return 0;                                                                                                                                                                                                                                                                                                                              <* 
+ *> }                                                                                                                                                                                                                                                                                                                                         <*/
 
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_parse_limits  (char a_list)
-{
-   char        x_min       =    0;
-   char        x_max       =    0;
-
-   PROG__unit_quiet  ();
-   yUNIT_minscrp ("PARSE__limits");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond  ("verify quick success");
-   yUNIT_minval   ("get limits for SCRP"                , PARSE__limits ('s', &x_min, &x_max), 0);
-   yUNIT_minval   ("... check min"                      , x_min         , 3);
-   yUNIT_minval   ("... check max"                      , x_max         , 5);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("attempt with missing min");
-   yUNIT_minval   ("get limits with a null"             , PARSE__limits ('s', NULL  , &x_max), -999);
-   yUNIT_minval   ("... check max"                      , x_max         , 0);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("attempt with missing max");
-   yUNIT_minval   ("get limits with a null"             , PARSE__limits ('s', &x_min, NULL  ), -999);
-   yUNIT_minval   ("... check min"                      , x_min         , 0);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify quick success");
-   yUNIT_minval   ("get limits for COND"                , PARSE__limits ('2', &x_min, &x_max), 0);
-   yUNIT_minval   ("... check min"                      , x_min         , 2);
-   yUNIT_minval   ("... check max"                      , x_max         , 2);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("attempt with an illegal spec");
-   yUNIT_minval   ("get limits for '*'"                 , PARSE__limits ('*', &x_min, &x_max), -999);
-   yUNIT_minval   ("... check min"                      , x_min         , 0);
-   yUNIT_minval   ("... check max"                      , x_max         , 0);
-   yUNIT_mindnoc  ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   PROG__unit_end  ();
-   return 0;
-}
-
-char
-koios__unit_parse_current (char a_list)
-{
-   char        x_spec      =  '-';
-   char        x_max       =    0;
-   char        x_desc      [LEN_LONG]  = "";
-   char        x_meth      [LEN_HUND]  = "";
-   char        x_args      [LEN_FULL]  = "";
-   char        x_test      [LEN_LABEL] = "";
-   char        x_expe      [LEN_RECD]  = "";
-   char        x_retn      [LEN_FULL]  = "";
-
-   yUNIT_minscrp ("PARSE__current");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   x_spec = 's';  x_max = 2;
-   yUNIT_mincond  ("verify script success");
-   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (1, "SCRP"                     , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "check variable"           , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "extra"                    , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minval   ("... check max"                      , x_max         , 2);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "check variable");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   x_spec = 'f';  x_max = 7;
-   yUNIT_mincond  ("verify exec success");
-   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "call function"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "BIG_function"             , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (4, "27, 86, 't'"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (5, "i_equal"                  , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (6, "42"                       , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (7, "n"                        , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (8, "junk at end"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minval   ("... check max"                      , x_max         , 7);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "call function");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "BIG_function");
-   yUNIT_minstr   ("... check args"                     , x_args        , "27, 86, 't'");
-   yUNIT_minstr   ("... check test"                     , x_test        , "i_equal");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "42");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "n");
-   yUNIT_mindnoc  ();
-
-   x_spec = 'p';  x_max = 4;
-   yUNIT_mincond  ("verify code success");
-   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "- - - - - - -"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (4, "my.val = 978;"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (5, "more stuff"               , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minval   ("... check max"                      , x_max         , 4);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "update global");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "my.val = 978;");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   x_spec = '1';  x_max = 1;
-   yUNIT_mincond  ("verify ditto success");
-   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minval   ("... check max"                      , x_max         , 1);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_parse_prep      (char a_list)
-{
-   FILE       *x_scrp      = NULL;
-   char        x_nscrp     [LEN_HUND]  = "apate.unit";
-   char        x_recd      [LEN_RECD]  = "";
-   char        x_verb      [LEN_LABEL] = "";
-   char        x_spec      =  '-';
-   void       *x_conv      = NULL;
-   void       *x_code      = NULL;
-   char        x_stage     [LEN_SHORT] = "";
-   char        x_vers      =   -1;
-   char        x_desc      [LEN_LONG]  = "";
-   char        x_expe      [LEN_RECD]  = "";
-   char        x_dittoing  =  '-';
-   char        x_mark      =  '-';
-   char        x_dmark     =  '-';
-   int         x_ditto     =    0;
-   int         x_dline     =    0;
-   char        x_share     =  '-';
-   char        x_cshare    =  '-';
-
-   yUNIT_minscrp ("PARSE_prep");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   strcpy (x_recd, "SCRP    [¡Ï]  (CATS) verify preparation and defaulting                           0s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mincond  ("verify scrp in update");
-   yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp,  5, G_RUN_UPDATE , x_recd, x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline, &x_share, &x_cshare),    0);
-   yUNIT_minstr   ("... reuses"                         , REUSE__used (), "¥-----¥-----¥-----¥-----¥-   ¥-----¥-----¥-----¥-----¥-");
-   yUNIT_minstr   ("... dittos"                         , DITTO__used (), "----------");
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "SCRP");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , 's');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_scrp);
-   yUNIT_minpoint ("... check code"                     , x_code        , CODE_scrp);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "¡Ï");
-   yUNIT_minval   ("... check vers"                     , x_vers        , 0);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  '-');
-   yUNIT_minchr   ("... check mark"                     , x_mark        ,  '-');
-   yUNIT_minchr   ("... check dmark"                    , x_dmark       ,  '-');
-   yUNIT_minval   ("... check ditto"                    , x_ditto       ,    0);
-   yUNIT_minval   ("... check dline"                    , x_dline       ,    0);
-   yUNIT_minchr   ("... check share"                    , x_share       ,  '-');
-   yUNIT_minchr   ("... check cshare"                   , x_cshare      ,  '-');
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "   COND  (0)  check initial environment                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mincond  ("verify cond in update");
-   yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 10, G_RUN_UPDATE , x_recd, x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline, &x_share, &x_cshare),    0);
-   yUNIT_minstr   ("... reuses"                         , REUSE__used (), "¥-----¥-----¥-----¥-----¥-   ¥-----¥-----¥-----¥-----¥-");
-   yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "COND");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '2');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_cond);
-   yUNIT_minpoint ("... check code"                     , x_code        , CODE_cond);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , 0);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  '-');
-   yUNIT_minchr   ("... check mark"                     , x_mark        ,  '0');
-   yUNIT_minchr   ("... check dmark"                    , x_dmark       ,  '-');
-   yUNIT_minval   ("... check ditto"                    , x_ditto       ,    0);
-   yUNIT_minval   ("... check dline"                    , x_dline       ,    0);
-   yUNIT_minchr   ("... check share"                    , x_share       ,  '-');
-   yUNIT_minchr   ("... check cshare"                   , x_cshare      ,  '-');
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "   DITTO (0)  repeat the condition                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mincond  ("verify ditto in update");
-   yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 15, G_RUN_UPDATE , x_recd, x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline, &x_share, &x_cshare),    1);
-   yUNIT_minstr   ("... reuses"                         , REUSE__used (), "¥-----¥-----¥-----¥-----¥-   ¥-----¥-----¥-----¥-----¥-");
-   yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "DITTO");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '1');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_ditto);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , 0);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "[ check initial environment ]");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  '-');
-   yUNIT_minchr   ("... check mark"                     , x_mark        ,  '0');
-   yUNIT_minchr   ("... check dmark"                    , x_dmark       ,  '-');
-   yUNIT_minval   ("... check ditto"                    , x_ditto       ,    0);
-   yUNIT_minval   ("... check dline"                    , x_dline       ,    0);
-   yUNIT_minchr   ("... check share"                    , x_share       ,  '-');
-   yUNIT_minchr   ("... check cshare"                   , x_cshare      ,  '-');
-   yUNIT_mindnoc  ();
-
-   x_ditto = 0; /* simple reset */
-
-   strcpy (x_recd, "   DITTO (0)  repeat the condition                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mincond  ("verify ditto in creation");
-   system ("touch apate.unit           2> /dev/null");
-   yUNIT_minval   ("open the script file"               , READ_open   (x_nscrp, 'r', &x_scrp, NULL), 0);
-   yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 20, G_RUN_CREATE , x_recd, x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline, &x_share, &x_cshare),    1);
-   yUNIT_minstr   ("... reuses"                         , REUSE__used (), "¥-----¥-----¥-----¥-----¥-   ¥-----¥-----¥-----¥-----¥-");
-   yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "DITTO");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '1');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_ditto);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , 0);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "[ check initial environment ]");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  'y');
-   yUNIT_minchr   ("... check mark"                     , x_mark        ,  '0');
-   yUNIT_minchr   ("... check dmark"                    , x_dmark       ,  '0');
-   yUNIT_minval   ("... check ditto"                    , x_ditto       ,   10);
-   yUNIT_minval   ("... check dline"                    , x_dline       ,    0);
-   yUNIT_minchr   ("... check share"                    , x_share       ,  '-');
-   yUNIT_minchr   ("... check cshare"                   , x_cshare      ,  '-');
-   yUNIT_minval   ("close the script file"              , READ_close  (&x_scrp),   0);
-   yUNIT_mindnoc  ();
-
-   x_ditto = 0; /* simple reset */
-   x_dmark = '-';
-
-   strcpy (x_recd, "SHARED   -g-  reusable code                                                      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mincond  ("verify shared in update");
-   yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 25, G_RUN_UPDATE , x_recd, x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_dittoing, &x_mark, &x_dmark, &x_ditto, &x_dline, &x_share, &x_cshare),    0);
-   yUNIT_minstr   ("... reuses"                         , REUSE__used (), "¥-----¥-----¥-----¥-----¥-   ¥-----g-----¥-----¥-----¥-");
-   yUNIT_minstr   ("... dittos (cleared)"               , DITTO__used (), "----------");
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "SHARED");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , 's');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_shared);
-   yUNIT_minpoint ("... check code"                     , x_code        , CODE_shared);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , 0);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minchr   ("... check dittoing"                 , x_dittoing    ,  'y');
-   yUNIT_minchr   ("... check mark"                     , x_mark        ,  '-');
-   yUNIT_minchr   ("... check dmark"                    , x_dmark       ,  '-');
-   yUNIT_minval   ("... check ditto"                    , x_ditto       ,    0);
-   yUNIT_minval   ("... check dline"                    , x_dline       ,    0);
-   yUNIT_minchr   ("... check share"                    , x_share       ,  'g');
-   yUNIT_minchr   ("... check cshare"                   , x_cshare      ,  '-');
-   yUNIT_mindnoc  ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_parse_driver    (char a_list)
-{
-   char        x_name      [LEN_HUND]  = "apate.unit";
-   char        x_recd      [LEN_RECD]  = "";
-   char        x_desc      [LEN_LONG]  = "";
-   char        x_meth      [LEN_HUND]  = "";
-   char        x_args      [LEN_FULL]  = "";
-   char        x_test      [LEN_LABEL] = "";
-   char        x_expe      [LEN_RECD]  = "";
-   char        x_retn      [LEN_FULL]  = "";
-
-   yUNIT_minscrp ("PARSE_driver");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   strcpy (x_recd, "SCRP          (CATS) verify preparation and defaulting                           0s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mincond  ("verify script success");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", 's', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "(CATS) verify preparation and defaulting");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "CATS__prepare");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "0s");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "prepare");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "   COND  (0)  verify the defaults                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mincond  ("verify condition success");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 10,  0, "COND", '2', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "verify the defaults");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "   COND  (0) ");
-   yUNIT_mincond  ("attempt with verb only");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 10,  0, "COND", '2', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "     exec     call prepare                         CATS__prepare               \"∑ ∑  ∑ ∑ ∑   ∑ ∑\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq         i_equal     0                                                                                                    ");
-   yUNIT_mincond  ("verify exec/get success");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 15,  0, "exec", 'f', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "call prepare");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "CATS__prepare");
-   yUNIT_minstr   ("... check args"                     , x_args        , "\"∑ ∑  ∑ ∑ ∑   ∑ ∑\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq");
-   yUNIT_minstr   ("... check test"                     , x_test        , "i_equal");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "0");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "     exec     call prepare                         CATS__prepare              ");
-   yUNIT_mincond  ("attempt with not enough fields");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 15,  0, "exec", 'f', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "     code     ... change part                      - - - - - - - - - - - - -   x_part      = 'v';                                                                                                                                                                                                           ");
-   yUNIT_mincond  ("verify code success");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 20,  0, "code", 'p', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "... change part");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "x_part      = 'v';");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "code         different attempt                       v = 1;  ");
-   yUNIT_mincond  ("verify code with wrong indentation");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 25,  0, "code", 'p', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "different attempt");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "v = 1;");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_parse_comment   (char a_list)
-{
-   char        x_name      [LEN_HUND]  = "apate.unit";
-   char        x_recd      [LEN_RECD]  = "";
-   char        x_verb      [LEN_LABEL] = "";
-   char        x_indx      =    0;
-   char        x_spec      =  '-';
-   void       *x_conv      = NULL;
-   void       *x_code      = NULL;
-   char        x_vers      =   -1;
-   char        x_stage     [LEN_SHORT] = "";
-   char        x_desc      [LEN_LONG]  = "";
-   char        x_meth      [LEN_HUND]  = "";
-   char        x_args      [LEN_FULL]  = "";
-   char        x_test      [LEN_LABEL] = "";
-   char        x_expe      [LEN_RECD]  = "";
-   char        x_retn      [LEN_FULL]  = "";
-   char        x_mark      =  '-';
-   char        x_share     =  '-';
-
-   yUNIT_minscrp ("PARSE__comment");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   strcpy (x_recd, "#> macro a jklh");
-   yUNIT_mincond  ("verify a quick success");
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    1);
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_comment);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "#> macro a jklh");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "     code     ... change part                      - - - - - - - - - - - - -   x_part      = 'v';                                                                                                                                                                                                           ");
-   yUNIT_mincond  ("attempt on a normal line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    0);
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "     #> insert more code here");
-   yUNIT_mincond  ("verify an indented saved comment");
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    1);
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_comment);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "     #> insert more code here");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "######> insert more code here");
-   yUNIT_mincond  ("attempt on correct comment but without spaces first");
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    0);
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "## throw away comment ");
-   yUNIT_mincond  ("attempt on a normal line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    0);
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, ">> wrong prefix");
-   yUNIT_mincond  ("attempt on a normal line");
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    0);
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '-');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , NULL);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "   #> script level comment");
-   yUNIT_mincond  ("verify an indented saved comment");
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    1);
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_comment);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "   #> script level comment");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   strcpy (x_recd, "#> ");
-   yUNIT_mincond  ("verify comment with just the initial space");
-   yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_share),    0);
-   yUNIT_minval   ("call comment"                       , PARSE__comment  (x_name,  5, x_recd, x_verb, &x_spec, &x_conv, &x_code, x_expe),    1);
-   yUNIT_minstr   ("... check verb"                     , x_verb        , "#>");
-   yUNIT_minchr   ("... check spec"                     , x_spec        , 'c');
-   yUNIT_minpoint ("... check conv"                     , x_conv        , CONV_comment);
-   yUNIT_minpoint ("... check code"                     , x_code        , NULL);
-   yUNIT_minstr   ("... check stage"                    , x_stage       , "");
-   yUNIT_minval   ("... check vers"                     , x_vers        , -1);
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "#> ");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
-   yUNIT_mindnoc  ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_parse_version   (char a_list)
-{
-   char        x_vers      =  '-';
-
-   yUNIT_minscrp ("PARSE__version");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond  ("verify a quick success");
-   yUNIT_minval   ("call version"                       , PARSE__version  ("v21"              , &x_vers),    0);
-   yUNIT_minval   ("... check version"                  , x_vers        ,  21);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("attempt a bad version");
-   yUNIT_minval   ("call version"                       , PARSE__version  ("v01"              , &x_vers), -999);
-   yUNIT_minval   ("... check version"                  , x_vers        ,  -1);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify current");
-   yUNIT_minval   ("call version"                       , PARSE__version  ("check descripion" , &x_vers),    0);
-   yUNIT_minval   ("... check version"                  , x_vers        ,   0);
-   yUNIT_mindnoc  ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
+/*> char                                                                                                               <* 
+ *> koios__unit_parse_version   (char a_list)                                                                          <* 
+ *> {                                                                                                                  <* 
+ *>    char        x_vers      =  '-';                                                                                 <* 
+ *>                                                                                                                    <* 
+ *>    yUNIT_minscrp ("PARSE__version");                                                                               <* 
+ *>    if (a_list == 'y')  return 0;                                                                                   <* 
+ *>    yURG_err_none ();                                                                                               <* 
+ *>    rm_working_files ();                                                                                            <* 
+ *>    PROG__unit_quiet  ();                                                                                           <* 
+ *>                                                                                                                    <* 
+ *>    yUNIT_mincond  ("verify a quick success");                                                                      <* 
+ *>    yUNIT_minval   ("call version"                       , PARSE__version  ("v21"              , &x_vers),    0);   <* 
+ *>    yUNIT_minval   ("... check version"                  , x_vers        ,  21);                                    <* 
+ *>    yUNIT_mindnoc  ();                                                                                              <* 
+ *>                                                                                                                    <* 
+ *>    yUNIT_mincond  ("attempt a bad version");                                                                       <* 
+ *>    yUNIT_minval   ("call version"                       , PARSE__version  ("v01"              , &x_vers), -999);   <* 
+ *>    yUNIT_minval   ("... check version"                  , x_vers        ,  -1);                                    <* 
+ *>    yUNIT_mindnoc  ();                                                                                              <* 
+ *>                                                                                                                    <* 
+ *>    yUNIT_mincond  ("verify current");                                                                              <* 
+ *>    yUNIT_minval   ("call version"                       , PARSE__version  ("check descripion" , &x_vers),    0);   <* 
+ *>    yUNIT_minval   ("... check version"                  , x_vers        ,   0);                                    <* 
+ *>    yUNIT_mindnoc  ();                                                                                              <* 
+ *>                                                                                                                    <* 
+ *>    PROG__unit_end    ();                                                                                           <* 
+ *>    rm_working_files ();                                                                                            <* 
+ *>    yUNIT_minprcs ();                                                                                               <* 
+ *>    return 0;                                                                                                       <* 
+ *> }                                                                                                                  <*/
 
 
 
@@ -5378,1588 +5378,1588 @@ koios__unit_scrp_variety (void)
 /*====================------------------------------------====================*/
 static void      o___LIVE____________________o (void) {;}
 
-char
-koios__unit_shared_data  (char a_compile)
-{
-   char        x_wave      [LEN_HUND]  = "apate.wave";
-   char        x_global    [LEN_HUND]  = "master.globals";
-
-   yUNIT_minscrp ("run-time testing");
-   yURG_err_none ();  /* not to stderr/terminal */
-
-   yUNIT_mincond ("prepare a master example");
-   system ("rm -f apate.unit 2> /dev/null");
-   system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  123456789- \"        > master.unit");
-   system ("echo \"#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  =(var)==== \"       >> master.unit");
-   system ("echo \"PREP          global function headers             \"                                                                                                       >> master.unit");
-   system ("echo \"  incl        fake header                          apate.h           \"                                                                                    >> master.unit");
-   system ("echo \"  global      global variable                      - - - - - - - -   int h = 0;                                                        \"              >> master.unit");
-   system ("echo \"GLOBAL   -D-  globally shared steps                0s  tbd        \"                                                                                   >> master.unit");
-   system ("echo \"  COND        prepare variables                   \"                                                                                                       >> master.unit");
-   system ("echo \"    code      ... set new value                    - - - - - - - -   h = 32 * 64;                                                    \"                >> master.unit");
-   system ("echo \"  COND        generate a summary                  \"                                                                                                       >> master.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> master.unit");
-   system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> master.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> master.unit");
-   yUNIT_mindnoc ();
-
-   if (a_compile == 'y') {
-      yUNIT_mincond ("turn into a master header");
-      yUNIT_minval  ("... run koios"                      , system ("koios --create master"), 999);
-      yUNIT_mindnoc ();
-   } else {
-      yUNIT_mincond ("turn into a master header");
-      yUNIT_minval  ("... run koios"                      , system ("koios --update master"), 999);
-      yUNIT_mindnoc ();
-   }
-
-   yUNIT_mincond ("verify exporting globals");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global,   0), "A   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "B   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "C   -1                                                                                0    0");
-   if (a_compile == 'y')   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "D    6 globally∑shared∑steps                                                          2    4");
-   else                    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "D    6 globally∑shared∑steps                                                          0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "E   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "F   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "G   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "H   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "I   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "J   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "K   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "L   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "M   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "N   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "O   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "P   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "Q   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "R   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "S   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "T   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "U   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "V   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "W   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "X   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "Y   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "Z   -1                                                                                0    0");
-   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), ""                                                                                            );
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("prepare a header example");
-   system ("rm -f apate.h    2> /dev/null");
-   system ("echo \"#define WEIRD_BIT \"booga\"\"                                                                                                                                   > apate.h");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("prepare a interesting example");
-   system ("rm -f apate.unit 2> /dev/null");
-   system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  123456789- \"        > apate.unit");
-   system ("echo \"#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  =(var)==== \"       >> apate.unit");
-   system ("echo \"PREP          global function headers             \"                                                                                                       >> apate.unit");
-   system ("echo \"  incl        fake header                          apate.h           \"                                                                                    >> apate.unit");
-   system ("echo \"SECT          simple testing                      \"                                                                                                       >> apate.unit");
-   system ("echo \"SCRP    [¿Í]  (SCRP) verify openning and closing   0s  tbd        \"                                                                                   >> apate.unit");
-   system ("echo \"  COND        simple openning                     \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");
-   system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"  COND   (1)  defensive checks                    \"                                                                                                       >> apate.unit");
-   system ("echo \"    load      ... prep data for read               stdin             one two three                                                   \"                >> apate.unit");
-   system ("echo \"    get       ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");
-   system ("echo \"  COND        small condition                     \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");
-   system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");
-   system ("echo \"  COND        duplicate opens and closes          \"                                                                                                       >> apate.unit");
-   system ("echo \"    local     ... working variables                - - - - - - - -   int c = 0;                                                      \"                >> apate.unit");
-   system ("echo \"    echo      ... check working variable           - - - - - - - -   c                         i_equal     0                     \"                >> apate.unit");
-   system ("echo \"    load      ... prep data for read               stdin             one two three                                                   \"                >> apate.unit");
-   system ("echo \"    mode      FORCED_FAIL                         \"                                                                                                       >> apate.unit");
-   system ("echo \"    system    ... run little                       - - - - - - - -   /bin/false                                                      \"                >> apate.unit");
-   system ("echo \"SECT          more complex testing                \"                                                                                                       >> apate.unit");
-   system ("echo \"SHARED   -a-  prepare files for use                0s  tbd         \"                                                                                  >> apate.unit");
-   system ("echo \"  COND        script input file                   \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");
-   system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    mode      normal                              \"                                                                                                       >> apate.unit");
-   system ("echo \"  COND        code output file                    \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");
-   system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"SHARED   -b-  remove files after use               0s  tbd         \"                                                                                  >> apate.unit");
-   system ("echo \"  COND        code output file                    \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");
-   system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"  COND        close and delete code file          \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");
-   system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"SCRP    [¿Î]  (SCRP) verify system startup          0s  tbd                          \"                                                              >> apate.unit");
-   system ("echo \"  COND        run initialization                  \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");
-   system ("echo \"    mode      FORCED_FAIL                         \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"  REUSE  -a-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");
-   system ("echo \"  COND        parse a code record                 \"                                                                                                       >> apate.unit");
-   system ("echo \"    local     ... create string                    - - - - - - - -   char  x_str [100];                                              \"                >> apate.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                  x_str  \"        >> apate.unit");
-   system ("echo \"    echo      ... verify string                    - - - - - - - -   x_str                     s_equal     hello                 \"                >> apate.unit");
-   system ("echo \"    local     ... create number                    - - - - - - - -   float x_real = 0.0;                                             \"                >> apate.unit");
-   system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                   x_real \"        >> apate.unit");
-   system ("echo \"    echo      ... verify number                    - - - - - - - -   x_real                    r_lesser    16.0                  \"                >> apate.unit");
-   system ("echo \"    local     ... create integer                   - - - - - - - -   int   x_int  = 0;                                               \"                >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                      x_int  \"        >> apate.unit");
-   system ("echo \"    echo      ... verify integer                   - - - - - - - -   x_int                     i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    local     ... create character                 - - - - - - - -   char  x_char = 0;                                               \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                    x_char \"        >> apate.unit");
-   system ("echo \"    echo      ... verify character                 - - - - - - - -   x_char                    i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"    local     ... create pointer                   - - - - - - - -   int  *x_ptr  = NULL;                                            \"                >> apate.unit");
-   system ("echo \"    exec      ... check pointer                    yUNIT_testptr                               p_exists    0                      x_ptr  \"        >> apate.unit");
-   system ("echo \"    echo      ... verify pointer                   - - - - - - - -   x_ptr                     p_exists    0                     \"                >> apate.unit");
-   system ("echo \"    echo      ... verify value at pointer          - - - - - - - -   (x_ptr) ? *x_ptr : 0      i_equal     42                    \"                >> apate.unit");
-   system ("echo \"SCRP    [¡Ï]  (SCRP) verify normal processing       0s  tbd                          \"                                                              >> apate.unit");
-   system ("echo \"  GROUP       round one                           \"                                                                                                       >> apate.unit");
-   system ("echo \"  COND   (1)  process arguments                   \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");
-   system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"  REUSE  -a-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");
-   system ("echo \"  COND   (2)  read one record                     \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check string                     yUNIT_teststring  1                         s_equal     hello                 \"                >> apate.unit");
-   system ("echo \"    exec      ... check number                     yUNIT_testreal    2                         r_greater   15.0                  \"                >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     64                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    87                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"  GROUP       round two                           \"                                                                                                       >> apate.unit");
-   system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");
-   system ("echo \"  REUSE  -b-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");
-   system ("echo \"  GROUP       final round                         \"                                                                                                       >> apate.unit");
-   system ("echo \"  DITTO  (2)  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");
-   system ("echo \"  REUSE  -D-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");
-   system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");
-   system ("echo \"SCRP    [¬Ú]  (SCRP) empty script                   0s  tbd                          \"                                                              >> apate.unit");
-   yUNIT_mindnoc ();
-
-   if (a_compile == 'y') {
-      yUNIT_mincond ("turn into a unit test");
-      yUNIT_minval  ("... run koios"                      , system ("koios --create apate"), 999);
-      yUNIT_minval  ("... copy to c"                      , system ("cp  -f apate_unit.{cs,c}"), 0);
-      yUNIT_minval  ("... compile"                        , system ("gcc -c apate_unit.c"), 0);
-      yUNIT_minval  ("... link"                           , system ("gcc -o apate_unit apate_unit.o -lyUNIT"), 0);
-      yUNIT_minval  ("... permissions"                    , system ("chmod +x apate_unit"), 0);
-      yUNIT_mindnoc ();
-   }
-
-   if (a_compile == 'y') {
-      yUNIT_mincond ("verify waves");
-      yUNIT_minstr  ("check wave entry"                   , yURG_peek (x_wave, '∫'), "¿  Í  apate.unit                       1  (SCRP) verify openning and closing                                ");
-      yUNIT_minstr  ("check wave entry"                   , yURG_peek (x_wave, '÷'), "¿  Î  apate.unit                       2  (SCRP) verify system startup                                      ");
-      yUNIT_minstr  ("check wave entry"                   , yURG_peek (x_wave, '÷'), "¡  Ï  apate.unit                       3  (SCRP) verify normal processing                                   ");
-      yUNIT_minstr  ("check wave entry"                   , yURG_peek (x_wave, '÷'), "¬  Ú  apate.unit                       4  (SCRP) empty script                                               ");
-      yUNIT_minval  ("... check line count"               , yURG_peek_count (x_wave) ,  4);
-      yUNIT_minprcs ();
-   }
-
-   return 0;
-}
-
-char
-koios__unit_live_conv    (char a_list)
-{
-   int         c           =    0;
-   char        x_master    [LEN_HUND]  = "master.unit";
-   char        x_global    [LEN_HUND]  = "master.globals";
-   char        x_unit      [LEN_HUND]  = "apate.unit";
-   char        x_wave      [LEN_HUND]  = "apate.wave";
-
-   yUNIT_minscrp ("live testing for conversion");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   koios__unit_shared_data ('-');
-
-   /*> PROG__unit_loud   ();                                                          <*/
-
-   /*> yUNIT_mincond ("call master conversion");                                                                        <* 
-    *> yUNIT_minval  ("... run master"                     , system ("koios --update master > /dev/null 2>&1"),   0);   <* 
-    *> yUNIT_minval  ("... check line count"               , yURG_peek_count (x_master) ,  28);                         <* 
-    *> yUNIT_mindnoc ();                                                                                                <*/
-
-   yUNIT_mincond ("check updated master");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master,   0), "#!/usr/local/bin/koios");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "#   koios-polos (axis of heaven) unit testing meta-language");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "PREP          global function headers                                            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "   incl       fake header                          apate.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "   global     global variable                      - - - - - - - - - - - - -   int h = 0;                                                                                                                                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "GLOBAL   -D-  globally shared steps                                              0s   tbd                                                                                          ((DD.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "   COND       prepare variables                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((DD.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "     code     ... set new value                    - - - - - - - - - - - - -   h = 32 * 64;                                                                                                                                                                                                               ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "   COND       generate a summary                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((DD.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "# end-of-file.  done, finito, completare, whimper [œ¥∑∑∑");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");
-   yUNIT_mindnoc ();
-
-   /*> PROG__unit_end    ();                                                          <*/
-
-   yUNIT_mincond ("call conversion");
-   yUNIT_minval  ("... run koios"                      , system ("koios --update apate > /dev/null 2>&1"),   0);
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_unit) , 167);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify header");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit,   0), "#!/usr/local/bin/koios");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#   koios-polos (axis of heaven) unit testing meta-language");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify prep/incl");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "PREP          global function headers                                            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   incl       fake header                          apate.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify sect");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SECT          simple testing                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify script with dittoing");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP    [¿Í]  (SCRP) verify openning and closing                                 0s   tbd                                                                                          ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       simple openning                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND  (1)  defensive checks                                                   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     load     ... prep data for read               stdin                       one two three                                                                                                                                                                                                              ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     get      ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (1)  [ defensive checks ]                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.003))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       small condition                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.004))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (1)  [ defensive checks ]                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.005))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       duplicate opens and closes                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.006))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... working variables                - - - - - - - - - - - - -   int c = 0;                                                                                                                                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... check working variable           - - - - - - - - - - - - -   c                                                                                                     i_equal     0                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     load     ... prep data for read               stdin                       one two three                                                                                                                                                                                                              ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     mode     FORCED_FAIL                          - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     system   ... run little                       - - - - - - - - - - - - -   /bin/false                                                                                                                                                                                                                 ");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify sect");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SECT          more complex testing                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify shared a");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SHARED   -a-  prepare files for use                                              0s   tbd                                                                                          ((aa.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       script input file                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((aa.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     mode     normal                               - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       code output file                                                   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((aa.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify shared b");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SHARED   -b-  remove files after use                                             0s   tbd                                                                                          ((bb.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       code output file                                                   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       close and delete code file                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify script with a reuse");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP    [¿Î]  (SCRP) verify system startup                                       0s   tbd                                                                                          ((02.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       run initialization                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     mode     FORCED_FAIL                          - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   REUSE -a-  [ prepare files for use ]                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       parse a code record                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.003))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... create string                    - - - - - - - - - - - - -   char  x_str [100];                                                                                                                                                                                                         ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                 x_str                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify string                    - - - - - - - - - - - - -   x_str                                                                                                 s_equal     hello                                                                                                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... create number                    - - - - - - - - - - - - -   float x_real = 0.0;                                                                                                                                                                                                        ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                  x_real               ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify number                    - - - - - - - - - - - - -   x_real                                                                                                r_lesser    16.0                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... create integer                   - - - - - - - - - - - - -   int   x_int  = 0;                                                                                                                                                                                                          ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                     x_int                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify integer                   - - - - - - - - - - - - -   x_int                                                                                                 i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... create character                 - - - - - - - - - - - - -   char  x_char = 0;                                                                                                                                                                                                          ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                   x_char               ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify character                 - - - - - - - - - - - - -   x_char                                                                                                i_equal     'A'                                                                                                  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... create pointer                   - - - - - - - - - - - - -   int  *x_ptr  = NULL;                                                                                                                                                                                                       ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check pointer                    yUNIT_testptr                                                                                                                     p_exists    0                                                                                                     x_ptr                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify pointer                   - - - - - - - - - - - - -   x_ptr                                                                                                 p_exists    0                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify value at pointer          - - - - - - - - - - - - -   (x_ptr) ? *x_ptr : 0                                                                                  i_equal     42                                                                                                   ");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify script with multiple reuses and dittos");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP    [¡Ï]  (SCRP) verify normal processing                                    0s   tbd                                                                                          ((03.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   GROUP      round one                                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND  (1)  process arguments                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   REUSE -a-  [ prepare files for use ]                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND  (2)  read one record                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.003))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            1                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              2                                                                                                     r_greater   15.0                                                                                                 ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               64                                                                                                    i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              87                                                                                                    i_equal     'A'                                                                                                  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   GROUP      round two                                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (1)  [ process arguments ]                                              - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.004))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   REUSE -b-  [ remove files after use ]                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.005))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   GROUP      final round                                                        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (2)  [ read one record ]                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.006))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   REUSE -D-  [ globally shared steps ]                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.007))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (1)  [ process arguments ]                                              - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.008))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify empty script");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP    [¬Ú]  (SCRP) empty script                                                0s   tbd                                                                                          ((04.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify footer");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "# end-of-file.  done, finito, completare, whimper [œ¥∑∑∑");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_mindnoc ();
-
-   /*> yUNIT_mincond  ("verify the WAVE file)");                                                                                                                                                                           <* 
-    *> yUNIT_minstr   ("... check WAVE"                     , yURG_peek      (x_wave    ,   0)   , "¿  Í  apate.unit                       1  (SCRP) verify openning and closing                                ");   <* 
-    *> yUNIT_minstr   ("... check WAVE"                     , yURG_peek      (x_wave    , '÷')   , "¿  Î  apate.unit                       2  (SCRP) verify system startup                                      ");   <* 
-    *> yUNIT_minstr   ("... check WAVE"                     , yURG_peek      (x_wave    , '÷')   , "¡  Ï  apate.unit                       3  (SCRP) verify normal processing                                   ");   <* 
-    *> yUNIT_minstr   ("... check WAVE"                     , yURG_peek      (x_wave    , '÷')   , "¬  Ú  apate.unit                       4  (SCRP) empty script                                               ");   <* 
-    *> yUNIT_minstr   ("... check WAVE"                     , yURG_peek      (x_wave    , '÷')   , ""                                           );                                                                         <* 
-    *> yUNIT_mindnoc  ();                                                                                                                                                                                                  <*/
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_live_ditto   (char a_list)
-{
-   int         c           =    0;
-   char        x_master    [LEN_HUND]  = "master_unit.cs";
-   char        x_global    [LEN_HUND]  = "master.globals";
-   char        x_ncode     [LEN_HUND]  = "apate_unit.cs";
-   char        x_wave      [LEN_HUND]  = "apate.wave";
-
-   yUNIT_minscrp ("live testing for ditto");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond  ("create a sample unit with ditto");
-   system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  apate.unit");
-   system ("echo \"  COND   (1)  repeat code                         \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"  COND        non-repeat code before ditto        \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");
-   system ("echo \"  COND        non-repeat code after ditto         \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("call live code creation");
-   yUNIT_minval   ("... run koios"                      , system ("koios --create apate  > /dev/null 2>&1"),   0);
-   yUNIT_minval   ("... copy to c"                      , system ("cp  -f apate_unit.{cs,c}"), 0);
-   yUNIT_minval   ("... compile"                        , system ("gcc -c apate_unit.c"), 0);
-   yUNIT_minval   ("... link"                           , system ("gcc -o apate_unit apate_unit.o -lyUNIT"), 0);
-   yUNIT_minval   ("... permissions"                    , system ("chmod +x apate_unit"), 0);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify code header");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode,   0), "/*================================= beg-code =================================*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "/* /usr/local/bin/koios                                                       */");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "/*   autogen by koios-polos (axis of heaven) unit testing meta-language       */");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "/*---(standard support functions)----*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "#include    <yUNIT_unit.h>");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "#include    \"master.h\"");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "/*================================ beg-script ================================*/");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify script");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "char");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "yUNIT_script_01          (void)");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "{");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   /*===[[ script header ]]========================*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   cyUNIT.offset  = 0;");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   cyUNIT.origin  = 1;");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_mode_reset ();");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_scrp    (   1,   1, \"\", \"verify ditto\", \"0s\", \"tbd\", \"\");");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify repeatable condition");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   /*===[[ COND #001 ]]============================*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_cond    (   2, cyUNIT.offset +   1, '!', \"repeat code\");");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(run step)--------------------*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testint (32);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   3,   1, \"... check integer\", \"yUNIT_testint\", \"32\", \"i_equal\", 2, cyUNIT.i_rc, cyUNIT.exec);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(run step)--------------------*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testchar (65);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   4,   2, \"... check character\", \"yUNIT_testchar\", \"65\", \"i_equal\", 'A', cyUNIT.i_rc, cyUNIT.exec);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(summary)---------------------*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_dnoc    (cyUNIT.exec);"         );
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(done)------------------------*/");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify non-repeatable condition");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   /*===[[ COND #002 ]]============================*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_cond    (   5, cyUNIT.offset +   2, '-', \"non-repeat code before ditto\");");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(run step)--------------------*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testint (32);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   6,   1, \"... check integer\", \"yUNIT_testint\", \"32\", \"i_equal\", 2, cyUNIT.i_rc, cyUNIT.exec);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(summary)---------------------*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_dnoc    (cyUNIT.exec);"         );
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(done)------------------------*/");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify ditto on repeatable condition");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   /*===[[ COND #003 ]]============================*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_cond    (   7, cyUNIT.offset +   3, '1', \"[ repeat code ]\");");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(run step)--------------------*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testint (32);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   3,   1, \"... check integer\", \"yUNIT_testint\", \"32\", \"i_equal\", 2, cyUNIT.i_rc, cyUNIT.exec);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(run step)--------------------*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testchar (65);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   4,   2, \"... check character\", \"yUNIT_testchar\", \"65\", \"i_equal\", 'A', cyUNIT.i_rc, cyUNIT.exec);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(summary)---------------------*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_dnoc    (cyUNIT.exec);"         );
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(done)------------------------*/");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify non-repeatable condition");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   /*===[[ COND #004 ]]============================*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_cond    (   8, cyUNIT.offset +   4, '-', \"non-repeat code after ditto\");");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(run step)--------------------*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testint (32);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   9,   1, \"... check integer\", \"yUNIT_testint\", \"32\", \"i_equal\", 2, cyUNIT.i_rc, cyUNIT.exec);");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(summary)---------------------*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_dnoc    (cyUNIT.exec);"         );
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /*---(done)------------------------*/");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify end of script");
-   yUNIT_minstr   ("... check result"                   , yURG_peek (x_ncode, '÷'), "   /*===[[ script done ]]==========================*/");
-   yUNIT_minstr   ("... check result"                   , yURG_peek (x_ncode, '÷'), "   yUNIT_prcs    (cyUNIT.exec);"            );
-   yUNIT_minstr   ("... check result"                   , yURG_peek (x_ncode, '÷'), "   /*---(complete)-----------------------*/");
-   yUNIT_minstr   ("... check result"                   , yURG_peek (x_ncode, '÷'), "   return 0;"                               );
-   yUNIT_minstr   ("... check result"                   , yURG_peek (x_ncode, '÷'), "}"                                          );
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "/*================================ end-script ================================*/");
-   yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "");
-   yUNIT_mindnoc  ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_live_scrp    (char a_list)
-{
-   int         c           =    0;
-   char        x_urun      [LEN_HUND]  = "apate.urun";
-   char        x_wave      [LEN_HUND]  = "apate.wave";
-
-   yUNIT_minscrp ("live SCRP level testing on unit test result");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   koios__unit_shared_data ('y');
-
-   yUNIT_mincond ("check inventory of scripts");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --scrps"), 0);
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 17);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check urun output");
-   yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===-------------------------- simple testing ---------------------------=== TCES");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] (SCRP) verify openning and closing ============================[¿Í]=[00006]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===----------------------- more complex testing ------------------------=== TCES");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [04] (SCRP) empty script ===========================================[¬Ú]=[00094]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "TINU  scrp=4    cond=21    test=90    [ ------------------------------------------- ]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check inventory of one script only");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --scrps 03"), 0);
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 7);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check urun output");
-   yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "TINU  scrp=1    cond=11    test=40    [ ------------------------------------------- ]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check running and showing script-level only only");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --scrp"), 999);
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 21);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check urun output");
-   yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===-------------------------- simple testing ---------------------------=== TCES");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] (SCRP) verify openning and closing ============================[¿Í]=[00006]");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=6     test=22    [ pass=15    fail=1     badd=0     void=6     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===----------------------- more complex testing ------------------------=== TCES");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=4     test=28    [ pass=16    fail=5     badd=0     void=7     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=11    test=40    [ pass=30    fail=8     badd=0     void=2     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [04] (SCRP) empty script ===========================================[¬Ú]=[00094]");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_YEL "PRCS -------- cond=0     test=0     [ pass=0     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), BACK_RED "TINU  scrp=4    cond=21    test=90    [ pass=61    fail=14    badd=0     void=15    ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check running single script and showing script-level only only");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --scrp 02"), 999);
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 8);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check urun output");
-   yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=4     test=28    [ pass=16    fail=5     badd=0     void=7     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), BACK_RED "TINU  scrp=1    cond=4     test=28    [ pass=16    fail=5     badd=0     void=7     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_live_cond    (char a_list)
-{
-   int         c           =    0;
-   char        x_urun      [LEN_HUND]  = "apate.urun";
-
-   yUNIT_minscrp ("live COND level testing on unit test result");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   koios__unit_shared_data ('y');
-
-   /*> system ("cp apate.unit  apate_back.unit");                                     <*/
-   /*> system ("cp master.unit master_back.unit");                                    <*/
-
-   yUNIT_mincond ("check inventory of conditions");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --conds"), 0);
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 87);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check header");
-   yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑4 ∑∑∑4 ∑∑∑4");
-   yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (3) YUNIT_COND                             c ∑∑21 ∑∑17 ∑∑12");
-   yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑90 ∑∑78 ∑∑58");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check section");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===-------------------------- simple testing ---------------------------=== TCES");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check script one");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] (SCRP) verify openning and closing ============================[¿Í]=[00006]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [002] (1)" BACK_OFF " defensive checks - -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00012]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [003] (1) [ defensive checks ]  -- -- -- -- -- -- -- -- -- -- -- -- -- [00017]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [004] small condition -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00018]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [005] (1) [ defensive checks ]  -- -- -- -- -- -- -- -- -- -- -- -- -- [00020]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [006] duplicate opens and closes  -- -- -- -- -- -- -- -- -- -- -- -- -[00021]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  PRCS -------- cond=6     test=22    [ ------------------------------------------- ]");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check section");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===----------------------- more complex testing ------------------------=== TCES");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check script two");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] run initialization -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00051]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [004] parse a code record - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00057]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  PRCS -------- cond=4     test=28    [ ------------------------------------------- ]");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check script three");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round one   ----------------------------===");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [001] (1)" BACK_OFF " process arguments  -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00076]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [004] (2)" BACK_OFF " read one record -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00082]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round two   ----------------------------===");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [005] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00088]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [006]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00040]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [007]" BACK_OFF " close and delete code file  -- -- -- -- -- -- -- -- -- -- -- -- -[00045]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===---------------------------   final round   ---------------------------===");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [008] (2) [ read one record ] - -- -- -- -- -- -- -- -- -- -- -- -- -- [00091]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check (70) global cond"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [009]" BACK_OFF " prepare variables  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check (72) global cond"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [010]" BACK_OFF " generate a summary -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00009]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [011] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00093]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  PRCS -------- cond=11    test=40    [ ------------------------------------------- ]");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check script four");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [04] (SCRP) empty script ===========================================[¬Ú]=[00094]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  PRCS -------- cond=0     test=0     [ ------------------------------------------- ]");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check footer");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "TINU  scrp=4    cond=21    test=90    [ ------------------------------------------- ]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check inventory of conditions for single script");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --conds 02"), 0);
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 22);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check urun output");
-   yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑1 ∑∑∑4 ∑∑∑4");
-   yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (3) YUNIT_COND                             c ∑∑∑4 ∑∑17 ∑∑12");
-   yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑28 ∑∑78 ∑∑58");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] run initialization -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00051]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [004] parse a code record - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00057]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  PRCS -------- cond=4     test=28    [ ------------------------------------------- ]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "TINU  scrp=1    cond=4     test=28    [ ------------------------------------------- ]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check executing and presenting only conditions");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --cond"), 999);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify header");
-   yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑4 ∑∑∑4 ∑∑∑4");
-   yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (3) YUNIT_COND                             c ∑∑21 ∑∑17 ∑∑12");
-   yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑90 ∑∑78 ∑∑58");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===-------------------------- simple testing ---------------------------=== TCES");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify first script");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] (SCRP) verify openning and closing ============================[¿Í]=[00006]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [002] (1)" BACK_OFF " defensive checks - -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00012]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=3     fail=0     badd=0     void=1     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [003] (1) [ defensive checks ]  -- -- -- -- -- -- -- -- -- -- -- -- -- [00017]" BACK_OFF);
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=3     fail=0     badd=0     void=1     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [004] small condition -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00018]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=1     [ pass=1     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [005] (1) [ defensive checks ]  -- -- -- -- -- -- -- -- -- -- -- -- -- [00020]" BACK_OFF);
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=3     fail=0     badd=0     void=1     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [006] duplicate opens and closes  -- -- -- -- -- -- -- -- -- -- -- -- -[00021]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=5     [ pass=1     fail=1     badd=0     void=3     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=6     test=22    [ pass=15    fail=1     badd=0     void=6     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===----------------------- more complex testing ------------------------=== TCES");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify second script");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] run initialization -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00051]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=1     fail=2     badd=0     void=1     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=3     badd=0     void=1     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [004] parse a code record - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00057]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=16    [ pass=11    fail=0     badd=0     void=5     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=4     test=28    [ pass=16    fail=5     badd=0     void=7     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify third script");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round one   ----------------------------===");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [001] (1)" BACK_OFF " process arguments  -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00076]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=3     fail=0     badd=0     void=1     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [004] (2)" BACK_OFF " read one record -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00082]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=4     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round two   ----------------------------===");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [005] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00088]" BACK_OFF);
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [006]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00040]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [007]" BACK_OFF " close and delete code file  -- -- -- -- -- -- -- -- -- -- -- -- -[00045]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===---------------------------   final round   ---------------------------===");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [008] (2) [ read one record ] - -- -- -- -- -- -- -- -- -- -- -- -- -- [00091]" BACK_OFF);
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=4     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check global condition"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [009]" BACK_OFF " prepare variables  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=1     [ pass=0     fail=0     badd=0     void=1     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check global condition"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [010]" BACK_OFF " generate a summary -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00009]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=3     [ pass=3     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [011] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00093]" BACK_OFF);
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=11    test=40    [ pass=30    fail=8     badd=0     void=2     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify fourth script and footer");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [04] (SCRP) empty script ===========================================[¬Ú]=[00094]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_YEL "PRCS -------- cond=0     test=0     [ pass=0     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), BACK_RED "TINU  scrp=4    cond=21    test=90    [ pass=61    fail=14    badd=0     void=15    ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 108);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check executing and presenting but show only one script");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --cond 03"), 999);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify header");
-   yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑1 ∑∑∑4 ∑∑∑4");
-   yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (3) YUNIT_COND                             c ∑∑11 ∑∑17 ∑∑12");
-   yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑40 ∑∑78 ∑∑58");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify third script");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round one   ----------------------------===");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [001] (1)" BACK_OFF " process arguments  -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00076]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=3     fail=0     badd=0     void=1     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [004] (2)" BACK_OFF " read one record -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00082]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=4     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round two   ----------------------------===");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [005] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00088]" BACK_OFF);
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [006]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00040]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [007]" BACK_OFF " close and delete code file  -- -- -- -- -- -- -- -- -- -- -- -- -[00045]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===---------------------------   final round   ---------------------------===");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [008] (2) [ read one record ] - -- -- -- -- -- -- -- -- -- -- -- -- -- [00091]" BACK_OFF);
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=4     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check global condition"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [009]" BACK_OFF " prepare variables  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=1     [ pass=0     fail=0     badd=0     void=1     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check global condition"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [010]" BACK_OFF " generate a summary -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00009]");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=3     [ pass=3     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [011] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00093]" BACK_OFF);
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=11    test=40    [ pass=30    fail=8     badd=0     void=2     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify fourth script and footer");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), BACK_RED "TINU  scrp=1    cond=11    test=40    [ pass=30    fail=8     badd=0     void=2     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 53);
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_live_step    (char a_list)
-{
-   int         c           =    0;
-   char        x_urun      [LEN_HUND]  = "apate.urun";
-
-   yUNIT_minscrp ("live STEP level testing on unit test result");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   koios__unit_shared_data ('y');
-
-   yUNIT_mincond ("check displaying steps");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --steps"), 0);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check step level header");
-   yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑4 ∑∑∑4 ∑∑∑4");
-   yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (4) YUNIT_STEP                             c ∑∑21 ∑∑17 ∑∑12");
-   yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑90 ∑∑78 ∑∑58");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check step level section format");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===-------------------------- simple testing ---------------------------=== TCES");
-   yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check step level script format");
-   yUNIT_minstr  ("... check (11) separator"           , yURG_peek (x_urun, '÷'), "===[[ NEW SCRIPT ]]==================================================================");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] (SCRP) verify openning and closing ============================[¿Í]=[00006]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check step level condition and normal steps");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) str   : check string ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00008]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ab) real  : check number ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00009]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ac) int   : check integer  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00010]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ad) int   : check character ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00011]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [002] (1)" BACK_OFF " defensive checks - -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00012]");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check alternative step level entries");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun,  41), "  COND [006] duplicate opens and closes  -- -- -- -- -- -- -- -- -- -- -- -- -[00021]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) LOCAL : working variables ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00022]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ab) int   : check working variable  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00023]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ac) LOAD  : prep data for read ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00024]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ad) MODE  : FORCED_FAIL ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00025]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ae) SYS   : run little  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00026]");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check inclusion of shared");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun,  64), "");
-   yUNIT_minstr  ("... check shared header"            , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SHARE (a) ===--------------------   prepare files for use   --------------------===" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) str   : check string ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00030]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ab) real  : check number ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00031]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ac) int   : check integer  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00032]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ad) MODE  : normal ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00033]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) str   : check string ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00035]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ab) real  : check number ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00036]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ac) int   : check integer  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00037]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ad) int   : check character ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00038]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check shared footer"            , yURG_peek (x_urun, '÷'), "  " BACK_MAG "ERAHS (a) ===--------------------   prepare files for use   --------------------===" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 197);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check inclusion of global");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 166), "");
-   yUNIT_minstr  ("... check global header"            , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GLOBAL (D) ===-------------------   globally shared steps   --------------------===" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [009]" BACK_OFF " prepare variables  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) CODE  : set new value  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00008]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [010]" BACK_OFF " generate a summary -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00009]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) str   : check string ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00010]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ab) real  : check number ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00011]");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ac) int   : check integer  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00012]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check global footer"            , yURG_peek (x_urun, '÷'), "  " BACK_BLU "LABOLG (D) ===-------------------   globally shared steps   --------------------===" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 197);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check executing and presenting down to steps");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --step"), 999);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check step level condition and normal steps");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun,  14), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "aa) PASS  " BACK_OFF " : check string ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00008]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "ab) PASS  " BACK_OFF " : check number ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00009]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "ac) PASS  " BACK_OFF " : check integer ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00010]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "ad) PASS  " BACK_OFF " : check character ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00011]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [002] (1)" BACK_OFF " defensive checks - -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00012]");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check alternative step level entries");
-   yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun,  68), "  COND [006] duplicate opens and closes  -- -- -- -- -- -- -- -- -- -- -- -- -[00021]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "aa) " BACK_GRN "LOCAL " BACK_OFF " : working variables  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00022]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "ab) PASS  " BACK_OFF " : check working variable ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00023]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "ac) " BACK_GRN "LOAD  " BACK_OFF " : prep data for read ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00024]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "ad) " BACK_GRN "MODE  " BACK_OFF " : ENABLE FORCED FAILURE (pass=fail, fail=pass)  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00025]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "ae) " BACK_RED "!SYS  " BACK_OFF " : run little ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00026]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=5     [ pass=1     fail=1     badd=0     void=3     ]" BACK_OFF);
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_live_full    (char a_list)
-{
-   int         c           =    0;
-   char        x_urun      [LEN_HUND]  = "apate.urun";
-
-   yUNIT_minscrp ("live FULL testing on unit test result");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   koios__unit_shared_data ('y');
-
-   yUNIT_mincond ("check executing and presenting full");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit"), 999);
-   yUNIT_mindnoc ();
-
-   /*> system ("cp -fv apate.unit apate_back.unit");                                  <*/
-   /*> system ("cp -fv apate.urun apate_back.urun");                                  <*/
-
-   yUNIT_mincond ("check passing string step");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  16), "  " BACK_GRN "aa) PASS  " BACK_OFF " : check string ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00008]");
-   yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_teststring (0)");
-   yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : s_equal    (rc =  101, test abbr = e)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  5ÂhelloÊ");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  5ÂhelloÊ");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check failing string step (nearly same)");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 418), "  " BACK_RED "aa) FAIL  " BACK_OFF " : check string ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00083]");
-   yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_teststring (1)");
-   yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : s_equal    (rc = -101, test abbr = e)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  7Â" BOLD_RED "hello££" BOLD_OFF "Ê");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  7Â" BOLD_RED "goodbye" BOLD_OFF "Ê");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check forced fail string step (same)");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 187), "  " BACK_GRN "aa) " BACK_RED "!FAIL " BACK_OFF " : check string ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00030]");
-   yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_teststring (0)");
-   yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : s_equal    (rc =  101, test abbr = e)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  5ÂhelloÊ");                              
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  5ÂhelloÊ");                              
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check passing float step");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  22), "  " BACK_GRN "ab) PASS  " BACK_OFF " : check number ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00009]");
-   yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_testreal (5)");
-   yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : r_greater  (rc =  103, test abbr = g)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  9Â15.000000Ê");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  9Â15.707964Ê");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check failing float step");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 424), "  " BACK_RED "ab) FAIL  " BACK_OFF " : check number ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00084]");
-   yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_testreal (2)");
-   yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : r_greater  (rc = -103, test abbr = g)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  9Â15.000000Ê");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  8Â6.283185Ê");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check passing integer step");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  28), "  " BACK_GRN "ac) PASS  " BACK_OFF " : check integer ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00010]");
-   yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_testint (32)");
-   yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : i_equal    (rc =  101, test abbr = e)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  1Â2Ê");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  1Â2Ê");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check failing integer step");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 430), "  " BACK_RED "ac) FAIL  " BACK_OFF " : check integer ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00085]");
-   yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_testint (64)");
-   yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : i_equal    (rc = -101, test abbr = e)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  1Â2Ê");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  1Â4Ê");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check mode step");                                   
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 141), "  " BACK_CYN "ad) " BACK_GRN "MODE  " BACK_OFF " : ENABLE FORCED FAILURE (pass=fail, fail=pass)  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00025]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check code step");                                   
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 568), "  " BACK_CYN "aa) " BACK_GRN "CODE  " BACK_OFF " : set new value ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00008]");
-   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, '÷'), "      code   : 12Âh = 32 * 64;Ê");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check load step");                                   
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  44), "  " BACK_CYN "aa) " BACK_GRN "LOAD  " BACK_OFF " : prep data for read ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00013]");
-   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, '÷'), "      stdin  : 13Âone two threeÊ");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check sys step");                                   
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 143), "  " BACK_CYN "ae) " BACK_RED "!SYS  " BACK_OFF " : run little ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00026]");
-   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, '÷'), "      system : 10Â/bin/falseÊ");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check local step");                                   
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 129), "  " BACK_CYN "aa) " BACK_GRN "LOCAL " BACK_OFF " : working variables  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00022]");
-   yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, '÷'), "      local  : 10Âint c = 0;Ê");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_live_stop    (char a_list)
-{
-   int         c           =    0;
-   char        x_unit      [LEN_HUND]  = "apate.unit";
-   char        x_conv      [LEN_HUND]  = "apate.unit.unit";
-
-   yUNIT_minscrp ("live testing on unit test result (STOPPING)");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond  ("verify a simple success");
-   system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  apate.unit");
-   system ("echo \"  COND   (1)  repeat code                         \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond ("call conversion");
-   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   5);
-   yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),   0);
-   yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  18);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   1);
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond  ("attempt with a bad verb");
-   system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  apate.unit");
-   system ("echo \"  CONDY  (1)  repeat code                         \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond ("call conversion");
-   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit) ,   5);
-   yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate"), 999);
-   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   5);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   3);
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), BOLD_ERR "FATAL, apate.unit:2:0: error: verb ∂CONDY∂ not recognized/found"               BACK_OFF  );
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), BOLD_ERR "FATAL, apate.unit:5:1: error: DITTO identifier Â1Ê not set by previous COND"   BACK_OFF  );
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("call execution");
-   yUNIT_minval  ("... run koios"                      , system ("koios --Ecode apate"), 999);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   3);
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), BOLD_ERR "FATAL, apate.unit:2:0: error: verb ∂CONDY∂ not recognized/found"               BACK_OFF  );
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), BOLD_ERR "FATAL, apate.unit:5:1: error: DITTO identifier Â1Ê not set by previous COND"   BACK_OFF  );
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_live_vers    (char a_list)
-{
-   int         c           =    0;
-   char        x_unit      [LEN_HUND]  = "apate.unit";
-   char        x_conv      [LEN_HUND]  = "apate.unit.unit";
-
-   yUNIT_minscrp ("live testing with various versions");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond  ("verify a simple success");
-   system ("echo \"SCRP          v21  verify ditto                  0s  tbd        \"                                                                                   >  apate.unit");
-   system ("echo \"  COND   (1)  v20  repeat code                  \"                                                                                                       >> apate.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");
-   system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond ("call conversion");
-   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   5);
-   yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),   0);
-   yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  18);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   1);
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify header");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit,   0), "#!/usr/local/bin/koios");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#   koios-polos (axis of heaven) unit testing meta-language");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify script with dittoing");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP          verify ditto                                                       0s   tbd                                                                                          ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND  (1)  repeat code                                                        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (1)  [ repeat code ]                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify footer");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "# end-of-file.  done, finito, completare, whimper [œ¥∑∑∑");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
-
-char
-koios__unit_live_comment (char a_list)
-{
-   int         c           =    0;
-   char        x_unit      [LEN_HUND]  = "apate.unit";
-   char        x_conv      [LEN_HUND]  = "apate.unit.unit";
-
-   yUNIT_minscrp ("live testing with comments");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-   yUNIT_mincond  ("unit with variety of comments, and issue");
-   system ("echo \"\"                                                                                                                                                                > apate.unit");
-   system ("echo \"## this is a comment\"                                                                                                                                           >> apate.unit");
-   system ("echo \"\"                                                                                                                                                               >> apate.unit");
-   system ("echo \"#> this is a saved comment\"                                                                                                                                     >> apate.unit");
-   system ("echo \"#>this needed a space\"                                                                                                                                          >> apate.unit");
-   system ("echo \"\"                                                                                                                                                               >> apate.unit");
-   system ("echo \"PREP          include the prototype headers                            - - - - - - - - - -   - - - - -   - - - - - - - - - -  >>\"                     >> apate.unit");
-   system ("echo \"   #> this is second level comment\"                                                                                                                             >> apate.unit");
-   system ("echo \"   incl       include public header                apate.h           - - - - - - - - - -   - - - - -   - - - - - - - - - -  \"                       >> apate.unit");
-   system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  -  123456789- \"    >> apate.unit");
-   system ("echo \"#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  t  =(var)==== \"    >> apate.unit");
-   system ("echo \"SCRP    [¡Ï]  (SCRP  ) verify openning and closin                                           ((01.---))  - - - - - - - - - -  \"                        >> apate.unit");
-   system ("echo \"# random comment\"                                                                                                                                               >> apate.unit");
-   system ("echo \"\"                                                                                                                                                               >> apate.unit");
-   system ("echo \"   COND       parse a code record   - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - \"                                                       >> apate.unit");
-   system ("echo \"     #> this is third level comment\"                                                                                                                            >> apate.unit");
-   system ("echo \"     load     add a line to stdin    stdin  * * * * *                      : basic line                  : - - - - -  :  /bin/true > /dev/null\"         >> apate.unit");
-   system ("echo \"\"                                                                                                                                                               >> apate.unit");
-   system ("echo \"# > random comment\"                                                                                                                                               >> apate.unit");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond ("call conversion");
-   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,  19);
-   yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),  999);
-   yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  19);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   2);
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), BOLD_ERR "FATAL, apate.unit:5:0: error: verb ∂#>this∂ not recognized/found"               BACK_OFF  );
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond  ("unit with variety of comments, and issue");
-   system ("echo \"\"                                                                                                                                                                > apate.unit");
-   system ("echo \"## this is a comment\"                                                                                                                                           >> apate.unit");
-   system ("echo \"\"                                                                                                                                                               >> apate.unit");
-   system ("echo \"#> this is a saved comment\"                                                                                                                                     >> apate.unit");
-   system ("echo \"\"                                                                                                                                                               >> apate.unit");
-   system ("echo \"PREP          include the prototype headers                            - - - - - - - - - -   - - - - -   - - - - - - - - - -  >>\"                     >> apate.unit");
-   system ("echo \"   #> this is second level comment\"                                                                                                                             >> apate.unit");
-   system ("echo \"   incl       include public header                apate.h           - - - - - - - - - -   - - - - -   - - - - - - - - - -  \"                       >> apate.unit");
-   system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  -  123456789- \"    >> apate.unit");
-   system ("echo \"#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  t  =(var)==== \"    >> apate.unit");
-   system ("echo \"SCRP    [¡Ï]  (SCRP  ) verify openning and closin                                           ((01.---))  - - - - - - - - - -  \"                        >> apate.unit");
-   system ("echo \"# random comment\"                                                                                                                                               >> apate.unit");
-   system ("echo \"\"                                                                                                                                                               >> apate.unit");
-   system ("echo \"   COND       parse a code record   - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - \"                                                       >> apate.unit");
-   system ("echo \"     #> this is third level comment\"                                                                                                                            >> apate.unit");
-   system ("echo \"     load     add a line to stdin    stdin  * * * * *                      : basic line                  : - - - - -  :  /bin/true > /dev/null\"         >> apate.unit");
-   system ("echo \"\"                                                                                                                                                               >> apate.unit");
-   system ("echo \"# > random comment\"                                                                                                                                               >> apate.unit");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond ("call conversion");
-   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,  18);
-   yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),    0);
-   yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  25);
-   yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   1);
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );
-   yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify header");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit,   0), "#!/usr/local/bin/koios");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#   koios-polos (axis of heaven) unit testing meta-language");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#> this is a saved comment");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify prep area");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "PREP          include the prototype headers                                      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   #> this is second level comment");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   incl       include public header                apate.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-
-   yUNIT_mincond ("verify script");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP    [¡Ï]  (SCRP  ) verify openning and closin                                                                                                                                  ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       parse a code record                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     #> this is third level comment");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     load     add a line to stdin                  stdin                       * * * * *                      : basic line                  : - - - - -  :  /bin/true > /dev/null                                                                                                                         ");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("verify footer");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "# end-of-file.  done, finito, completare, whimper [œ¥∑∑∑");
-   yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
+/*> char                                                                                                                                                                                                           <* 
+ *> koios__unit_shared_data  (char a_compile)                                                                                                                                                                      <* 
+ *> {                                                                                                                                                                                                              <* 
+ *>    char        x_wave      [LEN_HUND]  = "apate.wave";                                                                                                                                                         <* 
+ *>    char        x_global    [LEN_HUND]  = "master.globals";                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                <* 
+ *>    yUNIT_minscrp ("run-time testing");                                                                                                                                                                         <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                                             <* 
+ *>                                                                                                                                                                                                                <* 
+ *>    yUNIT_mincond ("prepare a master example");                                                                                                                                                                 <* 
+ *>    system ("rm -f apate.unit 2> /dev/null");                                                                                                                                                                   <* 
+ *>    system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  123456789- \"        > master.unit");                   <* 
+ *>    system ("echo \"#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  =(var)==== \"       >> master.unit");                   <* 
+ *>    system ("echo \"PREP          global function headers             \"                                                                                                       >> master.unit");              <* 
+ *>    system ("echo \"  incl        fake header                          apate.h           \"                                                                                    >> master.unit");              <* 
+ *>    system ("echo \"  global      global variable                      - - - - - - - -   int h = 0;                                                        \"              >> master.unit");                <* 
+ *>    system ("echo \"GLOBAL   -D-  globally shared steps                0s  tbd        \"                                                                                   >> master.unit");                <* 
+ *>    system ("echo \"  COND        prepare variables                   \"                                                                                                       >> master.unit");              <* 
+ *>    system ("echo \"    code      ... set new value                    - - - - - - - -   h = 32 * 64;                                                    \"                >> master.unit");                <* 
+ *>    system ("echo \"  COND        generate a summary                  \"                                                                                                       >> master.unit");              <* 
+ *>    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> master.unit");                  <* 
+ *>    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> master.unit");                  <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> master.unit");                  <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                <* 
+ *>    if (a_compile == 'y') {                                                                                                                                                                                     <* 
+ *>       yUNIT_mincond ("turn into a master header");                                                                                                                                                             <* 
+ *>       yUNIT_minval  ("... run koios"                      , system ("koios --create master"), 999);                                                                                                            <* 
+ *>       yUNIT_mindnoc ();                                                                                                                                                                                        <* 
+ *>    } else {                                                                                                                                                                                                    <* 
+ *>       yUNIT_mincond ("turn into a master header");                                                                                                                                                             <* 
+ *>       yUNIT_minval  ("... run koios"                      , system ("koios --update master"), 999);                                                                                                            <* 
+ *>       yUNIT_mindnoc ();                                                                                                                                                                                        <* 
+ *>    }                                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                <* 
+ *>    yUNIT_mincond ("verify exporting globals");                                                                                                                                                                 <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global,   0), "A   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "B   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "C   -1                                                                                0    0");                           <* 
+ *>    if (a_compile == 'y')   yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "D    6 globally∑shared∑steps                                                          2    4");   <* 
+ *>    else                    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "D    6 globally∑shared∑steps                                                          0    0");   <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "E   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "F   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "G   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "H   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "I   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "J   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "K   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "L   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "M   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "N   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "O   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "P   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "Q   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "R   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "S   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "T   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "U   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "V   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "W   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "X   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "Y   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), "Z   -1                                                                                0    0");                           <* 
+ *>    yUNIT_minstr  ("... check lines"                    , yURG_peek (x_global, '÷'), ""                                                                                            );                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                <* 
+ *>    yUNIT_mincond ("prepare a header example");                                                                                                                                                                 <* 
+ *>    system ("rm -f apate.h    2> /dev/null");                                                                                                                                                                   <* 
+ *>    system ("echo \"#define WEIRD_BIT \"booga\"\"                                                                                                                                   > apate.h");                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                <* 
+ *>    yUNIT_mincond ("prepare a interesting example");                                                                                                                                                            <* 
+ *>    system ("rm -f apate.unit 2> /dev/null");                                                                                                                                                                   <* 
+ *>    system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  123456789- \"        > apate.unit");                    <* 
+ *>    system ("echo \"#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  =(var)==== \"       >> apate.unit");                    <* 
+ *>    system ("echo \"PREP          global function headers             \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  incl        fake header                          apate.h           \"                                                                                    >> apate.unit");               <* 
+ *>    system ("echo \"SECT          simple testing                      \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"SCRP    [¿Í]  (SCRP) verify openning and closing   0s  tbd        \"                                                                                   >> apate.unit");                 <* 
+ *>    system ("echo \"  COND        simple openning                     \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");                   <* 
+ *>    system ("echo \"  COND   (1)  defensive checks                    \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    load      ... prep data for read               stdin             one two three                                                   \"                >> apate.unit");                 <* 
+ *>    system ("echo \"    get       ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");                   <* 
+ *>    system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  COND        small condition                     \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");                   <* 
+ *>    system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  COND        duplicate opens and closes          \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    local     ... working variables                - - - - - - - -   int c = 0;                                                      \"                >> apate.unit");                 <* 
+ *>    system ("echo \"    echo      ... check working variable           - - - - - - - -   c                         i_equal     0                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    load      ... prep data for read               stdin             one two three                                                   \"                >> apate.unit");                 <* 
+ *>    system ("echo \"    mode      FORCED_FAIL                         \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    system    ... run little                       - - - - - - - -   /bin/false                                                      \"                >> apate.unit");                 <* 
+ *>    system ("echo \"SECT          more complex testing                \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"SHARED   -a-  prepare files for use                0s  tbd         \"                                                                                  >> apate.unit");                 <* 
+ *>    system ("echo \"  COND        script input file                   \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    mode      normal                              \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  COND        code output file                    \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");                   <* 
+ *>    system ("echo \"SHARED   -b-  remove files after use               0s  tbd         \"                                                                                  >> apate.unit");                 <* 
+ *>    system ("echo \"  COND        code output file                    \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");                   <* 
+ *>    system ("echo \"  COND        close and delete code file          \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");                   <* 
+ *>    system ("echo \"SCRP    [¿Î]  (SCRP) verify system startup          0s  tbd                          \"                                                              >> apate.unit");                  <* 
+ *>    system ("echo \"  COND        run initialization                  \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    mode      FORCED_FAIL                         \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");                   <* 
+ *>    system ("echo \"  REUSE  -a-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  COND        parse a code record                 \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    local     ... create string                    - - - - - - - -   char  x_str [100];                                              \"                >> apate.unit");                 <* 
+ *>    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                  x_str  \"        >> apate.unit");                   <* 
+ *>    system ("echo \"    echo      ... verify string                    - - - - - - - -   x_str                     s_equal     hello                 \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    local     ... create number                    - - - - - - - -   float x_real = 0.0;                                             \"                >> apate.unit");                 <* 
+ *>    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                   x_real \"        >> apate.unit");                   <* 
+ *>    system ("echo \"    echo      ... verify number                    - - - - - - - -   x_real                    r_lesser    16.0                  \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    local     ... create integer                   - - - - - - - -   int   x_int  = 0;                                               \"                >> apate.unit");                 <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                      x_int  \"        >> apate.unit");                   <* 
+ *>    system ("echo \"    echo      ... verify integer                   - - - - - - - -   x_int                     i_equal     2                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    local     ... create character                 - - - - - - - -   char  x_char = 0;                                               \"                >> apate.unit");                 <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                    x_char \"        >> apate.unit");                   <* 
+ *>    system ("echo \"    echo      ... verify character                 - - - - - - - -   x_char                    i_equal     'A'                   \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    local     ... create pointer                   - - - - - - - -   int  *x_ptr  = NULL;                                            \"                >> apate.unit");                 <* 
+ *>    system ("echo \"    exec      ... check pointer                    yUNIT_testptr                               p_exists    0                      x_ptr  \"        >> apate.unit");                   <* 
+ *>    system ("echo \"    echo      ... verify pointer                   - - - - - - - -   x_ptr                     p_exists    0                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    echo      ... verify value at pointer          - - - - - - - -   (x_ptr) ? *x_ptr : 0      i_equal     42                    \"                >> apate.unit");                   <* 
+ *>    system ("echo \"SCRP    [¡Ï]  (SCRP) verify normal processing       0s  tbd                          \"                                                              >> apate.unit");                  <* 
+ *>    system ("echo \"  GROUP       round one                           \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  COND   (1)  process arguments                   \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    exec      ... check string                     yUNIT_teststring  0                         s_equal     hello                 \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check number                     yUNIT_testreal    5                         r_greater   15.0                  \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");                   <* 
+ *>    system ("echo \"  REUSE  -a-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  COND   (2)  read one record                     \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"    exec      ... check string                     yUNIT_teststring  1                         s_equal     hello                 \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check number                     yUNIT_testreal    2                         r_greater   15.0                  \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     64                        i_equal     2                     \"                >> apate.unit");                   <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    87                        i_equal     'A'                   \"                >> apate.unit");                   <* 
+ *>    system ("echo \"  GROUP       round two                           \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  REUSE  -b-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  GROUP       final round                         \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  DITTO  (2)  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  REUSE  -D-  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> apate.unit");               <* 
+ *>    system ("echo \"SCRP    [¬Ú]  (SCRP) empty script                   0s  tbd                          \"                                                              >> apate.unit");                  <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                <* 
+ *>    if (a_compile == 'y') {                                                                                                                                                                                     <* 
+ *>       yUNIT_mincond ("turn into a unit test");                                                                                                                                                                 <* 
+ *>       yUNIT_minval  ("... run koios"                      , system ("koios --create apate"), 999);                                                                                                             <* 
+ *>       yUNIT_minval  ("... copy to c"                      , system ("cp  -f apate_unit.{cs,c}"), 0);                                                                                                           <* 
+ *>       yUNIT_minval  ("... compile"                        , system ("gcc -c apate_unit.c"), 0);                                                                                                                <* 
+ *>       yUNIT_minval  ("... link"                           , system ("gcc -o apate_unit apate_unit.o -lyUNIT"), 0);                                                                                             <* 
+ *>       yUNIT_minval  ("... permissions"                    , system ("chmod +x apate_unit"), 0);                                                                                                                <* 
+ *>       yUNIT_mindnoc ();                                                                                                                                                                                        <* 
+ *>    }                                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                <* 
+ *>    if (a_compile == 'y') {                                                                                                                                                                                     <* 
+ *>       yUNIT_mincond ("verify waves");                                                                                                                                                                          <* 
+ *>       yUNIT_minstr  ("check wave entry"                   , yURG_peek (x_wave, '∫'), "¿  Í  apate.unit                       1  (SCRP) verify openning and closing                                ");     <* 
+ *>       yUNIT_minstr  ("check wave entry"                   , yURG_peek (x_wave, '÷'), "¿  Î  apate.unit                       2  (SCRP) verify system startup                                      ");     <* 
+ *>       yUNIT_minstr  ("check wave entry"                   , yURG_peek (x_wave, '÷'), "¡  Ï  apate.unit                       3  (SCRP) verify normal processing                                   ");     <* 
+ *>       yUNIT_minstr  ("check wave entry"                   , yURG_peek (x_wave, '÷'), "¬  Ú  apate.unit                       4  (SCRP) empty script                                               ");     <* 
+ *>       yUNIT_minval  ("... check line count"               , yURG_peek_count (x_wave) ,  4);                                                                                                                    <* 
+ *>       yUNIT_minprcs ();                                                                                                                                                                                        <* 
+ *>    }                                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                <* 
+ *>    return 0;                                                                                                                                                                                                   <* 
+ *> }                                                                                                                                                                                                              <*/
+
+/*> char                                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *> koios__unit_live_conv    (char a_list)                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *> {                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    int         c           =    0;                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    char        x_master    [LEN_HUND]  = "master.unit";                                                                                                                                                                                                                                                                                                                                                                       <* 
+ *>    char        x_global    [LEN_HUND]  = "master.globals";                                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    char        x_unit      [LEN_HUND]  = "apate.unit";                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    char        x_wave      [LEN_HUND]  = "apate.wave";                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_minscrp ("live testing for conversion");                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                                                                                                                                                                                                                                              <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                                                                                                       <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                                                                                                                                                                                                                                      <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    koios__unit_shared_data ('-');                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    /+> PROG__unit_loud   ();                                                          <+/                                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    /+> yUNIT_mincond ("call master conversion");                                                                        <*                                                                                                                                                                                                                                                                                                    <* 
+ *>     *> yUNIT_minval  ("... run master"                     , system ("koios --update master > /dev/null 2>&1"),   0);   <*                                                                                                                                                                                                                                                                                                    <* 
+ *>     *> yUNIT_minval  ("... check line count"               , yURG_peek_count (x_master) ,  28);                         <*                                                                                                                                                                                                                                                                                                    <* 
+ *>     *> yUNIT_mindnoc ();                                                                                                <+/                                                                                                                                                                                                                                                                                                   <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("check updated master");                                                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master,   0), "#!/usr/local/bin/koios");                                                                                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "#   koios-polos (axis of heaven) unit testing meta-language");                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");   <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");   <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "PREP          global function headers                                            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "   incl       fake header                          apate.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "   global     global variable                      - - - - - - - - - - - - -   int h = 0;                                                                                                                                                                                                                 ");                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");   <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");   <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "GLOBAL   -D-  globally shared steps                                              0s   tbd                                                                                          ((DD.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "   COND       prepare variables                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((DD.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "     code     ... set new value                    - - - - - - - - - - - - -   h = 32 * 64;                                                                                                                                                                                                               ");                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "   COND       generate a summary                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((DD.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "# end-of-file.  done, finito, completare, whimper [œ¥∑∑∑");                                                                                                                                                                                                                                                                              <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_master, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    /+> PROG__unit_end    ();                                                          <+/                                                                                                                                                                                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("call conversion");                                                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minval  ("... run koios"                      , system ("koios --update apate > /dev/null 2>&1"),   0);                                                                                                                                                                                                                                                                                                              <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_unit) , 167);                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("verify header");                                                                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit,   0), "#!/usr/local/bin/koios");                                                                                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#   koios-polos (axis of heaven) unit testing meta-language");                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("verify prep/incl");                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "PREP          global function headers                                            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   incl       fake header                          apate.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("verify sect");                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SECT          simple testing                                                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("verify script with dittoing");                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP    [¿Í]  (SCRP) verify openning and closing                                 0s   tbd                                                                                          ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                             <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       simple openning                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND  (1)  defensive checks                                                   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     load     ... prep data for read               stdin                       one two three                                                                                                                                                                                                              ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     get      ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (1)  [ defensive checks ]                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.003))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       small condition                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.004))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (1)  [ defensive checks ]                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.005))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       duplicate opens and closes                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.006))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... working variables                - - - - - - - - - - - - -   int c = 0;                                                                                                                                                                                                                 ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... check working variable           - - - - - - - - - - - - -   c                                                                                                     i_equal     0                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     load     ... prep data for read               stdin                       one two three                                                                                                                                                                                                              ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     mode     FORCED_FAIL                          - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     system   ... run little                       - - - - - - - - - - - - -   /bin/false                                                                                                                                                                                                                 ");                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("verify sect");                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SECT          more complex testing                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("verify shared a");                                                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SHARED   -a-  prepare files for use                                              0s   tbd                                                                                          ((aa.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                             <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       script input file                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((aa.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     mode     normal                               - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       code output file                                                   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((aa.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("verify shared b");                                                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SHARED   -b-  remove files after use                                             0s   tbd                                                                                          ((bb.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                             <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       code output file                                                   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       close and delete code file                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("verify script with a reuse");                                                                                                                                                                                                                                                                                                                                                                              <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP    [¿Î]  (SCRP) verify system startup                                       0s   tbd                                                                                          ((02.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                             <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       run initialization                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     mode     FORCED_FAIL                          - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   REUSE -a-  [ prepare files for use ]                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       parse a code record                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.003))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... create string                    - - - - - - - - - - - - -   char  x_str [100];                                                                                                                                                                                                         ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                 x_str                ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify string                    - - - - - - - - - - - - -   x_str                                                                                                 s_equal     hello                                                                                                ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... create number                    - - - - - - - - - - - - -   float x_real = 0.0;                                                                                                                                                                                                        ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                  x_real               ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify number                    - - - - - - - - - - - - -   x_real                                                                                                r_lesser    16.0                                                                                                 ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... create integer                   - - - - - - - - - - - - -   int   x_int  = 0;                                                                                                                                                                                                          ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                     x_int                ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify integer                   - - - - - - - - - - - - -   x_int                                                                                                 i_equal     2                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... create character                 - - - - - - - - - - - - -   char  x_char = 0;                                                                                                                                                                                                          ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                   x_char               ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify character                 - - - - - - - - - - - - -   x_char                                                                                                i_equal     'A'                                                                                                  ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     local    ... create pointer                   - - - - - - - - - - - - -   int  *x_ptr  = NULL;                                                                                                                                                                                                       ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check pointer                    yUNIT_testptr                                                                                                                     p_exists    0                                                                                                     x_ptr                ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify pointer                   - - - - - - - - - - - - -   x_ptr                                                                                                 p_exists    0                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     echo     ... verify value at pointer          - - - - - - - - - - - - -   (x_ptr) ? *x_ptr : 0                                                                                  i_equal     42                                                                                                   ");                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("verify script with multiple reuses and dittos");                                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP    [¡Ï]  (SCRP) verify normal processing                                    0s   tbd                                                                                          ((03.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                             <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   GROUP      round one                                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND  (1)  process arguments                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   REUSE -a-  [ prepare files for use ]                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND  (2)  read one record                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.003))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check string                     yUNIT_teststring            1                                                                                                     s_equal     hello                                                                                                ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check number                     yUNIT_testreal              2                                                                                                     r_greater   15.0                                                                                                 ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               64                                                                                                    i_equal     2                                                                                                    ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              87                                                                                                    i_equal     'A'                                                                                                  ");                            <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   GROUP      round two                                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (1)  [ process arguments ]                                              - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.004))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   REUSE -b-  [ remove files after use ]                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.005))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   GROUP      final round                                                        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (2)  [ read one record ]                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.006))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   REUSE -D-  [ globally shared steps ]                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.007))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (1)  [ process arguments ]                                              - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((03.008))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("verify empty script");                                                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");     <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP    [¬Ú]  (SCRP) empty script                                                0s   tbd                                                                                          ((04.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                             <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    yUNIT_mincond ("verify footer");                                                                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "# end-of-file.  done, finito, completare, whimper [œ¥∑∑∑");                                                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    /+> yUNIT_mincond  ("verify the WAVE file)");                                                                                                                                                                           <*                                                                                                                                                                                                 <* 
+ *>     *> yUNIT_minstr   ("... check WAVE"                     , yURG_peek      (x_wave    ,   0)   , "¿  Í  apate.unit                       1  (SCRP) verify openning and closing                                ");   <*                                                                                                                                                                                                 <* 
+ *>     *> yUNIT_minstr   ("... check WAVE"                     , yURG_peek      (x_wave    , '÷')   , "¿  Î  apate.unit                       2  (SCRP) verify system startup                                      ");   <*                                                                                                                                                                                                 <* 
+ *>     *> yUNIT_minstr   ("... check WAVE"                     , yURG_peek      (x_wave    , '÷')   , "¡  Ï  apate.unit                       3  (SCRP) verify normal processing                                   ");   <*                                                                                                                                                                                                 <* 
+ *>     *> yUNIT_minstr   ("... check WAVE"                     , yURG_peek      (x_wave    , '÷')   , "¬  Ú  apate.unit                       4  (SCRP) empty script                                               ");   <*                                                                                                                                                                                                 <* 
+ *>     *> yUNIT_minstr   ("... check WAVE"                     , yURG_peek      (x_wave    , '÷')   , ""                                           );                                                                         <*                                                                                                                                                                                                 <* 
+ *>     *> yUNIT_mindnoc  ();                                                                                                                                                                                                  <+/                                                                                                                                                                                                <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                               <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>    return 0;                                                                                                                                                                                                                                                                                                                                                                                                                  <* 
+ *> }                                                                                                                                                                                                                                                                                                                                                                                                                             <*/
+
+/*> char                                                                                                                                                                                                                        <* 
+ *> koios__unit_live_ditto   (char a_list)                                                                                                                                                                                      <* 
+ *> {                                                                                                                                                                                                                           <* 
+ *>    int         c           =    0;                                                                                                                                                                                          <* 
+ *>    char        x_master    [LEN_HUND]  = "master_unit.cs";                                                                                                                                                                  <* 
+ *>    char        x_global    [LEN_HUND]  = "master.globals";                                                                                                                                                                  <* 
+ *>    char        x_ncode     [LEN_HUND]  = "apate_unit.cs";                                                                                                                                                                   <* 
+ *>    char        x_wave      [LEN_HUND]  = "apate.wave";                                                                                                                                                                      <* 
+ *>                                                                                                                                                                                                                             <* 
+ *>    yUNIT_minscrp ("live testing for ditto");                                                                                                                                                                                <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                                            <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                                                          <* 
+ *>    rm_working_files ();                                                                                                                                                                                                     <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                                    <* 
+ *>                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("create a sample unit with ditto");                                                                                                                                                                      <* 
+ *>    system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  apate.unit");                              <* 
+ *>    system ("echo \"  COND   (1)  repeat code                         \"                                                                                                       >> apate.unit");                            <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                                <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");                                <* 
+ *>    system ("echo \"  COND        non-repeat code before ditto        \"                                                                                                       >> apate.unit");                            <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                                <* 
+ *>    system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");                            <* 
+ *>    system ("echo \"  COND        non-repeat code after ditto         \"                                                                                                       >> apate.unit");                            <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                                <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("call live code creation");                                                                                                                                                                              <* 
+ *>    yUNIT_minval   ("... run koios"                      , system ("koios --create apate  > /dev/null 2>&1"),   0);                                                                                                          <* 
+ *>    yUNIT_minval   ("... copy to c"                      , system ("cp  -f apate_unit.{cs,c}"), 0);                                                                                                                          <* 
+ *>    yUNIT_minval   ("... compile"                        , system ("gcc -c apate_unit.c"), 0);                                                                                                                               <* 
+ *>    yUNIT_minval   ("... link"                           , system ("gcc -o apate_unit apate_unit.o -lyUNIT"), 0);                                                                                                            <* 
+ *>    yUNIT_minval   ("... permissions"                    , system ("chmod +x apate_unit"), 0);                                                                                                                               <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("verify code header");                                                                                                                                                                                   <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode,   0), "/+================================= beg-code =================================+/");                                                    <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "/+ /usr/local/bin/koios                                                       +/");                                                    <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "/+   autogen by koios-polos (axis of heaven) unit testing meta-language       +/");                                                    <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "");                                                                                                                                    <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "/+---(standard support functions)----+/");                                                                                             <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "#include    <yUNIT_unit.h>");                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "#include    \"master.h\"");                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "");                                                                                                                                    <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "/+================================ beg-script ================================+/");                                                    <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("verify script");                                                                                                                                                                                        <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "");                                                                                                                                    <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "char");                                                                                                                                <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "yUNIT_script_01          (void)");                                                                                                     <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "{");                                                                                                                                   <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   /+===[[ script header ]]========================+/");                                                                               <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   cyUNIT.offset  = 0;");                                                                                                              <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   cyUNIT.origin  = 1;");                                                                                                              <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_mode_reset ();");                                                                                                             <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_scrp    (   1,   1, \"\", \"verify ditto\", \"0s\", \"tbd\", \"\");");                                                        <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("verify repeatable condition");                                                                                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   /+===[[ COND #001 ]]============================+/");                                                                               <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_cond    (   2, cyUNIT.offset +   1, '!', \"repeat code\");");                                                                 <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(run step)--------------------+/");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testint (32);");                                                                           <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   3,   1, \"... check integer\", \"yUNIT_testint\", \"32\", \"i_equal\", 2, cyUNIT.i_rc, cyUNIT.exec);");        <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(run step)--------------------+/");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testchar (65);");                                                                          <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   4,   2, \"... check character\", \"yUNIT_testchar\", \"65\", \"i_equal\", 'A', cyUNIT.i_rc, cyUNIT.exec);");   <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(summary)---------------------+/");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_dnoc    (cyUNIT.exec);"         );                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(done)------------------------+/");                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("verify non-repeatable condition");                                                                                                                                                                      <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   /+===[[ COND #002 ]]============================+/");                                                                               <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_cond    (   5, cyUNIT.offset +   2, '-', \"non-repeat code before ditto\");");                                                <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(run step)--------------------+/");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testint (32);");                                                                           <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   6,   1, \"... check integer\", \"yUNIT_testint\", \"32\", \"i_equal\", 2, cyUNIT.i_rc, cyUNIT.exec);");        <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(summary)---------------------+/");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_dnoc    (cyUNIT.exec);"         );                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(done)------------------------+/");                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("verify ditto on repeatable condition");                                                                                                                                                                 <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   /+===[[ COND #003 ]]============================+/");                                                                               <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_cond    (   7, cyUNIT.offset +   3, '1', \"[ repeat code ]\");");                                                             <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(run step)--------------------+/");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testint (32);");                                                                           <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   3,   1, \"... check integer\", \"yUNIT_testint\", \"32\", \"i_equal\", 2, cyUNIT.i_rc, cyUNIT.exec);");        <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(run step)--------------------+/");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testchar (65);");                                                                          <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   4,   2, \"... check character\", \"yUNIT_testchar\", \"65\", \"i_equal\", 'A', cyUNIT.i_rc, cyUNIT.exec);");   <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(summary)---------------------+/");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_dnoc    (cyUNIT.exec);"         );                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(done)------------------------+/");                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("verify non-repeatable condition");                                                                                                                                                                      <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   /+===[[ COND #004 ]]============================+/");                                                                               <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "   yUNIT_cond    (   8, cyUNIT.offset +   4, '-', \"non-repeat code after ditto\");");                                                 <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(run step)--------------------+/");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_reset_rc ();");                                                                                                            <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      if (cyUNIT.exec)  cyUNIT.i_rc = yUNIT_testint (32);");                                                                           <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_int     (   9,   1, \"... check integer\", \"yUNIT_testint\", \"32\", \"i_equal\", 2, cyUNIT.i_rc, cyUNIT.exec);");        <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(summary)---------------------+/");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      yUNIT_dnoc    (cyUNIT.exec);"         );                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "      /+---(done)------------------------+/");                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("verify end of script");                                                                                                                                                                                 <* 
+ *>    yUNIT_minstr   ("... check result"                   , yURG_peek (x_ncode, '÷'), "   /+===[[ script done ]]==========================+/");                                                                               <* 
+ *>    yUNIT_minstr   ("... check result"                   , yURG_peek (x_ncode, '÷'), "   yUNIT_prcs    (cyUNIT.exec);"            );                                                                                         <* 
+ *>    yUNIT_minstr   ("... check result"                   , yURG_peek (x_ncode, '÷'), "   /+---(complete)-----------------------+/");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check result"                   , yURG_peek (x_ncode, '÷'), "   return 0;"                               );                                                                                         <* 
+ *>    yUNIT_minstr   ("... check result"                   , yURG_peek (x_ncode, '÷'), "}"                                          );                                                                                         <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "");                                                                                                                                    <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "/+================================ end-script ================================+/");                                                    <* 
+ *>    yUNIT_minstr   ("... check line"                     , yURG_peek (x_ncode, '÷'), "");                                                                                                                                    <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                             <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                                    <* 
+ *>    rm_working_files ();                                                                                                                                                                                                     <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                                        <* 
+ *>    return 0;                                                                                                                                                                                                                <* 
+ *> }                                                                                                                                                                                                                           <*/
+
+/*> char                                                                                                                                                                                               <* 
+ *> koios__unit_live_scrp    (char a_list)                                                                                                                                                             <* 
+ *> {                                                                                                                                                                                                  <* 
+ *>    int         c           =    0;                                                                                                                                                                 <* 
+ *>    char        x_urun      [LEN_HUND]  = "apate.urun";                                                                                                                                             <* 
+ *>    char        x_wave      [LEN_HUND]  = "apate.wave";                                                                                                                                             <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_minscrp ("live SCRP level testing on unit test result");                                                                                                                                  <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                   <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                                 <* 
+ *>    rm_working_files ();                                                                                                                                                                            <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    koios__unit_shared_data ('y');                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("check inventory of scripts");                                                                                                                                                   <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --scrps"), 0);                                                                                                      <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 17);                                                                                                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("check urun output");                                                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===-------------------------- simple testing ---------------------------=== TCES");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] (SCRP) verify openning and closing ============================[¿Í]=[00006]");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===----------------------- more complex testing ------------------------=== TCES");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [04] (SCRP) empty script ===========================================[¬Ú]=[00094]");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "TINU  scrp=4    cond=21    test=90    [ ------------------------------------------- ]");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("check inventory of one script only");                                                                                                                                           <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --scrps 03"), 0);                                                                                                   <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 7);                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("check urun output");                                                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "TINU  scrp=1    cond=11    test=40    [ ------------------------------------------- ]");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("check running and showing script-level only only");                                                                                                                             <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --scrp"), 999);                                                                                                     <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 21);                                                                                                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("check urun output");                                                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===-------------------------- simple testing ---------------------------=== TCES");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] (SCRP) verify openning and closing ============================[¿Í]=[00006]");                        <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=6     test=22    [ pass=15    fail=1     badd=0     void=6     ]" BACK_OFF);   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===----------------------- more complex testing ------------------------=== TCES");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");                        <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=4     test=28    [ pass=16    fail=5     badd=0     void=7     ]" BACK_OFF);   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");                        <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=11    test=40    [ pass=30    fail=8     badd=0     void=2     ]" BACK_OFF);   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [04] (SCRP) empty script ===========================================[¬Ú]=[00094]");                        <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_YEL "PRCS -------- cond=0     test=0     [ pass=0     fail=0     badd=0     void=0     ]" BACK_OFF);   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), BACK_RED "TINU  scrp=4    cond=21    test=90    [ pass=61    fail=14    badd=0     void=15    ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");                        <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("check running single script and showing script-level only only");                                                                                                               <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --scrp 02"), 999);                                                                                                  <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 8);                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("check urun output");                                                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework ---------------------------------------(beg)");                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");                        <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=4     test=28    [ pass=16    fail=5     badd=0     void=7     ]" BACK_OFF);   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), BACK_RED "TINU  scrp=1    cond=4     test=28    [ pass=16    fail=5     badd=0     void=7     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");                        <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                           <* 
+ *>    rm_working_files ();                                                                                                                                                                            <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                               <* 
+ *>    return 0;                                                                                                                                                                                       <* 
+ *> }                                                                                                                                                                                                  <*/
+
+/*> char                                                                                                                                                                                                  <* 
+ *> koios__unit_live_cond    (char a_list)                                                                                                                                                                <* 
+ *> {                                                                                                                                                                                                     <* 
+ *>    int         c           =    0;                                                                                                                                                                    <* 
+ *>    char        x_urun      [LEN_HUND]  = "apate.urun";                                                                                                                                                <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_minscrp ("live COND level testing on unit test result");                                                                                                                                     <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                      <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                                    <* 
+ *>    rm_working_files ();                                                                                                                                                                               <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    koios__unit_shared_data ('y');                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    /+> system ("cp apate.unit  apate_back.unit");                                     <+/                                                                                                             <* 
+ *>    /+> system ("cp master.unit master_back.unit");                                    <+/                                                                                                             <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check inventory of conditions");                                                                                                                                                   <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --conds"), 0);                                                                                                         <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 87);                                                                                                              <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check header");                                                                                                                                                                    <* 
+ *>    yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");                           <* 
+ *>    yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑4 ∑∑∑4 ∑∑∑4");                           <* 
+ *>    yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (3) YUNIT_COND                             c ∑∑21 ∑∑17 ∑∑12");                           <* 
+ *>    yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑90 ∑∑78 ∑∑58");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check section");                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");                           <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===-------------------------- simple testing ---------------------------=== TCES");                           <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check script one");                                                                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] (SCRP) verify openning and closing ============================[¿Í]=[00006]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [002] (1)" BACK_OFF " defensive checks - -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00012]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [003] (1) [ defensive checks ]  -- -- -- -- -- -- -- -- -- -- -- -- -- [00017]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [004] small condition -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00018]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [005] (1) [ defensive checks ]  -- -- -- -- -- -- -- -- -- -- -- -- -- [00020]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [006] duplicate opens and closes  -- -- -- -- -- -- -- -- -- -- -- -- -[00021]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  PRCS -------- cond=6     test=22    [ ------------------------------------------- ]");                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check section");                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");                           <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===----------------------- more complex testing ------------------------=== TCES");                           <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check script two");                                                                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] run initialization -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00051]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [004] parse a code record - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00057]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  PRCS -------- cond=4     test=28    [ ------------------------------------------- ]");                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check script three");                                                                                                                                                              <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round one   ----------------------------===");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [001] (1)" BACK_OFF " process arguments  -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00076]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [004] (2)" BACK_OFF " read one record -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00082]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round two   ----------------------------===");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [005] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00088]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [006]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00040]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [007]" BACK_OFF " close and delete code file  -- -- -- -- -- -- -- -- -- -- -- -- -[00045]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===---------------------------   final round   ---------------------------===");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [008] (2) [ read one record ] - -- -- -- -- -- -- -- -- -- -- -- -- -- [00091]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check (70) global cond"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [009]" BACK_OFF " prepare variables  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check (72) global cond"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [010]" BACK_OFF " generate a summary -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00009]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [011] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00093]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  PRCS -------- cond=11    test=40    [ ------------------------------------------- ]");                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check script four");                                                                                                                                                               <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [04] (SCRP) empty script ===========================================[¬Ú]=[00094]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  PRCS -------- cond=0     test=0     [ ------------------------------------------- ]");                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check footer");                                                                                                                                                                    <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "TINU  scrp=4    cond=21    test=90    [ ------------------------------------------- ]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check inventory of conditions for single script");                                                                                                                                 <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --conds 02"), 0);                                                                                                      <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 22);                                                                                                              <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check urun output");                                                                                                                                                               <* 
+ *>    yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");                           <* 
+ *>    yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑1 ∑∑∑4 ∑∑∑4");                           <* 
+ *>    yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (3) YUNIT_COND                             c ∑∑∑4 ∑∑17 ∑∑12");                           <* 
+ *>    yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑28 ∑∑78 ∑∑58");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] run initialization -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00051]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [004] parse a code record - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00057]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  PRCS -------- cond=4     test=28    [ ------------------------------------------- ]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "TINU  scrp=1    cond=4     test=28    [ ------------------------------------------- ]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check executing and presenting only conditions");                                                                                                                                  <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --cond"), 999);                                                                                                        <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify header");                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");                           <* 
+ *>    yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑4 ∑∑∑4 ∑∑∑4");                           <* 
+ *>    yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (3) YUNIT_COND                             c ∑∑21 ∑∑17 ∑∑12");                           <* 
+ *>    yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑90 ∑∑78 ∑∑58");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");                           <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===-------------------------- simple testing ---------------------------=== TCES");                           <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify first script");                                                                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] (SCRP) verify openning and closing ============================[¿Í]=[00006]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");                           <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [002] (1)" BACK_OFF " defensive checks - -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00012]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=3     fail=0     badd=0     void=1     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [003] (1) [ defensive checks ]  -- -- -- -- -- -- -- -- -- -- -- -- -- [00017]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=3     fail=0     badd=0     void=1     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [004] small condition -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00018]");                           <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=1     [ pass=1     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [005] (1) [ defensive checks ]  -- -- -- -- -- -- -- -- -- -- -- -- -- [00020]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=3     fail=0     badd=0     void=1     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [006] duplicate opens and closes  -- -- -- -- -- -- -- -- -- -- -- -- -[00021]");                           <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=5     [ pass=1     fail=1     badd=0     void=3     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=6     test=22    [ pass=15    fail=1     badd=0     void=6     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");                           <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===----------------------- more complex testing ------------------------=== TCES");                           <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify second script");                                                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [02] (SCRP) verify system startup ==================================[¿Î]=[00050]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] run initialization -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00051]");                           <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=1     fail=2     badd=0     void=1     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=3     badd=0     void=1     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [004] parse a code record - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00057]");                           <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=16    [ pass=11    fail=0     badd=0     void=5     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=4     test=28    [ pass=16    fail=5     badd=0     void=7     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify third script");                                                                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round one   ----------------------------===");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [001] (1)" BACK_OFF " process arguments  -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00076]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=3     fail=0     badd=0     void=1     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [004] (2)" BACK_OFF " read one record -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00082]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=4     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round two   ----------------------------===");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [005] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00088]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [006]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00040]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [007]" BACK_OFF " close and delete code file  -- -- -- -- -- -- -- -- -- -- -- -- -[00045]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===---------------------------   final round   ---------------------------===");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [008] (2) [ read one record ] - -- -- -- -- -- -- -- -- -- -- -- -- -- [00091]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=4     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check global condition"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [009]" BACK_OFF " prepare variables  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=1     [ pass=0     fail=0     badd=0     void=1     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check global condition"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [010]" BACK_OFF " generate a summary -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00009]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=3     [ pass=3     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [011] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00093]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=11    test=40    [ pass=30    fail=8     badd=0     void=2     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify fourth script and footer");                                                                                                                                                 <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [04] (SCRP) empty script ===========================================[¬Ú]=[00094]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_YEL "PRCS -------- cond=0     test=0     [ pass=0     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), BACK_RED "TINU  scrp=4    cond=21    test=90    [ pass=61    fail=14    badd=0     void=15    ]" BACK_OFF);         <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");                           <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 108);                                                                                                             <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("check executing and presenting but show only one script");                                                                                                                         <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --cond 03"), 999);                                                                                                     <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify header");                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");                           <* 
+ *>    yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑1 ∑∑∑4 ∑∑∑4");                           <* 
+ *>    yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (3) YUNIT_COND                             c ∑∑11 ∑∑17 ∑∑12");                           <* 
+ *>    yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑40 ∑∑78 ∑∑58");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify third script");                                                                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [03] (SCRP) verify normal processing ===============================[¡Ï]=[00074]");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round one   ----------------------------===");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [001] (1)" BACK_OFF " process arguments  -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00076]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=3     fail=0     badd=0     void=1     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [004] (2)" BACK_OFF " read one record -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00082]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=4     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===----------------------------   round two   ----------------------------===");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [005] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00088]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [006]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00040]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [007]" BACK_OFF " close and delete code file  -- -- -- -- -- -- -- -- -- -- -- -- -[00045]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check group"                    , yURG_peek (x_urun, '÷'), "  GROUP ===---------------------------   final round   ---------------------------===");                           <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [008] (2) [ read one record ] - -- -- -- -- -- -- -- -- -- -- -- -- -- [00091]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=4     [ pass=0     fail=4     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check global condition"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [009]" BACK_OFF " prepare variables  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=1     [ pass=0     fail=0     badd=0     void=1     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check global condition"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [010]" BACK_OFF " generate a summary -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00009]");   <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=3     [ pass=3     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "DOND [011] (1) [ process arguments ] -- -- -- -- -- -- -- -- -- -- -- -- -- [00093]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_RED "PRCS -------- cond=11    test=40    [ pass=30    fail=8     badd=0     void=2     ]" BACK_OFF);      <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    yUNIT_mincond ("verify fourth script and footer");                                                                                                                                                 <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), BACK_RED "TINU  scrp=1    cond=11    test=40    [ pass=30    fail=8     badd=0     void=2     ]" BACK_OFF);         <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");                           <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 53);                                                                                                              <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                  <* 
+ *>                                                                                                                                                                                                       <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                              <* 
+ *>    rm_working_files ();                                                                                                                                                                               <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                  <* 
+ *>    return 0;                                                                                                                                                                                          <* 
+ *> }                                                                                                                                                                                                     <*/
+
+/*> char                                                                                                                                                                                                              <* 
+ *> koios__unit_live_step    (char a_list)                                                                                                                                                                            <* 
+ *> {                                                                                                                                                                                                                 <* 
+ *>    int         c           =    0;                                                                                                                                                                                <* 
+ *>    char        x_urun      [LEN_HUND]  = "apate.urun";                                                                                                                                                            <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_minscrp ("live STEP level testing on unit test result");                                                                                                                                                 <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                                  <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                                                <* 
+ *>    rm_working_files ();                                                                                                                                                                                           <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    koios__unit_shared_data ('y');                                                                                                                                                                                 <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check displaying steps");                                                                                                                                                                      <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --steps"), 0);                                                                                                                     <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check step level header");                                                                                                                                                                     <* 
+ *>    yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");                                       <* 
+ *>    yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑4 ∑∑∑4 ∑∑∑4");                                       <* 
+ *>    yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (4) YUNIT_STEP                             c ∑∑21 ∑∑17 ∑∑12");                                       <* 
+ *>    yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑90 ∑∑78 ∑∑58");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check step level section format");                                                                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");                                       <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "SECT ===-------------------------- simple testing ---------------------------=== TCES");                                       <* 
+ *>    yUNIT_minstr  ("... check section"                  , yURG_peek (x_urun, '÷'), "=========================------------------------------------========================");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check step level script format");                                                                                                                                                              <* 
+ *>    yUNIT_minstr  ("... check (11) separator"           , yURG_peek (x_urun, '÷'), "===[[ NEW SCRIPT ]]==================================================================");                                       <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] (SCRP) verify openning and closing ============================[¿Í]=[00006]");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check step level condition and normal steps");                                                                                                                                                 <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) str   : check string ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00008]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ab) real  : check number ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00009]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ac) int   : check integer  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00010]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ad) int   : check character ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00011]");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [002] (1)" BACK_OFF " defensive checks - -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00012]");               <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check alternative step level entries");                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun,  41), "  COND [006] duplicate opens and closes  -- -- -- -- -- -- -- -- -- -- -- -- -[00021]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) LOCAL : working variables ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00022]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ab) int   : check working variable  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00023]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ac) LOAD  : prep data for read ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00024]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ad) MODE  : FORCED_FAIL ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00025]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ae) SYS   : run little  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00026]");                                       <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check inclusion of shared");                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun,  64), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check shared header"            , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SHARE (a) ===--------------------   prepare files for use   --------------------===" BACK_OFF);                  <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [002]" BACK_OFF " script input file  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00029]");               <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) str   : check string ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00030]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ab) real  : check number ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00031]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ac) int   : check integer  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00032]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ad) MODE  : normal ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00033]");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_MAG "SOND [003]" BACK_OFF " code output file - -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00034]");               <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) str   : check string ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00035]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ab) real  : check number ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00036]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ac) int   : check integer  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00037]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ad) int   : check character ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00038]");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check shared footer"            , yURG_peek (x_urun, '÷'), "  " BACK_MAG "ERAHS (a) ===--------------------   prepare files for use   --------------------===" BACK_OFF);                  <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 197);                                                                                                                         <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check inclusion of global");                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, 166), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check global header"            , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GLOBAL (D) ===-------------------   globally shared steps   --------------------===" BACK_OFF);                  <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [009]" BACK_OFF " prepare variables  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");               <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) CODE  : set new value  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00008]");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_BLU "GOND [010]" BACK_OFF " generate a summary -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00009]");               <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     aa) str   : check string ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00010]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ab) real  : check number ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00011]");                                       <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "     ac) int   : check integer  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑[00012]");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check global footer"            , yURG_peek (x_urun, '÷'), "  " BACK_BLU "LABOLG (D) ===-------------------   globally shared steps   --------------------===" BACK_OFF);                  <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 197);                                                                                                                         <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check executing and presenting down to steps");                                                                                                                                                <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit --step"), 999);                                                                                                                    <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check step level condition and normal steps");                                                                                                                                                 <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun,  14), "  COND [001] simple openning -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00007]");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "aa) PASS  " BACK_OFF " : check string ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00008]");               <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "ab) PASS  " BACK_OFF " : check number ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00009]");               <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "ac) PASS  " BACK_OFF " : check integer ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00010]");               <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "ad) PASS  " BACK_OFF " : check character ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00011]");               <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=4     fail=0     badd=0     void=0     ]" BACK_OFF);                  <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun, '÷'), "  " BACK_CYN "CCND [002] (1)" BACK_OFF " defensive checks - -- -- -- -- -- -- -- -- -- -- -- -- -- -- [00012]");               <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check alternative step level entries");                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check condition header"         , yURG_peek (x_urun,  68), "  COND [006] duplicate opens and closes  -- -- -- -- -- -- -- -- -- -- -- -- -[00021]");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "aa) " BACK_GRN "LOCAL " BACK_OFF " : working variables  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00022]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "ab) PASS  " BACK_OFF " : check working variable ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00023]");               <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "ac) " BACK_GRN "LOAD  " BACK_OFF " : prep data for read ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00024]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "ad) " BACK_GRN "MODE  " BACK_OFF " : ENABLE FORCED FAILURE (pass=fail, fail=pass)  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00025]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "ae) " BACK_RED "!SYS  " BACK_OFF " : run little ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00026]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_RED "DNOC --------------- test=5     [ pass=1     fail=1     badd=0     void=3     ]" BACK_OFF);                  <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                          <* 
+ *>    rm_working_files ();                                                                                                                                                                                           <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                              <* 
+ *>    return 0;                                                                                                                                                                                                      <* 
+ *> }                                                                                                                                                                                                                 <*/
+
+/*> char                                                                                                                                                                                                              <* 
+ *> koios__unit_live_full    (char a_list)                                                                                                                                                                            <* 
+ *> {                                                                                                                                                                                                                 <* 
+ *>    int         c           =    0;                                                                                                                                                                                <* 
+ *>    char        x_urun      [LEN_HUND]  = "apate.urun";                                                                                                                                                            <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_minscrp ("live FULL testing on unit test result");                                                                                                                                                       <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                                  <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                                                <* 
+ *>    rm_working_files ();                                                                                                                                                                                           <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    koios__unit_shared_data ('y');                                                                                                                                                                                 <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check executing and presenting full");                                                                                                                                                         <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit"), 999);                                                                                                                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    /+> system ("cp -fv apate.unit apate_back.unit");                                  <+/                                                                                                                         <* 
+ *>    /+> system ("cp -fv apate.urun apate_back.urun");                                  <+/                                                                                                                         <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check passing string step");                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  16), "  " BACK_GRN "aa) PASS  " BACK_OFF " : check string ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00008]");               <* 
+ *>    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_teststring (0)");                                                                                         <* 
+ *>    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : s_equal    (rc =  101, test abbr = e)");                                                                        <* 
+ *>    yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  5ÂhelloÊ");                                                                                                    <* 
+ *>    yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  5ÂhelloÊ");                                                                                                    <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check failing string step (nearly same)");                                                                                                                                                     <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 418), "  " BACK_RED "aa) FAIL  " BACK_OFF " : check string ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00083]");               <* 
+ *>    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_teststring (1)");                                                                                         <* 
+ *>    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : s_equal    (rc = -101, test abbr = e)");                                                                        <* 
+ *>    yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  7Â" BOLD_RED "hello££" BOLD_OFF "Ê");                                                                          <* 
+ *>    yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  7Â" BOLD_RED "goodbye" BOLD_OFF "Ê");                                                                          <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check forced fail string step (same)");                                                                                                                                                        <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 187), "  " BACK_GRN "aa) " BACK_RED "!FAIL " BACK_OFF " : check string ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00030]");   <* 
+ *>    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_teststring (0)");                                                                                         <* 
+ *>    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : s_equal    (rc =  101, test abbr = e)");                                                                        <* 
+ *>    yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  5ÂhelloÊ");                                                                                                    <* 
+ *>    yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  5ÂhelloÊ");                                                                                                    <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check passing float step");                                                                                                                                                                    <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  22), "  " BACK_GRN "ab) PASS  " BACK_OFF " : check number ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00009]");               <* 
+ *>    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_testreal (5)");                                                                                           <* 
+ *>    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : r_greater  (rc =  103, test abbr = g)");                                                                        <* 
+ *>    yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  9Â15.000000Ê");                                                                                                <* 
+ *>    yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  9Â15.707964Ê");                                                                                                <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check failing float step");                                                                                                                                                                    <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 424), "  " BACK_RED "ab) FAIL  " BACK_OFF " : check number ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00084]");               <* 
+ *>    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_testreal (2)");                                                                                           <* 
+ *>    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : r_greater  (rc = -103, test abbr = g)");                                                                        <* 
+ *>    yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  9Â15.000000Ê");                                                                                                <* 
+ *>    yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  8Â6.283185Ê");                                                                                                 <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check passing integer step");                                                                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  28), "  " BACK_GRN "ac) PASS  " BACK_OFF " : check integer ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00010]");               <* 
+ *>    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_testint (32)");                                                                                           <* 
+ *>    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : i_equal    (rc =  101, test abbr = e)");                                                                        <* 
+ *>    yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  1Â2Ê");                                                                                                        <* 
+ *>    yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  1Â2Ê");                                                                                                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check failing integer step");                                                                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 430), "  " BACK_RED "ac) FAIL  " BACK_OFF " : check integer ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00085]");               <* 
+ *>    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : yUNIT_testint (64)");                                                                                           <* 
+ *>    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : i_equal    (rc = -101, test abbr = e)");                                                                        <* 
+ *>    yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect :  1Â2Ê");                                                                                                        <* 
+ *>    yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual :  1Â4Ê");                                                                                                        <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check mode step");                                                                                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 141), "  " BACK_CYN "ad) " BACK_GRN "MODE  " BACK_OFF " : ENABLE FORCED FAILURE (pass=fail, fail=pass)  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00025]");   <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check code step");                                                                                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 568), "  " BACK_CYN "aa) " BACK_GRN "CODE  " BACK_OFF " : set new value ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00008]");   <* 
+ *>    yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, '÷'), "      code   : 12Âh = 32 * 64;Ê");                                                                                             <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check load step");                                                                                                                                                                             <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun,  44), "  " BACK_CYN "aa) " BACK_GRN "LOAD  " BACK_OFF " : prep data for read ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00013]");   <* 
+ *>    yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, '÷'), "      stdin  : 13Âone two threeÊ");                                                                                            <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check sys step");                                                                                                                                                                              <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 143), "  " BACK_CYN "ae) " BACK_RED "!SYS  " BACK_OFF " : run little ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00026]");   <* 
+ *>    yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, '÷'), "      system : 10Â/bin/falseÊ");                                                                                               <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check local step");                                                                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, 129), "  " BACK_CYN "aa) " BACK_GRN "LOCAL " BACK_OFF " : working variables  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00022]");   <* 
+ *>    yUNIT_minstr  ("... ... contents"                   , yURG_peek (x_urun, '÷'), "      local  : 10Âint c = 0;Ê");                                                                                               <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                          <* 
+ *>    rm_working_files ();                                                                                                                                                                                           <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                              <* 
+ *>    return 0;                                                                                                                                                                                                      <* 
+ *> }                                                                                                                                                                                                                 <*/
+
+/*> char                                                                                                                                                                                               <* 
+ *> koios__unit_live_stop    (char a_list)                                                                                                                                                             <* 
+ *> {                                                                                                                                                                                                  <* 
+ *>    int         c           =    0;                                                                                                                                                                 <* 
+ *>    char        x_unit      [LEN_HUND]  = "apate.unit";                                                                                                                                             <* 
+ *>    char        x_conv      [LEN_HUND]  = "apate.unit.unit";                                                                                                                                        <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_minscrp ("live testing on unit test result (STOPPING)");                                                                                                                                  <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                   <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                                 <* 
+ *>    rm_working_files ();                                                                                                                                                                            <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond  ("verify a simple success");                                                                                                                                                     <* 
+ *>    system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  apate.unit");     <* 
+ *>    system ("echo \"  COND   (1)  repeat code                         \"                                                                                                       >> apate.unit");   <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");       <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");       <* 
+ *>    system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");   <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("call conversion");                                                                                                                                                              <* 
+ *>    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   5);                                                                                                         <* 
+ *>    yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),   0);                                                                                    <* 
+ *>    yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  18);                                                                                                         <* 
+ *>    yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   1);                                                                                                         <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );         <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );                                                       <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond  ("attempt with a bad verb");                                                                                                                                                     <* 
+ *>    system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  apate.unit");     <* 
+ *>    system ("echo \"  CONDY  (1)  repeat code                         \"                                                                                                       >> apate.unit");   <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");       <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");       <* 
+ *>    system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");   <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("call conversion");                                                                                                                                                              <* 
+ *>    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit) ,   5);                                                                                                          <* 
+ *>    yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate"), 999);                                                                                                     <* 
+ *>    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   5);                                                                                                         <* 
+ *>    yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   3);                                                                                                         <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );         <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), BOLD_ERR "FATAL, apate.unit:2:0: error: verb ∂CONDY∂ not recognized/found"               BACK_OFF  );          <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), BOLD_ERR "FATAL, apate.unit:5:1: error: DITTO identifier Â1Ê not set by previous COND"   BACK_OFF  );          <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );                                                       <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond ("call execution");                                                                                                                                                               <* 
+ *>    yUNIT_minval  ("... run koios"                      , system ("koios --Ecode apate"), 999);                                                                                                     <* 
+ *>    yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   3);                                                                                                         <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );         <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), BOLD_ERR "FATAL, apate.unit:2:0: error: verb ∂CONDY∂ not recognized/found"               BACK_OFF  );          <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), BOLD_ERR "FATAL, apate.unit:5:1: error: DITTO identifier Â1Ê not set by previous COND"   BACK_OFF  );          <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );                                                       <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                               <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                           <* 
+ *>    rm_working_files ();                                                                                                                                                                            <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                               <* 
+ *>    return 0;                                                                                                                                                                                       <* 
+ *> }                                                                                                                                                                                                  <*/
+
+/*> char                                                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *> koios__unit_live_vers    (char a_list)                                                                                                                                                                                                                                                                                                                                                                                      <* 
+ *> {                                                                                                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    int         c           =    0;                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>    char        x_unit      [LEN_HUND]  = "apate.unit";                                                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    char        x_conv      [LEN_HUND]  = "apate.unit.unit";                                                                                                                                                                                                                                                                                                                                                                 <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_minscrp ("live testing with various versions");                                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("verify a simple success");                                                                                                                                                                                                                                                                                                                                                                              <* 
+ *>    system ("echo \"SCRP          v21  verify ditto                  0s  tbd        \"                                                                                   >  apate.unit");                                                                                                                                                                                                                               <* 
+ *>    system ("echo \"  COND   (1)  v20  repeat code                  \"                                                                                                       >> apate.unit");                                                                                                                                                                                                                             <* 
+ *>    system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> apate.unit");                                                                                                                                                                                                                                <* 
+ *>    system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> apate.unit");                                                                                                                                                                                                                                <* 
+ *>    system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> apate.unit");                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond ("call conversion");                                                                                                                                                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   5);                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),   0);                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  18);                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   1);                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );                                                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond ("verify header");                                                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit,   0), "#!/usr/local/bin/koios");                                                                                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#   koios-polos (axis of heaven) unit testing meta-language");                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond ("verify script with dittoing");                                                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");   <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");   <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP          verify ditto                                                       0s   tbd                                                                                          ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND  (1)  repeat code                                                        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check integer                    yUNIT_testint               32                                                                                                    i_equal     2                                                                                                    ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     exec     ... check character                  yUNIT_testchar              65                                                                                                    i_equal     'A'                                                                                                  ");                          <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   DITTO (1)  [ repeat code ]                                                    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                         <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond ("verify footer");                                                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "# end-of-file.  done, finito, completare, whimper [œ¥∑∑∑");                                                                                                                                                                                                                                                                              <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    return 0;                                                                                                                                                                                                                                                                                                                                                                                                                <* 
+ *> }                                                                                                                                                                                                                                                                                                                                                                                                                           <*/
+
+/*> char                                                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *> koios__unit_live_comment (char a_list)                                                                                                                                                                                                                                                                                                                                                                                      <* 
+ *> {                                                                                                                                                                                                                                                                                                                                                                                                                           <* 
+ *>    int         c           =    0;                                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>    char        x_unit      [LEN_HUND]  = "apate.unit";                                                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    char        x_conv      [LEN_HUND]  = "apate.unit.unit";                                                                                                                                                                                                                                                                                                                                                                 <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_minscrp ("live testing with comments");                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                                                                                                                                                                                                                                            <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                                                                                                                                                                                                                                                          <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("unit with variety of comments, and issue");                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    system ("echo \"\"                                                                                                                                                                > apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"## this is a comment\"                                                                                                                                           >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"\"                                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"#> this is a saved comment\"                                                                                                                                     >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"#>this needed a space\"                                                                                                                                          >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"\"                                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"PREP          include the prototype headers                            - - - - - - - - - -   - - - - -   - - - - - - - - - -  >>\"                     >> apate.unit");                                                                                                                                                                                                                             <* 
+ *>    system ("echo \"   #> this is second level comment\"                                                                                                                             >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"   incl       include public header                apate.h           - - - - - - - - - -   - - - - -   - - - - - - - - - -  \"                       >> apate.unit");                                                                                                                                                                                                                              <* 
+ *>    system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  -  123456789- \"    >> apate.unit");                                                                                                                                                                                                                                <* 
+ *>    system ("echo \"#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  t  =(var)==== \"    >> apate.unit");                                                                                                                                                                                                                                <* 
+ *>    system ("echo \"SCRP    [¡Ï]  (SCRP  ) verify openning and closin                                           ((01.---))  - - - - - - - - - -  \"                        >> apate.unit");                                                                                                                                                                                                                             <* 
+ *>    system ("echo \"# random comment\"                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"\"                                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"   COND       parse a code record   - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - \"                                                       >> apate.unit");                                                                                                                                                                                                                             <* 
+ *>    system ("echo \"     #> this is third level comment\"                                                                                                                            >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"     load     add a line to stdin    stdin  * * * * *                      : basic line                  : - - - - -  :  /bin/true > /dev/null\"         >> apate.unit");                                                                                                                                                                                                                            <* 
+ *>    system ("echo \"\"                                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"# > random comment\"                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                      <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond ("call conversion");                                                                                                                                                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,  19);                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),  999);                                                                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  19);                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   2);                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), BOLD_ERR "FATAL, apate.unit:5:0: error: verb ∂#>this∂ not recognized/found"               BACK_OFF  );                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );                                                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond  ("unit with variety of comments, and issue");                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    system ("echo \"\"                                                                                                                                                                > apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"## this is a comment\"                                                                                                                                           >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"\"                                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"#> this is a saved comment\"                                                                                                                                     >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"\"                                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"PREP          include the prototype headers                            - - - - - - - - - -   - - - - -   - - - - - - - - - -  >>\"                     >> apate.unit");                                                                                                                                                                                                                             <* 
+ *>    system ("echo \"   #> this is second level comment\"                                                                                                                             >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"   incl       include public header                apate.h           - - - - - - - - - -   - - - - -   - - - - - - - - - -  \"                       >> apate.unit");                                                                                                                                                                                                                              <* 
+ *>    system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  -  123456789- \"    >> apate.unit");                                                                                                                                                                                                                                <* 
+ *>    system ("echo \"#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  t  =(var)==== \"    >> apate.unit");                                                                                                                                                                                                                                <* 
+ *>    system ("echo \"SCRP    [¡Ï]  (SCRP  ) verify openning and closin                                           ((01.---))  - - - - - - - - - -  \"                        >> apate.unit");                                                                                                                                                                                                                             <* 
+ *>    system ("echo \"# random comment\"                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"\"                                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"   COND       parse a code record   - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - \"                                                       >> apate.unit");                                                                                                                                                                                                                             <* 
+ *>    system ("echo \"     #> this is third level comment\"                                                                                                                            >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"     load     add a line to stdin    stdin  * * * * *                      : basic line                  : - - - - -  :  /bin/true > /dev/null\"         >> apate.unit");                                                                                                                                                                                                                            <* 
+ *>    system ("echo \"\"                                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                        <* 
+ *>    system ("echo \"# > random comment\"                                                                                                                                               >> apate.unit");                                                                                                                                                                                                                      <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                                                                                                       <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond ("call conversion");                                                                                                                                                                                                                                                                                                                                                                                       <* 
+ *>    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,  18);                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minval  ("... run koios"                      , system ("koios --Econv apate > /dev/null 2>&1"),    0);                                                                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval  ("... check result lines"             , yURG_peek_count (x_unit)  ,  25);                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minval  ("... count errors"                   , yURG_peek_count (YURG_ERR),   1);                                                                                                                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR,   0), BOLD_ERR "FATAL, file Âmaster.globalsÊ could not be openned"                              BACK_OFF  );                                                                                                                                                                                                                                  <* 
+ *>    yUNIT_minstr  ("... check error line"               , yURG_peek (YURG_ERR, '÷'), ""                                                    );                                                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond ("verify header");                                                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit,   0), "#!/usr/local/bin/koios");                                                                                                                                                                                                                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#   koios-polos (axis of heaven) unit testing meta-language");                                                                                                                                                                                                                                                                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#> this is a saved comment");                                                                                                                                                                                                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond ("verify prep area");                                                                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");   <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");   <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "PREP          include the prototype headers                                      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   #> this is second level comment");                                                                                                                                                                                                                                                                                                    <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   incl       include public header                apate.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                          <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond ("verify script");                                                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");   <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");   <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "SCRP    [¡Ï]  (SCRP  ) verify openning and closin                                                                                                                                  ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                           <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "   COND       parse a code record                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     #> this is third level comment");                                                                                                                                                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "     load     add a line to stdin                  stdin                       * * * * *                      : basic line                  : - - - - -  :  /bin/true > /dev/null                                                                                                                         ");                        <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    yUNIT_mincond ("verify footer");                                                                                                                                                                                                                                                                                                                                                                                         <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "# end-of-file.  done, finito, completare, whimper [œ¥∑∑∑");                                                                                                                                                                                                                                                                              <* 
+ *>    yUNIT_minstr  ("... check line"                     , yURG_peek (x_unit, '÷'), "");                                                                                                                                                                                                                                                                                                                                      <* 
+ *>                                                                                                                                                                                                                                                                                                                                                                                                                             <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    rm_working_files ();                                                                                                                                                                                                                                                                                                                                                                                                     <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    return 0;                                                                                                                                                                                                                                                                                                                                                                                                                <* 
+ *> }                                                                                                                                                                                                                                                                                                                                                                                                                           <*/
 
 char
 koios__unit_live_variety (char a_list)
@@ -7018,108 +7018,108 @@ koios__unit_live_variety (char a_list)
    return 0;
 }
 
-char
-koios__unit_live_code    (char a_list)
-{
-   int         c           =    0;
-   char        x_unit      [LEN_HUND]  = "apate.unit";
-   char        x_conv      [LEN_HUND]  = "apate.unit.unit";
-   char        x_urun      [LEN_HUND]  = "apate.urun";
-
-   yUNIT_minscrp ("live testing with code/chdir lines");
-   if (a_list == 'y')  return 0;
-   yURG_err_none ();  /* not to stderr/terminal */
-   rm_working_files ();
-   PROG__unit_quiet  ();
-
-
-   yUNIT_mincond  ("verify a simple success");
-   system ("echo \"PREP          include headers                     \"                                                                                                                > apate.unit");
-   system ("echo \"   incl       right libraries                      koios.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \"   >> apate.unit");
-   system ("echo \"SCRP          quick test                                                       - - - - - - - - - - - - - - - - -    -((01.---))  - - - - - - - - - -  \"   >> apate.unit");
-   system ("echo \"   COND       verify code                          - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - -  \"                                           >> apate.unit");
-   system ("echo \"     local    path directory                       - - - - - - - - - - - - -   char  x_name [LEN_HUND] = \\\"\\\";                                        \"   >> apate.unit");
-   system ("echo \"     code     update directory                     - - - - - - - - - - - - -   strcpy (x_name, \\\"/home/member\\\");                                     \"   >> apate.unit");
-   system ("echo \"     code     change directory                     - - - - - - - - - - - - -   chdir (x_name);                                                            \"   >> apate.unit");
-   system ("echo \"     exec     get current directory                getcwd                      NULL, 0                             s_equal       /home/member         \"   >> apate.unit");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond ("call conversion");
-   yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   8);
-   yUNIT_minval  ("... run koios"                      , system ("koios --Ecode apate > /dev/null 2>&1"),   0);
-   yUNIT_minval  ("... copy to c"                      , system ("cp  -f apate_unit.{cs,c}"), 0);
-   yUNIT_minval  ("... compile"                        , system ("gcc -c apate_unit.c"), 0);
-   yUNIT_minval  ("... link"                           , system ("gcc -o apate_unit apate_unit.o -lyUNIT"), 0);
-   yUNIT_minval  ("... permissions"                    , system ("chmod +x apate_unit"), 0);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond ("check results");
-   yUNIT_minval  ("... run unit test"                  , system ("./apate_unit")  , 0);
-   yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 34);
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check header");
-   yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑1 ∑∑∑1 ∑∑∑1");
-   yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (5) YUNIT_FULL                             c ∑∑∑1 ∑∑∑1 ∑∑∑1");
-   yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑∑4 ∑∑∑4 ∑∑∑4");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-
-   yUNIT_mincond ("check script entry");                
-   yUNIT_minstr  ("... check (11) separator"           , yURG_peek (x_urun, '÷'), "===[[ NEW SCRIPT ]]==================================================================");
-   yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] quick test ====================================================[  ]=[00003]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check condition entry");                
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "  COND [001] verify code  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00004]");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-
-   yUNIT_mincond ("check passing string step");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "aa) " BACK_GRN "LOCAL " BACK_OFF " : path directory  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00005]");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      local  : 29Âchar  x_name [LEN_HUND] = ∂∂;Ê");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check passing string step");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "ab) " BACK_GRN "CODE  " BACK_OFF " : update directory ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00006]");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      code   : 32Âstrcpy (x_name, ∂/home/member∂);Ê");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check passing string step");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "ac) " BACK_GRN "CODE  " BACK_OFF " : change directory ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00007]");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      code   : 15Âchdir (x_name);Ê");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check passing string step");
-   yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "ad) PASS  " BACK_OFF " : get current directory ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00008]");
-   yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : getcwd (NULL, 0)");
-   yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : s_equal    (rc =  101, test abbr = e)");
-   yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect : 12Â/home/memberÊ");
-   yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual : 12Â/home/memberÊ");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   yUNIT_mincond ("check urun output");
-   yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=1     fail=0     badd=0     void=3     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_GRN "PRCS -------- cond=1     test=4     [ pass=1     fail=0     badd=0     void=3     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), BACK_GRN "TINU  scrp=1    cond=1     test=4     [ pass=1     fail=0     badd=0     void=3     ]" BACK_OFF);
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
-   yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");
-   yUNIT_mindnoc ();
-
-   PROG__unit_end    ();
-   rm_working_files ();
-   yUNIT_minprcs ();
-   return 0;
-}
+/*> char                                                                                                                                                                                                              <* 
+ *> koios__unit_live_code    (char a_list)                                                                                                                                                                            <* 
+ *> {                                                                                                                                                                                                                 <* 
+ *>    int         c           =    0;                                                                                                                                                                                <* 
+ *>    char        x_unit      [LEN_HUND]  = "apate.unit";                                                                                                                                                            <* 
+ *>    char        x_conv      [LEN_HUND]  = "apate.unit.unit";                                                                                                                                                       <* 
+ *>    char        x_urun      [LEN_HUND]  = "apate.urun";                                                                                                                                                            <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_minscrp ("live testing with code/chdir lines");                                                                                                                                                          <* 
+ *>    if (a_list == 'y')  return 0;                                                                                                                                                                                  <* 
+ *>    yURG_err_none ();  /+ not to stderr/terminal +/                                                                                                                                                                <* 
+ *>    rm_working_files ();                                                                                                                                                                                           <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                                          <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond  ("verify a simple success");                                                                                                                                                                    <* 
+ *>    system ("echo \"PREP          include headers                     \"                                                                                                                > apate.unit");          <* 
+ *>    system ("echo \"   incl       right libraries                      koios.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  \"   >> apate.unit");            <* 
+ *>    system ("echo \"SCRP          quick test                                                       - - - - - - - - - - - - - - - - -    -((01.---))  - - - - - - - - - -  \"   >> apate.unit");              <* 
+ *>    system ("echo \"   COND       verify code                          - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - -  \"                                           >> apate.unit");             <* 
+ *>    system ("echo \"     local    path directory                       - - - - - - - - - - - - -   char  x_name [LEN_HUND] = \\\"\\\";                                        \"   >> apate.unit");            <* 
+ *>    system ("echo \"     code     update directory                     - - - - - - - - - - - - -   strcpy (x_name, \\\"/home/member\\\");                                     \"   >> apate.unit");            <* 
+ *>    system ("echo \"     code     change directory                     - - - - - - - - - - - - -   chdir (x_name);                                                            \"   >> apate.unit");            <* 
+ *>    system ("echo \"     exec     get current directory                getcwd                      NULL, 0                             s_equal       /home/member         \"   >> apate.unit");              <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                             <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("call conversion");                                                                                                                                                                             <* 
+ *>    yUNIT_minval  ("... check unit lines"               , yURG_peek_count (x_unit)  ,   8);                                                                                                                        <* 
+ *>    yUNIT_minval  ("... run koios"                      , system ("koios --Ecode apate > /dev/null 2>&1"),   0);                                                                                                   <* 
+ *>    yUNIT_minval  ("... copy to c"                      , system ("cp  -f apate_unit.{cs,c}"), 0);                                                                                                                 <* 
+ *>    yUNIT_minval  ("... compile"                        , system ("gcc -c apate_unit.c"), 0);                                                                                                                      <* 
+ *>    yUNIT_minval  ("... link"                           , system ("gcc -o apate_unit apate_unit.o -lyUNIT"), 0);                                                                                                   <* 
+ *>    yUNIT_minval  ("... permissions"                    , system ("chmod +x apate_unit"), 0);                                                                                                                      <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                             <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check results");                                                                                                                                                                               <* 
+ *>    yUNIT_minval  ("... run unit test"                  , system ("./apate_unit")  , 0);                                                                                                                           <* 
+ *>    yUNIT_minval  ("... check line count"               , yURG_peek_count (x_urun) , 34);                                                                                                                          <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check header");                                                                                                                                                                                <* 
+ *>    yUNIT_minstr  ("... check unit header"              , yURG_peek (x_urun, '∫'), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");                                       <* 
+ *>    yUNIT_minstr  ("... ... patron"                     , yURG_peek (x_urun, '÷'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ∑∑∑1 ∑∑∑1 ∑∑∑1");                                       <* 
+ *>    yUNIT_minstr  ("... ... level"                      , yURG_peek (x_urun, '÷'), "   assign output level to (5) YUNIT_FULL                             c ∑∑∑1 ∑∑∑1 ∑∑∑1");                                       <* 
+ *>    yUNIT_minstr  ("... ... eterm"                      , yURG_peek (x_urun, '÷'), "   assign format/color to (y) ETERM                                  x ∑∑∑4 ∑∑∑4 ∑∑∑4");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check script entry");                                                                                                                                                                          <* 
+ *>    yUNIT_minstr  ("... check (11) separator"           , yURG_peek (x_urun, '÷'), "===[[ NEW SCRIPT ]]==================================================================");                                       <* 
+ *>    yUNIT_minstr  ("... check script"                   , yURG_peek (x_urun, '÷'), "SCRP [01] quick test ====================================================[  ]=[00003]");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check condition entry");                                                                                                                                                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "  COND [001] verify code  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -[00004]");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check passing string step");                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "aa) " BACK_GRN "LOCAL " BACK_OFF " : path directory  ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00005]");   <* 
+ *>    yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      local  : 29Âchar  x_name [LEN_HUND] = ∂∂;Ê");                                                                            <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check passing string step");                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "ab) " BACK_GRN "CODE  " BACK_OFF " : update directory ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00006]");   <* 
+ *>    yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      code   : 32Âstrcpy (x_name, ∂/home/member∂);Ê");                                                                         <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check passing string step");                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_CYN "ac) " BACK_GRN "CODE  " BACK_OFF " : change directory ∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00007]");   <* 
+ *>    yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      code   : 15Âchdir (x_name);Ê");                                                                                          <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check passing string step");                                                                                                                                                                   <* 
+ *>    yUNIT_minstr  ("... check step header"              , yURG_peek (x_urun, '÷'), "  " BACK_GRN "ad) PASS  " BACK_OFF " : get current directory ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑ ∑∑[00008]");               <* 
+ *>    yUNIT_minstr  ("... ... method"                     , yURG_peek (x_urun, '÷'), "      method : getcwd (NULL, 0)");                                                                                             <* 
+ *>    yUNIT_minstr  ("... ... test"                       , yURG_peek (x_urun, '÷'), "      test   : s_equal    (rc =  101, test abbr = e)");                                                                        <* 
+ *>    yUNIT_minstr  ("... ... expect"                     , yURG_peek (x_urun, '÷'), "      expect : 12Â/home/memberÊ");                                                                                             <* 
+ *>    yUNIT_minstr  ("... ... actual"                     , yURG_peek (x_urun, '÷'), "      actual : 12Â/home/memberÊ");                                                                                             <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    yUNIT_mincond ("check urun output");                                                                                                                                                                           <* 
+ *>    yUNIT_minstr  ("... check condition footer"         , yURG_peek (x_urun, '÷'), "      " BACK_GRN "DNOC --------------- test=4     [ pass=1     fail=0     badd=0     void=3     ]" BACK_OFF);                  <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check script footer"            , yURG_peek (x_urun, '÷'), "  " BACK_GRN "PRCS -------- cond=1     test=4     [ pass=1     fail=0     badd=0     void=3     ]" BACK_OFF);                  <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), BACK_GRN "TINU  scrp=1    cond=1     test=4     [ pass=1     fail=0     badd=0     void=3     ]" BACK_OFF);                     <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_minstr  ("... check unit footer"              , yURG_peek (x_urun, '÷'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");                                       <* 
+ *>    yUNIT_minstr  ("... empty"                          , yURG_peek (x_urun, '÷'), "");                                                                                                                            <* 
+ *>    yUNIT_mindnoc ();                                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                                   <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                                          <* 
+ *>    rm_working_files ();                                                                                                                                                                                           <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                              <* 
+ *>    return 0;                                                                                                                                                                                                      <* 
+ *> }                                                                                                                                                                                                                 <*/
 
 
 
@@ -7189,28 +7189,28 @@ main                    (int a_argc, char *a_argv [])
    /*---(koios_ditto.c MORE)-------------*/
    /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_ditto_parse    (x_list);    <*/
    /*---(koios_parse.c)------------------*/
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_default  (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_comment  (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_version  (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_limits   (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_current  (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_prep     (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_driver   (x_list);
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_default  (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_comment  (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_version  (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_limits   (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_current  (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_prep     (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_parse_driver   (x_list);    <*/
    /*---(script input)-------------------*/
    /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_scrp_variety ();            <*/
    /*---(conversion live)----------------*/
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_conv      (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_ditto     (x_list);
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_conv      (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_ditto     (x_list);    <*/
    /*---(code live)----------------------*/
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_scrp      (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_cond      (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_step      (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_full      (x_list);
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_scrp      (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_cond      (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_step      (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_full      (x_list);    <*/
    /*---(specific concerns)--------------*/
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_stop      (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_vers      (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_comment   (x_list);
-   ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_code      (x_list);
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_stop      (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_vers      (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_comment   (x_list);    <*/
+   /*> ++n;  if (x_unit == 0 || x_unit == n)  koios__unit_live_code      (x_list);    <*/
    /*---(done)---------------------------*/
    yUNIT_mintinu ();
    return 0;
