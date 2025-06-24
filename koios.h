@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4w"
-#define     P_VERTXT    "massive updates to output formatting"
+#define     P_VERNUM    "1.4x"
+#define     P_VERTXT    "added z_equal style checking for yUNIT_rc/yVAR_rc simplied char rc checking"
 /*········· ··········· ´·····························´········································*/
 
 /*

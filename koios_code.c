@@ -823,7 +823,7 @@ CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN
       case 's'  : case 'u'  : case 'w'  :
          CONV_printf (a_code, "%s      if (cyUNIT.exec)  cyUNIT.s_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
-      case 'i'  : case 'c'  :
+      case 'i'  : case 'c'  : case 'z'  :
          CONV_printf (a_code, "%s      if (cyUNIT.exec)  cyUNIT.i_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
       case 'r'  :
@@ -840,6 +840,7 @@ CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN
    case 's'  : strlcpy (x_func, "yUNIT_string"   , LEN_FULL);    break;
    case 'w'  : strlcpy (x_func, "yUNIT_wrap"     , LEN_FULL);    break;
    case 'u'  : strlcpy (x_func, "yUNIT_round"    , LEN_FULL);    break;
+   case 'z'  : strlcpy (x_func, "yUNIT_rc"       , LEN_FULL);    break;
    case 'c'  : strlcpy (x_func, "yUNIT_char"     , LEN_FULL);    break;
    case 'i'  : strlcpy (x_func, "yUNIT_int"      , LEN_FULL);    break;
    case 'r'  : strlcpy (x_func, "yUNIT_real"     , LEN_FULL);    break;
@@ -883,7 +884,7 @@ CODE__expect            (FILE *a_code, char a_test [LEN_LABEL], char a_expect [L
       case 's' : case 'u' : case 'w' :      /* stringish   */
          CONV_printf (a_code, "\"%s\", " , a_expect);
          break;
-      case 'c' :                            /* character   */
+      case 'c' : case 'z' :                 /* character   */
          CONV_printf (a_code, "%s, "     , a_expect);
          break;
       case 'i' : case 'p' : case 'r' :      /* numberish   */
@@ -923,7 +924,7 @@ CODE__suffix            (FILE *a_code, char a_verb [LEN_LABEL], char a_test [LEN
       case 's'  : case 'u'  : case 'w'  :
          CONV_printf (a_code, "cyUNIT.s_rc, cyUNIT.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
-      case 'i'  : case 'c'  :
+      case 'i'  : case 'c'  : case 'z'  :
          CONV_printf (a_code, "cyUNIT.i_rc, cyUNIT.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
       case 'r'  :
@@ -940,7 +941,7 @@ CODE__suffix            (FILE *a_code, char a_verb [LEN_LABEL], char a_test [LEN
       case 's'  : case 'u'  : case 'w'  :
          CONV_printf (a_code, "%s      if (cyUNIT.exec) { if (cyUNIT.s_rc != NULL)  strcpy (%s, cyUNIT.s_rc); }\n", a_pre, a_return);
          break;
-      case 'i'  : case 'c'  :
+      case 'i'  : case 'c'  : case 'z'  :
          CONV_printf (a_code, "%s      if (cyUNIT.exec)  %s = cyUNIT.i_rc;\n", a_pre, a_return);
          break;
       case 'r'  :
