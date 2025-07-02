@@ -151,7 +151,8 @@ CODE__code_beg          (char a_nscrp [LEN_TITLE], FILE *a_code)
       CONV_printf (a_code, "/*---(standard support functions)----*/\n");
       CONV_printf (a_code, "#include    <yURG.h>\n");
       CONV_printf (a_code, "#include    <yUNIT_unit.h>\n");
-      CONV_printf (a_code, "#include    \"master.h\"\n");
+      if (yenv_uexists ("master.h"))  CONV_printf (a_code, "#include    \"master.h\"\n");
+      if (yenv_uexists ("master.c"))  CONV_printf (a_code, "#include    \"master.c\"\n");
       CONV_printf (a_code, "\n");
       CONV_printf (a_code, "/*================================ beg-script ================================*/\n");
    } else {
@@ -809,7 +810,7 @@ CODE__display           (char a_code [LEN_RECD], char r_display [LEN_RECD], char
 }
 
 char
-CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_test [LEN_LABEL], char a_display [LEN_RECD], char a_system [LEN_RECD], char a_dittoing, int a_nline, int a_dline, char a_pre [LEN_TERSE])
+CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_test [LEN_LABEL], char a_display [LEN_RECD], char a_system [LEN_RECD], char a_dittoing, int a_nline, int a_dline, char a_pre [LEN_TERSE], char a_share)
 {
    /*---(locals)-----------+-----------+-*/
    char        x_func      [LEN_FULL]   = "";
@@ -840,7 +841,7 @@ CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN
    case 's'  : strlcpy (x_func, "yUNIT_string"   , LEN_FULL);    break;
    case 'w'  : strlcpy (x_func, "yUNIT_wrap"     , LEN_FULL);    break;
    case 'u'  : strlcpy (x_func, "yUNIT_round"    , LEN_FULL);    break;
-   case 'z'  : strlcpy (x_func, "yUNIT_rc"       , LEN_FULL);    break;
+   case 'z'  : strlcpy (x_func, "yUNIT_num"      , LEN_FULL);    break;
    case 'c'  : strlcpy (x_func, "yUNIT_char"     , LEN_FULL);    break;
    case 'i'  : strlcpy (x_func, "yUNIT_int"      , LEN_FULL);    break;
    case 'r'  : strlcpy (x_func, "yUNIT_real"     , LEN_FULL);    break;
@@ -856,7 +857,7 @@ CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN
    /*---(write test)---------------------*/
    switch (a_test [0]) {
    case 'v' :    /* pure void        */
-      CONV_printf (a_code, "\"%s\", cyUNIT.exec, '%c');\n", a_test, a_dittoing);
+      CONV_printf (a_code, "\"%s\", cyUNIT.exec, '%c', '%c');\n", a_test, a_dittoing, a_share);
       break;
    default  :    /* all others       */
       CONV_printf (a_code, "\"%s\", "          , a_test);
@@ -884,10 +885,8 @@ CODE__expect            (FILE *a_code, char a_test [LEN_LABEL], char a_expect [L
       case 's' : case 'u' : case 'w' :      /* stringish   */
          CONV_printf (a_code, "\"%s\", " , a_expect);
          break;
-      case 'c' : case 'z' :                 /* character   */
-         CONV_printf (a_code, "%s, "     , a_expect);
-         break;
       case 'i' : case 'p' : case 'r' :      /* numberish   */
+      case 'c' : case 'z' :                 /* character   */
          CONV_printf (a_code, "%s, "     , a_expect);
          break;
       default  :
@@ -1056,7 +1055,7 @@ CODE__exec              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    CODE__display    (a_args, x_display, x_system, NULL);
    /*---(create)-------------------------*/
    CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
-   CODE__prefix     (a_code, a_verb, a_desc, a_method, a_test, x_display, x_system, a_dittoing, a_nline, a_dline, x_pre);
+   CODE__prefix     (a_code, a_verb, a_desc, a_method, a_test, x_display, x_system, a_dittoing, a_nline, a_dline, x_pre, *b_share);
    CODE__expect     (a_code, a_test, a_expect, a_dittoing);
    CODE__suffix     (a_code, a_verb, a_test, x_system, a_return, x_pre, a_dittoing, *b_share);
    CODE__select_end (a_code, a_verb, a_which, *b_share);

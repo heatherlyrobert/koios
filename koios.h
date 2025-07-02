@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "1.-- production"
 #define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4x"
-#define     P_VERTXT    "added z_equal style checking for yUNIT_rc/yVAR_rc simplied char rc checking"
+#define     P_VERNUM    "1.4y"
+#define     P_VERTXT    "small updates as i roll-out"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -577,7 +577,7 @@ char        CODE__group             (char a_nscrp [LEN_TITLE], FILE *a_main, FIL
 char        CODE__reuse             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(step-support)---------*/
 char        CODE__display           (char a_code [LEN_RECD], char r_display [LEN_RECD], char r_system [LEN_RECD], char r_load [LEN_RECD]);
-char        CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_display [LEN_RECD], char a_dittoing, int a_nline, int a_dline, char a_pre [LEN_TERSE]);
+char        CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_test [LEN_LABEL], char a_display [LEN_RECD], char a_system [LEN_RECD], char a_dittoing, int a_nline, int a_dline, char a_pre [LEN_TERSE], char a_share);
 char        CODE__expect            (FILE *a_conv, char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_dittoing);
 char        CODE__suffix            (FILE *a_code, char a_verb [LEN_LABEL], char a_test [LEN_LABEL], char a_system [LEN_RECD], char a_return [LEN_FULL], char a_pre [LEN_TERSE], char a_dittoing, char a_share);
 char        CODE__specialty         (FILE *a_code, char a_load [LEN_RECD], char a_dittoing, char a_share);
