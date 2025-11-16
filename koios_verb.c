@@ -3,8 +3,8 @@
 
 /*
  * location -- what type of unit test file can it appear in...
- *    m  master.unit only
- *    n  non-master.unit only
+ *    m  unit_head.unit or unit_data only
+ *    n  not unit_head.unit or unit_data
  *    -  any and all
  *
  *
@@ -495,18 +495,17 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
       return rce;
    }
    /*---(file limitations)---------------*/
-   --rce;  if (strcmp (a_nscrp, "master.unit") == 0) {
+   --rce;  IF_GLOBAL {
       if (x_locn == 'n') {
-         debug_uver   ylog_unote   ("verb not allowed in master.unit");
-         yerr_uerror ("%s:%d:0: error: verb å%sæ good; BUT, not allowed inside master.unit", a_nscrp, a_line, x_verb);
+         debug_uver   ylog_unote   ("verb not allowed in unit_head.unit, unit_comp.unit, or unit_data.unit");
+         yerr_uerror ("%s:%d:0: error: verb å%sæ good; BUT, not allowed inside unit_head.unit, unit_comp.unit, or unit_data.unit", a_nscrp, a_line, x_verb);
          debug_uver   ylog_uexitr  (__FUNCTION__, rce);
          return rce;
       }
-   }
-   --rce;  if (strcmp (a_nscrp, "master.unit") != 0) {
+   } else {
       if (x_locn == 'm') {
-         debug_uver   ylog_unote   ("verb not allowed outside master.unit");
-         yerr_uerror ("%s:%d:0: error: verb å%sæ good; BUT, not allowed outside master.unit", a_nscrp, a_line, x_verb);
+         debug_uver   ylog_unote   ("verb not allowed outside unit_head.unit, unit_comp.unit, or unit_data.unit");
+         yerr_uerror ("%s:%d:0: error: verb å%sæ good; BUT, not allowed outside unit_head.unit, unit_comp.unit, or unit_data.unit", a_nscrp, a_line, x_verb);
          debug_uver   ylog_uexitr  (__FUNCTION__, rce);
          return rce;
       }

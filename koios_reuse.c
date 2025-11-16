@@ -289,9 +289,9 @@ REUSE__parse_global     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
    if (x_type == 'F')  n  = yUNIT_reuse_line (x_label);
    debug_uver   ylog_uvalue  ("n"         , n);
    /*---(defense)------------------------*/
-   --rce;  if (strstr (a_nscrp, "master.unit") == NULL) {
-      debug_uver   ylog_unote   ("GLOBAL/CONFIG only allowed in master.unit");
-      yerr_uerror ("%s:%d:0: error: ÂGLOBAL/CONFIGÊ verbs not allowed outside master.unit", a_nscrp, a_line);
+   --rce;  IF_LOCAL {
+      debug_uver   ylog_unote   ("GLOBAL/CONFIG only allowed in unit_head.unit, unit_comp.unit, or unit_data.unit");
+      yerr_uerror ("%s:%d:0: error: ÂGLOBAL/CONFIGÊ verbs not allowed outside unit_head.unit, unit_comp.unit, or unit_data.unit", a_nscrp, a_line);
       debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
@@ -358,9 +358,9 @@ REUSE__parse_shared     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
    n  = yUNIT_reuse_line (x_label);
    debug_uver   ylog_uvalue  ("n"         , n);
    /*---(defense)------------------------*/
-   --rce;  if (strstr (a_nscrp, "master.unit") != NULL) {
-      debug_uver   ylog_unote   ("SHARED not allowed inside master.unit");
-      yerr_uerror ("%s:%d:0: error: ÂSHAREDÊ verb not allowed inside master.unit", a_nscrp, a_line);
+   --rce;  IF_GLOBAL {
+      debug_uver   ylog_unote   ("SHARED not allowed inside unit_head.unit, unit_comp.unit, or unit_data.unit");
+      yerr_uerror ("%s:%d:0: error: ÂSHAREDÊ verb not allowed inside unit_head.unit, unit_comp.unit, or unit_data.unit", a_nscrp, a_line);
       debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
@@ -460,8 +460,8 @@ REUSE__parse_reuse_new  (char a_nscrp [LEN_TITLE], int a_line, char a_prefix [LE
    /*---(check trailer)------------------*/
    x_minor = a_label [2];
    debug_uver   ylog_uchar   ("pre 2"     , x_minor);
-   --rce;  if (strchr ("*" YSTR_LOWER, x_minor) == NULL) {
-      yerr_uerror ("%s:%d:0: error: ∂%s∂ identifier ∂%c∂ does not end with Â*abcdefghijklmnopqrstuvwxyzÊ, e.g., ÂA/aÊ", a_nscrp, a_line, a_prefix, x_minor);
+   --rce;  if (strchr ("*" YSTR_ALLCHAR, x_minor) == NULL) {
+      yerr_uerror ("%s:%d:0: error: ∂%s∂ identifier ∂%c∂ does not end with Â*a-zA-Z0-9Ë-ˇÊ, e.g., ÂA/aÊ", a_nscrp, a_line, a_prefix, x_minor);
       debug_uver   ylog_unote   ("no close marker");
       debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
@@ -501,9 +501,9 @@ REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
    if (r_major != NULL)  *r_major = '-';
    if (r_minor != NULL)  *r_minor = '-';
    /*---(defense)------------------------*/
-   --rce;  if (strstr (a_nscrp, "master.unit") != NULL) {
-      debug_uver   ylog_unote   ("REUSE not allowed inside master.unit");
-      yerr_uerror ("%s:%d:0: error: ÂREUSEÊ verb not allowed inside master.unit", a_nscrp, a_line);
+   --rce;  IF_GLOBAL {
+      debug_uver   ylog_unote   ("REUSE not allowed inside unit_head.unit, unit_comp.unit, or unit_data.unit");
+      yerr_uerror ("%s:%d:0: error: ÂREUSEÊ verb not allowed inside unit_head.unit, unit_comp.unit, or unit_data.unit", a_nscrp, a_line);
       debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }

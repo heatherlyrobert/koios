@@ -377,8 +377,8 @@ PARSE__which            (char a_nscrp [LEN_TITLE], int a_line, char a_desc [LEN_
    debug_uver   ylog_uvalue  ("l"         , l);
    /*---(check valid)--------------------*/
    --rce;  for (i = 0; i < l; ++i) {
-      if (strchr (YSTR_LOWER "-·", t [i]) != NULL)  continue;
-      yerr_uerror ("%s:%d:0: error: which string å%sæ contains illegal char (%c) at pos (%d), only allow [a-z·-]", a_nscrp, a_line, t, t [i], i);
+      if (strchr (YSTR_ALLCHAR "-·", t [i]) != NULL)  continue;
+      yerr_uerror ("%s:%d:0: error: which string å%sæ contains illegal char (%c) at pos (%d), only allow [A-Za-z0-9è-ÿ·-]", a_nscrp, a_line, t, t [i], i);
       debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }

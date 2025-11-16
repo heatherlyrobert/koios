@@ -35,10 +35,10 @@
 #define     P_AUTHOR    "heatherlyrobert"
 #define     P_CREATED   "2014-03"
 /*········· ··········· ´·····························´········································*/
-#define     P_VERMAJOR  "1.-- production"
-#define     P_VERMINOR  "1.4- start removing globals from functions (into parameters)"
-#define     P_VERNUM    "1.4y"
-#define     P_VERTXT    "small updates as i roll-out"
+#define     P_VERMAJOR  "2.-- production on stress test datasets"
+#define     P_VERMINOR  "2.0- supporting unit_head, unit_comp, unit_data"
+#define     P_VERNUM    "2.0a"
+#define     P_VERTXT    "created unit_ vs master change, unit testing on koios_live working!!!"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -66,12 +66,35 @@
  *
  */
 /*
- * [0a] [0b] [0c] [0d] [0e] ...
- * [1a] [1b] [1c] [1d] [1e] ...
- * [2a] [2b] [2c] [2d] [2e] ...
- * [3a] [3b] [3c] [3d] [3e] ...
- * [4a] [4b] [4c] [4d] [4e] ...
- * [5a] [5b] [5c] [5d] [5e] ...
+ * [··/·]  stage marker for koios, more importantly ouroboros
+ *  ŒŒ  Œ         
+ *  ŒŒ  „········· focus  
+ *  Œ„············ stage  a-z  dependencies inside file
+ *  „············· wave   0-9  dependencies outside file
+ *
+ * waves...
+ *    0  =  no dependency outside of file/unit
+ *    1  =  functions dependent on another file's 0s
+ *    2  =  functions dependent on another file's 1s
+ *    3  =  functions dependent on another file's 2s
+ *    4  =  functions dependent on another file's 3s
+ *    etc, etc, etc
+ *
+ * stages...
+ *    a  = dependent on nothing not already tested
+ *    b  = dependent on function(s) in 'a'
+ *    c  = dependent on function(s) in 'b'
+ *    d  = dependent on function(s) in 'c'
+ *    e  = dependent on function(s) in 'd'
+ *    etc, etc, etc
+ *
+ * sequence...
+ * [0a/·] [0b/·] [0c/·] [0d/·] [0e/·] ...
+ * [1a/·] [1b/·] [1c/·] [1d/·] [1e/·] ...
+ * [2a/·] [2b/·] [2c/·] [2d/·] [2e/·] ...
+ * [3a/·] [3b/·] [3c/·] [3d/·] [3e/·] ...
+ * [4a/·] [4b/·] [4c/·] [4d/·] [4e/·] ...
+ * [5a/·] [5b/·] [5c/·] [5d/·] [5e/·] ...
  * ...
  *
  *
@@ -81,87 +104,6 @@
  *
  */
 
-/*>                                                                                   <* 
- *> 24 testing phases in 6 loose blocks to help sequence (like visual look)           <* 
- *>                                                                                   <* 
- *> basics, functionality, safety, and string                                         <* 
- *> SCRP  [Àè] [Àé] [Àê] [Àë]      simple dependencies, only to · in its own file     <* 
- *> SCRP  [Áì] [Áí] [Áî] [Áï]      dependent on À or less, or Á in its own file       <* 
- *> SCRP  [Âð] [Âñ] [Âò] [Âó]      dependent on Á or less, or Â in its own file       <* 
- *>                                                                                   <* 
- *> integration testing                                                               <* 
- *> SCRP  [Ãô] [Ãõ] [Ãö] [Ã÷]      dependent on Â or less, or Ã in its own file       <* 
- *> SCRP  [Äø] [Äù] [Äú] [Äû]      dependent on Ã or less, or Ä in its own file       <* 
- *>                                                                                   <* 
- *> testing library in a host application (e.g., gyges testing yMACRO)                <* 
- *> SCRP  [Åü] [Åý] [Åþ] [Åÿ]      dependent on Ä or less, or Å in its own file       <* 
- *>                                                                                   <* 
- *> its not perfect, but i don't want more than solid guidance (80:20 solution)       <* 
- *>   second character is unique/enough, but the first one helps w/quick inspection   <* 
- *>                                                                                   <*/
-
-/*>                                                                                   <* 
- *> ORIGINAL WITH WAVES                                                               <* 
- *>                                                                                   <* 
- *> SCRP  [·è] [·é] [·ê] [·ë]      simple dependencies, only to · in its own file     <* 
- *> SCRP  [´ì] [´í] [´î] [´ï]      dependent on · or less, or ´ in its own file       <* 
- *> SCRP  [ ð] [ ñ] [ ò] [ ó]      dependent on ´ or less, or   in its own file       <* 
- *> SCRP  [Ïô] [Ïõ] [Ïö] [Ï÷]      dependent on   or less, or Ï in its own file       <* 
- *> SCRP  [¬ø] [¬ù] [¬ú] [¬û]      dependent on Ï or less, or ¬ in its own file       <* 
- *> SCRP  [°ü] [°ý] [°þ] [°ÿ]      integration/string tests                           <* 
- *>                                                                                   <*/
-
-/*>                                                                                   <* 
- *> POTENTIAL SYMBOL UPDATE                                                           <* 
- *>                                                                                   <* 
- *> basics, functionality, and safety                                                 <* 
- *> SCRP  [áè] [áé] [áê] [áë]      simple dependencies, only to · in its own file     <* 
- *> SCRP  [ ì] [ í] [ î] [ ï]      dependent on · or less, or   in its own file       <* 
- *> SCRP  [¬ð] [¬ñ] [¬ò] [¬ó]      dependent on   or less, or ¬ in its own file       <* 
- *>                                                                                   <* 
- *> strings, integration, and debugging                                               <* 
- *> SCRP  [´ô] [´õ] [´ö] [´÷]      dependent on ¬ or less, or ´ in its own file       <* 
- *> SCRP  [Ïø] [Ïù] [Ïú] [Ïû]      dependent on ´ or less, or Ï in its own file       <* 
- *> SCRP  [°ü] [°ý] [°þ] [°ÿ]      dependent on Ï or less, or ° in its own file       <* 
- *>                                                                                   <* 
- *>                                                                                   <*/
-
-/*>                                                                                   <* 
- *> ATTEMPT AT MORE ALPHA                                                             <* 
- *>                                                                                   <* 
- *> basics, functionality, and safety                                                 <* 
- *> SCRP  [aè] [aé] [aê] [aë]      simple dependencies, only to · in its own file     <* 
- *> SCRP  [bì] [bí] [bî] [bï]      dependent on · or less, or   in its own file       <* 
- *> SCRP  [cð] [cñ] [cò] [có]      dependent on   or less, or ¬ in its own file       <* 
- *>                                                                                   <* 
- *> strings, integration, and debugging                                               <* 
- *> SCRP  [dô] [dõ] [dö] [d÷]      dependent on ¬ or less, or ´ in its own file       <* 
- *> SCRP  [eø] [eù] [eú] [eû]      dependent on ´ or less, or Ï in its own file       <* 
- *> SCRP  [fü] [fý] [fþ] [fÿ]      dependent on Ï or less, or ° in its own file       <* 
- *>                                                                                   <* 
- *>                                                                                   <*/
-
-/*>                                                                                   <* 
- *> ATTEMPT AT FULLY ALPHA                                                            <* 
- *>                                                                                   <* 
- *> SCRP  [1è] [1é] [1ê] [1ë]      simple dependencies, only to · in its own file     <* 
- *> SCRP  [2è] [2é] [2ê] [2ë]      dependent on · or less, or ´ in its own file       <* 
- *> SCRP  [3è] [3é] [3ê] [3ë]      dependent on ´ or less, or   in its own file       <* 
- *> SCRP  [4è] [4é] [4ê] [4ë]      dependent on   or less, or Ï in its own file       <* 
- *> SCRP  [5è] [5é] [5ê] [5ë]      dependent on Ï or less, or ¬ in its own file       <* 
- *> SCRP  [6è] [6é] [6ê] [6ë]      integration/string tests                           <* 
- *>                                                                                   <*/
-
-/*>                                                                                   <* 
- *> FIRST RUN (4 waves of 10 stages each)                                             <* 
- *>                                                                                   <* 
- *> SCRP  [è0] [è1] [è2] [è3] [è4] [è5] [è6] [è7] [è8] [è9]                           <* 
- *> SCRP  [é0] [é1] [é2] [é3] [é4] [é5] [é6] [èé] [é8] [é9]                           <* 
- *> SCRP  [ê0] [ê1] [ê2] [ê3] [ê4] [ê5] [ê6] [ê7] [ê8] [ê9]                           <* 
- *> SCRP  [ë0] [ë1] [ë2] [ë3] [ë4] [ë5] [ë6] [ë7] [ë8] [ë9]                           <* 
- *>                                                                                   <* 
- *> just didn't play out right                                                        <* 
- *>                                                                                   <*/
 
 
 /*===[[ SUMMARY ]]=============================================================#
@@ -244,8 +186,11 @@
 #include    <yCOLOR_solo.h>
 #include    <yUNIT_solo.h>
 #include    <yDLST_solo.h>
+#include    <yEXEC_solo.h>
 
 #include    <yUNIT.h>
+#include    <yLOG.h>
+#include    <yURG.h>
 
 
 
@@ -261,8 +206,15 @@
 #define     T_CONFIG    'c'
 #define     T_DITTOS    'd'
 
-#define     IF_MASTER     if (strcmp (my_loc.l_base, "master") == 0)
-#define     IF_NORMAL     if (strcmp (my_loc.l_base, "master") != 0)
+#define     IF_MASTER     if (strcmp (my_loc.l_base, "unit_head") == 0)
+#define     IF_NORMAL     if (strcmp (my_loc.l_base, "unit_head") != 0)
+#define     IF_SHARED     if (strcmp (my_loc.l_base, "unit_head") == 0 || strcmp (my_loc.l_base, "unit_comp") == 0 || strcmp (my_loc.l_base, "unit_data") == 0)
+
+#define     IF_HEAD       if (strcmp (a_nscrp, "unit_head.unit")  == 0)
+#define     IF_NOT_HEAD   if (strcmp (a_nscrp, "unit_head.unit")  != 0)
+
+#define     IF_GLOBAL     if (strcmp (a_nscrp, "unit_head.unit")  == 0 || strcmp (my_loc.l_base, "unit_comp") == 0 || strcmp (a_nscrp, "unit_data.unit") == 0)
+#define     IF_LOCAL      if (strcmp (a_nscrp, "unit_head.unit")  != 0 && strcmp (my_loc.l_base, "unit_comp") != 0 && strcmp (a_nscrp, "unit_data.unit") != 0)
 
 #define     IF_CONFIRM    if (my.noise == 'c') 
 #define     IF_VERBOSE    if (my.noise == 'v') 
@@ -295,18 +247,24 @@ extern      tGLOBALS    my;
 typedef     struct cLOC   tLOC;
 struct cLOC {
    /*---(location data)---------*/
+   char        l_dir       [LEN_PATH];      /* full current path              */
+   char        l_file      [LEN_FULL];      /* full file name                 */
+   char        l_full      [LEN_PATH];      /* absolute file name             */
    char        l_proj      [LEN_LABEL];     /* base project name              */
-   char        l_extn      [LEN_TERSE];     /* .unit vs .sunit                */
    char        l_base      [LEN_TITLE];     /* base name of files             */
+   char        l_extn      [LEN_TERSE];     /* .unit vs .sunit                */
+   char        l_quality;                   /* name quality                   */
    /*---(file names)------------*/
    char        l_scrp      [LEN_TITLE];     /* name of input script file      */
    char        l_main      [LEN_TITLE];     /* name of output main file       */
+   char        l_head      [LEN_TITLE];     /* name of header file            */
    char        l_code      [LEN_TITLE];     /* name of output code file       */
    char        l_wave      [LEN_TITLE];     /* name of master code file       */
    char        l_conv      [LEN_TITLE];     /* name of output script file     */
    /*---(file handles)----------*/
    FILE       *l_SCRP;                      /* pointer to input script file   */
    FILE       *l_MAIN;                      /* pointer to output main file    */
+   FILE       *l_HEAD;                      /* pointer to output header file  */
    FILE       *l_CODE;                      /* pointer to output code file    */
    FILE       *l_WAVE;                      /* pointer to output wave file    */
    FILE       *l_CONV;                      /* pointer to output script file  */
@@ -380,24 +338,29 @@ char        PROG__header            (void);
 char        PROG_urgents            (int a_argc, char *a_argv []);
 /*---(start-up)-------------*/
 char        PROG__init              (void);
-char        PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char r_proj [LEN_LABEL], char r_ext [LEN_TERSE]);
-char        PROG__args              (int a_argc, char *a_argv [], char *r_runtype, char *r_noise, char *r_replace, char r_base [LEN_TITLE], char r_proj [LEN_LABEL], char r_ext [LEN_SHORT]);
+/*> char        PROG__file              (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char r_proj [LEN_LABEL], char r_ext [LEN_TERSE]);   <*/
+char        PROG__args              (int a_argc, char *a_argv []);
 char        PROG__begin             (void);
 char        PROG_startup            (int a_argc, char *a_argv []);
 /*---(execution)------------*/
-char        PROG_dawn               (char a_runtype, char a_nscrp [LEN_TITLE], FILE **r_scrp, int *r_line, char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char a_nconv [LEN_TITLE], FILE **r_conv, char *b_share, char *b_select);
+char        PROG_dawn               (char a_runtype, char a_nscrp [LEN_TITLE], FILE **r_scrp, int *r_line, char a_nmain [LEN_TITLE], FILE **r_main, char a_nhead [LEN_TITLE], FILE **r_head, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char a_nconv [LEN_TITLE], FILE **r_conv, char *b_share, char *b_select);
 char        PROG_terminate          (FILE **r_scrp, FILE **r_main, FILE **r_code, FILE **r_wave, FILE **r_conv);
-char        PROG_driver             (char a_good, char a_runtype, char a_nscrp [LEN_TITLE], int *r_nline, FILE **b_scrp, FILE *a_main, FILE *a_code, FILE *a_wave, FILE *a_conv, char b_last [LEN_LABEL], int *r_nrecd, char *r_under, char *r_ditto, char *r_dittoing, char *r_dtarget, int *r_dstart, int *r_dline, char *r_major, char *r_minor, char *r_share, char *r_select);
-char        PROG_dusk               (char a_good, char a_runtype, char a_replace, char a_nscrp [LEN_TITLE], FILE **r_scrp, int a_nline, char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char a_nconv [LEN_TITLE], FILE **r_conv, char a_share, char a_select);
-char        PROG_loop               (int a_argc, char *a_argv []);
+char        PROG_driver             (char a_good, char a_runtype, char a_nscrp [LEN_TITLE], int *r_nline, FILE **b_scrp, FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, FILE *a_conv, char b_last [LEN_LABEL], int *r_nrecd, char *r_under, char *r_ditto, char *r_dittoing, char *r_dtarget, int *r_dstart, int *r_dline, char *r_major, char *r_minor, char *r_share, char *r_select);
+char        PROG_pseudo             (int a_argc, char *a_argv []);
+char        PROG_dusk               (char a_good, char a_runtype, char a_replace, char a_nscrp [LEN_TITLE], FILE **r_scrp, int a_nline, char a_nmain [LEN_TITLE], FILE **r_main, char a_nhead [LEN_TITLE], FILE **r_head, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char a_nconv [LEN_TITLE], FILE **r_conv, char a_share, char a_select);
 /*---(shut-down)------------*/
 char        PROG__end               (void);
 char        PROG_shutdown           (void);
+/*---(strings)-------------*/
+char        PROG__args_string       (char a_string [LEN_FULL]);
+char        PROG_startup_string     (char a_string [LEN_FULL]);
+char        PROG_pseudo_string      (char a_string [LEN_FULL]);
 /*---(unittest)------------*/
 char        PROG__unit_bigclean     (void);
 char        PROG__unit_quiet        (void);
 char        PROG__unit_loud         (void);
 char        PROG__unit_end          (void);
+/*---(done)----------------*/
 
 
 
@@ -551,7 +514,7 @@ char        CONV_force              (int a_scrps, int  a_conds);
 /*········· ´······················ ´·········································*/
 /*---(support)--------------*/
 char        CODE_init               (void);
-char        CODE__defense           (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_meth [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expe [LEN_RECD], char a_retn [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_major, char a_minor, char *b_share, char *b_select);
+char        CODE__defense           (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_meth [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expe [LEN_RECD], char a_retn [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_major, char a_minor, char *b_share, char *b_select);
 int         CODE__line              (char a_dittoing, int a_nline, int a_dline);
 /*---(prep)-----------------*/
 char        CODE__code_beg          (char a_nscrp [LEN_TITLE], FILE *a_code);
@@ -559,22 +522,22 @@ char        CODE__code_stats        (FILE *a_code);
 char        CODE__code_end          (char a_nscrp [LEN_TITLE], FILE *a_code);
 char        CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE]);
 char        CODE__main_end          (FILE *a_main);
-char        CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char *r_share, char *b_select);
+char        CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_nhead [LEN_TITLE], FILE **r_head, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char *b_share, char *b_select);
 char        CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, int a_nline, char a_share, char a_select, char a_unit);
-char        CODE__incl              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__incl              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(select)---------------*/
 char        CODE__select_beg        (FILE* a_code, char a_verb [LEN_TERSE], char a_which [LEN_TITLE], char a_share, char r_pre [LEN_TERSE]);
 char        CODE__select_end        (FILE* a_code, char a_verb [LEN_TERSE], char a_which [LEN_TITLE], char a_share);
 /*---(scrp)-----------------*/
 char        CODE__scrp_end          (FILE *a_code, char a_last [LEN_LABEL], char a_nline, char a_verb [LEN_LABEL], char a_share);
-char        CODE__scrp              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__shared            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__sect              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__scrp              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__shared            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__sect              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(cond)-----------------*/
 char        CODE__cond_end          (FILE *a_code, char a_last [LEN_LABEL], char a_verb [LEN_LABEL], char a_nline, char a_share);
-char        CODE__cond              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__group             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__reuse             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__cond              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__group             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__reuse             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(step-support)---------*/
 char        CODE__display           (char a_code [LEN_RECD], char r_display [LEN_RECD], char r_system [LEN_RECD], char r_load [LEN_RECD]);
 char        CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_test [LEN_LABEL], char a_display [LEN_RECD], char a_system [LEN_RECD], char a_dittoing, int a_nline, int a_dline, char a_pre [LEN_TERSE], char a_share);
@@ -583,17 +546,17 @@ char        CODE__suffix            (FILE *a_code, char a_verb [LEN_LABEL], char
 char        CODE__specialty         (FILE *a_code, char a_load [LEN_RECD], char a_dittoing, char a_share);
 /*---(step)-----------------*/
 char        CODE__step_add          (FILE *a_code, char a_runtype, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_dittoing, int a_nline, int a_dline);
-char        CODE__exec              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__load              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__file              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__append            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__mode              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__code              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__gvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__lvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
-char        CODE__system            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__exec              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__load              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__file              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__append            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__mode              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__code              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__gvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__lvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__system            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(driver)---------------*/
-char        CODE_driver             (void f_call (), char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE_driver             (void f_call (), char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select);
 /*---(unitest)--------------*/
 char        CODE_force              (int a_scrps, int  a_conds);
 /*---(done)-----------------*/

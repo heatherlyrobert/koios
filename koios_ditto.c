@@ -204,6 +204,7 @@ static  FILE *s_fditto = NULL;   /* re-opened version to process the ditto    */
  *
  * å´         æ  å 179æ  åæ
  */
+             /*-> 123456789-123456789-123456789-123456789--[ ······ [·Ï·Ï·Ï·]-*/
 char         /*->  --------------------------------------------[ ´········· ]-*/ /*-ågcg´·Bá551á21·´K45´37·´1·D2Cá·æ¬å5á14··´#Z1á·1·····´···´····æ¬å>li··´4·2···2´····´····æ-*/
 DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_mark, int a_ditto, char *r_dittoing, char *r_mark, char *r_dmark, int *r_dstart, int *r_dline)
 {

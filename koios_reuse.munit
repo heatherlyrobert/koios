@@ -268,7 +268,7 @@ char
 koios_reuse_delimit (char a_scrp, char a_list, char a_unit)
 {
    char        x_cwd       [LEN_FULL]  = "";
-   char        x_master    [LEN_TITLE] = "master.unit";
+   char        x_master    [LEN_TITLE] = "unit_head.unit";
    char        x_name      [LEN_TITLE] = "apate.unit";
    char        x_desc      [LEN_LONG]  = "";
    char        x_share     =  '-';
@@ -317,7 +317,7 @@ char
 koios_reuse_global  (char a_scrp, char a_list, char a_unit)
 {
    char        x_cwd       [LEN_FULL]  = "";
-   char        x_master    [LEN_TITLE] = "master.unit";
+   char        x_master    [LEN_TITLE] = "unit_head.unit";
    char        x_name      [LEN_TITLE] = "apate.unit";
    char        x_desc      [LEN_LONG]  = "";
    char        x_share     =  '-';
@@ -406,7 +406,7 @@ char
 koios_reuse_shared  (char a_scrp, char a_list, char a_unit)
 {
    char        x_cwd       [LEN_FULL]  = "";
-   char        x_master    [LEN_TITLE] = "master.unit";
+   char        x_master    [LEN_TITLE] = "unit_head.unit";
    char        x_name      [LEN_TITLE] = "apate.unit";
    char        x_desc      [LEN_LONG]  = "";
    char        x_share     =  '-';
@@ -481,7 +481,7 @@ char
 koios_reuse_old    (char a_scrp, char a_list, char a_unit)
 {
    char        x_cwd       [LEN_FULL]  = "";
-   char        x_master    [LEN_TITLE] = "master.unit";
+   char        x_master    [LEN_TITLE] = "unit_head.unit";
    char        x_name      [LEN_TITLE] = "apate.unit";
    char        x_desc      [LEN_LONG]  = "";
    char        x_share     =  '-';
@@ -559,7 +559,7 @@ char
 koios_reuse_new    (char a_scrp, char a_list, char a_unit)
 {
    char        x_cwd       [LEN_FULL]  = "";
-   char        x_master    [LEN_TITLE] = "master.unit";
+   char        x_master    [LEN_TITLE] = "unit_head.unit";
    char        x_name      [LEN_TITLE] = "apate.unit";
    char        x_desc      [LEN_LONG]  = "";
    char        x_share     =  '-';
@@ -638,7 +638,7 @@ char
 koios_reuse_reuse  (char a_scrp, char a_list, char a_unit)
 {
    char        x_cwd       [LEN_FULL]  = "";
-   char        x_master    [LEN_TITLE] = "master.unit";
+   char        x_master    [LEN_TITLE] = "unit_head.unit";
    char        x_name      [LEN_TITLE] = "apate.unit";
    char        x_desc      [LEN_LONG]  = "";
    char        x_share     =  '-';
@@ -727,7 +727,7 @@ char
 koios_reuse_parse  (char a_scrp, char a_list, char a_unit)
 {
    char        x_cwd       [LEN_FULL]  = "";
-   char        x_master    [LEN_TITLE] = "master.unit";
+   char        x_master    [LEN_TITLE] = "unit_head.unit";
    char        x_name      [LEN_TITLE] = "apate.unit";
    char        x_desc      [LEN_LONG]  = "";
    char        x_major     =  '-';
@@ -880,7 +880,7 @@ koios_reuse_exim   (char a_scrp, char a_list, char a_unit)
 {
    char        x_cwd       [LEN_FULL]  = "";
    char        x_name      [LEN_TITLE] = "script.unit";
-   char        x_master    [LEN_TITLE] = "master.unit";
+   char        x_master    [LEN_TITLE] = "unit_head.unit";
    char        x_globals   [LEN_TITLE] = "/tmp/master.globals";
    char        x_desc      [LEN_LONG]  = "";
    int         x_conds     =    0;

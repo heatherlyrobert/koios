@@ -58,7 +58,7 @@ CODE_init               (void)
 }
 
 char
-CODE__defense           (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_meth [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expe [LEN_RECD], char a_retn [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_major, char a_minor, char *b_share, char *b_select)
+CODE__defense           (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_meth [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expe [LEN_RECD], char a_retn [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        rce         =  -10;
    --rce;  if (a_nscrp  == NULL)  return rce;
@@ -146,13 +146,15 @@ CODE__code_beg          (char a_nscrp [LEN_TITLE], FILE *a_code)
    CONV_printf (a_code, "/*================================= beg-code =================================*/\n");
    CONV_printf (a_code, "/* /usr/local/bin/koios                                                       */\n");
    CONV_printf (a_code, "/*   autogen by %-60.60s  */\n", P_ONELINE);
-   if (strcmp (a_nscrp, "master.unit") != 0) { 
+   IF_NOT_HEAD {
       CONV_printf (a_code, "\n");
       CONV_printf (a_code, "/*---(standard support functions)----*/\n");
       CONV_printf (a_code, "#include    <yURG.h>\n");
       CONV_printf (a_code, "#include    <yUNIT_unit.h>\n");
-      if (yenv_uexists ("master.h"))  CONV_printf (a_code, "#include    \"master.h\"\n");
-      if (yenv_uexists ("master.c"))  CONV_printf (a_code, "#include    \"master.c\"\n");
+      if (yenv_uexists ("unit_code.h") == 'r')  CONV_printf (a_code, "#include    \"unit_code.h\"\n");
+      if (yenv_uexists ("unit_head.h") == 'r')  CONV_printf (a_code, "#include    \"unit_head.h\"\n");
+      if (yenv_uexists ("unit_comp.h") == 'r')  CONV_printf (a_code, "#include    \"unit_comp.h\"\n");
+      if (yenv_uexists ("unit_data.h") == 'r')  CONV_printf (a_code, "#include    \"unit_data.h\"\n");
       CONV_printf (a_code, "\n");
       CONV_printf (a_code, "/*================================ beg-script ================================*/\n");
    } else {
@@ -187,7 +189,7 @@ CODE__code_end          (char a_nscrp [LEN_TITLE], FILE *a_code)
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    CONV_printf (a_code, "\n");
-   if (strcmp (a_nscrp, "master.unit") != 0) {
+   IF_NOT_HEAD {
       CONV_printf (a_code, "/*================================ end-script ================================*/\n");
    } else {
       CONV_printf (a_code, "/*================================ end-global ================================*/\n");
@@ -240,12 +242,13 @@ CODE__main_end          (FILE *a_main)
 }
 
 char
-CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char *b_share, char *b_select)
+CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_nhead [LEN_TITLE], FILE **r_head, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
    FILE       *x_main      = NULL;
+   FILE       *x_head      = NULL;
    FILE       *x_code      = NULL;
    FILE       *x_wave      = NULL;
    /*---(header)-------------------------*/
@@ -255,6 +258,15 @@ CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FIL
    --rce;  if (rc < 0 || x_main == NULL) {
       debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
+   }
+   /*---(open header)--------------------*/
+   if (strcmp (a_nhead, "") != 0) {
+      rc = READ_open       (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nhead, 'w', &x_head, NULL);
+      --rce;  if (rc < 0 || x_head == NULL) {
+         READ_close (__FILE__, __FUNCTION__, __LINE__, a_nhead, &x_head);
+         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+         return rce;
+      }
    }
    /*---(open code)----------------------*/
    rc = READ_open       (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_ncode, 'w', &x_code, NULL);
@@ -276,15 +288,11 @@ CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FIL
    CODE__code_beg (a_nscrp, x_code);
    /*---(default globals)----------------*/
    yUNIT_stats_purge (YUNIT_BUILD  , &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
-   /*> s_nscrp  = s_ncond = s_nstep = 0;                                              <* 
-    *> s_uscrp  = s_ucond = s_ustep = 0;                                              <* 
-    *> s_scond  = s_sstep = 0;                                                        <* 
-    *> s_cstep  = 0;                                                                  <* 
-    *> s_dcond  = s_dstep = 0;                                                        <*/
    if (b_share  != NULL)  *b_share  = '-';
    if (b_select != NULL)  *b_select = '-';
    /*---(save-back)----------------------*/
    if (r_main   != NULL)  *r_main   = x_main;
+   if (r_head   != NULL)  *r_head   = x_head;
    if (r_code   != NULL)  *r_code   = x_code;
    if (r_wave   != NULL)  *r_wave   = x_wave;
    /*---(complete)-----------------------*/
@@ -312,14 +320,16 @@ CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LE
       CODE__code_end   (a_nscrp, *r_code);
    }
    /*---(informational)------------------*/
-   if (a_good == 'y' && strcmp (a_nscrp, "master.unit") != 0) {
-      CODE__code_stats (*r_code);
-      VERB_inventory   (*r_code);
+   if (a_good == 'y') {
+      IF_NOT_HEAD {
+         CODE__code_stats (*r_code);
+         VERB_inventory   (*r_code);
+      }
    }
    /*---(append main)--------------------*/
    if (a_good == 'y') {
       /*---(append main)-----------------*/
-      if (strcmp (a_nscrp, "master.unit") != 0) {
+      IF_NOT_HEAD {
          READ_close (__FILE__, __FUNCTION__, __LINE__, a_nmain, r_main);
          READ_open  (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nmain, 'r', r_main, NULL);
          /*> printf ("MAIN------------------------------------------\n");                <*/
@@ -333,8 +343,7 @@ CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LE
       }
       /*---(export globals)--------------*/
       else {
-         /*> printf ("handling master.unit\n");                                       <*/
-         REUSE_export ("master.globals");
+         REUSE_export ("unit.globals");
       }
    }
    /*---(write wave footer)--------------*/
@@ -344,8 +353,8 @@ CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LE
    rc = READ_close (__FILE__, __FUNCTION__, __LINE__, a_ncode, r_code);
    rc = READ_close (__FILE__, __FUNCTION__, __LINE__, a_nwave, r_wave);
    /*---(transfer master.h)--------------*/
-   if (a_good == 'y' &&strcmp (a_nscrp, "master.unit") == 0) {
-      system  ("mv -f master_unit.cs master.h");
+   if (a_good == 'y') {
+      IF_HEAD   system  ("mv -f unit_head.cs unit_head.h");
    }
    /*---(clean-up)-----------------------*/
    if (a_unit != 'y') {
@@ -361,7 +370,7 @@ CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LE
 }
 
 char
-CODE__incl              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__incl              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        t           [LEN_HUND]  = "";
    /*---(header)-------------------------*/
@@ -435,7 +444,7 @@ CODE__scrp_end          (FILE *a_code, char a_last [LEN_LABEL], char a_nline, ch
 }
 
 char
-CODE__scrp              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__scrp              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -446,12 +455,12 @@ CODE__scrp              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(wrap last script)---------------*/
    if (s_cscrp >  0 && *b_share == '-')   yUNIT_wave_end (a_wave);
    CODE__scrp_end (a_code, a_last, a_nline, a_verb, *b_share);
@@ -490,7 +499,7 @@ CODE__scrp              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__shared            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__shared            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -500,12 +509,12 @@ CODE__shared            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*> CONV_printf ("CODE__shared (%c) %d\n", a_major, a_nline);                      <*/
    /*---(end last script)----------------*/
    if (s_cscrp >  0 && *b_share == '-')   yUNIT_wave_end (a_wave);
@@ -537,7 +546,7 @@ CODE__shared            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__sect              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__sect              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
@@ -590,7 +599,7 @@ CODE__cond_end          (FILE *a_code, char a_last [LEN_LABEL], char a_verb [LEN
 }
 
 char
-CODE__cond              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__cond              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -599,12 +608,12 @@ CODE__cond              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(wrap last cond)-----------------*/
    CODE__cond_end (a_code, a_last, a_verb, a_nline, *b_share);
    /*> CONV_printf      (a_code, "   /+ COND = %4d, s_in_cond = %c +/\n", s_ccond, s_in_cond);   <*/
@@ -632,7 +641,7 @@ CODE__cond              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__group             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__group             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -643,12 +652,12 @@ CODE__group             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(wrap last cond)-----------------*/
    CODE__cond_end (a_code, a_last, a_verb, a_nline, *b_share);
    /*---(create)-------------------------*/
@@ -672,7 +681,7 @@ CODE__group             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__reuse             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__reuse             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -682,12 +691,12 @@ CODE__reuse             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(wrap last cond)-----------------*/
    CODE__cond_end (a_code, a_last, a_verb, a_nline, *b_share);
    /*---(statistics)---------------------*/
@@ -1032,7 +1041,7 @@ CODE__step_add          (FILE *a_code, char a_runtype, char a_verb [LEN_LABEL], 
 }
 
 char
-CODE__exec              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__exec              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -1042,12 +1051,12 @@ CODE__exec              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(statistics)---------------------*/
    yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_EXEC, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(prepare)------------------------*/
@@ -1065,7 +1074,7 @@ CODE__exec              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__load              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__load              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -1075,12 +1084,12 @@ CODE__load              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(statistics)---------------------*/
    yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VOID, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(prepare)------------------------*/
@@ -1097,7 +1106,7 @@ CODE__load              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__file              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__file              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -1107,12 +1116,12 @@ CODE__file              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(statistics)---------------------*/
    yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_EXEC, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(prepare)------------------------*/
@@ -1129,7 +1138,7 @@ CODE__file              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__append            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__append            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -1139,12 +1148,12 @@ CODE__append            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(statistics)---------------------*/
    yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_EXEC, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(prepare)------------------------*/
@@ -1162,7 +1171,7 @@ CODE__append            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__mode              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__mode              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -1170,12 +1179,12 @@ CODE__mode              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(statistics)---------------------*/
    yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VOID, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(prepare)------------------------*/
@@ -1190,7 +1199,7 @@ CODE__mode              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__code              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__code              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -1200,12 +1209,12 @@ CODE__code              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(statistics)---------------------*/
    yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VOID, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(prepare)------------------------*/
@@ -1222,7 +1231,7 @@ CODE__code              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__gvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__gvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -1232,12 +1241,12 @@ CODE__gvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(statistics)---------------------*/
    /*> yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VARS, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);   <*/
    /*---(prepare)------------------------*/
@@ -1253,7 +1262,7 @@ CODE__gvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__lvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__lvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -1264,12 +1273,12 @@ CODE__lvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
+   /*> rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);   <* 
+    *> debug_uver   ylog_uvalue  ("defense"   , rc);                                                                                                                                                           <* 
+    *> if (rc < 0) {                                                                                                                                                                                           <* 
+    *>    debug_uver   ylog_uexitr  (__FUNCTION__, rc);                                                                                                                                                        <* 
+    *>    return rc;                                                                                                                                                                                           <* 
+    *> }                                                                                                                                                                                                       <*/
    /*---(statistics)---------------------*/
    yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VARS, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(prepare)------------------------*/
@@ -1287,7 +1296,7 @@ CODE__lvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 }
 
 char
-CODE__system            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE__system            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rc          =    0;
@@ -1297,13 +1306,6 @@ CODE__system            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
    char        x_type      =  '-';
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
-   /*---(defense)------------------------*/
-   rc = CODE__defense (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
-   if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
-      return rc;
-   }
    /*---(statistics)---------------------*/
    if (strcmp (a_verb, "system") == 0)  x_type = YUNIT_IS_EXEC;
    else                                 x_type = YUNIT_IS_VOID;
@@ -1328,25 +1330,31 @@ CODE__system            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, F
 static void  o___DRIVER__________o () { return; }
 
 char
-CODE_driver             (void f_call (), char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+CODE_driver             (void f_call (), char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
-   char      (*x_func) (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select);
+   char      (*x_func) (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select);
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
+   rc = CODE__defense (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*---(prepare)------------------------*/
    debug_uver   ylog_upoint  ("f_call"    , f_call);
    if (f_call == NULL) {
       debug_uver   ylog_unote   ("nothing to do");
       debug_uver   ylog_uexit   (__FUNCTION__);
       return 0;
    }
-   /*---(prepare)------------------------*/
    x_func = f_call;
    /*---(call function)------------------*/
-   rc = x_func (a_nscrp, a_main, a_code, a_wave, a_runtype, a_last, a_nline, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_dittoing, a_dtarget, a_dline, a_major, a_minor, b_share, b_select);
+   rc = x_func (a_nscrp, a_main, a_head, a_code, a_wave, a_runtype, a_last, a_nline, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_dittoing, a_dtarget, a_dline, a_major, a_minor, b_share, b_select);
    debug_uver   ylog_uvalue  ("call"      , rc);
    --rce;  if (rc < 0) {
       debug_uver   ylog_uexitr  (__FUNCTION__, rce);

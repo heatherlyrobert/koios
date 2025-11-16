@@ -3,14 +3,12 @@
 
 
 
-char  *s_wave     = "/tmp/master.wave";
-
 char
 koios_verb_data           (char a_scrp, char a_list, char a_unit)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        x_unit      [LEN_LABEL] = "apate.unit";
-   char        x_mast      [LEN_LABEL] = "master.unit";
+   char        x_mast      [LEN_LABEL] = "unit_head.unit";
    char        x_indent    =    0;
    char        x_desc      [LEN_DESC]  = "";
    char        x_spec      =  '∑';
@@ -148,7 +146,7 @@ koios_verb_cursor         (char a_scrp, char a_list, char a_unit)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        x_unit      [LEN_LABEL] = "apate.unit";
-   char        x_mast      [LEN_LABEL] = "master.unit";
+   char        x_mast      [LEN_LABEL] = "unit_head.unit";
    char        x_verb      [LEN_LABEL] = "";
    char        x_indent    =    0;
    char        x_desc      [LEN_DESC]  = "";
@@ -498,7 +496,7 @@ koios_verb_under          (char a_scrp, char a_list, char a_unit)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        x_unit      [LEN_LABEL] = "apate.unit";
-   char        x_mast      [LEN_LABEL] = "master.unit";
+   char        x_mast      [LEN_LABEL] = "unit_head.unit";
    char        x_verb      [LEN_LABEL] = "";
    char        x_index     =  '∑';
    char        x_spec      =  '∑';
@@ -726,7 +724,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        x_unit      [LEN_LABEL] = "apate.unit";
-   char        x_mast      [LEN_LABEL] = "master.unit";
+   char        x_mast      [LEN_LABEL] = "unit_head.unit";
    char        x_verb      [LEN_LABEL] = "";
    char        x_index     =  '∑';
    char        x_spec      =  '∑';
@@ -829,7 +827,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minptr   ("... check code"                     , x_code      , 0);
    yUNIT_mindnoc  ();
 
-   yUNIT_mincond  ("verify GLOBAL in master");
+   yUNIT_mincond  ("verify GLOBAL in unit_head");
    yerr_ureset   ();
    yUNIT_minval   ("parse verb"                         , VERB_parse  (x_mast, 75, "GLOBAL   -A-", &x_under, x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1   );
    yUNIT_minstr   ("... check verb"                     , x_verb      , "GLOBAL");
@@ -850,7 +848,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr   ("... check location"                 , x_locn      , '-');
    yUNIT_minptr   ("... check conv"                     , x_conv      , 0);
    yUNIT_minptr   ("... check code"                     , x_code      , 0);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   ('['), "apate.unit:75:0: error: verb ÂGLOBALÊ good; BUT, not allowed outside master.unit");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   ('['), "apate.unit:75:0: error: verb ÂGLOBALÊ good; BUT, not allowed outside unit_head.unit or unit_data.unit");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify SHARED in normal unit");
@@ -865,7 +863,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check error message"            , yerr_upeek   ('['), "(n/a)");
    yUNIT_mindnoc  ();
 
-   yUNIT_mincond  ("attempt SHARED in master unit");
+   yUNIT_mincond  ("attempt SHARED in unit_head");
    yerr_ureset   ();
    yUNIT_minval   ("parse verb"                         , VERB_parse  (x_mast, 95, "SHARED   -a-", &x_under, x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), -999);
    yUNIT_minstr   ("... check verb"                     , x_verb      , "");
@@ -874,7 +872,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr   ("... check location"                 , x_locn      , '-');
    yUNIT_minptr   ("... check conv"                     , x_conv      , 0);
    yUNIT_minptr   ("... check code"                     , x_code      , 0);
-   yUNIT_minstr   ("... check error message"             , yerr_upeek   ('['), "master.unit:95:0: error: verb ÂSHAREDÊ good; BUT, not allowed inside master.unit");
+   yUNIT_minstr   ("... check error message"             , yerr_upeek   ('['), "unit_head.unit:95:0: error: verb ÂSHAREDÊ good; BUT, not allowed inside unit_head.unit or unit_data.unit");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify parsing a COND verb");

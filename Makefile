@@ -34,7 +34,7 @@ LIB_UTIL   =
 #===(master template)======================================#
 include /usr/local/sbin/zeno_make
 
-LIB_HERE := $<  $(filter-out %_main.os,$(OBJ_NORM)) $(LIB_STD)  $(LIB_MINE)
+# LIB_HERE := $<  $(filter-out %_main.os,$(OBJ_NORM)) $(LIB_STD)  $(LIB_MINE)
 
 
 

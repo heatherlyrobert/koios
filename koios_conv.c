@@ -2,7 +2,7 @@
 #include    "koios.h"        /* LOCAL  : main header                          */
 
 
-/*> head -n -1 master.unit | cksum -a sha1   --untagged                               <*/
+/*> head -n -1 unit_head.unit | cksum -a sha1   --untagged                               <*/
 /*> ec4d94a02fc5f3fbfb33e22928aed70dc0f790ef  -                                       <*/
 
 /*> # end-of-file.  done, finito, completare, whimper [Ï´···                          <* 
@@ -118,8 +118,8 @@ char
 CONV__prep              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        rc          =    0;
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    CONV__break    (a_conv);
    return CONV_printf (a_conv, "%-6.6s        %-65.65s  %s\n", a_verb, a_desc, s_suffix);
 }
@@ -128,8 +128,8 @@ char
 CONV__incl              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        rc          =    0;
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    return CONV_printf (a_conv, "   incl       %-35.35s  %-26.26s  %s\n", a_desc, a_method, s_suffix);
 }
 
@@ -137,8 +137,8 @@ char
 CONV__comment           (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        rc          =    0;
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    return CONV_printf (a_conv, "%s\n", a_expect);
 }
 
@@ -158,8 +158,8 @@ CONV_footer             (char a_good, FILE **b_conv, char a_nscrp [LEN_TITLE], c
    CONV_printf (*b_conv, "# end-of-file.  done, finito, completare, whimper [Ï´···\n");
    READ_close (__FILE__, __FUNCTION__, __LINE__, a_nconv, b_conv);
    /*---(export globals)-----------------*/
-   if (a_good == 'y' && strcmp (a_nscrp, "master.unit") == 0) {
-      REUSE_export ("master.globals");
+   if (a_good == 'y') {
+      IF_HEAD  REUSE_export ("unit.globals");
    }
    /*---(clean-up)-----------------------*/
    if (a_good != 'y') {
@@ -203,8 +203,8 @@ CONV__scrp              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN
    char        rc          =    0;
    char        x_suf       [LEN_TERSE] = "";
    char        x_cnt       [LEN_LABEL] = "";
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_stats_scrp  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_SCRP, a_verb, a_major, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    CONV__scrp_add ('y', a_verb, a_major, a_stage, x_suf, x_cnt, b_share);
    CONV__break    (a_conv);
@@ -217,8 +217,8 @@ CONV__shared            (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN
    char        rc          =    0;
    char        x_suf       [LEN_TERSE] = "";
    char        x_cnt       [LEN_LABEL] = "";
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_stats_scrp  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_SHAR, a_verb, a_major, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    CONV__scrp_add ('-', a_verb, a_major, a_stage, x_suf, x_cnt, b_share);
    CONV__break    (a_conv);
@@ -231,8 +231,8 @@ CONV__sect              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN
    char        rc          =    0;
    char        x_suf       [LEN_TERSE] = "";
    char        x_cnt       [LEN_LABEL] = "";
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_stats_scrp  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_SECT, a_verb, a_major, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    CONV__scrp_add (',', a_verb, a_major, a_stage, x_suf, x_cnt, b_share);
    CONV__break    (a_conv);
@@ -270,8 +270,8 @@ CONV__cond              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN
    char        rc          =    0;
    char        x_suf       [LEN_TERSE] = "";
    char        x_cnt       [LEN_LABEL] = "";
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_stats_cond  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_COND, a_verb, a_desc, '-', a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    CONV__cond_add (a_ditto, a_major, a_minor, *b_share, x_suf, x_cnt);
    return CONV_printf (a_conv, "\n   %-5.5s %-3.3s  %-65.65s  %s  %-10.10s  %s \n", a_verb, x_suf, a_desc, s_hund, x_cnt, s_hund);
@@ -283,8 +283,8 @@ CONV__ditto             (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN
    char        rc          =    0;
    char        x_suf       [LEN_TERSE] = "";
    char        x_cnt       [LEN_LABEL] = "   ";
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_stats_cond  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_DITT, a_verb, a_desc, '-', a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    DITTO_called (a_ditto);
    CONV__cond_add (a_ditto, a_major, a_minor, *b_share, x_suf, x_cnt);
@@ -298,8 +298,8 @@ CONV__reuse             (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN
    char        x_suf       [LEN_TERSE] = "";
    char        x_cnt       [LEN_LABEL] = "   ";
    char        t           [LEN_SHORT] = "";
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_reuse_called (a_major);
    sprintf (t, "%c", a_major);
    yUNIT_stats_cond  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_REUS, a_verb, a_desc, '-', a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
@@ -312,8 +312,8 @@ CONV__group             (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN
 {
    char        rc          =    0;
    char        x_desc      [LEN_LONG]  = "";
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    DITTO_parse__group (a_desc, x_desc);
    return CONV_printf (a_conv, "\n   %-5.5s      %-65.65s  %s\n", a_verb, x_desc, s_suffix);
 }
@@ -330,8 +330,8 @@ CONV__exec              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN
 {
    char        rc          =    0;
    char        t           [LEN_RECD ] = "";
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_stats_step  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_EXEC, a_verb, a_desc, '-', a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    if (strcmp (a_return, "") != 0)    sprintf (t, " %-20s ", a_return); 
    return CONV_printf (a_conv, "     %-6.6s   %-35.35s  %-26.26s  %-100s  %-10.10s  %-100s %s\n", a_verb, a_desc, a_method, a_args, a_test, a_expect, t);
@@ -341,8 +341,8 @@ char
 CONV__load              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        rc          =    0;
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_stats_step  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_VOID, a_verb, a_desc, '-', a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    return CONV_printf (a_conv, "     %-6.6s   %-35.35s  %-26.26s  %-218s \n", a_verb, a_desc, a_method, a_expect);
 }
@@ -351,8 +351,8 @@ char
 CONV__file              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        rc          =    0;
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_stats_step  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_EXEC, a_verb, a_desc, '-', a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    return CONV_printf (a_conv, "     %-6.6s   %-35.35s  - - - - - - - - - - - - -   %-218s \n", a_verb, a_desc, a_expect);
 }
@@ -361,8 +361,8 @@ char
 CONV__append            (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        rc          =    0;
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_stats_step  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_EXEC, a_verb, a_desc, '-', a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    return CONV_printf (a_conv, "     %-6.6s   %-35.35s  - - - - - - - - - - - - -   %-218s \n", a_verb, a_desc, a_expect);
 }
@@ -371,8 +371,8 @@ char
 CONV__mode              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        rc          =    0;
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_stats_step  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_VOID, a_verb, a_desc, '-', a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    return CONV_printf (a_conv, "     %-6.6s   %-35.35s  %-26.26s  %s\n", a_verb, a_desc, a_method, s_suffix);
 }
@@ -382,8 +382,8 @@ CONV__code              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN
 {
    char        rc          =    0;
    char        x_type      =  '-';
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    if (strcmp (a_verb, "system") == 0)  x_type = YUNIT_IS_EXEC;
    else                                 x_type = YUNIT_IS_VOID;
    yUNIT_stats_step  (YUNIT_CONVERT, a_conv, "", x_type       , a_verb, a_desc, '-', a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
@@ -394,8 +394,8 @@ char
 CONV__gvar              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        rc          =    0;
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    if (strcmp (a_verb, "local") == 0) yUNIT_stats_step  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_VARS, a_verb, a_desc, '-', a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    return CONV_printf (a_conv, "   %-6.6s     %-35.35s  - - - - - - - - - - - - -   %-218s \n", a_verb, a_desc, a_expect);
 }
@@ -404,8 +404,8 @@ char
 CONV__echo              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select)
 {
    char        rc          =    0;
-   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   if (rc < 0)  return rc;
+   /*> rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);   <* 
+    *> if (rc < 0)  return rc;                                                                                                                                      <*/
    yUNIT_stats_step  (YUNIT_CONVERT, a_conv, "", YUNIT_IS_EXEC, a_verb, a_desc, '-', a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    return CONV_printf (a_conv, "     %-6.6s   %-35.35s  - - - - - - - - - - - - -   %-100s  %-10.10s  %-100s \n", a_verb, a_desc, a_args, a_test, a_expect);
 }
@@ -427,6 +427,13 @@ CONV_driver             (void f_call (), FILE *a_conv, char a_verb [LEN_LABEL], 
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
+   rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
+   debug_uver   ylog_uvalue  ("defense"   , rc);
+   if (rc < 0) {
+      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      return rc;
+   }
+   /*---(preare)-------------------------*/
    debug_uver   ylog_upoint  ("f_call"    , f_call);
    if (f_call == NULL) {
       debug_uver   ylog_unote   ("nothing to do");

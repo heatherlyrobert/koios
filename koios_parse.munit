@@ -644,11 +644,11 @@ koios_parse_which   (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("attempt with bad character");
    yerr_ureset   ();
-   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 20, "åabc··E·æ call parsing"            , x_which), -999);
+   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 20, "åabc··&·æ call parsing"            , x_which), -999);
    yUNIT_minstr   ("... review marks"                   , x_which             , "");
    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:20:0: error: which string åabc··E·æ contains illegal char (E) at pos (5), only allow [a-z·-]");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:20:0: error: which string åabc··&·æ contains illegal char (&) at pos (5), only allow [A-Za-z0-9è-ÿ·-]");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify with an empty set");
