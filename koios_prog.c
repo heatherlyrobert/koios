@@ -3,9 +3,9 @@
 
 
 
+#include    <yLOG_uver.h>
 #include    <ySTR_uver.h>
 #include    <yENV_uver.h>
-#include    <yLOG_uver.h>
 #include    <yEXEC_uver.h>
 
 
@@ -535,7 +535,8 @@ PROG_dawn                (char a_runtype, char a_nscrp [LEN_TITLE], FILE **r_scr
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(open incomming script)----------*/
-   rc = READ_open      (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nscrp, 'r', r_scrp, r_line);
+   if (r_line != NULL)  *r_line = 0;
+   rc = yenv_uopen_detail (__FILE__, __FUNCTION__, __LINE__, a_nscrp, 'r', r_scrp);
    debug_uver   ylog_uvalue  ("script"    , rc);
    --rce;  if (rc < 0) {
       PROG_shutdown ();
@@ -551,7 +552,7 @@ PROG_dawn                (char a_runtype, char a_nscrp [LEN_TITLE], FILE **r_scr
       rc = CONV_header  (a_nconv, r_conv, r_share, r_select);
       break;
    default  :
-      READ_close (__FILE__, __FUNCTION__, __LINE__, a_nscrp, r_scrp);
+      yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nscrp, r_scrp);
       PROG_shutdown ();
       debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
@@ -559,7 +560,7 @@ PROG_dawn                (char a_runtype, char a_nscrp [LEN_TITLE], FILE **r_scr
    }
    debug_uver   ylog_uvalue  ("output"    , rc);
    --rce;  if (rc <  0) {
-      READ_close (__FILE__, __FUNCTION__, __LINE__, a_nscrp, r_scrp);
+      yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nscrp, r_scrp);
       PROG_shutdown ();
       return rc;
    }
@@ -577,10 +578,10 @@ char
 PROG_terminate           (FILE **r_scrp, FILE **r_main, FILE **r_code, FILE **r_wave, FILE **r_conv)
 {
    debug_uver   ylog_uenter  (__FUNCTION__);
-   READ_close (__FILE__, __FUNCTION__, __LINE__, "???", r_scrp);
-   READ_close (__FILE__, __FUNCTION__, __LINE__, "???", r_main);
-   READ_close (__FILE__, __FUNCTION__, __LINE__, "???", r_code);
-   READ_close (__FILE__, __FUNCTION__, __LINE__, "???", r_wave);
+   yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, "???", r_scrp);
+   yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, "???", r_main);
+   yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, "???", r_code);
+   yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, "???", r_wave);
    debug_uver   ylog_uexit   (__FUNCTION__);
    PROG_shutdown ();
    return 0;
@@ -731,10 +732,10 @@ PROG_dusk                (char a_good, char a_runtype, char a_replace, char a_ns
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
    /*---(close files)--------------------*/
-   rc = READ_close (__FILE__, __FUNCTION__, __LINE__, a_nscrp, r_scrp);
+   rc = yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nscrp, r_scrp);
    --rce;  switch (a_runtype) {
    case G_RUN_CREATE : case G_RUN_DEBUG :
-      rc = CODE_footer  (a_good, a_nscrp, a_nmain, r_main, a_ncode, r_code, a_nwave, r_wave, a_nline, a_share, a_select, '-');
+      rc = CODE_footer  (a_good, a_nscrp, a_nmain, r_main, a_nhead, r_head, a_ncode, r_code, a_nwave, r_wave, a_nline, a_share, a_select, '-');
       break;
    case G_RUN_UPDATE :
       rc = CONV_footer  (a_good, r_conv, a_nscrp, a_nconv);
@@ -1031,9 +1032,9 @@ PROG__unit_quiet   (void)
    char        rce         =  -10;
    char        rc          =    0;
    char        x_argc      =    3;
-   char       *x_argv [3]  = { "koios_unit", "--verify", "apate" };
+   char       *x_argv [3]  = { "koios_unit", "--verify", "koios_zzzz" };
    /*---(prepare)------------------------*/
-   system ("touch /tmp/apate.unit           2> /dev/null");
+   system ("touch /tmp/koios.unit_testing_marvel/koios_zzzz.unit           2> /dev/null");
    /*---(debugging)----------------------*/
    rc = PROG_urgents (x_argc, x_argv);
    debug_uver   ylog_uvalue   ("urgents"   , rc);
@@ -1048,8 +1049,9 @@ PROG__unit_quiet   (void)
       PROG_shutdown ();
       return rce;
    }
+   /*---(clean-up)-----------------------*/
+   system ("rm -f /tmp/koios.unit_testing_marvel/koios_zzzz.unit           2> /dev/null");
    /*---(complete)-----------------------*/
-   system ("rm    /tmp/apate.unit           2> /dev/null");
    return 0;
 }
 
@@ -1059,9 +1061,9 @@ PROG__unit_loud    (void)
    char        rce         =  -10;
    char        rc          =    0;
    char        x_argc      =    4;
-   char       *x_argv [4]  = { "koios_debug", "@@kitchen" , "--verify", "apate"};
+   char       *x_argv [4]  = { "koios_debug", "@@kitchen" , "--verify", "koios_zzzz"};
    /*---(prepare)------------------------*/
-   system ("touch /tmp/apate.unit           2> /dev/null");
+   system ("touch /tmp/koios.unit_testing_marvel/koios_zzzz.unit           2> /dev/null");
    /*---(debugging)----------------------*/
    rc = PROG_urgents (x_argc, x_argv);
    debug_uver   ylog_uvalue   ("urgents"   , rc);
@@ -1076,12 +1078,13 @@ PROG__unit_loud    (void)
       PROG_shutdown ();
       return rce;
    }
+   /*---(clean-up)-----------------------*/
+   system ("rm -f /tmp/koios.unit_testing_marvel/koios_zzzz.unit           2> /dev/null");
    /*---(debug)--------------------------*/
    /*> printf ("which !!  %s\n", ylog_uwhich ());                                     <* 
     *> printf ("which !!  %s\n", mylog_lstd);                                         <* 
     *> printf ("my.debug  %c\n", my.debug);                                           <* 
     *> printf ("ulines    %d\n", ylog_ulines());                                      <*/
-   /*> system ("rm    /tmp/apate.unit           2> /dev/null");                       <*/
    /*---(complete)-----------------------*/
    return 0;
 }

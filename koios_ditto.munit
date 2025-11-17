@@ -494,7 +494,8 @@ koios_ditto_parse  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("prepare for conversion run");
-   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, "", x_nscrp, 'r', &x_scrp, &x_nline), 0);
+   x_nline = 0;
+   yUNIT_minval   ("open the script file"               , yenv_uopen_detail   (__FILE__, __FUNCTION__, __LINE__, x_nscrp, 'r', &x_scrp), 1);
    yUNIT_minval   ("... init"                           , DITTO_init ()       , 0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "----------");
    yUNIT_mindnoc  ();
@@ -564,11 +565,12 @@ koios_ditto_parse  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("close conversion run");
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_nscrp, &x_scrp)    ,    0);
+   yUNIT_minval   ("close the script file"              , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, x_nscrp, &x_scrp)    ,    1);
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("prepare for code run");
-   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, "", x_nscrp, 'r', &x_scrp, &x_nline), 0);
+   yUNIT_minval   ("open the script file"               , yenv_uopen_detail   (__FILE__, __FUNCTION__, __LINE__, x_nscrp, 'r', &x_scrp), 1);
+   x_nline = 0;
    yUNIT_minval   ("... init"                           , DITTO_init ()       , 0);
    yUNIT_minstr   ("... review"                         , DITTO__used ()      , "----------");
    yUNIT_mindnoc  ();
@@ -670,7 +672,7 @@ koios_ditto_parse  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("close update run");
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_nscrp, &x_scrp)    ,    0);
+   yUNIT_minval   ("close the script file"              , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, x_nscrp, &x_scrp)    ,    1);
    yUNIT_mindnoc  ();
 
    PROG__unit_end    ();

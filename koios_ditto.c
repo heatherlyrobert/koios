@@ -286,7 +286,7 @@ DITTO_beg               (FILE **b_scrp, cchar a_nscrp [LEN_TITLE], int a_line, c
       return rce;
    }
    /*---(reopen file)--------------------*/
-   rc = READ_open (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nscrp, 'r', &s_fditto, r_dline);
+   rc = yenv_uopen_detail (__FILE__, __FUNCTION__, __LINE__, a_nscrp, 'r', &s_fditto);
    debug_uver   ylog_uvalue  ("open"      , rc);
    debug_uver   ylog_upoint  ("s_fditto"  , s_fditto);
    --rce;  if (rc < 0 || s_fditto == NULL) {
@@ -368,7 +368,7 @@ DITTO_end               (FILE **b_scrp, char *r_dittoing, char *r_dmark, int *r_
    /*---(close detail report)------------*/
    debug_uver   ylog_upoint  ("file_ditto", s_fditto);
    /*> rc = fclose (s_fditto);                                                        <*/
-   rc = READ_close (__FILE__, __FUNCTION__, __LINE__, "???", &s_fditto);
+   rc = yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, "???", &s_fditto);
    debug_uver   ylog_uvalue  ("close"     , rc);
    --rce;  if (rc < 0 || s_fditto != NULL) {
       debug_uver   ylog_uexitr  (__FUNCTION__, rce);

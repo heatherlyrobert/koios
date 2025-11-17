@@ -537,6 +537,10 @@ UNIT___live_scrp    (char a_scrp, char a_list, char a_unit)
 
    koios_live_build ();
 
+   yUNIT_minprcs ();
+   return 0;
+
+
    yerr_ureset   ();
    yUNIT_mincond ("verify writing to WAVE file)");
    yUNIT_minval  ("... wave count"                     , yenv_ulines (sm_nwave)    ,    8);
@@ -1671,7 +1675,7 @@ UNIT___live_stop    (char a_scrp, char a_list, char a_unit)
    yerr_ureset    ();
    yUNIT_minval   ("... run koios"                      , system ("koios --Econv koios_stop > /dev/null 2>&1"),   0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_reuse.cs/REUSE_import:755:0: error: file å/tmp/koios.unit_testing_marvel/unit.globalsæ could not be found/openned for (r)");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_reuse.cs/REUSE_import:755:0: error: file åunit.globalsæ fopen in yenv_uopen_detail returned (2) No such file or directory");
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc  ();
 
@@ -1736,7 +1740,7 @@ koios_live_comment (char a_scrp, char a_list, char a_unit)
    system ("echo \"\"                                                                                                                                                               >> /tmp/apate.unit");
    system ("echo \"PREP          include the prototype headers                            - - - - - - - - - -   - - - - -   - - - - - - - - - -  >>\"                     >> /tmp/apate.unit");
    system ("echo \"   #> this is second level comment\"                                                                                                                             >> /tmp/apate.unit");
-   system ("echo \"   incl       include public header                apate.h           - - - - - - - - - -   - - - - -   - - - - - - - - - -  \"                       >> /tmp/apate.unit");
+   system ("echo \"   incl       include public header                koios.h           - - - - - - - - - -   - - - - -   - - - - - - - - - -  \"                       >> /tmp/apate.unit");
    system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  -  123456789- \"    >> /tmp/apate.unit");
    system ("echo \"#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  t  =(var)==== \"    >> /tmp/apate.unit");
    system ("echo \"SCRP  [2e/q]  (SCRP  ) verify openning and closin                                           ((01.---))  - - - - - - - - - -  \"                        >> /tmp/apate.unit");
@@ -1764,7 +1768,7 @@ koios_live_comment (char a_scrp, char a_list, char a_unit)
    system ("echo \"\"                                                                                                                                                               >> /tmp/apate.unit");
    system ("echo \"PREP          include the prototype headers                            - - - - - - - - - -   - - - - -   - - - - - - - - - -  >>\"                     >> /tmp/apate.unit");
    system ("echo \"   #> this is second level comment\"                                                                                                                             >> /tmp/apate.unit");
-   system ("echo \"   incl       include public header                apate.h           - - - - - - - - - -   - - - - -   - - - - - - - - - -  \"                       >> /tmp/apate.unit");
+   system ("echo \"   incl       include public header                koios.h           - - - - - - - - - -   - - - - -   - - - - - - - - - -  \"                       >> /tmp/apate.unit");
    system ("echo \"#23456789-12  123456789-123456789-123456789-12345  123456789-123456  123456789-123456789-  123456789-  123456789-123456789-  -  123456789- \"    >> /tmp/apate.unit");
    system ("echo \"#==(verb)===  ===========(description)===========  =====(function)=  ====(arguments)=====  ==(test)==  ====(results)=======  t  =(var)==== \"    >> /tmp/apate.unit");
    system ("echo \"SCRP  [2e/q]  (SCRP  ) verify openning and closin                                           ((01.---))  - - - - - - - - - -  \"                        >> /tmp/apate.unit");
@@ -1797,7 +1801,7 @@ koios_live_comment (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... check line"                     , yenv_upeek (x_unit, '>'), "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
    yUNIT_minstr  ("... check line"                     , yenv_upeek (x_unit, '>'), "PREP          include the prototype headers                                      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr  ("... check line"                     , yenv_upeek (x_unit, '>'), "   #> this is second level comment");
-   yUNIT_minstr  ("... check line"                     , yenv_upeek (x_unit, '>'), "   incl       include public header                apate.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr  ("... check line"                     , yenv_upeek (x_unit, '>'), "   incl       include public header                koios.h                     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
 
    yUNIT_mincond ("verify script");
    yUNIT_minstr  ("... check line"                     , yenv_upeek (x_unit, '>'), "");

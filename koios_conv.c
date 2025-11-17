@@ -90,7 +90,7 @@ CONV_header             (char a_name [LEN_PATH], FILE **r_conv, char *r_share, c
    if (r_select != NULL)  *r_select = '-';
    if (r_conv   != NULL)  *r_conv   = NULL;
    /*---(open file)----------------------*/
-   rc = READ_open       (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_name, 'w', &x_conv, NULL);
+   rc = yenv_uopen_detail (__FILE__, __FUNCTION__, __LINE__, a_name, 'w', &x_conv);
    if (rc < 0 || x_conv == NULL)  return rce;
    /*---(write header)-------------------*/
    CONV_printf (x_conv, "#!/usr/local/bin/koios\n");
@@ -156,7 +156,7 @@ CONV_footer             (char a_good, FILE **b_conv, char a_nscrp [LEN_TITLE], c
    CONV_printf (*b_conv, "\n\n\n");
    /*---(normal end-of-file)-------------*/
    CONV_printf (*b_conv, "# end-of-file.  done, finito, completare, whimper [Ï´···\n");
-   READ_close (__FILE__, __FUNCTION__, __LINE__, a_nconv, b_conv);
+   yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nconv, b_conv);
    /*---(export globals)-----------------*/
    if (a_good == 'y') {
       IF_HEAD  REUSE_export ("unit.globals");

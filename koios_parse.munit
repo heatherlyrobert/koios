@@ -526,7 +526,7 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    strcpy (x_recd, "   DITTO (0)  repeat the condition                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_mincond  ("verify ditto in creation");
    system ("touch /tmp/apate.unit           2> /dev/null");
-   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, "", x_nscrp, 'r', &x_scrp, NULL), 0);
+   yUNIT_minval   ("open the script file"               , yenv_uopen_detail   (__FILE__, __FUNCTION__, __LINE__, x_nscrp, 'r', &x_scrp), 1);
    yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share, &x_minor, x_which),    0);
    yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 20, G_RUN_CREATE , x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_mark, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &x_share, &x_select),    1);
    yUNIT_minstr   ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");
@@ -549,7 +549,7 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr   ("... check minor"                    , x_minor       ,  '-');
    yUNIT_minchr   ("... check share"                    , x_share       ,  '-');
    yUNIT_minchr   ("... check select"                   , x_select      ,  '-');
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_nscrp, &x_scrp),   0);
+   yUNIT_minval   ("close the script file"              , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, x_nscrp, &x_scrp),   1);
    yUNIT_mindnoc  ();
 
    x_dtarget = '-';

@@ -4,110 +4,110 @@
 /*>   f(a__FILE__, __FUNCTION__, __SLINE__, €ý5n                                     <*/
 
 
-char
-koios_read_open    (char a_scrp, char a_list, char a_unit)
-{
-   char        x_cwd       [LEN_FULL]  = "";
-   char         x_name     [LEN_HUND] = "/tmp/apate.unit";
-   FILE        *x_file     = NULL;
-   int          x_line     =    0;
-   char         t          [LEN_HUND] = "";
-
-   yUNIT_minscrpy ("koios", "koios_read", "(CODE) verify openning and closing");
-   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
-   if (a_unit != 0 && a_scrp != a_unit)  return 0;
-   if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-   PROG__unit_bigclean ();
-   system ("rm -f /tmp/apate.unit        2> /dev/null");
-
-   yUNIT_mincond  ("attempt to open a null name");
-   x_line = 25;
-   yerr_ureset   ();
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
-   yUNIT_minval   ("... check line number"              , x_line        , 25);
-   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , NULL  , 'r', &x_file, &x_line), -999);
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
-   yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:31:0: error: file name requested for openning is NULL/empty");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("attempt to open with no name");
-   x_line = 35;
-   yerr_ureset   ();
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
-   yUNIT_minval   ("... check line number"              , x_line        , 35);
-   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , ""    , 'r', &x_file, &x_line), -999);
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
-   yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:42:0: error: file name requested for openning is NULL/empty");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("attempt to open with a non-existant file");
-   x_line = 45;
-   yerr_ureset   ();
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
-   yUNIT_minval   ("... check line number"              , x_line        , 45);
-   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), -999);
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
-   yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:53:0: error: file å/tmp/apate.unitæ could not be found/openned for (r)");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify openning a valid file");
-   sprintf (t, "touch %s", x_name);
-   system (t);
-   x_line = 55;
-   yerr_ureset   ();
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
-   yUNIT_minval   ("... check line number"              , x_line        , 55);
-   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 1);
-   yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("attempt to re-open an open file");
-   x_line = 65;
-   yerr_ureset   ();
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 1);
-   yUNIT_minval   ("... check line number"              , x_line        , 65);
-   yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), -999);
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 1);
-   yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:77:0: error: file å/tmp/apate.unitæ passed with already used file pointer");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify closing an open file");
-   yerr_ureset   ();
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 1);
-   yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file)                 , 0);
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
-   yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("attempt to re-close a closed file");
-   yerr_ureset   ();
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
-   yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minval   ("open the script file"               , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file)                 , -999);
-   yUNIT_minptr   ("... check script pointer"           , x_file        , 0);
-   yUNIT_minval   ("... check line number"              , x_line        , 0);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:97:0: error: file å/tmp/apate.unitæ passed with already grounded file pointer");
-   yUNIT_mindnoc  ();
-
-   PROG__unit_end    ();
-   sync ();
-   system ("rm -f /tmp/apate.unit 2> /dev/null");
-   chdir   (x_cwd);
-   PROG__unit_bigclean ();
-   yUNIT_minprcs ();
-   return 0;
-}
+/*> char                                                                                                                                                                                               <* 
+ *> koios_read_open    (char a_scrp, char a_list, char a_unit)                                                                                                                                         <* 
+ *> {                                                                                                                                                                                                  <* 
+ *>    char        x_cwd       [LEN_FULL]  = "";                                                                                                                                                       <* 
+ *>    char         x_name     [LEN_HUND] = "/tmp/apate.unit";                                                                                                                                         <* 
+ *>    FILE        *x_file     = NULL;                                                                                                                                                                 <* 
+ *>    int          x_line     =    0;                                                                                                                                                                 <* 
+ *>    char         t          [LEN_HUND] = "";                                                                                                                                                        <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_minscrpy ("koios", "koios_read", "(CODE) verify openning and closing");                                                                                                                   <* 
+ *>    if (a_list == '!')    { yUNIT_minprcs (); return 0; }                                                                                                                                           <* 
+ *>    if (a_unit != 0 && a_scrp != a_unit)  return 0;                                                                                                                                                 <* 
+ *>    if (a_list == 'y')                    return 0;                                                                                                                                                 <* 
+ *>    getcwd  (x_cwd, LEN_FULL);                                                                                                                                                                      <* 
+ *>    chdir   ("/tmp/");                                                                                                                                                                              <* 
+ *>    PROG__unit_quiet  ();                                                                                                                                                                           <* 
+ *>    PROG__unit_bigclean ();                                                                                                                                                                         <* 
+ *>    system ("rm -f /tmp/apate.unit        2> /dev/null");                                                                                                                                           <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond  ("attempt to open a null name");                                                                                                                                                 <* 
+ *>    x_line = 25;                                                                                                                                                                                    <* 
+ *>    yerr_ureset   ();                                                                                                                                                                               <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 25);                                                                                                                     <* 
+ *>    yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , NULL  , 'r', &x_file, &x_line), -999);                             <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 0);                                                                                                                      <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:31:0: error: file name requested for openning is NULL/empty");                     <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond  ("attempt to open with no name");                                                                                                                                                <* 
+ *>    x_line = 35;                                                                                                                                                                                    <* 
+ *>    yerr_ureset   ();                                                                                                                                                                               <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 35);                                                                                                                     <* 
+ *>    yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , ""    , 'r', &x_file, &x_line), -999);                             <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 0);                                                                                                                      <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:42:0: error: file name requested for openning is NULL/empty");                     <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond  ("attempt to open with a non-existant file");                                                                                                                                    <* 
+ *>    x_line = 45;                                                                                                                                                                                    <* 
+ *>    yerr_ureset   ();                                                                                                                                                                               <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 45);                                                                                                                     <* 
+ *>    yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), -999);                             <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 0);                                                                                                                      <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:53:0: error: file å/tmp/apate.unitæ could not be found/openned for (r)");          <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond  ("verify openning a valid file");                                                                                                                                                <* 
+ *>    sprintf (t, "touch %s", x_name);                                                                                                                                                                <* 
+ *>    system (t);                                                                                                                                                                                     <* 
+ *>    x_line = 55;                                                                                                                                                                                    <* 
+ *>    yerr_ureset   ();                                                                                                                                                                               <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 55);                                                                                                                     <* 
+ *>    yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);                                <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 1);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 0);                                                                                                                      <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond  ("attempt to re-open an open file");                                                                                                                                             <* 
+ *>    x_line = 65;                                                                                                                                                                                    <* 
+ *>    yerr_ureset   ();                                                                                                                                                                               <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 1);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 65);                                                                                                                     <* 
+ *>    yUNIT_minval   ("open the script file"               , READ_open   (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), -999);                             <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 1);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 0);                                                                                                                      <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:77:0: error: file å/tmp/apate.unitæ passed with already used file pointer");       <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond  ("verify closing an open file");                                                                                                                                                 <* 
+ *>    yerr_ureset   ();                                                                                                                                                                               <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 1);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file)                 , 0);                                                    <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 0);                                                                                                                      <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                            <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    yUNIT_mincond  ("attempt to re-close a closed file");                                                                                                                                           <* 
+ *>    yerr_ureset   ();                                                                                                                                                                               <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("open the script file"               , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file)                 , -999);                                                 <* 
+ *>    yUNIT_minptr   ("... check script pointer"           , x_file        , 0);                                                                                                                      <* 
+ *>    yUNIT_minval   ("... check line number"              , x_line        , 0);                                                                                                                      <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "koios_read.munit/koios_read_open:97:0: error: file å/tmp/apate.unitæ passed with already grounded file pointer");   <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                              <* 
+ *>                                                                                                                                                                                                    <* 
+ *>    PROG__unit_end    ();                                                                                                                                                                           <* 
+ *>    sync ();                                                                                                                                                                                        <* 
+ *>    system ("rm -f /tmp/apate.unit 2> /dev/null");                                                                                                                                                  <* 
+ *>    chdir   (x_cwd);                                                                                                                                                                                <* 
+ *>    PROG__unit_bigclean ();                                                                                                                                                                         <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                               <* 
+ *>    return 0;                                                                                                                                                                                       <* 
+ *> }                                                                                                                                                                                                  <*/
 
 char
 koios_read_defense (char a_scrp, char a_list, char a_unit)
@@ -192,7 +192,8 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify reading a single record");
    yerr_ureset   ();
    system ("echo \"exec     read a line      SCRP_read       i_lesser    0      \"                                             > /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
+   x_line = 0;
+   yUNIT_minval   ("open the script file"               , yenv_uopen_detail   (__FILE__, __FUNCTION__, __LINE__, x_name, 'r', &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -200,7 +201,7 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    0);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 1);
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
+   yUNIT_minval   ("close the script file"              , yenv_uclose_detail  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -215,7 +216,8 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify an empty line");
    yerr_ureset   ();
    system ("echo \"\"                                                                                                                       > /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
+   x_line = 0;
+   yUNIT_minval   ("open the script file"               , yenv_uopen_detail    (__FILE__, __FUNCTION__, __LINE__, x_name, 'r', &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -223,7 +225,7 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 2);
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
+   yUNIT_minval   ("close the script file"              , yenv_uclose_detail  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -238,7 +240,8 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify another good line");
    yerr_ureset   ();
    system ("echo \"SCRP     testing          0s    tbd    - - - - -  \"                                                       > /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
+   x_line = 0;
+   yUNIT_minval   ("open the script file"               , yenv_uopen_detail    (__FILE__, __FUNCTION__, __LINE__, x_name, 'r', &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -246,7 +249,7 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    1);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 1);
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
+   yUNIT_minval   ("close the script file"              , yenv_uclose_detail  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -261,7 +264,8 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify a comment");
    yerr_ureset   ();
    system ("echo \"## the descripion of something else\"                                                                              > /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
+   x_line = 0;
+   yUNIT_minval   ("open the script file"               , yenv_uopen_detail    (__FILE__, __FUNCTION__, __LINE__, x_name, 'r', &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -269,7 +273,7 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 2);
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
+   yUNIT_minval   ("close the script file"              , yenv_uclose_detail  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -284,7 +288,8 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify a short line");
    yerr_ureset   ();
    system ("echo \"SCRP\"                                                                                                             > /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
+   x_line = 0;
+   yUNIT_minval   ("open the script file"               , yenv_uopen_detail    (__FILE__, __FUNCTION__, __LINE__, x_name, 'r', &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -292,7 +297,7 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 2);
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
+   yUNIT_minval   ("close the script file"              , yenv_uclose_detail  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    1);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -308,7 +313,8 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yerr_ureset   ();
    system ("rm -f /tmp/apate.unit 2> /dev/null");
    system ("touch /tmp/apate.unit");
-   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
+   x_line = 0;
+   yUNIT_minval   ("open the script file"               , yenv_uopen_detail    (__FILE__, __FUNCTION__, __LINE__, x_name, 'r', &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -316,7 +322,7 @@ koios_read_single  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... dline"                          , x_dline                  ,    0);
    yUNIT_minval   ("... nrecd"                          , x_nrecd                  ,    2);
    yUNIT_minval   ("read the line"                      , READ__single  (&x_file, &x_line, &x_dittoing, &x_dmark, &x_ditto, &x_dline, &x_nrecd, x_recd), 0);
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
+   yUNIT_minval   ("close the script file"              , yenv_uclose_detail  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 1);
    yUNIT_minval   ("... line"                           , x_line                   ,    0);
    yUNIT_minchr   ("... dittoing"                       , x_dittoing               ,  '-');
    yUNIT_minchr   ("... dmark"                          , x_dmark                  ,  '-');
@@ -374,7 +380,8 @@ koios_read_end_ditto  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("open script, roll forward to DITTO, then start a ditto");
-   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
+   x_line = 0;
+   yUNIT_minval   ("open the script file"               , yenv_uopen_detail    (__FILE__, __FUNCTION__, __LINE__, x_name, 'r', &x_file), 1);
    x_main     = x_file;
    fgets (x_recd, LEN_RECD, x_main);
    fgets (x_recd, LEN_RECD, x_main);
@@ -489,7 +496,7 @@ koios_read_end_ditto  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("close out the script");
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
+   yUNIT_minval   ("close the script file"              , yenv_uclose_detail  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 1);
    yUNIT_mindnoc ();
 
    PROG__unit_end    ();
@@ -539,7 +546,8 @@ koios_read_driver  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("open the script");
-   yUNIT_minval   ("open the script file"               , READ_open    (__FILE__, __FUNCTION__, __LINE__, ""                   , x_name, 'r', &x_file, &x_line), 0);
+   x_line = 0;
+   yUNIT_minval   ("open the script file"               , yenv_uopen_detail    (__FILE__, __FUNCTION__, __LINE__, x_name, 'r', &x_file), 1);
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify first good line");
@@ -605,7 +613,7 @@ koios_read_driver  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("close out the script");
-   yUNIT_minval   ("close the script file"              , READ_close  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 0);
+   yUNIT_minval   ("close the script file"              , yenv_uclose_detail  (__FILE__, __FUNCTION__, __LINE__, x_name, &x_file), 1);
    yUNIT_mindnoc ();
 
    PROG__unit_end    ();
@@ -639,7 +647,7 @@ main                    (int a_argc, char *a_argv [])
    /*---(startup)------------------------*/
    yUNIT_minunit ("koios_read");
    /*---(scripts)------------------------*/
-   koios_read_open      (++n, x_list, x_unit);
+   /*> koios_read_open      (++n, x_list, x_unit);                                    <*/
    koios_read_defense   (++n, x_list, x_unit);
    koios_read_single    (++n, x_list, x_unit);
    koios_read_end_ditto (++n, x_list, x_unit);

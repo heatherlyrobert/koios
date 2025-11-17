@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.-- production on stress test datasets"
 #define     P_VERMINOR  "2.0- supporting unit_head, unit_comp, unit_data"
-#define     P_VERNUM    "2.0a"
-#define     P_VERTXT    "created unit_ vs master change, unit testing on koios_live working!!!"
+#define     P_VERNUM    "2.0b"
+#define     P_VERTXT    "everything except koios_prog.unit is clean, but complex testing left"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -180,17 +180,15 @@
 #include    <sys/types.h>    /* stat, lstat                                   */
 
 /*===[[ CUSTOM LIBRARIES ]]===================================================*/
+#include    <yLOG_solo.h>    /* CUSTOM : heatherly program logging            */
 #include    <ySTR_solo.h>
 #include    <yENV_solo.h>
-#include    <yLOG_solo.h>    /* CUSTOM : heatherly program logging            */
 #include    <yCOLOR_solo.h>
 #include    <yUNIT_solo.h>
 #include    <yDLST_solo.h>
 #include    <yEXEC_solo.h>
 
 #include    <yUNIT.h>
-#include    <yLOG.h>
-#include    <yURG.h>
 
 
 
@@ -419,8 +417,8 @@ char        VERB_inventory          (FILE *a_main);
 /*===[[ koios_read.c ]]=======================================================*/
 /*········· ´······················ ´·········································*/
 /*---(file)-----------------*/
-char        READ_open               (char a_sfile [LEN_TITLE], char a_sfunc [LEN_TITLE], int a_sline, char a_dir [LEN_PATH], char a_name [LEN_TITLE], char a_mode, FILE **r_file, int *r_line);
-char        READ_close              (char a_sfile [LEN_TITLE], char a_sfunc [LEN_TITLE], int a_sline, char a_name [LEN_TITLE], FILE **b_file);
+/*> char        READ_open               (char a_sfile [LEN_TITLE], char a_sfunc [LEN_TITLE], int a_sline, char a_dir [LEN_PATH], char a_name [LEN_TITLE], char a_mode, FILE **r_file, int *r_line);   <*/
+/*> char        READ_close              (char a_sfile [LEN_TITLE], char a_sfunc [LEN_TITLE], int a_sline, char a_name [LEN_TITLE], FILE **b_file);   <*/
 /*---(record)---------------*/
 char        READ__defense           (FILE **a_file, int *r_nline, char *r_dittoing, char *r_dmark, int *r_ditto, int *r_dline, int *r_nrecd, char r_recd [LEN_RECD]);
 char        READ__clear             (void);
@@ -523,7 +521,7 @@ char        CODE__code_end          (char a_nscrp [LEN_TITLE], FILE *a_code);
 char        CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE]);
 char        CODE__main_end          (FILE *a_main);
 char        CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_nhead [LEN_TITLE], FILE **r_head, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char *b_share, char *b_select);
-char        CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, int a_nline, char a_share, char a_select, char a_unit);
+char        CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_nhead [LEN_TITLE], FILE **r_head, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, int a_nline, char a_share, char a_select, char a_unit);
 char        CODE__incl              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(select)---------------*/
 char        CODE__select_beg        (FILE* a_code, char a_verb [LEN_TERSE], char a_which [LEN_TITLE], char a_share, char r_pre [LEN_TERSE]);

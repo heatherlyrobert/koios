@@ -253,35 +253,46 @@ CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FIL
    FILE       *x_wave      = NULL;
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
+   /*---(show args)----------------------*/
+   debug_uver   ylog_uinfo   ("a_nmain"   , a_nmain);
+   debug_uver   ylog_uinfo   ("a_nhead"   , a_nhead);
+   debug_uver   ylog_uinfo   ("a_ncode"   , a_ncode);
+   debug_uver   ylog_uinfo   ("a_nwave"   , a_nwave);
    /*---(open main)----------------------*/
-   rc = READ_open       (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nmain, 'w', &x_main, NULL);
+   rc = yenv_uopen_detail (__FILE__, __FUNCTION__, __LINE__, a_nmain, 'w', &x_main);
+   debug_uver   ylog_uvalue  ("main"      , rc);
    --rce;  if (rc < 0 || x_main == NULL) {
       debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(open header)--------------------*/
-   if (strcmp (a_nhead, "") != 0) {
-      rc = READ_open       (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nhead, 'w', &x_head, NULL);
-      --rce;  if (rc < 0 || x_head == NULL) {
-         READ_close (__FILE__, __FUNCTION__, __LINE__, a_nhead, &x_head);
+   --rce;  if (a_nhead == NULL || strcmp (a_nhead, "") != 0) {
+      rc = yenv_uopen_detail (__FILE__, __FUNCTION__, __LINE__, a_nhead, 'w', &x_head);
+      debug_uver   ylog_uvalue  ("head"      , rc);
+      if (rc < 0 || x_head == NULL) {
+         yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nhead, &x_head);
          debug_uver   ylog_uexitr  (__FUNCTION__, rce);
          return rce;
       }
    }
    /*---(open code)----------------------*/
-   rc = READ_open       (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_ncode, 'w', &x_code, NULL);
+   rc = yenv_uopen_detail (__FILE__, __FUNCTION__, __LINE__, a_ncode, 'w', &x_code);
+   debug_uver   ylog_uvalue  ("code"      , rc);
    --rce;  if (rc < 0 || x_code == NULL) {
-      READ_close (__FILE__, __FUNCTION__, __LINE__, a_nmain, &x_main);
+      yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nmain, &x_main);
       debug_uver   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(open wave)----------------------*/
-   rc = READ_open       (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nwave, 'w', &x_wave, NULL);
-   --rce;  if (rc < 0 || x_wave == NULL) {
-      READ_close (__FILE__, __FUNCTION__, __LINE__, a_nmain, &x_main);
-      READ_close (__FILE__, __FUNCTION__, __LINE__, a_ncode, &x_code);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
+   --rce;  if (a_nwave == NULL || strcmp (a_nwave, "") != 0) {
+      rc = yenv_uopen_detail (__FILE__, __FUNCTION__, __LINE__, a_nwave, 'w', &x_wave);
+      debug_uver   ylog_uvalue  ("wave"      , rc);
+      if (rc < 0 || x_wave == NULL) {
+         yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nmain, &x_main);
+         yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_ncode, &x_code);
+         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+         return rce;
+      }
    }
    /*---(add headers)--------------------*/
    CODE__main_beg (x_main, a_nscrp);
@@ -301,7 +312,7 @@ CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FIL
 }
 
 char
-CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, int a_nline, char a_share, char a_select, char a_unit)
+CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_nhead [LEN_TITLE], FILE **r_head, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, int a_nline, char a_share, char a_select, char a_unit)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -310,7 +321,12 @@ CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LE
    char        t           [LEN_HUND]  = "";
    /*---(header)-------------------------*/
    debug_uver   ylog_uenter  (__FUNCTION__);
+   /*---(show args)----------------------*/
    debug_uver   ylog_uchar   ("a_good"    , a_good);
+   debug_uver   ylog_uinfo   ("a_nmain"   , a_nmain);
+   debug_uver   ylog_uinfo   ("a_nhead"   , a_nhead);
+   debug_uver   ylog_uinfo   ("a_ncode"   , a_ncode);
+   debug_uver   ylog_uinfo   ("a_nwave"   , a_nwave);
    /*---(polish off scripts)-------------*/
    if (s_cscrp >  0 && a_share == '-')   yUNIT_wave_end (my_loc.l_WAVE);
    CODE__scrp_end          (*r_code, "----", a_nline, "----", a_share);
@@ -330,13 +346,12 @@ CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LE
    if (a_good == 'y') {
       /*---(append main)-----------------*/
       IF_NOT_HEAD {
-         READ_close (__FILE__, __FUNCTION__, __LINE__, a_nmain, r_main);
-         READ_open  (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_nmain, 'r', r_main, NULL);
+         if (*r_main != NULL)  yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nmain, r_main);
+         yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, a_nmain, 'r', r_main);
          /*> printf ("MAIN------------------------------------------\n");                <*/
          while (1) {
             fgets (x_recd, LEN_RECD, *r_main);
             if (feof (*r_main)) break;
-            /*> printf ("MAIN    %s", x_recd);                                           <*/
             CONV_printf (*r_code, x_recd);
          }
          /*> printf ("MAIN------------------------------------------\n");                <*/
@@ -349,9 +364,10 @@ CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LE
    /*---(write wave footer)--------------*/
    if (r_wave != NULL && *r_wave != NULL)  fprintf (*r_wave, "\n");
    /*---(close files)--------------------*/
-   rc = READ_close (__FILE__, __FUNCTION__, __LINE__, a_nmain, r_main);
-   rc = READ_close (__FILE__, __FUNCTION__, __LINE__, a_ncode, r_code);
-   rc = READ_close (__FILE__, __FUNCTION__, __LINE__, a_nwave, r_wave);
+   if (*r_main != NULL)  rc = yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nmain, r_main);
+   if (*r_head != NULL)  rc = yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nhead, r_head);
+   if (*r_code != NULL)  rc = yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_ncode, r_code);
+   if (*r_wave != NULL)  rc = yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nwave, r_wave);
    /*---(transfer master.h)--------------*/
    if (a_good == 'y') {
       IF_HEAD   system  ("mv -f unit_head.cs unit_head.h");

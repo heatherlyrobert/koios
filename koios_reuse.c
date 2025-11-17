@@ -738,10 +738,10 @@ REUSE_export            (cchar a_name [LEN_PATH])
    FILE       *f           = NULL;
    int         c           =    0;
    --rce;  if (a_name == NULL)   return rce;
-   READ_open (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_name, 'w', &f, NULL);
+   yenv_uopen_detail (__FILE__, __FUNCTION__, __LINE__, a_name, 'w', &f);
    --rce;  if (f == NULL)  return rce;
    c = yUNIT_reuse_export (f);
-   READ_close (__FILE__, __FUNCTION__, __LINE__, "???", &f);
+   yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, "???", &f);
    return c;
 }
 
@@ -752,10 +752,10 @@ REUSE_import            (cchar a_name [LEN_PATH])
    FILE       *f           = NULL;
    int         c           =    0;
    --rce;  if (a_name == NULL)   return rce;
-   READ_open (__FILE__, __FUNCTION__, __LINE__, my.cwd, a_name, 'r', &f, NULL);
+   yenv_uopen_detail (__FILE__, __FUNCTION__, __LINE__, a_name, 'r', &f);
    --rce;  if (f == NULL)  return rce;
    c = yUNIT_reuse_import (f);
-   READ_close (__FILE__, __FUNCTION__, __LINE__, "???", &f);
+   yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, "???", &f);
    /*> yUNIT_reuse_list ();                                                           <*/
    return c;
 }

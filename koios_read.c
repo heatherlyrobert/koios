@@ -8,126 +8,126 @@
 /*====================------------------------------------====================*/
 static void  o___FILE____________o () { return; }
 
-char
-READ_open               (char a_sfile [LEN_TITLE], char a_sfunc [LEN_TITLE], int a_sline, char a_dir [LEN_PATH], char a_name [LEN_TITLE], char a_mode, FILE **r_file, int *r_line)
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   char        x_mode      [LEN_SHORT] = "";
-   char        x_name      [LEN_PATH]  = "";
-   int         l           =    0;
-   char        a           =  '-';
-   char        b           =  '-';
-   FILE       *f           = NULL;
-   /*---(header)-------------------------*/
-   debug_uver   ylog_uenter  (__FUNCTION__);
-   /*---(default)------------------------*/
-   if (r_line != NULL)  *r_line = 0;
-   /*---(defense)------------------------*/
-   debug_uver   ylog_upoint  ("a_dir"     , a_dir);
-   --rce;  if (a_dir   == NULL) {
-      yerr_uerror ("%s/%s:%d:0: error: directory name requested for openning is NULL", a_sfile, a_sfunc, a_sline);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   debug_uver   ylog_uinfo   ("a_dir"     , a_dir);
-   debug_uver   ylog_upoint  ("a_name"    , a_name);
-   --rce;  if (a_name  == NULL || a_name [0] == '\0') {
-      yerr_uerror ("%s/%s:%d:0: error: file name requested for openning is NULL/empty", a_sfile, a_sfunc, a_sline);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   debug_uver   ylog_uinfo   ("a_name"    , a_name);
-   debug_uver   ylog_upoint  ("r_file"    , r_file);
-   --rce;  if (r_file  == NULL) {
-      yerr_uerror ("%s/%s:%d:0: error: file å%sæ passed with NULL file pointer return", a_sfile, a_sfunc, a_sline, a_name);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   debug_uver   ylog_upoint  ("*r_file"   , *r_file);
-   --rce;  if (*r_file != NULL) {
-      yerr_uerror ("%s/%s:%d:0: error: file å%sæ passed with already used file pointer", a_sfile, a_sfunc, a_sline, a_name);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(mode)---------------------------*/
-   debug_uver   ylog_uchar   ("a_mode"     , a_mode);
-   --rce;  switch (a_mode) {
-   case 'r'  :
-      strcpy (x_mode, "rt");
-      break;
-   case 'w'  :
-      strcpy (x_mode, "wt");
-      break;
-   default   :
-      yerr_uerror ("%s/%s:%d:0: error: file å%sæ passed for (%c) when direction can only be årwæ", a_sfile, a_sfunc, a_sline, a_name, a_mode);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-      break;
-   }
-   debug_uver   ylog_uinfo   ("x_mode"    , x_mode);
-   /*---(full name)----------------------*/
-   l = strlen (a_dir);
-   debug_uver   ylog_uvalue  ("l"         , l);
-   if (l > 0)  a = a_dir  [l - 1];
-   b = a_name [0];
-   if (l == 0 || b == '/')    snprintf (x_name, LEN_PATH, "%s"   , a_name);
-   else if (a != '/')         snprintf (x_name, LEN_PATH, "%s/%s", a_dir, a_name);
-   else                       snprintf (x_name, LEN_PATH, "%s%s" , a_dir, a_name);
-   debug_uver   ylog_uinfo   ("x_name"    , x_name);
-   /*---(open)---------------------------*/
-   f = fopen (x_name, x_mode);
-   debug_uver   ylog_upoint  ("f"         , f);
-   --rce;  if (f == NULL) {
-      yerr_uerror ("%s/%s:%d:0: error: file å%sæ could not be found/openned for (%c)", a_sfile, a_sfunc, a_sline, x_name, a_mode);
-      debug_uver   ylog_unote   ("can not open script file");
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   debug_uver   ylog_unote   ("script file open");
-   /*---(save-back)----------------------*/
-   if (r_file  != NULL)  *r_file = f;
-   /*---(complete)-----------------------*/
-   debug_uver   ylog_uexit   (__FUNCTION__);
-   return 0;
-}
+/*> char                                                                                                                                                                                 <* 
+ *> READ_open               (char a_sfile [LEN_TITLE], char a_sfunc [LEN_TITLE], int a_sline, char a_dir [LEN_PATH], char a_name [LEN_TITLE], char a_mode, FILE **r_file, int *r_line)   <* 
+ *> {                                                                                                                                                                                    <* 
+ *>    /+---(locals)-----------+-----+-----+-+/                                                                                                                                          <* 
+ *>    char        rce         =  -10;                                                                                                                                                   <* 
+ *>    char        x_mode      [LEN_SHORT] = "";                                                                                                                                         <* 
+ *>    char        x_name      [LEN_PATH]  = "";                                                                                                                                         <* 
+ *>    int         l           =    0;                                                                                                                                                   <* 
+ *>    char        a           =  '-';                                                                                                                                                   <* 
+ *>    char        b           =  '-';                                                                                                                                                   <* 
+ *>    FILE       *f           = NULL;                                                                                                                                                   <* 
+ *>    /+---(header)-------------------------+/                                                                                                                                          <* 
+ *>    debug_uver   ylog_uenter  (__FUNCTION__);                                                                                                                                         <* 
+ *>    /+---(default)------------------------+/                                                                                                                                          <* 
+ *>    if (r_line != NULL)  *r_line = 0;                                                                                                                                                 <* 
+ *>    /+---(defense)------------------------+/                                                                                                                                          <* 
+ *>    debug_uver   ylog_upoint  ("a_dir"     , a_dir);                                                                                                                                  <* 
+ *>    --rce;  if (a_dir   == NULL) {                                                                                                                                                    <* 
+ *>       yerr_uerror ("%s/%s:%d:0: error: directory name requested for openning is NULL", a_sfile, a_sfunc, a_sline);                                                                   <* 
+ *>       debug_uver   ylog_uexitr  (__FUNCTION__, rce);                                                                                                                                 <* 
+ *>       return rce;                                                                                                                                                                    <* 
+ *>    }                                                                                                                                                                                 <* 
+ *>    debug_uver   ylog_uinfo   ("a_dir"     , a_dir);                                                                                                                                  <* 
+ *>    debug_uver   ylog_upoint  ("a_name"    , a_name);                                                                                                                                 <* 
+ *>    --rce;  if (a_name  == NULL || a_name [0] == '\0') {                                                                                                                              <* 
+ *>       yerr_uerror ("%s/%s:%d:0: error: file name requested for openning is NULL/empty", a_sfile, a_sfunc, a_sline);                                                                  <* 
+ *>       debug_uver   ylog_uexitr  (__FUNCTION__, rce);                                                                                                                                 <* 
+ *>       return rce;                                                                                                                                                                    <* 
+ *>    }                                                                                                                                                                                 <* 
+ *>    debug_uver   ylog_uinfo   ("a_name"    , a_name);                                                                                                                                 <* 
+ *>    debug_uver   ylog_upoint  ("r_file"    , r_file);                                                                                                                                 <* 
+ *>    --rce;  if (r_file  == NULL) {                                                                                                                                                    <* 
+ *>       yerr_uerror ("%s/%s:%d:0: error: file å%sæ passed with NULL file pointer return", a_sfile, a_sfunc, a_sline, a_name);                                                          <* 
+ *>       debug_uver   ylog_uexitr  (__FUNCTION__, rce);                                                                                                                                 <* 
+ *>       return rce;                                                                                                                                                                    <* 
+ *>    }                                                                                                                                                                                 <* 
+ *>    debug_uver   ylog_upoint  ("*r_file"   , *r_file);                                                                                                                                <* 
+ *>    --rce;  if (*r_file != NULL) {                                                                                                                                                    <* 
+ *>       yerr_uerror ("%s/%s:%d:0: error: file å%sæ passed with already used file pointer", a_sfile, a_sfunc, a_sline, a_name);                                                         <* 
+ *>       debug_uver   ylog_uexitr  (__FUNCTION__, rce);                                                                                                                                 <* 
+ *>       return rce;                                                                                                                                                                    <* 
+ *>    }                                                                                                                                                                                 <* 
+ *>    /+---(mode)---------------------------+/                                                                                                                                          <* 
+ *>    debug_uver   ylog_uchar   ("a_mode"     , a_mode);                                                                                                                                <* 
+ *>    --rce;  switch (a_mode) {                                                                                                                                                         <* 
+ *>    case 'r'  :                                                                                                                                                                       <* 
+ *>       strcpy (x_mode, "rt");                                                                                                                                                         <* 
+ *>       break;                                                                                                                                                                         <* 
+ *>    case 'w'  :                                                                                                                                                                       <* 
+ *>       strcpy (x_mode, "wt");                                                                                                                                                         <* 
+ *>       break;                                                                                                                                                                         <* 
+ *>    default   :                                                                                                                                                                       <* 
+ *>       yerr_uerror ("%s/%s:%d:0: error: file å%sæ passed for (%c) when direction can only be årwæ", a_sfile, a_sfunc, a_sline, a_name, a_mode);                                       <* 
+ *>       debug_uver   ylog_uexitr  (__FUNCTION__, rce);                                                                                                                                 <* 
+ *>       return rce;                                                                                                                                                                    <* 
+ *>       break;                                                                                                                                                                         <* 
+ *>    }                                                                                                                                                                                 <* 
+ *>    debug_uver   ylog_uinfo   ("x_mode"    , x_mode);                                                                                                                                 <* 
+ *>    /+---(full name)----------------------+/                                                                                                                                          <* 
+ *>    l = strlen (a_dir);                                                                                                                                                               <* 
+ *>    debug_uver   ylog_uvalue  ("l"         , l);                                                                                                                                      <* 
+ *>    if (l > 0)  a = a_dir  [l - 1];                                                                                                                                                   <* 
+ *>    b = a_name [0];                                                                                                                                                                   <* 
+ *>    if (l == 0 || b == '/')    snprintf (x_name, LEN_PATH, "%s"   , a_name);                                                                                                          <* 
+ *>    else if (a != '/')         snprintf (x_name, LEN_PATH, "%s/%s", a_dir, a_name);                                                                                                   <* 
+ *>    else                       snprintf (x_name, LEN_PATH, "%s%s" , a_dir, a_name);                                                                                                   <* 
+ *>    debug_uver   ylog_uinfo   ("x_name"    , x_name);                                                                                                                                 <* 
+ *>    /+---(open)---------------------------+/                                                                                                                                          <* 
+ *>    f = fopen (x_name, x_mode);                                                                                                                                                       <* 
+ *>    debug_uver   ylog_upoint  ("f"         , f);                                                                                                                                      <* 
+ *>    --rce;  if (f == NULL) {                                                                                                                                                          <* 
+ *>       yerr_uerror ("%s/%s:%d:0: error: file å%sæ could not be found/openned for (%c)", a_sfile, a_sfunc, a_sline, x_name, a_mode);                                                   <* 
+ *>       debug_uver   ylog_unote   ("can not open script file");                                                                                                                        <* 
+ *>       debug_uver   ylog_uexitr  (__FUNCTION__, rce);                                                                                                                                 <* 
+ *>       return rce;                                                                                                                                                                    <* 
+ *>    }                                                                                                                                                                                 <* 
+ *>    debug_uver   ylog_unote   ("script file open");                                                                                                                                   <* 
+ *>    /+---(save-back)----------------------+/                                                                                                                                          <* 
+ *>    if (r_file  != NULL)  *r_file = f;                                                                                                                                                <* 
+ *>    /+---(complete)-----------------------+/                                                                                                                                          <* 
+ *>    debug_uver   ylog_uexit   (__FUNCTION__);                                                                                                                                         <* 
+ *>    return 0;                                                                                                                                                                         <* 
+ *> }                                                                                                                                                                                    <*/
 
-char         /*--> close script file ---------------------[ ------ [ ------ ]-*/
-READ_close              (char a_sfile [LEN_TITLE], char a_sfunc [LEN_TITLE], int a_sline, char a_name [LEN_TITLE], FILE **b_file)
-{
-   /*---(locals)-----------+-----------+-*/
-   char        rc          = 0;
-   char        rce         = -10;
-   /*---(header)-------------------------*/
-   debug_uver   ylog_uenter  (__FUNCTION__);
-   /*---(defense)------------------------*/
-   debug_uver   ylog_upoint  ("b_file"    , b_file);
-   --rce;  if (b_file  == NULL) {
-      yerr_uerror ("%s/%s:%d:0: error: file å%sæ passed with NULL file pointer return", a_sfile, a_sfunc, a_sline, a_name);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   debug_uver   ylog_upoint  ("*b_file"   , *b_file);
-   --rce;  if (*b_file == NULL) {
-      yerr_uerror ("%s/%s:%d:0: error: file å%sæ passed with already grounded file pointer", a_sfile, a_sfunc, a_sline, a_name);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(close)--------------------------*/
-   fflush (*b_file);
-   rc = fclose (*b_file);
-   debug_uver   ylog_uvalue  ("rc"        , rc);
-   --rce;  if (rc < 0) {
-      yerr_uerror ("%s/%s:%d:0: error: file å%sæ could not be closed", a_sfile, a_sfunc, a_sline, a_name);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(default)------------------------*/
-   *b_file = NULL;
-   /*---(complete)-----------------------*/
-   debug_uver   ylog_uexit   (__FUNCTION__);
-   return 0;
-}
+/*> char         /+--> close script file ---------------------[ ------ [ ------ ]-+/                                                    <* 
+ *> READ_close              (char a_sfile [LEN_TITLE], char a_sfunc [LEN_TITLE], int a_sline, char a_name [LEN_TITLE], FILE **b_file)   <* 
+ *> {                                                                                                                                   <* 
+ *>    /+---(locals)-----------+-----------+-+/                                                                                         <* 
+ *>    char        rc          = 0;                                                                                                     <* 
+ *>    char        rce         = -10;                                                                                                   <* 
+ *>    /+---(header)-------------------------+/                                                                                         <* 
+ *>    debug_uver   ylog_uenter  (__FUNCTION__);                                                                                        <* 
+ *>    /+---(defense)------------------------+/                                                                                         <* 
+ *>    debug_uver   ylog_upoint  ("b_file"    , b_file);                                                                                <* 
+ *>    --rce;  if (b_file  == NULL) {                                                                                                   <* 
+ *>       yerr_uerror ("%s/%s:%d:0: error: file å%sæ passed with NULL file pointer return", a_sfile, a_sfunc, a_sline, a_name);         <* 
+ *>       debug_uver   ylog_uexitr  (__FUNCTION__, rce);                                                                                <* 
+ *>       return rce;                                                                                                                   <* 
+ *>    }                                                                                                                                <* 
+ *>    debug_uver   ylog_upoint  ("*b_file"   , *b_file);                                                                               <* 
+ *>    --rce;  if (*b_file == NULL) {                                                                                                   <* 
+ *>       yerr_uerror ("%s/%s:%d:0: error: file å%sæ passed with already grounded file pointer", a_sfile, a_sfunc, a_sline, a_name);    <* 
+ *>       debug_uver   ylog_uexitr  (__FUNCTION__, rce);                                                                                <* 
+ *>       return rce;                                                                                                                   <* 
+ *>    }                                                                                                                                <* 
+ *>    /+---(close)--------------------------+/                                                                                         <* 
+ *>    fflush (*b_file);                                                                                                                <* 
+ *>    rc = fclose (*b_file);                                                                                                           <* 
+ *>    debug_uver   ylog_uvalue  ("rc"        , rc);                                                                                    <* 
+ *>    --rce;  if (rc < 0) {                                                                                                            <* 
+ *>       yerr_uerror ("%s/%s:%d:0: error: file å%sæ could not be closed", a_sfile, a_sfunc, a_sline, a_name);                          <* 
+ *>       debug_uver   ylog_uexitr  (__FUNCTION__, rce);                                                                                <* 
+ *>       return rce;                                                                                                                   <* 
+ *>    }                                                                                                                                <* 
+ *>    /+---(default)------------------------+/                                                                                         <* 
+ *>    *b_file = NULL;                                                                                                                  <* 
+ *>    /+---(complete)-----------------------+/                                                                                         <* 
+ *>    debug_uver   ylog_uexit   (__FUNCTION__);                                                                                        <* 
+ *>    return 0;                                                                                                                        <* 
+ *> }                                                                                                                                   <*/
 
 
 

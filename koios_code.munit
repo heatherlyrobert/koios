@@ -292,7 +292,7 @@ koios_code_beg     (char a_scrp, char a_list, char a_unit)
    KOIOS_open_all ('*', '-');
 
    yUNIT_mincond  ("verify writing a code beg");
-   yUNIT_minval   ("write code beg"                     , CODE__code_beg  (sm_nscrp, sm_code)   ,    0);
+   yUNIT_minval   ("write code beg"                     , CODE__code_beg  (sm_nunit, sm_code)   ,    0);
    yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,   12);
    yUNIT_mindnoc  ();
 
@@ -301,6 +301,136 @@ koios_code_beg     (char a_scrp, char a_list, char a_unit)
    return 0;
 }
 
+char
+koios_code_yenv    (char a_scrp, char a_list, char a_unit)
+{
+   char        s           [LEN_FULL]  = "";
+   char        t           [LEN_FULL]  = "";
+   FILE       *f           = NULL;
+
+   yUNIT_minscrpy ("koios", "koios_code", "(CODE) verify yenv_uopen and yenv_uclose (string test)");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   KOIOS_open_all ('*', '-');
+
+   chdir (sm_koios);
+   strcpy  (s, "koios_apate.unit");
+
+   yUNIT_mincond  ("attempt to close a non-open file");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, s   , &f  )      , -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:322:0: error: file åkoios_apate.unitæ passed to yenv_uclose_detail with already grounded file return pointer");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify openning a non-open file");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uopen_detail"             , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, s   , 'w' , &f  ),    1);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  1);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt to re-open already open file");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, s   , 'w' , &f  ), -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  1);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:338:0: error: file åkoios_apate.unitæ passed to yenv_uopen_detail with already open file return pointer");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify closing an open file");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, s   , &f  )      ,    1);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt to re-close an already closed file");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, s   , &f  )      , -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:354:0: error: file åkoios_apate.unitæ passed to yenv_uclose_detail with already grounded file return pointer");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt to open file with null/empty");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, NULL, 'w' , &f  ), -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:362:0: error: file name passed to yenv_uopen_detail is null/empty");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, ""  , 'w' , &f  ), -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:367:0: error: file name passed to yenv_uopen_detail is null/empty");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, s   ,  0  , &f  ), -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:372:0: error: file åkoios_apate.unitæ passed to yenv_uopen_detail with mode (0) when the only valid are årwaæ");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, s   , 'x' , &f  ), -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:377:0: error: file åkoios_apate.unitæ passed to yenv_uopen_detail with mode (x) when the only valid are årwaæ");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, s   , 'w' , NULL), -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:382:0: error: file åkoios_apate.unitæ passed to yenv_uopen_detail with null file return pointer");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify openning a non-open file");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uopen_detail"             , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, s   , 'w' , &f  ),    1);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  1);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt to close file with null/empty");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, NULL, &f  )      , -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  1);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:398:0: error: file name passed to yenv_uclose_detail is null/empty");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, ""  , &f  )      , -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  1);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:403:0: error: file name passed to yenv_uclose_detail is null/empty");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, s   , NULL)      , -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  1);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:408:0: error: file åkoios_apate.unitæ passed to yenv_uclose_detail with null file return pointer");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify closing an open file");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uclose_detail"            , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, s   , &f  )      ,    1);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify openning for read (r) a non-existant file");
+   yerr_ureset    ();
+   yUNIT_minval   ("call yenv_uopen_detail"             , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, "koios_crazy.unit", 'r' , &f  ), -999);
+   yUNIT_minptr   ("... check pointer"                  , f     ,  0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_code.munit/koios_code_yenv:424:0: error: file åkoios_crazy.unitæ fopen in yenv_uopen_detail returned (2) No such file or directory");
+   yUNIT_mindnoc  ();
+
+   KOIOS_close_all ('*');
+   yUNIT_minprcs  ();
+   return 0;
+}
 
 char
 koios_code_header  (char a_scrp, char a_list, char a_unit)
@@ -315,28 +445,28 @@ koios_code_header  (char a_scrp, char a_list, char a_unit)
    KOIOS_open_all ('*', '-');
 
    yUNIT_mincond  ("verify writing a code beg");
-   yUNIT_minval   ("write code beg"                     , CODE__code_beg  (sm_nscrp, sm_code)   ,    0);
-   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,   12);
+   yUNIT_minval   ("write code beg"                     , CODE__code_beg  (sm_nunit, sm_code)   ,    0);
+   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,    9);
    yUNIT_mindnoc  ();
 
    sm_cmark = KOIOS_code_beg         (__FILE__, __LINE__, sm_cmark);
 
    yUNIT_mincond  ("verify writing a code end");
-   yUNIT_minval   ("write code end"                     , CODE__code_end  (sm_nscrp, sm_code)   ,    0);
-   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,   14);
+   yUNIT_minval   ("write code end"                     , CODE__code_end  (sm_nunit, sm_code)   ,    0);
+   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,   11);
    yUNIT_mindnoc  ();
 
    sm_cmark = KOIOS_code_end         (__FILE__, __LINE__, sm_cmark);
 
    yUNIT_mincond  ("verify writing a code stats");
    yUNIT_minval   ("write code stats"                   , CODE__code_stats  (sm_code) ,    0);
-   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,   22);
+   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,   19);
    yUNIT_mindnoc  ();
 
    sm_cmark = KOIOS_code_stats       (__FILE__, __LINE__, sm_cmark);
 
    yUNIT_mincond  ("verify writing a main beg");
-   yUNIT_minval   ("write main beg"                     , CODE__main_beg  (sm_main, sm_nscrp)  ,    0);
+   yUNIT_minval   ("write main beg"                     , CODE__main_beg  (sm_main, sm_nunit)  ,    0);
    yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_nmain   )         ,   14);
 
    sm_mmark = KOIOS_main_beg         (__FILE__, __LINE__, sm_mmark);
@@ -351,12 +481,15 @@ koios_code_header  (char a_scrp, char a_list, char a_unit)
    KOIOS_close_all ('-');
 
    yUNIT_mincond  ("verify calling the header");
-   yUNIT_minval   ("call header"                        , CODE_header     (sm_nscrp, sm_nmain, &sm_main, sm_nhead, &sm_head, sm_ncode, &sm_code, sm_nwave, &sm_wave, &x_share, &x_select),    0);
+   yerr_ureset    ();
+   yUNIT_minval   ("call header"                        , CODE_header     (sm_nunit, sm_nmain, &sm_main, sm_nhead, &sm_head, sm_ncode, &sm_code, sm_nwave, &sm_wave, &x_share, &x_select),    0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "(n/a)");
    yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_nmain   )         ,   14);
-   yUNIT_minval   ("check header lines"                 , yenv_ulines     (sm_nhead   )         ,    0);
-   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,   12);
+   yUNIT_minval   ("check header lines"                 , yenv_ulines     (sm_nhead   )         ,   -1);
+   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,    9);
    yUNIT_minptr   ("... check main pointer"             , sm_main        , 0x1);
-   yUNIT_minptr   ("... check header pointer"           , sm_head        , 0x1);
+   yUNIT_minptr   ("... check header pointer"           , sm_head        , 0x0);
    yUNIT_minptr   ("... check code pointer"             , sm_code        , 0x1);
    yUNIT_minptr   ("... check wave pointer"             , sm_wave        , 0x1);
    yUNIT_mindnoc  ();
@@ -365,11 +498,12 @@ koios_code_header  (char a_scrp, char a_list, char a_unit)
    sm_mmark = KOIOS_main_beg         (__FILE__, __LINE__, sm_mmark);
 
    yUNIT_mincond  ("verify calling the footer");
-   yUNIT_minval   ("call footer"                        , CODE_footer     ('y', sm_nscrp, sm_nmain, &sm_main, sm_ncode, &sm_code, sm_nwave, &sm_wave, 0, x_share, x_select, 'y'),    0);
-   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,   99);
-   yUNIT_minptr   ("... check main pointer"             , sm_main       , 0x0);
-   yUNIT_minptr   ("... check code pointer"             , sm_code       , 0x0);
-   yUNIT_minptr   ("... check wave pointer"             , sm_wave       , 0x0);
+   yUNIT_minval   ("call footer"                        , CODE_footer     ('y', sm_nunit, sm_nmain, &sm_main, sm_nhead, &sm_head, sm_ncode, &sm_code, sm_nwave, &sm_wave, 0, x_share, x_select, 'y'),    0);
+   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,   96);
+   yUNIT_minptr   ("... check main pointer"             , sm_main        , 0x0);
+   yUNIT_minptr   ("... check header pointer"           , sm_head        , 0x0);
+   yUNIT_minptr   ("... check code pointer"             , sm_code        , 0x0);
+   yUNIT_minptr   ("... check wave pointer"             , sm_wave        , 0x0);
    yUNIT_mindnoc  ();
 
    sm_cmark = KOIOS_code_end         (__FILE__, __LINE__, sm_cmark);
@@ -461,7 +595,7 @@ koios_code_scrp         (char a_scrp, char a_list, char a_unit)
    sm_mmark = KOIOS_main_scrp        (__FILE__, __LINE__, sm_mmark,   2);
    sm_cmark = KOIOS_code_prcs        (__FILE__, __LINE__, sm_cmark,  21);
    sm_cmark = KOIOS_code_scrp        (__FILE__, __LINE__, sm_cmark,  21,  2, "0b/K", "second layer");
-   sm_wmark = KOIOS_wave_scrp        (__FILE__, __LINE__, sm_wmark,   1, "apate"           , "first testing"    , '0', 'a', '·');
+   sm_wmark = KOIOS_wave_scrp        (__FILE__, __LINE__, sm_wmark,   1, "koios"     , "koios_zzzz"      , "first testing"    , '0', 'a', '·');
 
    yUNIT_mincond  ("verify writing a SHARED");
    yUNIT_minval   ("write code line"                    , CODE__shared   (sm_ncode  , sm_main    , sm_head    , sm_code    , sm_wave    , G_RUN_CREATE, "SCRP"  ,  42, "SHARED", "some common data"    , ""               , ""               , ""          , ""               , ""          , ""    , ""       , '-', '-', '-',   0, 'o', 'g', &x_share, &x_select),    0);
@@ -472,7 +606,7 @@ koios_code_scrp         (char a_scrp, char a_list, char a_unit)
 
    sm_cmark = KOIOS_code_prcs        (__FILE__, __LINE__, sm_cmark,  42);
    sm_cmark = KOIOS_code_shar        (__FILE__, __LINE__, sm_cmark,  42, 'o', "some common data");
-   sm_wmark = KOIOS_wave_scrp        (__FILE__, __LINE__, sm_wmark,   2, "apate"           , "second layer"     , '0', 'b', 'K');
+   sm_wmark = KOIOS_wave_scrp        (__FILE__, __LINE__, sm_wmark,   2, "koios"     , "koios_zzzz"      , "second layer"     , '0', 'b', 'K');
 
    yUNIT_mincond  ("verify writing SECT");
    yUNIT_minval   ("write code line"                    , CODE__sect     (sm_ncode  , sm_main    , sm_head    , sm_code    , sm_wave    , G_RUN_CREATE, "SHARED",  63, "SECT"  , "later stuff"         , ""               , ""               , ""          , ""               , ""          , ""    , ""       , '-', '-', '-',   0, '-', '-', &x_share, &x_select),    0);
@@ -1013,6 +1147,7 @@ main                    (int a_argc, char *a_argv [])
    koios_code_expect    (++n, x_list, x_unit);
    koios_code_suffix    (++n, x_list, x_unit);
    koios_code_select    (++n, x_list, x_unit);
+   koios_code_yenv      (++n, x_list, x_unit);
    koios_code_header    (++n, x_list, x_unit);
    koios_code_prep      (++n, x_list, x_unit);
    koios_code_scrp      (++n, x_list, x_unit);
