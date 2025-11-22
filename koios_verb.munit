@@ -1,5 +1,5 @@
 /*===============================[[ beg-code ]]===============================*/
-#include    "koios.h"
+#include    "master.munit"
 
 
 
@@ -26,7 +26,7 @@ koios_verb_data           (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
    /*---(script)-------------------------*/
 
    yUNIT_mincond  ("verify quick success");
@@ -136,7 +136,7 @@ koios_verb_data           (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    /*---(complete)-----------------------*/
-   PROG__unit_end ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -165,7 +165,7 @@ koios_verb_cursor         (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
    /*---(script)-------------------------*/
 
    yUNIT_mincond  ("verify quick success");
@@ -345,8 +345,7 @@ koios_verb_cursor         (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    /*---(complete)-----------------------*/
-   PROG__unit_end ();
-   yUNIT_minprcs  ();
+   KOIOS_scrp_finish ();
    return 0;
 }
 
@@ -360,7 +359,7 @@ koios_verb_detail         (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("verify quick success by name");
    yerr_ureset   ();
@@ -390,7 +389,7 @@ koios_verb_detail         (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    /*---(complete)-----------------------*/
-   PROG__unit_end ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -409,7 +408,7 @@ koios_verb_addto          (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("verify gathering indexes");
    yerr_ureset   ();
@@ -486,7 +485,7 @@ koios_verb_addto          (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    /*---(complete)-----------------------*/
-   PROG__unit_end ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -509,8 +508,7 @@ koios_verb_under          (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   PROG__unit_quiet  ();
-   yerr_uopen    ();
+   KOIOS_scrp_start ('y');
 
    yerr_ureset   ();
    yUNIT_mincond  ("verify PREP verb");
@@ -714,7 +712,7 @@ koios_verb_under          (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    /*---(complete)-----------------------*/
-   PROG__unit_end ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -737,8 +735,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   PROG__unit_quiet  ();
-   yerr_uopen    ();
+   KOIOS_scrp_start ('y');
 
    yUNIT_mincond  ("verify quick success");
    yerr_ureset   ();
@@ -848,7 +845,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr   ("... check location"                 , x_locn      , '-');
    yUNIT_minptr   ("... check conv"                     , x_conv      , 0);
    yUNIT_minptr   ("... check code"                     , x_code      , 0);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   ('['), "apate.unit:75:0: error: verb ÂGLOBALÊ good; BUT, not allowed outside unit_head.unit, unit_comp.unit, or unit_data.unit");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   ('['), "apate.unit:75:0: error: verb ÂGLOBALÊ good; BUT, not allowed outside unit_head.unit, unit_wide.unit, or unit_data.unit");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify SHARED in normal unit");
@@ -872,7 +869,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr   ("... check location"                 , x_locn      , '-');
    yUNIT_minptr   ("... check conv"                     , x_conv      , 0);
    yUNIT_minptr   ("... check code"                     , x_code      , 0);
-   yUNIT_minstr   ("... check error message"             , yerr_upeek   ('['), "unit_head.unit:95:0: error: verb ÂSHAREDÊ good; BUT, not allowed inside unit_head.unit, unit_comp.unit, or unit_data.unit");
+   yUNIT_minstr   ("... check error message"             , yerr_upeek   ('['), "unit_head.unit:95:0: error: verb ÂSHAREDÊ good; BUT, not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify parsing a COND verb");
@@ -912,7 +909,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    /*---(complete)-----------------------*/
-   yerr_uclose   ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -924,8 +921,7 @@ koios_verb_ditto          (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("verify non-dittoable and non-selctable verbs");
    yUNIT_minval   ("call ditto for PREP"                 , VERB_dittoable  ("PREP"       ), 0);
@@ -971,7 +967,7 @@ koios_verb_ditto          (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("call select for empty"               , VERB_selectable (""           ), 0);
    yUNIT_mindnoc  () ;
 
-   PROG__unit_end    ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }

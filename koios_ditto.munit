@@ -1,5 +1,5 @@
 /*===============================[[ beg-code ]]===============================*/
-#include    "koios.h"
+#include    "master.munit"
 
 
 
@@ -14,10 +14,7 @@ koios_ditto_index  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("verify on valid indexes");
    yUNIT_minval  ("... run 0"                          , DITTO__index ('0'), 0);
@@ -46,8 +43,7 @@ koios_ditto_index  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc ();
 
    /*---(complete)-----------------------*/
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -63,10 +59,7 @@ koios_ditto_getset (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("verify clean start");
    yUNIT_minval  ("... init"                           , DITTO_init ()       , 0);
@@ -215,8 +208,7 @@ koios_ditto_getset (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... show desc"                      , x_desc                           , "");
    yUNIT_mindnoc ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -240,10 +232,7 @@ koios_ditto_toggle (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("prepare clean start");
    system ("touch /tmp/apate.unit           2> /dev/null");
@@ -348,9 +337,8 @@ koios_ditto_toggle (char a_scrp, char a_list, char a_unit)
    fclose (x_main);
    yUNIT_mindnoc  ();
 
-   PROG__unit_end    ();
    system ("rm    -f /tmp/apate.unit        > /dev/null   2>&1");
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -367,10 +355,7 @@ koios_ditto_read   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("verify normal, non-ditto action");
    x_ditto =    0;  x_line =    1; x_dline =    0;
@@ -418,8 +403,7 @@ koios_ditto_read   (char a_scrp, char a_list, char a_unit)
    yUNIT_minval  ("... dline"                          , x_dline                  ,  46);
    yUNIT_mindnoc ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -433,7 +417,7 @@ koios_ditto_desc   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("verify updating name successfully");
    yUNIT_minval  ("call naming"                        , DITTO_parse__desc     ("original cond", x_desc)    , 0);
@@ -450,7 +434,7 @@ koios_ditto_desc   (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... description"                    , x_desc                , "[ - ]- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ");
    yUNIT_mindnoc ();
 
-   PROG__unit_end    ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -477,11 +461,9 @@ koios_ditto_parse  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-   system ("rm    -f /tmp/apate.unit        > /dev/null   2>&1");
+   KOIOS_scrp_start ('-');
 
+   system ("rm    -f /tmp/apate.unit        > /dev/null   2>&1");
 
    yUNIT_mincond  ("create a test script");
    system ("echo \"\"                                                                                                                        > /tmp/apate.unit");
@@ -675,9 +657,8 @@ koios_ditto_parse  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("close the script file"              , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, x_nscrp, &x_scrp)    ,    1);
    yUNIT_mindnoc  ();
 
-   PROG__unit_end    ();
    system ("rm    -f /tmp/apate.unit        > /dev/null   2>&1");
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }

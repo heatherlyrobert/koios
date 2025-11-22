@@ -134,7 +134,7 @@ VERB__by_name           (char a_verb [LEN_LABEL], char *r_indent, char r_desc [L
    char        rce         =  -10;
    int         i           =    0;
    /*---(header)-------------------------*/
-   debug_uver   ylog_uenter  (__FUNCTION__);
+   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(default)------------------------*/
    if (r_desc   != NULL)  strcpy (r_desc, "");
    if (r_indent != NULL)  *r_indent =    0;
@@ -149,9 +149,9 @@ VERB__by_name           (char a_verb [LEN_LABEL], char *r_indent, char r_desc [L
    if (r_ditto  != NULL)  *r_ditto  =  '-';
    if (r_select != NULL)  *r_select =  '-';
    /*---(defense)------------------------*/
-   debug_uver   ylog_upoint  ("a_verb"    , a_verb);
+   UDEBUG_KOIOS   ylog_upoint  ("a_verb"    , a_verb);
    --rce;  if (a_verb == NULL || a_verb [0] == '\0') {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(prepare)------------------------*/
@@ -163,7 +163,7 @@ VERB__by_name           (char a_verb [LEN_LABEL], char *r_indent, char r_desc [L
       if (s_verbs [i].v_name [0] != a_verb [0])         continue;
       if (strcmp (s_verbs [i].v_name, a_verb) != 0)     continue;
       /*---(save-back)-------------------*/
-      debug_uver   ylog_uvalue  ("FOUND"     , i);
+      UDEBUG_KOIOS   ylog_uvalue  ("FOUND"     , i);
       if (r_indent != NULL)  *r_indent = s_verbs [i].v_indent;
       if (r_desc   != NULL)  strcpy (r_desc, s_verbs [i].v_desc);
       if (r_spec   != NULL)  *r_spec   = s_verbs [i].v_spec;
@@ -177,13 +177,13 @@ VERB__by_name           (char a_verb [LEN_LABEL], char *r_indent, char r_desc [L
       if (r_ditto  != NULL)  *r_ditto  = s_verbs [i].v_ditto;
       if (r_select != NULL)  *r_select = s_verbs [i].v_select;
       /*---(complete)--------------------*/
-      debug_uver   ylog_uexit   (__FUNCTION__);
+      UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
       return i;
       /*---(done)------------------------*/
    }
    /*---(complete)-----------------------*/
    --rce;
-   debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+   UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
    return rce;
 }
 
@@ -249,7 +249,7 @@ VERB__by_cursor         (char a_scope, char a_dir, char r_verb [LEN_LABEL], char
       else                x_found = 'y';
       x_last  = c;
       if (x_curr == 999)  continue;
-      debug_uver   ylog_uvalue  ("FOUND"     , c);
+      UDEBUG_KOIOS   ylog_uvalue  ("FOUND"     , c);
       break;
       /*---(done)------------------------*/
    }
@@ -257,7 +257,7 @@ VERB__by_cursor         (char a_scope, char a_dir, char r_verb [LEN_LABEL], char
    if (x_found == 'Y') { --i; x_found = 'y'; }
    /*---(trouble)------------------------*/
    --rce;  if (x_found != 'y') {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(save-back)-------------------*/
@@ -275,7 +275,7 @@ VERB__by_cursor         (char a_scope, char a_dir, char r_verb [LEN_LABEL], char
    if (r_ditto  != NULL)  *r_ditto  = s_verbs [i].v_ditto;
    if (r_select != NULL)  *r_select = s_verbs [i].v_select;
    /*---(complete)-----------------------*/
-   debug_uver   ylog_uexit   (__FUNCTION__);
+   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
    return i;
 }
 
@@ -285,7 +285,7 @@ VERB__by_index          (char n, char r_verb [LEN_LABEL], char *r_indent, char r
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    /*---(header)-------------------------*/
-   debug_uver   ylog_uenter  (__FUNCTION__);
+   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(default)------------------------*/
    if (r_verb   != NULL)  strcpy (r_verb, "");
    if (r_indent != NULL)  *r_indent =    0;
@@ -303,9 +303,9 @@ VERB__by_index          (char n, char r_verb [LEN_LABEL], char *r_indent, char r
    /*---(prepare)------------------------*/
    if (s_nverb < 0)  VERB_init ();
    /*---(defense)------------------------*/
-   debug_uver   ylog_uvalue  ("s_nverb"   , s_nverb);
+   UDEBUG_KOIOS   ylog_uvalue  ("s_nverb"   , s_nverb);
    --rce;  if (n < 0 || n >= s_nverb) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(save-back)----------------------*/
@@ -323,7 +323,7 @@ VERB__by_index          (char n, char r_verb [LEN_LABEL], char *r_indent, char r
    if (r_ditto  != NULL)  *r_ditto  = s_verbs [n].v_ditto;
    if (r_select != NULL)  *r_select = s_verbs [n].v_select;
    /*---(complete)-----------------------*/
-   debug_uver   ylog_uexit   (__FUNCTION__);
+   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
    return n;
 }
 
@@ -408,9 +408,9 @@ VERB__parse_under       (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
    if (a_is == 'W')                          { *b_under = a_is;  return 5; }
    /*---(trouble check)------------------*/
    --rce;  if (a_under  != *b_under) {
-      debug_uver   ylog_unote   ("wrong line ownership (dangerous)");
+      UDEBUG_KOIOS   ylog_unote   ("wrong line ownership (dangerous)");
       yerr_uerror ("%s:%d:0: error: verb å%sæ is good; BUT, under (%c) while needs to be under (%c)", a_nscrp, a_line, a_verb, *b_under, a_under);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(save-back)----------------------*/
@@ -439,7 +439,7 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
    char      (*x_conv) (void)  = NULL;
    char      (*x_code) (void)  = NULL;
    /*---(header)-------------------------*/
-   debug_uver   ylog_uenter  (__FUNCTION__);
+   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(default)------------------------*/
    if (r_verb  != NULL)  strlcpy  (r_verb , "", LEN_LABEL);
    if (r_indx  != NULL)  *r_indx  = -1;
@@ -448,20 +448,20 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
    if (r_conv  != NULL)  *r_conv  = NULL;
    if (r_code  != NULL)  *r_code  = NULL;
    /*---(defense)------------------------*/
-   debug_uver   ylog_upoint  ("a_nscrp"   , a_nscrp);
+   UDEBUG_KOIOS   ylog_upoint  ("a_nscrp"   , a_nscrp);
    --rce;  if (a_nscrp == NULL) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   debug_uver   ylog_upoint  ("a_field"   , a_field);
+   UDEBUG_KOIOS   ylog_upoint  ("a_field"   , a_field);
    --rce;  if (a_field == NULL || strlen (a_field) <= 0) {
       yerr_uerror ("%s:%d:0: error: no verb found (empty or null)", a_nscrp, a_line);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   debug_uver   ylog_upoint  ("b_under"   , b_under);
+   UDEBUG_KOIOS   ylog_upoint  ("b_under"   , b_under);
    --rce;  if (b_under == NULL) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(prepare)------------------------*/
@@ -476,44 +476,44 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
    ystrutrim (x_word, LEN_FULL);
    p = strchr (x_word, ' ');
    if (p != NULL)  p [0] = '\0';
-   debug_uver   ylog_unote   (x_word);
+   UDEBUG_KOIOS   ylog_unote   (x_word);
    /*---(find verb)----------------------*/
    x_indx = VERB__by_name (x_word, NULL, NULL, &x_spec, &x_locn, &x_is, &x_under, NULL, NULL, &x_conv, &x_code, NULL, NULL);
-   debug_uver   ylog_uvalue  ("x_indx"    , x_indx);
+   UDEBUG_KOIOS   ylog_uvalue  ("x_indx"    , x_indx);
    --rce;  if (x_indx < 0) {
-      debug_uver   ylog_unote   ("verb not found");
+      UDEBUG_KOIOS   ylog_unote   ("verb not found");
       rc = yerr_uerror ("%s:%d:0: error: verb å%sæ not recognized/found", a_nscrp, a_line, x_word);
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    strlcpy (x_verb, x_word, LEN_LABEL);
    /*---(failure)------------------------*/
    --rce;  if (x_indx == -1) {
       yerr_uerror ("%s:%d:0: error: verb å%sæ not recognized/found", a_nscrp, a_line, x_word);
-      debug_uver   ylog_unote   ("verb not found");
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      UDEBUG_KOIOS   ylog_unote   ("verb not found");
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(file limitations)---------------*/
    --rce;  IF_GLOBAL {
       if (x_locn == 'n') {
-         debug_uver   ylog_unote   ("verb not allowed in unit_head.unit, unit_comp.unit, or unit_data.unit");
-         yerr_uerror ("%s:%d:0: error: verb å%sæ good; BUT, not allowed inside unit_head.unit, unit_comp.unit, or unit_data.unit", a_nscrp, a_line, x_verb);
-         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+         UDEBUG_KOIOS   ylog_unote   ("verb not allowed in unit_head.unit, unit_wide.unit, or unit_data.unit");
+         yerr_uerror ("%s:%d:0: error: verb å%sæ good; BUT, not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit", a_nscrp, a_line, x_verb);
+         UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
          return rce;
       }
    } else {
       if (x_locn == 'm') {
-         debug_uver   ylog_unote   ("verb not allowed outside unit_head.unit, unit_comp.unit, or unit_data.unit");
-         yerr_uerror ("%s:%d:0: error: verb å%sæ good; BUT, not allowed outside unit_head.unit, unit_comp.unit, or unit_data.unit", a_nscrp, a_line, x_verb);
-         debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+         UDEBUG_KOIOS   ylog_unote   ("verb not allowed outside unit_head.unit, unit_wide.unit, or unit_data.unit");
+         yerr_uerror ("%s:%d:0: error: verb å%sæ good; BUT, not allowed outside unit_head.unit, unit_wide.unit, or unit_data.unit", a_nscrp, a_line, x_verb);
+         UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
          return rce;
       }
    }
    /*---(underneath problem)-------------*/
    rc = VERB__parse_under (a_nscrp, a_line, x_verb, x_is, x_under, b_under);
    --rce;  if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(save-back)----------------------*/
@@ -524,7 +524,7 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
    if (r_conv  != NULL)  *r_conv  = x_conv;
    if (r_code  != NULL)  *r_code  = x_code;
    /*---(complete)-----------------------*/
-   debug_uver   ylog_uexit   (__FUNCTION__);
+   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
    return 1;
 }
 

@@ -20,7 +20,7 @@ koios_prog_args  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all ('*', '-');
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("make testing directories");
    sprintf (t, "mkdir %s  > /dev/null  2>&1", sm_koios);
@@ -266,7 +266,7 @@ koios_prog_args  (char a_scrp, char a_list, char a_unit)
    system  (t);
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -281,6 +281,7 @@ koios_prog_begin   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("make testing directories");
    sprintf (t, "mkdir %s  > /dev/null  2>&1", sm_koios);
@@ -333,9 +334,9 @@ koios_prog_begin   (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr   ("check unit testing file"            , yenv_uexists (t)   , '-');
    yUNIT_mindnoc  ();
 
-   yUNIT_mincond  ("verify unit_comp file");
+   yUNIT_mincond  ("verify unit_wide file");
    chdir (sm_koios);
-   strcpy  (s, "unit_comp.unit");
+   strcpy  (s, "unit_wide.unit");
    sprintf (t, "touch %s%s  > /dev/null  2>&1", sm_koios, s);
    system  (t);
    sprintf (t, "%s%s", sm_koios, s);
@@ -343,14 +344,14 @@ koios_prog_begin   (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr   ("check unit testing file"            , yenv_uexists (t)   , 'r');
    yUNIT_minval   ("call init (defaults)"               , PROG__init ()      ,   0);
    yUNIT_minstr   ("... check cwd"                      , my.cwd             , "¬");
-   yUNIT_minval   ("call args (string)"                 , PROG__args_string ("koios --code unit_comp"),  0);
+   yUNIT_minval   ("call args (string)"                 , PROG__args_string ("koios --code unit_wide"),  0);
    yUNIT_minval   ("call begin"                         , PROG__begin ()     ,  0);
-   yUNIT_minstr   ("... check script"                   , my_loc.l_scrp      , "unit_comp.unit");
-   yUNIT_minstr   ("... check main"                     , my_loc.l_main      , "unit_comp.tmp");
-   yUNIT_minstr   ("... check header"                   , my_loc.l_head      , "unit_comp.h");
-   yUNIT_minstr   ("... check code"                     , my_loc.l_code      , "unit_comp.cs");
-   yUNIT_minstr   ("... check wave"                     , my_loc.l_wave      , "unit_comp.wave");
-   yUNIT_minstr   ("... check conv"                     , my_loc.l_conv      , "unit_comp.unit.new");
+   yUNIT_minstr   ("... check script"                   , my_loc.l_scrp      , "unit_wide.unit");
+   yUNIT_minstr   ("... check main"                     , my_loc.l_main      , "unit_wide.tmp");
+   yUNIT_minstr   ("... check header"                   , my_loc.l_head      , "unit_wide.h");
+   yUNIT_minstr   ("... check code"                     , my_loc.l_code      , "unit_wide.cs");
+   yUNIT_minstr   ("... check wave"                     , my_loc.l_wave      , "unit_wide.wave");
+   yUNIT_minstr   ("... check conv"                     , my_loc.l_conv      , "unit_wide.unit.new");
    sprintf (t, "rm -f %s%s  > /dev/null  2>&1", sm_koios, s);
    system  (t);
    yUNIT_minchr   ("check unit testing file"            , yenv_uexists (t)   , '-');
@@ -384,7 +385,7 @@ koios_prog_begin   (char a_scrp, char a_list, char a_unit)
    system  (t);
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -397,6 +398,7 @@ koios_prog_dawn  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
+   KOIOS_scrp_start ('-');
 
    sprintf (t, "touch %s", sm_nunit);
 
@@ -418,7 +420,8 @@ koios_prog_dawn  (char a_scrp, char a_list, char a_unit)
 
    sm_mmark = KOIOS_main_beg (__FILE__, __LINE__, sm_mmark);
    sm_cmark = KOIOS_code_beg (__FILE__, __LINE__, sm_cmark);
-   KOIOS_close_all ('*');
+
+   KOIOS_scrp_reset ();
 
    yUNIT_mincond  ("run DAWN as non-existant run type");
    yUNIT_minval   ("... create scrp file"               , system (t)             ,    0);
@@ -436,7 +439,7 @@ koios_prog_dawn  (char a_scrp, char a_list, char a_unit)
    yUNIT_minptr   ("... check conv pointer"             , sm_conv                ,    0);
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_reset ();
 
    yUNIT_mincond  ("run DAWN as DEBUG");
    yUNIT_minval   ("... create scrp file"               , system (t)             ,    0);
@@ -456,7 +459,8 @@ koios_prog_dawn  (char a_scrp, char a_list, char a_unit)
 
    sm_mmark = KOIOS_main_beg (__FILE__, __LINE__, sm_mmark);
    sm_cmark = KOIOS_code_beg (__FILE__, __LINE__, sm_cmark);
-   KOIOS_close_all ('*');
+
+   KOIOS_scrp_reset ();
 
    yUNIT_mincond  ("run DAWN as UPDATE");
    yUNIT_minval   ("... create scrp file"               , system (t)             ,    0);
@@ -475,8 +479,8 @@ koios_prog_dawn  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    sm_vmark = KOIOS_conv_beg (sm_vmark);
-   KOIOS_close_all ('*');
 
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -489,6 +493,7 @@ koios_prog_dusk  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
+   KOIOS_scrp_start ('-');
 
    sprintf (t, "touch %s", sm_nunit);
 
@@ -514,7 +519,8 @@ koios_prog_dusk  (char a_scrp, char a_list, char a_unit)
    sm_cmark = KOIOS_code_stats       (__FILE__, __LINE__, sm_cmark);
    sm_cmark = KOIOS_code_verbs       (__FILE__, __LINE__, sm_cmark);
    sm_cmark = KOIOS_code_main        (__FILE__, __LINE__, sm_cmark);
-   KOIOS_close_all ('*');
+
+   KOIOS_scrp_reset ();
 
    yUNIT_mincond  ("run DAWN as non-existant run type");
    yUNIT_minval   ("... create scrp file"               , system (t)             ,    0);
@@ -533,7 +539,7 @@ koios_prog_dusk  (char a_scrp, char a_list, char a_unit)
    yUNIT_minptr   ("... check conv pointer"             , sm_conv                ,    0);
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_reset ();
 
    yUNIT_mincond  ("run DUSK as DEBUG");
    yUNIT_minval   ("... create scrp file"               , system (t)             ,    0);
@@ -557,7 +563,8 @@ koios_prog_dusk  (char a_scrp, char a_list, char a_unit)
    sm_cmark = KOIOS_code_stats       (__FILE__, __LINE__, sm_cmark);
    sm_cmark = KOIOS_code_verbs       (__FILE__, __LINE__, sm_cmark);
    sm_cmark = KOIOS_code_main        (__FILE__, __LINE__, sm_cmark);
-   KOIOS_close_all ('*');
+
+   KOIOS_scrp_reset ();
 
    yUNIT_mincond  ("run DUSK as UPDATE");
    yUNIT_minval   ("... create scrp file"               , system (t)             ,    0);
@@ -578,7 +585,8 @@ koios_prog_dusk  (char a_scrp, char a_list, char a_unit)
 
    sm_vmark = KOIOS_conv_beg (sm_vmark);
    sm_vmark = KOIOS_conv_end (sm_vmark);
-   KOIOS_close_all ('*');
+
+   KOIOS_scrp_reset ();
 
    yUNIT_mincond  ("run DUSK as UPDATE (with good/replace)");
    yUNIT_minval   ("... create scrp file"               , system (t)             ,    0);
@@ -597,7 +605,7 @@ koios_prog_dusk  (char a_scrp, char a_list, char a_unit)
    yUNIT_minptr   ("... check conv pointer"             , sm_conv                ,    0);
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -620,11 +628,12 @@ koios_prog_driver  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
+   KOIOS_scrp_start_open  ('y');
 
    KOIOS_data_variety (sm_nunit);
-   KOIOS_open_all  ('*', 'y');
 
    yUNIT_mincond  ("run single DRIVER as CREATE (prep)");
+   yUNIT_minchr   ("turn on debug"                      , my.debug = 'y'                  ,  'y');
    yUNIT_minval   ("run driver"                         , PROG_driver  ('-', G_RUN_CREATE , sm_nunit, &sm_nline, &sm_scrp, sm_main, sm_head, sm_code, sm_wave, sm_conv, x_last, &x_nrecd, &x_under, &x_ditto, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &sm_share, &sm_select),    1);
    yUNIT_minval   ("... check line number"              , sm_nline                ,    8);
    yUNIT_minval   ("... check records used"             , x_nrecd                 ,    1);
@@ -682,7 +691,7 @@ koios_prog_driver  (char a_scrp, char a_list, char a_unit)
    yUNIT_minptr   ("... code pointer"                   , my_cur.c_code           ,    1);
    yUNIT_minptr   ("... conv pointer"                   , my_cur.c_conv           ,    1);
    yUNIT_minstr   ("... description"                    , my_cur.c_desc           ,  "fake header");
-   yUNIT_minstr   ("... method"                         , my_cur.c_method         ,  "apate.h");
+   yUNIT_minstr   ("... method"                         , my_cur.c_method         ,  "koios.h");
    yUNIT_minstr   ("... args"                           , my_cur.c_args           ,  "");
    yUNIT_minstr   ("... test"                           , my_cur.c_test           ,  "");
    yUNIT_minstr   ("... expect"                         , my_cur.c_expect         ,  "");
@@ -1235,7 +1244,7 @@ koios_prog_driver  (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr   ("... check select"                   , sm_select               ,  '-');
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish_close ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -1243,15 +1252,14 @@ koios_prog_driver  (char a_scrp, char a_list, char a_unit)
 char
 koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
 {
-   char       *x_argA  [3] =  { "koios_debug"       , "--conv"       , "apate"      };
+   char       *x_argA  [3] =  { "koios_debug"       , "--conv"       , "koios_live" };
    char       *x_argB  [3] =  { "koios_debug"       , "--conv"       , "unit_head"  };
 
    yUNIT_minscrpy ("koios", "koios_prog", "(PROG) verify script placements and data in normal units");
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all  ('*', '-');
-   KOIOS_reset ();
+   KOIOS_scrp_start  ('-');
    KOIOS_globals_empty (sm_globals);
 
    KOIOS_topline_unit (sm_nunit);
@@ -1264,18 +1272,16 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("verify PREP can not come after SCRP");
    yerr_ureset    ();
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"SCRP          (SCRP) verify system startup          0s  tbd                          \"                                                              >  /tmp/apate.unit");
-   system ("echo \"PREP          global function headers             \"                                                                                                       >> /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP          (SCRP) verify system startup          0s  tbd                          ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "PREP          global function headers             ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "apate.unit:2:0: error: verb åPREPæ is good; BUT, under (S) while needs to be under (-)");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_live.unit:2:0: error: verb åPREPæ is good; BUT, under (S) while needs to be under (-)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify SCRP can come first");
    yerr_ureset    ();
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"SCRP          (SCRP) verify system startup          0s  tbd                          \"                                                              >  /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP          (SCRP) verify system startup          0s  tbd                          ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA),    0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
    yUNIT_minval   ("... converted count"                , yenv_ulines      (sm_nunit  ),   20);
@@ -1304,8 +1310,7 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("verify SCRP with no additional data is legal");
    yerr_ureset    ();
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"SCRP                                                   \"                                                              >  /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP                                                   ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA),    0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
    yUNIT_minval   ("... converted count"                , yenv_ulines      (sm_nunit  ),   20);
@@ -1334,35 +1339,33 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("attempt SHARED with illegal ids");
    yerr_ureset    ();
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"SHARED        chance to share                          \"                                                              >  /tmp/apate.unit");
-   system ("echo \"SHARED   -A-  chance to share                          \"                                                              >> /tmp/apate.unit");
-   system ("echo \"SHARED   -ò-  chance to share                          \"                                                              >> /tmp/apate.unit");
-   system ("echo \"SHARED    a   chance to share                          \"                                                              >> /tmp/apate.unit");
-   system ("echo \"SHARED   [a]  chance to share                          \"                                                              >> /tmp/apate.unit");
-   system ("echo \"SHARED   (a)  chance to share                          \"                                                              >> /tmp/apate.unit");
-   system ("echo \"SHARED   -1-  chance to share                          \"                                                              >> /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SHARED        chance to share                          ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED   -A-  chance to share                          ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED   -ò-  chance to share                          ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED    a   chance to share                          ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED   [a]  chance to share                          ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED   (a)  chance to share                          ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED   -1-  chance to share                          ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    7);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "apate.unit:1:0: error: åSHAREDæ missing valid identifier string, e.g., å-a-æ");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:2:0: error: åSHARED   -A-æ identifier (A) not valid åABCDEFGHIJKLMNOPQRSTUVWXYZæ");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:3:0: error: åSHARED   -ò-æ identifier (ò) not valid åABCDEFGHIJKLMNOPQRSTUVWXYZæ");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:4:0: error: åSHARED    aæ missing valid identifier string, e.g., å-a-æ");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:5:0: error: åSHARED   [a]æ missing valid identifier string, e.g., å-a-æ");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:6:0: error: åSHARED   (a)æ missing valid identifier string, e.g., å-a-æ");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:7:0: error: åSHARED   -1-æ identifier (1) not valid åABCDEFGHIJKLMNOPQRSTUVWXYZæ");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_live.unit:1:0: error: åSHAREDæ missing valid identifier string, e.g., å-a-æ");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:2:0: error: åSHARED   -A-æ identifier (A) not valid åABCDEFGHIJKLMNOPQRSTUVWXYZæ");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:3:0: error: åSHARED   -ò-æ identifier (ò) not valid åABCDEFGHIJKLMNOPQRSTUVWXYZæ");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:4:0: error: åSHARED    aæ missing valid identifier string, e.g., å-a-æ");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:5:0: error: åSHARED   [a]æ missing valid identifier string, e.g., å-a-æ");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:6:0: error: åSHARED   (a)æ missing valid identifier string, e.g., å-a-æ");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:7:0: error: åSHARED   -1-æ identifier (1) not valid åABCDEFGHIJKLMNOPQRSTUVWXYZæ");
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("attempt GLOBAL/CONFIG in normal unit");
    yerr_ureset    ();
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"GLOBAL   -A-  chance to share                          \"                                                              >  /tmp/apate.unit");
-   system ("echo \"CONFIG   -ò-  chance to share                          \"                                                              >> /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "GLOBAL   -A-  chance to share                          ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "CONFIG   -ò-  chance to share                          ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    2);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "apate.unit:1:0: error: verb åGLOBALæ good; BUT, not allowed outside unit_head.unit or unit_data.unit");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:2:0: error: verb åCONFIGæ good; BUT, not allowed outside unit_head.unit or unit_data.unit");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_live.unit:1:0: error: verb åGLOBALæ good; BUT, not allowed outside unit_head.unit, unit_wide.unit, or unit_data.unit");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:2:0: error: verb åCONFIGæ good; BUT, not allowed outside unit_head.unit, unit_wide.unit, or unit_data.unit");
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc  ();
 
@@ -1371,23 +1374,21 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
    yerr_ureset    ();
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argB), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    7);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "unit_head.unit:2:0: error: verb åSCRPæ good; BUT, not allowed inside unit_head.unit or unit_data.unit");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:3:0: error: verb åSHAREDæ good; BUT, not allowed inside unit_head.unit or unit_data.unit");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:4:0: error: verb åSHAREDæ good; BUT, not allowed inside unit_head.unit or unit_data.unit");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:5:0: error: verb åSECTæ good; BUT, not allowed inside unit_head.unit or unit_data.unit");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:6:0: error: verb åSCRPæ good; BUT, not allowed inside unit_head.unit or unit_data.unit");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:7:0: error: verb åSCRPæ good; BUT, not allowed inside unit_head.unit or unit_data.unit");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:8:0: error: verb åSCRPæ good; BUT, not allowed inside unit_head.unit or unit_data.unit");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "unit_head.unit:2:0: error: verb åSCRPæ good; BUT, not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:3:0: error: verb åSHAREDæ good; BUT, not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:4:0: error: verb åSHAREDæ good; BUT, not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:5:0: error: verb åSECTæ good; BUT, not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:6:0: error: verb åSCRPæ good; BUT, not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:7:0: error: verb åSCRPæ good; BUT, not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "unit_head.unit:8:0: error: verb åSCRPæ good; BUT, not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify GLOBAL/CONFIG in unithead");
    yerr_ureset    ();
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"PREP          global function headers             \"                                                                     >  /tmp/apate.unit");
-   system ("echo \"GLOBAL   -A-  chance to share                          \"                                                              >> /tmp/apate.unit");
-   system ("echo \"CONFIG   -ò-  chance to share                          \"                                                              >> /tmp/apate.unit");
-   system ("mv -f /tmp/apate.unit  /tmp/unit_head.unit");
+   KOIOS__append  ('[', UNIT_HEAD_UNIT, "PREP          global function headers             ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "GLOBAL   -A-  chance to share                          ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "CONFIG   -ò-  chance to share                          ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argB),    0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
    yUNIT_minval   ("... converted count"                , yenv_ulines      (sm_hunit  ),   35);
@@ -1429,7 +1430,7 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "(n/a)");
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -1437,22 +1438,20 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
 char
 koios_prog_globals    (char a_scrp, char a_list, char a_unit)
 {
-   char       *x_argA  [3] =  { "koios_debug"       , "--conv"       , "apate"      };
+   char       *x_argA  [3] =  { "koios_debug"       , "--conv"       , "koios_live" };
    char       *x_argB  [3] =  { "koios_debug"       , "--conv"       , "unit_head"  };
 
    yUNIT_minscrpy ("koios", "koios_prog", "(PROG) verify globals placement and contents");
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all   ('*', '-');
-   KOIOS_reset      ();
+   KOIOS_scrp_start ('-');
    KOIOS_globals_empty (sm_globals);
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify passible placement");
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"PREP          global function headers             \"                                                                                                       >  /tmp/apate.unit");
-   system ("echo \"   global     global variable                      - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "PREP          global function headers             ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA),    0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
    yUNIT_minval   ("... converted count"                , yenv_ulines      (sm_nunit  ),   18);
@@ -1479,31 +1478,28 @@ koios_prog_globals    (char a_scrp, char a_list, char a_unit)
 
    yerr_ureset    ();
    yUNIT_mincond  ("attempt a global in a SCRP and SHARED");
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"SCRP  [1a/A]  (SCRP) verify openning and closing    0s  open                         \"                                                              >  /tmp/apate.unit");
-   system ("echo \"   global     global variable                      - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
-   system ("echo \"SHARED   -a-  prepare files for use                 0s  prepare                      \"                                                              >> /tmp/apate.unit");
-   system ("echo \"   global     global variable                      - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
-   system ("echo \"   COND  (3)  simple openning                     \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   global     global variable                      - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP  [1a/A]  (SCRP) verify openning and closing    0s  open                         ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED   -a-  prepare files for use                 0s  prepare                      ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   COND  (3)  simple openning                     ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    3);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "apate.unit:2:0: error: verb åglobalæ is good; BUT, under (S) while needs to be under (P)");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:4:0: error: verb åglobalæ is good; BUT, under (S) while needs to be under (P)");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:6:0: error: verb åglobalæ is good; BUT, under (C) while needs to be under (P)");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_live.unit:2:0: error: verb åglobalæ is good; BUT, under (S) while needs to be under (P)");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:4:0: error: verb åglobalæ is good; BUT, under (S) while needs to be under (P)");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:6:0: error: verb åglobalæ is good; BUT, under (C) while needs to be under (P)");
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yerr_ureset    ();
    yUNIT_mincond  ("attempt a global in a GLOBAL and CONFIG");
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"GLOBAL   -B-  example global                        0s  open                         \"                                                              >  /tmp/apate.unit");
-   system ("echo \"   global     global variable                      - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
-   system ("echo \"CONFIG   -ê-  example config                        0s  prepare                      \"                                                              >> /tmp/apate.unit");
-   system ("echo \"   global     global variable                      - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
-   system ("echo \"   COND  (3)  simple openning                     \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   global     global variable                      - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
-   system ("mv -f /tmp/apate.unit  /tmp/unit_head.unit");
+   KOIOS__append  ('[', UNIT_HEAD_UNIT, "GLOBAL   -B-  example global                        0s  open                         ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "CONFIG   -ê-  example config                        0s  prepare                      ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   COND  (3)  simple openning                     ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argB), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    3);
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "unit_head.unit:2:0: error: verb åglobalæ is good; BUT, under (S) while needs to be under (P)");
@@ -1512,7 +1508,111 @@ koios_prog_globals    (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
+   yUNIT_minprcs  ();
+   return 0;
+}
+
+char
+koios_prog_globals2   (char a_scrp, char a_list, char a_unit)
+{
+   char       *x_argA  [3] =  { "koios_debug"       , "--code"       , "unit_head"  };
+   char       *x_argB  [3] =  { "koios_debug"       , "--code"       , "unit_wide"  };
+   char       *x_argC  [3] =  { "koios_debug"       , "--code"       , "unit_data"  };
+
+   yUNIT_minscrpy ("koios", "koios_prog", "(PROG) verify globals integration");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   KOIOS_scrp_start ('-');
+
+   KOIOS_globals_empty (sm_globals);
+
+   yerr_ureset    ();
+   yUNIT_mincond  ("verify creating unit_head.unit");
+   KOIOS__append  ('[', "unit_head.unit", "PREP          global function headers             ");
+   KOIOS__append  ('>', "unit_head.unit", "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
+   KOIOS__append  ('>', "unit_head.unit", "GLOBAL -D-  globally shared steps          0s  tbd        "                                            );
+   KOIOS__append  ('>', "unit_head.unit", "GLOBAL -K-  more globally shared steps     0s  tbd        "                                            );
+
+   yerr_ureset    ();
+   yUNIT_mincond  ("verify globals created by code");
+   yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA),    0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "(n/a)");
+   yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used   ()     , "¬   á···   SH á·····á·····á·····á·····á·   GL á··D··á···K·á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
+   yUNIT_mindnoc  ();
+
+   yerr_ureset    ();
+   yUNIT_mincond  ("verify creating unit_wide.unit");
+   KOIOS__append  ('[', "unit_wide.unit", "GLOBAL -A-  unit_wide global               0s  tbd        "                                            );
+   KOIOS__append  ('>', "unit_wide.unit", "GLOBAL -Y-  another unit_wide_global       0s  tbd        "                                            );
+   KOIOS__append  ('>', "unit_wide.unit", "CONFIG -é-  and a unit_wide config         0s  tbd        "                                            );
+
+   yerr_ureset    ();
+   yUNIT_mincond  ("verify globals created by code");
+   yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argB),    0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "(n/a)");
+   yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used   ()     , "¬   á···   SH á·····á·····á·····á·····á·   GL A··D··á···K·á·····á·····Y·   CO áé····á·····á·····á·····   á   Ï");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify unit_wide headers");
+   yUNIT_minval   ("... converted count"                , yenv_ulines      ("unit_wide.h"),    5);
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '[')      , "/*········· ´······················ ´·········································*/");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '>')      , "int         yUNIT_global_A          (char a_select);");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '>')      , "int         yUNIT_global_Y          (char a_select);");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '>')      , "int         yUNIT_config_b          (char a_select);");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '>')      , "/*········· ´······················ ´·········································*/");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '>')      , "(n/a)");
+
+   yerr_ureset    ();
+   yUNIT_mincond  ("verify creating unit_data.unit");
+   KOIOS__append  ('[', "unit_data.unit", "GLOBAL -J-  unit_data global               0s  tbd        "                                            );
+   KOIOS__append  ('>', "unit_data.unit", "CONFIG -ÿ-  another unit_data_global       0s  tbd        "                                            );
+   KOIOS__append  ('>', "unit_data.unit", "CONFIG -ò-  and a unit_data config         0s  tbd        "                                            );
+
+   yerr_ureset    ();
+   yUNIT_mincond  ("verify globals created by code");
+   yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argC),    0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "(n/a)");
+   yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used   ()     , "¬   á···   SH á·····á·····á·····á·····á·   GL A··D··á··JK·á·····á·····Y·   CO áé····á···ò·á·····á····ÿ   á   Ï");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify unit_data headers");
+   yUNIT_minval   ("... converted count"                , yenv_ulines      ("unit_data.h"),    5);
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_data.h" , '[')      , "/*········· ´······················ ´·········································*/");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_data.h" , '>')      , "int         yUNIT_global_J          (char a_select);");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_data.h" , '>')      , "int         yUNIT_config_k          (char a_select);");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_data.h" , '>')      , "int         yUNIT_config_x          (char a_select);");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_data.h" , '>')      , "/*········· ´······················ ´·········································*/");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_data.h" , '>')      , "(n/a)");
+
+   yerr_ureset    ();
+   yUNIT_mincond  ("verify re-running a new unit_wide.unit");
+   KOIOS__append  ('[', "unit_wide.unit", "GLOBAL -Y-  another unit_wide_global       0s  tbd        "                                            );
+   KOIOS__append  ('>', "unit_wide.unit", "GLOBAL -Z-  another unit_wide_global       0s  tbd        "                                            );
+   KOIOS__append  ('>', "unit_wide.unit", "CONFIG -ê-  and a unit_wide config         0s  tbd        "                                            );
+
+   yerr_ureset    ();
+   yUNIT_mincond  ("verify globals created by code");
+   yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argB),    0);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "(n/a)");
+   yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used   ()     , "¬   á···   SH á·····á·····á·····á·····á·   GL á··D··á··JK·á·····á·····YZ   CO á·ê···á···ò·á·····á····ÿ   á   Ï");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify unit_wide headers");
+   yUNIT_minval   ("... converted count"                , yenv_ulines      ("unit_wide.h"),    5);
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '[')      , "/*········· ´······················ ´·········································*/");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '>')      , "int         yUNIT_global_Y          (char a_select);");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '>')      , "int         yUNIT_global_Z          (char a_select);");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '>')      , "int         yUNIT_config_c          (char a_select);");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '>')      , "/*········· ´······················ ´·········································*/");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       ("unit_wide.h" , '>')      , "(n/a)");
+
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -1520,34 +1620,32 @@ koios_prog_globals    (char a_scrp, char a_list, char a_unit)
 char
 koios_prog_conds      (char a_scrp, char a_list, char a_unit)
 {
-   char       *x_argA  [3] =  { "koios_debug"       , "--conv"       , "apate"      };
+   char       *x_argA  [3] =  { "koios_debug"       , "--conv"       , "koios_live" };
    char       *x_argB  [3] =  { "koios_debug"       , "--conv"       , "unit_head"  };
 
    yUNIT_minscrpy ("koios", "koios_prog", "(PROG) verify condition-level placement and contents");
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all   ('*', '-');
-   KOIOS_reset      ();
+   KOIOS_scrp_start ('-');
    KOIOS_globals_empty (sm_globals);
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify passible placement in normal unit");
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"SHARED   -a-  prepare files for use                 0s  prepare                      \"                                                              >  /tmp/apate.unit");
-   system ("echo \"   local      local variable                       - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
-   system ("echo \"SHARED   -b-  prepare more files                    0s  more                         \"                                                              >> /tmp/apate.unit");
-   system ("echo \"   local      local variable                       - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
-   system ("echo \"   COND  (9)  script input file                   \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   GROUP      round one                           \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   DITTO (9)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   REUSE a/*  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"SCRP  [1a/A]  (SCRP) verify openning and closing    0s  open                         \"                                                              >> /tmp/apate.unit");
-   system ("echo \"   local      local variable                       - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
-   system ("echo \"   COND  (3)  script large output file            \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   GROUP      round two                           \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   DITTO (3)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   REUSE b/k  - - - - - - - - - - - - - - - - -   \"                                                                                                       >> /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SHARED   -a-  prepare files for use                 0s  prepare                      ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   local      local variable                       - - - - - - - -   int h = 0;                                                  ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED   -b-  prepare more files                    0s  more                         ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   local      local variable                       - - - - - - - -   int h = 0;                                                  ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   COND  (9)  script input file                   ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   GROUP      round one                           ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   DITTO (9)  - - - - - - - - - - - - - - - - - - ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   REUSE a/*  - - - - - - - - - - - - - - - - -   ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SCRP  [1a/A]  (SCRP) verify openning and closing    0s  open                         ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   local      local variable                       - - - - - - - -   int h = 0;                                                  ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   COND  (3)  script large output file            ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   GROUP      round two                           ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   DITTO (3)  - - - - - - - - - - - - - - - - - - ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   REUSE b/k  - - - - - - - - - - - - - - - - -   ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA),    0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
    yUNIT_minval   ("... converted count"                , yenv_ulines      (sm_nunit  ),   57);
@@ -1613,18 +1711,16 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify passible placement in unit_head");
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"CONFIG   -ò-  prepare files for use                 0s  prepare                      \"                                                              >  /tmp/apate.unit");
-   system ("echo \"   local      local variable                       - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
-   system ("echo \"   COND  (9)  script input file                   \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   GROUP      round one                           \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   DITTO (9)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"GLOBAL   -B-  prepare more files                    0s  more                         \"                                                              >> /tmp/apate.unit");
-   system ("echo \"   local      local variable                       - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
-   system ("echo \"   COND  (3)  script large output file            \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   GROUP      round two                           \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   DITTO (3)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> /tmp/apate.unit");
-   system ("mv -f /tmp/apate.unit  /tmp/unit_head.unit");
+   KOIOS__append  ('[', UNIT_HEAD_UNIT, "CONFIG   -ò-  prepare files for use                 0s  prepare                      ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   local      local variable                       - - - - - - - -   int h = 0;                                                  ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   COND  (9)  script input file                   ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   GROUP      round one                           ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   DITTO (9)  - - - - - - - - - - - - - - - - - - ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "GLOBAL   -B-  prepare more files                    0s  more                         ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   local      local variable                       - - - - - - - -   int h = 0;                                                  ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   COND  (3)  script large output file            ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   GROUP      round two                           ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   DITTO (3)  - - - - - - - - - - - - - - - - - - ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argB),    0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
    yUNIT_minval   ("... converted count"                , yenv_ulines      (sm_hunit  ),   43);
@@ -1676,43 +1772,39 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
 
    yerr_ureset    ();
    yUNIT_mincond  ("attempt a COND under PREP");
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"PREP          prepare files for use               \"                                                                                                       >   /tmp/apate.unit");
-   system ("echo \"   COND       script input file                   \"                                                                                                       >> /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "PREP          prepare files for use               ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   COND       script input file                   ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "apate.unit:2:0: error: verb åCONDæ is good; BUT, under (P) while needs to be under (S)");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_live.unit:2:0: error: verb åCONDæ is good; BUT, under (P) while needs to be under (S)");
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yerr_ureset    ();
    yUNIT_mincond  ("attempt a REUSE in unit_head");
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"GLOBAL   -J-  prepare files for use                 0s  prepare                      \"                                                              >   /tmp/apate.unit");
-   system ("echo \"   REUSE B/*  global variable                      - - - - - - - -   int h = 0;                                                  \"                    >> /tmp/apate.unit");
-   system ("mv -f /tmp/apate.unit  /tmp/unit_head.unit");
+   KOIOS__append  ('[', UNIT_HEAD_UNIT, "GLOBAL   -J-  prepare files for use                 0s  prepare                      ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "   REUSE B/*  global variable                      - - - - - - - -   int h = 0;                                                  ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argB), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "unit_head.unit:2:0: error: åREUSEæ verb not allowed inside unit_head.unit or unit_data.unit");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "unit_head.unit:2:0: error: åREUSEæ verb not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yerr_ureset    ();
    yUNIT_mincond  ("attempt DITTO before defined");
-   system ("rm -f /tmp/apate.unit   > /dev/null  2>&1");
-   system ("echo \"SCRP          (SCRP) verify openning and closing    0s  open                         \"                                                              >  /tmp/apate.unit");
-   system ("echo \"   COND  (0)  script large output file            \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"   DITTO (3)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> /tmp/apate.unit");
-   system ("echo \"SCRP          (SCRP) another script                 0s  open                         \"                                                              >> /tmp/apate.unit");
-   system ("echo \"   DITTO (0)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP          (SCRP) verify openning and closing    0s  open                         ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   COND  (0)  script large output file            ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   DITTO (3)  - - - - - - - - - - - - - - - - - - ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SCRP          (SCRP) another script                 0s  open                         ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "   DITTO (0)  - - - - - - - - - - - - - - - - - - ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    2);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "apate.unit:3:0: error: DITTO identifier (3) not set by previous COND in current SCRP/SHARE");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:5:0: error: DITTO identifier (0) not set by previous COND in current SCRP/SHARE");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_live.unit:3:0: error: DITTO identifier (3) not set by previous COND in current SCRP/SHARE");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:5:0: error: DITTO identifier (0) not set by previous COND in current SCRP/SHARE");
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -1720,44 +1812,43 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
 char
 koios_prog_steps      (char a_scrp, char a_list, char a_unit)
 {
-   char       *x_argA  [3] =  { "koios_debug"       , "--conv"       , "apate"      };
+   char       *x_argA  [3] =  { "koios_debug"       , "--conv"       , "koios_live" };
    char       *x_argB  [3] =  { "koios_debug"       , "--conv"       , "unit_head"  };
 
    yUNIT_minscrpy ("koios", "koios_prog", "(PROG) verify step-level placement and contents");
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all   ('*', '-');
-   KOIOS_reset      ();
+   KOIOS_scrp_start ('-');
    KOIOS_globals_empty (sm_globals);
 
    yUNIT_mincond ("verify step-level verbs in normal unit");
-   system ("echo \"SHARED -z-  overall shared code      0s  shared     \"                                 >  /tmp/apate.unit");
-   system ("echo \"COND        generate a summary      \"                                                     >> /tmp/apate.unit");
-   system ("echo \"exec        ... check string         yUNIT_teststring  0   s_equal     hello   \"  >> /tmp/apate.unit");
-   system ("echo \"get         ... check number         yUNIT_testreal    5   r_greater   15.0    \"  >> /tmp/apate.unit");
-   system ("echo \"echo        ... check integer        - - - - - - - -   h   i_equal     2       \"  >> /tmp/apate.unit");
-   system ("echo \"COND        follow-up with empty    \"                                                     >> /tmp/apate.unit");
-   system ("echo \"system      ... run little           - - - - - - - -   /bin/false       \"             >> /tmp/apate.unit");
-   system ("echo \"load        ... prep data for read   stdin             one two three    \"             >> /tmp/apate.unit");
-   system ("echo \"code        ... alter variable       - - - - - - - -   j = 5;           \"             >> /tmp/apate.unit");
-   system ("echo \"file        ... start file           - - - - - - - -   test.txt         \"             >> /tmp/apate.unit");
-   system ("echo \"append      ... first line           - - - - - - - -   weehoo           \"             >> /tmp/apate.unit");
-   system ("echo \"appvis      ... next line            - - - - - - - -   voodoo           \"             >> /tmp/apate.unit");
-   system ("echo \"mode        forced fail              FORCED_FAIL\"                                         >> /tmp/apate.unit");
-   system ("echo \"SCRP        global internal steps    0s  internal   \"                                 >> /tmp/apate.unit");
-   system ("echo \"COND        generate a summary      \"                                                     >> /tmp/apate.unit");
-   system ("echo \"exec        ... check string         yUNIT_teststring  0   s_equal     hello   \"  >> /tmp/apate.unit");
-   system ("echo \"get         ... check number         yUNIT_testreal    5   r_greater   15.0    \"  >> /tmp/apate.unit");
-   system ("echo \"echo        ... check integer        - - - - - - - -   h   i_equal     2       \"  >> /tmp/apate.unit");
-   system ("echo \"COND        follow-up with empty    \"                                                     >> /tmp/apate.unit");
-   system ("echo \"system      ... run little           - - - - - - - -   /bin/false       \"             >> /tmp/apate.unit");
-   system ("echo \"load        ... prep data for read   stdin             one two three    \"             >> /tmp/apate.unit");
-   system ("echo \"code        ... alter variable       - - - - - - - -   j = 5;           \"             >> /tmp/apate.unit");
-   system ("echo \"file        ... start file           - - - - - - - -   test.txt         \"             >> /tmp/apate.unit");
-   system ("echo \"append      ... first line           - - - - - - - -   weehoo           \"             >> /tmp/apate.unit");
-   system ("echo \"appvis      ... next line            - - - - - - - -   voodoo           \"             >> /tmp/apate.unit");
-   system ("echo \"mode        forced fail              FORCED_FAIL\"                                         >> /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SHARED -z-  overall shared code      0s  shared     ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "COND        generate a summary      ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "get         ... check number         yUNIT_testreal    5   r_greater   15.0    ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "echo        ... check integer        - - - - - - - -   h   i_equal     2       ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "COND        follow-up with empty    ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "system      ... run little           - - - - - - - -   /bin/false       ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "load        ... prep data for read   stdin             one two three    ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "code        ... alter variable       - - - - - - - -   j = 5;           ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "file        ... start file           - - - - - - - -   test.txt         ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "append      ... first line           - - - - - - - -   weehoo           ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "appvis      ... next line            - - - - - - - -   voodoo           ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "mode        forced fail              FORCED_FAIL");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SCRP        global internal steps    0s  internal   ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "COND        generate a summary      ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "get         ... check number         yUNIT_testreal    5   r_greater   15.0    ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "echo        ... check integer        - - - - - - - -   h   i_equal     2       ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "COND        follow-up with empty    ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "system      ... run little           - - - - - - - -   /bin/false       ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "load        ... prep data for read   stdin             one two three    ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "code        ... alter variable       - - - - - - - -   j = 5;           ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "file        ... start file           - - - - - - - -   test.txt         ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "append      ... first line           - - - - - - - -   weehoo           ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "appvis      ... next line            - - - - - - - -   voodoo           ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "mode        forced fail              FORCED_FAIL");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA),    0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
    yUNIT_minval   ("... converted count"                , yenv_ulines      (sm_nunit  ),   57);
@@ -1821,117 +1912,124 @@ koios_prog_steps      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "(n/a)");
    yUNIT_mindnoc ();
 
-   return 0;
-
    yUNIT_mincond ("verify step-level verbs in unit_head");
-   system ("echo \"CONFIG -ÿ-  overall shared code      0s  shared     \"                                 >  /tmp/apate.unit");
-   system ("echo \"COND        generate a summary      \"                                                     >> /tmp/apate.unit");
-   system ("echo \"exec        ... check string         yUNIT_teststring  0   s_equal     hello   \"  >> /tmp/apate.unit");
-   system ("echo \"get         ... check number         yUNIT_testreal    5   r_greater   15.0    \"  >> /tmp/apate.unit");
-   system ("echo \"echo        ... check integer        - - - - - - - -   h   i_equal     2       \"  >> /tmp/apate.unit");
-   system ("echo \"COND        follow-up with empty    \"                                                     >> /tmp/apate.unit");
-   system ("echo \"system      ... run little           - - - - - - - -   /bin/false       \"             >> /tmp/apate.unit");
-   system ("echo \"load        ... prep data for read   stdin             one two three    \"             >> /tmp/apate.unit");
-   system ("echo \"code        ... alter variable       - - - - - - - -   j = 5;           \"             >> /tmp/apate.unit");
-   system ("echo \"file        ... start file           - - - - - - - -   test.txt         \"             >> /tmp/apate.unit");
-   system ("echo \"append      ... first line           - - - - - - - -   weehoo           \"             >> /tmp/apate.unit");
-   system ("echo \"appvis      ... next line            - - - - - - - -   voodoo           \"             >> /tmp/apate.unit");
-   system ("echo \"mode        FORCED_FAIL             \"                                                     >> /tmp/apate.unit");
-   system ("echo \"GLOBAL -Z-  global internal steps    0s  internal   \"                                 >> /tmp/apate.unit");
-   system ("echo \"COND        generate a summary      \"                                                     >> /tmp/apate.unit");
-   system ("echo \"exec        ... check string         yUNIT_teststring  0   s_equal     hello   \"  >> /tmp/apate.unit");
-   system ("echo \"get         ... check number         yUNIT_testreal    5   r_greater   15.0    \"  >> /tmp/apate.unit");
-   system ("echo \"echo        ... check integer        - - - - - - - -   h   i_equal     2       \"  >> /tmp/apate.unit");
-   system ("echo \"COND        follow-up with empty    \"                                                     >> /tmp/apate.unit");
-   system ("echo \"system      ... run little           - - - - - - - -   /bin/false       \"             >> /tmp/apate.unit");
-   system ("echo \"load        ... prep data for read   stdin             one two three    \"             >> /tmp/apate.unit");
-   system ("echo \"code        ... alter variable       - - - - - - - -   j = 5;           \"             >> /tmp/apate.unit");
-   system ("echo \"file        ... start file           - - - - - - - -   test.txt         \"             >> /tmp/apate.unit");
-   system ("echo \"append      ... first line           - - - - - - - -   weehoo           \"             >> /tmp/apate.unit");
-   system ("echo \"appvis      ... next line            - - - - - - - -   voodoo           \"             >> /tmp/apate.unit");
-   system ("echo \"mode        FORCED_FAIL             \"                                                     >> /tmp/apate.unit");
-   system ("mv -f /tmp/apate.unit  /tmp/unit_head.unit");
+   KOIOS__append  ('[', UNIT_HEAD_UNIT, "CONFIG -ÿ-  overall shared code      0s  shared     ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "COND        generate a summary      ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "get         ... check number         yUNIT_testreal    5   r_greater   15.0    ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "echo        ... check integer        - - - - - - - -   h   i_equal     2       ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "COND        follow-up with empty    ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "system      ... run little           - - - - - - - -   /bin/false       ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "load        ... prep data for read   stdin             one two three    ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "code        ... alter variable       - - - - - - - -   j = 5;           ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "file        ... start file           - - - - - - - -   test.txt         ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "append      ... first line           - - - - - - - -   weehoo           ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "appvis      ... next line            - - - - - - - -   voodoo           ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "mode        ... forced fail          FORCED_FAIL");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "GLOBAL -Z-  global internal steps    0s  internal   ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "COND        generate a summary      ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "get         ... check number         yUNIT_testreal    5   r_greater   15.0    ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "echo        ... check integer        - - - - - - - -   h   i_equal     2       ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "COND        follow-up with empty    ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "system      ... run little           - - - - - - - -   /bin/false       ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "load        ... prep data for read   stdin             one two three    ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "code        ... alter variable       - - - - - - - -   j = 5;           ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "file        ... start file           - - - - - - - -   test.txt         ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "append      ... first line           - - - - - - - -   weehoo           ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "appvis      ... next line            - - - - - - - -   voodoo           ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "mode        ... forced fail          FORCED_FAIL");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argB),    0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
-   yUNIT_minval   ("... converted count"                , yenv_ulines      (sm_hunit  ),   46);
+   yUNIT_minval   ("... converted count"                , yenv_ulines      (sm_hunit  ),   57);
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '[')      , "#!/usr/local/bin/koios");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#   koios-polos (axis of heaven) unit testing meta-language");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "CONFIG   -ÿ-  overall shared code                                                 0s  shared          -                                                                            ((ÿÿ.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "   COND       generate a summary                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((ÿÿ.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     get      ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     echo     ... check integer                    - - - - - - - - - - - - -   h                                                                                                     i_equal     2                                                                                                    ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "   COND       follow-up with empty                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((ÿÿ.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     system   ... run little                       - - - - - - - - - - - - -   /bin/false                                                                                                                                                                                                                 ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     load     ... prep data for read               stdin                       one two three                                                                                                                                                                                                              ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     code     ... alter variable                   - - - - - - - - - - - - -   j = 5;                                                                                                                                                                                                                     ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     file     ... start file                       - - - - - - - - - - - - -   test.txt                                                                                                                                                                                                                   ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     append   ... first line                       - - - - - - - - - - - - -   weehoo                                                                                                                                                                                                                     ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     appvis   ... next line                        - - - - - - - - - - - - -   voodoo                                                                                                                                                                                                                     ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     mode     FORCED_FAIL                          - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "GLOBAL   -Z-  global internal steps                                               0s  internal        -                                                                            ((ZZ.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "   COND       generate a summary                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((ZZ.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     get      ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     echo     ... check integer                    - - - - - - - - - - - - -   h                                                                                                     i_equal     2                                                                                                    ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "   COND       follow-up with empty                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((ZZ.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     system   ... run little                       - - - - - - - - - - - - -   /bin/false                                                                                                                                                                                                                 ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     load     ... prep data for read               stdin                       one two three                                                                                                                                                                                                              ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     code     ... alter variable                   - - - - - - - - - - - - -   j = 5;                                                                                                                                                                                                                     ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     file     ... start file                       - - - - - - - - - - - - -   test.txt                                                                                                                                                                                                                   ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     append   ... first line                       - - - - - - - - - - - - -   weehoo                                                                                                                                                                                                                     ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     appvis   ... next line                        - - - - - - - - - - - - -   voodoo                                                                                                                                                                                                                     ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "     mode     FORCED_FAIL                          - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "# end-of-file.  done, finito, completare, whimper [Ï´···");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "(n/a)");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "#   koios-polos (axis of heaven) unit testing meta-language");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "CONFIG   -ÿ-  overall shared code                                                 0s  shared          -                                                                            ((ÿÿ.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "   COND       generate a summary                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((ÿÿ.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     get      ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     echo     ... check integer                    - - - - - - - - - - - - -   h                                                                                                     i_equal     2                                                                                                    ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "   COND       follow-up with empty                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((ÿÿ.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     system   ... run little                       - - - - - - - - - - - - -   /bin/false                                                                                                                                                                                                                 ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     load     ... prep data for read               stdin                       one two three                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     code     ... alter variable                   - - - - - - - - - - - - -   j = 5;                                                                                                                                                                                                                     ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     file     ... start file                       - - - - - - - - - - - - -   test.txt                                                                                                                                                                                                                   ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     append   ... first line                       - - - - - - - - - - - - -   weehoo                                                                                                                                                                                                                     ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     appvis   ... next line                        - - - - - - - - - - - - -   voodoo                                                                                                                                                                                                                     ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     mode     ... forced fail                      FORCED_FAIL                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_hunit   , '>')      , "   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT======real====vars====void====skip===DITTO====real====void====skip   ");
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_hunit   , '>')      , "   GIFNOC     global shared code statistics -----------------------------------   ÿ     1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        0    10     7     0     3     0     0     0     0     0   ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "GLOBAL   -Z-  global internal steps                                               0s  internal        -                                                                            ((ZZ.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "   COND       generate a summary                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((ZZ.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     get      ... check number                     yUNIT_testreal              5                                                                                                     r_greater   15.0                                                                                                 ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     echo     ... check integer                    - - - - - - - - - - - - -   h                                                                                                     i_equal     2                                                                                                    ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "   COND       follow-up with empty                                               - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((ZZ.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     system   ... run little                       - - - - - - - - - - - - -   /bin/false                                                                                                                                                                                                                 ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     load     ... prep data for read               stdin                       one two three                                                                                                                                                                                                              ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     code     ... alter variable                   - - - - - - - - - - - - -   j = 5;                                                                                                                                                                                                                     ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     file     ... start file                       - - - - - - - - - - - - -   test.txt                                                                                                                                                                                                                   ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     append   ... first line                       - - - - - - - - - - - - -   weehoo                                                                                                                                                                                                                     ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     appvis   ... next line                        - - - - - - - - - - - - -   voodoo                                                                                                                                                                                                                     ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     mode     ... forced fail                      FORCED_FAIL                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_hunit   , '>')      , "   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT======real====vars====void====skip===DITTO====real====void====skip   ");
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_hunit   , '>')      , "   LABOLG     global shared code statistics -----------------------------------   Z     1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        0    10     7     0     3     0     0     0     0     0   ");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_hunit   , '>')      , "#===========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT======real====vars====void====skip===DITTO====real====void====skip   ");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_hunit   , '>')      , "RETSAM        final master file statistics ------------------------------------   -     2     2     0     0     4     4     0  ··········     0  ·                        0  ·                        0    20    14     0     6     0     0     0     0     0   ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "# end-of-file.  done, finito, completare, whimper [Ï´···");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "(n/a)");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt step-level verbs in PREP/SCRP/SHARE (normal unit)");
-   system ("echo \"PREP        overall shared code     \"                                                     >  /tmp/apate.unit");
-   system ("echo \"exec        ... check string         yUNIT_teststring  0   s_equal     hello   \"  >> /tmp/apate.unit");
-   system ("echo \"get         ... check number         yUNIT_testreal    5   r_greater   15.0    \"  >> /tmp/apate.unit");
-   system ("echo \"echo        ... check integer        - - - - - - - -   h   i_equal     2       \"  >> /tmp/apate.unit");
-   system ("echo \"SCRP        global internal steps    0s  internal   \"                                 >> /tmp/apate.unit");
-   system ("echo \"exec        ... check string         yUNIT_teststring  0   s_equal     hello   \"  >> /tmp/apate.unit");
-   system ("echo \"SHARED -a-  global internal steps    0s  internal   \"                                 >> /tmp/apate.unit");
-   system ("echo \"exec        ... check string         yUNIT_teststring  0   s_equal     hello   \"  >> /tmp/apate.unit");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "PREP        overall shared code     ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "get         ... check number         yUNIT_testreal    5   r_greater   15.0    ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "echo        ... check integer        - - - - - - - -   h   i_equal     2       ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SCRP        global internal steps    0s  internal   ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED -a-  global internal steps    0s  internal   ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    5);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "apate.unit:2:0: error: verb åexecæ is good; BUT, under (P) while needs to be under (C)");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:3:0: error: verb ågetæ is good; BUT, under (P) while needs to be under (C)");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:4:0: error: verb åechoæ is good; BUT, under (P) while needs to be under (C)");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:6:0: error: verb åexecæ is good; BUT, under (S) while needs to be under (C)");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "apate.unit:8:0: error: verb åexecæ is good; BUT, under (S) while needs to be under (C)");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_live.unit:2:0: error: verb åexecæ is good; BUT, under (P) while needs to be under (C)");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:3:0: error: verb ågetæ is good; BUT, under (P) while needs to be under (C)");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:4:0: error: verb åechoæ is good; BUT, under (P) while needs to be under (C)");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:6:0: error: verb åexecæ is good; BUT, under (S) while needs to be under (C)");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "koios_live.unit:8:0: error: verb åexecæ is good; BUT, under (S) while needs to be under (C)");
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt step-level verbs in PREP/SHARE (unit_head)");
-   system ("echo \"PREP        overall shared code     \"                                                     >  /tmp/apate.unit");
-   system ("echo \"exec        ... check string         yUNIT_teststring  0   s_equal     hello   \"  >> /tmp/apate.unit");
-   system ("echo \"get         ... check number         yUNIT_testreal    5   r_greater   15.0    \"  >> /tmp/apate.unit");
-   system ("echo \"echo        ... check integer        - - - - - - - -   h   i_equal     2       \"  >> /tmp/apate.unit");
-   system ("echo \"CONFIG -ò-  global internal steps    0s  internal   \"                                 >> /tmp/apate.unit");
-   system ("echo \"exec        ... check string         yUNIT_teststring  0   s_equal     hello   \"  >> /tmp/apate.unit");
-   system ("echo \"GLOBAL -A-  global internal steps    0s  internal   \"                                 >> /tmp/apate.unit");
-   system ("echo \"exec        ... check string         yUNIT_teststring  0   s_equal     hello   \"  >> /tmp/apate.unit");
-   system ("mv -f /tmp/apate.unit  /tmp/unit_head.unit");
+   KOIOS__append  ('[', UNIT_HEAD_UNIT, "PREP        overall shared code     ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "get         ... check number         yUNIT_testreal    5   r_greater   15.0    ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "echo        ... check integer        - - - - - - - -   h   i_equal     2       ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "CONFIG -ò-  global internal steps    0s  internal   ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "GLOBAL -A-  global internal steps    0s  internal   ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argB), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    5);
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "unit_head.unit:2:0: error: verb åexecæ is good; BUT, under (P) while needs to be under (C)");
@@ -1942,7 +2040,7 @@ koios_prog_steps      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc ();
 
-   /*> KOIOS_close_all ('*');                                                         <*/
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -1979,6 +2077,7 @@ main                    (int a_argc, char *a_argv [])
    koios_prog_driver    (++n, x_list, x_unit);
    koios_prog_scrps     (++n, x_list, x_unit);
    koios_prog_globals   (++n, x_list, x_unit);
+   koios_prog_globals2  (++n, x_list, x_unit);
    koios_prog_conds     (++n, x_list, x_unit);
    koios_prog_steps     (++n, x_list, x_unit);
    /*---(wrapup)-------------------------*/

@@ -148,24 +148,44 @@ CONV_footer             (char a_good, FILE **b_conv, char a_nscrp [LEN_TITLE], c
    char        rce         =  -10;
    char        rc          =    0;
    char        t           [LEN_HUND]  = "";
+   /*---(header)-------------------------*/
+   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
-   --rce;  if (b_conv   == NULL)   return rce;
-   --rce;  if (*b_conv  == NULL)   return rce;
+   UDEBUG_KOIOS   ylog_upoint  ("b_conv"    , b_conv);
+   --rce;  if (b_conv   == NULL) {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   UDEBUG_KOIOS   ylog_upoint  ("*b_conv"   , *b_conv);
+   --rce;  if (*b_conv  == NULL) {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
    /*---(finish stattistics)-------------*/
-   yUNIT_stats_unit  (YUNIT_CONVERT, *b_conv, a_nscrp, 'U', "UNIT", '-', &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   rc = yUNIT_stats_unit  (YUNIT_CONVERT, *b_conv, a_nscrp, 'U', "UNIT", '-', &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   UDEBUG_KOIOS   ylog_uvalue  ("stats"     , rc);
    CONV_printf (*b_conv, "\n\n\n");
    /*---(normal end-of-file)-------------*/
    CONV_printf (*b_conv, "# end-of-file.  done, finito, completare, whimper [Ï´···\n");
-   yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nconv, b_conv);
+   rc = yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, a_nconv, b_conv);
+   UDEBUG_KOIOS   ylog_uvalue  ("uclose"    , rc);
    /*---(export globals)-----------------*/
+   UDEBUG_KOIOS   ylog_uchar   ("a_good"    , a_good);
    if (a_good == 'y') {
-      IF_HEAD  REUSE_export ("unit.globals");
+      IF_GLOBAL {
+         UDEBUG_KOIOS   ylog_unote   ("export globals (conv)");
+         rc = yUNIT_reuse_export (KOIOS_GLOBALS);
+         UDEBUG_KOIOS   ylog_uvalue  ("export"    , rc);
+         UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());
+      }
    }
    /*---(clean-up)-----------------------*/
    if (a_good != 'y') {
+      UDEBUG_KOIOS   ylog_unote   ("destroy erroneous updated file");
       sprintf (t, "rm -f %s", a_nconv); system  (t);
    }
    /*---(complete)-----------------------*/
+   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
    return 1;
 }
 
@@ -425,32 +445,32 @@ CONV_driver             (void f_call (), FILE *a_conv, char a_verb [LEN_LABEL], 
    char        rc          =    0;
    char      (*x_func) (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
    /*---(header)-------------------------*/
-   debug_uver   ylog_uenter  (__FUNCTION__);
+   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(defense)------------------------*/
    rc = CONV__defense (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("defense"   , rc);
+   UDEBUG_KOIOS   ylog_uvalue  ("defense"   , rc);
    if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rc);
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rc);
       return rc;
    }
    /*---(preare)-------------------------*/
-   debug_uver   ylog_upoint  ("f_call"    , f_call);
+   UDEBUG_KOIOS   ylog_upoint  ("f_call"    , f_call);
    if (f_call == NULL) {
-      debug_uver   ylog_unote   ("nothing to do");
-      debug_uver   ylog_uexit   (__FUNCTION__);
+      UDEBUG_KOIOS   ylog_unote   ("nothing to do");
+      UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
       return 0;
    }
    /*---(prepare)------------------------*/
    x_func = f_call;
    /*---(call function)------------------*/
    rc = x_func (a_conv, a_verb, a_desc, a_method, a_args, a_test, a_expect, a_return, a_stage, a_which, a_ditto, a_major, a_minor, b_share, b_select);
-   debug_uver   ylog_uvalue  ("call"      , rc);
+   UDEBUG_KOIOS   ylog_uvalue  ("call"      , rc);
    --rce;  if (rc < 0) {
-      debug_uver   ylog_uexitr  (__FUNCTION__, rce);
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(complete)-----------------------*/
-   debug_uver   ylog_uexit   (__FUNCTION__);
+   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
    return 0;
 }
 

@@ -1,5 +1,5 @@
 /*===============================[[ beg-code ]]===============================*/
-#include    "koios.h"
+#include    "master.munit"
 
 
 
@@ -29,10 +29,7 @@ koios_parse_default   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("verify a quick success");
    yUNIT_minval   ("call default"                       , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_meth, x_args, x_test, x_expe, x_retn, &x_mark, &x_major, &x_minor, x_which),    0);
@@ -127,8 +124,7 @@ koios_parse_default   (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check which"                    , x_which       , "");
    yUNIT_mindnoc  ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -161,7 +157,7 @@ koios_parse_comment   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
 
    strcpy (x_recd, "#> macro a jklh");
    yUNIT_mincond  ("verify a quick success");
@@ -316,7 +312,7 @@ koios_parse_comment   (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check retn"                     , x_retn        , "");
    yUNIT_mindnoc  ();
 
-   PROG__unit_end    ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -331,10 +327,7 @@ koios_parse_version   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("verify a quick success");
    yUNIT_minval   ("call version"                       , PARSE__version  ("v21"              , &x_vers),    0);
@@ -351,8 +344,7 @@ koios_parse_version   (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check version"                  , x_vers        ,   0);
    yUNIT_mindnoc  ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -368,10 +360,7 @@ koios_parse_limits  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("verify quick success");
    yUNIT_minval   ("get limits for SCRP"                , PARSE__limits ('s', &x_min, &x_max), 0);
@@ -401,9 +390,8 @@ koios_parse_limits  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check max"                      , x_max         , 0);
    yUNIT_mindnoc  ();
 
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
-   chdir   (x_cwd);
-   PROG__unit_end  ();
    return 0;
 }
 
@@ -438,16 +426,13 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    strcpy (x_recd, "SCRP    [2e]  (CATS) verify preparation and defaulting                           0s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_mincond  ("verify scrp in update");
    yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share, &x_minor, x_which),    0);
    yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp,  5, G_RUN_UPDATE , x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_mark, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &x_share, &x_select),    0);
-   yUNIT_minstr   ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");
+   yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used ()      , "¬   á···   SH á·····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "----------");
    yUNIT_minstr   ("... check verb"                     , x_verb        , "SCRP");
    yUNIT_minchr   ("... check under"                    , x_under       , 'S');
@@ -473,7 +458,7 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify cond in update");
    yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share, &x_minor, x_which),    0);
    yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 10, G_RUN_UPDATE , x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_mark, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &x_share, &x_select),    0);
-   yUNIT_minstr   ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");
+   yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used ()      , "¬   á···   SH á·····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
    yUNIT_minstr   ("... check verb"                     , x_verb        , "COND");
    yUNIT_minchr   ("... check under"                    , x_under       , 'C');
@@ -499,7 +484,7 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify ditto in update");
    yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share, &x_minor, x_which),    0);
    yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 15, G_RUN_UPDATE , x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_mark, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &x_share, &x_select),    1);
-   yUNIT_minstr   ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");
+   yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used ()      , "¬   á···   SH á·····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
    yUNIT_minstr   ("... check verb"                     , x_verb        , "DITTO");
    yUNIT_minchr   ("... check under"                    , x_under       , 'C');
@@ -529,7 +514,7 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("open the script file"               , yenv_uopen_detail   (__FILE__, __FUNCTION__, __LINE__, x_nscrp, 'r', &x_scrp), 1);
    yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share, &x_minor, x_which),    0);
    yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 20, G_RUN_CREATE , x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_mark, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &x_share, &x_select),    1);
-   yUNIT_minstr   ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");
+   yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used ()      , "¬   á···   SH á·····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
    yUNIT_minstr   ("... check verb"                     , x_verb        , "DITTO");
    yUNIT_minchr   ("... check under"                    , x_under       , 'C');
@@ -559,7 +544,7 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify shared in update");
    yUNIT_minval   ("call defaults"                      , PARSE_default   (x_verb, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, NULL, NULL, NULL, x_expe, NULL, &x_mark, &x_share, &x_minor, x_which),    0);
    yUNIT_minval   ("call parse prep"                    , PARSE_prep      (&x_scrp, x_nscrp, 25, G_RUN_UPDATE , x_recd, x_verb, &x_under, &x_spec, &x_conv, &x_code, x_stage, &x_vers, x_desc, x_expe, &x_mark, &x_dittoing, &x_dtarget, &x_dstart, &x_dline, &x_major, &x_minor, &x_share, &x_select),    0);
-   yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH á·····g·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
+   yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used  ()     , "+   á···   SH á·····g·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minstr   ("... dittos (cleared)"               , DITTO__used (), "----------");
    yUNIT_minstr   ("... check verb"                     , x_verb        , "SHARED");
    yUNIT_minchr   ("... check under"                    , x_under       , 'S');
@@ -581,8 +566,7 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr   ("... check select"                   , x_select      ,  '-');
    yUNIT_mindnoc  ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -597,8 +581,7 @@ koios_parse_which   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   PROG__unit_quiet  ();
-   yerr_uopen ();
+   KOIOS_scrp_start ('y');
 
    yUNIT_mincond  ("verify a quick success");
    yerr_ureset   ();
@@ -669,8 +652,7 @@ koios_parse_which   (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
-   yerr_uclose ();
-   PROG__unit_end    ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -692,10 +674,7 @@ koios_parse_current (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    x_spec = 's';  x_max = 2;
    yUNIT_mincond  ("verify script success");
@@ -760,8 +739,7 @@ koios_parse_current (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check retn"                     , x_retn        , "");
    yUNIT_mindnoc  ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -784,10 +762,7 @@ koios_parse_driver    (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    strcpy (x_recd, "SCRP          (CATS) verify preparation and defaulting                           0s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_mincond  ("verify script success");
@@ -866,8 +841,7 @@ koios_parse_driver    (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check retn"                     , x_retn        , "");
    yUNIT_mindnoc  ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }

@@ -18,9 +18,9 @@ static char   sm_globals [LEN_FULL]  = "unit.globals";
 static char   sm_thead   [LEN_FULL]  = "unit_code.h";
 static char   sm_tcode   [LEN_FULL]  = "unit_code.c";
 
-static char   sm_cunit   [LEN_FULL]  = "unit_comp.unit";
-static char   sm_chead   [LEN_FULL]  = "unit_comp.h";
-static char   sm_ccode   [LEN_FULL]  = "unit_comp.cs";
+static char   sm_wunit   [LEN_FULL]  = "unit_wide.unit";
+static char   sm_whead   [LEN_FULL]  = "unit_wide.h";
+static char   sm_wcode   [LEN_FULL]  = "unit_wide.cs";
 
 static char   sm_dunit   [LEN_FULL]  = "unit_data.unit";
 static char   sm_dhead   [LEN_FULL]  = "unit_data.h";
@@ -118,127 +118,106 @@ KOIOS__clear_all          (char a_which)
 }
 
 char
-KOIOS_prep_all            (void)
+KOIOS__scrp_start         (char a_open, char a_debug)
 {
    char        t           [LEN_FULL]  = "";
 
+   yUNIT_mincond  ("prepare clean start (save dir, create and move to koios)");
    sprintf (t, "mkdir %s    > /dev/null  2>&1", sm_koios);
-   system  (t);
-
-   yUNIT_mincond  ("prepare clean start");
+   yUNIT_minstr   ("make command to create directory"   , t                               ,  "¬");
+   yUNIT_minval   ("create koios test directory"        , system  (t)                     ,    0);
    yUNIT_minstr   ("capture home directory"             , getcwd  (sm_cwd, LEN_FULL)      ,  "¬");
    yUNIT_minval   ("move to /tmp"                       , chdir   (sm_koios)              ,    0);
    yUNIT_minstr   ("operating in directory"             , getcwd  (t     , LEN_FULL)      ,  "¬");
    yUNIT_mindnoc  ();
 
-   sprintf (t, "touch %s  > /dev/null  2>&1"  , sm_nunit);
-   system  (t);
-
-   sprintf (t, "touch %s  > /dev/null  2>&1"  , sm_khead);
-   system  (t);
-
    KOIOS__clear_all ('Ô');
 
-   yUNIT_minval   ("open logging file"                  , ylog_uopen ()                   ,    1);
-   yUNIT_minval   ("open error file"                    , yerr_uopen ()                   ,    2);
-
-   return 0;
-}
-
-char
-KOIOS_open_all            (char a_type, char a_loud)
-{
-   char        t           [LEN_FULL]  = "";
-
-   sprintf (t, "mkdir %s  > /dev/null  2>&1", sm_koios);
-   system  (t);
-
-   if (a_type == '*') {
-      yUNIT_mincond  ("prepare clean start");
-      yUNIT_minstr   ("capture home directory"             , getcwd  (sm_cwd, LEN_FULL)      ,  "¬");
-      yUNIT_minval   ("move to /tmp"                       , chdir   (sm_koios)              ,    0);
-      yUNIT_minstr   ("operating in directory"             , getcwd  (t     , LEN_FULL)      ,  "¬");
-      if (a_loud != 'y')  yUNIT_minval   ("run unit quiet"                     , PROG__unit_quiet  ()            ,    0);
-      else                yUNIT_minval   ("run unit loud"                      , PROG__unit_loud   ()            ,    0);
+   yUNIT_mincond  ("configure debugging");
+   if (a_debug != 'y') {
+      yUNIT_minval   ("run unit quiet"                     , PROG__unit_quiet  ()            ,    0);
+      yUNIT_minchr   ("turn off debug"                     , my.debug = 'n'                  ,  'n');
+   } else {
+      yUNIT_minval   ("run unit loud"                      , PROG__unit_loud   ()            ,    0);
+      yUNIT_minchr   ("turn on debug"                      , my.debug = 'y'                  ,  'y');
       yUNIT_minval   ("open logging file"                  , ylog_uopen ()                   ,    1);
       yUNIT_minval   ("open error file"                    , yerr_uopen ()                   ,    2);
-      if (a_loud != 'y')  yUNIT_minchr   ("turn on debug"                      , my.debug = 'y'                  ,  'y');
+      yUNIT_minchr   ("turn on yUNIT debugging"            , yUNIT_debugging ()              ,  'y');
+      yUNIT_minchr   ("turn on yenv debugging"             , yenv_udebugging ()              ,  'y');
+   }
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("prepare a couple necessary files");
+   sprintf (t, "touch %s  > /dev/null  2>&1"  , sm_khead);
+   yUNIT_minstr   ("make command to koios header"       , t                               ,  "¬");
+   yUNIT_minval   ("create koios header file"           , system  (t)                     ,    0);
+   sprintf (t, "touch %s  > /dev/null  2>&1"  , sm_nunit);
+   yUNIT_minstr   ("make command to create unit"        , t                               ,  "¬");
+   yUNIT_minval   ("create unit test source"            , system  (t)                     ,    0);
+   yUNIT_mindnoc  ();
+
+   if (a_open == 'y') {
+      yUNIT_mincond  ("open all files");
+      yUNIT_minval   ("clear statistics"                   , CODE_init ()    ,    0);
+      yUNIT_minval   ("open scrp file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_nunit, 'r' , &sm_scrp),    1);
+      yUNIT_minval   ("open main file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_nmain, 'w' , &sm_main),    1);
+      if (strcmp (sm_nhead, "") != 0) {
+         yUNIT_minval   ("open head file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_nhead, 'w' , &sm_head),    1);
+      }
+      yUNIT_minval   ("open code file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_ncode, 'w' , &sm_code),    1);
+      yUNIT_minval   ("open wave file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_nwave, 'w' , &sm_wave),    1);
+      yUNIT_minval   ("open conv file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_nconv, 'w' , &sm_conv),    1);
       yUNIT_mindnoc  ();
    }
-
-   sprintf (t, "touch %s  > /dev/null  2>&1"  , sm_nunit);
-   system  (t);
-
-   sprintf (t, "touch %s  > /dev/null  2>&1"  , sm_khead);
-   system  (t);
-
-   CODE_init ();
-
-   KOIOS__clear_all ('Ô');
-
-   yUNIT_mincond  ("open all files");
-   yUNIT_minval   ("clear statistics"                   , CODE_init ()    ,    0);
-   yUNIT_minval   ("open scrp file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_nunit, 'r' , &sm_scrp),    1);
-   yUNIT_minval   ("open main file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_nmain, 'w' , &sm_main),    1);
-   if (strcmp (sm_nhead, "") != 0) {
-      yUNIT_minval   ("open head file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_nhead, 'w' , &sm_head),    1);
-   }
-   yUNIT_minval   ("open code file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_ncode, 'w' , &sm_code),    1);
-   yUNIT_minval   ("open wave file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_nwave, 'w' , &sm_wave),    1);
-   yUNIT_minval   ("open conv file"                     , yenv_uopen_detail  (__FILE__, __FUNCTION__, __LINE__, sm_nconv, 'w' , &sm_conv),    1);
-   yUNIT_mindnoc  ();
 
    return 0;
 }
 
+char KOIOS_scrp_start          (char a_debug)  { return KOIOS__scrp_start ('-', a_debug);  }
+char KOIOS_scrp_start_open     (char a_debug)  { return KOIOS__scrp_start ('y', a_debug);  }
+
 char
-KOIOS_close_all           (char a_type)
+KOIOS__scrp_finish        (char a_close, char a_wipe)
 {
    char        t           [LEN_FULL]  = "";
 
-   yUNIT_mincond  ("close all files");
-   if (sm_scrp != NULL)  yUNIT_minval   ("close scrp file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nunit,       &sm_scrp),    1);
-   if (sm_main != NULL)  yUNIT_minval   ("close main file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nmain,       &sm_main),    1);
-   if (sm_main != NULL)  yUNIT_minval   ("close head file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nhead,       &sm_head),    1);
-   if (sm_code != NULL)  yUNIT_minval   ("close code file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_ncode,       &sm_code),    1);
-   if (sm_wave != NULL)  yUNIT_minval   ("close wave file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nwave,       &sm_wave),    1);
-   if (sm_conv != NULL)  yUNIT_minval   ("close conv file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nconv,       &sm_conv),    1);
-   yUNIT_mindnoc  ();
+   if (a_close == 'y') {
+      yUNIT_mincond  ("close all files");
+      if (sm_scrp != NULL)  yUNIT_minval   ("close scrp file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nunit,       &sm_scrp),    1);
+      if (sm_main != NULL)  yUNIT_minval   ("close main file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nmain,       &sm_main),    1);
+      if (sm_main != NULL)  yUNIT_minval   ("close head file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nhead,       &sm_head),    1);
+      if (sm_code != NULL)  yUNIT_minval   ("close code file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_ncode,       &sm_code),    1);
+      if (sm_wave != NULL)  yUNIT_minval   ("close wave file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nwave,       &sm_wave),    1);
+      if (sm_conv != NULL)  yUNIT_minval   ("close conv file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nconv,       &sm_conv),    1);
+      yUNIT_mindnoc  ();
+   }
 
    KOIOS__clear_all ('Õ');
 
-   if (a_type == '*') {
-      yUNIT_mincond  ("prepare clean end");
-      yUNIT_minval   ("close error file"                   , yerr_uclose ()   ,    0);
-      yUNIT_minval   ("close error file"                   , ylog_uclose ()   ,    0);
-      yUNIT_minval   ("run unit end"                       , PROG__unit_end (),    0);
-      yUNIT_minval   ("move back to home directory"        , chdir   (sm_cwd) ,    0);
-      yUNIT_minstr   ("operating in directory"             , getcwd  (t     , LEN_FULL)      ,  "¬");
+   if (a_wipe == 'y') {
+      yUNIT_mincond  ("close-out debugging");
+      yUNIT_minchr   ("turn off debug"                     , my.debug = 'n'                  ,  'n');
+      yUNIT_minval   ("close logging file"                 , ylog_uclose ()                  ,    0);
+      yUNIT_minval   ("close error file"                   , yerr_uclose ()                  ,    0);
+      yUNIT_minval   ("run unit end"                       , PROG__unit_end ()               ,    0);
       yUNIT_mindnoc  ();
 
+      yUNIT_mincond  ("prepare clean end");
+      yUNIT_minval   ("move back to home directory"        , chdir   (sm_cwd) ,    0);
+      yUNIT_minstr   ("confirm home directory"             , getcwd  (t     , LEN_FULL)      ,  "¬");
       sprintf (t, "rm -rf %s    > /dev/null  2>&1", sm_koios);
-      system  (t);
+      yUNIT_minstr   ("make command to wipe test dir"      , t                               ,  "¬");
+      yUNIT_minval   ("wipe test directory"                , system  (t)                     ,    0);
+      yUNIT_mindnoc  ();
    }
 
    return 0;
 }
 
-char
-KOIOS_reset             (void)
-{
-   yUNIT_mincond  ("close all files");
-   if (sm_scrp != NULL)  yUNIT_minval   ("close scrp file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nunit,       &sm_scrp),    1);
-   if (sm_main != NULL)  yUNIT_minval   ("close main file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nmain,       &sm_main),    1);
-   if (sm_main != NULL)  yUNIT_minval   ("close head file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nhead,       &sm_head),    1);
-   if (sm_code != NULL)  yUNIT_minval   ("close code file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_ncode,       &sm_code),    1);
-   if (sm_wave != NULL)  yUNIT_minval   ("close wave file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nwave,       &sm_wave),    1);
-   if (sm_conv != NULL)  yUNIT_minval   ("close conv file"                    , yenv_uclose_detail (__FILE__, __FUNCTION__, __LINE__, sm_nconv,       &sm_conv),    1);
-   yUNIT_mindnoc  ();
+char KOIOS_scrp_reset          (void)  { return KOIOS__scrp_finish ('y', '-');  }
+char KOIOS_scrp_finish         (void)  { return KOIOS__scrp_finish ('-', 'y');  }
+char KOIOS_scrp_finish_close   (void)  { return KOIOS__scrp_finish ('y', 'y');  }
 
-   KOIOS__clear_all ('Õ');
-
-   return 0;
-}
 
 
 /*===[[ CODE FILE MAJORS ]]===================================================*/
@@ -259,7 +238,7 @@ KOIOS_code_beg          (char A_FILE [LEN_TITLE], int A_LINE, int a_mark)
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "#include    <yUNIT_unit.h>"                                                      );
    if (yenv_uexists (sm_thead) == 'r')  yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "#include    \"unit_code.h\""                                                     );
    if (yenv_uexists (sm_hhead) == 'r')  yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "#include    \"unit_head.h\""                                                     );
-   if (yenv_uexists (sm_chead) == 'r')  yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "#include    \"unit_comp.h\""                                                     );
+   if (yenv_uexists (sm_whead) == 'r')  yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "#include    \"unit_wide.h\""                                                     );
    if (yenv_uexists (sm_dhead) == 'r')  yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "#include    \"unit_data.h\""                                                     );
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , ""                                                                                );
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "/*================================ beg-script ================================*/");
@@ -803,41 +782,6 @@ KOIOS_master_create    (char a_file [LEN_FULL])
     *    entries are intensionally unindented and squashed to push conversion a little
     */
    yUNIT_mincond ("prepare a master example (normal)");
-   /*> system ("rm -f /tmp/unit_head.unit 2> /dev/null");                                                                                                      <* 
-    *> system ("echo \"PREP        global function headers       \"                                                                >  " UNIT_HEAD_UNIT);     <* 
-    *> system ("echo \"incl        fake header                    koios.h           \"                                             >> " UNIT_HEAD_UNIT);     <* 
-    *> system ("echo \"global      global variable                - - - - - - - -   int h = 0;                            \"   >> " UNIT_HEAD_UNIT);       <* 
-    *> system ("echo \"\"                                                                                                              >> " UNIT_HEAD_UNIT);   <* 
-    *> system ("echo \"GLOBAL -D-  globally shared steps          0s  tbd        \"                                            >> " UNIT_HEAD_UNIT);       <* 
-    *> system ("echo \"local       working variables              - - - - - - - -   int c = -1;                          \"    >> " UNIT_HEAD_UNIT);       <* 
-    *> system ("echo \"\"                                                                                                              >> " UNIT_HEAD_UNIT);   <* 
-    *> system ("echo \"COND        åxyzæ prepare variables       \"                                                                >> " UNIT_HEAD_UNIT);     <* 
-    *> system ("echo \"code        åx··æ set new value            - - - - - - - -   c = 32 * 64;                         \"    >> " UNIT_HEAD_UNIT);       <* 
-    *> system ("echo \"code        å·y·æ set new value            - - - - - - - -   c -= 20;                             \"    >> " UNIT_HEAD_UNIT);       <* 
-    *> system ("echo \"code        å··zæ set new value            - - - - - - - -   c += 60;                             \"    >> " UNIT_HEAD_UNIT);       <* 
-    *> system ("echo \"echo        åxz·æ check latest value       - - - - - - - -   c              i_greater   0     \"    >> " UNIT_HEAD_UNIT);         <* 
-    *> system ("echo \"echo        åy··æ check latest value       - - - - - - - -   c              i_lesser    0     \"    >> " UNIT_HEAD_UNIT);         <* 
-    *> system ("echo \"\"                                                                                                              >> " UNIT_HEAD_UNIT);   <* 
-    *> system ("echo \"COND        å·æ generate a summary        \"                                                                >> " UNIT_HEAD_UNIT);     <* 
-    *> system ("echo \"exec        å·æ check string               yUNIT_teststring  0              s_equal     hello \"    >> " UNIT_HEAD_UNIT);         <* 
-    *> system ("echo \"get         åqæ check number               yUNIT_testreal    5              r_greater   15.0  \"    >> " UNIT_HEAD_UNIT);         <* 
-    *> system ("echo \"exec        å·æ check integer              yUNIT_testint     32             i_equal     2     \"    >> " UNIT_HEAD_UNIT);         <* 
-    *> system ("echo \"\"                                                                                                              >> " UNIT_HEAD_UNIT);   <* 
-    *> system ("echo \"CONFIG -ò-  global interal steps           0s  tbd        \"                                            >> " UNIT_HEAD_UNIT);       <* 
-    *> system ("echo \"\"                                                                                                              >> " UNIT_HEAD_UNIT);   <* 
-    *> system ("echo \"COND        åabcæ prepare variables       \"                                                                >> " UNIT_HEAD_UNIT);     <* 
-    *> system ("echo \"code        åabcæ ... set new value        - - - - - - - -   h = 96;                              \"    >> " UNIT_HEAD_UNIT);       <* 
-    *> system ("echo \"\"                                                                                                              >> " UNIT_HEAD_UNIT);   <* 
-    *> system ("echo \"COND        å·bcæ generate a summary      \"                                                                >> " UNIT_HEAD_UNIT);     <* 
-    *> system ("echo \"echo        å·b·æ check working variable   - - - - - - - -   h              i_equal     96    \"    >> " UNIT_HEAD_UNIT);         <* 
-    *> system ("echo \"system      åa··æ run little               - - - - - - - -   /bin/false                           \"    >> " UNIT_HEAD_UNIT);       <* 
-    *> system ("echo \"\"                                                                                                              >> " UNIT_HEAD_UNIT);   <* 
-    *> system ("echo \"GLOBAL -J-  globally set internal state    0s  tbd        \"                                            >> " UNIT_HEAD_UNIT);       <* 
-    *> system ("echo \"\"                                                                                                              >> " UNIT_HEAD_UNIT);   <* 
-    *> system ("echo \"COND        prepare variables             \"                                                                >> " UNIT_HEAD_UNIT);     <* 
-    *> system ("echo \"code        ... set new value              - - - - - - - -   h = 96;                              \"    >> " UNIT_HEAD_UNIT);       <* 
-    *> system ("echo \"mode        ... change mode                FORCED_FAIL      \"                                            >> " UNIT_HEAD_UNIT);      <* 
-    *> system ("echo \"mode        ... change mode                normal           \"                                            >> " UNIT_HEAD_UNIT);      <*/
    KOIOS__append  ('[', a_file, "PREP        global function headers       "                                                                );
    KOIOS__append  ('>', a_file, "incl        fake header                    koios.h           "                                             );
    KOIOS__append  ('>', a_file, "global      global variable                - - - - - - - -   int h = 0;                            "   );
@@ -966,9 +910,9 @@ char
 KOIOS_master_globals     (char a_file [LEN_FULL])
 {
    yUNIT_mincond ("verify master unit globals");
-   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '[')      , "D     5  globally shared steps                                                 1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     9     5     1     3     8     0     0     0     0   ");
-   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "J    29  globally set internal state                                           1     1     0     0     1     1     0  ··········     0  ·                        0  ·                        0     3     0     0     3     0     0     0     0     0   ");
-   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "ò    20  global interal steps                                                  1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     3     2     0     1     3     0     0     0     0   ");
+   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '[')      , "D  g  h     5  globally shared steps                                                 1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     9     5     1     3     8     0     0     0     0   ");
+   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "J  g  h    29  globally set internal state                                           1     1     0     0     1     1     0  ··········     0  ·                        0  ·                        0     3     0     0     3     0     0     0     0     0   ");
+   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "ò  c  h    20  global interal steps                                                  1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     3     2     0     1     3     0     0     0     0   ");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "(n/a)");
    yUNIT_minval  ("... check count"                     , yenv_ulines      (a_file  )     ,    3);
    yUNIT_mindnoc ();
@@ -993,7 +937,7 @@ KOIOS_master_head        (char a_file [LEN_FULL])
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "yUNIT_global_D           (char a_select)         /*   16, D, globally shared steps            */");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "{");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   /*===[[ global header ]]========================*/");
-   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   yUNIT_glob ('D', 16, a_select, \"globally shared steps\");");
+   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   yUNIT_glob ('D', 'h', 16, a_select, \"globally shared steps\");");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   int mykoios_ncond  = 0;");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   int mykoios_nstep  = 0;");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   /*---(local variable)--------------*/");
@@ -1065,7 +1009,7 @@ KOIOS_master_head        (char a_file [LEN_FULL])
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "yUNIT_config_k           (char a_select)         /*   38, ò, global interal steps             */");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "{");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   /*===[[ config header ]]========================*/");
-   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   yUNIT_conf ('ò', 38, a_select, \"global interal steps\");");
+   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   yUNIT_conf ('ò', 'h', 38, a_select, \"global interal steps\");");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   int mykoios_ncond  = 0;");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   int mykoios_nstep  = 0;");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   /*===[[ COND #001 ]]============================*/");
@@ -1105,7 +1049,7 @@ KOIOS_master_head        (char a_file [LEN_FULL])
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "yUNIT_global_J           (char a_select)         /*   54, J, globally set internal state      */");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "{");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   /*===[[ global header ]]========================*/");
-   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   yUNIT_glob ('J', 54, a_select, \"globally set internal state\");");
+   yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   yUNIT_glob ('J', 'h', 54, a_select, \"globally set internal state\");");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   int mykoios_ncond  = 0;");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   int mykoios_nstep  = 0;");
    yUNIT_minstr   ("... line"                           , yenv_upeek       (a_file     , '>')      , "   /*===[[ COND #001 ]]============================*/");
@@ -1687,7 +1631,7 @@ KOIOS_dataset_encoded  (char a_file [LEN_FULL])
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "yUNIT_shared_a           (char a_select)         /*   63, a, prepare files for use            */");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "{");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   /*===[[ shared header ]]========================*/");
-   yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   yUNIT_shar ('a', 63, a_select, \"prepare files for use\");");
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   yUNIT_shar ('a', '-', 63, a_select, \"prepare files for use\");");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   int mykoios_ncond  = 0;");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   int mykoios_nstep  = 0;");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   /*===[[ COND #001 ]]============================*/");
@@ -1755,7 +1699,7 @@ KOIOS_dataset_encoded  (char a_file [LEN_FULL])
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "yUNIT_shared_b           (char a_select)         /*   84, b, remove files after use           */");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "{");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   /*===[[ shared header ]]========================*/");
-   yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   yUNIT_shar ('b', 84, a_select, \"remove files after use\");");
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   yUNIT_shar ('b', '-', 84, a_select, \"remove files after use\");");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   int mykoios_ncond  = 0;");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   int mykoios_nstep  = 0;");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   /*===[[ COND #001 ]]============================*/");
@@ -2289,9 +2233,10 @@ KOIOS_dataset_wave     (void)
 
 char
 KOIOS_data_variety      (char a_file [LEN_TITLE])
-{   /*  39 lines, but only 14 must be handled  */
+{  /*  39 lines, but only 14 must be handled  */
+   /* in this case, must NOT start first append record with '[', or it breaks already open files */
    yUNIT_mincond  ("create a variety of data for testing");
-   KOIOS__append  ('[', a_file, "#!/usr/local/bin/koios");
+   KOIOS__append  ('>', a_file, "#!/usr/local/bin/koios");
    KOIOS__append  ('>', a_file, "#   koios-polos (axis of heaven) unit testing meta-language");
    KOIOS__append  ('>', a_file, "");
    KOIOS__append  ('>', a_file, "");
@@ -2441,56 +2386,56 @@ char
 KOIOS_globals_empty      (char a_file [LEN_FULL])
 {
    yUNIT_mincond ("create an empty sample master.globals");
-   KOIOS__append  ('[', a_file, "A    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "B    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "C    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "D    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "E    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "F    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "G    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "H    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "I    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "J    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "K    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "L    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "M    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "N    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "O    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "P    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "Q    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "R    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "S    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "T    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "U    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "V    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "W    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "X    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "Y    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "Z    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "è    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "é    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ê    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ë    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ì    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "í    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "î    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ï    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ð    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ñ    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ò    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ó    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ô    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "õ    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ö    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "÷    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ø    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ù    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ú    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "û    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ü    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ý    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "þ    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   KOIOS__append  ('>', a_file, "ÿ    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('[', a_file, "A  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "B  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "C  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "D  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "E  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "F  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "G  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "H  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "I  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "J  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "K  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "L  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "M  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "N  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "O  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "P  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "Q  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "R  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "S  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "T  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "U  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "V  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "W  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "X  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "Y  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "Z  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "è  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "é  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ê  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ë  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ì  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "í  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "î  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ï  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ð  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ñ  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ò  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ó  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ô  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "õ  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ö  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "÷  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ø  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ù  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ú  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "û  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ü  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ý  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "þ  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   KOIOS__append  ('>', a_file, "ÿ  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
    yUNIT_minval  ("... check count"                    , yenv_ulines(a_file)     ,   50);
    yUNIT_mindnoc ();
    return 0;

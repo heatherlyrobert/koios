@@ -36,9 +36,9 @@
 #define     P_CREATED   "2014-03"
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.-- production on stress test datasets"
-#define     P_VERMINOR  "2.0- supporting unit_head, unit_comp, unit_data"
-#define     P_VERNUM    "2.0b"
-#define     P_VERTXT    "everything except koios_prog.unit is clean, but complex testing left"
+#define     P_VERMINOR  "2.0- supporting unit_head, unit_share, unit_data"
+#define     P_VERNUM    "2.0c"
+#define     P_VERTXT    "built-in sharing and enhanced unit.globals for unit_head, _wide, and _data"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -191,6 +191,7 @@
 #include    <yUNIT.h>
 
 
+#define     KOIOS_GLOBALS      "unit.globals"
 
 #define     G_RUN_DEFAULT   '-'
 #define     G_RUN_CREATE    'c'
@@ -206,19 +207,19 @@
 
 #define     IF_MASTER     if (strcmp (my_loc.l_base, "unit_head") == 0)
 #define     IF_NORMAL     if (strcmp (my_loc.l_base, "unit_head") != 0)
-#define     IF_SHARED     if (strcmp (my_loc.l_base, "unit_head") == 0 || strcmp (my_loc.l_base, "unit_comp") == 0 || strcmp (my_loc.l_base, "unit_data") == 0)
+#define     IF_SHARED     if (strcmp (my_loc.l_base, "unit_head") == 0 || strcmp (my_loc.l_base, "unit_wide") == 0 || strcmp (my_loc.l_base, "unit_data") == 0)
 
 #define     IF_HEAD       if (strcmp (a_nscrp, "unit_head.unit")  == 0)
 #define     IF_NOT_HEAD   if (strcmp (a_nscrp, "unit_head.unit")  != 0)
 
-#define     IF_GLOBAL     if (strcmp (a_nscrp, "unit_head.unit")  == 0 || strcmp (my_loc.l_base, "unit_comp") == 0 || strcmp (a_nscrp, "unit_data.unit") == 0)
-#define     IF_LOCAL      if (strcmp (a_nscrp, "unit_head.unit")  != 0 && strcmp (my_loc.l_base, "unit_comp") != 0 && strcmp (a_nscrp, "unit_data.unit") != 0)
+#define     IF_GLOBAL     if (strcmp (a_nscrp, "unit_head.unit")  == 0 || strcmp (my_loc.l_base, "unit_wide") == 0 || strcmp (a_nscrp, "unit_data.unit") == 0)
+#define     IF_LOCAL      if (strcmp (a_nscrp, "unit_head.unit")  != 0 && strcmp (my_loc.l_base, "unit_wide") != 0 && strcmp (a_nscrp, "unit_data.unit") != 0)
 
 #define     IF_CONFIRM    if (my.noise == 'c') 
 #define     IF_VERBOSE    if (my.noise == 'v') 
 
 
-#define     debug_uver    if (my.debug == 'y')
+#define     UDEBUG_KOIOS  if (my.debug == 'y')
 
 
 typedef struct stat      tSTAT;
@@ -318,7 +319,6 @@ struct cRUN {
    /*---(done)------------------*/
 };
 extern      tRUN    my_run;
-
 
 
 extern char g_print     [LEN_RECD];
@@ -431,36 +431,22 @@ char        READ_next               (FILE **b_file, int *r_nline, char *r_dittoi
 /*===[[ koios_reuse.c ]]======================================================*/
 /*········· ´······················ ´·········································*/
 /*---(program)--------------*/
-/*> char        REUSE_purge             (void);                                       <*/
 char        REUSE_init              (void);
 char        REUSE_wrap              (void);
-/*---(basics)---------------*/
-/*> char        REUSE__type             (char a_abbr);                                <*/
-/*> int         REUSE__index            (char a_abbr);                                <*/
-/*> char        REUSE__data             (char a_abbr, char *r_type, char r_tdesc [LEN_TERSE], int *r_line, char r_desc [LEN_LONG], short *r_conds, short *r_steps, char *r_called);   <*/
 /*---(usage)----------------*/
-/*> char        REUSE__set              (char a_abbr, int a_line, char a_desc [LEN_LONG]);   <*/
-char        REUSE__set_recd         (char a_abbr, int a_line, char a_vers, char a_recd [LEN_RECD]);
-/*> int         REUSE__get              (char a_abbr, char r_desc [LEN_LONG], short *r_conds, short *r_steps);   <*/
-/*> char        REUSE_called            (char a_abbr);                                <*/
+char        REUSE__set_recd         (char a_abbr, char a_ftype, int a_line, char a_vers, char a_recd [LEN_RECD]);
 /*---(parsing)--------------*/
 char        REUSE__parse_delimit    (char a_func [LEN_LABEL], char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_SHORT], char a_pos, char a_char, char a_example [LEN_SHORT]);
-char        REUSE__parse_global     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major);
-char        REUSE__parse_shared     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major);
+char        REUSE__parse_global     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major);
+char        REUSE__parse_shared     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major);
 char        REUSE__parse_reuse_old  (char a_nscrp [LEN_TITLE], int a_line, char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char *r_major, char *r_minor);
 char        REUSE__parse_reuse_new  (char a_nscrp [LEN_TITLE], int a_line, char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char *r_major, char *r_minor);
-char        REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_share, char r_desc [LEN_LONG], char *r_major, char *r_minor);
+char        REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_share, char r_desc [LEN_LONG], char *r_major, char *r_minor);
 char        REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char a_share, char r_desc [LEN_LONG], char *r_major, char *r_minor);
-/*---(in-use)---------------*/
-char        REUSE_update            (char a_abbr, int a_conds, int a_steps);
-char        REUSE_addback           (char a_abbr, int *b_conds, int *b_steps);
-/*---(exim)-----------------*/
-char        REUSE_export            (cchar a_name [LEN_PATH]);
-char        REUSE_import            (cchar a_name [LEN_PATH]);
 /*---(debugging)------------*/
 char*       REUSE__actuals          (void);
 char*       REUSE__used             (void);
-char*       REUSE__detail           (char a_abbr);
+/*> char*       REUSE__detail           (char a_abbr);                                <*/
 /*---(totals)---------------*/
 char        REUSE_totals            (char a_verb [LEN_LABEL], char a_recd [LEN_RECD]);
 /*---(done)-----------------*/

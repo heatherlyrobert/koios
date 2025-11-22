@@ -1,5 +1,5 @@
 /*===============================[[ beg-code ]]===============================*/
-#include    "koios.h"
+#include    "master.munit"
 
 
 
@@ -16,10 +16,7 @@ koios_wave_parse          (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
-
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("verify quick success");
    yUNIT_minval   ("parse wave"                         , WAVE_parse      ("koios_wave",  1,  "SCRP"  , "SCRP    [1a]", x_stage), 1   );
@@ -155,8 +152,7 @@ koios_wave_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check result"                   , x_stage                             , "··/·");
 
    /*---(complete)-----------------------*/
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }

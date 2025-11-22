@@ -10,7 +10,7 @@ UNIT___live_master_conv  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_prep_all ();
+   KOIOS_scrp_start ('-');
 
    KOIOS_master_create (sm_hunit);
 
@@ -22,7 +22,7 @@ UNIT___live_master_conv  (char a_scrp, char a_list, char a_unit)
 
    KOIOS_master_globals (sm_globals);
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -34,7 +34,7 @@ UNIT___live_master_code  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_prep_all ();
+   KOIOS_scrp_start ('-');
 
    KOIOS_master_create (sm_hunit);
 
@@ -56,7 +56,7 @@ UNIT___live_master_code  (char a_scrp, char a_list, char a_unit)
 
    KOIOS_master_head    (sm_hhead);
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -68,7 +68,7 @@ UNIT___live_dataset_conv (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_prep_all ();
+   KOIOS_scrp_start ('-');
 
    KOIOS_master_create (sm_hunit);
 
@@ -86,7 +86,7 @@ UNIT___live_dataset_conv (char a_scrp, char a_list, char a_unit)
 
    KOIOS_dataset_verify (sm_nunit);
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -98,7 +98,7 @@ UNIT___live_dataset_code (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_prep_all ();
+   KOIOS_scrp_start ('-');
 
    KOIOS_master_create (sm_hunit);
 
@@ -130,7 +130,7 @@ UNIT___live_dataset_code (char a_scrp, char a_list, char a_unit)
 
    KOIOS_dataset_encoded (sm_ncode);
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -403,8 +403,7 @@ koios_live_ditto   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all ('*', '-');
-   KOIOS_reset    ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("create a sample unit with ditto");
    system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  /tmp/apate.unit");
@@ -519,9 +518,7 @@ koios_live_ditto   (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check line"                     , yenv_upeek (x_ncode, '>'), "");
    yUNIT_mindnoc  ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
-   PROG__unit_bigclean ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -533,13 +530,9 @@ UNIT___live_scrp    (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_prep_all ();
+   KOIOS_scrp_start ('-');
 
    koios_live_build ();
-
-   yUNIT_minprcs ();
-   return 0;
-
 
    yerr_ureset   ();
    yUNIT_mincond ("verify writing to WAVE file)");
@@ -647,7 +640,7 @@ UNIT___live_scrp    (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... check unit footer"              , yenv_upeek (sm_nurun, '>'), "yUNIT - heatherly unit testing framework ---------------------------------------(end)");
    yUNIT_mindnoc ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -659,7 +652,7 @@ UNIT___live_cond    (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_prep_all ();
+   KOIOS_scrp_start ('-');
 
    koios_live_build ();
 
@@ -981,7 +974,7 @@ UNIT___live_cond    (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "(n/a)");
    yUNIT_mindnoc ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -1022,7 +1015,7 @@ UNIT___live_steps   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_prep_all ();
+   KOIOS_scrp_start ('-');
 
    koios_live_build ();
 
@@ -1263,7 +1256,7 @@ UNIT___live_steps   (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "(n/a)");
    yUNIT_mindnoc ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -1275,7 +1268,7 @@ UNIT___live_step    (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_prep_all ();
+   KOIOS_scrp_start ('-');
 
    koios_live_build ();
 
@@ -1537,7 +1530,7 @@ UNIT___live_step    (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "(n/a)");
    yUNIT_mindnoc ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -1550,7 +1543,7 @@ UNIT___live_full    (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_prep_all ();
+   KOIOS_scrp_start ('-');
 
    koios_live_build ();
 
@@ -1647,7 +1640,7 @@ UNIT___live_full    (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... empty"                          , yenv_upeek  (sm_nurun, '>'), "");
    yUNIT_mindnoc ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -1661,7 +1654,7 @@ UNIT___live_stop    (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_prep_all ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("verify a simple success");
    system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  /tmp/koios.unit_testing_marvel/koios_stop.unit");
@@ -1675,7 +1668,7 @@ UNIT___live_stop    (char a_scrp, char a_list, char a_unit)
    yerr_ureset    ();
    yUNIT_minval   ("... run koios"                      , system ("koios --Econv koios_stop > /dev/null 2>&1"),   0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "koios_reuse.cs/REUSE_import:755:0: error: file åunit.globalsæ fopen in yenv_uopen_detail returned (2) No such file or directory");
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "yUNIT_reuse.cs/yUNIT_reuse_import:838:0: error: file åunit.globalsæ fopen in yenv_uopen_detail returned (2) No such file or directory");
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc  ();
 
@@ -1707,7 +1700,7 @@ UNIT___live_stop    (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -1725,11 +1718,7 @@ koios_live_comment (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir ("/tmp/");
-   PROG__unit_quiet  ();
-   PROG__unit_bigclean ();
-
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond  ("unit with variety of comments, and issue");
    system ("echo \"\"                                                                                                                                                                > /tmp/apate.unit");
@@ -1823,9 +1812,7 @@ koios_live_comment (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... check line"                     , yenv_upeek (x_unit, '>'), "# end-of-file.  done, finito, completare, whimper [Ï´···");
    yUNIT_minstr  ("... check line"                     , yenv_upeek (x_unit, '>'), "(n/a)");
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
-   PROG__unit_bigclean ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -1844,11 +1831,7 @@ koios_live_code    (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir ("/tmp/");
-   PROG__unit_quiet  ();
-   PROG__unit_bigclean ();
-
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("prepare a header example");
    system ("rm -f /tmp/apate.h    2> /dev/null");
@@ -1935,9 +1918,7 @@ koios_live_code    (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... empty"                          , yenv_upeek (x_urun, '>'), "(n/a)");
    yUNIT_mindnoc ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
-   PROG__unit_bigclean ();
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -2067,7 +2048,7 @@ UNIT___live_reuse       (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_prep_all ();
+   KOIOS_scrp_start ('-');
 
    KOIOS_reuse_master (sm_hunit);
 
@@ -2111,7 +2092,7 @@ UNIT___live_reuse       (char a_scrp, char a_list, char a_unit)
 
    KOIOS_reuse_output (sm_rurun);
 
-   /*> KOIOS_close_all ('*');                                                         <*/
+   KOIOS_scrp_finish ();
    yUNIT_minprcs  ();
    return 0;
 }

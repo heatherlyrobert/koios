@@ -1,5 +1,5 @@
 /*===============================[[ beg-code ]]===============================*/
-#include    "koios.h"
+#include    "master.munit"
 
 
 /*> ,x··V·:s/´/á/g¦··V·:s/-/·/g¦··0·113|·v·31l·d·80|·p··0·80|·a·   á···   ¥··186|·iá   ¥··/REUSE__used¦··N··cwyUNIT_reuse_used ¥··n··,y   <*/
@@ -7,262 +7,6 @@
 char  *s_wave     = "/tmp/master.wave";
 char  *s_error    = "/tmp/apate_errors.txt";
 
-
-/*> char                                                                                           <* 
- *> koios_reuse_index  (char a_scrp, char a_list, char a_unit)                                     <* 
- *> {                                                                                              <* 
- *>    /+---(header)-------------------------+/                                                    <* 
- *>    yUNIT_minscrpy ("koios", "koios_reuse", "(REUSE) retrieving reuse indexes");                <* 
- *>    if (a_list == '!')    { yUNIT_minprcs (); return 0; }                                       <* 
- *>    if (a_unit != 0 && a_scrp != a_unit)  return 0;                                             <* 
- *>    if (a_list == 'y')                    return 0;                                             <* 
- *>    PROG__unit_quiet  ();                                                                       <* 
- *>    yerr_uopen ();                                                                              <* 
- *>                                                                                                <* 
- *>    yUNIT_mincond ("verify on valid indexes");                                                  <* 
- *>    yUNIT_minval  ("... run A"                          , REUSE__index ('A'),   0          );   <* 
- *>    yUNIT_minval  ("... run L"                          , REUSE__index ('L'),  11          );   <* 
- *>    yUNIT_minval  ("... run Y"                          , REUSE__index ('Y'),  24          );   <* 
- *>    yUNIT_minval  ("... run e"                          , REUSE__index ('e'),  26 +  4     );   <* 
- *>    yUNIT_minval  ("... run q"                          , REUSE__index ('q'),  26 + 16     );   <* 
- *>    yUNIT_minval  ("... run a"                          , REUSE__index ('z'),  26 + 25     );   <* 
- *>    yUNIT_minval  ("... run ê"                          , REUSE__index ('ê'),  26 + 26 +  2);   <* 
- *>    yUNIT_minval  ("... run ÿ"                          , REUSE__index ('ÿ'),  26 + 26 + 23);   <* 
- *>    yUNIT_mindnoc ();                                                                           <* 
- *>                                                                                                <* 
- *>    yUNIT_mincond ("verify null handling");                                                     <* 
- *>    yUNIT_minval  ("... run NULL"                       , REUSE__index (0 ), -999);             <* 
- *>    yUNIT_mindnoc ();                                                                           <* 
- *>                                                                                                <* 
- *>    yUNIT_mincond ("verify defaultish");                                                        <* 
- *>    yUNIT_minval  ("... run space"                      , REUSE__index (' '), -999);            <* 
- *>    yUNIT_minval  ("... run -"                          , REUSE__index ('-'), -999);            <* 
- *>    yUNIT_minval  ("... run ·"                          , REUSE__index ('·'), -999);            <* 
- *>    yUNIT_mindnoc ();                                                                           <* 
- *>                                                                                                <* 
- *>    yUNIT_mincond ("attempt invalid indexes");                                                  <* 
- *>    yUNIT_minval  ("... run ?"                          , REUSE__index ('5'), -999);            <* 
- *>    yUNIT_minval  ("... run +"                          , REUSE__index ('+'), -999);            <* 
- *>    yUNIT_minval  ("... run ´"                          , REUSE__index ('´'), -999);            <* 
- *>    yUNIT_minval  ("... run ´"                          , REUSE__index ('='), -999);            <* 
- *>    yUNIT_mindnoc ();                                                                           <* 
- *>                                                                                                <* 
- *>    PROG__unit_end    ();                                                                       <* 
- *>    yUNIT_minprcs ();                                                                           <* 
- *>    return 0;                                                                                   <* 
- *> }                                                                                              <*/
-
-/*> char                                                                                                                                                                                 <* 
- *> koios_reuse_set    (char a_scrp, char a_list, char a_unit)                                                                                                                           <* 
- *> {                                                                                                                                                                                    <* 
- *>    char        x_cwd       [LEN_FULL]  = "";                                                                                                                                         <* 
- *>                                                                                                                                                                                      <* 
- *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                         <* 
- *>    /+---(header)-------------------------+/                                                                                                                                          <* 
- *>    yUNIT_minscrpy ("koios", "koios_reuse", "(REUSE) setting and getting reuse values");                                                                                              <* 
- *>    if (a_list == '!')    { yUNIT_minprcs (); return 0; }                                                                                                                             <* 
- *>    if (a_unit != 0 && a_scrp != a_unit)  return 0;                                                                                                                                   <* 
- *>    if (a_list == 'y')                    return 0;                                                                                                                                   <* 
- *>    getcwd  (x_cwd, LEN_FULL);                                                                                                                                                        <* 
- *>    chdir   ("/tmp/");                                                                                                                                                                <* 
- *>    PROG__unit_quiet  ();                                                                                                                                                             <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify clean start");                                                                                                                                             <* 
- *>    yUNIT_minval  ("... init"                           , REUSE_init ()       , 0);                                                                                                   <* 
- *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");   <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify showing detail on full empty");                                                                                                                            <* 
- *>    yUNIT_minstr  ("show detail (NULL)"                 , REUSE__detail ( 0 ) , "- · ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  ·········  Ï");            <* 
- *>    yUNIT_minstr  ("show detail (symbol)"               , REUSE__detail ('?') , "- · ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  ·········  Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('A') , "A m ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  GLOBAL     Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('M') , "M m ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  GLOBAL     Ï");            <* 
- *>    yUNIT_minstr  ("show detail (number)"               , REUSE__detail ('5') , "- · ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  ·········  Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('b') , "b r ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  SHARED     Ï");            <* 
- *>    yUNIT_minstr  ("show detail (spacer)"               , REUSE__detail ('·') , "- · ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  ·········  Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('s') , "s r ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  SHARED     Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('ê') , "ê c ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  CONFIG     Ï");            <* 
- *>    yUNIT_minstr  ("show detail (space)"                , REUSE__detail (' ') , "- · ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  ·········  Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('ò') , "ò c ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  CONFIG     Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('ÿ') , "ÿ c ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  CONFIG     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify setting a reuse mark");                                                                                                                                    <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set ('A', 123, "verify something")    , 1);                                                                          <* 
- *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "GL A-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");   <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('A') , "A m  123  verify·something                                     ···· ····  GLOBAL     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify re-setting a mark");                                                                                                                                       <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set ('A',  52, "check another"   )    , 1);                                                                          <* 
- *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "GL A-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");   <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('A') , "A m   52  check·another                                        ···· ····  GLOBAL     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("attempt to set illegal marks");                                                                                                                                   <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set ('/',   1, "verify something")    , -999);                                                                       <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set (' ',   1, "verify something")    , -999);                                                                       <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify setting another global");                                                                                                                                  <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set ('M', 678, "big shared global")   , 1);                                                                          <* 
- *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "GL A-----´-----M-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");   <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('M') , "M m  678  big·shared·global                                    ···· ····  GLOBAL     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify setting shared reuse mark");                                                                                                                               <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set ('z',  22, "monster trouble" )    , 1);                                                                          <* 
- *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "GL A-----´-----M-----´-----´-   SH ´-----´-----´-----´-----´z   CO ´-----´-----´-----´-----   Ï");   <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('z') , "z r   22  monster·trouble                                      ···· ····  SHARED     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify setting another shared reuse mark");                                                                                                                       <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set ('b', 287, "simple repeat check") , 1);                                                                          <* 
- *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "GL A-----´-----M-----´-----´-   SH ´b----´-----´-----´-----´z   CO ´-----´-----´-----´-----   Ï");   <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('b') , "b r  287  simple·repeat·check                                  ···· ····  SHARED     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify setting a config reuse mark");                                                                                                                             <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set ('ê',  32, "house keeping")       , 1);                                                                          <* 
- *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "GL A-----´-----M-----´-----´-   SH ´b----´-----´-----´-----´z   CO ´-ê---´-----´-----´-----   Ï");   <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('ê') , "ê c   32  house·keeping                                        ···· ····  CONFIG     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify checking all marks");                                                                                                                                      <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('A') , "A m   52  check·another                                        ···· ····  GLOBAL     Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('M') , "M m  678  big·shared·global                                    ···· ····  GLOBAL     Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('b') , "b r  287  simple·repeat·check                                  ···· ····  SHARED     Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('z') , "z r   22  monster·trouble                                      ···· ····  SHARED     Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('ê') , "ê c   32  house·keeping                                        ···· ····  CONFIG     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify purging marks");                                                                                                                                           <* 
- *>    yUNIT_minval  ("... purge"                          , REUSE_init  ()      , 0);                                                                                                   <* 
- *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´-----´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");   <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('A') , "A m ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  GLOBAL     Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('M') , "M m ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  GLOBAL     Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('b') , "b r ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  SHARED     Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('z') , "z r ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  SHARED     Ï");            <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('ê') , "ê c ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  CONFIG     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify setting by record");                                                                                                                                       <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set_recd ('f', 987,  0, "SHARE -f-  description field " )    , 1);                                                 <* 
- *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----´-----´-----´-   SH ´----f´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");   <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('f') , "f r  987  description·field                                    ···· ····  SHARED     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify setting by record (with spaces)");                                                                                                                         <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set_recd ('M', 789,  0, "GLOBAL -M-        indented        " )    , 1);                                            <* 
- *>    yUNIT_minstr  ("... review marks"                   , REUSE__used ()      , "GL ´-----´-----M-----´-----´-   SH ´----f´-----´-----´-----´-   CO ´-----´-----´-----´-----   Ï");   <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('M') , "M m  789  indented                                             ···· ····  GLOBAL     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    yUNIT_mincond ("verify setting by record (config)");                                                                                                                              <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set_recd ('ò', 789,  0, "GLOBAL -ò-     lovely comment     " )    , 1);                                            <* 
- *>    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "GL ´-----´-----M-----´-----´-   SH ´----f´-----´-----´-----´-   CO ´-----´---ò-´-----´-----   Ï");   <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail ('ò') , "ò c  789  lovely·comment                                       ···· ····  CONFIG     Ï");            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                 <* 
- *>                                                                                                                                                                                      <* 
- *>    PROG__unit_end    ();                                                                                                                                                             <* 
- *>    chdir   (x_cwd);                                                                                                                                                                  <* 
- *>    yUNIT_minprcs ();                                                                                                                                                                 <* 
- *>    return 0;                                                                                                                                                                         <* 
- *> }                                                                                                                                                                                    <*/
-
-/*> char                                                                                                                                                                                                       <* 
- *> koios_reuse_update (char a_scrp, char a_list, char a_unit)                                                                                                                                                 <* 
- *> {                                                                                                                                                                                                          <* 
- *>    /+---(locals)-----------+-----+-----+-+/                                                                                                                                                                <* 
- *>    char        x_type      =  '-';                                                                                                                                                                         <* 
- *>    char        x_tdesc     [LEN_TERSE] = "";                                                                                                                                                               <* 
- *>    int         x_line      =    0;                                                                                                                                                                         <* 
- *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                                               <* 
- *>    short       x_conds     =    0;                                                                                                                                                                         <* 
- *>    short       x_steps     =    0;                                                                                                                                                                         <* 
- *>    int         x_CONDS     =   50;                                                                                                                                                                         <* 
- *>    int         x_STEPS     =  253;                                                                                                                                                                         <* 
- *>    /+---(header)-------------------------+/                                                                                                                                                                <* 
- *>    yUNIT_minscrpy ("koios", "koios_reuse", "(REUSE) setting and getting reuse values");                                                                                                                    <* 
- *>    if (a_list == '!')    { yUNIT_minprcs (); return 0; }                                                                                                                                                   <* 
- *>    if (a_unit != 0 && a_scrp != a_unit)  return 0;                                                                                                                                                         <* 
- *>    if (a_list == 'y')                    return 0;                                                                                                                                                         <* 
- *>    PROG__unit_quiet  ();                                                                                                                                                                                   <* 
- *>                                                                                                                                                                                                            <* 
- *>    yUNIT_mincond ("prepare a dataset");                                                                                                                                                                    <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set     ('A',  52, "very first mark" )    , 1);                                                                                            <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set     ('M', 678, "big shared global")   , 1);                                                                                            <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set     ('b', 287, "simple repeat check") , 1);                                                                                            <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set     ('z',  22, "monster trouble" )    , 1);                                                                                            <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set     ('ê',  32, "house keeping")       , 1);                                                                                            <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set     ('ò', 789, "lovely comment")      , 1);                                                                                            <* 
- *>    yUNIT_minval  ("call set"                           , REUSE__set     ('ÿ', 666, "terminal mark")       , 1);                                                                                            <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                                       <* 
- *>                                                                                                                                                                                                            <* 
- *>    yUNIT_mincond ("verify checking all marks");                                                                                                                                                            <* 
- *>    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used   ()      , "·   á···   SH áb····á·····á·····á·····áz   GL A·····á·····M·····á·····á·   CO á·ê···á···ò·á·····á·····   !   Ï");   <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail  ('A') , "A m   52  very·first·mark                                      ···· ····  GLOBAL     Ï");                                 <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail  ('M') , "M m  678  big·shared·global                                    ···· ····  GLOBAL     Ï");                                 <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail  ('b') , "b r  287  simple·repeat·check                                  ···· ····  SHARED     Ï");                                 <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail  ('z') , "z r   22  monster·trouble                                      ···· ····  SHARED     Ï");                                 <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail  ('ê') , "ê c   32  house·keeping                                        ···· ····  CONFIG     Ï");                                 <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail  ('ò') , "ò c  789  lovely·comment                                       ···· ····  CONFIG     Ï");                                 <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail  ('ÿ') , "ÿ c  666  terminal·mark                                        ···· ····  CONFIG     Ï");                                 <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                                       <* 
- *>                                                                                                                                                                                                            <* 
- *>    yUNIT_mincond ("verify quick update config success");                                                                                                                                                   <* 
- *>    yUNIT_minval  ("call update"                        , REUSE_update   ('ò',  10, 25)           ,    1);                                                                                                  <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail  ('ò') , "ò c  789  lovely·comment                                         10   25  CONFIG     Ï");                                 <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                                       <* 
- *>                                                                                                                                                                                                            <* 
- *>    yUNIT_mincond ("verify quick addback config success");                                                                                                                                                  <* 
- *>    yUNIT_minval  ("call addback"                       , REUSE_addback  ('ò', &x_CONDS, &x_STEPS),    1);                                                                                                  <* 
- *>    yUNIT_minval  ("... new conds"                      , x_CONDS ,  60);                                                                                                                                   <* 
- *>    yUNIT_minval  ("... new steps"                      , x_STEPS , 278);                                                                                                                                   <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                                       <* 
- *>                                                                                                                                                                                                            <* 
- *>    yUNIT_mincond ("attempt NULL abbr");                                                                                                                                                                    <* 
- *>    yUNIT_minval  ("call update"                        , REUSE_update   ( 0 ,  10, 25)           , -999);                                                                                                  <* 
- *>    yUNIT_minval  ("call addback"                       , REUSE_addback  ( 0 , &x_CONDS, &x_STEPS), -999);                                                                                                  <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                                       <* 
- *>                                                                                                                                                                                                            <* 
- *>    yUNIT_mincond ("attempt illegal abbr");                                                                                                                                                                 <* 
- *>    yUNIT_minval  ("call update"                        , REUSE_update   ('5',  10, 25)           , -999);                                                                                                  <* 
- *>    yUNIT_minval  ("call addback"                       , REUSE_addback  ('5', &x_CONDS, &x_STEPS), -999);                                                                                                  <* 
- *>    yUNIT_minval  ("call update"                        , REUSE_update   (' ',  10, 25)           , -999);                                                                                                  <* 
- *>    yUNIT_minval  ("call addback"                       , REUSE_addback  (' ', &x_CONDS, &x_STEPS), -999);                                                                                                  <* 
- *>    yUNIT_minval  ("call update"                        , REUSE_update   ('?',  10, 25)           , -999);                                                                                                  <* 
- *>    yUNIT_minval  ("call addback"                       , REUSE_addback  ('?', &x_CONDS, &x_STEPS), -999);                                                                                                  <* 
- *>    yUNIT_minval  ("call update"                        , REUSE_update   ('-',  10, 25)           , -999);                                                                                                  <* 
- *>    yUNIT_minval  ("call addback"                       , REUSE_addback  ('-', &x_CONDS, &x_STEPS), -999);                                                                                                  <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                                       <* 
- *>                                                                                                                                                                                                            <* 
- *>    yUNIT_mincond ("attempt updates on unset marks");                                                                                                                                                       <* 
- *>    yUNIT_minval  ("call update"                        , REUSE_update   ('P',  10, 25)           , -999);                                                                                                  <* 
- *>    yUNIT_minval  ("call addback"                       , REUSE_addback  ('P', &x_CONDS, &x_STEPS), -999);                                                                                                  <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail  ('P') , "P m ····  ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´ · · · · ´  ···· ····  GLOBAL     Ï");                                 <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                                       <* 
- *>                                                                                                                                                                                                            <* 
- *>    yUNIT_mincond ("attempt addback on un-updated mark");                                                                                                                                                   <* 
- *>    yUNIT_minval  ("call addback"                       , REUSE_addback  ('M', &x_CONDS, &x_STEPS), -999);                                                                                                  <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail  ('M') , "M m  678  big·shared·global                                    ···· ····  GLOBAL     Ï");                                 <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                                       <* 
- *>                                                                                                                                                                                                            <* 
- *>    yUNIT_mincond ("verify updating shared");                                                                                                                                                               <* 
- *>    yUNIT_minval  ("call update"                        , REUSE_update   ('b',  24, 156)          ,    1);                                                                                                  <* 
- *>    yUNIT_minstr  ("show detail"                        , REUSE__detail  ('b') , "b r  287  simple·repeat·check                                    24  156  SHARED     Ï");                                 <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                                       <* 
- *>                                                                                                                                                                                                            <* 
- *>    yUNIT_mincond ("verify addback on shared");                                                                                                                                                             <* 
- *>    yUNIT_minval  ("call addback"                       , REUSE_addback  ('b', &x_CONDS, &x_STEPS),    1);                                                                                                  <* 
- *>    yUNIT_minval  ("... new conds"                      , x_CONDS ,  84);                                                                                                                                   <* 
- *>    yUNIT_minval  ("... new steps"                      , x_STEPS , 434);                                                                                                                                   <* 
- *>    yUNIT_mindnoc ();                                                                                                                                                                                       <* 
- *>                                                                                                                                                                                                            <* 
- *>    PROG__unit_end    ();                                                                                                                                                                                   <* 
- *>    yUNIT_minprcs ();                                                                                                                                                                                       <* 
- *>    return 0;                                                                                                                                                                                               <* 
- *> }                                                                                                                                                                                                          <*/
 
 char
 koios_reuse_delimit (char a_scrp, char a_list, char a_unit)
@@ -278,8 +22,7 @@ koios_reuse_delimit (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   PROG__unit_quiet  ();
-   yerr_uopen    ();
+   KOIOS_scrp_start ('y');
 
    yUNIT_mincond ("verify quick success");
    yerr_ureset   ();
@@ -306,9 +49,7 @@ koios_reuse_delimit (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... check error message"            , yerr_upeek   ('['), "scrp_name:6:0: error: verb åGLOBALæ from prefix åGLOBAL A/aæ with label åA/aæ has leading (A) instead of (-), e.g., å-A-æ");
    yUNIT_mindnoc ();
 
-   yerr_uclose   ();
-   PROG__unit_end    ();
-   yUNIT_minval  ("... check error lines"              , yerr_ulines          ()                                                                              ,    1);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -327,9 +68,7 @@ koios_reuse_global  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("set to defaults");
    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
@@ -337,67 +76,66 @@ koios_reuse_global  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify simple global identifier");
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,   4, "GLOBAL"   , "GLOBAL -A-  generate test data   " , "GLOBAL -A-", "-A-", "-A-",  0, &x_share),    1);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',   4, "GLOBAL"   , "GLOBAL -A-  generate test data   " , "GLOBAL -A-", "-A-", "-A-",  0, &x_share),    1);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH á·····á·····á·····á·····á·   GL A·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minchr  ("... check mark"                     , x_share             , 'A');
    yUNIT_minval  ("call get mark"                      , yUNIT_reuse_get (x_share, x_desc, NULL, NULL)         ,    4);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify ignoring other verbs");
-   yUNIT_minval  ("call global (exec)"                 , REUSE__parse_global (x_master,   5, "exec"     , "  exec      read a line          " , "exec"      , "xec", "-A-",  0, &x_share),    0);
-   yUNIT_minval  ("call global (SCRP)"                 , REUSE__parse_global (x_master,   6, "SCRP"     , "SCRP        test the reading     " , "SCRP"      , "CRP", "-A-",  0, &x_share),    0);
-   yUNIT_minval  ("call global (SHARED)"               , REUSE__parse_global (x_master,   4, "SHARED"   , "SHARED -b-  generate test data   " , "SHARED -b-", "-b-", "-a-",  0, &x_share),    0);
+   yUNIT_minval  ("call global (exec)"                 , REUSE__parse_global (x_master, 'h',   5, "exec"     , "  exec      read a line          " , "exec"      , "xec", "-A-",  0, &x_share),    0);
+   yUNIT_minval  ("call global (SCRP)"                 , REUSE__parse_global (x_master, 'h',   6, "SCRP"     , "SCRP        test the reading     " , "SCRP"      , "CRP", "-A-",  0, &x_share),    0);
+   yUNIT_minval  ("call global (SHARED)"               , REUSE__parse_global (x_master, 'h',   4, "SHARED"   , "SHARED -b-  generate test data   " , "SHARED -b-", "-b-", "-a-",  0, &x_share),    0);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH á·····á·····á·····á·····á·   GL A·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt an illegal identifier");
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,   7, "GLOBAL"   , "GLOBAL -2-  generate test data   " , "GLOBAL -2-", "-2-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,   8, "GLOBAL"   , "GLOBAL -ò-  generate test data   " , "GLOBAL -ò-", "-ò-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,   8, "GLOBAL"   , "GLOBAL ---  generate test data   " , "GLOBAL ---", "---", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master,   8, "CONFIG"   , "CONFIG -2-  generate test data   " , "CONFIG -2-", "-2-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master,   8, "CONFIG"   , "CONFIG -M-  generate test data   " , "CONFIG -M-", "-M-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master,   8, "CONFIG"   , "CONFIG ---  generate test data   " , "CONFIG ---", "---", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',   7, "GLOBAL"   , "GLOBAL -2-  generate test data   " , "GLOBAL -2-", "-2-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',   8, "GLOBAL"   , "GLOBAL -ò-  generate test data   " , "GLOBAL -ò-", "-ò-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',   8, "GLOBAL"   , "GLOBAL ---  generate test data   " , "GLOBAL ---", "---", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master, 'h',   8, "CONFIG"   , "CONFIG -2-  generate test data   " , "CONFIG -2-", "-2-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master, 'h',   8, "CONFIG"   , "CONFIG -M-  generate test data   " , "CONFIG -M-", "-M-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master, 'h',   8, "CONFIG"   , "CONFIG ---  generate test data   " , "CONFIG ---", "---", "-A-",  0, &x_share), -999);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH á·····á·····á·····á·····á·   GL A·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify another success");             
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,  10, "GLOBAL"   , "GLOBAL -M-  generate test data   " , "GLOBAL -M-", "-M-", "-A-",  0, &x_share),    1);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',  10, "GLOBAL"   , "GLOBAL -M-  generate test data   " , "GLOBAL -M-", "-M-", "-A-",  0, &x_share),    1);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH á·····á·····á·····á·····á·   GL A·····á·····M·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minchr  ("... check mark"                     , x_share             , 'M');
    yUNIT_minval  ("call get mark"                      , yUNIT_reuse_get (x_share, x_desc, NULL, NULL)         ,   10);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt with bad label formatting");     
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,  11, "GLOBAL"   , "GLOBAL  B-  generate test data   " , "GLOBAL  B-", " B-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,  12, "GLOBAL"   , "GLOBAL -B   generate test data   " , "GLOBAL -B ", "-B ", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,  12, "GLOBAL"   , "GLOBAL (B)  generate test data   " , "GLOBAL (B)", "(B)", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,  12, "GLOBAL"   , "GLOBAL [B]  generate test data   " , "GLOBAL [B]", "[B]", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master,  11, "CONFIG"   , "CONFIG  è-  generate test data   " , "CONFIG  è-", " è-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master,  12, "CONFIG"   , "CONFIG -è   generate test data   " , "CONFIG -è ", "-è ", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master,  12, "CONFIG"   , "CONFIG (è)  generate test data   " , "CONFIG (è)", "(è)", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master,  12, "CONFIG"   , "CONFIG [è]  generate test data   " , "CONFIG -è]", "-è]", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',  11, "GLOBAL"   , "GLOBAL  B-  generate test data   " , "GLOBAL  B-", " B-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',  12, "GLOBAL"   , "GLOBAL -B   generate test data   " , "GLOBAL -B ", "-B ", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',  12, "GLOBAL"   , "GLOBAL (B)  generate test data   " , "GLOBAL (B)", "(B)", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',  12, "GLOBAL"   , "GLOBAL [B]  generate test data   " , "GLOBAL [B]", "[B]", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master, 'h',  11, "CONFIG"   , "CONFIG  è-  generate test data   " , "CONFIG  è-", " è-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master, 'h',  12, "CONFIG"   , "CONFIG -è   generate test data   " , "CONFIG -è ", "-è ", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master, 'h',  12, "CONFIG"   , "CONFIG (è)  generate test data   " , "CONFIG (è)", "(è)", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master, 'h',  12, "CONFIG"   , "CONFIG [è]  generate test data   " , "CONFIG -è]", "-è]", "-A-",  0, &x_share), -999);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH á·····á·····á·····á·····á·   GL A·····á·····M·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify config success");             
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master,  22, "CONFIG"   , "CONFIG -ò-  generate test data   " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share),    1);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master, 'h',  22, "CONFIG"   , "CONFIG -ò-  generate test data   " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share),    1);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH á·····á·····á·····á·····á·   GL A·····á·····M·····á·····á·   CO á·····á···ò·á·····á·····   á   Ï");
    yUNIT_minchr  ("... check mark"                     , x_share             , 'ò');
    yUNIT_minval  ("call get mark"                      , yUNIT_reuse_get (x_share, x_desc, NULL, NULL)         ,   22);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt to define outside the master");
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_name  ,  32, "GLOBAL"   , "GLOBAL -B-  generate test data   " , "GLOBAL -B-", "-B-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_name  ,  33, "CONFIG"   , "CONFIG -ê-  generate test data   " , "CONFIG -ê-", "-ê-", "-ò-",  0, &x_share), -999);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_name  , 'h',  32, "GLOBAL"   , "GLOBAL -B-  generate test data   " , "GLOBAL -B-", "-B-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_name  , 'h',  33, "CONFIG"   , "CONFIG -ê-  generate test data   " , "CONFIG -ê-", "-ê-", "-ò-",  0, &x_share), -999);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH á·····á·····á·····á·····á·   GL A·····á·····M·····á·····á·   CO á·····á···ò·á·····á·····   á   Ï");
 
    yUNIT_mincond ("attempt to redefine");
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_name  ,  32, "GLOBAL"   , "GLOBAL -M-  generate test data   " , "GLOBAL -M-", "-M-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_name  ,  33, "CONFIG"   , "CONFIG -ò-  generate test data   " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share), -999);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_name  , 'h',  32, "GLOBAL"   , "GLOBAL -M-  generate test data   " , "GLOBAL -M-", "-M-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_name  , 'h',  33, "CONFIG"   , "CONFIG -ò-  generate test data   " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share), -999);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH á·····á·····á·····á·····á·   GL A·····á·····M·····á·····á·   CO á·····á···ò·á·····á·····   á   Ï");
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -416,9 +154,7 @@ koios_reuse_shared  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("set to defaults");
    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
@@ -426,53 +162,52 @@ koios_reuse_shared  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify simple shared identifier");
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  ,  72, "SHARED"   , "SHARED -b-  generate test data   " , "SHARED -b-", "-b-", "-a-",  0, &x_share),    1);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-',  72, "SHARED"   , "SHARED -b-  generate test data   " , "SHARED -b-", "-b-", "-a-",  0, &x_share),    1);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH áb····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minchr  ("... check mark"                     , x_share             , 'b');
    yUNIT_minval  ("call get mark"                      , yUNIT_reuse_get (x_share, x_desc, NULL, NULL)         ,   72);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify ignoring other verbs");
-   yUNIT_minval  ("call shared (exec)"                 , REUSE__parse_shared (x_name  ,  73, "exec"     , "  exec      read a line          " , "exec"      , "xec", "-a-",  0, &x_share),    0);
-   yUNIT_minval  ("call shared (SCRP)"                 , REUSE__parse_shared (x_name  ,  74, "SCRP"     , "SCRP        test the reading     " , "SCRP"      , "CRP", "-a-",  0, &x_share),    0);
-   yUNIT_minval  ("call shared (GLOBAL)"               , REUSE__parse_shared (x_name  ,  75, "GLOBAL"   , "GLOBAL -A-  generate test data   " , "GLOBAL -A-", "-A-", "-A-",  0, &x_share),    0);
-   yUNIT_minval  ("call shared (CONFIG)"               , REUSE__parse_shared (x_name  ,  76, "CONFIG"   , "CONFIG -ò-  generate test data   " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share),    0);
+   yUNIT_minval  ("call shared (exec)"                 , REUSE__parse_shared (x_name  , '-',  73, "exec"     , "  exec      read a line          " , "exec"      , "xec", "-a-",  0, &x_share),    0);
+   yUNIT_minval  ("call shared (SCRP)"                 , REUSE__parse_shared (x_name  , '-',  74, "SCRP"     , "SCRP        test the reading     " , "SCRP"      , "CRP", "-a-",  0, &x_share),    0);
+   yUNIT_minval  ("call shared (GLOBAL)"               , REUSE__parse_shared (x_name  , '-',  75, "GLOBAL"   , "GLOBAL -A-  generate test data   " , "GLOBAL -A-", "-A-", "-A-",  0, &x_share),    0);
+   yUNIT_minval  ("call shared (CONFIG)"               , REUSE__parse_shared (x_name  , '-',  76, "CONFIG"   , "CONFIG -ò-  generate test data   " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share),    0);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH áb····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt an illegal identifier");
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  ,  87, "SHARED"   , "SHARED -2-  generate test data   " , "SHARED -2-", "-2-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  ,  88, "SHARED"   , "SHARED -ò-  generate test data   " , "SHARED -ò-", "-ò-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  ,  89, "SHARED"   , "SHARED -B-  generate test data   " , "SHARED -B-", "-B-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  ,  98, "SHARED"   , "SHARED ---  generate test data   " , "SHARED ---", "---", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-',  87, "SHARED"   , "SHARED -2-  generate test data   " , "SHARED -2-", "-2-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-',  88, "SHARED"   , "SHARED -ò-  generate test data   " , "SHARED -ò-", "-ò-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-',  89, "SHARED"   , "SHARED -B-  generate test data   " , "SHARED -B-", "-B-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-',  98, "SHARED"   , "SHARED ---  generate test data   " , "SHARED ---", "---", "-A-",  0, &x_share), -999);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH áb····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify another success");             
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , 110, "SHARED"   , "SHARED -s-  generate test data   " , "SHARED -s-", "-s-", "-A-",  0, &x_share),    1);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-', 110, "SHARED"   , "SHARED -s-  generate test data   " , "SHARED -s-", "-s-", "-A-",  0, &x_share),    1);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH áb····á·····á·····s·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minchr  ("... check mark"                     , x_share             , 's');
    yUNIT_minval  ("call get mark"                      , yUNIT_reuse_get (x_share, x_desc, NULL, NULL)         ,  110);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt with bad label formatting");     
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_master,  11, "SHARED"   , "SHARED  j-  generate test data   " , "SHARED  j-", " j-", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_master,  12, "SHARED"   , "SHARED -j   generate test data   " , "SHARED -j ", "-j ", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_master,  12, "SHARED"   , "SHARED (j)  generate test data   " , "SHARED (j)", "(j)", "-A-",  0, &x_share), -999);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_master,  12, "SHARED"   , "SHARED [j]  generate test data   " , "SHARED [j]", "[j]", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_master, 'h',  11, "SHARED"   , "SHARED  j-  generate test data   " , "SHARED  j-", " j-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_master, 'h',  12, "SHARED"   , "SHARED -j   generate test data   " , "SHARED -j ", "-j ", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_master, 'h',  12, "SHARED"   , "SHARED (j)  generate test data   " , "SHARED (j)", "(j)", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_master, 'h',  12, "SHARED"   , "SHARED [j]  generate test data   " , "SHARED [j]", "[j]", "-A-",  0, &x_share), -999);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH áb····á·····á·····s·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt to define inside the master");
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_master, 132, "SHARED"   , "SHARED -j-  generate test data   " , "SHARED -j-", "-j-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_master, 'h', 132, "SHARED"   , "SHARED -j-  generate test data   " , "SHARED -j-", "-j-", "-A-",  0, &x_share), -999);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH áb····á·····á·····s·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
 
    yUNIT_mincond ("attempt to redefine");
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  ,  32, "SHARED"   , "SHARED -s-  generate test data   " , "SHARED -s-", "-s-", "-A-",  0, &x_share), -999);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-',  32, "SHARED"   , "SHARED -s-  generate test data   " , "SHARED -s-", "-s-", "-A-",  0, &x_share), -999);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH áb····á·····á·····s·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -492,9 +227,7 @@ koios_reuse_old    (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("set to defaults");
    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
@@ -502,11 +235,11 @@ koios_reuse_old    (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("setup some reusesr");
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,   4, "GLOBAL"   , "GLOBAL -A-  generate test data   " , "GLOBAL -A-", "-A-", "-A-",  0, &x_share),    1);
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,  10, "GLOBAL"   , "GLOBAL -M-  generate test data   " , "GLOBAL -M-", "-M-", "-A-",  0, &x_share),    1);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master,  32, "CONFIG"   , "CONFIG -ò-  generate test data   " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share),    1);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  ,  72, "SHARED"   , "SHARED -b-  generate test data   " , "SHARED -b-", "-b-", "-a-",  0, &x_share),    1);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , 136, "SHARED"   , "SHARED -s-  generate test data   " , "SHARED -s-", "-s-", "-a-",  0, &x_share),    1);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',   4, "GLOBAL"   , "GLOBAL -A-  generate test data   " , "GLOBAL -A-", "-A-", "-A-",  0, &x_share),    1);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',  10, "GLOBAL"   , "GLOBAL -M-  generate test data   " , "GLOBAL -M-", "-M-", "-A-",  0, &x_share),    1);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master, 'h',  32, "CONFIG"   , "CONFIG -ò-  generate test data   " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share),    1);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-',  72, "SHARED"   , "SHARED -b-  generate test data   " , "SHARED -b-", "-b-", "-a-",  0, &x_share),    1);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-', 136, "SHARED"   , "SHARED -s-  generate test data   " , "SHARED -s-", "-s-", "-a-",  0, &x_share),    1);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH áb····á·····á·····s·····á·   GL A·····á·····M·····á·····á·   CO á·····á···ò·á·····á·····   á   Ï");
    yUNIT_mindnoc ();
 
@@ -549,8 +282,7 @@ koios_reuse_old    (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr  ("... check x_minor"                  , x_minor , '*');
    yUNIT_mindnoc ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -570,9 +302,7 @@ koios_reuse_new    (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("set to defaults");
    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
@@ -580,11 +310,11 @@ koios_reuse_new    (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("setup some reusesr");
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,   4, "GLOBAL"   , "GLOBAL -A-  generate test data   " , "GLOBAL -A-", "-A-", "-A-",  0, &x_share),    1);
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,  10, "GLOBAL"   , "GLOBAL -M-  generate test data   " , "GLOBAL -M-", "-M-", "-A-",  0, &x_share),    1);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master,  32, "CONFIG"   , "CONFIG -ò-  generate test data   " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share),    1);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  ,  72, "SHARED"   , "SHARED -b-  generate test data   " , "SHARED -b-", "-b-", "-a-",  0, &x_share),    1);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , 136, "SHARED"   , "SHARED -s-  generate test data   " , "SHARED -s-", "-s-", "-a-",  0, &x_share),    1);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',   4, "GLOBAL"   , "GLOBAL -A-  generate test data   " , "GLOBAL -A-", "-A-", "-A-",  0, &x_share),    1);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',  10, "GLOBAL"   , "GLOBAL -M-  generate test data   " , "GLOBAL -M-", "-M-", "-A-",  0, &x_share),    1);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master, 'h',  32, "CONFIG"   , "CONFIG -ò-  generate test data   " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share),    1);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-',  72, "SHARED"   , "SHARED -b-  generate test data   " , "SHARED -b-", "-b-", "-a-",  0, &x_share),    1);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-', 136, "SHARED"   , "SHARED -s-  generate test data   " , "SHARED -s-", "-s-", "-a-",  0, &x_share),    1);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH áb····á·····á·····s·····á·   GL A·····á·····M·····á·····á·   CO á·····á···ò·á·····á·····   á   Ï");
    yUNIT_mindnoc ();
 
@@ -628,8 +358,7 @@ koios_reuse_new    (char a_scrp, char a_list, char a_unit)
    yUNIT_minval  ("call reuse_new"                     , REUSE__parse_reuse_new (x_name  , 200, "REUSE ò/ ", "ò/ ", &x_major, &x_minor), -999);
    yUNIT_mindnoc ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -649,9 +378,7 @@ koios_reuse_reuse  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("set to defaults");
    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
@@ -659,66 +386,65 @@ koios_reuse_reuse  (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("setup some reusesr");
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,   4, "GLOBAL"   , "GLOBAL -A-  one                  " , "GLOBAL -A-", "-A-", "-A-",  0, &x_share),    1);
-   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master,  10, "GLOBAL"   , "GLOBAL -M-  two                  " , "GLOBAL -M-", "-M-", "-A-",  0, &x_share),    1);
-   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master,  32, "CONFIG"   , "CONFIG -ò-  three                " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share),    1);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  ,  72, "SHARED"   , "SHARED -b-  four                 " , "SHARED -b-", "-b-", "-a-",  0, &x_share),    1);
-   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , 136, "SHARED"   , "SHARED -s-  five                 " , "SHARED -s-", "-s-", "-a-",  0, &x_share),    1);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',   4, "GLOBAL"   , "GLOBAL -A-  one                  " , "GLOBAL -A-", "-A-", "-A-",  0, &x_share),    1);
+   yUNIT_minval  ("call global"                        , REUSE__parse_global (x_master, 'h',  10, "GLOBAL"   , "GLOBAL -M-  two                  " , "GLOBAL -M-", "-M-", "-A-",  0, &x_share),    1);
+   yUNIT_minval  ("call config"                        , REUSE__parse_global (x_master, 'h',  32, "CONFIG"   , "CONFIG -ò-  three                " , "CONFIG -ò-", "-ò-", "-ò-",  0, &x_share),    1);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-',  72, "SHARED"   , "SHARED -b-  four                 " , "SHARED -b-", "-b-", "-a-",  0, &x_share),    1);
+   yUNIT_minval  ("call shared"                        , REUSE__parse_shared (x_name  , '-', 136, "SHARED"   , "SHARED -s-  five                 " , "SHARED -s-", "-s-", "-a-",  0, &x_share),    1);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH áb····á·····á·····s·····á·   GL A·····á·····M·····á·····á·   CO á·····á···ò·á·····á·····   á   Ï");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify old-style REUSE of global");
-   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  ,   4, "REUSE"    , "REUSE  -A-  generate test data   " , "REUSE -A-" , "-A-", '-', x_desc, &x_major, &x_minor),    1);
+   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  , '·',   4, "REUSE"    , "REUSE  -A-  generate test data   " , "REUSE -A-" , "-A-", '-', x_desc, &x_major, &x_minor),    1);
    yUNIT_minchr  ("... check x_major"                  , x_major , 'A');
    yUNIT_minchr  ("... check x_minor"                  , x_minor , '*');
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify new-style REUSE of global (same)");
-   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  ,   4, "REUSE"    , "REUSE  A/*  generate test data   " , "REUSE A/-" , "A/*", '-', x_desc, &x_major, &x_minor),    1);
+   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  , '·',   4, "REUSE"    , "REUSE  A/*  generate test data   " , "REUSE A/-" , "A/*", '-', x_desc, &x_major, &x_minor),    1);
    yUNIT_minchr  ("... check x_major"                  , x_major , 'A');
    yUNIT_minchr  ("... check x_minor"                  , x_minor , '*');
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify new-style REUSE of global with minor");
-   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  ,   4, "REUSE"    , "REUSE  A/d  generate test data   " , "REUSE A/d" , "A/d", '-', x_desc, &x_major, &x_minor),    1);
+   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  , '·',   4, "REUSE"    , "REUSE  A/d  generate test data   " , "REUSE A/d" , "A/d", '-', x_desc, &x_major, &x_minor),    1);
    yUNIT_minchr  ("... check x_major"                  , x_major , 'A');
    yUNIT_minchr  ("... check x_minor"                  , x_minor , 'd');
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify ignoring other verbs");
-   yUNIT_minval  ("call reuse (exec)"                  , REUSE__parse_reuse  (x_name  ,   4, "exec"     , "  exec      read a line          " , "exec"      , "xec", '-', x_desc, &x_major, &x_minor),    0);
-   yUNIT_minval  ("call reuse (SCRP)"                  , REUSE__parse_reuse  (x_name  ,   4, "SCRP"     , "SCRP        testing the reading  " , "SCRP"      , "CRP", '-', x_desc, &x_major, &x_minor),    0);
-   yUNIT_minval  ("call reuse (GLOBAL)"                , REUSE__parse_reuse  (x_name  ,   4, "GLOBAL"   , "GLOBAL -A-  generate test data   " , "GLOBAL -A-", "-A-", '-', x_desc, &x_major, &x_minor),    0);
+   yUNIT_minval  ("call reuse (exec)"                  , REUSE__parse_reuse  (x_name  , '·',   4, "exec"     , "  exec      read a line          " , "exec"      , "xec", '-', x_desc, &x_major, &x_minor),    0);
+   yUNIT_minval  ("call reuse (SCRP)"                  , REUSE__parse_reuse  (x_name  , '·',   4, "SCRP"     , "SCRP        testing the reading  " , "SCRP"      , "CRP", '-', x_desc, &x_major, &x_minor),    0);
+   yUNIT_minval  ("call reuse (GLOBAL)"                , REUSE__parse_reuse  (x_name  , '·',   4, "GLOBAL"   , "GLOBAL -A-  generate test data   " , "GLOBAL -A-", "-A-", '-', x_desc, &x_major, &x_minor),    0);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH áb····á·····á·····s·····á·   GL A·····á·····M·····á·····á·   CO á·····á···ò·á·····á·····   á   Ï");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt with unset identifiers");
-   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  ,   4, "REUSE"    , "REUSE  -K-  generate test data   " , "REUSE -K-" , "-K-", '-', x_desc, &x_major, &x_minor), -999);
-   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  ,   4, "REUSE"    , "REUSE  -q-  generate test data   " , "REUSE -q-" , "-q-", '-', x_desc, &x_major, &x_minor), -999);
+   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  , '·',   4, "REUSE"    , "REUSE  -K-  generate test data   " , "REUSE -K-" , "-K-", '-', x_desc, &x_major, &x_minor), -999);
+   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  , '·',   4, "REUSE"    , "REUSE  -q-  generate test data   " , "REUSE -q-" , "-q-", '-', x_desc, &x_major, &x_minor), -999);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt REUSE inside master");
-   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_master,   4, "REUSE"    , "REUSE  -A-  generate test data   " , "REUSE -A-" , "-A-", '-', x_desc, &x_major, &x_minor), -999);
-   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_master,   4, "REUSE"    , "REUSE  -b-  generate test data   " , "REUSE -b-" , "-b-", '-', x_desc, &x_major, &x_minor), -999);
-   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_master,   4, "REUSE"    , "REUSE  -ò-  generate test data   " , "REUSE -ò-" , "-ò-", '-', x_desc, &x_major, &x_minor), -999);
+   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_master, 'h',   4, "REUSE"    , "REUSE  -A-  generate test data   " , "REUSE -A-" , "-A-", '-', x_desc, &x_major, &x_minor), -999);
+   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_master, 'h',   4, "REUSE"    , "REUSE  -b-  generate test data   " , "REUSE -b-" , "-b-", '-', x_desc, &x_major, &x_minor), -999);
+   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_master, 'h',   4, "REUSE"    , "REUSE  -ò-  generate test data   " , "REUSE -ò-" , "-ò-", '-', x_desc, &x_major, &x_minor), -999);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt REUSE inside itself");
-   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  ,   4, "REUSE"    , "REUSE  -A-  generate test data   " , "REUSE -A-" , "-A-", 'A', x_desc, &x_major, &x_minor), -999);
+   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  , '·',   4, "REUSE"    , "REUSE  -A-  generate test data   " , "REUSE -A-" , "-A-", 'A', x_desc, &x_major, &x_minor), -999);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("attempt REUSE with no identifier");
-   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  ,   4, "REUSE"    , "REUSE       generate test data   " , "REUSE"     , ""   , '-', x_desc, &x_major, &x_minor), -999);
+   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  , '·',   4, "REUSE"    , "REUSE       generate test data   " , "REUSE"     , ""   , '-', x_desc, &x_major, &x_minor), -999);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify another new-style REUSE");
-   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  ,   4, "REUSE"    , "REUSE  ò/b  generate test data   " , "REUSE ò/b" , "ò/b", '-', x_desc, &x_major, &x_minor),    1);
+   yUNIT_minval  ("call reuse"                         , REUSE__parse_reuse  (x_name  , '·',   4, "REUSE"    , "REUSE  ò/b  generate test data   " , "REUSE ò/b" , "ò/b", '-', x_desc, &x_major, &x_minor),    1);
    yUNIT_minchr  ("... check x_major"                  , x_major , 'ò');
    yUNIT_minchr  ("... check x_minor"                  , x_minor , 'b');
    yUNIT_mindnoc ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -736,9 +462,7 @@ koios_reuse_parse  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("set to defaults");
    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
@@ -869,8 +593,7 @@ koios_reuse_parse  (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "+   á···   SH á·c···á·····á·····á·····á·   GL A·····á·····á·····á·····á·   CO á·····á···ò·á·····á·····   á   Ï");
    yUNIT_mindnoc ();
 
-   PROG__unit_end    ();
-   chdir   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -891,69 +614,66 @@ koios_reuse_exim   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   getcwd  (x_cwd, LEN_FULL);
-   chdir   ("/tmp/");
-   PROG__unit_quiet  ();
+   KOIOS_scrp_start ('-');
 
    yUNIT_mincond ("set to defaults");
    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "¬   á···   SH á·····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('A')  , "A    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('D')  , "D    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('J')  , "J    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ê')  , "ê    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ò')  , "ò    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('A')  , "A  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('D')  , "D  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('J')  , "J  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ê')  , "ê  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ò')  , "ò  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify adding load of global/config");
-   yUNIT_minval  ("... parse"                          , yUNIT_reuse_parse  ('g',    "A    22  verify openning and closing                                           1     0     0     1     6     4     2  ·2········     0  ·                        0  ·                        0    14    10     1     3     0     8     6     2     0   "),    1);
-   yUNIT_minval  ("... parse"                          , yUNIT_reuse_parse  ('g',    "D   105  verify system startup                                                 1     0     0     1     4     2     0  ··········     1  b                        1  D                        0    21    14     5     2     0     0     0     0     0   "),    1);
-   yUNIT_minval  ("... parse"                          , yUNIT_reuse_parse  ('g',    "J   182  verify normal processing                                              1     0     0     1     8     2     3  ·21·······     1  a                        2  òD                       0     8     8     0     0     0    12    12     0     0   "),    1);
-   yUNIT_minval  ("... parse"                          , yUNIT_reuse_parse  ('g',    "ê   123  globally shared steps                                                 1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     9     5     1     3     8     0     0     0     0   "),    1);
-   yUNIT_minval  ("... parse"                          , yUNIT_reuse_parse  ('g',    "ò    38  global interal steps                                                  1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     3     2     0     1     3     0     0     0     0   "),    1);
+   yUNIT_minval  ("... parse"                          , yUNIT_reuse_parse  ('g',    "A  g  h    22  verify openning and closing                                           1     0     0     1     6     4     2  ·2········     0  ·                        0  ·                        0    14    10     1     3     0     8     6     2     0   "),    1);
+   yUNIT_minval  ("... parse"                          , yUNIT_reuse_parse  ('g',    "D  g  w   105  verify system startup                                                 1     0     0     1     4     2     0  ··········     1  b                        1  D                        0    21    14     5     2     0     0     0     0     0   "),    1);
+   yUNIT_minval  ("... parse"                          , yUNIT_reuse_parse  ('g',    "J  g  d   182  verify normal processing                                              1     0     0     1     8     2     3  ·21·······     1  a                        2  òD                       0     8     8     0     0     0    12    12     0     0   "),    1);
+   yUNIT_minval  ("... parse"                          , yUNIT_reuse_parse  ('g',    "ê  c  d   123  globally shared steps                                                 1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     9     5     1     3     8     0     0     0     0   "),    1);
+   yUNIT_minval  ("... parse"                          , yUNIT_reuse_parse  ('g',    "ò  c  h    38  global interal steps                                                  1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     3     2     0     1     3     0     0     0     0   "),    1);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used   ()     , "+   á···   SH á·····á·····á·····á·····á·   GL A··D··á··J··á·····á·····á·   CO á·ê···á···ò·á·····á·····   á   Ï");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('A')  , "A    22  verify openning and closing                                           1     0     0     1     6     4     2  ·2········     0  ·                        0  ·                        0    14    10     1     3     0     8     6     2     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('D')  , "D   105  verify system startup                                                 1     0     0     1     4     2     0  ··········     1  b                        1  D                        0    21    14     5     2     0     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('J')  , "J   182  verify normal processing                                              1     0     0     1     8     2     3  ·21·······     1  a                        2  òD                       0     8     8     0     0     0    12    12     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ê')  , "ê   123  globally shared steps                                                 1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     9     5     1     3     8     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ò')  , "ò    38  global interal steps                                                  1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     3     2     0     1     3     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('A')  , "A  g  h    22  verify openning and closing                                           1     0     0     1     6     4     2  ·2········     0  ·                        0  ·                        0    14    10     1     3     0     8     6     2     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('D')  , "D  g  w   105  verify system startup                                                 1     0     0     1     4     2     0  ··········     1  b                        1  D                        0    21    14     5     2     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('J')  , "J  g  d   182  verify normal processing                                              1     0     0     1     8     2     3  ·21·······     1  a                        2  òD                       0     8     8     0     0     0    12    12     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ê')  , "ê  c  d   123  globally shared steps                                                 1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     9     5     1     3     8     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ò')  , "ò  c  h    38  global interal steps                                                  1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     3     2     0     1     3     0     0     0     0   ");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify exporting");
-   yUNIT_minval  ("call export"                        , REUSE_export (x_globals)                                       , 5);
+   yUNIT_minval  ("call export"                        , yUNIT_reuse_export (x_globals)                                       , 5);
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify output");
    yUNIT_minval  ("... check count"                    , yenv_ulines(x_globals)     ,    5);
-   yUNIT_minstr  ("... check values"                   , yenv_upeek (x_globals, '['), "A    22  verify openning and closing                                           1     0     0     1     6     4     2  ·2········     0  ·                        0  ·                        0    14    10     1     3     0     8     6     2     0   ");
-   yUNIT_minstr  ("... check values"                   , yenv_upeek (x_globals, '>'), "D   105  verify system startup                                                 1     0     0     1     4     2     0  ··········     1  b                        1  D                        0    21    14     5     2     0     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yenv_upeek (x_globals, '>'), "J   182  verify normal processing                                              1     0     0     1     8     2     3  ·21·······     1  a                        2  òD                       0     8     8     0     0     0    12    12     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yenv_upeek (x_globals, '>'), "ê   123  globally shared steps                                                 1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     9     5     1     3     8     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yenv_upeek (x_globals, '>'), "ò    38  global interal steps                                                  1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     3     2     0     1     3     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yenv_upeek (x_globals, '['), "A  g  h    22  verify openning and closing                                           1     0     0     1     6     4     2  ·2········     0  ·                        0  ·                        0    14    10     1     3     0     8     6     2     0   ");
+   yUNIT_minstr  ("... check values"                   , yenv_upeek (x_globals, '>'), "D  g  w   105  verify system startup                                                 1     0     0     1     4     2     0  ··········     1  b                        1  D                        0    21    14     5     2     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yenv_upeek (x_globals, '>'), "J  g  d   182  verify normal processing                                              1     0     0     1     8     2     3  ·21·······     1  a                        2  òD                       0     8     8     0     0     0    12    12     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yenv_upeek (x_globals, '>'), "ê  c  d   123  globally shared steps                                                 1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     9     5     1     3     8     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yenv_upeek (x_globals, '>'), "ò  c  h    38  global interal steps                                                  1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     3     2     0     1     3     0     0     0     0   ");
    yUNIT_minstr  ("... check values"                   , yenv_upeek (x_globals, '>'), "(n/a)");
 
    yUNIT_mincond ("set to defaults");
    yUNIT_minval  ("... run clear"                      , REUSE_init ()       , 0);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used  ()      , "¬   á···   SH á·····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('A')  , "A    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('D')  , "D    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('J')  , "J    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ê')  , "ê    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ò')  , "ò    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('A')  , "A  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('D')  , "D  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('J')  , "J  g  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ê')  , "ê  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ò')  , "ò  c  -    -1  ·                                                                     0     0     0     0     0     0     0  ··········     0  ·                        0  ·                        0     0     0     0     0     0     0     0     0     0   ");
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify importing");
-   yUNIT_minval  ("call import"                        , REUSE_import (x_globals)                                       , 5);
+   yUNIT_minval  ("call import"                        , yUNIT_reuse_import (x_globals)                                       , 5);
    yUNIT_minstr  ("... review marks"                   , yUNIT_reuse_used   ()     , "+   á···   SH á·····á·····á·····á·····á·   GL A··D··á··J··á·····á·····á·   CO á·ê···á···ò·á·····á·····   á   Ï");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('A')  , "A    22  verify openning and closing                                           1     0     0     1     6     4     2  ·2········     0  ·                        0  ·                        0    14    10     1     3     0     8     6     2     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('D')  , "D   105  verify system startup                                                 1     0     0     1     4     2     0  ··········     1  b                        1  D                        0    21    14     5     2     0     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('J')  , "J   182  verify normal processing                                              1     0     0     1     8     2     3  ·21·······     1  a                        2  òD                       0     8     8     0     0     0    12    12     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ê')  , "ê   123  globally shared steps                                                 1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     9     5     1     3     8     0     0     0     0   ");
-   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ò')  , "ò    38  global interal steps                                                  1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     3     2     0     1     3     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('A')  , "A  g  h    22  verify openning and closing                                           1     0     0     1     6     4     2  ·2········     0  ·                        0  ·                        0    14    10     1     3     0     8     6     2     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('D')  , "D  g  w   105  verify system startup                                                 1     0     0     1     4     2     0  ··········     1  b                        1  D                        0    21    14     5     2     0     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('J')  , "J  g  d   182  verify normal processing                                              1     0     0     1     8     2     3  ·21·······     1  a                        2  òD                       0     8     8     0     0     0    12    12     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ê')  , "ê  c  d   123  globally shared steps                                                 1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     9     5     1     3     8     0     0     0     0   ");
+   yUNIT_minstr  ("... check values"                   , yUNIT_reuse_show   ('ò')  , "ò  c  h    38  global interal steps                                                  1     1     0     0     2     2     0  ··········     0  ·                        0  ·                        2     3     2     0     1     3     0     0     0     0   ");
    yUNIT_mindnoc ();
 
-   PROG__unit_end    ();
-   (x_cwd);
+   KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
@@ -982,9 +702,6 @@ main                    (int a_argc, char *a_argv [])
    /*---(startup)------------------------*/
    yUNIT_minunit ("koios_reuse");
    /*---(scripts)------------------------*/
-   /*> koios_reuse_index    (++n, x_list, x_unit);                                    <*/
-   /*> koios_reuse_set      (++n, x_list, x_unit);                                    <*/
-   /*> koios_reuse_update   (++n, x_list, x_unit);                                    <*/
    koios_reuse_delimit  (++n, x_list, x_unit);
    koios_reuse_global   (++n, x_list, x_unit);
    koios_reuse_shared   (++n, x_list, x_unit);

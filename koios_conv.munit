@@ -10,7 +10,7 @@ koios_conv_defense (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all ('*', '-');
+   KOIOS_scrp_start_open ('-');
 
    yUNIT_mincond  ("verify a quick success");
    yUNIT_minval   ("call defense"                       , CONV__defense (0xabcd    , "SHARED"  , "testing description" , "DITTO_parse"    , "x, y, 21"       , "i_lesser"  , "pretty expected", "rc"        , "10"  , "·······", '-', '-', '-', &sm_share, &sm_select),    0);
@@ -34,7 +34,7 @@ koios_conv_defense (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("call defense"                       , CONV__defense (0xFFFF    , "SHARED"  , "testing description" , "DITTO_parse"    , "x, y, 21"       , "i_lesser"  , "pretty expected", "rc"        , "10"  , "·······", '-', '-', '-', &sm_share, NULL      ), -999);
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish_close ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -46,7 +46,7 @@ koios_conv_printf  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all ('*', '-');
+   KOIOS_scrp_start_open ('-');
 
    yUNIT_mincond  ("verify printing a format only");
    yUNIT_minval   ("write line"                         , CONV_printf    (sm_conv   , "format only\n"                  ),    0);
@@ -86,7 +86,7 @@ koios_conv_printf  (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_nconv  , 'Ö')      , "(n/a)"                                    );
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish_close ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -98,7 +98,7 @@ koios_conv_printf  (char a_scrp, char a_list, char a_unit)
  *>    if (a_list == '!')    { yUNIT_minprcs (); return 0; }                                                                                                                                                                                                                                                                                                                                         <* 
  *>    if (a_unit != 0 && a_scrp != a_unit)  return 0;                                                                                                                                                                                                                                                                                                                                               <* 
  *>    if (a_list == 'y')                    return 0;                                                                                                                                                                                                                                                                                                                                               <* 
- *>    KOIOS_open_all ('*', '-');                                                                                                                                                                                                                                                                                                                                                                    <* 
+ *>    KOIOS_scrp_start_open ('-');                                                                                                                                                                                                                                                                                                                                                                    <* 
  *>                                                                                                                                                                                                                                                                                                                                                                                                  <* 
  *>    yUNIT_mincond  ("verify intial SCRP");                                                                                                                                                                                                                                                                                                                                                        <* 
  *>    yUNIT_minval   ("call summary"                       , CONV__summary   (sm_conv, ""            , 'P', "SCRP"  ,   1),    3);                                                                                                                                                                                                                                                                  <* 
@@ -168,7 +168,7 @@ koios_conv_printf  (char a_scrp, char a_list, char a_unit)
  *>    yUNIT_minval   ("... save spot"                      , sm_vmark = yenv_uwhere    () + 1       ,  666);                                                                                                                                                                                                                                                                                        <* 
  *>    yUNIT_mindnoc  ();                                                                                                                                                                                                                                                                                                                                                                            <* 
  *>                                                                                                                                                                                                                                                                                                                                                                                                  <* 
- *>    KOIOS_close_all ('*');                                                                                                                                                                                                                                                                                                                                                                        <* 
+ *>    KOIOS_scrp_finish_close ();                                                                                                                                                                                                                                                                                                                                                                           <* 
  *>    yUNIT_minprcs  ();                                                                                                                                                                                                                                                                                                                                                                            <* 
  *>    return 0;                                                                                                                                                                                                                                                                                                                                                                                     <* 
  *> }                                                                                                                                                                                                                                                                                                                                                                                                <*/
@@ -186,7 +186,7 @@ koios_conv_preps   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all ('*', '-');
+   KOIOS_scrp_start_open ('-');
 
    yUNIT_mincond  ("verify writing a BREAK");
    yUNIT_minval   ("write conv line"                    , CONV__break     (sm_conv   ),    0);
@@ -225,7 +225,7 @@ koios_conv_preps   (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... save spot"                      , sm_vmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish_close ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -240,7 +240,7 @@ koios_conv_scrp_add  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all ('*', '-');
+   KOIOS_scrp_start_open ('-');
 
    CONV_force ( 5, 32);
    yUNIT_mincond  ("verify SCRP without stage");
@@ -294,7 +294,7 @@ koios_conv_scrp_add  (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr   ("... check sm_share"                 , sm_share         , 'ÿ');
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish_close ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -306,7 +306,7 @@ koios_conv_scrps   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all ('*', '-');
+   KOIOS_scrp_start_open ('-');
 
    yUNIT_force_prog (  9,  4, 32);
    yUNIT_mincond  ("verify writing a SCRP without stage");
@@ -415,7 +415,7 @@ koios_conv_scrps   (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... save spot"                      , sm_vmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish_close ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -430,7 +430,7 @@ koios_conv_cond_add   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all ('*', '-');
+   KOIOS_scrp_start_open ('-');
 
    CONV_force ( 2, 33);
    yUNIT_mincond  ("verify common outputs");
@@ -467,7 +467,7 @@ koios_conv_cond_add   (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check count"                    , x_cnt            , "((02.037))");
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish_close ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -487,7 +487,7 @@ koios_conv_conds   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all ('*', '-');
+   KOIOS_scrp_start_open ('-');
 
    yUNIT_force_prog (  2, 36,  1);
 
@@ -556,7 +556,7 @@ koios_conv_conds   (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... save spot"                      , sm_vmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish_close ();
    yUNIT_minprcs  ();
    return 0;
 }
@@ -568,7 +568,7 @@ koios_conv_steps   (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_open_all ('*', '-');
+   KOIOS_scrp_start_open ('-');
 
    yUNIT_mincond  ("verify writing an EXEC");
    yUNIT_minval   ("write conv line"                    , CONV__exec     (sm_conv   , "exec"    , "call the function"   , "DITTO_parse"    , "x, y, 21"       , "s_equal"   , "pretty expected", "x_str"     , ""     , "·······", '-', '-', '-', &sm_share, &sm_select),    0);
@@ -640,7 +640,7 @@ koios_conv_steps   (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... save spot"                      , sm_vmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
 
-   KOIOS_close_all ('*');
+   KOIOS_scrp_finish_close ();
    yUNIT_minprcs  ();
    return 0;
 }
