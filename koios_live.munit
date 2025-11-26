@@ -662,9 +662,9 @@ UNIT___live_cond    (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond ("check header");
    yUNIT_minstr  ("... check unit header"              , yenv_upeek (sm_nurun, '['), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (sm_nurun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···4 ···4 ···4");
-   yUNIT_minstr  ("... ... level"                      , yenv_upeek (sm_nurun, '>'), "   assign output level to (3) YUNIT_COND                             c ··20 ···0 ···0");
-   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (sm_nurun, '>'), "   assign format/color to (y) ETERM                                  x ··86 ···0 ···0");
+   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (sm_nurun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···4 ··¬¬ ··¬¬");
+   yUNIT_minstr  ("... ... level"                      , yenv_upeek (sm_nurun, '>'), "   assign output level to (3) YUNIT_COND                             c ··20 ··¬¬ ··¬¬");
+   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (sm_nurun, '>'), "   assign format/color to (y) ETERM                                  x ··86 ··¬¬ ··¬¬");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
    yUNIT_minstr  ("... check section"                  , yenv_upeek (sm_nurun, '>'), "UNIT ===================================================================== koios_live");
    yUNIT_mindnoc ();
@@ -771,9 +771,9 @@ UNIT___live_cond    (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond ("check urun output");
    yUNIT_minstr  ("... check unit header"              , yenv_upeek (sm_nurun, '['), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (sm_nurun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···1 ···4 ···4");
-   yUNIT_minstr  ("... ... level"                      , yenv_upeek (sm_nurun, '>'), "   assign output level to (3) YUNIT_COND                             c ···5 ···0 ···0");
-   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (sm_nurun, '>'), "   assign format/color to (y) ETERM                                  x ··32 ···0 ···0");
+   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (sm_nurun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···1 ··¬¬ ··¬¬");
+   yUNIT_minstr  ("... ... level"                      , yenv_upeek (sm_nurun, '>'), "   assign output level to (3) YUNIT_COND                             c ···5 ··¬¬ ··¬¬");
+   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (sm_nurun, '>'), "   assign format/color to (y) ETERM                                  x ··32 ··¬¬ ··¬¬");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
    yUNIT_minstr  ("... check section"                  , yenv_upeek (sm_nurun, '>'), "UNIT ===================================================================== koios_live");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
@@ -803,9 +803,9 @@ UNIT___live_cond    (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond ("verify header");
    yUNIT_minstr  ("... check unit header"              , yenv_upeek (sm_nurun, '['), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (sm_nurun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···4 ···4 ···4");
-   yUNIT_minstr  ("... ... level"                      , yenv_upeek (sm_nurun, '>'), "   assign output level to (3) YUNIT_COND                             c ··20 ···0 ···0");
-   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (sm_nurun, '>'), "   assign format/color to (y) ETERM                                  x ··86 ···0 ···0");
+   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (sm_nurun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···4 ··¬¬ ··¬¬");
+   yUNIT_minstr  ("... ... level"                      , yenv_upeek (sm_nurun, '>'), "   assign output level to (3) YUNIT_COND                             c ··20 ··¬¬ ··¬¬");
+   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (sm_nurun, '>'), "   assign format/color to (y) ETERM                                  x ··86 ··¬¬ ··¬¬");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
    yUNIT_minstr  ("... check section"                  , yenv_upeek (sm_nurun, '>'), "UNIT ===================================================================== koios_live");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
@@ -922,9 +922,9 @@ UNIT___live_cond    (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond ("verify header");
    yUNIT_minstr  ("... check unit header"              , yenv_upeek (sm_nurun, '['), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (sm_nurun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···1 ···4 ···4");
-   yUNIT_minstr  ("... ... level"                      , yenv_upeek (sm_nurun, '>'), "   assign output level to (3) YUNIT_COND                             c ···9 ···0 ···0");
-   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (sm_nurun, '>'), "   assign format/color to (y) ETERM                                  x ··32 ···0 ···0");
+   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (sm_nurun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···1 ··¬¬ ··¬¬");
+   yUNIT_minstr  ("... ... level"                      , yenv_upeek (sm_nurun, '>'), "   assign output level to (3) YUNIT_COND                             c ···9 ··¬¬ ··¬¬");
+   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (sm_nurun, '>'), "   assign format/color to (y) ETERM                                  x ··32 ··¬¬ ··¬¬");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
    yUNIT_minstr  ("... check section"                  , yenv_upeek (sm_nurun, '>'), "UNIT ===================================================================== koios_live");
    yUNIT_mindnoc ();
@@ -985,7 +985,7 @@ UNIT___live_steps_top (void)
 
    yUNIT_mincond ("check step level header");
    yUNIT_minstr  ("... check unit header"              , yenv_upeek (sm_nurun, '['), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (sm_nurun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···4 ···4 ···4");
+   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (sm_nurun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···4 ··¬¬ ··¬¬");
    yUNIT_minstr  ("... ... level"                      , yenv_upeek (sm_nurun, '>'), "   assign output level to (4) YUNIT_STEP                             c ··20 ··¬¬ ··¬¬");
    yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (sm_nurun, '>'), "   assign format/color to (y) ETERM                                  x ··86 ··¬¬ ··¬¬");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
@@ -1656,21 +1656,21 @@ UNIT___live_stop    (char a_scrp, char a_list, char a_unit)
    if (a_list == 'y')                    return 0;
    KOIOS_scrp_start ('-');
 
-   yUNIT_mincond  ("verify a simple success");
-   system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  /tmp/koios.unit_testing_marvel/koios_stop.unit");
-   system ("echo \"  COND   (1)  repeat code                         \"                                                                                                       >> /tmp/koios.unit_testing_marvel/koios_stop.unit");
-   system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> /tmp/koios.unit_testing_marvel/koios_stop.unit");
-   system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> /tmp/koios.unit_testing_marvel/koios_stop.unit");
-   system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> /tmp/koios.unit_testing_marvel/koios_stop.unit");
-   yUNIT_mindnoc  ();
+   /*> yUNIT_mincond  ("verify a simple success");                                                                                                                                                                                         <* 
+    *> system ("echo \"SCRP          verify ditto                         0s  tbd        \"                                                                                   >  /tmp/koios.unit_testing_marvel/koios_stop.unit");     <* 
+    *> system ("echo \"  COND   (1)  repeat code                         \"                                                                                                       >> /tmp/koios.unit_testing_marvel/koios_stop.unit");   <* 
+    *> system ("echo \"    exec      ... check integer                    yUNIT_testint     32                        i_equal     2                     \"                >> /tmp/koios.unit_testing_marvel/koios_stop.unit");       <* 
+    *> system ("echo \"    exec      ... check character                  yUNIT_testchar    65                        i_equal     'A'                   \"                >> /tmp/koios.unit_testing_marvel/koios_stop.unit");       <* 
+    *> system ("echo \"  DITTO  (1)  - - - - - - - - - - - - - - - - - - \"                                                                                                       >> /tmp/koios.unit_testing_marvel/koios_stop.unit");   <* 
+    *> yUNIT_mindnoc  ();                                                                                                                                                                                                                  <*/
 
-   yUNIT_mincond  ("call conversion");
-   yerr_ureset    ();
-   yUNIT_minval   ("... run koios"                      , system ("koios --Econv koios_stop > /dev/null 2>&1"),   0);
-   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "yUNIT_reuse.cs/yUNIT_reuse_import:838:0: error: file åunit.globalsæ fopen in yenv_uopen_detail returned (2) No such file or directory");
-   yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");
-   yUNIT_mindnoc  ();
+   /*> yUNIT_mincond  ("call conversion");                                                                                                                                                                                   <* 
+    *> yerr_ureset    ();                                                                                                                                                                                                    <* 
+    *> yUNIT_minval   ("... run koios"                      , system ("koios --Econv koios_stop > /dev/null 2>&1"),   0);                                                                                                    <* 
+    *> yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);                                                                                                                                         <* 
+    *> yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "yUNIT_reuse.cs/yUNIT_reuse_import:838:0: error: file åunit.globalsæ fopen in yenv_uopen_detail returned (2) No such file or directory");   <* 
+    *> yUNIT_minstr   ("... error"                          , yerr_upeek  ('>'), "(n/a)");                                                                                                                                   <* 
+    *> yUNIT_mindnoc  ();                                                                                                                                                                                                    <*/
 
    KOIOS_master_create (sm_hunit);
 
@@ -1863,9 +1863,9 @@ koios_live_code    (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond ("check header");
    yUNIT_minstr  ("... check unit header"              , yenv_upeek (x_urun, '['), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (x_urun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···1 ···1 ···1");
-   yUNIT_minstr  ("... ... level"                      , yenv_upeek (x_urun, '>'), "   assign output level to (5) YUNIT_FULL                             c ···1 ···1 ···1");
-   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (x_urun, '>'), "   assign format/color to (y) ETERM                                  x ···4 ···4 ···4");
+   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (x_urun, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···1 ··¬¬ ··¬¬");
+   yUNIT_minstr  ("... ... level"                      , yenv_upeek (x_urun, '>'), "   assign output level to (5) YUNIT_FULL                             c ···1 ··¬¬ ··¬¬");
+   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (x_urun, '>'), "   assign format/color to (y) ETERM                                  x ···4 ··¬¬ ··¬¬");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (x_urun, '>'), "");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (x_urun, '>'), "");
 
@@ -1977,9 +1977,9 @@ KOIOS_reuse_output     (char a_file [LEN_FULL])
 {
    yUNIT_mincond ("verify header");
    yUNIT_minstr  ("... check unit header"              , yenv_upeek (a_file, '['), "yUNIT - heatherly unit testing framework --------------------------- - actu once ndit");
-   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (a_file, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···1 ···1 ···1");
+   yUNIT_minstr  ("... ... patron"                     , yenv_upeek (a_file, '>'), "   patron : daktyloi-aeonius (forefinger) automated unit testing     s ···1 ··¬¬ ··¬¬");
    yUNIT_minstr  ("... ... level"                      , yenv_upeek (a_file, '>'), "   assign output level to (3) YUNIT_COND                             c ··26 ··¬¬ ··¬¬");
-   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (a_file, '>'), "   assign format/color to (y) ETERM                                  x ···0 ···0 ···0");
+   yUNIT_minstr  ("... ... eterm"                      , yenv_upeek (a_file, '>'), "   assign format/color to (y) ETERM                                  x ···0 ··¬¬ ··¬¬");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (a_file, '>'), "");
    yUNIT_minstr  ("... check section"                  , yenv_upeek (a_file, '>'), "UNIT ==================================================================== koios_reuse");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (a_file, '>'), "");

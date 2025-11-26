@@ -72,7 +72,7 @@ koios_code_prefix  (char a_scrp, char a_list, char a_unit)
    fflush (sm_code);
    yUNIT_minval   ("check output lines"                 , yenv_ulines      (sm_ncode   )           ,    3);
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   ,   0)      , "      yUNIT_reset_rc ();"                 );
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "      if (cyUNIT.exec)  cyUNIT.s_rc = DITTO_parse (\"arguments\");");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "      if (myUNIT_RUN.exec)  myUNIT_RUN.s_rc = DITTO_parse (\"arguments\");");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "      yUNIT_string  (   0,   0, \"call the function\", \"DITTO_parse\", \"¶arguments¶\", \"s_equal\", ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1         ,  666);
@@ -84,8 +84,8 @@ koios_code_prefix  (char a_scrp, char a_list, char a_unit)
    fflush (sm_code);
    yUNIT_minval   ("check output lines"                 , yenv_ulines      (sm_ncode   )           ,    6);
    yUNIT_minstr   ("... header"                         , yenv_uindex      (sm_ncode   , sm_cmark) , "      yUNIT_reset_rc ();"                 );
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "      if (cyUNIT.exec)  MAIN_driver (15, 67);");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "      yUNIT_void    (   0,   0, \"deal with a void\", \"MAIN_driver\", \"15, 67\", \"v_void\", cyUNIT.exec, '-', '-');");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "      if (myUNIT_RUN.exec)  MAIN_driver (15, 67);");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "      yUNIT_void    (   0,   0, \"deal with a void\", \"MAIN_driver\", \"15, 67\", \"v_void\", myUNIT_RUN.exec, '-', '-');");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
@@ -97,7 +97,7 @@ koios_code_prefix  (char a_scrp, char a_list, char a_unit)
    fflush (sm_code);
    yUNIT_minval   ("check output lines"                 , yenv_ulines      (sm_ncode   )           ,    9);
    yUNIT_minstr   ("... header"                         , yenv_uindex      (sm_ncode   , sm_cmark) , "      yUNIT_reset_rc ();"                 );
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "      if (cyUNIT.exec)  cyUNIT.i_rc = cube (3);");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "      if (myUNIT_RUN.exec)  myUNIT_RUN.i_rc = cube (3);");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "      yUNIT_int     (   0,   0, \"cube a number\", \"cube\", \"3\", \"i_equal\", ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1         ,  666);
@@ -110,7 +110,7 @@ koios_code_prefix  (char a_scrp, char a_list, char a_unit)
    fflush (sm_code);
    yUNIT_minval   ("check output lines"                 , yenv_ulines      (sm_ncode   )           ,   12);
    yUNIT_minstr   ("... header"                         , yenv_uindex      (sm_ncode   , sm_cmark) , "         yUNIT_reset_rc ();"                 );
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "         if (cyUNIT.exec)  cyUNIT.s_rc = DITTO_parse (\"arguments\");");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "         if (myUNIT_RUN.exec)  myUNIT_RUN.s_rc = DITTO_parse (\"arguments\");");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "         yUNIT_string  (   0,   0, \"call the function\", \"DITTO_parse\", \"¶arguments¶\", \"s_equal\", ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_ncode   , '>')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1         ,  666);
@@ -189,7 +189,7 @@ koios_code_suffix  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("write suffix code"                  , CODE__suffix     (sm_code    , "exec"    , "s_equal"   , ""                        , ""          , ""   , '-', '-'),    1);
    fflush (sm_code);
    yUNIT_minval   ("check output lines"                 , yenv_ulines      (sm_ncode   )           ,    1);
-   yUNIT_minstr   ("... check line"                     , yenv_uindex      (sm_ncode    , sm_cmark) , "cyUNIT.s_rc, cyUNIT.exec, '-', '-');"               );
+   yUNIT_minstr   ("... check line"                     , yenv_uindex      (sm_ncode    , sm_cmark) , "myUNIT_RUN.s_rc, myUNIT_RUN.exec, '-', '-');"               );
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_ncode    , '>')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
@@ -198,8 +198,8 @@ koios_code_suffix  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("write suffix code"                  , CODE__suffix     (sm_code    , "exec"    , "s_equal"   , ""                        , "x_str"     , ""   , '-', '-'),    1);
    fflush (sm_code);
    yUNIT_minval   ("check output lines"                 , yenv_ulines      (sm_ncode   )           ,    3);
-   yUNIT_minstr   ("... check line"                     , yenv_uindex      (sm_ncode    , sm_cmark) , "cyUNIT.s_rc, cyUNIT.exec, '-', '-');"               );
-   yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_ncode    , '>')      , "      if (cyUNIT.exec) { if (cyUNIT.s_rc != NULL)  strcpy (x_str, cyUNIT.s_rc); }");
+   yUNIT_minstr   ("... check line"                     , yenv_uindex      (sm_ncode    , sm_cmark) , "myUNIT_RUN.s_rc, myUNIT_RUN.exec, '-', '-');"               );
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_ncode    , '>')      , "      if (myUNIT_RUN.exec) { if (myUNIT_RUN.s_rc != NULL)  strcpy (x_str, myUNIT_RUN.s_rc); }");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_ncode    , '>')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
@@ -214,8 +214,8 @@ koios_code_suffix  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("write suffix code"                  , CODE__suffix     (sm_code    , "exec"    , "i_equal"   , ""                        , "n"         , ""   , '-', '-'),    1);
    fflush (sm_code);
    yUNIT_minval   ("check output lines"                 , yenv_ulines      (sm_ncode   )           ,    5);
-   yUNIT_minstr   ("... check line"                     , yenv_uindex      (sm_ncode    , sm_cmark) , "cyUNIT.i_rc, cyUNIT.exec, '-', '-');"               );
-   yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_ncode    , '>')      , "      if (cyUNIT.exec)  n = cyUNIT.i_rc;" );
+   yUNIT_minstr   ("... check line"                     , yenv_uindex      (sm_ncode    , sm_cmark) , "myUNIT_RUN.i_rc, myUNIT_RUN.exec, '-', '-');"               );
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_ncode    , '>')      , "      if (myUNIT_RUN.exec)  n = myUNIT_RUN.i_rc;" );
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_ncode    , '>')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
@@ -465,13 +465,13 @@ koios_code_header  (char a_scrp, char a_list, char a_unit)
    sm_cmark = KOIOS_code_stats       (__FILE__, __LINE__, sm_cmark);
 
    yUNIT_mincond  ("verify writing a main beg");
-   yUNIT_minval   ("write main beg"                     , CODE__main_beg  (sm_main, sm_nunit)  ,    0);
+   yUNIT_minval   ("write main beg"                     , CODE__main_beg  (sm_main, sm_nunit)   ,    0);
    yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_nmain   )         ,   14);
 
    sm_mmark = KOIOS_main_beg         (__FILE__, __LINE__, sm_mmark);
 
    yUNIT_mincond  ("verify writing a main end");
-   yUNIT_minval   ("write main end"                     , CODE__main_end  (sm_main)   ,    0);
+   yUNIT_minval   ("write main end"                     , CODE__main_end  (sm_main, sm_nunit)   ,    0);
    yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_nmain   )         ,   24);
    yUNIT_mindnoc  ();
 
@@ -815,7 +815,7 @@ koios_code_step         (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "   /*---(local variable)--------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "   ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "   yUNIT_local   (  42,   1, \"return variable\", \"char x_var = 0;\", cyUNIT.exec, '-', '-');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "   yUNIT_local   (  42,   1, \"return variable\", \"char x_var = 0;\", myUNIT_RUN.exec, '-', '-');");
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "   char x_var = 0;                                   /*   42, return variable                  */");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
@@ -829,9 +829,9 @@ koios_code_step         (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(run step)--------------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      ++mykoios_nstep;");
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_reset_rc ();"                                  );
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (cyUNIT.exec)  cyUNIT.s_rc = DITTO_parse (x, y, 21);" );
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_string  (  43,   2, \"do first thing\", \"DITTO_parse\", \"x, y, 21\", \"s_equal\", \"pretty expect\", cyUNIT.s_rc, cyUNIT.exec, '-', '-');");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (cyUNIT.exec) { if (cyUNIT.s_rc != NULL)  strcpy (x_str, cyUNIT.s_rc); }" );
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (myUNIT_RUN.exec)  myUNIT_RUN.s_rc = DITTO_parse (x, y, 21);" );
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_string  (  43,   2, \"do first thing\", \"DITTO_parse\", \"x, y, 21\", \"s_equal\", \"pretty expect\", myUNIT_RUN.s_rc, myUNIT_RUN.exec, '-', '-');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (myUNIT_RUN.exec) { if (myUNIT_RUN.s_rc != NULL)  strcpy (x_str, myUNIT_RUN.s_rc); }" );
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
 
@@ -843,8 +843,8 @@ koios_code_step         (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(inject code)-----------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_code    (  44,   3, \"add variables\", \"a = xÆ + yÆ;\", cyUNIT.exec, '-', '-');");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (cyUNIT.exec) { a = xÆ + yÆ; }");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_code    (  44,   3, \"add variables\", \"a = xÆ + yÆ;\", myUNIT_RUN.exec, '-', '-');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (myUNIT_RUN.exec) { a = xÆ + yÆ; }");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
 
@@ -856,8 +856,8 @@ koios_code_step         (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(inject code)-----------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (strchr (\"*abc····\", a_select) != NULL) {  ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_code    (  45,   4, \"add variables\", \"a = xÆ + yÆ;\", cyUNIT.exec, '-', 'a');");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         if (cyUNIT.exec) { a = xÆ + yÆ; }");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_code    (  45,   4, \"add variables\", \"a = xÆ + yÆ;\", myUNIT_RUN.exec, '-', 'a');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         if (myUNIT_RUN.exec) { a = xÆ + yÆ; }");
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      }");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
@@ -871,9 +871,9 @@ koios_code_step         (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(run step)--------------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (strchr (\"*a······\", a_select) != NULL) {  ++mykoios_nstep;");
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_reset_rc ();"                                  );
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         if (cyUNIT.exec)  cyUNIT.s_rc = DITTO_parse (x, y, 21);" );
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_string  (  46,   5, \"do first thing\", \"DITTO_parse\", \"x, y, 21\", \"s_equal\", \"pretty expect\", cyUNIT.s_rc, cyUNIT.exec, '-', 'a');");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         if (cyUNIT.exec) { if (cyUNIT.s_rc != NULL)  strcpy (x_str, cyUNIT.s_rc); }" );
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         if (myUNIT_RUN.exec)  myUNIT_RUN.s_rc = DITTO_parse (x, y, 21);" );
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_string  (  46,   5, \"do first thing\", \"DITTO_parse\", \"x, y, 21\", \"s_equal\", \"pretty expect\", myUNIT_RUN.s_rc, myUNIT_RUN.exec, '-', 'a');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         if (myUNIT_RUN.exec) { if (myUNIT_RUN.s_rc != NULL)  strcpy (x_str, myUNIT_RUN.s_rc); }" );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      }");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
@@ -886,7 +886,7 @@ koios_code_step         (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "   /*---(local variable)--------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "   ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "   yUNIT_local   (  47,   6, \"return variable\", \"char x_var = 0;\", cyUNIT.exec, '-', 'a');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "   yUNIT_local   (  47,   6, \"return variable\", \"char x_var = 0;\", myUNIT_RUN.exec, '-', 'a');");
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "   char x_var = 0;                                   /*   47, return variable                  */");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
@@ -935,7 +935,7 @@ koios_code_files        (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(load input)------------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_load    (  62,   1, \"prepare stdin\", \"stdin\", \"shove this\", cyUNIT.exec, '-', '-');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_load    (  62,   1, \"prepare stdin\", \"stdin\", \"shove this\", myUNIT_RUN.exec, '-', '-');");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
 
@@ -947,7 +947,7 @@ koios_code_files        (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(load input)------------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (strchr (\"*······g\", a_select) != NULL) {  ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_load    (  63,   2, \"prepare stdin\", \"stdin\", \"shove this\", cyUNIT.exec, '-', 'ò');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_load    (  63,   2, \"prepare stdin\", \"stdin\", \"shove this\", myUNIT_RUN.exec, '-', 'ò');");
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      }");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
@@ -960,7 +960,7 @@ koios_code_files        (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(append test file)------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_append  (  64,   3, \"add a line\", \"hello  world\", cyUNIT.exec, '-', '-');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_append  (  64,   3, \"add a line\", \"hello  world\", myUNIT_RUN.exec, '-', '-');");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
 
@@ -972,7 +972,7 @@ koios_code_files        (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(append test file)------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (strchr (\"*··c···g\", a_select) != NULL) {  ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_append  (  65,   4, \"add a line\", \"hello  world\", cyUNIT.exec, '-', 'ò');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_append  (  65,   4, \"add a line\", \"hello  world\", myUNIT_RUN.exec, '-', 'ò');");
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      }");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
@@ -985,7 +985,7 @@ koios_code_files        (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(append test file)------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_append  (  66,   5, \"add a line\", \"hello § world\", cyUNIT.exec, '-', '-');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_append  (  66,   5, \"add a line\", \"hello § world\", myUNIT_RUN.exec, '-', '-');");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
 
@@ -997,7 +997,7 @@ koios_code_files        (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(append test file)------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (strchr (\"*··c···g\", a_select) != NULL) {  ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_append  (  67,   6, \"add a line\", \"hello § world\", cyUNIT.exec, '-', 'ò');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_append  (  67,   6, \"add a line\", \"hello § world\", myUNIT_RUN.exec, '-', 'ò');");
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      }");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
 
@@ -1009,7 +1009,7 @@ koios_code_files        (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(create test file)------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_file    (  68,   7, \"testing file\", \"test.txt\", cyUNIT.exec, '-', '-');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_file    (  68,   7, \"testing file\", \"test.txt\", myUNIT_RUN.exec, '-', '-');");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
 
@@ -1021,7 +1021,7 @@ koios_code_files        (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(create test file)------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (strchr (\"*wx·z···\", a_select) != NULL) {  ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_file    (  69,   8, \"testing file\", \"test.txt\", cyUNIT.exec, '-', 'ò');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_file    (  69,   8, \"testing file\", \"test.txt\", myUNIT_RUN.exec, '-', 'ò');");
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      }");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
@@ -1070,7 +1070,7 @@ koios_code_spec         (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(unit test mode)--------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_mode    (  42,   1, \"change modes\", \"FORCED_FAIL\", cyUNIT.exec, '-', '-');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_mode    (  42,   1, \"change modes\", \"FORCED_FAIL\", myUNIT_RUN.exec, '-', '-');");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
 
@@ -1082,7 +1082,7 @@ koios_code_spec         (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(unit test mode)--------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (strchr (\"*··c····\", a_select) != NULL) {  ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_mode    (  43,   2, \"å··c····æ mode\", \"FORCED_FAIL\", cyUNIT.exec, '-', 'd');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_mode    (  43,   2, \"å··c····æ mode\", \"FORCED_FAIL\", myUNIT_RUN.exec, '-', 'd');");
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      }");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
@@ -1095,7 +1095,7 @@ koios_code_spec         (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(system command)--------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_system  (  44,   3, \"check directory\", \"ls -l\", \"ls -l\", cyUNIT.exec, '-', '-');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      yUNIT_system  (  44,   3, \"check directory\", \"ls -l\", \"ls -l\", myUNIT_RUN.exec, '-', '-');");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();
 
@@ -1107,7 +1107,7 @@ koios_code_spec         (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... check wave lines"               , yenv_ulines    (sm_nwave)              , 0                                            );
    yUNIT_minstr   ("... check result"                   , yenv_uindex    (sm_ncode   , sm_cmark) , "      /*---(system command)--------------*/"               );
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      if (strchr (\"*qr·t···\", a_select) != NULL) {  ++mykoios_nstep;");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_system  (  45,   4, \"check directory\", \"ls -l\", \"ls -l\", cyUNIT.exec, '-', 'd');");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "         yUNIT_system  (  45,   4, \"check directory\", \"ls -l\", \"ls -l\", myUNIT_RUN.exec, '-', 'd');");
    yUNIT_minstr   ("... check result"                   , yenv_upeek     (sm_ncode   , '>')      , "      }");
    yUNIT_minval   ("... save spot"                      , sm_cmark = yenv_uwhere    () + 1       ,  666);
    yUNIT_mindnoc  ();

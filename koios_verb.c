@@ -495,7 +495,7 @@ VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN
       return rce;
    }
    /*---(file limitations)---------------*/
-   --rce;  IF_GLOBAL {
+   --rce;  IF_GLOBAL_A {
       if (x_locn == 'n') {
          UDEBUG_KOIOS   ylog_unote   ("verb not allowed in unit_head.unit, unit_wide.unit, or unit_data.unit");
          yerr_uerror ("%s:%d:0: error: verb å%sæ good; BUT, not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit", a_nscrp, a_line, x_verb);
@@ -534,7 +534,7 @@ VERB_inventory     (FILE *a_main)
    int         i           = 0;
    int         c           = 0;
    CONV_printf (a_main, "\n");
-   CONV_printf (a_main, "char\n");
+   CONV_printf (a_main, "static char\n");
    CONV_printf (a_main, "yUNIT_verbs (void)\n");
    CONV_printf (a_main, "{\n");
    CONV_printf (a_main, "   printf (\"koios, record type summary\\n\");\n");

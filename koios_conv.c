@@ -172,7 +172,7 @@ CONV_footer             (char a_good, FILE **b_conv, char a_nscrp [LEN_TITLE], c
    /*---(export globals)-----------------*/
    UDEBUG_KOIOS   ylog_uchar   ("a_good"    , a_good);
    if (a_good == 'y') {
-      IF_GLOBAL {
+      IF_GLOBAL_A {
          UDEBUG_KOIOS   ylog_unote   ("export globals (conv)");
          rc = yUNIT_reuse_export (KOIOS_GLOBALS);
          UDEBUG_KOIOS   ylog_uvalue  ("export"    , rc);

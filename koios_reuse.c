@@ -132,11 +132,13 @@ REUSE__parse_global     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    char        x_type      =  '?';
    /*---(header)-------------------------*/
    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
+   /*---(default)------------------------*/
+   if (r_major != NULL)  *r_major = x_label;
    /*---(quick-out)----------------------*/
    UDEBUG_KOIOS   ylog_uinfo   ("a_verb"    , a_verb);
-   if (strcmp ("GLOBAL" , a_verb) == 0)  x_type = 'G';
-   if (strcmp ("CONFIG" , a_verb) == 0)  x_type = 'F';
-   if (x_type == '?') {
+   if       (strcmp ("GLOBAL" , a_verb) == 0)  x_type = 'G';
+   else if (strcmp ("CONFIG" , a_verb) == 0)  x_type = 'F';
+   else {
       UDEBUG_KOIOS   ylog_unote   ("not a GLOBAL/CONFIG");
       UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
       return 0;
@@ -145,7 +147,11 @@ REUSE__parse_global     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    UDEBUG_KOIOS   ylog_uchar   ("x_type"    , x_type);
    /*---(check label)--------------------*/
    rc = REUSE__parse_delimit (__FUNCTION__, a_nscrp, a_line, a_verb, a_prefix, a_label, 0, '-', a_example);
-   --rce;  if (rc < 0)  return rce;
+   UDEBUG_KOIOS   ylog_uvalue  ("delimit"   , rc);
+   --rce;  if (rc < 0) {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
    x_label = a_label [1];
    UDEBUG_KOIOS   ylog_uchar   ("x_label"   , x_label);
    --rce;  if (x_type == 'G' && strchr (YSTR_UPPER, x_label) == NULL) {
@@ -173,7 +179,7 @@ REUSE__parse_global     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    if (x_type == 'F')  n  = yUNIT_reuse_line (x_label);
    UDEBUG_KOIOS   ylog_uvalue  ("n"         , n);
    /*---(defense)------------------------*/
-   --rce;  IF_LOCAL {
+   --rce;  IF_LOCAL_A {
       UDEBUG_KOIOS   ylog_unote   ("GLOBAL/CONFIG only allowed in unit_head.unit, unit_wide.unit, or unit_data.unit");
       yerr_uerror ("%s:%d:0: error: åGLOBAL/CONFIGæ verbs not allowed outside unit_head.unit, unit_wide.unit, or unit_data.unit", a_nscrp, a_line);
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
@@ -188,7 +194,12 @@ REUSE__parse_global     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    /*---(handle)-------------------------*/
    if (x_type == 'G')  rc = REUSE__set_recd (x_label, a_ftype, a_line, a_vers, a_recd);
    if (x_type == 'F')  rc = REUSE__set_recd (x_label, a_ftype, a_line, a_vers, a_recd);
-   UDEBUG_KOIOS   ylog_uvalue  ("set"       , rc);
+   UDEBUG_KOIOS   ylog_uvalue  ("set_recd"  , rc);
+   --rce;  if (rc < 0) {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(save-back)----------------------*/
    if (r_major != NULL)  *r_major = x_label;
    /*---(complete)-----------------------*/
    UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
@@ -206,6 +217,8 @@ REUSE__parse_shared     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    int         n           =   -1;
    /*---(header)-------------------------*/
    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
+   /*---(default)------------------------*/
+   if (r_major != NULL)  *r_major = x_label;
    /*---(quick-out)----------------------*/
    UDEBUG_KOIOS   ylog_uinfo   ("a_verb"    , a_verb);
    if (strcmp ("SHARED" , a_verb) != 0) {
@@ -243,7 +256,7 @@ REUSE__parse_shared     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    n  = yUNIT_reuse_line (x_label);
    UDEBUG_KOIOS   ylog_uvalue  ("n"         , n);
    /*---(defense)------------------------*/
-   --rce;  IF_GLOBAL {
+   --rce;  IF_GLOBAL_A {
       UDEBUG_KOIOS   ylog_unote   ("SHARED not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
       yerr_uerror ("%s:%d:0: error: åSHAREDæ verb not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit", a_nscrp, a_line);
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
@@ -258,6 +271,11 @@ REUSE__parse_shared     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    /*---(handle)-------------------------*/
    rc = REUSE__set_recd (x_label, a_ftype, a_line, a_vers, a_recd);
    UDEBUG_KOIOS   ylog_uvalue  ("set"       , rc);
+   --rce;  if (rc < 0) {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(save-back)----------------------*/
    if (r_major != NULL)  *r_major = x_label;
    /*---(complete)-----------------------*/
    UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
@@ -386,7 +404,7 @@ REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    if (r_major != NULL)  *r_major = '-';
    if (r_minor != NULL)  *r_minor = '-';
    /*---(defense)------------------------*/
-   --rce;  IF_GLOBAL {
+   --rce;  IF_GLOBAL_A {
       UDEBUG_KOIOS   ylog_unote   ("REUSE not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
       yerr_uerror ("%s:%d:0: error: åREUSEæ verb not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit", a_nscrp, a_line);
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
@@ -585,6 +603,142 @@ REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
 /*====================------------------------------------====================*/
 static void  o___EXIM____________o () { return; }
 
+char
+REUSE_export            (char a_good, char a_nscrp [LEN_TITLE])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_ftype     =  '-';
+   char        x_header    [LEN_TITLE] = "";
+   /*---(header)-------------------------*/
+   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
+   /*---(defense)------------------------*/
+   UDEBUG_KOIOS   ylog_uchar   ("a_good"    , a_good);
+   --rce;  if (a_good == 0 || strchr ("y-", a_good) == NULL) {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(quick-out)----------------------*/
+   if (a_good != 'y') {
+      UDEBUG_KOIOS   ylog_unote   ("completion not marked good, skipping");
+      UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
+      return 0;
+   }
+   /*---(defense)------------------------*/
+   UDEBUG_KOIOS   ylog_upoint  ("a_nscrp"   , a_nscrp);
+   --rce;  if (a_nscrp == NULL || a_nscrp [0] == '\0') {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   UDEBUG_KOIOS   ylog_uinfo   ("a_nscrp"   , a_nscrp);
+   /*---(quick-out)----------------------*/
+   IF_LOCAL_A {
+      UDEBUG_KOIOS   ylog_unote   ("local unit tests do not export globals");
+      UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
+      return 0;
+   }
+   /*---(export globals)-----------------*/
+   UDEBUG_KOIOS   ylog_unote   ("export globals (code)");
+   UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());
+   rc = yUNIT_reuse_export (KOIOS_GLOBALS);
+   UDEBUG_KOIOS   ylog_uvalue  ("export"    , rc);
+   --rce;  if (rc < 0) {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(write prototypes)---------------*/
+   --rce;  IF_NOT_HEAD {
+      UDEBUG_KOIOS   ylog_unote   ("unit_wide and unit_data write function prototypes");
+      x_ftype = yUNIT_reuse_ftype (a_nscrp, x_header);
+      UDEBUG_KOIOS   ylog_uchar   ("x_ftype"   , x_ftype);
+      UDEBUG_KOIOS   ylog_uinfo   ("x_header"  , x_header);
+      rc = yUNIT_reuse_header (x_ftype, x_header);
+      UDEBUG_KOIOS   ylog_uvalue  ("headers"   , rc);
+      if (rc < 0) {
+         UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+   }
+   /*---(no prototypes needed)-----------*/
+   else {
+      UDEBUG_KOIOS   ylog_unote   ("unit_head does not write function prototypes");
+      UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
+      return 0;
+   }
+   /*---(complete)-----------------------*/
+   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
+   return 1;
+}
+
+char
+REUSE_import            (char a_nscrp [LEN_TITLE])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   char        x_exist     =  '-';
+   char        x_ftype     =  '-';
+   char        x_cmd       [LEN_HUND]  = "";
+   /*---(header)-------------------------*/
+   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
+   /*---(defense)------------------------*/
+   UDEBUG_KOIOS   ylog_upoint  ("a_nscrp"   , a_nscrp);
+   --rce;  if (a_nscrp == NULL || a_nscrp [0] == '\0') {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   UDEBUG_KOIOS   ylog_uinfo   ("a_nscrp"   , a_nscrp);
+   /*---(purge existing globals)---------*/
+   UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());
+   rc = yUNIT_reuse_purge  ('*');
+   UDEBUG_KOIOS   ylog_uvalue  ("purge"     , rc);
+   --rce;  if (rc < 0) {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(get unit test type)-------------*/
+   x_ftype = yUNIT_reuse_ftype (a_nscrp, NULL);
+   UDEBUG_KOIOS   ylog_uchar   ("x_ftype"   , x_ftype);
+   /*---(check globals file)-------------*/
+   UDEBUG_KOIOS   ylog_uinfo   ("globals"   , KOIOS_GLOBALS);
+   x_exist = yenv_uexists (KOIOS_GLOBALS);
+   UDEBUG_KOIOS   ylog_uchar   ("x_exist"   , x_exist);
+   --rce;  if (x_exist != 'r') {
+      UDEBUG_KOIOS   ylog_unote   ("globals file does not already exist");
+      if (x_ftype != 'h') {
+         UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+      sprintf (x_cmd, "touch %s", KOIOS_GLOBALS);
+      UDEBUG_KOIOS   ylog_uinfo   ("x_cmd"     , x_cmd);
+      rc = system (x_cmd);
+      UDEBUG_KOIOS   ylog_uvalue  ("touch"     , rc);
+      if (rc < 0) {
+         UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+         return rce;
+      }
+   }
+   /*---(import)-------------------------*/
+   rc = yUNIT_reuse_import (KOIOS_GLOBALS);
+   UDEBUG_KOIOS   ylog_uvalue  ("import"    , rc);
+   --rce;  if (rc < 0) {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());
+   /*---(purge only current ftype)-------*/
+   rc = yUNIT_reuse_purge  (x_ftype);
+   UDEBUG_KOIOS   ylog_uvalue  ("purge"     , rc);
+   --rce;  if (rc < 0) {
+      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+      return rce;
+   }
+   UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());
+   /*---(complete)-----------------------*/
+   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
+   return 1;
+}
 
 
 

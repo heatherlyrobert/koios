@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.-- production on stress test datasets"
 #define     P_VERMINOR  "2.0- supporting unit_head, unit_share, unit_data"
-#define     P_VERNUM    "2.0c"
-#define     P_VERTXT    "built-in sharing and enhanced unit.globals for unit_head, _wide, and _data"
+#define     P_VERNUM    "2.0e"
+#define     P_VERTXT    "new structure working in polymnia, some local unit test must be caught up"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -209,11 +209,14 @@
 #define     IF_NORMAL     if (strcmp (my_loc.l_base, "unit_head") != 0)
 #define     IF_SHARED     if (strcmp (my_loc.l_base, "unit_head") == 0 || strcmp (my_loc.l_base, "unit_wide") == 0 || strcmp (my_loc.l_base, "unit_data") == 0)
 
-#define     IF_HEAD       if (strcmp (a_nscrp, "unit_head.unit")  == 0)
-#define     IF_NOT_HEAD   if (strcmp (a_nscrp, "unit_head.unit")  != 0)
+#define     IF_HEAD       if (strcmp (a_nscrp, "unit_head.unit") == 0)
+#define     IF_NOT_HEAD   if (strcmp (a_nscrp, "unit_head.unit") != 0)
 
-#define     IF_GLOBAL     if (strcmp (a_nscrp, "unit_head.unit")  == 0 || strcmp (my_loc.l_base, "unit_wide") == 0 || strcmp (a_nscrp, "unit_data.unit") == 0)
-#define     IF_LOCAL      if (strcmp (a_nscrp, "unit_head.unit")  != 0 && strcmp (my_loc.l_base, "unit_wide") != 0 && strcmp (a_nscrp, "unit_data.unit") != 0)
+#define     IF_GLOBAL_A   if (strcmp (a_nscrp, "unit_head.unit") == 0 || strcmp (a_nscrp, "unit_wide.unit") == 0 || strcmp (a_nscrp, "unit_data.unit") == 0)
+#define     IF_LOCAL_A    if (strcmp (a_nscrp, "unit_head.unit") != 0 && strcmp (a_nscrp, "unit_wide.unit") != 0 && strcmp (a_nscrp, "unit_data.unit") != 0)
+
+#define     IF_GLOBAL     if (strcmp (my_loc.l_base, "unit_head") == 0 || strcmp (my_loc.l_base, "unit_wide") == 0 || strcmp (my_loc.l_base, "unit_data") == 0)
+#define     IF_LOCAL      if (strcmp (my_loc.l_base, "unit_head") != 0 && strcmp (my_loc.l_base, "unit_wide") != 0 && strcmp (my_loc.l_base, "unit_data") != 0)
 
 #define     IF_CONFIRM    if (my.noise == 'c') 
 #define     IF_VERBOSE    if (my.noise == 'v') 
@@ -446,7 +449,9 @@ char        REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char 
 /*---(debugging)------------*/
 char*       REUSE__actuals          (void);
 char*       REUSE__used             (void);
-/*> char*       REUSE__detail           (char a_abbr);                                <*/
+/*---(exim)-----------------*/
+char        REUSE_export            (char a_good, char a_nscrp [LEN_TITLE]);
+char        REUSE_import            (char a_nscrp [LEN_TITLE]);
 /*---(totals)---------------*/
 char        REUSE_totals            (char a_verb [LEN_LABEL], char a_recd [LEN_RECD]);
 /*---(done)-----------------*/
@@ -505,7 +510,7 @@ char        CODE__code_beg          (char a_nscrp [LEN_TITLE], FILE *a_code);
 char        CODE__code_stats        (FILE *a_code);
 char        CODE__code_end          (char a_nscrp [LEN_TITLE], FILE *a_code);
 char        CODE__main_beg          (FILE *a_main, char a_nscrp [LEN_TITLE]);
-char        CODE__main_end          (FILE *a_main);
+char        CODE__main_end          (FILE *a_main, char a_nscrp [LEN_TITLE]);
 char        CODE_header             (char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_nhead [LEN_TITLE], FILE **r_head, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, char *b_share, char *b_select);
 char        CODE_footer             (char a_good, char a_nscrp [LEN_TITLE], char a_nmain [LEN_TITLE], FILE **r_main, char a_nhead [LEN_TITLE], FILE **r_head, char a_ncode [LEN_TITLE], FILE **r_code, char a_nwave [LEN_TITLE], FILE **r_wave, int a_nline, char a_share, char a_select, char a_unit);
 char        CODE__incl              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
