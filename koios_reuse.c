@@ -25,68 +25,108 @@ char REUSE_init              (void)  { yUNIT_reuse_purge ('*'); }
 char REUSE_wrap              (void)  { yUNIT_reuse_purge ('*'); }
 
 
-
 /*====================------------------------------------====================*/
 /*===----                      getting and setting                     ----===*/
 /*====================------------------------------------====================*/
 static void  o___USAGE___________o () { return; }
 
+/*> char                                                                                                   <* 
+ *> REUSE__set_recd         (char a_abbr, char a_ftype, int a_line, char a_vers, char a_recd [LEN_RECD])   <* 
+ *> {                                                                                                      <* 
+ *>    /+---(locals)-------------------------+/                                                            <* 
+ *>    char        rce         =  -10;                                                                     <* 
+ *>    char        rc          =    0;                                                                     <* 
+ *>    char       *p           = NULL;                                                                     <* 
+ *>    char       *r           = NULL;                                                                     <* 
+ *>    char        x_recd      [LEN_RECD]  = "";                                                           <* 
+ *>    /+---(header)-------------------------+/                                                            <* 
+ *>    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);                                                         <* 
+ *>    /+---(defense)------------------------+/                                                            <* 
+ *>    UDEBUG_KOIOS   ylog_upoint  ("a_recd"    , a_recd);                                                 <* 
+ *>    --rce;  if (a_recd == NULL || a_recd [0] == '\0') {                                                 <* 
+ *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                                                 <* 
+ *>       return rce;                                                                                      <* 
+ *>    }                                                                                                   <* 
+ *>    strlcpy (x_recd, a_recd, LEN_RECD);                                                                 <* 
+ *>    /+---(parse verb, no action)----------+/                                                            <* 
+ *>    p = strtok_r (x_recd, "", &r);                                                                     <* 
+ *>    UDEBUG_KOIOS   ylog_upoint  ("p"         , p);                                                      <* 
+ *>    --rce;  if (p      == NULL) {                                                                       <* 
+ *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                                                 <* 
+ *>       return rce;                                                                                      <* 
+ *>    }                                                                                                   <* 
+ *>    /+---(parse description)--------------+/                                                            <* 
+ *>    p = strtok_r (NULL  , "", &r);                                                                     <* 
+ *>    UDEBUG_KOIOS   ylog_upoint  ("p"         , p);                                                      <* 
+ *>    --rce;  if (p      == NULL) {                                                                       <* 
+ *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                                                 <* 
+ *>       return rce;                                                                                      <* 
+ *>    }                                                                                                   <* 
+ *>    /+---(if, versioned, parse again)-----+/                                                            <* 
+ *>    --rce; if (a_vers > 0) {                                                                            <* 
+ *>       p = strtok_r (NULL  , "", &r);                                                                  <* 
+ *>       UDEBUG_KOIOS   ylog_upoint  ("p"         , p);                                                   <* 
+ *>       if (p      == NULL) {                                                                            <* 
+ *>          UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                                              <* 
+ *>          return rce;                                                                                   <* 
+ *>       }                                                                                                <* 
+ *>    }                                                                                                   <* 
+ *>    /+---(clean-up)-----------------------+/                                                            <* 
+ *>    UDEBUG_KOIOS   ylog_uinfo   ("p"         , p);                                                      <* 
+ *>    ystrutrim (p, LEN_LONG);                                                                            <* 
+ *>    /+---(set)----------------------------+/                                                            <* 
+ *>    UDEBUG_KOIOS   ylog_uchar   ("a_ftype"   , a_ftype);                                                <* 
+ *>    rc = yUNIT_reuse_set (a_abbr, a_ftype, a_line, p, "å············æ", "·");                           <* 
+ *>    UDEBUG_KOIOS   ylog_uvalue  ("set"       , rc);                                                     <* 
+ *>    --rce; if (rc < 0) {                                                                                <* 
+ *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                                                 <* 
+ *>       return rce;                                                                                      <* 
+ *>    }                                                                                                   <* 
+ *>    UDEBUG_KOIOS   ylog_unote   (yUNIT_reuse_show   (a_abbr));                                          <* 
+ *>    /+---(complete)-----------------------+/                                                            <* 
+ *>    UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);                                                         <* 
+ *>    return rc;                                                                                          <* 
+ *> }                                                                                                      <*/
+
 char
-REUSE__set_recd         (char a_abbr, char a_ftype, int a_line, char a_vers, char a_recd [LEN_RECD])
+REUSE_scope             (char a_verb [LEN_LABEL], char r_example [LEN_SHORT])
 {
-   /*---(locals)-------------------------*/
-   char        rce         =  -10;
-   char        rc          =    0;
-   char       *p           = NULL;
-   char       *r           = NULL;
-   char        x_recd      [LEN_RECD]  = "";
-   /*---(header)-------------------------*/
-   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
-   /*---(defense)------------------------*/
-   UDEBUG_KOIOS   ylog_upoint  ("a_recd"    , a_recd);
-   --rce;  if (a_recd == NULL || a_recd [0] == '\0') {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   strlcpy (x_recd, a_recd, LEN_RECD);
-   /*---(parse verb, no action)----------*/
-   p = strtok_r (x_recd, "", &r);
-   UDEBUG_KOIOS   ylog_upoint  ("p"         , p);
-   --rce;  if (p      == NULL) {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(parse description)--------------*/
-   p = strtok_r (NULL  , "", &r);
-   UDEBUG_KOIOS   ylog_upoint  ("p"         , p);
-   --rce;  if (p      == NULL) {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(if, versioned, parse again)-----*/
-   --rce; if (a_vers > 0) {
-      p = strtok_r (NULL  , "", &r);
-      UDEBUG_KOIOS   ylog_upoint  ("p"         , p);
-      if (p      == NULL) {
-         UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-         return rce;
-      }
-   }
-   /*---(clean-up)-----------------------*/
-   UDEBUG_KOIOS   ylog_uinfo   ("p"         , p);
-   ystrutrim (p, LEN_LONG);
-   /*---(set)----------------------------*/
-   UDEBUG_KOIOS   ylog_uchar   ("a_ftype"   , a_ftype);
-   rc = yUNIT_reuse_set (a_abbr, a_ftype, a_line, p);
-   UDEBUG_KOIOS   ylog_uvalue  ("set"       , rc);
-   --rce; if (rc < 0) {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   UDEBUG_KOIOS   ylog_unote   (yUNIT_reuse_show   (a_abbr));
+   /*---(locals)-----------+-----+-----+-*/
+   char        x_type      =  '-';
+   char        x_example   [LEN_SHORT] = "";
+   /*---(default)------------------------*/
+   if (r_example != NULL)  strcpy (r_example, "");
+   /*---(assign type)--------------------*/
+   if      (a_verb == NULL)                  {  x_type = '°';           strcpy (x_example, ""   );  }
+   else if (strcmp (a_verb, "GLOBAL") == 0)  {  x_type = KOIOS_GLOBAL;  strcpy (x_example, "-A-");  }
+   else if (strcmp (a_verb, "CONFIG") == 0)  {  x_type = KOIOS_CONFIG;  strcpy (x_example, "-ò-");  }
+   else if (strcmp (a_verb, "SHARED") == 0)  {  x_type = KOIOS_SHARED;  strcpy (x_example, "-a-");  }
+   else if (strcmp (a_verb, "REUSE" ) == 0)  {  x_type = KOIOS_REUSE;   strcpy (x_example, "A/a");  }
+   else                                      {  x_type = '-';           strcpy (x_example, ""   );  }
+   /*---(save-back)----------------------*/
+   if (r_example != NULL)  strlcpy (r_example, x_example, LEN_SHORT);
    /*---(complete)-----------------------*/
-   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
-   return rc;
+   return x_type;
+}
+
+char
+REUSE_populate          (char a_verb [LEN_LABEL], char a_major, int a_line, char a_desc [LEN_LONG], char a_which [LEN_LABEL], char a_titles [LEN_PATH])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        x_ftype     =  '·';
+   /*---(quick_out)----------------------*/
+   /*---(check file)---------------------*/
+   /*> x_ftype = yUNIT_reuse_ftype (a_nscrp, NULL);                                                  <* 
+    *> ylog_uchar   ("x_ftype"   , x_ftype);                                            <* 
+    *> if (x_spec == KOIOS_SSHAR && r_major != NULL) {                                  <* 
+    *>    rc = yUNIT_reuse_set (*r_major, x_ftype, *r_nline, x_desc, x_meth, x_expe);   <* 
+    *>    UDEBUG_KOIOS   ylog_uvalue  ("reuse"     , rc);                               <* 
+    *>    --rce;  if (rc < 0)  {                                                        <* 
+    *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                           <* 
+    *>       return rce;                                                                <* 
+    *>    }                                                                             <* 
+    *> }                                                                                <*/
+
 }
 
 
@@ -121,7 +161,7 @@ REUSE__parse_delimit    (char a_func [LEN_LABEL], char a_nscrp [LEN_TITLE], int 
 }
 
 char
-REUSE__parse_global     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major)
+REUSE__parse_global     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_LABEL], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_share, char *r_major, char *r_minor)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -129,22 +169,26 @@ REUSE__parse_global     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    char        x_label     =  '?';
    char        c           =  '?';
    int         n           =   -1;
+   char        x_ftype     =  '?';
    char        x_type      =  '?';
    /*---(header)-------------------------*/
    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(default)------------------------*/
-   if (r_major != NULL)  *r_major = x_label;
+   if (r_major != NULL)  *r_major = '-';
+   if (r_minor != NULL)  *r_minor = '-';
    /*---(quick-out)----------------------*/
    UDEBUG_KOIOS   ylog_uinfo   ("a_verb"    , a_verb);
-   if       (strcmp ("GLOBAL" , a_verb) == 0)  x_type = 'G';
-   else if (strcmp ("CONFIG" , a_verb) == 0)  x_type = 'F';
+   if      (strcmp ("GLOBAL" , a_verb) == 0)  x_type = KOIOS_GLOBAL;
+   else if (strcmp ("CONFIG" , a_verb) == 0)  x_type = KOIOS_CONFIG;
    else {
       UDEBUG_KOIOS   ylog_unote   ("not a GLOBAL/CONFIG");
       UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
       return 0;
    }
-   UDEBUG_KOIOS   ylog_uchar   ("a_ftype"   , a_ftype);
    UDEBUG_KOIOS   ylog_uchar   ("x_type"    , x_type);
+   /*---(check file)---------------------*/
+   x_ftype = yUNIT_reuse_ftype (a_nscrp, NULL);
+   UDEBUG_KOIOS   ylog_uchar   ("x_ftype"   , x_ftype);
    /*---(check label)--------------------*/
    rc = REUSE__parse_delimit (__FUNCTION__, a_nscrp, a_line, a_verb, a_prefix, a_label, 0, '-', a_example);
    UDEBUG_KOIOS   ylog_uvalue  ("delimit"   , rc);
@@ -154,13 +198,13 @@ REUSE__parse_global     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    }
    x_label = a_label [1];
    UDEBUG_KOIOS   ylog_uchar   ("x_label"   , x_label);
-   --rce;  if (x_type == 'G' && strchr (YSTR_UPPER, x_label) == NULL) {
+   --rce;  if (x_type == KOIOS_GLOBAL && strchr (YSTR_UPPER, x_label) == NULL) {
       UDEBUG_KOIOS   ylog_unote   ("GLOBAL identifier must be A-Z");
       yerr_uerror ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ not valid å%sæ", a_nscrp, a_line, a_prefix, x_label, YSTR_UPPER);
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   --rce;  if (x_type == 'F' && strchr (YSTR_GREEK, x_label) == NULL) {
+   --rce;  if (x_type == KOIOS_CONFIG && strchr (YSTR_GREEK, x_label) == NULL) {
       UDEBUG_KOIOS   ylog_unote   ("CONFIG identifier must be è-ÿ");
       yerr_uerror ("%s:%d:0: error: ¶%s¶ identifier ¶%c¶ not valid å%sæ", a_nscrp, a_line, a_prefix, x_label, YSTR_GREEK);
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
@@ -175,8 +219,8 @@ REUSE__parse_global     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
       return rce;
    }
    /*---(prepare)------------------------*/
-   if (x_type == 'G')  n  = yUNIT_reuse_line (x_label);
-   if (x_type == 'F')  n  = yUNIT_reuse_line (x_label);
+   if (x_type == KOIOS_GLOBAL)  n  = yUNIT_reuse_line (x_label);
+   if (x_type == KOIOS_CONFIG)  n  = yUNIT_reuse_line (x_label);
    UDEBUG_KOIOS   ylog_uvalue  ("n"         , n);
    /*---(defense)------------------------*/
    --rce;  IF_LOCAL_A {
@@ -191,23 +235,23 @@ REUSE__parse_global     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   /*---(handle)-------------------------*/
-   if (x_type == 'G')  rc = REUSE__set_recd (x_label, a_ftype, a_line, a_vers, a_recd);
-   if (x_type == 'F')  rc = REUSE__set_recd (x_label, a_ftype, a_line, a_vers, a_recd);
-   UDEBUG_KOIOS   ylog_uvalue  ("set_recd"  , rc);
+   /*---(reserve place)------------------*/
+   rc = yUNIT_reuse_reserve (x_label, x_ftype, a_line);
+   UDEBUG_KOIOS   ylog_uvalue  ("reserve"   , rc);
    --rce;  if (rc < 0) {
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(save-back)----------------------*/
    if (r_major != NULL)  *r_major = x_label;
+   if (r_minor != NULL)  *r_minor = '-';
    /*---(complete)-----------------------*/
    UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
    return 1;
 }
 
 char
-REUSE__parse_shared     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major)
+REUSE__parse_shared     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_LABEL], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_share, char *r_major, char *r_minor)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -215,10 +259,12 @@ REUSE__parse_shared     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    char        x_label     =  '?';
    char        c           =  '?';
    int         n           =   -1;
+   char        x_ftype     =  '-';
    /*---(header)-------------------------*/
    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(default)------------------------*/
-   if (r_major != NULL)  *r_major = x_label;
+   if (r_major != NULL)  *r_major = '-';
+   if (r_minor != NULL)  *r_minor = '-';
    /*---(quick-out)----------------------*/
    UDEBUG_KOIOS   ylog_uinfo   ("a_verb"    , a_verb);
    if (strcmp ("SHARED" , a_verb) != 0) {
@@ -226,7 +272,9 @@ REUSE__parse_shared     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
       UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
       return 0;
    }
-   UDEBUG_KOIOS   ylog_uchar   ("a_ftype"   , a_ftype);
+   /*---(check file)---------------------*/
+   x_ftype = yUNIT_reuse_ftype (a_nscrp, NULL);
+   UDEBUG_KOIOS   ylog_uchar   ("x_ftype"   , x_ftype);
    /*---(check label)--------------------*/
    c = a_label [0];
    UDEBUG_KOIOS   ylog_uchar   ("pre 0"     , c);
@@ -268,15 +316,16 @@ REUSE__parse_shared     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   /*---(handle)-------------------------*/
-   rc = REUSE__set_recd (x_label, a_ftype, a_line, a_vers, a_recd);
-   UDEBUG_KOIOS   ylog_uvalue  ("set"       , rc);
+   /*---(reserve place)------------------*/
+   rc = yUNIT_reuse_reserve (x_label, x_ftype, a_line);
+   UDEBUG_KOIOS   ylog_uvalue  ("reserve"   , rc);
    --rce;  if (rc < 0) {
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(save-back)----------------------*/
    if (r_major != NULL)  *r_major = x_label;
+   if (r_minor != NULL)  *r_minor = '-';
    /*---(complete)-----------------------*/
    UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
    return 1;
@@ -378,7 +427,7 @@ REUSE__parse_reuse_new  (char a_nscrp [LEN_TITLE], int a_line, char a_prefix [LE
 }
 
 char
-REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_share, char r_desc [LEN_LONG], char *r_major, char *r_minor)
+REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_LABEL], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_share, char *r_major, char *r_minor)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
@@ -387,9 +436,8 @@ REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    char        x_minor     =  '-';
    char        c           =  '?';
    int         n           =   -1;
-   char        x_tdesc     [LEN_TERSE] = "";
-   char        x_desc      [LEN_LONG]  = "";
    int         l           =    0;
+   char        x_ftype     =  '-';
    /*---(header)-------------------------*/
    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(quick-out)----------------------*/
@@ -400,9 +448,11 @@ REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
       return 0;
    }
    /*---(default)------------------------*/
-   if (r_desc  != NULL)  strcpy (r_desc, "");
    if (r_major != NULL)  *r_major = '-';
    if (r_minor != NULL)  *r_minor = '-';
+   /*---(check file)---------------------*/
+   x_ftype = yUNIT_reuse_ftype (a_nscrp, NULL);
+   UDEBUG_KOIOS   ylog_uchar   ("x_ftype"   , x_ftype);
    /*---(defense)------------------------*/
    --rce;  IF_GLOBAL_A {
       UDEBUG_KOIOS   ylog_unote   ("REUSE not allowed inside unit_head.unit, unit_wide.unit, or unit_data.unit");
@@ -436,7 +486,7 @@ REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    }
    /*---(global)-------------------------*/
    --rce;  if (strchr (YSTR_UPPER, x_major) != NULL) {
-      n  = yUNIT_reuse_desc (x_major, x_tdesc, x_desc);
+      n  = yUNIT_reuse_desc (x_major, NULL, NULL);
       UDEBUG_KOIOS   ylog_uvalue  ("n"         , n);
       if (n < 0) {
          UDEBUG_KOIOS   ylog_unote   ("not set");
@@ -447,7 +497,7 @@ REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    }
    /*---(config)-------------------------*/
    else if (strchr (YSTR_GREEK, x_major) != NULL) {
-      n  = yUNIT_reuse_desc (x_major, x_tdesc, x_desc);
+      n  = yUNIT_reuse_desc (x_major, NULL, NULL);
       UDEBUG_KOIOS   ylog_uvalue  ("n"         , n);
       if (n < 0) {
          UDEBUG_KOIOS   ylog_unote   ("not set");
@@ -458,7 +508,7 @@ REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
    }
    /*---(shared)-------------------------*/
    else if (strchr (YSTR_LOWER, x_major) != NULL) {
-      n  = yUNIT_reuse_desc (x_major, x_tdesc, x_desc);
+      n  = yUNIT_reuse_desc (x_major, NULL, NULL);
       UDEBUG_KOIOS   ylog_uvalue  ("n"         , n);
       if (n < 0) {
          UDEBUG_KOIOS   ylog_unote   ("not set");
@@ -482,7 +532,6 @@ REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
       return rce;
    }
    /*---(save-back)----------------------*/
-   if (r_desc  != NULL)  DITTO_parse__desc (x_desc, r_desc);  /* nice stand-out formatting */
    if (r_major != NULL)  *r_major = x_major;
    if (r_minor != NULL)  *r_minor = x_minor;
    /*---(complete)-----------------------*/
@@ -491,20 +540,20 @@ REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, cha
 }
 
 char
-REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char a_share, char r_desc [LEN_LONG], char *r_major, char *r_minor)
+REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_LABEL], char a_share, char *r_major, char *r_minor)
 {
    /*---(locals)-----------+-----+-----+-*/
    char        rce         =  -10;
    char        rc          =    0;
+   char        x_type      =  '·';
    char        x_ftype     =  '·';
-   char        x_prefix    [LEN_RECD]  = "";
+   char        x_prefix    [LEN_LABEL] = "";
    char       *p           = NULL;
    char        m           =  '-';
    int         o           =   -1;
    int         c           =   -1;
    char        x_check     =   -1;
    char        x_label     [LEN_LABEL] = "";
-   char        x_desc      [LEN_LONG]  = "";
    char        x_ex        [LEN_SHORT] = "-A-";
    int         l           =    0;
    /*---(header)-------------------------*/
@@ -512,7 +561,6 @@ REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
    /*---(existing)-----------------------*/
    UDEBUG_KOIOS ylog_uinfo    ("used"      , yUNIT_reuse_used ());
    /*---(default)------------------------*/
-   if (r_desc  != NULL)  strcpy (r_desc, "");
    if (r_major != NULL)  *r_major = '-';
    if (r_minor != NULL)  *r_minor = '-';
    /*---(defense)------------------------*/
@@ -526,17 +574,13 @@ REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
-   UDEBUG_KOIOS   ylog_upoint  ("a_recd"    , a_recd);
-   --rce;  if (a_recd     == NULL) {
-      yerr_uerror ("%s:%d:0: error: GLOBAL/SHARED/REUSE called with a null string", a_nscrp, a_line);
+   UDEBUG_KOIOS   ylog_upoint  ("a_prefix"  , a_prefix);
+   --rce;  if (a_prefix   == NULL) {
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
    /*---(check file)---------------------*/
-   if      (strcmp (a_nscrp, "unit_head.unit") == 0)  x_ftype = 'h';
-   else if (strcmp (a_nscrp, "unit_wide.unit") == 0)  x_ftype = 'w';
-   else if (strcmp (a_nscrp, "unit_data.unit") == 0)  x_ftype = 'd';
-   else                                               x_ftype = '-';
+   x_ftype = yUNIT_reuse_ftype (a_nscrp, NULL);
    UDEBUG_KOIOS   ylog_uchar   ("x_ftype"   , x_ftype);
    /*---(check for right verbs)----------*/
    UDEBUG_KOIOS   ylog_unote   ("check examples");
@@ -550,22 +594,14 @@ REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
       return 0;
    }
    UDEBUG_KOIOS   ylog_uinfo   ("x_ex"      , x_ex);
-   /*---(check for marker)---------------*/
-   strlcpy (x_prefix, a_recd, LEN_RECD);
-   UDEBUG_KOIOS   ylog_uinfo   ("x_prefix"  , x_prefix);
-   p = strchr (x_prefix, '');
-   UDEBUG_KOIOS   ylog_upoint  ("p"         , p);
-   --rce;  if (p == NULL) {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   p [0] = '\0';
+   /*---(get the id's)-------------------*/
+   strlcpy (x_prefix, a_prefix, LEN_LABEL);
    ystrutrim (x_prefix, LEN_LABEL);
    UDEBUG_KOIOS   ylog_uinfo   ("x_prefix"  , x_prefix);
    l = strlen (x_prefix);
    strlcpy (x_label, x_prefix + l - 3, LEN_LABEL);
    /*---(handle global)------------------*/
-   rc = REUSE__parse_global (a_nscrp, x_ftype, a_line, a_verb, a_recd, x_prefix, x_label, x_ex, a_vers, r_major);
+   rc = REUSE__parse_global (a_nscrp, a_line, a_verb, x_prefix, x_label, x_ex, a_share, r_major, r_minor);
    UDEBUG_KOIOS   ylog_uvalue  ("global"    , rc);
    --rce;  if (rc < 0) {
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
@@ -573,7 +609,7 @@ REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
    }
    /*---(handle shared)------------------*/
    --rce;  if (rc == 0) {
-      rc = REUSE__parse_shared (a_nscrp, x_ftype, a_line, a_verb, a_recd, x_prefix, x_label, x_ex, a_vers, r_major);
+      rc = REUSE__parse_shared (a_nscrp, a_line, a_verb, x_prefix, x_label, x_ex, a_share, r_major, r_minor);
       UDEBUG_KOIOS   ylog_uvalue  ("shared"    , rc);
       if (rc < 0) {
          UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
@@ -582,7 +618,7 @@ REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
    }
    /*---(handle reuses)------------------*/
    --rce;  if (rc == 0) {
-      rc = REUSE__parse_reuse  (a_nscrp, x_ftype, a_line, a_verb, a_recd, x_prefix, x_label, a_share, r_desc, r_major, r_minor);
+      rc = REUSE__parse_reuse  (a_nscrp, a_line, a_verb, x_prefix, x_label, x_ex, a_share, r_major, r_minor);
       UDEBUG_KOIOS   ylog_uvalue  ("reuse"     , rc);
       if (rc < 0) {
          UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
@@ -603,142 +639,142 @@ REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
 /*====================------------------------------------====================*/
 static void  o___EXIM____________o () { return; }
 
-char
-REUSE_export            (char a_good, char a_nscrp [LEN_TITLE])
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   char        rc          =    0;
-   char        x_ftype     =  '-';
-   char        x_header    [LEN_TITLE] = "";
-   /*---(header)-------------------------*/
-   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
-   /*---(defense)------------------------*/
-   UDEBUG_KOIOS   ylog_uchar   ("a_good"    , a_good);
-   --rce;  if (a_good == 0 || strchr ("y-", a_good) == NULL) {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(quick-out)----------------------*/
-   if (a_good != 'y') {
-      UDEBUG_KOIOS   ylog_unote   ("completion not marked good, skipping");
-      UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
-      return 0;
-   }
-   /*---(defense)------------------------*/
-   UDEBUG_KOIOS   ylog_upoint  ("a_nscrp"   , a_nscrp);
-   --rce;  if (a_nscrp == NULL || a_nscrp [0] == '\0') {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   UDEBUG_KOIOS   ylog_uinfo   ("a_nscrp"   , a_nscrp);
-   /*---(quick-out)----------------------*/
-   IF_LOCAL_A {
-      UDEBUG_KOIOS   ylog_unote   ("local unit tests do not export globals");
-      UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
-      return 0;
-   }
-   /*---(export globals)-----------------*/
-   UDEBUG_KOIOS   ylog_unote   ("export globals (code)");
-   UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());
-   rc = yUNIT_reuse_export (KOIOS_GLOBALS);
-   UDEBUG_KOIOS   ylog_uvalue  ("export"    , rc);
-   --rce;  if (rc < 0) {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(write prototypes)---------------*/
-   --rce;  IF_NOT_HEAD {
-      UDEBUG_KOIOS   ylog_unote   ("unit_wide and unit_data write function prototypes");
-      x_ftype = yUNIT_reuse_ftype (a_nscrp, x_header);
-      UDEBUG_KOIOS   ylog_uchar   ("x_ftype"   , x_ftype);
-      UDEBUG_KOIOS   ylog_uinfo   ("x_header"  , x_header);
-      rc = yUNIT_reuse_header (x_ftype, x_header);
-      UDEBUG_KOIOS   ylog_uvalue  ("headers"   , rc);
-      if (rc < 0) {
-         UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-         return rce;
-      }
-   }
-   /*---(no prototypes needed)-----------*/
-   else {
-      UDEBUG_KOIOS   ylog_unote   ("unit_head does not write function prototypes");
-      UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
-      return 0;
-   }
-   /*---(complete)-----------------------*/
-   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
-   return 1;
-}
+/*> char                                                                                       <* 
+ *> REUSE_export            (char a_good, char a_nscrp [LEN_TITLE])                            <* 
+ *> {                                                                                          <* 
+ *>    /+---(locals)-----------+-----+-----+-+/                                                <* 
+ *>    char        rce         =  -10;                                                         <* 
+ *>    char        rc          =    0;                                                         <* 
+ *>    char        x_ftype     =  '-';                                                         <* 
+ *>    char        x_header    [LEN_TITLE] = "";                                               <* 
+ *>    /+---(header)-------------------------+/                                                <* 
+ *>    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);                                             <* 
+ *>    /+---(defense)------------------------+/                                                <* 
+ *>    UDEBUG_KOIOS   ylog_uchar   ("a_good"    , a_good);                                     <* 
+ *>    --rce;  if (a_good == 0 || strchr ("y-", a_good) == NULL) {                             <* 
+ *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                                     <* 
+ *>       return rce;                                                                          <* 
+ *>    }                                                                                       <* 
+ *>    /+---(quick-out)----------------------+/                                                <* 
+ *>    if (a_good != 'y') {                                                                    <* 
+ *>       UDEBUG_KOIOS   ylog_unote   ("completion not marked good, skipping");                <* 
+ *>       UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);                                          <* 
+ *>       return 0;                                                                            <* 
+ *>    }                                                                                       <* 
+ *>    /+---(defense)------------------------+/                                                <* 
+ *>    UDEBUG_KOIOS   ylog_upoint  ("a_nscrp"   , a_nscrp);                                    <* 
+ *>    --rce;  if (a_nscrp == NULL || a_nscrp [0] == '\0') {                                   <* 
+ *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                                     <* 
+ *>       return rce;                                                                          <* 
+ *>    }                                                                                       <* 
+ *>    UDEBUG_KOIOS   ylog_uinfo   ("a_nscrp"   , a_nscrp);                                    <* 
+ *>    /+---(quick-out)----------------------+/                                                <* 
+ *>    IF_LOCAL_A {                                                                            <* 
+ *>       UDEBUG_KOIOS   ylog_unote   ("local unit tests do not export globals");              <* 
+ *>       UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);                                          <* 
+ *>       return 0;                                                                            <* 
+ *>    }                                                                                       <* 
+ *>    /+---(export globals)-----------------+/                                                <* 
+ *>    UDEBUG_KOIOS   ylog_unote   ("export globals (code)");                                  <* 
+ *>    UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());                        <* 
+ *>    rc = yUNIT_reuse_export (KOIOS_GLOBALS);                                                <* 
+ *>    UDEBUG_KOIOS   ylog_uvalue  ("export"    , rc);                                         <* 
+ *>    --rce;  if (rc < 0) {                                                                   <* 
+ *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                                     <* 
+ *>       return rce;                                                                          <* 
+ *>    }                                                                                       <* 
+ *>    /+---(write prototypes)---------------+/                                                <* 
+ *>    --rce;  IF_NOT_HEAD {                                                                   <* 
+ *>       UDEBUG_KOIOS   ylog_unote   ("unit_wide and unit_data write function prototypes");   <* 
+ *>       x_ftype = yUNIT_reuse_ftype (a_nscrp, x_header);                                     <* 
+ *>       UDEBUG_KOIOS   ylog_uchar   ("x_ftype"   , x_ftype);                                 <* 
+ *>       UDEBUG_KOIOS   ylog_uinfo   ("x_header"  , x_header);                                <* 
+ *>       rc = yUNIT_reuse_header (x_ftype, x_header);                                         <* 
+ *>       UDEBUG_KOIOS   ylog_uvalue  ("headers"   , rc);                                      <* 
+ *>       if (rc < 0) {                                                                        <* 
+ *>          UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                                  <* 
+ *>          return rce;                                                                       <* 
+ *>       }                                                                                    <* 
+ *>    }                                                                                       <* 
+ *>    /+---(no prototypes needed)-----------+/                                                <* 
+ *>    else {                                                                                  <* 
+ *>       UDEBUG_KOIOS   ylog_unote   ("unit_head does not write function prototypes");        <* 
+ *>       UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);                                          <* 
+ *>       return 0;                                                                            <* 
+ *>    }                                                                                       <* 
+ *>    /+---(complete)-----------------------+/                                                <* 
+ *>    UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);                                             <* 
+ *>    return 1;                                                                               <* 
+ *> }                                                                                          <*/
 
-char
-REUSE_import            (char a_nscrp [LEN_TITLE])
-{
-   /*---(locals)-----------+-----+-----+-*/
-   char        rce         =  -10;
-   char        rc          =    0;
-   char        x_exist     =  '-';
-   char        x_ftype     =  '-';
-   char        x_cmd       [LEN_HUND]  = "";
-   /*---(header)-------------------------*/
-   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
-   /*---(defense)------------------------*/
-   UDEBUG_KOIOS   ylog_upoint  ("a_nscrp"   , a_nscrp);
-   --rce;  if (a_nscrp == NULL || a_nscrp [0] == '\0') {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   UDEBUG_KOIOS   ylog_uinfo   ("a_nscrp"   , a_nscrp);
-   /*---(purge existing globals)---------*/
-   UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());
-   rc = yUNIT_reuse_purge  ('*');
-   UDEBUG_KOIOS   ylog_uvalue  ("purge"     , rc);
-   --rce;  if (rc < 0) {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   /*---(get unit test type)-------------*/
-   x_ftype = yUNIT_reuse_ftype (a_nscrp, NULL);
-   UDEBUG_KOIOS   ylog_uchar   ("x_ftype"   , x_ftype);
-   /*---(check globals file)-------------*/
-   UDEBUG_KOIOS   ylog_uinfo   ("globals"   , KOIOS_GLOBALS);
-   x_exist = yenv_uexists (KOIOS_GLOBALS);
-   UDEBUG_KOIOS   ylog_uchar   ("x_exist"   , x_exist);
-   --rce;  if (x_exist != 'r') {
-      UDEBUG_KOIOS   ylog_unote   ("globals file does not already exist");
-      if (x_ftype != 'h') {
-         UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-         return rce;
-      }
-      sprintf (x_cmd, "touch %s", KOIOS_GLOBALS);
-      UDEBUG_KOIOS   ylog_uinfo   ("x_cmd"     , x_cmd);
-      rc = system (x_cmd);
-      UDEBUG_KOIOS   ylog_uvalue  ("touch"     , rc);
-      if (rc < 0) {
-         UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-         return rce;
-      }
-   }
-   /*---(import)-------------------------*/
-   rc = yUNIT_reuse_import (KOIOS_GLOBALS);
-   UDEBUG_KOIOS   ylog_uvalue  ("import"    , rc);
-   --rce;  if (rc < 0) {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());
-   /*---(purge only current ftype)-------*/
-   rc = yUNIT_reuse_purge  (x_ftype);
-   UDEBUG_KOIOS   ylog_uvalue  ("purge"     , rc);
-   --rce;  if (rc < 0) {
-      UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
-      return rce;
-   }
-   UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());
-   /*---(complete)-----------------------*/
-   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
-   return 1;
-}
+/*> char                                                                              <* 
+ *> REUSE_import            (char a_nscrp [LEN_TITLE])                                <* 
+ *> {                                                                                 <* 
+ *>    /+---(locals)-----------+-----+-----+-+/                                       <* 
+ *>    char        rce         =  -10;                                                <* 
+ *>    char        rc          =    0;                                                <* 
+ *>    char        x_exist     =  '-';                                                <* 
+ *>    char        x_ftype     =  '-';                                                <* 
+ *>    char        x_cmd       [LEN_HUND]  = "";                                      <* 
+ *>    /+---(header)-------------------------+/                                       <* 
+ *>    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);                                    <* 
+ *>    /+---(defense)------------------------+/                                       <* 
+ *>    UDEBUG_KOIOS   ylog_upoint  ("a_nscrp"   , a_nscrp);                           <* 
+ *>    --rce;  if (a_nscrp == NULL || a_nscrp [0] == '\0') {                          <* 
+ *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                            <* 
+ *>       return rce;                                                                 <* 
+ *>    }                                                                              <* 
+ *>    UDEBUG_KOIOS   ylog_uinfo   ("a_nscrp"   , a_nscrp);                           <* 
+ *>    /+---(purge existing globals)---------+/                                       <* 
+ *>    UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());               <* 
+ *>    rc = yUNIT_reuse_purge  ('*');                                                 <* 
+ *>    UDEBUG_KOIOS   ylog_uvalue  ("purge"     , rc);                                <* 
+ *>    --rce;  if (rc < 0) {                                                          <* 
+ *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                            <* 
+ *>       return rce;                                                                 <* 
+ *>    }                                                                              <* 
+ *>    /+---(get unit test type)-------------+/                                       <* 
+ *>    x_ftype = yUNIT_reuse_ftype (a_nscrp, NULL);                                   <* 
+ *>    UDEBUG_KOIOS   ylog_uchar   ("x_ftype"   , x_ftype);                           <* 
+ *>    /+---(check globals file)-------------+/                                       <* 
+ *>    UDEBUG_KOIOS   ylog_uinfo   ("globals"   , KOIOS_GLOBALS);                     <* 
+ *>    x_exist = yenv_uexists (KOIOS_GLOBALS);                                        <* 
+ *>    UDEBUG_KOIOS   ylog_uchar   ("x_exist"   , x_exist);                           <* 
+ *>    --rce;  if (x_exist != 'r') {                                                  <* 
+ *>       UDEBUG_KOIOS   ylog_unote   ("globals file does not already exist");        <* 
+ *>       if (x_ftype != 'h') {                                                       <* 
+ *>          UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                         <* 
+ *>          return rce;                                                              <* 
+ *>       }                                                                           <* 
+ *>       sprintf (x_cmd, "touch %s", KOIOS_GLOBALS);                                 <* 
+ *>       UDEBUG_KOIOS   ylog_uinfo   ("x_cmd"     , x_cmd);                          <* 
+ *>       rc = system (x_cmd);                                                        <* 
+ *>       UDEBUG_KOIOS   ylog_uvalue  ("touch"     , rc);                             <* 
+ *>       if (rc < 0) {                                                               <* 
+ *>          UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                         <* 
+ *>          return rce;                                                              <* 
+ *>       }                                                                           <* 
+ *>    }                                                                              <* 
+ *>    /+---(import)-------------------------+/                                       <* 
+ *>    rc = yUNIT_reuse_import (KOIOS_GLOBALS);                                       <* 
+ *>    UDEBUG_KOIOS   ylog_uvalue  ("import"    , rc);                                <* 
+ *>    --rce;  if (rc < 0) {                                                          <* 
+ *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                            <* 
+ *>       return rce;                                                                 <* 
+ *>    }                                                                              <* 
+ *>    UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());               <* 
+ *>    /+---(purge only current ftype)-------+/                                       <* 
+ *>    rc = yUNIT_reuse_purge  (x_ftype);                                             <* 
+ *>    UDEBUG_KOIOS   ylog_uvalue  ("purge"     , rc);                                <* 
+ *>    --rce;  if (rc < 0) {                                                          <* 
+ *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                            <* 
+ *>       return rce;                                                                 <* 
+ *>    }                                                                              <* 
+ *>    UDEBUG_KOIOS   ylog_uinfo   ("used"      , yUNIT_reuse_used ());               <* 
+ *>    /+---(complete)-----------------------+/                                       <* 
+ *>    UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);                                    <* 
+ *>    return 1;                                                                      <* 
+ *> }                                                                                 <*/
 
 
 

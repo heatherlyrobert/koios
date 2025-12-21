@@ -1,31 +1,25 @@
 
-./koios_code_munit    --list | tail --lines=+5  | head --lines=-3
-./koios_code_munit           | tail --lines=-3  | head --lines=-1
 
-./koios_conv_munit    --list | tail --lines=+5  | head --lines=-3
-./koios_conv_munit           | tail --lines=-3  | head --lines=-1
+single () {
 
-./koios_ditto_munit   --list | tail --lines=+5  | head --lines=-3
-./koios_ditto_munit          | tail --lines=-3  | head --lines=-1
+   ./${1}_munit    --list
+   cat ${1}.murun  | head --lines=1
 
-./koios_live_munit    --list | tail --lines=+5  | head --lines=-3
-./koios_live_munit           | tail --lines=-3  | head --lines=-1
+   ./${1}_munit
+   cat ${1}.murun  | tail --lines=2
 
-./koios_parse_munit   --list | tail --lines=+5  | head --lines=-3
-./koios_parse_munit          | tail --lines=-3  | head --lines=-1
+}
 
-./koios_prog_munit    --list | tail --lines=+5  | head --lines=-3
-./koios_prog_munit           | tail --lines=-3  | head --lines=-1
-
-./koios_read_munit    --list | tail --lines=+5  | head --lines=-3
-./koios_read_munit           | tail --lines=-3  | head --lines=-1
-
-./koios_reuse_munit   --list | tail --lines=+5  | head --lines=-3
-./koios_reuse_munit          | tail --lines=-3  | head --lines=-1
-
-./koios_verb_munit    --list | tail --lines=+5  | head --lines=-3
-./koios_verb_munit           | tail --lines=-3  | head --lines=-1
-
-./koios_wave_munit    --list | tail --lines=+5  | head --lines=-3
-./koios_wave_munit           | tail --lines=-3  | head --lines=-1
+printf "./master.sh unit-testing script ŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽ\n\n"
+single "koios_verb"
+single "koios_ditto"
+single "koios_reuse"
+single "koios_wave"
+single "koios_read"
+single "koios_parse"
+single "koios_conv"
+single "koios_code"
+single "koios_prog"
+single "koios_live"
+printf "end-of-execution.  done, finito, completare ŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽŽ\n"
 

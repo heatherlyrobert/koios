@@ -452,21 +452,21 @@ CODE__scrp_end          (FILE *a_code, char a_last [LEN_LABEL], char a_nline, ch
          CONV_printf (a_code, "   yUNIT_prcs    (myUNIT_RUN.exec);                   /* %4d */\n", a_nline);
       }
       else if (strchr (YSTR_LOWER, a_share) != NULL)  {
-         yUNIT_reuse_data (a_share, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &x_conds, &x_steps, NULL);
+         yUNIT_reuse_data (a_share, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &x_conds, &x_steps, NULL);
          CONV_printf (a_code, "   /*===[[ shared done ]]==========================*/\n");
          CONV_printf (a_code, "   yUNIT_rahs   ('%c', a_select, %3d, %3d, mykoios_ncond, mykoios_nstep);   /* %4d */\n", a_share, x_conds, x_steps, a_nline);
          /*> s_ucond -= s_scond;                                                      <* 
           *> s_ustep -= s_sstep;                                                      <*/
       }
       else if (strchr (YSTR_UPPER, a_share) != NULL)  {
-         yUNIT_reuse_data (a_share, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &x_conds, &x_steps, NULL);
+         yUNIT_reuse_data (a_share, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &x_conds, &x_steps, NULL);
          CONV_printf (a_code, "   /*===[[ global done ]]==========================*/\n");
          CONV_printf (a_code, "   yUNIT_bolg   ('%c', a_select, %3d, %3d, mykoios_ncond, mykoios_nstep);   /* %4d */\n", a_share, x_conds, x_steps, a_nline);
          /*> s_ucond -= s_scond;                                                      <* 
           *> s_ustep -= s_sstep;                                                      <*/
       }
       else if (strchr (YSTR_GREEK, a_share) != NULL)  {
-         yUNIT_reuse_data (a_share, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &x_conds, &x_steps, NULL);
+         yUNIT_reuse_data (a_share, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &x_conds, &x_steps, NULL);
          CONV_printf (a_code, "   /*===[[ config done ]]==========================*/\n");
          CONV_printf (a_code, "   yUNIT_fnoc   ('%c', a_select, %3d, %3d, mykoios_ncond, mykoios_nstep);   /* %4d */\n", a_share, x_conds, x_steps, a_nline);
          /*> s_ucond -= s_scond;                                                      <* 
@@ -705,17 +705,17 @@ CODE__reuse             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, F
    CONV_printf (a_code, "   /*===[[ REUSE SHARE ]]==========================*/\n");
    CODE__select_beg (a_code, a_verb, a_which, *b_share, NULL);
    CONV_printf (a_code, "      myUNIT_RUN.offset = mykoios_ncond - 1;\n");
-   if      (strchr (YSTR_UPPER, a_major) != NULL)  x_type = 'g';
-   else if (strchr (YSTR_LOWER, a_major) != NULL)  x_type = 's';
-   else if (strchr (YSTR_GREEK, a_major) != NULL)  x_type = 'c';
+   if      (strchr (YSTR_UPPER, a_major) != NULL)  x_type = KOIOS_GLOBAL;
+   else if (strchr (YSTR_LOWER, a_major) != NULL)  x_type = KOIOS_SHARED;
+   else if (strchr (YSTR_GREEK, a_major) != NULL)  x_type = KOIOS_CONFIG;
    switch (x_type) {
-   case 'g'  :
+   case KOIOS_GLOBAL :
       CONV_printf (a_code, "      mykoios_ncurr = yUNIT_global_%c ('%c');                       /* %4d, %-32.32s */\n", a_major, a_minor, a_nline, a_desc);
       break;
-   case 's'  :
+   case KOIOS_SHARED :
       CONV_printf (a_code, "      mykoios_ncurr = yUNIT_shared_%c ('%c');                       /* %4d, %-32.32s */\n", a_major, a_minor, a_nline, a_desc);
       break;
-   case 'c'  :
+   case KOIOS_CONFIG :
       x_char  = a_major;
       x_char -= 'è';
       x_char += 'a';
@@ -826,34 +826,34 @@ CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN
    if (strcmp (a_verb, "echo") != 0) {
       CONV_printf (a_code, "%s      yUNIT_reset_rc ();\n", a_pre);
       switch (a_test [0]) {
-      case 'v'  :
+      case KOIOS_VOID   :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  %s (%s);\n", a_pre, a_method , a_system);
          break;
-      case 's'  : case 'u'  : case 'w'  :
+      case KOIOS_STRING : case KOIOS_ROUND  : case KOIOS_WRAP   :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  myUNIT_RUN.s_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
-      case 'i'  : case 'c'  : case 'z'  :
+      case KOIOS_INT    : case KOIOS_CHAR   : case KOIOS_NUM    :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  myUNIT_RUN.i_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
-      case 'r'  :
+      case KOIOS_REAL   :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  myUNIT_RUN.r_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
-      case 'p'  :
+      case KOIOS_POINT  :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  myUNIT_RUN.p_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
       }
    }
    /*---(determine function)-------------*/
    switch (a_test [0]) {
-   case 'v'  : strlcpy (x_func, "yUNIT_void"     , LEN_FULL);    break;
-   case 's'  : strlcpy (x_func, "yUNIT_string"   , LEN_FULL);    break;
-   case 'w'  : strlcpy (x_func, "yUNIT_wrap"     , LEN_FULL);    break;
-   case 'u'  : strlcpy (x_func, "yUNIT_round"    , LEN_FULL);    break;
-   case 'z'  : strlcpy (x_func, "yUNIT_num"      , LEN_FULL);    break;
-   case 'c'  : strlcpy (x_func, "yUNIT_char"     , LEN_FULL);    break;
-   case 'i'  : strlcpy (x_func, "yUNIT_int"      , LEN_FULL);    break;
-   case 'r'  : strlcpy (x_func, "yUNIT_real"     , LEN_FULL);    break;
-   case 'p'  : strlcpy (x_func, "yUNIT_point"    , LEN_FULL);    break;
+   case KOIOS_VOID   : strlcpy (x_func, "yUNIT_void"     , LEN_FULL);    break;
+   case KOIOS_STRING : strlcpy (x_func, "yUNIT_string"   , LEN_FULL);    break;
+   case KOIOS_ROUND  : strlcpy (x_func, "yUNIT_round"    , LEN_FULL);    break;
+   case KOIOS_WRAP   : strlcpy (x_func, "yUNIT_wrap"     , LEN_FULL);    break;
+   case KOIOS_NUM    : strlcpy (x_func, "yUNIT_num"      , LEN_FULL);    break;
+   case KOIOS_CHAR   : strlcpy (x_func, "yUNIT_char"     , LEN_FULL);    break;
+   case KOIOS_INT    : strlcpy (x_func, "yUNIT_int"      , LEN_FULL);    break;
+   case KOIOS_REAL   : strlcpy (x_func, "yUNIT_real"     , LEN_FULL);    break;
+   case KOIOS_POINT  : strlcpy (x_func, "yUNIT_point"    , LEN_FULL);    break;
    default   : strlcpy (x_func, "yUNIT_unknown"  , LEN_FULL);    break;
    }
    /*---(write prefix)-------------------*/
@@ -864,7 +864,7 @@ CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN
    CONV_printf (a_code, "\"%s\", \"%s\", "     , a_method  , a_display);
    /*---(write test)---------------------*/
    switch (a_test [0]) {
-   case 'v' :    /* pure void        */
+   case KOIOS_VOID :    /* pure void        */
       CONV_printf (a_code, "\"%s\", myUNIT_RUN.exec, '%c', '%c');\n", a_test, a_dittoing, a_share);
       break;
    default  :    /* all others       */
@@ -886,15 +886,15 @@ CODE__expect            (FILE *a_code, char a_test [LEN_LABEL], char a_expect [L
    char        x_var       [LEN_FULL ];
    char       *x_expe      = NULL;
    /*---(defense)------------------------*/
-   if (a_test [0] == 'v')    return 0;
+   if (a_test [0] == KOIOS_VOID)    return 0;
    /*---(normal)-------------------------*/
    if (strncmp (a_expect, "[[ ", 3) != 0) {
       switch (a_test [0]) {
-      case 's' : case 'u' : case 'w' :      /* stringish   */
+      case KOIOS_STRING : case KOIOS_ROUND  : case KOIOS_WRAP   :      /* stringish   */
          CONV_printf (a_code, "\"%s\", " , a_expect);
          break;
-      case 'i' : case 'p' : case 'r' :      /* numberish   */
-      case 'c' : case 'z' :                 /* character   */
+      case KOIOS_INT    : case KOIOS_POINT  : case KOIOS_REAL   :      /* numberish   */
+      case KOIOS_CHAR   : case KOIOS_NUM    :                 /* character   */
          CONV_printf (a_code, "%s, "     , a_expect);
          break;
       default  :
@@ -920,7 +920,7 @@ char
 CODE__suffix            (FILE *a_code, char a_verb [LEN_LABEL], char a_test [LEN_LABEL], char a_system [LEN_RECD], char a_return [LEN_FULL], char a_pre [LEN_TERSE], char a_dittoing, char a_share)
 {
    /*---(defense)------------------------*/
-   if (a_test [0] == 'v')    return 0;
+   if (a_test [0] == KOIOS_VOID)    return 0;
    /*---(handle echos)-------------------*/
    if (strcmp (a_verb, "echo") == 0) {
       CONV_printf (a_code, "%s, myUNIT_RUN.exec, '%c', '%c');\n"      , a_system, a_dittoing, a_share);
@@ -928,16 +928,16 @@ CODE__suffix            (FILE *a_code, char a_verb [LEN_LABEL], char a_test [LEN
    /*---(check for simple end)-----------*/
    else {
       switch (a_test [0]) {
-      case 's'  : case 'u'  : case 'w'  :
+      case KOIOS_STRING : case KOIOS_ROUND  : case KOIOS_WRAP   :
          CONV_printf (a_code, "myUNIT_RUN.s_rc, myUNIT_RUN.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
-      case 'i'  : case 'c'  : case 'z'  :
+      case KOIOS_INT    : case KOIOS_CHAR   : case KOIOS_NUM    :
          CONV_printf (a_code, "myUNIT_RUN.i_rc, myUNIT_RUN.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
-      case 'r'  :
+      case KOIOS_REAL   :
          CONV_printf (a_code, "myUNIT_RUN.r_rc, myUNIT_RUN.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
-      case 'p'  :
+      case KOIOS_POINT  :
          CONV_printf (a_code, "myUNIT_RUN.p_rc, myUNIT_RUN.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
       }
@@ -945,16 +945,16 @@ CODE__suffix            (FILE *a_code, char a_verb [LEN_LABEL], char a_test [LEN
    /*---(handle return variables)--------*/
    if (strcmp (a_return, "") != 0) {
       switch (a_test [0]) {
-      case 's'  : case 'u'  : case 'w'  :
+      case KOIOS_STRING : case KOIOS_ROUND  : case KOIOS_WRAP   :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec) { if (myUNIT_RUN.s_rc != NULL)  strcpy (%s, myUNIT_RUN.s_rc); }\n", a_pre, a_return);
          break;
-      case 'i'  : case 'c'  : case 'z'  :
+      case KOIOS_INT    : case KOIOS_CHAR   : case KOIOS_NUM    :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  %s = myUNIT_RUN.i_rc;\n", a_pre, a_return);
          break;
-      case 'r'  :
+      case KOIOS_REAL   :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  %s = myUNIT_RUN.r_rc;\n", a_pre, a_return);
          break;
-      case 'p'  :
+      case KOIOS_POINT  :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  %s = myUNIT_RUN.p_rc;\n", a_pre, a_return);
          break;
       }
@@ -1000,36 +1000,22 @@ CODE__step_add          (FILE *a_code, char a_runtype, char a_verb [LEN_LABEL], 
 {
    /*---(header)-------------------------*/
    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
-   /*---(comment for code)---------------*/
-   switch (a_verb [0]) {
-   case  'e'  :
-      if      (a_verb [1] == 'x')   CONV_printf (a_code, "      /*---(run step)--------------------*/\n");
-      else if (a_verb [1] == 'c')   CONV_printf (a_code, "      /*---(echo to verify)--------------*/\n");
-      break;
-   case  'l'  :
-      if      (a_verb [2] == 'a')   CONV_printf (a_code, "      /*---(load input)------------------*/\n");
-      else if (a_verb [2] == 'c')   CONV_printf (a_code, "   /*---(local variable)--------------*/\n");
-      break;
-   case  'm'  :
-      CONV_printf (a_code, "      /*---(unit test mode)--------------*/\n");
-      break;
-   case  'c'  :
-      CONV_printf (a_code, "      /*---(inject code)-----------------*/\n");
-      break;
-   case  'f'  :
-      CONV_printf (a_code, "      /*---(create test file)------------*/\n");
-      break;
-   case  'a'  :
-      CONV_printf (a_code, "      /*---(append test file)------------*/\n");
-      break;
-   case  'g'  :
-      if      (a_verb [2] == 'o')   CONV_printf (a_code, "/*---(global variable)-------------*/\n");
-      else if (a_verb [2] == 't')   CONV_printf (a_code, "      /*---(check result)----------------*/\n");
-      break;
-   case  's'  :
-      CONV_printf (a_code, "      /*---(system command)--------------*/\n");
-      break;
-   }
+   /*---(variables)----------------------*/
+   if      (strcmp (a_verb, "global") == 0)   CONV_printf (a_code, "/*---(global variable)-------------*/\n");
+   else if (strcmp (a_verb, "local" ) == 0)   CONV_printf (a_code, "   /*---(local variable)--------------*/\n");
+   /*---(execution)----------------------*/
+   else if (strcmp (a_verb, "exec"  ) == 0)   CONV_printf (a_code, "      /*---(run step)--------------------*/\n");
+   else if (strcmp (a_verb, "get"   ) == 0)   CONV_printf (a_code, "      /*---(check result)----------------*/\n");
+   else if (strcmp (a_verb, "echo"  ) == 0)   CONV_printf (a_code, "      /*---(echo to verify)--------------*/\n");
+   /*---(system)-------------------------*/
+   else if (strcmp (a_verb, "code"  ) == 0)   CONV_printf (a_code, "      /*---(inject code)-----------------*/\n");
+   else if (strcmp (a_verb, "system") == 0)   CONV_printf (a_code, "      /*---(system command)--------------*/\n");
+   else if (strcmp (a_verb, "load"  ) == 0)   CONV_printf (a_code, "      /*---(load input)------------------*/\n");
+   else if (strcmp (a_verb, "mode"  ) == 0)   CONV_printf (a_code, "      /*---(unit test mode)--------------*/\n");
+   /*---(files)--------------------------*/
+   else if (strcmp (a_verb, "file"  ) == 0)   CONV_printf (a_code, "      /*---(create test file)------------*/\n");
+   else if (strcmp (a_verb, "append") == 0)   CONV_printf (a_code, "      /*---(append test file)------------*/\n");
+   else if (strcmp (a_verb, "appvis") == 0)   CONV_printf (a_code, "      /*---(append test file)------------*/\n");
    /*---(debugging)----------------------*/
    if (a_runtype == G_RUN_DEBUG && strcmp (a_verb, "global") != 0) {
       CONV_printf (a_code, "      %sUG_UNIT    %sOG_unitstep (myUNIT_RUN.origin, myUNIT_RUN.offset + mykoios_ncond, %3i, %4i, \"%s\");\n", "DEB", "yL", s_cstep, CODE__line (a_dittoing, a_nline, a_dline), a_desc);

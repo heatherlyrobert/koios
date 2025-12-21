@@ -25,7 +25,7 @@ koios_parse_default   (char a_scrp, char a_list, char a_unit)
    char        x_minor     =  '-';
    char        x_which     [LEN_TITLE] = "";
 
-   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing defaults");
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify parsing defaults");
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
@@ -71,7 +71,7 @@ koios_parse_default   (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    strcpy (x_verb   , "test");
-   x_spec    = 's';
+   x_spec    = KOIOS_SSCRP;
    x_conv    = CONV__scrp;
    x_code    = CODE__scrp;
    strcpy (x_stage  , "2b"  );
@@ -153,7 +153,7 @@ koios_parse_comment   (char a_scrp, char a_list, char a_unit)
    char        x_minor     =  '-';
    char        x_which     [LEN_TITLE] = "";
 
-   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing comments");
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify parsing comments");
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
@@ -323,7 +323,7 @@ koios_parse_version   (char a_scrp, char a_list, char a_unit)
    char        x_cwd       [LEN_FULL]  = "";
    char        x_vers      =  '-';
 
-   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing version");
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify parsing version");
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
@@ -349,51 +349,51 @@ koios_parse_version   (char a_scrp, char a_list, char a_unit)
    return 0;
 }
 
-char
-koios_parse_limits  (char a_scrp, char a_list, char a_unit)
-{
-   char        x_cwd       [LEN_FULL]  = "";
-   char        x_min       =    0;
-   char        x_max       =    0;
-
-   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing limits");
-   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
-   if (a_unit != 0 && a_scrp != a_unit)  return 0;
-   if (a_list == 'y')                    return 0;
-   KOIOS_scrp_start ('-');
-
-   yUNIT_mincond  ("verify quick success");
-   yUNIT_minval   ("get limits for SCRP"                , PARSE__limits ('s', &x_min, &x_max), 0);
-   yUNIT_minval   ("... check min"                      , x_min         , 3);
-   yUNIT_minval   ("... check max"                      , x_max         , 5);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("attempt with missing min");
-   yUNIT_minval   ("get limits with a null"             , PARSE__limits ('s', NULL  , &x_max), -999);
-   yUNIT_minval   ("... check max"                      , x_max         , 0);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("attempt with missing max");
-   yUNIT_minval   ("get limits with a null"             , PARSE__limits ('s', &x_min, NULL  ), -999);
-   yUNIT_minval   ("... check min"                      , x_min         , 0);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("verify quick success");
-   yUNIT_minval   ("get limits for COND"                , PARSE__limits ('2', &x_min, &x_max), 0);
-   yUNIT_minval   ("... check min"                      , x_min         , 2);
-   yUNIT_minval   ("... check max"                      , x_max         , 2);
-   yUNIT_mindnoc  ();
-
-   yUNIT_mincond  ("attempt with an illegal spec");
-   yUNIT_minval   ("get limits for '*'"                 , PARSE__limits ('*', &x_min, &x_max), -999);
-   yUNIT_minval   ("... check min"                      , x_min         , 0);
-   yUNIT_minval   ("... check max"                      , x_max         , 0);
-   yUNIT_mindnoc  ();
-
-   KOIOS_scrp_finish ();
-   yUNIT_minprcs ();
-   return 0;
-}
+/*> char                                                                                                    <* 
+ *> koios_parse_limits  (char a_scrp, char a_list, char a_unit)                                             <* 
+ *> {                                                                                                       <* 
+ *>    char        x_cwd       [LEN_FULL]  = "";                                                            <* 
+ *>    char        x_min       =    0;                                                                      <* 
+ *>    char        x_max       =    0;                                                                      <* 
+ *>                                                                                                         <* 
+ *>    yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify parsing limits");                             <* 
+ *>    if (a_list == '!')    { yUNIT_minprcs (); return 0; }                                                <* 
+ *>    if (a_unit != 0 && a_scrp != a_unit)  return 0;                                                      <* 
+ *>    if (a_list == 'y')                    return 0;                                                      <* 
+ *>    KOIOS_scrp_start ('-');                                                                              <* 
+ *>                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify quick success");                                                             <* 
+ *>    yUNIT_minval   ("get limits for SCRP"                , PARSE__limits ('s', &x_min, &x_max), 0);      <* 
+ *>    yUNIT_minval   ("... check min"                      , x_min         , 3);                           <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 5);                           <* 
+ *>    yUNIT_mindnoc  ();                                                                                   <* 
+ *>                                                                                                         <* 
+ *>    yUNIT_mincond  ("attempt with missing min");                                                         <* 
+ *>    yUNIT_minval   ("get limits with a null"             , PARSE__limits ('s', NULL  , &x_max), -999);   <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 0);                           <* 
+ *>    yUNIT_mindnoc  ();                                                                                   <* 
+ *>                                                                                                         <* 
+ *>    yUNIT_mincond  ("attempt with missing max");                                                         <* 
+ *>    yUNIT_minval   ("get limits with a null"             , PARSE__limits ('s', &x_min, NULL  ), -999);   <* 
+ *>    yUNIT_minval   ("... check min"                      , x_min         , 0);                           <* 
+ *>    yUNIT_mindnoc  ();                                                                                   <* 
+ *>                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify quick success");                                                             <* 
+ *>    yUNIT_minval   ("get limits for COND"                , PARSE__limits ('2', &x_min, &x_max), 0);      <* 
+ *>    yUNIT_minval   ("... check min"                      , x_min         , 2);                           <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 2);                           <* 
+ *>    yUNIT_mindnoc  ();                                                                                   <* 
+ *>                                                                                                         <* 
+ *>    yUNIT_mincond  ("attempt with an illegal spec");                                                     <* 
+ *>    yUNIT_minval   ("get limits for '*'"                 , PARSE__limits ('*', &x_min, &x_max), -999);   <* 
+ *>    yUNIT_minval   ("... check min"                      , x_min         , 0);                           <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 0);                           <* 
+ *>    yUNIT_mindnoc  ();                                                                                   <* 
+ *>                                                                                                         <* 
+ *>    KOIOS_scrp_finish ();                                                                                <* 
+ *>    yUNIT_minprcs ();                                                                                    <* 
+ *>    return 0;                                                                                            <* 
+ *> }                                                                                                       <*/
 
 char
 koios_parse_prep      (char a_scrp, char a_list, char a_unit)
@@ -422,7 +422,7 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    char        x_select    =  '-';
    char        x_which     [LEN_TITLE] = "";
 
-   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing preparation");
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify parsing preparation");
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
@@ -435,8 +435,8 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used ()      , "¬   á···   SH á·····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "----------");
    yUNIT_minstr   ("... check verb"                     , x_verb        , "SCRP");
-   yUNIT_minchr   ("... check under"                    , x_under       , 'S');
-   yUNIT_minchr   ("... check spec"                     , x_spec        , 's');
+   yUNIT_minchr   ("... check under"                    , x_under       , SCRP);
+   yUNIT_minchr   ("... check spec"                     , x_spec        , KOIOS_SSCRP);
    yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__scrp);
    yUNIT_minptr   ("... check code"                     , x_code        , CODE__scrp);
    yUNIT_minstr   ("... check stage"                    , x_stage       , "2e/·");
@@ -461,8 +461,8 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used ()      , "¬   á···   SH á·····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
    yUNIT_minstr   ("... check verb"                     , x_verb        , "COND");
-   yUNIT_minchr   ("... check under"                    , x_under       , 'C');
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '2');
+   yUNIT_minchr   ("... check under"                    , x_under       , COND);
+   yUNIT_minchr   ("... check spec"                     , x_spec        , KOIOS_STWO);
    yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__cond);
    yUNIT_minptr   ("... check code"                     , x_code        , CODE__cond);
    yUNIT_minstr   ("... check stage"                    , x_stage       , "··/·");
@@ -487,8 +487,8 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used ()      , "¬   á···   SH á·····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
    yUNIT_minstr   ("... check verb"                     , x_verb        , "DITTO");
-   yUNIT_minchr   ("... check under"                    , x_under       , 'C');
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '1');
+   yUNIT_minchr   ("... check under"                    , x_under       , COND);
+   yUNIT_minchr   ("... check spec"                     , x_spec        , KOIOS_SONE);
    yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__ditto);
    yUNIT_minptr   ("... check code"                     , x_code        , NULL);
    yUNIT_minstr   ("... check stage"                    , x_stage       , "");
@@ -517,8 +517,8 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used ()      , "¬   á···   SH á·····á·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minstr   ("... dittos"                         , DITTO__used (), "0---------");
    yUNIT_minstr   ("... check verb"                     , x_verb        , "DITTO");
-   yUNIT_minchr   ("... check under"                    , x_under       , 'C');
-   yUNIT_minchr   ("... check spec"                     , x_spec        , '1');
+   yUNIT_minchr   ("... check under"                    , x_under       , COND);
+   yUNIT_minchr   ("... check spec"                     , x_spec        , KOIOS_SONE);
    yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__ditto);
    yUNIT_minptr   ("... check code"                     , x_code        , NULL);
    yUNIT_minstr   ("... check stage"                    , x_stage       , "");
@@ -547,8 +547,8 @@ koios_parse_prep      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... review marks"                   , yUNIT_reuse_used  ()     , "+   á···   SH á·····g·····á·····á·····á·   GL á·····á·····á·····á·····á·   CO á·····á·····á·····á·····   á   Ï");
    yUNIT_minstr   ("... dittos (cleared)"               , DITTO__used (), "----------");
    yUNIT_minstr   ("... check verb"                     , x_verb        , "SHARED");
-   yUNIT_minchr   ("... check under"                    , x_under       , 'S');
-   yUNIT_minchr   ("... check spec"                     , x_spec        , 's');
+   yUNIT_minchr   ("... check under"                    , x_under       , SCRP);
+   yUNIT_minchr   ("... check spec"                     , x_spec        , KOIOS_SSHAR);
    yUNIT_minptr   ("... check conv"                     , x_conv        , CONV__shared);
    yUNIT_minptr   ("... check code"                     , x_code        , CODE__shared);
    yUNIT_minstr   ("... check stage"                    , x_stage       , "··/·");
@@ -577,7 +577,7 @@ koios_parse_which   (char a_scrp, char a_list, char a_unit)
    char       *x_name      = "/tmp/apate.unit";
    char        x_which     [LEN_TITLE] = "";
 
-   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing current");
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify parsing which");
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
@@ -585,7 +585,7 @@ koios_parse_which   (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("verify a quick success");
    yerr_ureset   ();
-   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 15, "åabc··e·æ call parsing"            , x_which),    1);
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 15, "exec"   , "åabc··e·æ call parsing"            , x_which),    1);
    yUNIT_minstr   ("... review marks"                   , x_which             , "abc··e·");
    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
@@ -594,7 +594,7 @@ koios_parse_which   (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("verify with NULL return");
    yerr_ureset   ();
-   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 16, "åabc··e·æ call parsing"            , NULL   ),    1);
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 16, "exec"   , "åabc··e·æ call parsing"            , NULL   ),    1);
    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
@@ -602,15 +602,15 @@ koios_parse_which   (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("attempt with NULL description");
    yerr_ureset   ();
-   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 17, NULL                                , x_which), -999);
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 17, "exec"   , NULL                                , x_which), -999);
    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
-   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:17:0: error: full description field is NULL");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify a record without");
    yerr_ureset   ();
-   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 18, "make sure return is correct"       , x_which),    0);
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 18, "exec"   , "make sure return is correct"       , x_which),    0);
    yUNIT_minstr   ("... review marks"                   , x_which             , "");
    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
@@ -619,24 +619,24 @@ koios_parse_which   (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("attempt without closing æ");
    yerr_ureset   ();
-   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 19, "åabc··e· call parsing"             , x_which), -999);
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 19, "exec"   , "åabc··e· call parsing"             , x_which), -999);
    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:19:0: error: description \"åabc··e· call parsing\" starts selectable, but does not cloce, i.e., åabc··d··æ");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:19:0: error: åexecæ description \"åabc··e· call parsing\" starts selectable, but does not close, i.e., åabc··d··æ");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("attempt with bad character");
    yerr_ureset   ();
-   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 20, "åabc··&·æ call parsing"            , x_which), -999);
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 20, "exec"   , "åabc··&·æ call parsing"            , x_which), -999);
    yUNIT_minstr   ("... review marks"                   , x_which             , "");
    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
-   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:20:0: error: which string åabc··&·æ contains illegal char (&) at pos (5), only allow [A-Za-z0-9è-ÿ·-]");
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:20:0: error: åexecæ select string åabc··&·æ contains illegal char (&) at pos (5), only allow [A-Za-z0-9è-ÿ·-]");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify with an empty set");
    yerr_ureset   ();
-   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 21, "åæ make sure return is correct"       , x_which),    1);
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 21, "exec"   , "åæ make sure return is correct"       , x_which),    1);
    yUNIT_minstr   ("... review marks"                   , x_which             , "");
    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
@@ -645,8 +645,23 @@ koios_parse_which   (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("verify suffixing selection");
    yerr_ureset   ();
-   yUNIT_minval   ("call defaults"                      , PARSE__which    (x_name, 21, "call to verify     åcq·yzæ"       , x_which),    1);
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 22, "exec"   , "call to verify     åcq·yzæ"       , x_which),    1);
    yUNIT_minstr   ("... review marks"                   , x_which             , "cq·yz");
+   yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt on unselectable verbs");
+   yerr_ureset   ();
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 23, "SCRP"   , "åabcæ check new functions"        , x_which),    0);
+   yUNIT_minstr   ("... review marks"                   , x_which             , "");
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 23, "SHARED" , "åabcæ check new functions"        , x_which),    0);
+   yUNIT_minstr   ("... review marks"                   , x_which             , "");
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 23, "PREP"   , "åabcæ check new functions"        , x_which),    0);
+   yUNIT_minstr   ("... review marks"                   , x_which             , "");
+   yUNIT_minval   ("call which"                         , PARSE__which    (x_name, 23, "incl"   , "åabcæ check new functions"        , x_which),    0);
+   yUNIT_minstr   ("... review marks"                   , x_which             , "");
    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
@@ -658,91 +673,680 @@ koios_parse_which   (char a_scrp, char a_list, char a_unit)
 }
 
 char
-koios_parse_current (char a_scrp, char a_list, char a_unit)
+koios_parse_select      (char a_scrp, char a_list, char a_unit)
 {
-   char        x_cwd       [LEN_FULL]  = "";
-   char        x_spec      =  '-';
-   char        x_max       =    0;
-   char        x_desc      [LEN_LONG]  = "";
-   char        x_meth      [LEN_HUND]  = "";
-   char        x_args      [LEN_FULL]  = "";
-   char        x_test      [LEN_LABEL] = "";
-   char        x_expe      [LEN_RECD]  = "";
-   char        x_retn      [LEN_FULL]  = "";
+   char       *x_name      = "apate.unit";
+   char        x_select    [LEN_LABEL] = "";
 
-   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing current");
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify select field fixing");
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_scrp_start ('-');
+   KOIOS_scrp_start ('y');
 
-   x_spec = 's';  x_max = 2;
-   yUNIT_mincond  ("verify script success");
-   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (1, "SCRP"                     , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "check variable"           , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "extra"                    , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minval   ("... check max"                      , x_max         , 2);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "check variable");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "-");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "0s");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "tbd");
+   yUNIT_mincond  ("verify handling a null, empty, placeholder");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__select    (x_name, 150, "GLOBAL" , NULL                          , x_select), -999);
+   yUNIT_minstr   ("... review select"                  , x_select            , "å············æ");
+   yUNIT_minval   ("call select handler"                , PARSE__select    (x_name, 150, "GLOBAL" , ""                            , x_select), -999);
+   yUNIT_minstr   ("... review select"                  , x_select            , "å············æ");
+   yUNIT_minval   ("call select handler"                , PARSE__select    (x_name, 150, "GLOBAL" , "·"                           , x_select),    0);
+   yUNIT_minstr   ("... review select"                  , x_select            , "å············æ");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
-   x_spec = 'f';  x_max = 7;
-   yUNIT_mincond  ("verify exec success");
-   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "call function"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "BIG_function"             , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (4, "27, 86, 't'"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (5, "i_equal"                  , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (6, "42"                       , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (7, "n"                        , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (8, "junk at end"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minval   ("... check max"                      , x_max         , 7);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "call function");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "BIG_function");
-   yUNIT_minstr   ("... check args"                     , x_args        , "27, 86, 't'");
-   yUNIT_minstr   ("... check test"                     , x_test        , "i_equal");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "42");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "n");
+   yUNIT_mincond  ("verify handling short lists");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__select    (x_name, 150, "GLOBAL" , "···"                         , x_select),    1);
+   yUNIT_minstr   ("... review select"                  , x_select            , "å············æ");
+   yUNIT_minval   ("call select handler"                , PARSE__select    (x_name, 150, "GLOBAL" , "··n"                         , x_select),    1);
+   yUNIT_minstr   ("... review select"                  , x_select            , "ån···········æ");
+   yUNIT_minval   ("call select handler"                , PARSE__select    (x_name, 150, "GLOBAL" , "ab·"                         , x_select),    1);
+   yUNIT_minstr   ("... review select"                  , x_select            , "åab··········æ");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
-   x_spec = 'p';  x_max = 4;
-   yUNIT_mincond  ("verify code success");
-   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "- - - - - - -"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (4, "my.val = 978;"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (5, "more stuff"               , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minval   ("... check max"                      , x_max         , 4);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "update global");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "my.val = 978;");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mincond  ("verify handling non-contiguous list");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__select    (x_name, 150, "GLOBAL" , "·j··èé···3"                  , x_select),    1);
+   yUNIT_minstr   ("... review select"                  , x_select            , "åjèé3········æ");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
    yUNIT_mindnoc  ();
 
-   x_spec = '1';  x_max = 1;
-   yUNIT_mincond  ("verify ditto success");
-   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
-   yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);
-   yUNIT_minval   ("... check max"                      , x_max         , 1);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
-   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
-   yUNIT_minstr   ("... check args"                     , x_args        , "");
-   yUNIT_minstr   ("... check test"                     , x_test        , "");
-   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
-   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mincond  ("attempt a duplicate select char");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__select    (x_name, 150, "GLOBAL" , "ab·c·b"                      , x_select), -999);
+   yUNIT_minstr   ("... review select"                  , x_select            , "");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "apate.unit:150:0: error: åGLOBALæ select (b) already exists in 3åabcæ duplicate");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify handling a long field");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__select    (x_name, 150, "GLOBAL" , "·l·········ÿ······þ······9"  , x_select),    1);
+   yUNIT_minstr   ("... review select"                  , x_select            , "ålÿþ9········æ");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt a too-long character list");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__select    (x_name, 150, "GLOBAL" , "abcdefghijk··l····m"         , x_select), -999);
+   yUNIT_minstr   ("... review select"                  , x_select            , "");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "apate.unit:150:0: error: åGLOBALæ select contents 13åabcdefghijklmæ longer than 12 chars");
    yUNIT_mindnoc  ();
 
    KOIOS_scrp_finish ();
    yUNIT_minprcs ();
    return 0;
 }
+
+char
+koios_parse_subtitles   (char a_scrp, char a_list, char a_unit)
+{
+   char       *x_name      = "apate.unit";
+   char        x_subtitles    [LEN_RECD] = "";
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify subtitle field fixing");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   KOIOS_scrp_start ('y');
+
+   yUNIT_mincond  ("verify handling a null, empty, placeholder");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 150, "CONFIG" , "åabcæ"  , NULL                          , x_subtitles), -999);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············");
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 150, "CONFIG" , "åabcæ"  , ""                            , x_subtitles), -999);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············");
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 150, "CONFIG" , "åabcæ"  , "·"                           , x_subtitles),    0);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt with bad select char");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 160, "CONFIG" , "åabcæ"  , "a=one··········, /=two··········, c=thr··········"      , x_subtitles), -999);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "apate.unit:160:0: error: åCONFIGæ subtitle (1) 16å/=two··········,æ starts with illegal select char åa-zA-Z0-9è-ÿÏ´·æ");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt without the equal sign");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 160, "CONFIG" , "åabcæ"  , "a=one··········, b=two··········, c:thr··········"      , x_subtitles), -999);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "apate.unit:160:0: error: åCONFIGæ subtitle (2) 15åc:thr··········æ does not have equal (=) in pos 2");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt missing from select");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 160, "CONFIG" , "åa·cæ"  , "a=one··········, b=two··········, c:thr··········"      , x_subtitles), -999);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "apate.unit:160:0: error: åCONFIGæ subtitle (1) 16åb=two··········,æ does not exist in select åa·cæ");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt too short field");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 160, "CONFIG" , "åa·cæ"  , "a=, b=two··········, c:thr··········"      , x_subtitles), -999);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "apate.unit:160:0: error: åCONFIGæ subtitle (0) 3åa=,æ less than minimum of 3 chars");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt a duplicate entry");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 160, "CONFIG" , "åabcæ"  , "a=one··········, b=two··········, b=thr··········"      , x_subtitles), -999);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "apate.unit:160:0: error: åCONFIGæ subtitle (2) (b) already exists in 2åabæ duplicate");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify a single field");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 160, "CONFIG" , "åabcæ"  , "a=one··········"                                        , x_subtitles),    1);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "a=one··········, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify multiple fields");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 160, "CONFIG" , "åaceæ"  , "a=one··········, c=thr··········, e=fiv··········"      , x_subtitles),    1);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "a=one··········, c=thr··········, e=fiv··········, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify non-contiguous fields");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 160, "CONFIG" , "åaceæ"  , "a=one··········, Ï=·············, c=thr··········, Ï=·············, e=fiv··········"      , x_subtitles),    1);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "a=one··········, c=thr··········, e=fiv··········, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify terse fields");
+   yerr_ureset   ();
+   yUNIT_minval   ("call select handler"                , PARSE__subtitles (x_name, 160, "CONFIG" , "åaceæ"  , "a=one, c=thr, e=fiv"      , x_subtitles),    1);
+   yUNIT_minstr   ("... review select"                  , x_subtitles         , "a=one··········, c=thr··········, e=fiv··········, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   KOIOS_scrp_finish ();
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios_parse_field       (char a_scrp, char a_list, char a_unit)
+{
+   char       *x_name      = "apate.unit";
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_meth      [LEN_HUND]  = "";
+   char        x_args      [LEN_FULL]  = "";
+   char        x_test      [LEN_LABEL] = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_retn      [LEN_FULL]  = "";
+   char        x_which     [LEN_TITLE] = "";
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify handling field content");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   KOIOS_scrp_start ('y');
+
+   yUNIT_mincond  ("verify a quick success");
+   yerr_ureset   ();
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 101, "PREP"   , KOIOS_STWO ,  2, "include the prototype headers"         , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minstr   ("... review desc"                    , x_desc              , "include the prototype headers");
+   yUNIT_minstr   ("... review method"                  , x_meth              , "");
+   yUNIT_minstr   ("... review arguments"               , x_args              , "");
+   yUNIT_minstr   ("... review test"                    , x_test              , "");
+   yUNIT_minstr   ("... review expected"                , x_expe              , "");
+   yUNIT_minstr   ("... review return"                  , x_retn              , "");
+   yUNIT_minstr   ("... review which"                   , x_which             , "");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt a non-existant spec");
+   yerr_ureset   ();
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 102, "PREP"   , '&'        ,  2, "include the prototype headers"         , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "apate.unit:102:0: error: åPREPæ spec (&) col (2) not legal/defined");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt a null script AND non-existant spec");
+   yerr_ureset   ();
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call field handler (null scrp)"     , PARSE__field    (NULL  , 103, "PREP"   , '&'        ,  2, "include the prototype headers"         , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a):103:0: error: åPREPæ spec (&) col (2) not legal/defined");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt a null verb AND non-existant spec");
+   yerr_ureset   ();
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call field handler (null scrp)"     , PARSE__field    (x_name, 104, NULL     , '&'        ,  2, "include the prototype headers"         , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "apate.unit:104:0: error: å(n/a)æ spec (&) col (2) not legal/defined");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt a column too low");
+   yerr_ureset   ();
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 105, "PREP"   , KOIOS_STWO ,  1, "include the prototype headers"         , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "apate.unit:105:0: error: åPREPæ spec (2) col (1) not legal/defined");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt a column too high");
+   yerr_ureset   ();
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 106, "PREP"   , KOIOS_STWO ,  3, "include the prototype headers"         , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "apate.unit:106:0: error: åPREPæ spec (2) col (3) not legal/defined");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify a field marked as skipped");
+   yerr_ureset   ();
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 107, "code"   , KOIOS_SCODE,  3, "- - - - - - - - - - - - - - -"         , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... review desc"                    , x_desc              , "");
+   yUNIT_minstr   ("... review method"                  , x_meth              , "");
+   yUNIT_minstr   ("... review arguments"               , x_args              , "");
+   yUNIT_minstr   ("... review test"                    , x_test              , "");
+   yUNIT_minstr   ("... review expected"                , x_expe              , "");
+   yUNIT_minstr   ("... review return"                  , x_retn              , "");
+   yUNIT_minstr   ("... review which"                   , x_which             , "");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify a code description");
+   yerr_ureset   ();
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 108, "code"   , KOIOS_SCODE,  2, "åabcæ verify rounding"                 , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minstr   ("... review desc"                    , x_desc              , "åabcæ verify rounding");
+   yUNIT_minstr   ("... review method"                  , x_meth              , "");
+   yUNIT_minstr   ("... review arguments"               , x_args              , "");
+   yUNIT_minstr   ("... review test"                    , x_test              , "");
+   yUNIT_minstr   ("... review expected"                , x_expe              , "");
+   yUNIT_minstr   ("... review return"                  , x_retn              , "");
+   yUNIT_minstr   ("... review which"                   , x_which             , "abc");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify a full scrp");
+   yerr_ureset   ();
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  2, "verify loading configuration"          , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  3, "10m"                                   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  4, "config"                                , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  5, "yLOAD_open, yLOG_close, yLOAD_read"    , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minstr   ("... review desc"                    , x_desc              , "verify loading configuration");
+   yUNIT_minstr   ("... review method"                  , x_meth              , "yLOAD_open, yLOG_close, yLOAD_read");
+   yUNIT_minstr   ("... review arguments"               , x_args              , "");
+   yUNIT_minstr   ("... review test"                    , x_test              , "10m");
+   yUNIT_minstr   ("... review expected"                , x_expe              , "");
+   yUNIT_minstr   ("... review return"                  , x_retn              , "config");
+   yUNIT_minstr   ("... review which"                   , x_which             , "");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt illegal scrp fields");
+   yerr_ureset   ();
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  3, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  3, "30M"                                   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  3, "100s"                                  , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  3, "?m"                                    , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  4, "two2"                                  , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  4, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  4, "testing_lengthy"                       , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  5, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  5, "ySTR_test; ySTR_more"                  , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify placeholder scrp fields");
+   yerr_ureset   ();
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  2, "·"                                     , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  3, "·"                                     , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  3, "0s"                                    , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  4, "·"                                     , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  4, "tbd"                                   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  5, "·"                                     , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify a full shared");
+   yerr_ureset   ();
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  2, "create sample data"                    , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  3, "sample"                                , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  4, "abcd"                                  , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  5, "a=zero, b=two, c=five, d=all"          , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minstr   ("... review desc"                    , x_desc              , "create sample data");
+   yUNIT_minstr   ("... review method"                  , x_meth              , "åabcd········æ");
+   yUNIT_minstr   ("... review arguments"               , x_args              , "");
+   yUNIT_minstr   ("... review test"                    , x_test              , "");
+   yUNIT_minstr   ("... review expected"                , x_expe              , "a=zero·········, b=two··········, c=five·········, d=all··········, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············");
+   yUNIT_minstr   ("... review return"                  , x_retn              , "sample");
+   yUNIT_minstr   ("... review which"                   , x_which             , "");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt illegal scrp fields");
+   yerr_ureset   ();
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  3, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  3, "testing_lengthy"                       , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  4, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  4, "·c?"                                   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  4, "-c-"                                   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  4, "··´bcd"                                , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  5, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  5, "a:try"                                 , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify placeholder scrp fields");
+   yerr_ureset   ();
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  2, "·"                                     , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  3, "·"                                     , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  3, "tbd"                                   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  4, "·"                                     , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 110, "SHARED" , KOIOS_SSHAR,  5, "·"                                     , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify a full exec");
+   yerr_ureset   ();
+   yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                  ,    0);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  2, "åa··æ call my function"                , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  3, "ySTR_testing"                          , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  4, "13, 'a', 27"                           , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  5, "z_equal"                               , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  6, "hello my/friend"                       , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  7, "x_var"                                 , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minstr   ("... review desc"                    , x_desc              , "åa··æ call my function");
+   yUNIT_minstr   ("... review method"                  , x_meth              , "ySTR_testing");
+   yUNIT_minstr   ("... review arguments"               , x_args              , "13, 'a', 27");
+   yUNIT_minstr   ("... review test"                    , x_test              , "z_equal");
+   yUNIT_minstr   ("... review expected"                , x_expe              , "hello my/friend");
+   yUNIT_minstr   ("... review return"                  , x_retn              , "x_var");
+   yUNIT_minstr   ("... review which"                   , x_which             , "a··");
+   yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt illegal exec fields");
+   yerr_ureset   ();
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  3, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  3, "PARSE_è"                               , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  5, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  5, "Z_equal"                               , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  6, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  7, "x_é"                                   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify placeholder exec fields");
+   yerr_ureset   ();
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 112, "exec"   , KOIOS_SEXEC,  2, "·"                                     , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 112, "exec"   , KOIOS_SEXEC,  4, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 112, "exec"   , KOIOS_SEXEC,  6, "0"                                     , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 112, "exec"   , KOIOS_SEXEC,  7, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
+   yUNIT_mindnoc  ();
+
+   KOIOS_scrp_finish ();
+   yUNIT_minprcs ();
+   return 0;
+}
+
+/*> char                                                                                                                                                                                                                            <* 
+ *> koios_parse_desc    (char a_scrp, char a_list, char a_unit)                                                                                                                                                                     <* 
+ *> {                                                                                                                                                                                                                               <* 
+ *>    char       *x_name      = "/tmp/apate.unit";                                                                                                                                                                                 <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                                                                    <* 
+ *>    char        x_which     [LEN_TITLE] = "";                                                                                                                                                                                    <* 
+ *>                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify parsing description");                                                                                                                                               <* 
+ *>    if (a_list == '!')    { yUNIT_minprcs (); return 0; }                                                                                                                                                                        <* 
+ *>    if (a_unit != 0 && a_scrp != a_unit)  return 0;                                                                                                                                                                              <* 
+ *>    if (a_list == 'y')                    return 0;                                                                                                                                                                              <* 
+ *>    KOIOS_scrp_start ('y');                                                                                                                                                                                                      <* 
+ *>                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_mincond  ("verify a quick success");                                                                                                                                                                                   <* 
+ *>    yerr_ureset   ();                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, NULL  , NULL  , NULL  , NULL  , NULL  )                                ,    0);                                                              <* 
+ *>    yUNIT_minval   ("call desc handler"                  , PARSE__desc     (x_name, 15, "exec"   , KOIOS_SEXEC, 8, "åabc··e·æ call parsing"            , x_desc, x_which),    1);                                                <* 
+ *>    yUNIT_minstr   ("... review desc"                    , x_desc              , "åabc··e·æ call parsing");                                                                                                                      <* 
+ *>    yUNIT_minstr   ("... review which"                   , x_which             , "abc··e·");                                                                                                                                     <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                                                              <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);                                                                                                                                                <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_mincond  ("attempt with a null");                                                                                                                                                                                      <* 
+ *>    yerr_ureset   ();                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, NULL  , NULL  , NULL  , NULL  , NULL  )                                ,    0);                                                              <* 
+ *>    yUNIT_minval   ("call desc handler"                  , PARSE__desc     (x_name, 15, "exec"   , KOIOS_SEXEC, 8, NULL                                , x_desc, x_which), -999);                                                <* 
+ *>    yUNIT_minstr   ("... review desc"                    , x_desc              , "[ - - - - - - (null)- - - - - - - ]");                                                                                                         <* 
+ *>    yUNIT_minstr   ("... review which"                   , x_which             , "");                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                                                              <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);                                                                                                                                                <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_mincond  ("attempt with placeholders");                                                                                                                                                                                <* 
+ *>    yerr_ureset   ();                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, NULL  , NULL  , NULL  , NULL  , NULL  )                                ,    0);                                                              <* 
+ *>    yUNIT_minval   ("call desc handler"                  , PARSE__desc     (x_name, 15, "exec"   , KOIOS_SEXEC, 8, ""                                  , x_desc, x_which),    0);                                                <* 
+ *>    yUNIT_minstr   ("... review desc"                    , x_desc              , "·");                                                                                                                                           <* 
+ *>    yUNIT_minstr   ("... review which"                   , x_which             , "");                                                                                                                                            <* 
+ *>    yUNIT_minval   ("call desc handler"                  , PARSE__desc     (x_name, 15, "exec"   , KOIOS_SEXEC, 8, "·"                                 , x_desc, x_which),    0);                                                <* 
+ *>    yUNIT_minstr   ("... review desc"                    , x_desc              , "·");                                                                                                                                           <* 
+ *>    yUNIT_minstr   ("... review which"                   , x_which             , "");                                                                                                                                            <* 
+ *>    yUNIT_minval   ("call desc handler"                  , PARSE__desc     (x_name, 15, "exec"   , KOIOS_SEXEC, 8, "-"                                 , x_desc, x_which),    0);                                                <* 
+ *>    yUNIT_minstr   ("... review desc"                    , x_desc              , "·");                                                                                                                                           <* 
+ *>    yUNIT_minstr   ("... review which"                   , x_which             , "");                                                                                                                                            <* 
+ *>    yUNIT_minval   ("call desc handler"                  , PARSE__desc     (x_name, 15, "exec"   , KOIOS_SEXEC, 8, "´"                                 , x_desc, x_which),    0);                                                <* 
+ *>    yUNIT_minstr   ("... review desc"                    , x_desc              , "·");                                                                                                                                           <* 
+ *>    yUNIT_minstr   ("... review which"                   , x_which             , "");                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                                                              <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);                                                                                                                                                <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_mincond  ("verify another success");                                                                                                                                                                                   <* 
+ *>    yerr_ureset   ();                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, NULL  , NULL  , NULL  , NULL  , NULL  )                                ,    0);                                                              <* 
+ *>    yUNIT_minval   ("call desc handler"                  , PARSE__desc     (x_name, 15, "exec"   , KOIOS_SEXEC, 8, "this is a perfectly fine descripion", x_desc, x_which),    1);                                               <* 
+ *>    yUNIT_minstr   ("... review desc"                    , x_desc              , "this is a perfectly fine descripion");                                                                                                         <* 
+ *>    yUNIT_minstr   ("... review which"                   , x_which             , "");                                                                                                                                            <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                                                              <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);                                                                                                                                                <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_mincond  ("attempt with null return variable");                                                                                                                                                                        <* 
+ *>    yerr_ureset   ();                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, NULL  , NULL  , NULL  , NULL  , NULL  )                                ,    0);                                                              <* 
+ *>    yUNIT_minval   ("call desc handler"                  , PARSE__desc     (x_name, 15, "exec"   , KOIOS_SEXEC, 8, "åab·dæ this is a perfectly fine descripion", NULL  , x_which),    1);                                        <* 
+ *>    yUNIT_minstr   ("... review which"                   , x_which             , "ab·d");                                                                                                                                        <* 
+ *>    yUNIT_minval   ("call desc handler"                  , PARSE__desc     (x_name, 15, "exec"   , KOIOS_SEXEC, 8, "åab·dæ this is a perfectly fine descripion", x_desc, NULL   ),    1);                                        <* 
+ *>    yUNIT_minstr   ("... review desc"                    , x_desc              , "åab·dæ this is a perfectly fine descripion");                                                                                                  <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                                                              <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);                                                                                                                                                <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                                 <* 
+ *>    yUNIT_mincond  ("verify truncating very long descriptions");                                                                                                                                                                 <* 
+ *>    yerr_ureset   ();                                                                                                                                                                                                            <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, NULL  , NULL  , NULL  , NULL  , NULL  )                                ,    0);                                                              <* 
+ *>    yUNIT_minval   ("call desc handler"                  , PARSE__desc     (x_name, 15, "exec"   , KOIOS_SEXEC, 8, "ågHiè5æ a perfectly fine descripion, but it could be improved with more thought", x_desc, x_which),    1);   <* 
+ *>    yUNIT_minstr   ("... review desc"                    , x_desc              , "ågHiè5æ a perfectly fine descripion, but it could be improved with more th");                                                                  <* 
+ *>    yUNIT_minstr   ("... review which"                   , x_which             , "gHiè5");                                                                                                                                       <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                                                              <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);                                                                                                                                                <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                                                         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                                                           <* 
+ *>                                                                                                                                                                                                                                 <* 
+ *>    KOIOS_scrp_finish ();                                                                                                                                                                                                        <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                                                            <* 
+ *>    return 0;                                                                                                                                                                                                                    <* 
+ *> }                                                                                                                                                                                                                               <*/
+
+/*> char                                                                                                                                                                                      <* 
+ *> koios_parse_function    (char a_scrp, char a_list, char a_unit)                                                                                                                           <* 
+ *> {                                                                                                                                                                                         <* 
+ *>    char       *x_name      = "/tmp/apate.unit";                                                                                                                                           <* 
+ *>    char        x_meth      [LEN_HUND]  = "";                                                                                                                                              <* 
+ *>    char        x_test      [LEN_LABEL] = "";                                                                                                                                              <* 
+ *>    char        x_retn      [LEN_FULL]  = "";                                                                                                                                              <* 
+ *>                                                                                                                                                                                           <* 
+ *>    yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify parsing function");                                                                                                            <* 
+ *>    if (a_list == '!')    { yUNIT_minprcs (); return 0; }                                                                                                                                  <* 
+ *>    if (a_unit != 0 && a_scrp != a_unit)  return 0;                                                                                                                                        <* 
+ *>    if (a_list == 'y')                    return 0;                                                                                                                                        <* 
+ *>    KOIOS_scrp_start ('y');                                                                                                                                                                <* 
+ *>                                                                                                                                                                                           <* 
+ *>    yUNIT_mincond  ("verify a function success");                                                                                                                                          <* 
+ *>    yerr_ureset   ();                                                                                                                                                                      <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (NULL  , x_meth, NULL  , x_test, NULL  , x_retn)                                ,    0);                        <* 
+ *>    yUNIT_minval   ("call function handler"              , PARSE__function (x_name, 30, "exec"   , KOIOS_SEXEC, 8, "test_function"                     , x_meth, x_test, x_retn),    1);   <* 
+ *>    yUNIT_minstr   ("... review method"                  , x_meth              , "test_function");                                                                                         <* 
+ *>    yUNIT_minstr   ("... review test"                    , x_test              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... review return"                  , x_retn              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                        <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                   <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                           <* 
+ *>    yUNIT_mincond  ("attempt with bad function characters");                                                                                                                               <* 
+ *>    yerr_ureset   ();                                                                                                                                                                      <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (NULL  , x_meth, NULL  , x_test, NULL  , x_retn)                                ,    0);                        <* 
+ *>    yUNIT_minval   ("call function handler"              , PARSE__function (x_name, 31, "exec"   , KOIOS_SEXEC, 8, "test function"                     , x_meth, x_test, x_retn), -999);   <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                        <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:31:0: error: åexecæ field åfunctionæ contains (1) illegal chars åtest°functionæ");         <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                           <* 
+ *>    yUNIT_mincond  ("verify a duration success");                                                                                                                                          <* 
+ *>    yerr_ureset   ();                                                                                                                                                                      <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (NULL  , x_meth, NULL  , x_test, NULL  , x_retn)                                ,    0);                        <* 
+ *>    yUNIT_minval   ("call function handler"              , PARSE__function (x_name, 32, "SCRP"   , KOIOS_SSCRP, 8, "0s"                                , x_meth, x_test, x_retn),    1);   <* 
+ *>    yUNIT_minstr   ("... review method"                  , x_meth              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... review test"                    , x_test              , "0s");                                                                                                    <* 
+ *>    yUNIT_minstr   ("... review return"                  , x_retn              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                        <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                   <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                           <* 
+ *>    yUNIT_mincond  ("verify a label success");                                                                                                                                             <* 
+ *>    yerr_ureset   ();                                                                                                                                                                      <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (NULL  , x_meth, NULL  , x_test, NULL  , x_retn)                                ,    0);                        <* 
+ *>    yUNIT_minval   ("call function handler"              , PARSE__function (x_name, 33, "SHARED" , KOIOS_SSHAR, 8, "search"                            , x_meth, x_test, x_retn),    1);   <* 
+ *>    yUNIT_minstr   ("... review method"                  , x_meth              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... review test"                    , x_test              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... review return"                  , x_retn              , "search");                                                                                                <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                        <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                   <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                           <* 
+ *>    yUNIT_mincond  ("attempt a bad label");                                                                                                                                                <* 
+ *>    yerr_ureset   ();                                                                                                                                                                      <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (NULL  , x_meth, NULL  , x_test, NULL  , x_retn)                                ,    0);                        <* 
+ *>    yUNIT_minval   ("call function handler"              , PARSE__function (x_name, 34, "SHARED" , KOIOS_SSHAR, 8, "lost&found"                        , x_meth, x_test, x_retn), -999);   <* 
+ *>    yUNIT_minstr   ("... review method"                  , x_meth              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... review test"                    , x_test              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... review return"                  , x_retn              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                        <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "/tmp/apate.unit:34:0: error: åSHAREDæ field ålabelæ contains (1) illegal chars ålost°foundæ");             <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                           <* 
+ *>    yUNIT_mincond  ("verify a label placeholder");                                                                                                                                         <* 
+ *>    yerr_ureset   ();                                                                                                                                                                      <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (NULL  , x_meth, NULL  , x_test, NULL  , x_retn)                                ,    0);                        <* 
+ *>    yUNIT_minval   ("call function handler"              , PARSE__function (x_name, 35, "SHARED" , KOIOS_SSHAR, 8, "tbd"                               , x_meth, x_test, x_retn),    1);   <* 
+ *>    yUNIT_minstr   ("... review method"                  , x_meth              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... review test"                    , x_test              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... review return"                  , x_retn              , "tbd");                                                                                                   <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                        <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                   <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                           <* 
+ *>    yUNIT_mincond  ("verify an alternate label placeholder");                                                                                                                              <* 
+ *>    yerr_ureset   ();                                                                                                                                                                      <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (NULL  , x_meth, NULL  , x_test, NULL  , x_retn)                                ,    0);                        <* 
+ *>    yUNIT_minval   ("call function handler"              , PARSE__function (x_name, 36, "SHARED" , KOIOS_SSHAR, 8, "·"                                 , x_meth, x_test, x_retn),    1);   <* 
+ *>    yUNIT_minstr   ("... review method"                  , x_meth              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... review test"                    , x_test              , "");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... review return"                  , x_retn              , "·");                                                                                                     <* 
+ *>    yUNIT_minstr   ("... which error"                    , yerr_uwhich (), "/tmp/ylog_errors.txt");                                                                                        <* 
+ *>    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);                                                                                                          <* 
+ *>    yUNIT_minstr   ("... check error message"            , yerr_upeek   (']'), "(n/a)");                                                                                                   <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                     <* 
+ *>                                                                                                                                                                                           <* 
+ *>    KOIOS_scrp_finish ();                                                                                                                                                                  <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                      <* 
+ *>    return 0;                                                                                                                                                                              <* 
+ *> }                                                                                                                                                                                         <*/
+
+/*> char                                                                                                                                                                                 <* 
+ *> koios_parse_current (char a_scrp, char a_list, char a_unit)                                                                                                                          <* 
+ *> {                                                                                                                                                                                    <* 
+ *>    char        x_cwd       [LEN_FULL]  = "";                                                                                                                                         <* 
+ *>    char        x_spec      =  '-';                                                                                                                                                   <* 
+ *>    char        x_max       =    0;                                                                                                                                                   <* 
+ *>    char        x_desc      [LEN_LONG]  = "";                                                                                                                                         <* 
+ *>    char        x_meth      [LEN_HUND]  = "";                                                                                                                                         <* 
+ *>    char        x_args      [LEN_FULL]  = "";                                                                                                                                         <* 
+ *>    char        x_test      [LEN_LABEL] = "";                                                                                                                                         <* 
+ *>    char        x_expe      [LEN_RECD]  = "";                                                                                                                                         <* 
+ *>    char        x_retn      [LEN_FULL]  = "";                                                                                                                                         <* 
+ *>                                                                                                                                                                                      <* 
+ *>    yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify parsing current");                                                                                                        <* 
+ *>    if (a_list == '!')    { yUNIT_minprcs (); return 0; }                                                                                                                             <* 
+ *>    if (a_unit != 0 && a_scrp != a_unit)  return 0;                                                                                                                                   <* 
+ *>    if (a_list == 'y')                    return 0;                                                                                                                                   <* 
+ *>    KOIOS_scrp_start ('-');                                                                                                                                                           <* 
+ *>                                                                                                                                                                                      <* 
+ *>    x_spec = 's';  x_max = 2;                                                                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify script success");                                                                                                                                         <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);                   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (1, "SCRP"                     , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "check variable"           , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "extra"                    , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);   <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 2);                                                                                                        <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "check variable");                                                                                         <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "-");                                                                                                      <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "0s");                                                                                                     <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "tbd");                                                                                                    <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                <* 
+ *>                                                                                                                                                                                      <* 
+ *>    x_spec = 'f';  x_max = 7;                                                                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify exec success");                                                                                                                                           <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);                   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "call function"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "BIG_function"             , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (4, "27, 86, 't'"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (5, "i_equal"                  , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (6, "42"                       , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (7, "n"                        , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (8, "junk at end"              , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);   <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 7);                                                                                                        <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "call function");                                                                                          <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "BIG_function");                                                                                           <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "27, 86, 't'");                                                                                            <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "i_equal");                                                                                                <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "42");                                                                                                     <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "n");                                                                                                      <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                <* 
+ *>                                                                                                                                                                                      <* 
+ *>    x_spec = 'p';  x_max = 4;                                                                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify code success");                                                                                                                                           <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);                   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (3, "- - - - - - -"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (4, "my.val = 978;"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn),    0);   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (5, "more stuff"               , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);   <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 4);                                                                                                        <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "update global");                                                                                          <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "my.val = 978;");                                                                                          <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                       <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                <* 
+ *>                                                                                                                                                                                      <* 
+ *>    x_spec = '1';  x_max = 1;                                                                                                                                                         <* 
+ *>    yUNIT_mincond  ("verify ditto success");                                                                                                                                          <* 
+ *>    yUNIT_minval   ("set defaults"                       , PARSE__default  (x_desc, x_meth, x_args, x_test, x_expe, x_retn)                                ,    0);                   <* 
+ *>    yUNIT_minval   ("call parse field"                   , PARSE__current  (2, "update global"            , x_spec, &x_max, x_desc, x_meth, x_args, x_test, x_expe, x_retn), -999);   <* 
+ *>    yUNIT_minval   ("... check max"                      , x_max         , 1);                                                                                                        <* 
+ *>    yUNIT_minstr   ("... check desc"                     , x_desc        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check meth"                     , x_meth        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check args"                     , x_args        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check test"                     , x_test        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check expe"                     , x_expe        , "");                                                                                                       <* 
+ *>    yUNIT_minstr   ("... check retn"                     , x_retn        , "");                                                                                                       <* 
+ *>    yUNIT_mindnoc  ();                                                                                                                                                                <* 
+ *>                                                                                                                                                                                      <* 
+ *>    KOIOS_scrp_finish ();                                                                                                                                                             <* 
+ *>    yUNIT_minprcs ();                                                                                                                                                                 <* 
+ *>    return 0;                                                                                                                                                                         <* 
+ *> }                                                                                                                                                                                    <*/
 
 char
 koios_parse_driver    (char a_scrp, char a_list, char a_unit)
@@ -758,15 +1362,16 @@ koios_parse_driver    (char a_scrp, char a_list, char a_unit)
    char        x_retn      [LEN_FULL]  = "";
    char        x_which     [LEN_TITLE] = "";
 
-   yUNIT_minscrpy ("koios", "koios_parse", "(CONV) verify parsing driver");
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify parsing driver");
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_scrp_start ('-');
+   KOIOS_scrp_start ('y');
 
    strcpy (x_recd, "SCRP          (CATS) verify preparation and defaulting                           0s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_mincond  ("verify script success");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", 's', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", KOIOS_SSCRP, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
    yUNIT_minstr   ("... check desc"                     , x_desc        , "(CATS) verify preparation and defaulting");
    yUNIT_minstr   ("... check meth"                     , x_meth        , "CATS__prepare");
    yUNIT_minstr   ("... check args"                     , x_args        , "");
@@ -777,7 +1382,8 @@ koios_parse_driver    (char a_scrp, char a_list, char a_unit)
 
    strcpy (x_recd, "   COND  (0)  verify the defaults                                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_mincond  ("verify condition success");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 10,  0, "COND", '2', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 10,  0, "COND", KOIOS_STWO , x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
    yUNIT_minstr   ("... check desc"                     , x_desc        , "verify the defaults");
    yUNIT_minstr   ("... check meth"                     , x_meth        , "");
    yUNIT_minstr   ("... check args"                     , x_args        , "");
@@ -788,8 +1394,9 @@ koios_parse_driver    (char a_scrp, char a_list, char a_unit)
 
    strcpy (x_recd, "   COND  (0) ");
    yUNIT_mincond  ("attempt with verb only");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 10,  0, "COND", '2', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
-   yUNIT_minstr   ("... check desc"                     , x_desc        , "");
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 10,  0, "COND", KOIOS_STWO , x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "---(empty)-------------------------");
    yUNIT_minstr   ("... check meth"                     , x_meth        , "");
    yUNIT_minstr   ("... check args"                     , x_args        , "");
    yUNIT_minstr   ("... check test"                     , x_test        , "");
@@ -799,7 +1406,8 @@ koios_parse_driver    (char a_scrp, char a_list, char a_unit)
 
    strcpy (x_recd, "     exec     call prepare                         CATS__prepare               \"· ·  · · ·   · ·\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq         i_equal     0                                                                                                    ");
    yUNIT_mincond  ("verify exec/get success");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 15,  0, "exec", 'f', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 15,  0, "exec", KOIOS_SEXEC, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
    yUNIT_minstr   ("... check desc"                     , x_desc        , "call prepare");
    yUNIT_minstr   ("... check meth"                     , x_meth        , "CATS__prepare");
    yUNIT_minstr   ("... check args"                     , x_args        , "\"· ·  · · ·   · ·\"   , &x_len , &x_part, &x_sub , &x_src , &x_cat , &x_page, &x_grp , &x_freq");
@@ -810,7 +1418,8 @@ koios_parse_driver    (char a_scrp, char a_list, char a_unit)
 
    strcpy (x_recd, "     exec     call prepare                         CATS__prepare              ");
    yUNIT_mincond  ("attempt with not enough fields");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 15,  0, "exec", 'f', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 15,  0, "exec", KOIOS_SEXEC, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
    yUNIT_minstr   ("... check desc"                     , x_desc        , "");
    yUNIT_minstr   ("... check meth"                     , x_meth        , "");
    yUNIT_minstr   ("... check args"                     , x_args        , "");
@@ -821,7 +1430,8 @@ koios_parse_driver    (char a_scrp, char a_list, char a_unit)
 
    strcpy (x_recd, "     code     ... change part                      - - - - - - - - - - - - -   x_part      = 'v';                                                                                                                                                                                                           ");
    yUNIT_mincond  ("verify code success");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 20,  0, "code", 'p', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 20,  0, "code", KOIOS_SCODE, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
    yUNIT_minstr   ("... check desc"                     , x_desc        , "... change part");
    yUNIT_minstr   ("... check meth"                     , x_meth        , "");
    yUNIT_minstr   ("... check args"                     , x_args        , "");
@@ -832,7 +1442,8 @@ koios_parse_driver    (char a_scrp, char a_list, char a_unit)
 
    strcpy (x_recd, "code         different attempt                       v = 1;  ");
    yUNIT_mincond  ("verify code with wrong indentation");
-   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 25,  0, "code", 'p', x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name, 25,  0, "code", KOIOS_SCODE, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
    yUNIT_minstr   ("... check desc"                     , x_desc        , "different attempt");
    yUNIT_minstr   ("... check meth"                     , x_meth        , "");
    yUNIT_minstr   ("... check args"                     , x_args        , "");
@@ -847,40 +1458,241 @@ koios_parse_driver    (char a_scrp, char a_list, char a_unit)
 }
 
 char
+koios_parse_scrp      (char a_scrp, char a_list, char a_unit)
+{
+   char        x_cwd       [LEN_FULL]  = "";
+   char        x_name      [LEN_HUND]  = "/tmp/apate.unit";
+   char        x_recd      [LEN_RECD]  = "";
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_meth      [LEN_HUND]  = "";
+   char        x_args      [LEN_FULL]  = "";
+   char        x_test      [LEN_LABEL] = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_retn      [LEN_FULL]  = "";
+   char        x_which     [LEN_TITLE] = "";
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify defaulting on scripts");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   KOIOS_scrp_start ('y');
+
+   yUNIT_mincond  ("verify script with proper fields");
+   strcpy (x_recd, "SCRP  [··/·]  (CATS) verify preparation and defaulting                           5s   prepare         CATS__prepare                                                                ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", KOIOS_SSCRP, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "(CATS) verify preparation and defaulting");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "CATS__prepare");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "5s");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "prepare");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify script with just verb, no delimiter at all");
+   strcpy (x_recd, "SCRP");
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", KOIOS_SSCRP, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "---(empty)-------------------------");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "·");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "0s");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "tbd");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify script with verb and stage");
+   strcpy (x_recd, "SCRP  [··/·] ");
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", KOIOS_SSCRP, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "---(empty)-------------------------");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "·");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "0s");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "tbd");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify script with verb and description");
+   strcpy (x_recd, "SCRP  [··/·]  very nice start");
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", KOIOS_SSCRP, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "very nice start");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "·");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "0s");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "tbd");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify script with verb, desc, dur");
+   strcpy (x_recd, "SCRP  [··/·]  very nice start  5m");
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", KOIOS_SSCRP, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "very nice start");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "·");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "5m");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "tbd");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify script with verb, desc, dur, label");
+   strcpy (x_recd, "SCRP  [··/·]  very nice start  5m  start");
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", KOIOS_SSCRP, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "very nice start");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "·");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "5m");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "start");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify script with one too many fields");
+   strcpy (x_recd, "SCRP  [··/·]  very nice start  5m  start  yURG_error  more bullshit");
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SCRP", KOIOS_SSCRP, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "very nice start");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "yURG_error");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "5m");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "start");
+   yUNIT_mindnoc  ();
+
+   KOIOS_scrp_finish ();
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios_parse_share     (char a_scrp, char a_list, char a_unit)
+{
+   char        x_cwd       [LEN_FULL]  = "";
+   char        x_name      [LEN_HUND]  = "/tmp/apate.unit";
+   char        x_unit      [LEN_HUND]  = "/tmp/unit_wide.unit";
+   char        x_recd      [LEN_RECD]  = "";
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_meth      [LEN_HUND]  = "";
+   char        x_args      [LEN_FULL]  = "";
+   char        x_test      [LEN_LABEL] = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_retn      [LEN_FULL]  = "";
+   char        x_which     [LEN_TITLE] = "";
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify defauting on shares");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   KOIOS_scrp_start ('y');
+
+   yUNIT_mincond  ("verify shared with proper fields");
+   strcpy (x_recd, "SHARED   -a-  add testing data   data    åabcæ  a=one, b=two, c=thr ");
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SHARED", KOIOS_SSHAR, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "add testing data");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "åabc·········æ");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "a=one··········, b=two··········, c=thr··········, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "data");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify shared with only verb, no delimiter");
+   strcpy (x_recd, "SHARED   -a-");
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "SHARED", KOIOS_SSHAR, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "---(empty)-------------------------");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "å············æ");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "tbd");
+   yUNIT_mindnoc  ();
+
+   KOIOS_scrp_finish ();
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
+koios_parse_cond      (char a_scrp, char a_list, char a_unit)
+{
+   char        x_cwd       [LEN_FULL]  = "";
+   char        x_name      [LEN_HUND]  = "/tmp/apate.unit";
+   char        x_unit      [LEN_HUND]  = "/tmp/unit_wide.unit";
+   char        x_recd      [LEN_RECD]  = "";
+   char        x_desc      [LEN_LONG]  = "";
+   char        x_meth      [LEN_HUND]  = "";
+   char        x_args      [LEN_FULL]  = "";
+   char        x_test      [LEN_LABEL] = "";
+   char        x_expe      [LEN_RECD]  = "";
+   char        x_retn      [LEN_FULL]  = "";
+   char        x_which     [LEN_TITLE] = "";
+
+   yUNIT_minscrpy ("koios", "koios_parse", "(PARSE) verify defauting on conditions");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   KOIOS_scrp_start ('y');
+
+   yUNIT_mincond  ("verify condition with proper fields");
+   strcpy (x_recd, "   COND  (0)  check initial environment                                          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yerr_ureset   ();
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "COND"  , KOIOS_STWO , x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "check initial environment");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify condition with only verb, no delimiter");
+   yerr_ureset   ();
+   strcpy (x_recd, "   COND  (0)");
+   yUNIT_minval   ("call parse"                         , PARSE_driver    (x_name,  5,  0, "COND"  , KOIOS_STWO , x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    0);
+   yUNIT_minstr   ("... check desc"                     , x_desc        , "---(empty)-------------------------");
+   yUNIT_minstr   ("... check meth"                     , x_meth        , "");
+   yUNIT_minstr   ("... check args"                     , x_args        , "");
+   yUNIT_minstr   ("... check test"                     , x_test        , "");
+   yUNIT_minstr   ("... check expe"                     , x_expe        , "");
+   yUNIT_minstr   ("... check retn"                     , x_retn        , "");
+   yUNIT_mindnoc  ();
+
+   KOIOS_scrp_finish ();
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
 main                    (int a_argc, char *a_argv [])
 {
    /*---(locals)-----------+-----+-----+-*/
-   int         x_unit      =    0;
-   int         n           =    0;
+   char        x_unit      =    0;
    char        x_list      =    0;
-   /*---(arguments)----------------------*/
-   printf ("## %s\n", P_ONELINE);
-   printf ("## pre-yUNIT unit testing : %s\n", a_argv [0]);
-   if (a_argc >= 2) {
-      if (strcmp (a_argv [1], "--list") == 0)       x_list = 'y';
-      else if (strcmp (a_argv [1], "--inst") == 0)  x_list = '!';
-      else                                          x_unit = atoi (a_argv [1]);
-   }
-   if (x_unit  >  0 )         printf ("## selected single script (%2d)\n", x_unit);
-   else                       printf ("## selected all scripts\n");
-   if (x_list == 'y')         printf ("## list script(s) only\n");
-   else if (x_list == '!')    printf ("## generate initial wave file\n");
-   else                       printf ("## execute conditions and steps\n");
-   printf ("\n");
+   char        n           =    0;
    /*---(startup)------------------------*/
-   yUNIT_minunit ("koios_parse");
-   /*---(scripts)------------------------*/
-   koios_parse_default (++n, x_list, x_unit);
-   koios_parse_comment (++n, x_list, x_unit);
-   koios_parse_version (++n, x_list, x_unit);
-   koios_parse_limits  (++n, x_list, x_unit);
-   koios_parse_prep    (++n, x_list, x_unit);
-   koios_parse_which   (++n, x_list, x_unit);
-   koios_parse_current (++n, x_list, x_unit);
-   koios_parse_driver  (++n, x_list, x_unit);
-   /*---(wrapup)-------------------------*/
+   yUNIT_minunit (a_argc, a_argv, "koios_parse" , P_ONELINE, &x_unit, &x_list);
+   /*---(scripts)----------+-------------*/
+   koios_parse_default     (++n, x_list, x_unit);
+   koios_parse_comment     (++n, x_list, x_unit);
+   koios_parse_version     (++n, x_list, x_unit);
+   koios_parse_prep        (++n, x_list, x_unit);
+   koios_parse_which       (++n, x_list, x_unit);
+   koios_parse_select      (++n, x_list, x_unit);
+   koios_parse_subtitles   (++n, x_list, x_unit);
+   koios_parse_field       (++n, x_list, x_unit);
+   /*> koios_parse_desc        (++n, x_list, x_unit);                                 <*/
+   /*> koios_parse_function    (++n, x_list, x_unit);                                 <*/
+   /*> koios_parse_current     (++n, x_list, x_unit);                                 <*/
+   koios_parse_driver      (++n, x_list, x_unit);
+   koios_parse_scrp        (++n, x_list, x_unit);
+   koios_parse_share       (++n, x_list, x_unit);
+   koios_parse_cond        (++n, x_list, x_unit);
+   /*---(wrapup)-----------+-------------*/
    yUNIT_mintinu    ();
    /*---(complete)-----------------------*/
    return 0;
 }
-

@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.-- production on stress test datasets"
 #define     P_VERMINOR  "2.0- supporting unit_head, unit_share, unit_data"
-#define     P_VERNUM    "2.0e"
-#define     P_VERTXT    "new structure working in polymnia, some local unit test must be caught up"
+#define     P_VERNUM    "2.0f"
+#define     P_VERTXT    "everything except live unit testing passes ;)"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -225,6 +225,110 @@
 #define     UDEBUG_KOIOS  if (my.debug == 'y')
 
 
+/*===[[ VERBS ]]==============================================================*/
+/*---(overall)--------------*/
+#define     PREP          'P'
+#define     INCL          'i'
+#define     DOCM          '#'
+/*---(scripts)--------------*/
+#define     SCRP          'S'
+#define     SHAR          'H'
+#define     GLOB          'G'
+#define     CONF          'F'
+#define     SECT          'E'
+/*---(conditions)-----------*/
+#define     COND          'C'
+#define     DITT          'D'
+#define     RUSE          'R'
+#define     GROP          'O'
+/*---(variables)------------*/
+#define     GVAR          'V'
+#define     LVAR          'v'
+/*---(steps)----------------*/
+#define     EXEC          'x'
+#define     GETT          'g'
+#define     EKOH          'e'
+/*---(specialty)------------*/
+#define     CODE          'c'
+#define     SYST          's'
+#define     LOAD          'l'
+#define     MODE          'm'
+/*---(specialty)------------*/
+#define     FDEF          'f'
+#define     APPD          'a'
+#define     APPV          'b'
+/*---(statistics)-----------*/
+#define     PRCS          '1'
+#define     RAHS          '2'
+#define     BOLG          '3'
+#define     FNOC          '4'
+#define     TINU          '5'
+#define     AUDT          '6'
+#define     ENDG          '7'
+/*---(ouroboros)------------*/
+#define     WAVE          'W'
+#define     STAG          'o'
+/*---(other)----------------*/
+#define     ANYT          '*'
+#define     NONE          '-'
+/*---(done)-----------------*/
+
+
+/*===[[ LOCATION ]]===========================================================*/
+#define     NORM          'n'
+#define     UNIT          'm'
+/*---(done)-----------------*/
+
+
+/*===[[ VERB SPEC TYPES ]]====================================================*/
+#define     KOIOS_SSCRP   'S'
+#define     KOIOS_SSHAR   'G'
+#define     KOIOS_SEXEC   'f'
+#define     KOIOS_SEKOH   'e'
+#define     KOIOS_SONE    '1'
+#define     KOIOS_STWO    '2'
+#define     KOIOS_STHR    '3'
+#define     KOIOS_SDOC    'c'
+#define     KOIOS_SCODE   'p'
+#define     KOIOS_SLOAD   'P'
+#define     KOIOS_SAUDT   'A'
+/*---(combos)---------------*/
+#define     KOIOS_SFUNCS  "3fP"
+/*---(done)-----------------*/
+
+
+/*===[[ FIELDS ]]=============================================================*/
+#define     KOIOS_FDESC   'd'
+#define     KOIOS_FFUNC   'f'
+#define     KOIOS_FARGS   'a'
+#define     KOIOS_FTEST   't'
+#define     KOIOS_FEXPE   'e'
+#define     KOIOS_FRETN   'r'
+
+
+/*===[[ SHARED TYPES ]]=======================================================*/
+#define     KOIOS_GLOBAL  'g'
+#define     KOIOS_CONFIG  'c'
+#define     KOIOS_SHARED  's'
+#define     KOIOS_REUSE   'r'
+/*---(done)-----------------*/
+
+/*===[[ RETURN TYPES ]]=======================================================*/
+/*---(string types)---------*/
+#define     KOIOS_STRING  's'
+#define     KOIOS_ROUND   'u'
+#define     KOIOS_WRAP    'w'
+/*---(number types)---------*/
+#define     KOIOS_CHAR    'c'
+#define     KOIOS_INT     'i'
+#define     KOIOS_NUM     'z'
+#define     KOIOS_REAL    'r'
+/*---(other types)----------*/
+#define     KOIOS_POINT   'p'
+#define     KOIOS_VOID    'v'
+/*---(done)-----------------*/
+
+
 typedef struct stat      tSTAT;
 typedef struct tm        tTIME;
 typedef unsigned char    uchar;
@@ -402,6 +506,11 @@ char*       DITTO__used             (void);
 /*---(done)-----------------*/
 
 
+
+/*===[[ koios_verb.c ]]=======================================================*/
+/*········´ ´················spec·´ ´·········································*/
+char        VERB_limits             (char a_spec, char *r_min, char *r_max, char r_desc [LEN_DESC]);
+/*········´ ´·············program·´ ´·········································*/
 char        VERB_init               (void);
 char        VERB__by_name           (char a_verb [LEN_LABEL], char *r_indent, char r_desc [LEN_DESC], char *r_spec, char *r_locn, char *r_is, char *r_under, int *r_count, int *r_total, void **r_conv, void **r_code, char *r_ditto, char *r_select);
 char        VERB__by_cursor         (char a_scope, char a_dir, char r_verb [LEN_LABEL], char *r_indent, char r_desc [LEN_DESC], char *r_spec, char *r_locn, char *r_is, char *r_under, int *r_count, int *r_total, void **r_conv, void **r_code, char *r_ditto, char *r_select);
@@ -415,6 +524,7 @@ char        VERB_selectable         (char a_verb [LEN_LABEL]);
 char        VERB__parse_under       (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_is, char a_under, char *b_under);
 char        VERB_parse              (char a_nscrp [LEN_TITLE], int a_line, char a_field [LEN_LABEL], char *b_under, char r_verb [LEN_LABEL], char *r_indx, char *r_spec, char *r_locn, char **r_conv, char **r_code);
 char        VERB_inventory          (FILE *a_main);
+/*········´ ´················DONE·´ ´·········································*/
 
 
 /*===[[ koios_read.c ]]=======================================================*/
@@ -437,21 +547,22 @@ char        READ_next               (FILE **b_file, int *r_nline, char *r_dittoi
 char        REUSE_init              (void);
 char        REUSE_wrap              (void);
 /*---(usage)----------------*/
-char        REUSE__set_recd         (char a_abbr, char a_ftype, int a_line, char a_vers, char a_recd [LEN_RECD]);
+char        REUSE_scope             (char a_verb [LEN_LABEL], char r_example [LEN_SHORT]);
+char        REUSE_populate          (char a_verb [LEN_LABEL], char a_major, int a_line, char a_desc [LEN_LONG], char a_which [LEN_LABEL], char a_titles [LEN_PATH]);
 /*---(parsing)--------------*/
 char        REUSE__parse_delimit    (char a_func [LEN_LABEL], char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_SHORT], char a_pos, char a_char, char a_example [LEN_SHORT]);
-char        REUSE__parse_global     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major);
-char        REUSE__parse_shared     (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_vers, char *r_major);
+char        REUSE__parse_global     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_LABEL], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_share, char *r_major, char *r_minor);
+char        REUSE__parse_shared     (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_LABEL], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_share, char *r_major, char *r_minor);
 char        REUSE__parse_reuse_old  (char a_nscrp [LEN_TITLE], int a_line, char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char *r_major, char *r_minor);
 char        REUSE__parse_reuse_new  (char a_nscrp [LEN_TITLE], int a_line, char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char *r_major, char *r_minor);
-char        REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], char a_ftype, int a_line, char a_verb [LEN_LABEL], char a_recd [LEN_LABEL], char a_prefix [LEN_RECD], char a_label [LEN_LABEL], char a_share, char r_desc [LEN_LONG], char *r_major, char *r_minor);
-char        REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_vers, char a_recd [LEN_RECD], char a_share, char r_desc [LEN_LONG], char *r_major, char *r_minor);
+char        REUSE__parse_reuse      (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_LABEL], char a_label [LEN_LABEL], char a_example [LEN_SHORT], char a_share, char *r_major, char *r_minor);
+char        REUSE_parse             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_prefix [LEN_LABEL], char a_share, char *r_major, char *r_minor);
 /*---(debugging)------------*/
 char*       REUSE__actuals          (void);
 char*       REUSE__used             (void);
 /*---(exim)-----------------*/
-char        REUSE_export            (char a_good, char a_nscrp [LEN_TITLE]);
-char        REUSE_import            (char a_nscrp [LEN_TITLE]);
+/*> char        REUSE_export            (char a_good, char a_nscrp [LEN_TITLE]);      <*/
+/*> char        REUSE_import            (char a_nscrp [LEN_TITLE]);                   <*/
 /*---(totals)---------------*/
 char        REUSE_totals            (char a_verb [LEN_LABEL], char a_recd [LEN_RECD]);
 /*---(done)-----------------*/
@@ -553,17 +664,22 @@ char        CODE_force              (int a_scrps, int  a_conds);
 
 
 /*===[[ koios_parse.c ]]======================================================*/
-/*········· ´······················ ´·········································*/
+/*········´ ´···············trees·´ ´·········································*/
 char        PARSE_default           (char r_verb [LEN_LABEL], char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char *r_ditto, char *r_major, char *r_minor, char r_which [LEN_TITLE]);
 char        PARSE__comment          (char a_nscrp [LEN_TITLE], int a_line, char a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_under, char *r_spec, char **r_conv, char **r_code, char r_expe [LEN_RECD]);
 char        PARSE__default          (char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL]);
 char        PARSE__version          (char *a_field, char *r_vers);
-char        PARSE__limits           (char a_spec, char *r_min, char *r_max);
-char        PARSE__which            (char a_nscrp [LEN_TITLE], int a_line, char a_desc [LEN_LONG], char r_which [LEN_TITLE]);
+char        PARSE__allowed_chars    (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_label [LEN_TERSE], char a_allowed [LEN_FULL], char a_field [LEN_RECD]);
+char        PARSE__which            (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char r_which [LEN_TITLE]);
+char        PARSE__desc             (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_spec, char a_max, char a_field [LEN_RECD], char r_desc [LEN_LONG], char r_which [LEN_TITLE]);
+char        PARSE__function         (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_spec, char a_max, char a_field [LEN_RECD], char r_meth [LEN_HUND], char r_test [LEN_LABEL], char r_retn [LEN_FULL]);
+char        PARSE__select           (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_field [LEN_RECD], char r_field [LEN_LABEL]);
+char        PARSE__subtitles        (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_select [LEN_LABEL], char a_field [LEN_RECD], char r_field [LEN_RECD]);
+char        PARSE__field            (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_LABEL], char a_spec, char a_col, char a_field [LEN_RECD], char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_which [LEN_TITLE]);
 char        PARSE__current          (char n, char *p, char a_spec, char *r_max, char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL]);
 char        PARSE_prep              (FILE **b_scrp, char a_nscrp [LEN_TITLE], int a_line, char a_runtype, char a_recd [LEN_RECD], char r_verb [LEN_LABEL], char *r_under, char *r_spec, char **r_conv, char **r_code, char r_stage [LEN_SHORT], char *r_vers, char r_desc [LEN_LONG], char r_expe [LEN_RECD], char *r_ditto, char *r_dittoing, char *r_dtarget, int *r_dstart, int *r_dline, char *r_major, char *r_minor, char *r_share, char *r_select);
 char        PARSE_driver            (char a_nscrp [LEN_TITLE], int a_line, char a_vers, char a_verb [LEN_LABEL], char a_spec, char a_recd [LEN_RECD], char r_desc [LEN_LONG], char r_meth [LEN_HUND], char r_args [LEN_FULL], char r_test [LEN_LABEL], char r_expe [LEN_RECD], char r_retn [LEN_FULL], char r_which [LEN_TITLE]);
-/*---(done)-----------------*/
+/*········´ ´················DONE·´ ´·········································*/
 
 
 

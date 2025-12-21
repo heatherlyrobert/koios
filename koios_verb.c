@@ -2,11 +2,6 @@
 #include    "koios.h"        /* LOCAL  : main header                          */
 
 /*
- * location -- what type of unit test file can it appear in...
- *    m  unit_head.unit or unit_data only
- *    n  not unit_head.unit or unit_data
- *    -  any and all
- *
  *
  * make all tables findable by
  *    abbr/name
@@ -22,13 +17,94 @@
  *
  */
 
+/*>                                                                                                                                                                                                                                                                                                                                         <* 
+ *> #==(verb)===  ==========(description)============  =========(label)==========  ==(legal)===  =========(selection labels)=======================================================================================================================================================================================================    <* 
+ *> GLOBAL   -A-  unsorted animal species dataset      species                     abcdef······  a=empty··········, b=one············, c=two············, d=four···········, e=nine···········, f=thirty-nine····, g=···············, h=···············, i=···············, j=···············, k=···············, l=···············    <* 
+ *> CONFIG   -é-  unsorted animal species dataset      species                     abcdef······  a=empty··········, b=one············, c=two············, d=four···········, e=nine···········, f=thirty-nine····, g=···············, h=···············, i=···············, j=···············, k=···············, l=···············    <* 
+ *> SHARED   -c-  unsorted animal species dataset      species                     abcdef······  a=empty··········, b=one············, c=two············, d=four···········, e=nine···········, f=thirty-nine····, g=···············, h=···············, i=···············, j=···············, k=···············, l=···············    <* 
+ *>                                                                                                                                                                                                                                                                                                                                         <* 
+ *>                                                                                                                                                                                                                                                                                                                                         <*/
+/*===[[ INFORMATIONAL TABLES ]]===============================================*/
 
-static char  s_nverb    =  -1;
+struct cSPEC {
+   char        s_spec;
+   char        s_min;
+   char        s_max;
+   char        s_desc      [LEN_DESC];
+} static s_specs [LEN_LABEL] = {
+   /*-----min--max----description----------------------------*/
+   { KOIOS_SSCRP ,  1 ,  5 , "åSCRPæ script header"                  },   /* can just be a placeholder */
+   { KOIOS_SDOC  ,  1 ,  1 , "å#>æ internal comments"                },
+   { KOIOS_SONE  ,  1 ,  1 , "åDITTOæ and åREUSEæ w/one field"       },
+   { KOIOS_STWO  ,  1 ,  2 , "åPREPæ, åCONDæ, etc w/descripion"      },   /* can omit description */
+   { KOIOS_STHR  ,  3 ,  3 , "åinclæ and åmodeæ w/three fields"      },
+   { KOIOS_SSHAR ,  1 ,  5 , "åSHAREDæ global, config, shared"       },
+   { KOIOS_SEXEC ,  6 ,  7 , "åexecæ function call"                  },
+   { KOIOS_SEKOH ,  6 ,  7 , "åechoæ function call"                  },
+   { KOIOS_SCODE ,  4 ,  4 , "all non-exec except load"              },
+   { KOIOS_SLOAD ,  4 ,  4 , "åloadæ input loading"                  },
+   { KOIOS_SAUDT ,  0 ,  0 , "åPRCSæ all statistic footers"          },
+   /*-----min--max----description----------------------------*/
+   {  0          ,  0 ,  0 , "end-of-list"                           },
+};
 
+char
+VERB_limits             (char a_spec, char *r_min, char *r_max, char r_desc [LEN_DESC])
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        i           =    0;
+   /*---(defaults)-----------------------*/
+   if (r_min  != NULL)  *r_min = 0;
+   if (r_max  != NULL)  *r_max = 0;
+   if (r_desc != NULL)  strcpy (r_desc, "");
+   /*---(process)------------------------*/
+   for (i = 0; i < LEN_LABEL; ++i) {
+      if (s_specs [i].s_spec == 0)       break;
+      if (s_specs [i].s_spec != a_spec)  continue;
+      if (r_min  != NULL)  *r_min = s_specs [i].s_min;
+      if (r_max  != NULL)  *r_max = s_specs [i].s_max;
+      if (r_desc != NULL)  strlcpy (r_desc, s_specs [i].s_desc, LEN_DESC);
+      return 1;
+   }
+   /*---(complete)-----------------------*/
+   return --rce;
+}
+
+struct cLOCN {
+   char        s_locn;
+   char        s_desc      [LEN_DESC];
+} static s_locns [LEN_TERSE] = {
+   { '-' , "anywhere"                            },
+   { 'n' , "normal unit test files only"         },
+   { 'm' , "unit_wide or unit_data only"         },
+   {  0  , "end-of-list"                         },
+};
+
+struct cTYPE {
+   char        s_type;
+   char        s_desc      [LEN_DESC];
+} static s_types [LEN_LABEL] = {
+   { '-' , "nothing"                             },
+   { '*' , "anything (under only"                },
+   { 'P' , "prep header"                         },
+   { '#' , "comment"                             },
+   { 'S' , "script header"                       },
+   { 'C' , "condition header"                    },
+   { '´' , "all other verbs"                     },
+   { 'W' , "wave definition"                     },
+   { 'W' , "wave definition"                     },
+   {  0  , "end-of-list"                         },
+};
+
+
+
+/*===[[ VERB DEFINITION TABLE ]]==============================================*/
 
 #define     MAX_VERB         50
 typedef     struct cVERB    tVERB;
 struct cVERB {
+   char        v_abbr;                      /* unique identifier              */
    char        v_name      [LEN_LABEL];     /* verb                           */
    char        v_indent;                    /* expected indentation           */
    char        v_desc      [LEN_DESC];      /* description                    */
@@ -43,61 +119,64 @@ struct cVERB {
    char        v_ditto;                     /* can be within a DITTO          */
    char        v_select;                    /* selective execution in shares  */
 } static s_verbs [MAX_VERB] = {
-   /* --overall-----  ind   --------------------------------------- -sp- -lo- -is- -un-   cnt tot ----conv----    ----code----    --dit-  --sel- */
-   { ""             ,  0 , "overall"                               , '-', '-', '-', '-',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "PREP"         ,  0 , "preparation before testing"            , '2', '-', 'P', '-',    0,  0, CONV__prep    , NULL          ,  '-'  ,  '-'  },
-   { "incl"         , 3  , "c header inclusion"                    , '3', '-', '-', 'P',    0,  0, CONV__incl    , CODE__incl    ,  '-'  ,  '-'  },
-   { "#>"           ,  0 , "script internal comments"              , 'c', '-', '#', '*',    0,  0, CONV__comment , NULL          ,  '-'  ,  '-'  },
-   /* --scrps------- ind   ---------------------------------------- -sp- -lo- -is- -un-   cnt tot ----conv----    ----code----    --dit-  --sel-  */
-   { ""             ,  0 , "scripts"                               , '-', '-', '-', '-',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "SCRP"         ,  0 , "test script header"                    , 's', 'n', 'S', '-',    0,  0, CONV__scrp    , CODE__scrp    ,  '-'  ,  '-'  },
-   { "SHARED"       ,  0 , "shared code between scripts"           , 's', 'n', 'S', '-',    0,  0, CONV__shared  , CODE__shared  ,  '-'  ,  '-'  },
-   { "GLOBAL"       ,  0 , "shared code between units"             , 's', 'm', 'S', '-',    0,  0, CONV__shared  , CODE__shared  ,  '-'  ,  '-'  },
-   { "CONFIG"       ,  0 , "shared code between units"             , 's', 'm', 'S', '-',    0,  0, CONV__shared  , CODE__shared  ,  '-'  ,  '-'  },
-   { "SECT"         ,  0 , "grouping of scripts"                   , '2', 'n', 'S', '-',    0,  0, CONV__sect    , CODE__sect    ,  '-'  ,  '-'  },
-   /* --conds------- ind   ---------------------------------------- -sp- -lo- -is- -un-   cnt tot ----conv----    ----code----    --dit-  --sel-  */
-   { ""             ,  0 , "conditions"                            , '-', '-', '-', '-',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "COND"         , 3  , "test condition"                        , '2', '-', 'C', 'S',    0,  0, CONV__cond    , CODE__cond    ,  '-'  ,  'y'  },
-   { "DITTO"        , 3  , "repeated test condition"               , '1', '-', 'C', 'S',    0,  0, CONV__ditto   , NULL          ,  '-'  ,  'y'  },
-   { "REUSE"        , 3  , "inclusion of shared code"              , '1', '-', 'C', 'S',    0,  0, CONV__reuse   , CODE__reuse   ,  '-'  ,  'y'  },
-   { "GROUP"        , 3  , "grouping of conditions"                , '2', '-', 'C', 'S',    0,  0, CONV__group   , CODE__group   ,  '-'  ,  'y'  },
-   /* --variables--- ind   ---------------------------------------- -sp- -lo- -is- -un-   cnt tot ----conv----    ----code----    --dit-  --sel-  */
-   { ""             ,  0 , "variables"                             , '-', '-', '-', '-',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "global"       , 3  , "global/unit variable defn"             , 'p', '-', '-', 'P',    0,  0, CONV__gvar    , CODE__gvar    ,  '-'  ,  '-'  },
-   { "local"        , 3  , "local/script variable defn"            , 'p', '-', '-', 'S',    0,  0, CONV__gvar    , CODE__lvar    ,  '-'  ,  '-'  },
-   /* --steps------- ind   ---------------------------------------- -sp- -lo- -is- -un-   cnt tot ----conv----    ----code----    --dit-  --sel-  */
-   { ""             ,  0 , "steps"                                 , '-', '-', '-', '-',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "exec"         , 5  , "function execution"                    , 'f', '-', '-', 'C',    0,  0, CONV__exec    , CODE__exec    ,  'y'  ,  'y'  },
-   { "get"          , 5  , "unit test accessor retrieval"          , 'f', '-', '-', 'C',    0,  0, CONV__exec    , CODE__exec    ,  'y'  ,  'y'  },
-   { "echo"         , 5  , "test a variable directly"              , 'f', '-', '-', 'C',    0,  0, CONV__echo    , CODE__exec    ,  'y'  ,  'y'  },
-   /* --specialty--- ind   ---------------------------------------- -sp- -lo- -is- -un-   cnt tot ----conv----    ----code----    --dit-  --sel-  */
-   { ""             ,  0 , "specialty"                             , '-', '-', '-', '-',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "code"         , 5  , "insert c code"                         , 'p', '-', '-', 'C',    0,  0, CONV__code    , CODE__code    ,  'y'  ,  'y'  },
-   { "system"       , 5  , "execute shell code"                    , 'p', '-', '-', 'C',    0,  0, CONV__code    , CODE__system  ,  'y'  ,  'y'  },
-   { "load"         , 5  , "place data into input"                 , 'P', '-', '-', 'C',    0,  0, CONV__load    , CODE__load    ,  'y'  ,  'y'  },
-   { "mode"         , 5  , "set pass or forced_fail mode"          , '3', '-', '-', 'C',    0,  0, CONV__mode    , CODE__mode    ,  'y'  ,  'y'  },
-   /* --support----- ind   ---------------------------------------- -sp- -lo- -is- -un-   cnt tot ----conv----    ----code----    --dit-  --sel-  */
-   { ""             ,  0 , "support"                               , '-', '-', '-', '-',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "file"         , 5  , "create a temporary file"               , 'p', '-', '-', 'C',    0,  0, CONV__file    , CODE__file    ,  'y'  ,  'y'  },
-   { "append"       , 5  , "append data to temporary file"         , 'p', '-', '-', 'C',    0,  0, CONV__append  , CODE__append  ,  'y'  ,  'y'  },
-   { "appvis"       , 5  , "append data as visible characters"     , 'p', '-', '-', 'C',    0,  0, CONV__append  , CODE__append  ,  'y'  ,  'y'  },
-   /* --statistics-- ind   ---------------------------------------- -sp- -lo- -is- -un-   cnt tot ----conv----    ----code----    --dit-  --sel-  */
-   { ""             ,  0 , "statistics"                            , '-', '-', '-', '-',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "PRCS"         , 3  , "script ending"                         , 'U', 'n', 'A', '*',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "DERAHS"       , 3  , "local shared code ending"              , 'U', 'n', 'A', '*',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "LABOLG"       , 3  , "global shared code ending"             , 'U', 'm', 'A', '*',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "GIFNOC"       , 3  , "global shared code ending"             , 'U', 'm', 'A', '*',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "TINU"         ,  0 , "full unit test ending"                 , 'U', 'n', 'A', '*',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "RETSAM"       ,  0 , "master file ending"                    , 'U', 'm', 'A', '*',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "#========"    ,  0 , "ending comment"                        , 'U', '-', 'A', '*',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   /* --ouroboros--- ind   ---------------------------------------- -sp- -lo- -is- -un-   cnt tot ----conv----    ----code----    --dit-  --sel-  */
-   { ""             ,  0 , "oroboros"                              , '-', '-', '-', '-',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "WAVE"         ,  0 , "testing wave definition"               , '2', 'm', 'W', '-',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   { "stage"        , 3  , "testing stage definition"              , '2', 'm', '-', 'W',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   /* --sentinal---- ind   ---------------------------------------- -sp- -lo- -is- -un-   cnt tot ----conv----    ----code----    --dit-  --sel-  */
-   { "----"         ,  0 , "end-of-entries"                        , '-', '-', '-', '-',    0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
-   /* --done-------- ind   ---------------------------------------- -sp- -lo- -is- -un-   cnt tot ----conv----    ----code----    --dit-  --sel-  */
+   /*---  ---overall-----  ind   ----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel- */
+   { '·' , ""             ,  0 , "overall"                               , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { PREP, "PREP"         ,  0 , "preparation before testing"            , KOIOS_STWO   , '-' , PREP, '-' ,     0,  0, CONV__prep    , NULL          ,  '-'  ,  '-'  },
+   { INCL, "incl"         , 3  , "c header inclusion"                    , KOIOS_STHR   , '-' , '-' , PREP,     0,  0, CONV__incl    , CODE__incl    ,  '-'  ,  '-'  },
+   { DOCM, "#>"           ,  0 , "script internal comments"              , KOIOS_SDOC   , '-' , DOCM, ANYT,     0,  0, CONV__comment , NULL          ,  '-'  ,  '-'  },
+   /*---  ---scrps------- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
+   { '·' , ""             ,  0 , "scripts"                               , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { SCRP, "SCRP"         ,  0 , "test script header"                    , KOIOS_SSCRP  , NORM, SCRP, '-' ,     0,  0, CONV__scrp    , CODE__scrp    ,  '-'  ,  '-'  },
+   { GLOB, "GLOBAL"       ,  0 , "shared code between units"             , KOIOS_SSHAR  , UNIT, SCRP, '-' ,     0,  0, CONV__shared  , CODE__shared  ,  '-'  ,  '-'  },
+   { CONF, "CONFIG"       ,  0 , "shared code between units"             , KOIOS_SSHAR  , UNIT, SCRP, '-' ,     0,  0, CONV__shared  , CODE__shared  ,  '-'  ,  '-'  },
+   { SHAR, "SHARED"       ,  0 , "shared code between scripts"           , KOIOS_SSHAR  , NORM, SCRP, '-' ,     0,  0, CONV__shared  , CODE__shared  ,  '-'  ,  '-'  },
+   { SECT, "SECT"         ,  0 , "grouping of scripts"                   , KOIOS_STWO   , NORM, SCRP, '-' ,     0,  0, CONV__sect    , CODE__sect    ,  '-'  ,  '-'  },
+   /*---  ---conds------- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
+   { '·' , ""             ,  0 , "conditions"                            , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { COND, "COND"         , 3  , "test condition"                        , KOIOS_STWO   , '-' , COND, SCRP,     0,  0, CONV__cond    , CODE__cond    ,  '-'  ,  'y'  },
+   { DITT, "DITTO"        , 3  , "repeated test condition"               , KOIOS_SONE   , '-' , COND, SCRP,     0,  0, CONV__ditto   , NULL          ,  '-'  ,  'y'  },
+   { RUSE, "REUSE"        , 3  , "inclusion of shared code"              , KOIOS_SONE   , '-' , COND, SCRP,     0,  0, CONV__reuse   , CODE__reuse   ,  '-'  ,  'y'  },
+   { GROP, "GROUP"        , 3  , "grouping of conditions"                , KOIOS_STWO   , '-' , COND, SCRP,     0,  0, CONV__group   , CODE__group   ,  '-'  ,  'y'  },
+   /*---  ---variables--- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
+   { '·' , ""             ,  0 , "variables"                             , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { GVAR, "global"       , 3  , "global/unit variable defn"             , KOIOS_SCODE  , '-' , '-' , PREP,     0,  0, CONV__gvar    , CODE__gvar    ,  '-'  ,  '-'  },
+   { LVAR, "local"        , 3  , "local/script variable defn"            , KOIOS_SCODE  , '-' , '-' , SCRP,     0,  0, CONV__gvar    , CODE__lvar    ,  '-'  ,  '-'  },
+   /*---  ---steps------- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
+   { '·' , ""             ,  0 , "steps"                                 , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { EXEC, "exec"         , 5  , "function execution"                    , KOIOS_SEXEC  , '-' , '-' , COND,     0,  0, CONV__exec    , CODE__exec    ,  'y'  ,  'y'  },
+   { GETT, "get"          , 5  , "unit test accessor retrieval"          , KOIOS_SEXEC  , '-' , '-' , COND,     0,  0, CONV__exec    , CODE__exec    ,  'y'  ,  'y'  },
+   { EKOH, "echo"         , 5  , "test a variable directly"              , KOIOS_SEKOH  , '-' , '-' , COND,     0,  0, CONV__echo    , CODE__exec    ,  'y'  ,  'y'  },
+   /*---  ---specialty--- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
+   { '·' , ""             ,  0 , "specialty"                             , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { CODE, "code"         , 5  , "insert c code"                         , KOIOS_SCODE  , '-' , '-' , COND,     0,  0, CONV__code    , CODE__code    ,  'y'  ,  'y'  },
+   { SYST, "system"       , 5  , "execute shell code"                    , KOIOS_SCODE  , '-' , '-' , COND,     0,  0, CONV__code    , CODE__system  ,  'y'  ,  'y'  },
+   { LOAD, "load"         , 5  , "place data into input"                 , KOIOS_SLOAD  , '-' , '-' , COND,     0,  0, CONV__load    , CODE__load    ,  'y'  ,  'y'  },
+   { MODE, "mode"         , 5  , "set pass or forced_fail mode"          , KOIOS_STHR   , '-' , '-' , COND,     0,  0, CONV__mode    , CODE__mode    ,  'y'  ,  'y'  },
+   /*---  ---support----- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
+   { '·' , ""             ,  0 , "support"                               , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { FDEF, "file"         , 5  , "create a temporary file"               , KOIOS_SCODE  , '-' , '-' , COND,     0,  0, CONV__file    , CODE__file    ,  'y'  ,  'y'  },
+   { APPD, "append"       , 5  , "append data to temporary file"         , KOIOS_SCODE  , '-' , '-' , COND,     0,  0, CONV__append  , CODE__append  ,  'y'  ,  'y'  },
+   { APPV, "appvis"       , 5  , "append data as visible characters"     , KOIOS_SCODE  , '-' , '-' , COND,     0,  0, CONV__append  , CODE__append  ,  'y'  ,  'y'  },
+   /*---  ---statistics-- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
+   { '·' , ""             ,  0 , "statistics"                            , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { PRCS, "PRCS"         , 3  , "script ending"                         , KOIOS_SAUDT  , NORM, AUDT, ANYT,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { RAHS, "DERAHS"       , 3  , "local shared code ending"              , KOIOS_SAUDT  , NORM, AUDT, ANYT,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { BOLG, "LABOLG"       , 3  , "global shared code ending"             , KOIOS_SAUDT  , UNIT, AUDT, ANYT,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { FNOC, "GIFNOC"       , 3  , "global shared code ending"             , KOIOS_SAUDT  , UNIT, AUDT, ANYT,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { TINU, "TINU"         ,  0 , "full unit test ending"                 , KOIOS_SAUDT  , NORM, AUDT, ANYT,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { AUDT, "RETSAM"       ,  0 , "master file ending"                    , KOIOS_SAUDT  , UNIT, AUDT, ANYT,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { ENDG, "#========"    ,  0 , "ending comment"                        , KOIOS_SAUDT  , '-' , AUDT, ANYT,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   /*---  ---ouroboros--- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
+   { '·' , ""             ,  0 , "oroboros"                              , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { WAVE, "WAVE"         ,  0 , "testing wave definition"               , KOIOS_STWO   , UNIT, WAVE, '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { STAG, "stage"        , 3  , "testing stage definition"              , KOIOS_STWO   , UNIT, '-' , WAVE,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   /*---  ---sentinal---- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
+   {  0  , "----"         ,  0 , "end-of-entries"                        , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   /*---  ---done-------- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
 };
+static char  s_nverb    =  -1;
+
+
 
 char
 VERB_init               (void)
@@ -393,19 +472,19 @@ VERB__parse_under       (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
    /*---(DEBUGGING)----------------------*/
    /*> /+ TEMP_DEBUG +/ printf ("line %4d, %-10.10s, is (%c), under (%c), b_under (%c)\n", a_line, a_verb, a_is, a_under, *b_under);   <*/
    /*---(ANYWHERE)-----------------------*/
-   if (a_is == '#')                          return 7;
+   if (a_is == DOCM)                          return 7;
    /*---(AUDIT/TOTALS)-------------------*/
-   if (a_is == 'A')                          { *b_under = '-';   return 6; }
+   if (a_is == AUDT)                          { *b_under = NONE;  return 6; }
    /*---(script always good"-------------*/
-   if (a_is == 'S')                          { *b_under = a_is;  return 2; }
+   if (a_is == SCRP)                          { *b_under = a_is;  return 2; }
    /*---(script always good)-------------*/
-   if (a_is == '*' && *b_under == a_under)   return 4;
+   if (a_is == ANYT && *b_under == a_under)   return 4;
    /*---(condition-level)----------------*/
-   if (a_is == 'C' && *b_under == 'C')       return 3;
+   if (a_is == COND && *b_under == COND)      return 3;
    /*---(step-level)---------------------*/
-   if (a_is == '-' && *b_under == a_under)   return 4;
+   if (a_is == NONE && *b_under == a_under)   return 4;
    /*---(wave-level)---------------------*/
-   if (a_is == 'W')                          { *b_under = a_is;  return 5; }
+   if (a_is == WAVE)                         { *b_under = a_is;  return 5; }
    /*---(trouble check)------------------*/
    --rce;  if (a_under  != *b_under) {
       UDEBUG_KOIOS   ylog_unote   ("wrong line ownership (dangerous)");
@@ -414,7 +493,7 @@ VERB__parse_under       (char a_nscrp [LEN_TITLE], int a_line, char a_verb [LEN_
       return rce;
    }
    /*---(save-back)----------------------*/
-   if (a_is != '-')  *b_under = a_is;
+   if (a_is != NONE)  *b_under = a_is;
    /*---(ocmplete)-----------------------*/
    return 1;
 }

@@ -20,7 +20,7 @@ char    g_print     [LEN_RECD] = "";
 
 
 /*====================------------------------------------====================*/
-/*===----                        identipy functions                    ----===*/
+/*===----                        identity functions                    ----===*/
 /*====================------------------------------------====================*/
 static void  o___IDENTITY________o () { return; }
 
@@ -677,6 +677,7 @@ PROG_driver              (char a_good, char a_runtype, char a_nscrp [LEN_TITLE],
    char        x_retn      [LEN_FULL]  = "";
    char        x_stage     [LEN_SHORT] = "";
    char        x_which     [LEN_TITLE] = "";
+   char        x_ftype     =  '-';
    /*---(header)-------------------------*/
    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(defaulting)------------------*/
@@ -684,6 +685,9 @@ PROG_driver              (char a_good, char a_runtype, char a_nscrp [LEN_TITLE],
    if (r_major     != NULL)  *r_major    = '-';
    if (r_minor     != NULL)  *r_minor    = '-';
    PROG__defaults ();
+   /*---(check file)---------------------*/
+   x_ftype = yUNIT_reuse_ftype (a_nscrp, NULL);
+   UDEBUG_KOIOS   ylog_uchar   ("x_ftype"   , x_ftype);
    /*---(read next)-------------------*/
    rc = READ_next     (b_scrp, r_nline, r_dittoing, r_dtarget, r_dstart, r_dline, r_nrecd, x_recd);
    UDEBUG_KOIOS   ylog_uvalue  ("read"      , rc);
@@ -704,12 +708,25 @@ PROG_driver              (char a_good, char a_runtype, char a_nscrp [LEN_TITLE],
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
    }
+   UDEBUG_KOIOS   ylog_uchar   ("x_spec"    , x_spec);
    /*---(parse)-----------------------*/
    rc = PARSE_driver  (a_nscrp, *r_nline, x_vers, x_verb, x_spec, x_recd, x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which);
    UDEBUG_KOIOS   ylog_uvalue  ("parse"     , rc);
    --rce;  if (rc < 0)  {
       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
       return rce;
+   }
+   /*---(shared update)---------------*/
+   UDEBUG_KOIOS   ylog_upoint  ("r_major"   , r_major);
+   --rce;  if (x_spec == KOIOS_SSHAR && r_major != NULL) {
+      UDEBUG_KOIOS   ylog_unote   ("handling populating a share");
+      UDEBUG_KOIOS   ylog_uchar   ("*r_major"  , *r_major);
+      rc = yUNIT_reuse_populate (*r_major, x_ftype, *r_nline, x_desc, x_meth, x_expe);
+      UDEBUG_KOIOS   ylog_uvalue  ("reuse"     , rc);
+      if (rc < 0)  {
+         UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);
+         return rce;
+      }
    }
    /*---(write output)----------------*/
    if (a_good == 'y') {

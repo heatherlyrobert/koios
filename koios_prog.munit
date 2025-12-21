@@ -629,7 +629,7 @@ koios_prog_driver  (char a_scrp, char a_list, char a_unit)
    if (a_list == '!')    { yUNIT_minprcs (); return 0; }
    if (a_unit != 0 && a_scrp != a_unit)  return 0;
    if (a_list == 'y')                    return 0;
-   KOIOS_scrp_start_open  ('y');
+   KOIOS_scrp_start_open  ('-');
 
    KOIOS_data_variety (sm_nunit);
 
@@ -757,16 +757,16 @@ koios_prog_driver  (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("verify central data");
    yUNIT_minstr   ("... verb"                           , my_cur.c_verb           ,  "SHARED");
-   yUNIT_minchr   ("... spec"                           , my_cur.c_spec           ,  's');
+   yUNIT_minchr   ("... spec"                           , my_cur.c_spec           ,  KOIOS_SSHAR);
    yUNIT_minval   ("... vers"                           , my_cur.c_vers           ,    0);
    yUNIT_minptr   ("... code pointer"                   , my_cur.c_code           ,    1);
    yUNIT_minptr   ("... conv pointer"                   , my_cur.c_conv           ,    1);
    yUNIT_minstr   ("... description"                    , my_cur.c_desc           ,  "prepare files for use");
-   yUNIT_minstr   ("... method"                         , my_cur.c_method         ,  "-");
+   yUNIT_minstr   ("... method"                         , my_cur.c_method         ,  "åabc·········æ");
    yUNIT_minstr   ("... args"                           , my_cur.c_args           ,  "");
-   yUNIT_minstr   ("... test"                           , my_cur.c_test           ,  "0s");
-   yUNIT_minstr   ("... expect"                         , my_cur.c_expect         ,  "");
-   yUNIT_minstr   ("... return"                         , my_cur.c_return         ,  "tbd");
+   yUNIT_minstr   ("... test"                           , my_cur.c_test           ,  "");
+   yUNIT_minstr   ("... expect"                         , my_cur.c_expect         ,  "a=one··········, b=two··········, c=thr··········, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············");
+   yUNIT_minstr   ("... return"                         , my_cur.c_return         ,  "prepare");
    yUNIT_minstr   ("... stage"                          , my_cur.c_stage          ,  "··/·");
    yUNIT_minchr   ("... ditto"                          , my_cur.c_ditto          ,  '-');
    yUNIT_minchr   ("... major"                          , my_cur.c_major          ,  'a');
@@ -897,7 +897,7 @@ koios_prog_driver  (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("verify central data");
    yUNIT_minstr   ("... verb"                           , my_cur.c_verb           ,  "SCRP");
-   yUNIT_minchr   ("... spec"                           , my_cur.c_spec           ,  's');
+   yUNIT_minchr   ("... spec"                           , my_cur.c_spec           ,  KOIOS_SSCRP);
    yUNIT_minval   ("... vers"                           , my_cur.c_vers           ,    0);
    yUNIT_minptr   ("... code pointer"                   , my_cur.c_code           ,    1);
    yUNIT_minptr   ("... conv pointer"                   , my_cur.c_conv           ,    1);
@@ -1216,7 +1216,7 @@ koios_prog_driver  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("... vers"                           , my_cur.c_vers           ,    0);
    yUNIT_minptr   ("... code pointer"                   , my_cur.c_code           ,    1);
    yUNIT_minptr   ("... conv pointer"                   , my_cur.c_conv           ,    1);
-   yUNIT_minstr   ("... description"                    , my_cur.c_desc           ,  "[ prepare files for use ]- - - - - - - - - - - - - - - - - - - - - - ");
+   yUNIT_minstr   ("... description"                    , my_cur.c_desc           ,  "");
    yUNIT_minstr   ("... method"                         , my_cur.c_method         ,  "");
    yUNIT_minstr   ("... args"                           , my_cur.c_args           ,  "");
    yUNIT_minstr   ("... test"                           , my_cur.c_test           ,  "");
@@ -1268,12 +1268,13 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify passible topline");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA),    0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
+   yUNIT_minstr   ("... error"                          , yerr_upeek  ('['), "(n/a)");
    yUNIT_mindnoc  ();
    KOIOS_topline_conv ();
 
    yUNIT_mincond  ("verify PREP can not come after SCRP");
    yerr_ureset    ();
-   KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP          (SCRP) verify system startup          0s  tbd                          ");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP          (SCRP) verify system startup          0s  tbd         ·                ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "PREP          global function headers             ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
@@ -1282,7 +1283,7 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("verify SCRP can come first");
    yerr_ureset    ();
-   KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP          (SCRP) verify system startup          0s  tbd                          ");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP          (SCRP) verify system startup          0s  tbd         ·                ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA),    0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
    yUNIT_minval   ("... converted count"                , yenv_ulines      (sm_nunit  ),   20);
@@ -1293,7 +1294,7 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SCRP  [··/·]  (SCRP) verify system startup                                        0s  tbd             -                                                                            ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SCRP  [··/·]  (SCRP) verify system startup                                        0s  tbd             ·                                                                            ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , '>')      , "");
    yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_nunit   , '>')      , "   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_nunit   , '>')      , "   PRCS       script statistics -----------------------------------------------   1     1     0     0     1     0     0     0  ··········     0  ·                        0  ·                        0      0      0      0      0      0      0      0      0      0   ");
@@ -1311,7 +1312,7 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("verify SCRP with no additional data is legal");
    yerr_ureset    ();
-   KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP                                                   ");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP         ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA),    0);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    0);
    yUNIT_minval   ("... converted count"                , yenv_ulines      (sm_nunit  ),   20);
@@ -1322,7 +1323,7 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SCRP  [··/·]  [ - - - - - - (empty) - - - - - - ]                                 0s  tbd             -                                                                            ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SCRP  [··/·]  ---(empty)-------------------------                                 0s  tbd             ·                                                                            ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , '>')      , "");
    yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_nunit   , '>')      , "   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_nunit   , '>')      , "   PRCS       script statistics -----------------------------------------------   1     1     0     0     1     0     0     0  ··········     0  ·                        0  ·                        0      0      0      0      0      0      0      0      0      0   ");
@@ -1406,7 +1407,7 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "GLOBAL   -A-  chance to share                                                     0s  tbd             -                                                                            ((AA.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "GLOBAL   -A-  chance to share                      tbd                         å············æ  Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=··········· ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
    yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_hunit   , '>')      , "   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_hunit   , '>')      , "   LABOLG     global shared code statistics -----------------------------------   A     1     1     0     0     0     0     0  ··········     0  ·                        0  ·                        0      0      0      0      0      0      0      0      0      0   ");
@@ -1415,7 +1416,7 @@ koios_prog_scrps      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "CONFIG   -ò-  chance to share                                                     0s  tbd             -                                                                            ((òò.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "CONFIG   -ò-  chance to share                      tbd                         å············æ  Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=··········· ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
    yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_hunit   , '>')      , "   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_hunit   , '>')      , "   GIFNOC     global shared code statistics -----------------------------------   ò     1     1     0     0     0     0     0  ··········     0  ·                        0  ·                        0      0      0      0      0      0      0      0      0      0   ");
@@ -1481,7 +1482,7 @@ koios_prog_globals    (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("attempt a global in a SCRP and SHARED");
    KOIOS__append  ('[', UNIT_NORM_UNIT, "SCRP  [1a/A]  (SCRP) verify openning and closing    0s  open                         ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
-   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED   -a-  prepare files for use                 0s  prepare                      ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED   -a-  prepare files for use                  ·   ·          ·                ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   COND  (3)  simple openning                     ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
@@ -1495,9 +1496,9 @@ koios_prog_globals    (char a_scrp, char a_list, char a_unit)
 
    yerr_ureset    ();
    yUNIT_mincond  ("attempt a global in a GLOBAL and CONFIG");
-   KOIOS__append  ('[', UNIT_HEAD_UNIT, "GLOBAL   -B-  example global                        0s  open                         ");
+   KOIOS__append  ('[', UNIT_HEAD_UNIT, "GLOBAL   -B-  example global                       ·  ·  · ");                              
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
-   KOIOS__append  ('>', UNIT_HEAD_UNIT, "CONFIG   -ê-  example config                        0s  prepare                      ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "CONFIG   -ê-  example config                       ·  ·  · ");                              
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   COND  (3)  simple openning                     ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
@@ -1533,8 +1534,8 @@ koios_prog_globals2   (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify creating unit_head.unit");
    KOIOS__append  ('[', "unit_head.unit", "PREP          global function headers             ");
    KOIOS__append  ('>', "unit_head.unit", "   global     global variable                      - - - - - - - -   int h = 0;                                                  ");
-   KOIOS__append  ('>', "unit_head.unit", "GLOBAL -D-  globally shared steps          0s  tbd        "                                            );
-   KOIOS__append  ('>', "unit_head.unit", "GLOBAL -K-  more globally shared steps     0s  tbd        "                                            );
+   KOIOS__append  ('>', "unit_head.unit", "GLOBAL -D-  globally shared steps          steps  åabcæ  a=ay  ");
+   KOIOS__append  ('>', "unit_head.unit", "GLOBAL -K-  more globally shared steps     more   åfgæ   f=fee ");
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify globals created by code");
@@ -1546,9 +1547,9 @@ koios_prog_globals2   (char a_scrp, char a_list, char a_unit)
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify creating unit_wide.unit");
-   KOIOS__append  ('[', "unit_wide.unit", "GLOBAL -A-  unit_wide global               0s  tbd        "                                            );
-   KOIOS__append  ('>', "unit_wide.unit", "GLOBAL -Y-  another unit_wide_global       0s  tbd        "                                            );
-   KOIOS__append  ('>', "unit_wide.unit", "CONFIG -é-  and a unit_wide config         0s  tbd        "                                            );
+   KOIOS__append  ('[', "unit_wide.unit", "GLOBAL -A-  unit_wide global              ");
+   KOIOS__append  ('>', "unit_wide.unit", "GLOBAL -Y-  another unit_wide_global      ");
+   KOIOS__append  ('>', "unit_wide.unit", "CONFIG -é-  and a unit_wide config        ");
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify globals created by code");
@@ -1569,9 +1570,9 @@ koios_prog_globals2   (char a_scrp, char a_list, char a_unit)
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify creating unit_data.unit");
-   KOIOS__append  ('[', "unit_data.unit", "GLOBAL -J-  unit_data global               0s  tbd        "                                            );
-   KOIOS__append  ('>', "unit_data.unit", "CONFIG -ÿ-  another unit_data_global       0s  tbd        "                                            );
-   KOIOS__append  ('>', "unit_data.unit", "CONFIG -ò-  and a unit_data config         0s  tbd        "                                            );
+   KOIOS__append  ('[', "unit_data.unit", "GLOBAL -J-  unit_data global              ");
+   KOIOS__append  ('>', "unit_data.unit", "CONFIG -ÿ-  another unit_data_global      ");
+   KOIOS__append  ('>', "unit_data.unit", "CONFIG -ò-  and a unit_data config        ");
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify globals created by code");
@@ -1592,9 +1593,9 @@ koios_prog_globals2   (char a_scrp, char a_list, char a_unit)
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify re-running a new unit_wide.unit");
-   KOIOS__append  ('[', "unit_wide.unit", "GLOBAL -Y-  another unit_wide_global       0s  tbd        "                                            );
-   KOIOS__append  ('>', "unit_wide.unit", "GLOBAL -Z-  another unit_wide_global       0s  tbd        "                                            );
-   KOIOS__append  ('>', "unit_wide.unit", "CONFIG -ê-  and a unit_wide config         0s  tbd        "                                            );
+   KOIOS__append  ('[', "unit_wide.unit", "GLOBAL -Y-  another unit_wide_global      ");
+   KOIOS__append  ('>', "unit_wide.unit", "GLOBAL -Z-  another unit_wide_global      ");
+   KOIOS__append  ('>', "unit_wide.unit", "CONFIG -ê-  and a unit_wide config        ");
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify globals created by code");
@@ -1633,15 +1634,15 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify passible placement in normal unit");
-   KOIOS__append  ('[', UNIT_NORM_UNIT, "SHARED   -a-  prepare files for use                 0s  prepare                      ");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SHARED   -a-  prepare files for use                files ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   local      local variable                       - - - - - - - -   int h = 0;                                                  ");
-   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED   -b-  prepare more files                    0s  more                         ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED   -b-  prepare more files                   more  ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   local      local variable                       - - - - - - - -   int h = 0;                                                  ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   COND  (9)  script input file                   ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   GROUP      round one                           ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   DITTO (9)  - - - - - - - - - - - - - - - - - - ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   REUSE a/*  - - - - - - - - - - - - - - - - -   ");
-   KOIOS__append  ('>', UNIT_NORM_UNIT, "SCRP  [1a/A]  (SCRP) verify openning and closing    0s  open                         ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SCRP  [1a/A]  (SCRP) verify openning and closing   3s  open ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   local      local variable                       - - - - - - - -   int h = 0;                                                  ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   COND  (3)  script large output file            ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "   GROUP      round two                           ");
@@ -1657,7 +1658,7 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SHARED   -a-  prepare files for use                                               0s  prepare         -                                                                            ((aa.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SHARED   -a-  prepare files for use                files                       å············æ  Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=··········· ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   local      local variable                       - - - - - - - - - - - - -   int h = 0;                                                                                                                                                                                                                 ");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_nunit   , '>')      , "");
    yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_nunit   , '>')      , "   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip");
@@ -1667,7 +1668,7 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SHARED   -b-  prepare more files                                                  0s  more            -                                                                            ((bb.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SHARED   -b-  prepare more files                   more                        å············æ  Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=··········· ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   local      local variable                       - - - - - - - - - - - - -   int h = 0;                                                                                                                                                                                                                 ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   COND  (9)  script input file                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
@@ -1676,7 +1677,7 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   DITTO (9)  [ script input file ]- - - - - - - - - - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   REUSE a/*  [ prepare files for use ]- - - - - - - - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.003))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   REUSE a/*  ===[[ prepare files for use (EVERY) ]]===========================  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((bb.003))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_nunit   , '>')      , "");
    yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_nunit   , '>')      , "   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_nunit   , '>')      , "   DERAHS     local shared code statistics ------------------------------------   b     1     0     1     0     3     1     1  ·········1     1  a                        0  ·                        0      1      0      1      0      0      0      0      0      0   ");
@@ -1685,7 +1686,7 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SCRP  [1a/A]  (SCRP) verify openning and closing                                  0s  open            -                                                                            ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SCRP  [1a/A]  (SCRP) verify openning and closing                                  3s  open            ·                                                                            ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   local      local variable                       - - - - - - - - - - - - -   int h = 0;                                                                                                                                                                                                                 ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   COND  (3)  script large output file                                           - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
@@ -1694,7 +1695,7 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   DITTO (3)  [ script large output file ] - - - - - - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.002))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   REUSE b/k  [ prepare more files ] - - - - - - - - - - - - - - - - - - - - -   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.003))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   REUSE b/k  ===[[ prepare more files (k=N/A) ]]==============================  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.003))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , '>')      , "");
    yUNIT_minstr   ("... check result"                   , yenv_upeek       (sm_nunit   , '>')      , "   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (sm_nunit   , '>')      , "   PRCS       script statistics -----------------------------------------------   1     1     0     0     1     3     1     1  ···1······     1  b                        0  ·                        0      1      0      1      0      0      0      0      0      0   ");
@@ -1712,12 +1713,12 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
 
    yerr_ureset    ();
    yUNIT_mincond  ("verify passible placement in unit_head");
-   KOIOS__append  ('[', UNIT_HEAD_UNIT, "CONFIG   -ò-  prepare files for use                 0s  prepare                      ");
+   KOIOS__append  ('[', UNIT_HEAD_UNIT, "CONFIG   -ò-  prepare files for use                prepare                      ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   local      local variable                       - - - - - - - -   int h = 0;                                                  ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   COND  (9)  script input file                   ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   GROUP      round one                           ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   DITTO (9)  - - - - - - - - - - - - - - - - - - ");
-   KOIOS__append  ('>', UNIT_HEAD_UNIT, "GLOBAL   -B-  prepare more files                    0s  more                         ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "GLOBAL   -B-  prepare more files                   more                         ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   local      local variable                       - - - - - - - -   int h = 0;                                                  ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   COND  (3)  script large output file            ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   GROUP      round two                           ");
@@ -1732,7 +1733,7 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "CONFIG   -ò-  prepare files for use                                               0s  prepare         -                                                                            ((òò.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "CONFIG   -ò-  prepare files for use                prepare                     å············æ  Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=··········· ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "   local      local variable                       - - - - - - - - - - - - -   int h = 0;                                                                                                                                                                                                                 ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "   COND  (9)  script input file                                                  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((òò.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
@@ -1748,7 +1749,7 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "GLOBAL   -B-  prepare more files                                                  0s  more            -                                                                            ((BB.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "GLOBAL   -B-  prepare more files                   more                        å············æ  Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=··········· ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "   local      local variable                       - - - - - - - - - - - - -   int h = 0;                                                                                                                                                                                                                 ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , 'Ö')      , "   COND  (3)  script large output file                                           - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((BB.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
@@ -1783,7 +1784,7 @@ koios_prog_conds      (char a_scrp, char a_list, char a_unit)
 
    yerr_ureset    ();
    yUNIT_mincond  ("attempt a REUSE in unit_head");
-   KOIOS__append  ('[', UNIT_HEAD_UNIT, "GLOBAL   -J-  prepare files for use                 0s  prepare                      ");
+   KOIOS__append  ('[', UNIT_HEAD_UNIT, "GLOBAL   -J-  prepare files for use                prepare                      ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "   REUSE B/*  global variable                      - - - - - - - -   int h = 0;                                                  ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argB), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    1);
@@ -1824,7 +1825,7 @@ koios_prog_steps      (char a_scrp, char a_list, char a_unit)
    KOIOS_globals_empty (sm_globals);
 
    yUNIT_mincond ("verify step-level verbs in normal unit");
-   KOIOS__append  ('[', UNIT_NORM_UNIT, "SHARED -z-  overall shared code      0s  shared     ");
+   KOIOS__append  ('[', UNIT_NORM_UNIT, "SHARED -z-  overall shared code      shared     ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "COND        generate a summary      ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "get         ... check number         yUNIT_testreal    5   r_greater   15.0    ");
@@ -1860,7 +1861,7 @@ koios_prog_steps      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SHARED   -z-  overall shared code                                                 0s  shared          -                                                                            ((zz.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SHARED   -z-  overall shared code                  shared                      å············æ  Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=··········· ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   COND       generate a summary                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((zz.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
@@ -1883,7 +1884,7 @@ koios_prog_steps      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SCRP  [··/·]  global internal steps                                               0s  internal        -                                                                            ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "SCRP  [··/·]  global internal steps                                               0s  internal        ·                                                                            ((01.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "   COND       generate a summary                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((01.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_nunit   , 'Ö')      , "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
@@ -1914,7 +1915,7 @@ koios_prog_steps      (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc ();
 
    yUNIT_mincond ("verify step-level verbs in unit_head");
-   KOIOS__append  ('[', UNIT_HEAD_UNIT, "CONFIG -ÿ-  overall shared code      0s  shared     ");
+   KOIOS__append  ('[', UNIT_HEAD_UNIT, "CONFIG -ÿ-  overall shared code      shared     ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "COND        generate a summary      ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "get         ... check number         yUNIT_testreal    5   r_greater   15.0    ");
@@ -1927,7 +1928,7 @@ koios_prog_steps      (char a_scrp, char a_list, char a_unit)
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "append      ... first line           - - - - - - - -   weehoo           ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "appvis      ... next line            - - - - - - - -   voodoo           ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "mode        ... forced fail          FORCED_FAIL");
-   KOIOS__append  ('>', UNIT_HEAD_UNIT, "GLOBAL -Z-  global internal steps    0s  internal   ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "GLOBAL -Z-  global internal steps    internal   ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "COND        generate a summary      ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "get         ... check number         yUNIT_testreal    5   r_greater   15.0    ");
@@ -1950,7 +1951,7 @@ koios_prog_steps      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "CONFIG   -ÿ-  overall shared code                                                 0s  shared          -                                                                            ((ÿÿ.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "CONFIG   -ÿ-  overall shared code                  shared                      å············æ  Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=··········· ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "   COND       generate a summary                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((ÿÿ.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
@@ -1973,7 +1974,7 @@ koios_prog_steps      (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "GLOBAL   -Z-  global internal steps                                               0s  internal        -                                                                            ((ZZ.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "GLOBAL   -Z-  global internal steps                internal                    å············æ  Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=··········· ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "   COND       generate a summary                                                 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((ZZ.001))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... header"                         , yenv_upeek       (sm_hunit   , '>')      , "     exec     ... check string                     yUNIT_teststring            0                                                                                                     s_equal     hello                                                                                                ");
@@ -2010,7 +2011,7 @@ koios_prog_steps      (char a_scrp, char a_list, char a_unit)
    KOIOS__append  ('>', UNIT_NORM_UNIT, "echo        ... check integer        - - - - - - - -   h   i_equal     2       ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "SCRP        global internal steps    0s  internal   ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
-   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED -a-  global internal steps    0s  internal   ");
+   KOIOS__append  ('>', UNIT_NORM_UNIT, "SHARED -a-  global internal steps    internal   ");
    KOIOS__append  ('>', UNIT_NORM_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argA), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    5);
@@ -2027,9 +2028,9 @@ koios_prog_steps      (char a_scrp, char a_list, char a_unit)
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "get         ... check number         yUNIT_testreal    5   r_greater   15.0    ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "echo        ... check integer        - - - - - - - -   h   i_equal     2       ");
-   KOIOS__append  ('>', UNIT_HEAD_UNIT, "CONFIG -ò-  global internal steps    0s  internal   ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "CONFIG -ò-  global internal steps    internal   ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
-   KOIOS__append  ('>', UNIT_HEAD_UNIT, "GLOBAL -A-  global internal steps    0s  internal   ");
+   KOIOS__append  ('>', UNIT_HEAD_UNIT, "GLOBAL -A-  global internal steps    internal   ");
    KOIOS__append  ('>', UNIT_HEAD_UNIT, "exec        ... check string         yUNIT_teststring  0   s_equal     hello   ");
    yUNIT_minval   ("call args"                          , PROG_pseudo  (3, x_argB), -999);
    yUNIT_minval   ("... error count"                    , yerr_ulines (),    5);
@@ -2050,27 +2051,12 @@ char
 main                    (int a_argc, char *a_argv [])
 {
    /*---(locals)-----------+-----+-----+-*/
-   int         x_unit      =    0;
-   int         n           =    0;
+   char        x_unit      =    0;
    char        x_list      =    0;
-   /*---(arguments)----------------------*/
-   printf ("## %s\n", P_ONELINE);
-   printf ("## pre-yUNIT unit testing : %s\n", a_argv [0]);
-   if (a_argc >= 2) {
-      if (strcmp (a_argv [1], "--list") == 0)       x_list = 'y';
-      else if (strcmp (a_argv [1], "--inst") == 0)  x_list = '!';
-      else                                          x_unit = atoi (a_argv [1]);
-   }
-   if (x_unit  >  0 )         printf ("## selected single script (%2d)\n", x_unit);
-   else                       printf ("## selected all scripts\n");
-   if (x_list == 'y')         printf ("## list script(s) only\n");
-   else if (x_list == '!')    printf ("## generate initial wave file\n");
-   else                       printf ("## execute conditions and steps\n");
-   printf ("\n");
+   char        n           =    0;
    /*---(startup)------------------------*/
-   yUNIT_minunit ("koios_prog");
+   yUNIT_minunit (a_argc, a_argv, "koios_prog"  , P_ONELINE, &x_unit, &x_list);
    /*---(scripts)------------------------*/
-   /*> koios_prog_file      (++n, x_list, x_unit);                                    <*/
    koios_prog_args      (++n, x_list, x_unit);
    koios_prog_begin     (++n, x_list, x_unit);
    koios_prog_dawn      (++n, x_list, x_unit);
@@ -2086,4 +2072,3 @@ main                    (int a_argc, char *a_argv [])
    /*---(complete)-----------------------*/
    return 0;
 }
-

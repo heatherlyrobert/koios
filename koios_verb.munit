@@ -4,6 +4,60 @@
 
 
 char
+koios_verb_limits         (char a_scrp, char a_list, char a_unit)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        x_min       =    0;
+   char        x_max       =    0;
+   char        x_desc      [LEN_DESC]  = "";
+
+   yUNIT_minscrpy ("koios", "koios_verb" , "(VERB) verify parsing limits");
+   if (a_list == '!')    { yUNIT_minprcs (); return 0; }
+   if (a_unit != 0 && a_scrp != a_unit)  return 0;
+   if (a_list == 'y')                    return 0;
+   KOIOS_scrp_start ('-');
+
+   yUNIT_mincond  ("verify with SCRP (s)");
+   yUNIT_minval   ("get limits for SCRP"                , VERB_limits (KOIOS_SSCRP, &x_min, &x_max, x_desc),    1);
+   yUNIT_minval   ("... check min"                      , x_min         , 1);
+   yUNIT_minval   ("... check max"                      , x_max         , 5);
+   yUNIT_minstr   ("... check dasc"                     , x_desc        , "åSCRPæ¬¬¬");
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify with DITTO (1)");
+   yUNIT_minval   ("get limits for DITTO"               , VERB_limits (KOIOS_SONE , &x_min, &x_max, x_desc),    1);
+   yUNIT_minval   ("... check min"                      , x_min         , 1);
+   yUNIT_minval   ("... check max"                      , x_max         , 1);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify with missing min");
+   yUNIT_minval   ("get limits with a null"             , VERB_limits (KOIOS_SSCRP, NULL  , &x_max, x_desc),    1);
+   yUNIT_minval   ("... check max"                      , x_max         , 5);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify with missing max");
+   yUNIT_minval   ("get limits with a null"             , VERB_limits (KOIOS_SSCRP, &x_min, NULL  , x_desc),    1);
+   yUNIT_minval   ("... check min"                      , x_min         , 1);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("verify with COND (2)");
+   yUNIT_minval   ("get limits for COND"                , VERB_limits (KOIOS_STWO , &x_min, &x_max, x_desc),    1);
+   yUNIT_minval   ("... check min"                      , x_min         , 1);
+   yUNIT_minval   ("... check max"                      , x_max         , 2);
+   yUNIT_mindnoc  ();
+
+   yUNIT_mincond  ("attempt with an illegal spec");
+   yUNIT_minval   ("get limits for '*'"                 , VERB_limits ('*'        , &x_min, &x_max, x_desc), -999);
+   yUNIT_minval   ("... check min"                      , x_min         , 0);
+   yUNIT_minval   ("... check max"                      , x_max         , 0);
+   yUNIT_mindnoc  ();
+
+   KOIOS_scrp_finish ();
+   yUNIT_minprcs ();
+   return 0;
+}
+
+char
 koios_verb_data           (char a_scrp, char a_list, char a_unit)
 {
    /*---(locals)-----------+-----+-----+-*/
@@ -34,9 +88,9 @@ koios_verb_data           (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("verb data"                          , VERB__by_name  ("SCRP", &x_indent, x_desc, &x_spec, &x_locn, &x_is, &x_under, &x_count, &x_total, &x_conv, &x_code, &x_ditto, &x_select),    5);
    yUNIT_minval   ("... check indent"                   , x_indent    ,   0);
    yUNIT_minstr   ("... check description"              , x_desc      , "test script header");
-   yUNIT_minchr   ("... check spec"                     , x_spec      , 's');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_SSCRP);
    yUNIT_minchr   ("... check location"                 , x_locn      , 'n');
-   yUNIT_minchr   ("... check is"                       , x_is        , 'S');
+   yUNIT_minchr   ("... check is"                       , x_is        , KOIOS_SSCRP);
    yUNIT_minchr   ("... check under"                    , x_under     , '-');
    yUNIT_minval   ("... check count"                    , x_count     ,   0);
    yUNIT_minval   ("... check total"                    , x_total     ,   0);
@@ -109,7 +163,7 @@ koios_verb_data           (char a_scrp, char a_list, char a_unit)
    yUNIT_minchr   ("... check spec"                     , x_spec      , 'p');
    yUNIT_minchr   ("... check location"                 , x_locn      , '-');
    yUNIT_minchr   ("... check is"                       , x_is        , '-');
-   yUNIT_minchr   ("... check under"                    , x_under     , 'S');
+   yUNIT_minchr   ("... check under"                    , x_under     , KOIOS_SSCRP);
    yUNIT_minval   ("... check count"                    , x_count     ,   0);
    yUNIT_minval   ("... check total"                    , x_total     ,   0);
    yUNIT_minptr   ("... check conv"                     , x_conv      , CONV__gvar);
@@ -174,7 +228,7 @@ koios_verb_cursor         (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check verb"                     , x_verb      , "PREP");
    yUNIT_minval   ("... check indent"                   , x_indent    ,   0);
    yUNIT_minstr   ("... check description"              , x_desc      , "preparation before testing");
-   yUNIT_minchr   ("... check spec"                     , x_spec      , '2');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_STWO);
    yUNIT_minchr   ("... check location"                 , x_locn      , '-');
    yUNIT_minchr   ("... check is"                       , x_is        , 'P');
    yUNIT_minchr   ("... check under"                    , x_under     , '-');
@@ -246,9 +300,9 @@ koios_verb_cursor         (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check verb"                     , x_verb      , "SCRP");
    yUNIT_minval   ("... check indent"                   , x_indent    ,   0);
    yUNIT_minstr   ("... check description"              , x_desc      , "test script header");
-   yUNIT_minchr   ("... check spec"                     , x_spec      , 's');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_SSCRP);
    yUNIT_minchr   ("... check location"                 , x_locn      , 'n');
-   yUNIT_minchr   ("... check is"                       , x_is        , 'S');
+   yUNIT_minchr   ("... check is"                       , x_is        , KOIOS_SSCRP);
    yUNIT_minchr   ("... check under"                    , x_under     , '-');
    yUNIT_minval   ("... check count"                    , x_count     ,   0);
    yUNIT_minval   ("... check total"                    , x_total     ,   0);
@@ -278,7 +332,7 @@ koios_verb_cursor         (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check verb"                     , x_verb      , "stage");
    yUNIT_minval   ("... check indent"                   , x_indent    ,   3);
    yUNIT_minstr   ("... check description"              , x_desc      , "testing stage definition");
-   yUNIT_minchr   ("... check spec"                     , x_spec      , '2');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_STWO);
    yUNIT_minchr   ("... check location"                 , x_locn      , 'm');
    yUNIT_minchr   ("... check is"                       , x_is        , '-');
    yUNIT_minchr   ("... check under"                    , x_under     , 'W');
@@ -314,7 +368,7 @@ koios_verb_cursor         (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check verb"                     , x_verb      , "WAVE");
    yUNIT_minval   ("... check indent"                   , x_indent    ,   0);
    yUNIT_minstr   ("... check description"              , x_desc      , "testing wave definition");
-   yUNIT_minchr   ("... check spec"                     , x_spec      , '2');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_STWO);
    yUNIT_minchr   ("... check location"                 , x_locn      , 'm');
    yUNIT_minchr   ("... check is"                       , x_is        , 'W');
    yUNIT_minchr   ("... check under"                    , x_under     , '-');
@@ -332,9 +386,9 @@ koios_verb_cursor         (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check verb"                     , x_verb      , "#========");
    yUNIT_minval   ("... check indent"                   , x_indent    ,   0);
    yUNIT_minstr   ("... check description"              , x_desc      , "ending comment");
-   yUNIT_minchr   ("... check spec"                     , x_spec      , 'U');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_SAUDT);
    yUNIT_minchr   ("... check location"                 , x_locn      , '-');
-   yUNIT_minchr   ("... check is"                       , x_is        , 'A');
+   yUNIT_minchr   ("... check is"                       , x_is        , '6');
    yUNIT_minchr   ("... check under"                    , x_under     , '*');
    yUNIT_minval   ("... check count"                    , x_count     ,   0);
    yUNIT_minval   ("... check total"                    , x_total     ,   0);
@@ -363,7 +417,7 @@ koios_verb_detail         (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("verify quick success by name");
    yerr_ureset   ();
-   yUNIT_minstr   ("verb detail"                        , VERB__detail    (-1   , "SCRP"), "05) SCRP    0  test script header              s n S -    ·   ·  -conv- -code-  - -  Ï");
+   yUNIT_minstr   ("verb detail"                        , VERB__detail    (-1   , "SCRP"), "05) SCRP    0  test script header              S n S -    ·   ·  -conv- -code-  - -  Ï");
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("attempt a non-existant name");
@@ -417,7 +471,7 @@ koios_verb_addto          (char a_scrp, char a_list, char a_unit)
    x_exec  = VERB__index ("exec");
    x_local = VERB__index ("local");
    x_stage = VERB__index ("stage");
-   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              s n S -    ·   ·  -conv- -code-  - -  Ï");
+   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              S n S -    ·   ·  -conv- -code-  - -  Ï");
    yUNIT_minstr   ("COND detail"                        , VERB__detail    (x_cond , NULL), "11) COND    3  test condition                  2 - C S    ·   ·  -conv- -code-  - y  Ï");
    yUNIT_minstr   ("exec detail"                        , VERB__detail    (x_exec , NULL), "19) exec    5  function execution              f - - C    ·   ·  -conv- -code-  y y  Ï");
    yUNIT_minstr   ("local detail"                       , VERB__detail    (x_local, NULL), "17) local   3  local/script variable defn      p - - S    ·   ·  -conv- -code-  - -  Ï");
@@ -427,7 +481,7 @@ koios_verb_addto          (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify adding an occurance");
    yerr_ureset   ();
    yUNIT_minval   ("addto"                              , VERB__addto     (x_scrp)       ,    1);
-   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              s n S -    1   1  -conv- -code-  - -  Ï");
+   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              S n S -    1   1  -conv- -code-  - -  Ï");
    yUNIT_minstr   ("COND detail"                        , VERB__detail    (x_cond , NULL), "11) COND    3  test condition                  2 - C S    ·   ·  -conv- -code-  - y  Ï");
    yUNIT_minstr   ("exec detail"                        , VERB__detail    (x_exec , NULL), "19) exec    5  function execution              f - - C    ·   ·  -conv- -code-  y y  Ï");
    yUNIT_minstr   ("local detail"                       , VERB__detail    (x_local, NULL), "17) local   3  local/script variable defn      p - - S    ·   ·  -conv- -code-  - -  Ï");
@@ -437,7 +491,7 @@ koios_verb_addto          (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify adding to a different verb");
    yerr_ureset   ();
    yUNIT_minval   ("addto"                              , VERB__addto     (x_exec)       ,    1);
-   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              s n S -    1   1  -conv- -code-  - -  Ï");
+   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              S n S -    1   1  -conv- -code-  - -  Ï");
    yUNIT_minstr   ("COND detail"                        , VERB__detail    (x_cond , NULL), "11) COND    3  test condition                  2 - C S    ·   ·  -conv- -code-  - y  Ï");
    yUNIT_minstr   ("exec detail"                        , VERB__detail    (x_exec , NULL), "19) exec    5  function execution              f - - C    1   1  -conv- -code-  y y  Ï");
    yUNIT_minstr   ("local detail"                       , VERB__detail    (x_local, NULL), "17) local   3  local/script variable defn      p - - S    ·   ·  -conv- -code-  - -  Ï");
@@ -447,7 +501,7 @@ koios_verb_addto          (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify adding to the same verb");
    yerr_ureset   ();
    yUNIT_minval   ("addto"                              , VERB__addto     (x_exec)       ,    1);
-   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              s n S -    1   1  -conv- -code-  - -  Ï");
+   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              S n S -    1   1  -conv- -code-  - -  Ï");
    yUNIT_minstr   ("COND detail"                        , VERB__detail    (x_cond , NULL), "11) COND    3  test condition                  2 - C S    ·   ·  -conv- -code-  - y  Ï");
    yUNIT_minstr   ("exec detail"                        , VERB__detail    (x_exec , NULL), "19) exec    5  function execution              f - - C    2   2  -conv- -code-  y y  Ï");
    yUNIT_minstr   ("local detail"                       , VERB__detail    (x_local, NULL), "17) local   3  local/script variable defn      p - - S    ·   ·  -conv- -code-  - -  Ï");
@@ -457,7 +511,7 @@ koios_verb_addto          (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify a reset");
    yerr_ureset   ();
    yUNIT_minval   ("call reset"                         , VERB_script_reset ()           ,    0);
-   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              s n S -    ·   1  -conv- -code-  - -  Ï");
+   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              S n S -    ·   1  -conv- -code-  - -  Ï");
    yUNIT_minstr   ("COND detail"                        , VERB__detail    (x_cond , NULL), "11) COND    3  test condition                  2 - C S    ·   ·  -conv- -code-  - y  Ï");
    yUNIT_minstr   ("exec detail"                        , VERB__detail    (x_exec , NULL), "19) exec    5  function execution              f - - C    ·   2  -conv- -code-  y y  Ï");
    yUNIT_minstr   ("local detail"                       , VERB__detail    (x_local, NULL), "17) local   3  local/script variable defn      p - - S    ·   ·  -conv- -code-  - -  Ï");
@@ -467,7 +521,7 @@ koios_verb_addto          (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify adding another to same");
    yerr_ureset   ();
    yUNIT_minval   ("addto"                              , VERB__addto     (x_exec)       ,    1);
-   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              s n S -    ·   1  -conv- -code-  - -  Ï");
+   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              S n S -    ·   1  -conv- -code-  - -  Ï");
    yUNIT_minstr   ("COND detail"                        , VERB__detail    (x_cond , NULL), "11) COND    3  test condition                  2 - C S    ·   ·  -conv- -code-  - y  Ï");
    yUNIT_minstr   ("exec detail"                        , VERB__detail    (x_exec , NULL), "19) exec    5  function execution              f - - C    1   3  -conv- -code-  y y  Ï");
    yUNIT_minstr   ("local detail"                       , VERB__detail    (x_local, NULL), "17) local   3  local/script variable defn      p - - S    ·   ·  -conv- -code-  - -  Ï");
@@ -477,7 +531,7 @@ koios_verb_addto          (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond  ("verify initializing");
    yerr_ureset   ();
    yUNIT_minval   ("call init"                          , VERB_init       ()             ,    0);
-   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              s n S -    ·   ·  -conv- -code-  - -  Ï");
+   yUNIT_minstr   ("SCRP detail"                        , VERB__detail    (x_scrp , NULL), "05) SCRP    0  test script header              S n S -    ·   ·  -conv- -code-  - -  Ï");
    yUNIT_minstr   ("COND detail"                        , VERB__detail    (x_cond , NULL), "11) COND    3  test condition                  2 - C S    ·   ·  -conv- -code-  - y  Ï");
    yUNIT_minstr   ("exec detail"                        , VERB__detail    (x_exec , NULL), "19) exec    5  function execution              f - - C    ·   ·  -conv- -code-  y y  Ï");
    yUNIT_minstr   ("local detail"                       , VERB__detail    (x_local, NULL), "17) local   3  local/script variable defn      p - - S    ·   ·  -conv- -code-  - -  Ï");
@@ -537,16 +591,16 @@ koios_verb_under          (char a_scrp, char a_list, char a_unit)
    x_under     = 'S';
    yUNIT_minval   ("verify SCRP after SCRP"             , VERB__parse_under  (x_unit,  1, "SCRP"   , 'S', '-', &x_under),    2);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
-   x_under     = 'C';
+   x_under     = COND;
    yUNIT_minval   ("verify SCRP-level after COND-level" , VERB__parse_under  (x_unit,  1, "SCRP"   , 'S', '-', &x_under),    2);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
-   x_under     = 'C';
+   x_under     = COND;
    yUNIT_minval   ("verify SCRP-level after COND-level" , VERB__parse_under  (x_unit,  1, "SHARED" , 'S', '-', &x_under),    2);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
-   x_under     = 'C';
+   x_under     = COND;
    yUNIT_minval   ("verify SCRP-level after COND-level" , VERB__parse_under  (x_unit,  1, "GLOBAL" , 'S', '-', &x_under),    2);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
-   x_under     = 'C';
+   x_under     = COND;
    yUNIT_minval   ("verify SCRP-level after COND-level" , VERB__parse_under  (x_unit,  1, "CONFIG" , 'S', '-', &x_under),    2);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
    x_under     = '-';
@@ -561,7 +615,7 @@ koios_verb_under          (char a_scrp, char a_list, char a_unit)
    x_under     = '-';
    yUNIT_minval   ("verify SCRP-level after STEP-level" , VERB__parse_under  (x_unit,  1, "CONFIG" , 'S', '-', &x_under),    2);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
-   x_under     = '#';
+   x_under     = DOCM;
    yUNIT_minval   ("verify SCRP after comment"          , VERB__parse_under  (x_unit,  1, "SCRP"   , 'S', '-', &x_under),    2);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
    yUNIT_mindnoc  ();
@@ -569,32 +623,32 @@ koios_verb_under          (char a_scrp, char a_list, char a_unit)
    yerr_ureset   ();
    yUNIT_mincond  ("verify COND-level verb");
    x_under     = '-';
-   yUNIT_minval   ("attempt COND at first"              , VERB__parse_under  (x_unit,  1, "COND"   , 'C', 'S', &x_under), -999);
+   yUNIT_minval   ("attempt COND at first"              , VERB__parse_under  (x_unit,  1, "COND"   , COND, 'S', &x_under), -999);
    yUNIT_minchr   ("... check under"                    , x_under     , '-');
    x_under     = 'P';
-   yUNIT_minval   ("attempt COND after PREP"            , VERB__parse_under  (x_unit,  1, "COND"   , 'C', 'S', &x_under), -999);
+   yUNIT_minval   ("attempt COND after PREP"            , VERB__parse_under  (x_unit,  1, "COND"   , COND, 'S', &x_under), -999);
    yUNIT_minchr   ("... check under"                    , x_under     , 'P');
    x_under     = 'S';
-   yUNIT_minval   ("verify COND after SCRP-level"       , VERB__parse_under  (x_unit,  1, "COND"   , 'C', 'S', &x_under),    1);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
-   x_under     = 'C';
-   yUNIT_minval   ("verify COND after COND"             , VERB__parse_under  (x_unit,  1, "COND"   , 'C', 'S', &x_under),    3);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
-   x_under     = 'C';
-   yUNIT_minval   ("verify GROUP after COND"            , VERB__parse_under  (x_unit,  1, "GROUP"  , 'C', 'S', &x_under),    3);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
-   x_under     = 'C';
-   yUNIT_minval   ("verify COND after GROUP"            , VERB__parse_under  (x_unit,  1, "COND"   , 'C', 'S', &x_under),    3);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
-   x_under     = 'C';
-   yUNIT_minval   ("verify DITTO after COND"            , VERB__parse_under  (x_unit,  1, "DITTO"  , 'C', 'S', &x_under),    3);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
-   x_under     = 'C';
-   yUNIT_minval   ("verify REUSE after COND"            , VERB__parse_under  (x_unit,  1, "REUSE"  , 'C', 'S', &x_under),    3);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
-   x_under     = 'C';
-   yUNIT_minval   ("verify COND after EXEC-level"       , VERB__parse_under  (x_unit,  1, "COND"   , 'C', 'S', &x_under),    3);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
+   yUNIT_minval   ("verify COND after SCRP-level"       , VERB__parse_under  (x_unit,  1, "COND"   , COND, 'S', &x_under),    1);
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
+   x_under     = COND;
+   yUNIT_minval   ("verify COND after COND"             , VERB__parse_under  (x_unit,  1, "COND"   , COND, 'S', &x_under),    3);
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
+   x_under     = COND;
+   yUNIT_minval   ("verify GROUP after COND"            , VERB__parse_under  (x_unit,  1, "GROUP"  , COND, 'S', &x_under),    3);
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
+   x_under     = COND;
+   yUNIT_minval   ("verify COND after GROUP"            , VERB__parse_under  (x_unit,  1, "COND"   , COND, 'S', &x_under),    3);
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
+   x_under     = COND;
+   yUNIT_minval   ("verify DITTO after COND"            , VERB__parse_under  (x_unit,  1, "DITTO"  , COND, 'S', &x_under),    3);
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
+   x_under     = COND;
+   yUNIT_minval   ("verify REUSE after COND"            , VERB__parse_under  (x_unit,  1, "REUSE"  , COND, 'S', &x_under),    3);
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
+   x_under     = COND;
+   yUNIT_minval   ("verify COND after EXEC-level"       , VERB__parse_under  (x_unit,  1, "COND"   , COND, 'S', &x_under),    3);
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
    yUNIT_mindnoc  ();
 
    yerr_ureset   ();
@@ -608,10 +662,10 @@ koios_verb_under          (char a_scrp, char a_list, char a_unit)
    x_under     = 'S';
    yUNIT_minval   ("verify WAVE after SCRP-level"       , VERB__parse_under  (x_unit,  1, "WAVE"   , 'W', '-', &x_under),    5);
    yUNIT_minchr   ("... check under"                    , x_under     , 'W');
-   x_under     = 'C';
+   x_under     = COND;
    yUNIT_minval   ("verify WAVE after COND-level"       , VERB__parse_under  (x_unit,  1, "WAVE"   , 'W', '-', &x_under),    5);
    yUNIT_minchr   ("... check under"                    , x_under     , 'W');
-   x_under     = 'C';
+   x_under     = COND;
    yUNIT_minval   ("verify WAVE after STEP-level"       , VERB__parse_under  (x_unit,  1, "WAVE"   , 'W', '-', &x_under),    5);
    yUNIT_minchr   ("... check under"                    , x_under     , 'W');
    yUNIT_mindnoc  ();
@@ -627,9 +681,9 @@ koios_verb_under          (char a_scrp, char a_list, char a_unit)
    x_under     = 'S';
    yUNIT_minval   ("attempt STAGE in SCRP-level"        , VERB__parse_under  (x_unit,  1, "stage"  , '-', 'W', &x_under), -999);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
-   x_under     = 'C';
+   x_under     = COND;
    yUNIT_minval   ("attempt STAGE in COND-level"        , VERB__parse_under  (x_unit,  1, "stage"  , '-', 'W', &x_under), -999);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
    x_under     = 'W';
    yUNIT_minval   ("verify STAGE in WAVE"               , VERB__parse_under  (x_unit,  1, "stage"  , '-', 'W', &x_under),    4);
    yUNIT_minchr   ("... check under"                    , x_under     , 'W');
@@ -646,9 +700,9 @@ koios_verb_under          (char a_scrp, char a_list, char a_unit)
    x_under     = 'S';
    yUNIT_minval   ("attempt GLOBAL in SCRP-level"       , VERB__parse_under  (x_unit,  1, "global" , '-', 'P', &x_under), -999);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
-   x_under     = 'C';
+   x_under     = COND;
    yUNIT_minval   ("attempt GLOBAL in COND-level"       , VERB__parse_under  (x_unit,  1, "global" , '-', 'P', &x_under), -999);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
    x_under     = 'W';
    yUNIT_minval   ("attempt GLOBAL in WAVE"             , VERB__parse_under  (x_unit,  1, "global" , '-', 'P', &x_under), -999);
    yUNIT_minchr   ("... check under"                    , x_under     , 'W');
@@ -665,9 +719,9 @@ koios_verb_under          (char a_scrp, char a_list, char a_unit)
    x_under     = 'S';
    yUNIT_minval   ("verify LOCAL in SCRP-level"         , VERB__parse_under  (x_unit,  1, "local"  , '-', 'S', &x_under),    4);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
-   x_under     = 'C';
+   x_under     = COND;
    yUNIT_minval   ("attempt LOCAL in COND-level"        , VERB__parse_under  (x_unit,  1, "local"  , '-', 'S', &x_under), -999);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
    x_under     = 'W';
    yUNIT_minval   ("attempt LOCAL in WAVE"              , VERB__parse_under  (x_unit,  1, "local"  , '-', 'S', &x_under), -999);
    yUNIT_minchr   ("... check under"                    , x_under     , 'W');
@@ -676,38 +730,38 @@ koios_verb_under          (char a_scrp, char a_list, char a_unit)
    yerr_ureset   ();
    yUNIT_mincond  ("verify EXEC only in COND-level");
    x_under     = '-';
-   yUNIT_minval   ("attempt EXEC at first"              , VERB__parse_under  (x_unit,  1, "exec"   , '-', 'C', &x_under), -999);
+   yUNIT_minval   ("attempt EXEC at first"              , VERB__parse_under  (x_unit,  1, "exec"   , '-', COND, &x_under), -999);
    yUNIT_minchr   ("... check under"                    , x_under     , '-');
    x_under     = 'P';
-   yUNIT_minval   ("attempt EXEC in PREP"               , VERB__parse_under  (x_unit,  1, "exec"   , '-', 'C', &x_under), -999);
+   yUNIT_minval   ("attempt EXEC in PREP"               , VERB__parse_under  (x_unit,  1, "exec"   , '-', COND, &x_under), -999);
    yUNIT_minchr   ("... check under"                    , x_under     , 'P');
    x_under     = 'S';
-   yUNIT_minval   ("verify EXEC in SCRP-level"          , VERB__parse_under  (x_unit,  1, "exec"   , '-', 'C', &x_under), -999);
+   yUNIT_minval   ("verify EXEC in SCRP-level"          , VERB__parse_under  (x_unit,  1, "exec"   , '-', COND, &x_under), -999);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
-   x_under     = 'C';
-   yUNIT_minval   ("attempt EXEC in COND-level"         , VERB__parse_under  (x_unit,  1, "exec"   , '-', 'C', &x_under),    4);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
+   x_under     = COND;
+   yUNIT_minval   ("attempt EXEC in COND-level"         , VERB__parse_under  (x_unit,  1, "exec"   , '-', COND, &x_under),    4);
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
    x_under     = 'W';
-   yUNIT_minval   ("attempt EXEC in WAVE"               , VERB__parse_under  (x_unit,  1, "exec"   , '-', 'C', &x_under), -999);
+   yUNIT_minval   ("attempt EXEC in WAVE"               , VERB__parse_under  (x_unit,  1, "exec"   , '-', COND, &x_under), -999);
    yUNIT_minchr   ("... check under"                    , x_under     , 'W');
    yUNIT_mindnoc  ();
 
    yerr_ureset   ();
    yUNIT_mincond  ("verify comment anywhere");
    x_under     = '-';
-   yUNIT_minval   ("verify comment overall"             , VERB__parse_under  (x_unit,  1, "#>"     , '#', '*', &x_under),    7);
+   yUNIT_minval   ("verify comment overall"             , VERB__parse_under  (x_unit,  1, "#>"     , DOCM, '*', &x_under),    7);
    yUNIT_minchr   ("... check under"                    , x_under     , '-');
    x_under     = 'P';
-   yUNIT_minval   ("verify comment in PREP"             , VERB__parse_under  (x_unit,  1, "#>"     , '#', '*', &x_under),    7);
+   yUNIT_minval   ("verify comment in PREP"             , VERB__parse_under  (x_unit,  1, "#>"     , DOCM, '*', &x_under),    7);
    yUNIT_minchr   ("... check under"                    , x_under     , 'P');
    x_under     = 'S';
-   yUNIT_minval   ("verify comment in SCRP"             , VERB__parse_under  (x_unit,  1, "#>"     , '#', '*', &x_under),    7);
+   yUNIT_minval   ("verify comment in SCRP"             , VERB__parse_under  (x_unit,  1, "#>"     , DOCM, '*', &x_under),    7);
    yUNIT_minchr   ("... check under"                    , x_under     , 'S');
-   x_under     = 'C';
-   yUNIT_minval   ("verify comment in SCRP"             , VERB__parse_under  (x_unit,  1, "#>"     , '#', '*', &x_under),    7);
-   yUNIT_minchr   ("... check under"                    , x_under     , 'C');
+   x_under     = COND;
+   yUNIT_minval   ("verify comment in SCRP"             , VERB__parse_under  (x_unit,  1, "#>"     , DOCM, '*', &x_under),    7);
+   yUNIT_minchr   ("... check under"                    , x_under     , COND);
    x_under     = 'W';
-   yUNIT_minval   ("verify comment in WAVE"             , VERB__parse_under  (x_unit,  1, "#>"     , '#', '*', &x_under),    7);
+   yUNIT_minval   ("verify comment in WAVE"             , VERB__parse_under  (x_unit,  1, "#>"     , DOCM, '*', &x_under),    7);
    yUNIT_minchr   ("... check under"                    , x_under     , 'W');
    yUNIT_mindnoc  ();
 
@@ -742,7 +796,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("parse verb"                         , VERB_parse  (x_unit,  1, "SCRP        ", &x_under, x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1   );
    yUNIT_minstr   ("... check verb"                     , x_verb      , "SCRP");
    yUNIT_minval   ("... check index"                    , x_index     , 5);
-   yUNIT_minchr   ("... check spec"                     , x_spec      , 's');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_SSCRP);
    yUNIT_minchr   ("... check location"                 , x_locn      , 'n');
    yUNIT_minptr   ("... check conv"                     , x_conv      , CONV__scrp);
    yUNIT_minptr   ("... check code"                     , x_code      , CODE__scrp);
@@ -770,7 +824,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("parse verb"                         , VERB_parse  (x_unit,  1, "SCRP    [1a]", &x_under, x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1   );
    yUNIT_minstr   ("... check verb"                     , x_verb      , "SCRP");
    yUNIT_minval   ("... check index"                    , x_index     , 5);
-   yUNIT_minchr   ("... check spec"                     , x_spec      , 's');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_SSCRP);
    yUNIT_minchr   ("... check location"                 , x_locn      , 'n');
    yUNIT_minptr   ("... check conv"                     , x_conv      , CONV__scrp);
    yUNIT_minptr   ("... check code"                     , x_code      , CODE__scrp);
@@ -795,7 +849,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("parse COND"                         , VERB_parse (x_unit , 10, " COND"      , &x_under, x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1);
    yUNIT_minstr   ("... check verb"                     , x_verb      , "COND");
    yUNIT_minval   ("... check index"                    , x_index     , 999);
-   yUNIT_minchr   ("... check spec"                     , x_spec      , '2');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_STWO);
    yUNIT_minchr   ("... check location"                 , x_locn      , '-');
    yUNIT_minptr   ("... check conv pointer"             , x_conv      , CONV__cond);
    yUNIT_minptr   ("... check code pointer"             , x_code      , CODE__cond);
@@ -807,7 +861,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("parse COND"                         , VERB_parse (x_unit , 40, " COND (1)"  , &x_under, x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1);
    yUNIT_minstr   ("... check verb"                     , x_verb      , "COND");
    yUNIT_minval   ("... check index"                    , x_index     , 999);
-   yUNIT_minchr   ("... check spec"                     , x_spec      , '2');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_STWO);
    yUNIT_minchr   ("... check location"                 , x_locn      , '-');
    yUNIT_minptr   ("... check conv pointer"             , x_conv      , CONV__cond);
    yUNIT_minptr   ("... check code pointer"             , x_code      , CODE__cond);
@@ -828,8 +882,8 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yerr_ureset   ();
    yUNIT_minval   ("parse verb"                         , VERB_parse  (x_mast, 75, "GLOBAL   -A-", &x_under, x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1   );
    yUNIT_minstr   ("... check verb"                     , x_verb      , "GLOBAL");
-   yUNIT_minval   ("... check index"                    , x_index     , 7);
-   yUNIT_minchr   ("... check spec"                     , x_spec      , 's');
+   yUNIT_minval   ("... check index"                    , x_index     , 6);
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_SSHAR);
    yUNIT_minchr   ("... check location"                 , x_locn      , 'm');
    yUNIT_minptr   ("... check conv"                     , x_conv      , CONV__shared);
    yUNIT_minptr   ("... check code"                     , x_code      , CODE__shared);
@@ -853,7 +907,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("parse verb"                         , VERB_parse  (x_unit, 95, "SHARED   -a-", &x_under, x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1);
    yUNIT_minstr   ("... check verb"                     , x_verb      , "SHARED");
    yUNIT_minval   ("... check index"                    , x_index     , 999);
-   yUNIT_minchr   ("... check spec"                     , x_spec      , 's');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_SSHAR);
    yUNIT_minchr   ("... check location"                 , x_locn      , 'n');
    yUNIT_minptr   ("... check conv"                     , x_conv      , CONV__shared);
    yUNIT_minptr   ("... check code"                     , x_code      , CODE__shared);
@@ -877,7 +931,7 @@ koios_verb_parse          (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("parse COND"                         , VERB_parse (x_unit , 10, " COND"      , &x_under, x_verb, &x_index, &x_spec, &x_locn, &x_conv, &x_code), 1);
    yUNIT_minstr   ("... check verb"                     , x_verb      , "COND");
    yUNIT_minval   ("... check index"                    , x_index     , 999);
-   yUNIT_minchr   ("... check spec"                     , x_spec      , '2');
+   yUNIT_minchr   ("... check spec"                     , x_spec      , KOIOS_STWO);
    yUNIT_minchr   ("... check location"                 , x_locn      , '-');
    yUNIT_minptr   ("... check conv pointer"             , x_conv      , CONV__cond);
    yUNIT_minptr   ("... check code pointer"             , x_code      , CODE__cond);
@@ -972,30 +1026,54 @@ koios_verb_ditto          (char a_scrp, char a_list, char a_unit)
    return 0;
 }
 
+/*> char                                                                                  <* 
+ *> main                    (int a_argc, char *a_argv [])                                 <* 
+ *> {                                                                                     <* 
+ *>    /+---(locals)-----------+-----+-----+-+/                                           <* 
+ *>    int         x_unit      =    0;                                                    <* 
+ *>    int         n           =    0;                                                    <* 
+ *>    char        x_list      =    0;                                                    <* 
+ *>    /+---(arguments)----------------------+/                                           <* 
+ *>    printf ("## %s\n", P_ONELINE);                                                     <* 
+ *>    printf ("## pre-yUNIT unit testing : %s\n", a_argv [0]);                           <* 
+ *>    if (a_argc >= 2) {                                                                 <* 
+ *>       if (strcmp (a_argv [1], "--list") == 0)       x_list = 'y';                     <* 
+ *>       else if (strcmp (a_argv [1], "--inst") == 0)  x_list = '!';                     <* 
+ *>       else                                          x_unit = atoi (a_argv [1]);       <* 
+ *>    }                                                                                  <* 
+ *>    if (x_unit  >  0 )         printf ("## selected single script (%2d)\n", x_unit);   <* 
+ *>    else                       printf ("## selected all scripts\n");                   <* 
+ *>    if (x_list == 'y')         printf ("## list script(s) only\n");                    <* 
+ *>    else if (x_list == '!')    printf ("## generate initial wave file\n");             <* 
+ *>    else                       printf ("## execute conditions and steps\n");           <* 
+ *>    printf ("\n");                                                                     <* 
+ *>    /+---(startup)------------------------+/                                           <* 
+ *>    yUNIT_minunit ("koios_verb");                                                      <* 
+ *>    /+---(scripts)------------------------+/                                           <* 
+ *>    koios_verb_data      (++n, x_list, x_unit);                                        <* 
+ *>    koios_verb_cursor    (++n, x_list, x_unit);                                        <* 
+ *>    koios_verb_detail    (++n, x_list, x_unit);                                        <* 
+ *>    koios_verb_addto     (++n, x_list, x_unit);                                        <* 
+ *>    koios_verb_under     (++n, x_list, x_unit);                                        <* 
+ *>    koios_verb_parse     (++n, x_list, x_unit);                                        <* 
+ *>    koios_verb_ditto     (++n, x_list, x_unit);                                        <* 
+ *>    /+---(wrapup)-------------------------+/                                           <* 
+ *>    yUNIT_mintinu    ();                                                               <* 
+ *>    /+---(complete)-----------------------+/                                           <* 
+ *>    return 0;                                                                          <* 
+ *> }                                                                                     <*/
+
 char
 main                    (int a_argc, char *a_argv [])
 {
    /*---(locals)-----------+-----+-----+-*/
-   int         x_unit      =    0;
-   int         n           =    0;
+   char        x_unit      =    0;
    char        x_list      =    0;
-   /*---(arguments)----------------------*/
-   printf ("## %s\n", P_ONELINE);
-   printf ("## pre-yUNIT unit testing : %s\n", a_argv [0]);
-   if (a_argc >= 2) {
-      if (strcmp (a_argv [1], "--list") == 0)       x_list = 'y';
-      else if (strcmp (a_argv [1], "--inst") == 0)  x_list = '!';
-      else                                          x_unit = atoi (a_argv [1]);
-   }
-   if (x_unit  >  0 )         printf ("## selected single script (%2d)\n", x_unit);
-   else                       printf ("## selected all scripts\n");
-   if (x_list == 'y')         printf ("## list script(s) only\n");
-   else if (x_list == '!')    printf ("## generate initial wave file\n");
-   else                       printf ("## execute conditions and steps\n");
-   printf ("\n");
+   char        n           =    0;
    /*---(startup)------------------------*/
-   yUNIT_minunit ("koios_verb");
+   yUNIT_minunit (a_argc, a_argv, "koios_verb"  , P_ONELINE, &x_unit, &x_list);
    /*---(scripts)------------------------*/
+   koios_verb_limits    (++n, x_list, x_unit);
    koios_verb_data      (++n, x_list, x_unit);
    koios_verb_cursor    (++n, x_list, x_unit);
    koios_verb_detail    (++n, x_list, x_unit);
@@ -1008,4 +1086,3 @@ main                    (int a_argc, char *a_argv [])
    /*---(complete)-----------------------*/
    return 0;
 }
-

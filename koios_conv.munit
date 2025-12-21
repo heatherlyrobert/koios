@@ -355,20 +355,20 @@ koios_conv_scrps   (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify writing a SHARED");
-   yUNIT_minval   ("write conv line"                    , CONV__shared    (sm_conv   , "SHARED"  , "in the same file"    , ""               , ""               , "0s"        , ""               , "simple"    , ""     , "·······", '-', 'a', '-', &sm_share, &sm_select),    0);
+   yUNIT_minval   ("write conv line"                    , CONV__shared    (sm_conv   , "SHARED"  , "in the same file"    , "·"              , ""               , ""          , "·"              , "simple"    , ""     , "·······", '-', 'a', '-', &sm_share, &sm_select),    0);
    yUNIT_minval   ("... check count"                    , yenv_ulines     (sm_nconv)               , 30);
    yUNIT_minstr   ("... check result"                   , yenv_uindex     (sm_nconv  , sm_vmark) , ""                                         );
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , ""                                         );
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , ""                                         );
    yUNIT_minstr   ("... ruler"                          , yenv_upeek      (sm_nconv  , '>')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... title"                          , yenv_upeek      (sm_nconv  , '>')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , "SHARED   -a-  in the same file                                                    0s  simple                                                                                       ((aa.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , "SHARED   -a-  in the same file                     simple                      ·               ·                                                                                                                                                                                                        ");
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_vmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify writing a GLOBAL");
-   yUNIT_minval   ("write conv line"                    , CONV__shared    (sm_conv   , "GLOBAL"  , "in the master file"  , ""               , ""               , "5s"        , ""               , "central"   , ""     , "·······", '-', 'Z', '-', &sm_share, &sm_select),    0);
+   yUNIT_minval   ("write conv line"                    , CONV__shared    (sm_conv   , "GLOBAL"  , "in the master file"  , "·"              , ""               , ""          , "·"              , "central"   , ""     , "·······", '-', 'Z', '-', &sm_share, &sm_select),    0);
    yUNIT_minval   ("... check count"                    , yenv_ulines     (sm_nconv)               , 39);
    yUNIT_minstr   ("... check result"                   , yenv_uindex     (sm_nconv  , sm_vmark) , ""                                         );
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , "   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip");
@@ -378,13 +378,13 @@ koios_conv_scrps   (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , ""                                         );
    yUNIT_minstr   ("... ruler"                          , yenv_upeek      (sm_nconv  , '>')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... title"                          , yenv_upeek      (sm_nconv  , '>')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , "GLOBAL   -Z-  in the master file                                                  5s  central                                                                                      ((ZZ.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , "GLOBAL   -Z-  in the master file                   central                     ·               ·                                                                                                                                                                                                        ");
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_vmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify writing a CONFIG");
-   yUNIT_minval   ("write conv line"                    , CONV__shared    (sm_conv   , "CONFIG"  , ""                    , ""               , ""               , ""          , ""               , ""          , ""     , "·······", '-', 'ò', '-', &sm_share, &sm_select),    0);
+   yUNIT_minval   ("write conv line"                    , CONV__shared    (sm_conv   , "CONFIG"  , "·"                   , "·"              , ""               , ""          , "·"              , "·"         , ""     , "·······", '-', 'ò', '-', &sm_share, &sm_select),    0);
    yUNIT_minval   ("... check count"                    , yenv_ulines     (sm_nconv)               , 48);
    yUNIT_minstr   ("... check result"                   , yenv_uindex     (sm_nconv  , sm_vmark) , ""                                         );
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , "   #========  =================================================================  ID   TOP======glob====shar====scrp   MID======cond====ditto=and=usage=======local-reuse-and-list============global-reuse-and-list===========skip   BOT========real=====vars=====void=====skip====DITTO=====real=====void=====skip");
@@ -394,7 +394,7 @@ koios_conv_scrps   (char a_scrp, char a_list, char a_unit)
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , ""                                         );
    yUNIT_minstr   ("... ruler"                          , yenv_upeek      (sm_nconv  , '>')      , "#23456789-12  123456789-123456789-123456789-12345  123456789-123456789-123456  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-  123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789-  123456789-123456789- ");
    yUNIT_minstr   ("... title"                          , yenv_upeek      (sm_nconv  , '>')      , "#==(verb)===  ===========(description)===========  =====(function)===========  ========================(arguments)=================================================================  ==(test)==  ==========================(results)=================================================================  ========(var)======= ");
-   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , "CONFIG   -ò-                                                                                                                                                                       ((òò.---))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , "CONFIG   -ò-  ·                                    ·                           ·               ·                                                                                                                                                                                                        ");
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , '>')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_vmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
@@ -530,19 +530,21 @@ koios_conv_conds   (char a_scrp, char a_list, char a_unit)
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify writing a REUSE (old-style)");
+   yUNIT_minval   ("... create global"                  , yUNIT_reuse_parse  ('g',    "s  g  h     22  verify openning and closing                                           1     0     0     1     6     4     2  ·2········     0  ·                        0  ·                        0     14     10      1      3      0      8      6      2      0    å···a·b···c··æ  a=one, b=two, c=thr "),    1);
    yUNIT_minval   ("write conv line"                    , CONV__reuse     (sm_conv   , "REUSE"   , "call share"          , ""               , ""               , ""          , ""               , ""          , ""     , "·······", '-', 's', '-', &sm_share, &sm_select),    0);
    yUNIT_minval   ("... check count"                    , yenv_ulines     (sm_nconv)             , 10);
    yUNIT_minstr   ("... check result"                   , yenv_uindex     (sm_nconv  , sm_vmark) , ""                                         );
-   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , 'Ö')      , "   REUSE s/*  call share                                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.041))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , 'Ö')      , "   REUSE s/*  ===[[ verify openning and closing (EVERY) ]]=====================  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.041))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , 'Ö')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_vmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
 
    yUNIT_mincond  ("verify writing a REUSE (new-style)");
+   yUNIT_minval   ("... create global"                  , yUNIT_reuse_parse  ('g',    "ò  g  h     22  verify data samples                                                   1     0     0     1     6     4     2  ·2········     0  ·                        0  ·                        0     14     10      1      3      0      8      6      2      0    å···a·b···c··æ  a=one, b=two, c=thr "),    1);
    yUNIT_minval   ("write conv line"                    , CONV__reuse     (sm_conv   , "REUSE"   , "call share"          , ""               , ""               , ""          , ""               , ""          , ""     , "·······", '-', 'ò', 'b', &sm_share, &sm_select),    0);
    yUNIT_minval   ("... check count"                    , yenv_ulines     (sm_nconv)             , 12);
    yUNIT_minstr   ("... check result"                   , yenv_uindex     (sm_nconv  , sm_vmark) , ""                                         );
-   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , 'Ö')      , "   REUSE ò/b  call share                                                         - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.042))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
+   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , 'Ö')      , "   REUSE ò/b  ===[[ verify data samples (b=two) ]]=============================  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -   ((02.042))  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  ");
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_nconv  , 'Ö')      , "(n/a)"                                    );
    yUNIT_minval   ("... save spot"                      , sm_vmark = yenv_uwhere    () + 1         ,  666);
    yUNIT_mindnoc  ();
@@ -645,29 +647,54 @@ koios_conv_steps   (char a_scrp, char a_list, char a_unit)
    return 0;
 }
 
+/*> char                                                                                        <* 
+ *> main                    (int a_argc, char *a_argv [])                                       <* 
+ *> {                                                                                           <* 
+ *>    /+---(locals)-----------+-----+-----+-+/                                                 <* 
+ *>    int         x_unit      =    0;                                                          <* 
+ *>    int         n           =    0;                                                          <* 
+ *>    char        x_list      =  '-';                                                          <* 
+ *>    /+---(arguments)----------------------+/                                                 <* 
+ *>    printf ("## %s\n", P_ONELINE);                                                           <* 
+ *>    printf ("## pre-yUNIT unit testing : %s\n", a_argv [0]);                                 <* 
+ *>    if (a_argc >= 2) {                                                                       <* 
+ *>       if (strcmp (a_argv [1], "--list") == 0)       x_list = 'y';                           <* 
+ *>       else if (strcmp (a_argv [1], "--inst") == 0)  x_list = '!';                           <* 
+ *>       else                                          x_unit = atoi (a_argv [1]);             <* 
+ *>    }                                                                                        <* 
+ *>    if (x_unit  >  0 )         printf ("## selected single script (%2d)\n", x_unit);         <* 
+ *>    else                       printf ("## selected all scripts\n");                         <* 
+ *>    if (x_list == 'y')         printf ("## list script(s) only\n");                          <* 
+ *>    else if (x_list == '!')    printf ("## generate initial wave file\n");                   <* 
+ *>    else                       printf ("## execute conditions and steps\n");                 <* 
+ *>    printf ("\n");                                                                           <* 
+ *>    /+---(startup)------------------------+/                                                 <* 
+ *>    yUNIT_minunit ("koios_conv");                                                            <* 
+ *>    /+---(scripts)------------------------+/                                                 <* 
+ *>    koios_conv_defense   (++n, x_list, x_unit);                                              <* 
+ *>    koios_conv_printf    (++n, x_list, x_unit);                                              <* 
+ *>    /+> koios_conv_summary   (++n, x_list, x_unit);                                    <+/   <* 
+ *>    koios_conv_preps     (++n, x_list, x_unit);                                              <* 
+ *>    koios_conv_scrp_add  (++n, x_list, x_unit);                                              <* 
+ *>    koios_conv_scrps     (++n, x_list, x_unit);                                              <* 
+ *>    koios_conv_cond_add  (++n, x_list, x_unit);                                              <* 
+ *>    koios_conv_conds     (++n, x_list, x_unit);                                              <* 
+ *>    koios_conv_steps     (++n, x_list, x_unit);                                              <* 
+ *>    /+---(wrapup)-------------------------+/                                                 <* 
+ *>    if (x_list == '-')  yUNIT_mintinu    ();                                                 <* 
+ *>    /+---(complete)-----------------------+/                                                 <* 
+ *>    return 0;                                                                                <* 
+ *> }                                                                                           <*/
+
 char
 main                    (int a_argc, char *a_argv [])
 {
    /*---(locals)-----------+-----+-----+-*/
-   int         x_unit      =    0;
-   int         n           =    0;
-   char        x_list      =  '-';
-   /*---(arguments)----------------------*/
-   printf ("## %s\n", P_ONELINE);
-   printf ("## pre-yUNIT unit testing : %s\n", a_argv [0]);
-   if (a_argc >= 2) {
-      if (strcmp (a_argv [1], "--list") == 0)       x_list = 'y';
-      else if (strcmp (a_argv [1], "--inst") == 0)  x_list = '!';
-      else                                          x_unit = atoi (a_argv [1]);
-   }
-   if (x_unit  >  0 )         printf ("## selected single script (%2d)\n", x_unit);
-   else                       printf ("## selected all scripts\n");
-   if (x_list == 'y')         printf ("## list script(s) only\n");
-   else if (x_list == '!')    printf ("## generate initial wave file\n");
-   else                       printf ("## execute conditions and steps\n");
-   printf ("\n");
+   char        x_unit      =    0;
+   char        x_list      =    0;
+   char        n           =    0;
    /*---(startup)------------------------*/
-   yUNIT_minunit ("koios_conv");
+   yUNIT_minunit (a_argc, a_argv, "koios_conv"  , P_ONELINE, &x_unit, &x_list);
    /*---(scripts)------------------------*/
    koios_conv_defense   (++n, x_list, x_unit);
    koios_conv_printf    (++n, x_list, x_unit);
@@ -679,7 +706,7 @@ main                    (int a_argc, char *a_argv [])
    koios_conv_conds     (++n, x_list, x_unit);
    koios_conv_steps     (++n, x_list, x_unit);
    /*---(wrapup)-------------------------*/
-   if (x_list == '-')  yUNIT_mintinu    ();
+   yUNIT_mintinu    ();
    /*---(complete)-----------------------*/
    return 0;
 }
