@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.-- production on stress test datasets"
 #define     P_VERMINOR  "2.0- supporting unit_head, unit_share, unit_data"
-#define     P_VERNUM    "2.0g"
-#define     P_VERTXT    "updated for better shared verbs, all unit testing passes ;)"
+#define     P_VERNUM    "2.0h"
+#define     P_VERTXT    "little tweaking to support ySTR"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -293,6 +293,7 @@
 #define     KOIOS_SLOAD   'P'
 #define     KOIOS_SAUDT   'A'
 /*---(combos)---------------*/
+#define     KOIOS_SSINGLE "c1A"
 #define     KOIOS_SFUNCS  "3fP"
 /*---(done)-----------------*/
 

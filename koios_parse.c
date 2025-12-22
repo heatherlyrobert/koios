@@ -12,7 +12,7 @@ struct cPARSE {
    char        p_field     [LEN_TERSE];
    char        p_min;
    short       p_max;
-   char        p_allowed   [LEN_FULL];
+   char        p_allowed   [LEN_PATH];
    char        p_dest;
    char        p_place     [LEN_SHORT];
    char        p_def       [LEN_PATH];
@@ -25,35 +25,35 @@ struct cPARSE {
 
    { KOIOS_SSCRP  ,  2,  "desc"      ,   0, LEN_LONG  , YSTR_SEVEN " "                           , KOIOS_FDESC , "·", "---(empty)-------------------------"   },
    { KOIOS_SSCRP  ,  3,  "duration"  ,   0, 4         , YSTR_NUMBER YSTR_LOWER "·"               , KOIOS_FTEST , "·", "0s"  },
-   { KOIOS_SSCRP  ,  4,  "label"     ,   0, 15        , YSTR_UPPER YSTR_LOWER "·_"               , KOIOS_FRETN , "·", "tbd" },
+   { KOIOS_SSCRP  ,  4,  "label"     ,   0, 15        , YSTR_UPPER YSTR_LOWER YSTR_NUMBER "·_"   , KOIOS_FRETN , "·", "tbd" },
    { KOIOS_SSCRP  ,  5,  "tested"    ,   0, LEN_HUND  , YSTR_UPPER YSTR_LOWER YSTR_NUMBER "· ,_" , KOIOS_FFUNC , "·", "·"   },
 
    { KOIOS_SSHAR  ,  2,  "desc"      ,   0, LEN_LONG  , YSTR_SEVEN " "                           , KOIOS_FDESC , "·", "---(empty)-------------------------"   },
-   { KOIOS_SSHAR  ,  3,  "label"     ,   0, 14        , YSTR_UPPER YSTR_LOWER "·_"               , KOIOS_FRETN , "·", "tbd" },
+   { KOIOS_SSHAR  ,  3,  "label"     ,   0, 14        , YSTR_UPPER YSTR_LOWER YSTR_NUMBER "·_"   , KOIOS_FRETN , "·", "tbd" },
    { KOIOS_SSHAR  ,  4,  "select"    ,   0, 15        , YSTR_ALLCHAR "·åæ"                       , KOIOS_FFUNC , "·", "å············æ" },
    { KOIOS_SSHAR  ,  5,  "subtitle"  ,   0, LEN_RECD  , YSTR_ALLCHAR "Ï· ,= -_"                  , KOIOS_FEXPE , "·", "Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············, Ï=·············" },
 
    { KOIOS_SEXEC  ,  2,  "desc"      ,   0, LEN_LONG  , YSTR_SEVEN " "                           , KOIOS_FDESC , "·", "---(empty)-------------------------"   },
    { KOIOS_SEXEC  ,  3,  "function"  ,   1, LEN_TITLE , YSTR_UPPER YSTR_LOWER YSTR_NUMBER "_"    , KOIOS_FFUNC , "·", ""    },
-   { KOIOS_SEXEC  ,  4,  "args"      ,   0, LEN_FULL  , YSTR_SEVEN " "                           , KOIOS_FARGS , "·", ""    },
+   { KOIOS_SEXEC  ,  4,  "args"      ,   0, LEN_FULL  , YSTR_MAXX                                , KOIOS_FARGS , "·", ""    },
    { KOIOS_SEXEC  ,  5,  "test"      ,   5, LEN_LABEL , YSTR_LOWER "_"                           , KOIOS_FTEST , "·", ""    },
-   { KOIOS_SEXEC  ,  6,  "expect"    ,   1, LEN_RECD  , YSTR_SEVEN " "                           , KOIOS_FEXPE , "·", ""    },
+   { KOIOS_SEXEC  ,  6,  "expect"    ,   0, LEN_RECD  , YSTR_MAXX                                , KOIOS_FEXPE , "·", ""    },
    { KOIOS_SEXEC  ,  7,  "return"    ,   0, LEN_LABEL , YSTR_UPPER YSTR_LOWER YSTR_NUMBER "_"    , KOIOS_FRETN , "·", ""    },
 
    { KOIOS_SEKOH  ,  2,  "desc"      ,   0, LEN_LONG  , YSTR_SEVEN " "                           , KOIOS_FDESC , "·", "---(empty)-------------------------"   },
    { KOIOS_SEKOH  ,  3,  "SKIP"      ,   0, LEN_TITLE , YSTR_UPPER YSTR_LOWER YSTR_NUMBER "_"    , KOIOS_FFUNC , "·", "·"   },
    { KOIOS_SEKOH  ,  4,  "args"      ,   1, LEN_FULL  , YSTR_SEVEN " "                           , KOIOS_FARGS , "·", ""    },
    { KOIOS_SEKOH  ,  5,  "test"      ,   5, LEN_LABEL , YSTR_LOWER "_"                           , KOIOS_FTEST , "·", ""    },
-   { KOIOS_SEKOH  ,  6,  "expect"    ,   1, LEN_RECD  , YSTR_SEVEN " "                           , KOIOS_FEXPE , "·", ""    },
+   { KOIOS_SEKOH  ,  6,  "expect"    ,   0, LEN_RECD  , YSTR_MAXX                                , KOIOS_FEXPE , "·", ""    },
    { KOIOS_SEKOH  ,  7,  "return"    ,   0, LEN_LABEL , YSTR_UPPER YSTR_LOWER YSTR_NUMBER "_"    , KOIOS_FRETN , "·", ""    },
 
    { KOIOS_SCODE  ,  2,  "desc"      ,   0, LEN_LONG  , YSTR_SEVEN " "                           , KOIOS_FDESC , "·", "---(empty)-------------------------"   },
    { KOIOS_SCODE  ,  3,  "SKIP"      ,   0, LEN_TITLE , YSTR_SEVEN " "                           , KOIOS_FFUNC , "·", "·"   },
-   { KOIOS_SCODE  ,  4,  "content"   ,   1, LEN_RECD  , YSTR_SEVEN " "                           , KOIOS_FEXPE , "·", ""    },
+   { KOIOS_SCODE  ,  4,  "content"   ,   1, LEN_RECD  , YSTR_MAXX                                , KOIOS_FEXPE , "·", ""    },
 
    { KOIOS_SLOAD  ,  2,  "desc"      ,   0, LEN_LONG  , YSTR_SEVEN " "                           , KOIOS_FDESC , "·", "---(empty)-------------------------"   },
    { KOIOS_SLOAD  ,  3,  "config"    ,   1, LEN_TITLE , YSTR_SEVEN " "                           , KOIOS_FFUNC , "·", "·"   },
-   { KOIOS_SLOAD  ,  4,  "content"   ,   0, LEN_RECD  , YSTR_SEVEN " "                           , KOIOS_FEXPE , "·", ""    },
+   { KOIOS_SLOAD  ,  4,  "content"   ,   0, LEN_RECD  , YSTR_MAXX                                , KOIOS_FEXPE , "·", ""    },
 
    { 0            ,  0,  "end-list"  ,   0, 0         , ""                                       , '-'         , "" , ""    },
 };
@@ -1169,7 +1169,7 @@ PARSE_driver            (char a_nscrp [LEN_TITLE], int a_line, char a_vers, char
    /*---(header)-------------------------*/
    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(quick-out)----------------------*/
-   if (strchr ("#1A", a_spec) != NULL) {
+   if (strchr (KOIOS_SSINGLE, a_spec) != NULL) {
       UDEBUG_KOIOS   ylog_unote   ("one field required and already read as verb");
       UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
       return 0;  /* ditto type */
