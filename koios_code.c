@@ -540,6 +540,8 @@ CODE__shared            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, F
    char        t           [LEN_TERSE] = "";
    uchar       x_char      =  '-';
    char        x_ftype     =  '-';
+   char        x_which     [LEN_LABEL] = "";
+   char        x_titles    [LEN_PATH]  = "";
    /*---(header)-------------------------*/
    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(end last script)----------------*/
@@ -547,6 +549,8 @@ CODE__shared            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, F
    CODE__scrp_end (a_code, a_last, a_nline, a_verb, *b_share);
    /*---(statistics)---------------------*/
    yUNIT_stats_scrp  (YUNIT_BUILD  , NULL, "", YUNIT_IS_SHAR, a_verb, a_major, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   /*---(data)---------------------------*/
+   rc = yUNIT_reuse_data (a_minor, NULL, NULL, NULL, NULL, NULL, NULL, NULL, x_which, x_titles, NULL, NULL, NULL);
    /*---(counters)-----------------------*/
    *b_share  = a_major;
    *b_select = a_minor;
@@ -567,7 +571,7 @@ CODE__shared            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, F
    CONV_printf (a_code, "yUNIT_%-6.6s_%c           (char a_select)         /* %4d, %c, %-32.32s */\n", t, x_char, a_nline, a_major, a_desc);
    CONV_printf (a_code, "{\n");
    CONV_printf (a_code, "   /*===[[ %-6.6s header ]]========================*/\n", t);
-   CONV_printf (a_code, "   yUNIT_%-4.4s ('%c', '%c', %d, a_select, \"%s\");\n", t, a_major, x_ftype, a_nline, a_desc);
+   CONV_printf (a_code, "   yUNIT_%-4.4s ('%c', '%c', %d, a_select, \"%s\", \"%s\", \"%s\");\n", t, a_major, x_ftype, a_nline, a_desc, x_which, x_titles);
    CONV_printf (a_code, "   int mykoios_ncond  = 0;\n");
    CONV_printf (a_code, "   int mykoios_nstep  = 0;\n");
    /*---(complete)-----------------------*/
@@ -695,10 +699,13 @@ CODE__reuse             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, F
    char        rce         =  -10;
    char        x_type      =  '-';
    uchar       x_char      =  '-';
+   char        x_title     [LEN_LONG]  = "";
    /*---(header)-------------------------*/
    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
    /*---(wrap last cond)-----------------*/
    CODE__cond_end (a_code, a_last, a_verb, a_nline, *b_share);
+   /*---(title)--------------------------*/
+   strlcpy (x_title, yUNIT_reuse_title (a_major, a_minor), LEN_LONG);
    /*---(statistics)---------------------*/
    yUNIT_stats_cond  (YUNIT_BUILD  , NULL, "", YUNIT_IS_REUS, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
    /*---(create)-------------------------*/
@@ -710,16 +717,16 @@ CODE__reuse             (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, F
    else if (strchr (YSTR_GREEK, a_major) != NULL)  x_type = KOIOS_CONFIG;
    switch (x_type) {
    case KOIOS_GLOBAL :
-      CONV_printf (a_code, "      mykoios_ncurr = yUNIT_global_%c ('%c');                       /* %4d, %-32.32s */\n", a_major, a_minor, a_nline, a_desc);
+      CONV_printf (a_code, "      mykoios_ncurr = yUNIT_global_%c ('%c');                       /* %4d, %-65.65s */\n", a_major, a_minor, a_nline, x_title);
       break;
    case KOIOS_SHARED :
-      CONV_printf (a_code, "      mykoios_ncurr = yUNIT_shared_%c ('%c');                       /* %4d, %-32.32s */\n", a_major, a_minor, a_nline, a_desc);
+      CONV_printf (a_code, "      mykoios_ncurr = yUNIT_shared_%c ('%c');                       /* %4d, %-65.65s */\n", a_major, a_minor, a_nline, x_title);
       break;
    case KOIOS_CONFIG :
       x_char  = a_major;
       x_char -= 'è';
       x_char += 'a';
-      CONV_printf (a_code, "      mykoios_ncurr = yUNIT_config_%c ('%c');     /* %c */           /* %4d, %-32.32s */\n", x_char, a_minor, a_major, a_nline, a_desc);
+      CONV_printf (a_code, "      mykoios_ncurr = yUNIT_config_%c ('%c');     /* %c */           /* %4d, %-65.65s */\n", x_char, a_minor, a_major, a_nline, x_title);
       break;
    }
    CONV_printf (a_code, "      mykoios_ncond += mykoios_ncurr - 1;\n");

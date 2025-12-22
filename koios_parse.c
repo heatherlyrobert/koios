@@ -44,8 +44,8 @@ struct cPARSE {
    { KOIOS_SEKOH  ,  3,  "SKIP"      ,   0, LEN_TITLE , YSTR_UPPER YSTR_LOWER YSTR_NUMBER "_"    , KOIOS_FFUNC , "·", "·"   },
    { KOIOS_SEKOH  ,  4,  "args"      ,   1, LEN_FULL  , YSTR_SEVEN " "                           , KOIOS_FARGS , "·", ""    },
    { KOIOS_SEKOH  ,  5,  "test"      ,   5, LEN_LABEL , YSTR_LOWER "_"                           , KOIOS_FTEST , "·", ""    },
-   { KOIOS_SEKOH  ,  6,  "expect"    ,   1, LEN_RECD  , YSTR_SEVEN " "                           , KOIOS_FEXPE , "·", "·"   },
-   { KOIOS_SEKOH  ,  7,  "return"    ,   0, LEN_LABEL , YSTR_UPPER YSTR_LOWER YSTR_NUMBER "_"    , KOIOS_FRETN , "·", "·"   },
+   { KOIOS_SEKOH  ,  6,  "expect"    ,   1, LEN_RECD  , YSTR_SEVEN " "                           , KOIOS_FEXPE , "·", ""    },
+   { KOIOS_SEKOH  ,  7,  "return"    ,   0, LEN_LABEL , YSTR_UPPER YSTR_LOWER YSTR_NUMBER "_"    , KOIOS_FRETN , "·", ""    },
 
    { KOIOS_SCODE  ,  2,  "desc"      ,   0, LEN_LONG  , YSTR_SEVEN " "                           , KOIOS_FDESC , "·", "---(empty)-------------------------"   },
    { KOIOS_SCODE  ,  3,  "SKIP"      ,   0, LEN_TITLE , YSTR_SEVEN " "                           , KOIOS_FFUNC , "·", "·"   },

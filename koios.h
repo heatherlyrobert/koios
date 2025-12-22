@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.-- production on stress test datasets"
 #define     P_VERMINOR  "2.0- supporting unit_head, unit_share, unit_data"
-#define     P_VERNUM    "2.0f"
-#define     P_VERTXT    "everything except live unit testing passes ;)"
+#define     P_VERNUM    "2.0g"
+#define     P_VERTXT    "updated for better shared verbs, all unit testing passes ;)"
 /*········· ··········· ´·····························´········································*/
 
 /*

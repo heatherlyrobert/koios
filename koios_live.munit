@@ -162,8 +162,8 @@ koios_live_build        (void)
 
    yerr_ureset    ();
    yUNIT_mincond ("turn into a unit test");
-   yUNIT_minval  ("... copy to c"                      , system ("cp  -f /tmp/koios.unit_testing_marvel/koios_live_unit.{cs,c}"), 0);
-   yUNIT_minval  ("... compile"                        , system ("gcc -c /tmp/koios.unit_testing_marvel/koios_live_unit.c   > /dev/null  2>&1"), 0);
+   yUNIT_minval  ("... copy to c"                      , system ("cp  -f koios_live_unit.{cs,c}"), 0);
+   yUNIT_minval  ("... compile"                        , system ("gcc -c koios_live_unit.c   > /dev/null  2>&1"), 0);
    yUNIT_minval  ("... link"                           , system ("gcc -o /tmp/koios.unit_testing_marvel/koios_live_unit /tmp/koios.unit_testing_marvel/koios_live_unit.o -lyUNIT   > /dev/null  2>&1"), 0);
    yUNIT_minval  ("... permissions"                    , system ("chmod +x /tmp/koios.unit_testing_marvel/koios_live_unit"), 0);
    yUNIT_minval  ("... wave count"                     , yenv_ulines (sm_nwave),    8);
@@ -1003,7 +1003,7 @@ UNIT___live_steps_top (void)
    yUNIT_mincond ("check step level script format");
    yUNIT_minstr  ("... check (11) separator"           , yenv_upeek (sm_nurun, '>'), "===[[ NEW SCRIPT ]]==================================================================");
    yUNIT_minstr  ("... check script"                   , yenv_upeek (sm_nurun, '>'), "SCRP [01] (SCRP) verify openning and closing ==========================[1a/A]=[00022]");
-   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  2s  : tbd            : -");
+   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  2s  : tbd            : ·");
 
    return 0;
 }
@@ -1095,7 +1095,7 @@ UNIT___live_steps   (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond ("check step level script format");
    yUNIT_minstr  ("... check (11) separator"           , yenv_upeek (sm_nurun, '>'), "===[[ NEW SCRIPT ]]==================================================================");
    yUNIT_minstr  ("... check script"                   , yenv_upeek (sm_nurun, '>'), "SCRP [02] (SCRP) verify system startup ================================[1b/·]=[00105]");
-   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  0s  : tbd            : -");
+   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  0s  : tbd            : ·");
    yUNIT_minstr  ("... check step header"              , yenv_upeek (sm_nurun, '>'), "  aa) LOCAL  : create string ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·[00106]");
    yUNIT_minstr  ("... check step header"              , yenv_upeek (sm_nurun, '>'), "  ab) LOCAL  : create integer · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·[00107]");
    yUNIT_minstr  ("... check step header"              , yenv_upeek (sm_nurun, '>'), "  ac) LOCAL  : create number ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·[00108]");
@@ -1169,7 +1169,7 @@ UNIT___live_steps   (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond ("verify third script");
    yUNIT_minstr  ("... check (11) separator"           , yenv_upeek (sm_nurun, '>'), "===[[ NEW SCRIPT ]]==================================================================");
    yUNIT_minstr  ("... check script"                   , yenv_upeek (sm_nurun, '>'), "SCRP [03] (SCRP) verify normal processing =============================[1c/·]=[00143]");
-   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  5s  : tbd            : -");
+   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  5s  : tbd            : ·");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
    yUNIT_minstr  ("... check group"                    , yenv_upeek (sm_nurun, '>'), "  GROUP ===----------------------------   round one   ----------------------------===");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
@@ -1246,7 +1246,7 @@ UNIT___live_steps   (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond ("verify fourth script");
    yUNIT_minstr  ("... check (11) separator"           , yenv_upeek (sm_nurun, '>'), "===[[ NEW SCRIPT ]]==================================================================");
    yUNIT_minstr  ("... check script"                   , yenv_upeek (sm_nurun, '>'), "SCRP [04] (SCRP) empty script =========================================[1d/s]=[00182]");
-   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  0s  : tbd            : -");
+   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  0s  : tbd            : ·");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
    yUNIT_minstr  ("... check footer"                   , yenv_upeek (sm_nurun, '>'), "  DRCS  ------- cond=0     test=0     [ ------------------------------------------- ]");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
@@ -1355,7 +1355,7 @@ UNIT___live_step    (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond ("check step level script format");
    yUNIT_minstr  ("... check (11) separator"           , yenv_upeek (sm_nurun, '>'), "===[[ NEW SCRIPT ]]==================================================================");
    yUNIT_minstr  ("... check script"                   , yenv_upeek (sm_nurun, '>'), "SCRP [02] (SCRP) verify system startup ================================[1b/·]=[00105]");
-   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  0s  : tbd            : -");
+   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  0s  : tbd            : ·");
    yUNIT_minstr  ("... check step header"              , yenv_upeek (sm_nurun, '>'), "  " BACK_BRN "aa) " BACK_GRN "LOCAL " BACK_OFF " : create string ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·[00106]");
    yUNIT_minstr  ("... check step header"              , yenv_upeek (sm_nurun, '>'), "  " BACK_BRN "ab) " BACK_GRN "LOCAL " BACK_OFF " : create integer · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·[00107]");
    yUNIT_minstr  ("... check step header"              , yenv_upeek (sm_nurun, '>'), "  " BACK_BRN "ac) " BACK_GRN "LOCAL " BACK_OFF " : create number ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·[00108]");
@@ -1434,7 +1434,7 @@ UNIT___live_step    (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond ("verify third script");
    yUNIT_minstr  ("... check (11) separator"           , yenv_upeek (sm_nurun, '>'), "===[[ NEW SCRIPT ]]==================================================================");
    yUNIT_minstr  ("... check script"                   , yenv_upeek (sm_nurun, '>'), "SCRP [03] (SCRP) verify normal processing =============================[1c/·]=[00143]");
-   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  5s  : tbd            : -");
+   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  5s  : tbd            : ·");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
    yUNIT_minstr  ("... check group"                    , yenv_upeek (sm_nurun, '>'), "  GROUP ===----------------------------   round one   ----------------------------===");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
@@ -1520,7 +1520,7 @@ UNIT___live_step    (char a_scrp, char a_list, char a_unit)
    yUNIT_mincond ("verify fourth script");
    yUNIT_minstr  ("... check (11) separator"           , yenv_upeek (sm_nurun, '>'), "===[[ NEW SCRIPT ]]==================================================================");
    yUNIT_minstr  ("... check script"                   , yenv_upeek (sm_nurun, '>'), "SCRP [04] (SCRP) empty script =========================================[1d/s]=[00182]");
-   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  0s  : tbd            : -");
+   yUNIT_minstr  ("... chech detail"                   , yenv_upeek (sm_nurun, '>'), "  0s  : tbd            : ·");
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
    yUNIT_minstr  ("... check script footer"            , yenv_upeek (sm_nurun, '>'), "  " BACK_BRN "PRCS  ------- cond=0     test=0     [ pass=0     fail=0     badd=0     void=0     ]" BACK_OFF);
    yUNIT_minstr  ("... empty"                          , yenv_upeek (sm_nurun, '>'), "");
@@ -1939,33 +1939,33 @@ KOIOS_reuse_dataset    (char a_file [LEN_FULL])
 {
    yUNIT_mincond ("prepare a interesting example");
    KOIOS__append  ('[', a_file, "#==(verb)===  ===========(description)===========  =====(function)=  ");
-   KOIOS__append  ('>', a_file, "SHARED   -a-  tbd                                   0  -           ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "SHARED   -b-  tbd                                   0  -           ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "SHARED   -c-  tbd                                   0  -           ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "SCRP          MAIN                                  0  -           ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   REUSE  -b-  - - - - - - - - - - - - - - - - -   ");
-   KOIOS__append  ('>', a_file, "   REUSE  -a-  - - - - - - - - - - - - - - - - -   ");
-   KOIOS__append  ('>', a_file, "   REUSE  -c-  - - - - - - - - - - - - - - - - -   ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   REUSE  -c-  - - - - - - - - - - - - - - - - -   ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   REUSE  -b-  - - - - - - - - - - - - - - - - -   ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   REUSE  -a-  - - - - - - - - - - - - - - - - -   ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
-   KOIOS__append  ('>', a_file, "   COND        tbd                                 ");
+   KOIOS__append  ('>', a_file, "SHARED   -a-  tbd                                  ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "SHARED   -b-  tbd                                 ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "SHARED   -c-  tbd                                 ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "SCRP          MAIN                                ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   REUSE  -b-  - - - - - - - - - - - - - - - - -  ");
+   KOIOS__append  ('>', a_file, "   REUSE  -a-  - - - - - - - - - - - - - - - - -  ");
+   KOIOS__append  ('>', a_file, "   REUSE  -c-  - - - - - - - - - - - - - - - - -  ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   REUSE  -c-  - - - - - - - - - - - - - - - - -  ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   REUSE  -b-  - - - - - - - - - - - - - - - - -  ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   REUSE  -a-  - - - - - - - - - - - - - - - - -  ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
+   KOIOS__append  ('>', a_file, "   COND        tbd                                ");
    yUNIT_minval   ("check scrp lines"                   , yenv_ulines     (a_file     )         ,   28);
    yUNIT_mindnoc ();
 
@@ -2096,52 +2096,6 @@ UNIT___live_reuse       (char a_scrp, char a_list, char a_unit)
    yUNIT_minprcs  ();
    return 0;
 }
-
-/*> char                                                                                          <* 
- *> main                    (int a_argc, char *a_argv [])                                         <* 
- *> {                                                                                             <* 
- *>    /+---(locals)-----------+-----+-----+-+/                                                   <* 
- *>    int         x_unit      =    0;                                                            <* 
- *>    int         n           =    0;                                                            <* 
- *>    char        x_list      =    0;                                                            <* 
- *>    /+---(arguments)----------------------+/                                                   <* 
- *>    printf ("## %s\n", P_ONELINE);                                                             <* 
- *>    printf ("## pre-yUNIT unit testing : %s\n", a_argv [0]);                                   <* 
- *>    if (a_argc >= 2) {                                                                         <* 
- *>       if (strcmp (a_argv [1], "--list") == 0)       x_list = 'y';                             <* 
- *>       else if (strcmp (a_argv [1], "--inst") == 0)  x_list = '!';                             <* 
- *>       else                                          x_unit = atoi (a_argv [1]);               <* 
- *>    }                                                                                          <* 
- *>    if (x_unit  >  0 )         printf ("## selected single script (%2d)\n", x_unit);           <* 
- *>    else                       printf ("## selected all scripts\n");                           <* 
- *>    if (x_list == 'y')         printf ("## list script(s) only\n");                            <* 
- *>    else if (x_list == '!')    printf ("## generate initial wave file\n");                     <* 
- *>    else                       printf ("## execute conditions and steps\n");                   <* 
- *>    printf ("\n");                                                                             <* 
- *>    /+---(startup)------------------------+/                                                   <* 
- *>    yUNIT_minunit ("koios_live");                                                              <* 
- *>    /+---(scripts)------------------------+/                                                   <* 
- *>    /+ ························· ´·········································+/                  <* 
- *>    UNIT___live_master_conv      (++n, x_list, x_unit);                                        <* 
- *>    UNIT___live_master_code      (++n, x_list, x_unit);                                        <* 
- *>    UNIT___live_dataset_conv     (++n, x_list, x_unit);                                        <* 
- *>    UNIT___live_dataset_code     (++n, x_list, x_unit);                                        <* 
- *>    /+> koios_live_ditto            (++n, x_list, x_unit);                               <+/   <* 
- *>    UNIT___live_scrp             (++n, x_list, x_unit);                                        <* 
- *>    UNIT___live_cond             (++n, x_list, x_unit);                                        <* 
- *>    UNIT___live_reuse            (++n, x_list, x_unit);                                        <* 
- *>    UNIT___live_steps            (++n, x_list, x_unit);                                        <* 
- *>    UNIT___live_step             (++n, x_list, x_unit);                                        <* 
- *>    UNIT___live_full             (++n, x_list, x_unit);                                        <* 
- *>    UNIT___live_stop             (++n, x_list, x_unit);                                        <* 
- *>    /+> koios_live_vers             (++n, x_list, x_unit);                               <+/   <* 
- *>    /+> koios_live_comment          (++n, x_list, x_unit);                               <+/   <* 
- *>    /+> koios_live_code             (++n, x_list, x_unit);                               <+/   <* 
- *>    /+---(wrapup)-------------------------+/                                                   <* 
- *>    yUNIT_mintinu    ();                                                                       <* 
- *>    /+---(complete)-----------------------+/                                                   <* 
- *>    return 0;                                                                                  <* 
- *> }                                                                                             <*/
 
 char
 main                    (int a_argc, char *a_argv [])
