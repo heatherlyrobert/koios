@@ -37,8 +37,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.-- production on stress test datasets"
 #define     P_VERMINOR  "2.0- supporting unit_head, unit_share, unit_data"
-#define     P_VERNUM    "2.0h"
-#define     P_VERTXT    "little tweaking to support ySTR"
+#define     P_VERNUM    "2.0i"
+#define     P_VERTXT    "updates to handle utility unit-testing files"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -345,6 +345,7 @@ struct cGLOBALS
    char        replace;                     /* convert and replace file       */
    char        cwd         [LEN_PATH ];     /* true working directory         */
    char        debug;                       /* turn on limited debugging      */
+   char        util        [LEN_LABEL];     /* name of utility for library    */
    /*---(debug/test)------------*/
    char        answer      [LEN_RECD ];     /* unit testing answer string     */
    /*---(done)------------------*/

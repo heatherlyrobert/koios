@@ -123,6 +123,7 @@ PROG__init              (void)
    strlcpy  (my_loc.l_extn, "", LEN_TITLE);
    strlcpy  (my_loc.l_base, "", LEN_TITLE);
    my_loc.l_quality = '-';
+   strlcpy  (my.util      , "", LEN_LABEL);
    /*---(outgoing files)-----------------*/
    strlcpy  (my_loc.l_scrp, "", LEN_TITLE);  my_loc.l_SCRP = NULL;
    strlcpy  (my_loc.l_main, "", LEN_TITLE);  my_loc.l_MAIN = NULL;
@@ -147,170 +148,6 @@ PROG__init              (void)
    UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
    return 0;
 }
-
-/*> char                                                                                                                          <* 
- *> PROG__file_OLD          (char a_name [LEN_TITLE], char r_base [LEN_TITLE], char r_proj [LEN_LABEL], char r_ext [LEN_TERSE])   <* 
- *> {                                                                                                                             <* 
- *>    /+---(locals)-----------+-----+-----+-+/                                                                                   <* 
- *>    char        rce         =  -10;                                                                                            <* 
- *>    char        rc          =    0;                                                                                            <* 
- *>    char        x_base      [LEN_TITLE] = "";                                                                                  <* 
- *>    char        x_proj      [LEN_LABEL] = "";                                                                                  <* 
- *>    char        x_unit      [LEN_TITLE] = "";                                                                                  <* 
- *>    char        x_ext       [LEN_TERSE] = "";                                                                                  <* 
- *>    int         l           =    0;                                                                                            <* 
- *>    int         i           =    0;                                                                                            <* 
- *>    tSTAT       s;                                                                                                             <* 
- *>    char       *p           = NULL;                                                                                            <* 
- *>    tSTAT       r;                                                                                                             <* 
- *>    char        t           [LEN_FULL]  = "";                                                                                  <* 
- *>    /+---(header)-------------------------+/                                                                                   <* 
- *>    UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);                                                                                  <* 
- *>    /+---(default)------------------------+/                                                                                   <* 
- *>    if (r_base != NULL)  strcpy (r_base, "");                                                                                  <* 
- *>    if (r_proj != NULL)  strcpy (r_proj, "");                                                                                  <* 
- *>    if (r_ext  != NULL)  strcpy (r_ext , "");                                                                                  <* 
- *>    /+---(defense)------------------------+/                                                                                   <* 
- *>    UDEBUG_KOIOS  ylog_upoint  ("a_name"    , a_name);                                                                           <* 
- *>    --rce;  if (a_name == NULL) {                                                                                              <* 
- *>       yerr_uerror ("script name can not be null");                                                                            <* 
- *>       UDEBUG_KOIOS  ylog_uexitr(__FUNCTION__, rce);                                                                             <* 
- *>       return rce;                                                                                                             <* 
- *>    }                                                                                                                          <* 
- *>    UDEBUG_KOIOS  ylog_uinfo   ("a_name"    , a_name);                                                                           <* 
- *>    /+---(check length)-------------------+/                                                                                   <* 
- *>    l = strlen (a_name);                                                                                                       <* 
- *>    UDEBUG_KOIOS  ylog_uvalue  ("l"         , l);                                                                                <* 
- *>    --rce;  if (l <= 0) {                                                                                                      <* 
- *>       yerr_uerror ("script name can not be blank/empty");                                                                     <* 
- *>       UDEBUG_KOIOS  ylog_uexitr(__FUNCTION__, rce);                                                                             <* 
- *>       return rce;                                                                                                             <* 
- *>    }                                                                                                                          <* 
- *>    /+---(check for path)-----------------+/                                                                                   <* 
- *>    --rce;  if (strchr (a_name, '/') != NULL) {                                                                                <* 
- *>       yerr_uerror ("script name ¶%s¶ can not include a path (abs or rel)", a_name);                                           <* 
- *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                                                                          <* 
- *>       return rce;                                                                                                             <* 
- *>    }                                                                                                                          <* 
- *>    /+---(check for hidden)---------------+/                                                                                   <* 
- *>    --rce;  if (a_name [0] == '.') {                                                                                           <* 
- *>       yerr_uerror ("script name ¶%s¶ can not be hidden file (.)", a_name);                                                    <* 
- *>       UDEBUG_KOIOS   ylog_uexitr  (__FUNCTION__, rce);                                                                          <* 
- *>       return rce;                                                                                                             <* 
- *>    }                                                                                                                          <* 
- *>    /+---(check characters)---------------+/                                                                                   <* 
- *>    --rce;  for (i = 0; i < l; ++i) {                                                                                          <* 
- *>       if (strchr (YSTR_ALNUM "_.", a_name [i]) != NULL)  continue;                                                            <* 
- *>       yerr_uerror ("script name ¶%s¶ can not have a '%c' as character %d", a_name, a_name [i], i);                            <* 
- *>       UDEBUG_KOIOS  ylog_uchar ("bad char"  , a_name [i]);                                                                      <* 
- *>       UDEBUG_KOIOS  ylog_uexitr(__FUNCTION__, rce);                                                                             <* 
- *>       return rce;                                                                                                             <* 
- *>    }                                                                                                                          <* 
- *>    /+---(check for extentions)-----------+/                                                                                   <* 
- *>    strcpy (x_base, a_name);                                                                                                   <* 
- *>    p = strstr (x_base, ".unit");                                                                                              <* 
- *>    if (p != NULL)   p [0] = '\0';                                                                                             <* 
- *>    p = strstr (x_base, ".sunit");                                                                                             <* 
- *>    if (p != NULL)   p [0] = '\0';                                                                                             <* 
- *>    /+---(check unit file)----------------+/                                                                                   <* 
- *>    sprintf (x_unit, "%s.unit", x_base);                                                                                       <* 
- *>    UDEBUG_KOIOS    ylog_uvalue  ("x_unit"    , rc);                                                                             <* 
- *>    rc = lstat (x_unit, &s);                                                                                                   <* 
- *>    UDEBUG_KOIOS    ylog_uvalue  ("stat"      , rc);                                                                             <* 
- *>    --rce;  if (rc < 0) {                                                                                                      <* 
- *>       sprintf (x_unit, "%s.sunit", x_base);                                                                                   <* 
-*>       UDEBUG_KOIOS    ylog_uvalue  ("x_unit"    , rc);                                                                          <* 
-*>       rc = lstat (x_unit, &s);                                                                                                <* 
-*>       UDEBUG_KOIOS    ylog_uvalue  ("stat"      , rc);                                                                          <* 
-*>       if (rc < 0) {                                                                                                           <* 
-   *>          yerr_uerror ("script name ¶%s¶ can not be found as .unit or .sunit", a_name);                                        <* 
-      *>          UDEBUG_KOIOS    ylog_unote   ("can not find source either .unit or .sunit");                                           <* 
-      *>          UDEBUG_KOIOS    ylog_uexitr (__FUNCTION__, rce);                                                                       <* 
-      *>          return rce;                                                                                                          <* 
-      *>       } else {                                                                                                                <* 
-         *>          strcpy (x_ext, ".sunit");                                                                                            <* 
-            *>       }                                                                                                                       <* 
-            *>    } else {                                                                                                                   <* 
-               *>       strcpy (x_ext, ".unit");                                                                                                <* 
-                  *>    }                                                                                                                          <* 
-                  *>    --rce;  if (S_ISDIR (s.st_mode))  {                                                                                        <* 
-                     *>       yerr_uerror ("script name ¶%s¶ refers to a directory, illegal", a_name);                                                <* 
-                        *>       UDEBUG_KOIOS    ylog_unote   ("can not use a directory");                                                                 <* 
-                        *>       UDEBUG_KOIOS    ylog_uexitr  (__FUNCTION__, rce);                                                                         <* 
-                        *>       return rce;                                                                                                             <* 
-                        *>    }                                                                                                                          <* 
-                        *>    --rce;  if (S_ISLNK (s.st_mode))  {                                                                                        <* 
-                           *>       UDEBUG_KOIOS    ylog_unote   ("is a link, figure it out");                                                                <* 
-                              *>       if (strcmp (x_ext, ".sunit") == 0) {                                                                                    <* 
-                                 *>          yerr_uerror ("script name ¶%s¶ is a .sunit can can not be a symlink", a_name);                                       <* 
-                                    *>          if (my.debug == 'y')  ylog_unote ("FATAL, .sunit can not be a symlink");                                             <* 
-                                    *>          else                  printf ("FATAL, .sunit can not be a symlink\n");                                               <* 
-                                    *>          UDEBUG_KOIOS    ylog_unote   ("can not use a symlink");                                                                <* 
-                                    *>          UDEBUG_KOIOS    ylog_uexitr  (__FUNCTION__, rce);                                                                      <* 
-                                    *>          return rce;                                                                                                          <* 
-                                    *>       } else {                                                                                                                <* 
-                                       *>          rc = readlink (x_unit, t, LEN_FULL);                                                                                 <* 
-                                          *>          UDEBUG_KOIOS    ylog_uvalue  ("readlink"  , rc);                                                                       <* 
-                                          *>          if (rc < 0) {                                                                                                        <* 
-                                             *>             UDEBUG_KOIOS    ylog_uexitr (__FUNCTION__, rce);                                                                    <* 
-                                                *>             return rce;                                                                                                       <* 
-                                                *>          }                                                                                                                    <* 
-                                                *>          UDEBUG_KOIOS  ylog_uinfo   ("t"         , t);                                                                          <* 
-                                                *>          l = strlen (t);                                                                                                      <* 
-                                                *>          UDEBUG_KOIOS  ylog_uvalue  ("l"         , l);                                                                          <* 
-                                                *>          if (l < 7) {                                                                                                         <* 
-                                                   *>             UDEBUG_KOIOS    ylog_uexitr (__FUNCTION__, rce);                                                                    <* 
-                                                      *>             return rce;                                                                                                       <* 
-                                                      *>          }                                                                                                                    <* 
-                                                      *>          UDEBUG_KOIOS  ylog_uinfo   ("suffix"    , t + l - 6);                                                                  <* 
-                                                      *>          if (strcmp (t + l - 6, ".sunit") != 0) {                                                                             <* 
-                                                         *>             yerr_uerror ("script name ¶%s¶ is a symlink to ¶%s¶, only .sunit is legal", a_name, t);                           <* 
-                                                            *>             UDEBUG_KOIOS    ylog_uexitr (__FUNCTION__, rce);                                                                    <* 
-                                                            *>             return rce;                                                                                                       <* 
-                                                            *>          }                                                                                                                    <* 
-                                                            *>          rc = stat (t, &r);                                                                                                   <* 
-                                                            *>          UDEBUG_KOIOS    ylog_uvalue  ("stat"      , rc);                                                                       <* 
-                                                            *>          if (rc < 0) {                                                                                                        <* 
-                                                               *>             yerr_uerror ("script name ¶%s¶ is a symlink to .sunit ¶%s¶, but source does not exist", a_name, t);               <* 
-                                                                  *>             UDEBUG_KOIOS    ylog_uexitr (__FUNCTION__, rce);                                                                    <* 
-                                                                  *>             return rce;                                                                                                       <* 
-                                                                  *>          }                                                                                                                    <* 
-                                                                  *>       }                                                                                                                       <* 
-                                                                  *>    }                                                                                                                          <* 
-                                                                  *>    else if (!S_ISREG (s.st_mode)) {                                                                                           <* 
-                                                                     *>       yerr_uerror ("script name ¶%s¶ is not a regular file, illegal", a_name);                                                <* 
-                                                                        *>       UDEBUG_KOIOS    ylog_unote   ("can only use regular file");                                                               <* 
-                                                                        *>       UDEBUG_KOIOS    ylog_uexitr  (__FUNCTION__, rce);                                                                         <* 
-                                                                        *>       return rce;                                                                                                             <* 
-                                                                        *>    }                                                                                                                          <* 
-                                                                        *>    /+---(get project name)---------------+/                                                                                   <* 
-                                                                        *>    p = strchr (x_base, '_');                                                                                                  <* 
-                                                                        *>    if (p == NULL)  strcpy (x_proj, x_base);                                                                                   <* 
-                                                                        *>    else {                                                                                                                     <* 
-                                                                           *>       l = p - x_base;                                                                                                         <* 
-                                                                              *>       strncpy (x_proj, x_base, l);                                                                                            <* 
-                                                                              *>    }                                                                                                                          <* 
-                                                                              *>    /+---(check master.h)-----------------+/                                                                                   <* 
-                                                                              *>    rc = lstat ("unit_data.c", &s);                                                                                            <* 
-                                                                              *>    UDEBUG_KOIOS    ylog_uvalue  ("stat"      , rc);                                                                             <* 
-                                                                              *>    if (rc < 0)   system  ("touch unit_data.c");                                                                               <* 
-                                                                              *>    /+---(save back)----------------------+/                                                                                   <* 
-                                                                              *>    if (r_base != NULL) {                                                                                                      <* 
-                                                                                 *>       strncpy (r_base, x_base, LEN_TITLE);                                                                                    <* 
-                                                                                    *>       UDEBUG_KOIOS  ylog_uinfo   ("r_base"    , r_base);                                                                        <* 
-                                                                                    *>    }                                                                                                                          <* 
-                                                                                    *>    if (r_proj != NULL) {                                                                                                      <* 
-                                                                                       *>       strncpy (r_proj, x_proj, LEN_LABEL);                                                                                    <* 
-                                                                                          *>       UDEBUG_KOIOS  ylog_uinfo   ("r_proj"    , r_proj);                                                                        <* 
-                                                                                          *>    }                                                                                                                          <* 
-                                                                                          *>    if (r_ext  != NULL) {                                                                                                      <* 
-                                                                                             *>       strncpy (r_ext , x_ext , LEN_TERSE);                                                                                    <* 
-                                                                                                *>       UDEBUG_KOIOS  ylog_uinfo   ("r_ext"     , r_ext);                                                                         <* 
-                                                                                                *>    }                                                                                                                          <* 
-                                                                                                *>    /+---(complete)-----------------------+/                                                                                   <* 
-                                                                                                *>    UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);                                                                                  <* 
-                                                                                                *>    return 0;                                                                                                                  <* 
-                                                                                                *> }                                                                                                                             <*/
 
 char
 PROG__args              (int a_argc, char *a_argv [])
@@ -363,6 +200,8 @@ PROG__args              (int a_argc, char *a_argv [])
       else if (strncmp (a, "--edebug"     , 10) == 0)  { my.run_type = G_RUN_DEBUG;   my.noise = 'e'; }
       else if (strncmp (a, "--Edebug"     , 10) == 0)  { my.run_type = G_RUN_DEBUG;   my.noise = 'E'; }
       else if (strncmp (a, "--vdebug"     , 10) == 0)  { my.run_type = G_RUN_DEBUG;   my.noise = 'v'; }
+      /*---(utility unit tests)----------*/
+      else if (strncmp (a, "--util="      ,  7) == 0)  { strlcpy (my.util, a + 7, LEN_LABEL); }
       /*---(old args)--------------------*/
       /*> else if (strncmp (a, "--create"     , 10) == 0)    my.run_type = G_RUN_CREATE;   <*/
       /*> else if (strncmp (a, "--compile"    , 10) == 0)    my.run_type = G_RUN_CREATE;   <*/
@@ -378,35 +217,56 @@ PROG__args              (int a_argc, char *a_argv [])
       }
       /*---(file name)-------------------*/
       else {
+         /*---(fix extension)------------*/
          if (strstr (a, ".unit") == NULL)  sprintf (x_name, "%s.unit", a);
          else                              strcpy  (x_name, a);
+         UDEBUG_KOIOS  ylog_uinfo  ("x_name"    , x_name);
          rc = yenv_uname    (my.cwd, x_name, NULL, my_loc.l_full);
          UDEBUG_KOIOS  ylog_uvalue ("name"      , rc);
          if (rc < 0) {
             UDEBUG_KOIOS  ylog_uexitr (__FUNCTION__, rce);
             return rce;
          }
+         /*---(get directory details)----*/
+         UDEBUG_KOIOS  ylog_uinfo  ("l_full"    , my_loc.l_full);
          rc = yenv_udetail (my_loc.l_full, NULL, my_loc.l_dir, my_loc.l_file, my_loc.l_proj, my_loc.l_base, my_loc.l_extn, NULL, &(my_loc.l_quality));
          UDEBUG_KOIOS  ylog_uvalue ("detail"    , rc);
          if (rc < 0) {
             UDEBUG_KOIOS  ylog_uexitr (__FUNCTION__, rce);
             return rce;
          }
+         /*---(check extension)----------*/
          UDEBUG_KOIOS  ylog_uinfo  ("l_extn"    , my_loc.l_extn);
          if (strcmp (my_loc.l_extn, ".unit") != 0) {
             UDEBUG_KOIOS  ylog_unote  ("can only be used on .unit files");
             UDEBUG_KOIOS  ylog_uexitr (__FUNCTION__, rce);
             return rce;
          }
+         /*---(check for normal)---------*/
          UDEBUG_KOIOS  ylog_uinfo  ("l_proj"    , my_loc.l_proj);
          l = strlen (my_loc.l_proj);
          UDEBUG_KOIOS  ylog_uvalue ("l"         , l);
          UDEBUG_KOIOS  ylog_uinfo  ("l_base"    , my_loc.l_base);
-         if (strncmp (my_loc.l_base, my_loc.l_proj, l) != 0  &&
-               strcmp  (my_loc.l_base, "unit_head"     ) != 0  &&
-               strcmp  (my_loc.l_base, "unit_wide"     ) != 0  &&
-               strcmp  (my_loc.l_base, "unit_data"     ) != 0) {
-            UDEBUG_KOIOS  ylog_unote  ("all units must start with proj or be unit_head, unit_wide, or unit_data");
+         if (strncmp (my_loc.l_base, my_loc.l_proj, l) == 0) {
+            UDEBUG_KOIOS  ylog_unote  ("prefix matches project name, good to go");
+         }
+         /*---(check for utility)--------*/
+         else if (strcmp (my.util, "") != 0) {
+            l = strlen (my.util);
+            UDEBUG_KOIOS  ylog_uinfo  ("l"         , l);
+            if (strncmp (my_loc.l_base, my.util      , l) == 0) {
+               UDEBUG_KOIOS  ylog_unote  ("prefix matches utility name, good to go");
+            }
+         }
+         /*---(check for shares)---------*/
+         else if (strcmp (my_loc.l_base, "unit_head"     ) == 0  ||
+               strcmp  (my_loc.l_base, "unit_wide"     ) == 0  ||
+               strcmp  (my_loc.l_base, "unit_data"     ) == 0) {
+            UDEBUG_KOIOS  ylog_unote  ("name matches a share -- unit_head, unit_wide, or unit_data, good to go");
+         }
+         /*---(handle trouble)-----------*/
+         else {
+            UDEBUG_KOIOS  ylog_unote  ("all units must start with proj/util or be unit_head, unit_wide, or unit_data");
             UDEBUG_KOIOS  ylog_uexitr (__FUNCTION__, rce);
             return rce;
          }
