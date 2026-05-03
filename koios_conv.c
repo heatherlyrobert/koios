@@ -137,6 +137,13 @@ CONV__comment           (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN
 }
 
 char
+CONV__spacer            (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select)
+{
+   char        rc          =    0;
+   return CONV_printf (a_conv, "     Ï>----´  ´ - - - - - - - - - - - - - - - - ´  ´ - - - - - - - - - - - ´   ´ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ´   ´ - - - ´   ´ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ´  \n", a_expect);
+}
+
+char
 CONV_footer             (char a_good, FILE **b_conv, char a_nscrp [LEN_TITLE], char a_nconv [LEN_TITLE])
 {
    char        rce         =  -10;

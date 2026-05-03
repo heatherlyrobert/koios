@@ -36,9 +36,9 @@
 #define     P_CREATED   "2014-03"
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.-- production on stress test datasets"
-#define     P_VERMINOR  "2.0- supporting unit_head, unit_share, unit_data"
-#define     P_VERNUM    "2.0i"
-#define     P_VERTXT    "updates to handle utility unit-testing files"
+#define     P_VERMINOR  "2.1- improving to support mass-testing like polymnia"
+#define     P_VERNUM    "2.1a"
+#define     P_VERTXT    "added step spacer"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -245,6 +245,7 @@
 #define     GVAR          'V'
 #define     LVAR          'v'
 /*---(steps)----------------*/
+#define     SPAC          'Ï'
 #define     EXEC          'x'
 #define     GETT          'g'
 #define     EKOH          'e'
@@ -596,6 +597,7 @@ char        CONV__ditto             (FILE *a_conv, char a_verb [LEN_LABEL], char
 char        CONV__reuse             (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
 char        CONV__group             (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
 /*---(steps)----------------*/
+char        CONV__spacer            (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
 char        CONV__gvar              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
 char        CONV__exec              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);
 char        CONV__code              (FILE *a_conv, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_major, char a_minor, char *b_share, char *b_select);

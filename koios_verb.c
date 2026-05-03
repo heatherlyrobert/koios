@@ -157,6 +157,7 @@ struct cVERB {
    { FDEF, "file"         , 5  , "create a temporary file"               , KOIOS_SCODE  , '-' , '-' , COND,     0,  0, CONV__file    , CODE__file    ,  'y'  ,  'y'  },
    { APPD, "append"       , 5  , "append data to temporary file"         , KOIOS_SCODE  , '-' , '-' , COND,     0,  0, CONV__append  , CODE__append  ,  'y'  ,  'y'  },
    { APPV, "appvis"       , 5  , "append data as visible characters"     , KOIOS_SCODE  , '-' , '-' , COND,     0,  0, CONV__append  , CODE__append  ,  'y'  ,  'y'  },
+   { SPAC, "Ï>----´"      , 5  , "visual breaks between steps"           , KOIOS_SONE   , '-' , '-' , COND,     0,  0, CONV__spacer  , NULL          ,  '-'  ,  '-'  },
    /*---  ---statistics-- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
    { '·' , ""             ,  0 , "statistics"                            , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
    { PRCS, "PRCS"         , 3  , "script ending"                         , KOIOS_SAUDT  , NORM, AUDT, ANYT,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
