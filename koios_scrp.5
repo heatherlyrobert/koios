@@ -1,0 +1,115 @@
+
+.SH TABLE OF CONTENTS
+.nf  
+A) overview        general overview of scripts
+B) technical       what is produced under the covers
+C) example         reasonable example
+D) verb            field one
+E) description     field two
+F) duration        field three
+G) label           field four
+H) focus           field five
+I) sequencing      modification to field one
+J) output          how scripts are reported
+
+.SH A) OVERVIEW
+a script is a independently runable set of unit-test steps that have a common,
+clear focus and a managable length.  scripts are the primary organizational
+entity in unit testing.
+
+.SH B) TECHNICAL
+each script is ultimately translated as a single c-language function within
+the program to test a specific unit/file.
+
+.SH C) EXAMPLE
+all unit testing scripts must begin with the SCRP verb, and are a single,
+un-indented line containing five columns using ascii field-seperator (0x1c)
+delimiters. these field delimiters will be shown here with the (§) character.
+
+   verb--- § ---description----------- § dur § ---label--- § ---functions--- §
+   SCRP    § (CFLOW) verify parsing    §  5s § parse       § parse_handler   §
+
+.SH D) VERB
+SCRP is the verb and must have zero indentation.  this field is a maximum of
+twelve (12) characters, overflow and trailing spaces will be truncated.
+
+   verb--- § ---description----------- § dur § ---label--- § ---functions--- §
+   SCRP    § ·                         § ·   § ·           § ·               §
+
+.SH E) DESCRIPTION
+it is very unhelpful to leave off a description as unit-testing is almost
+invariably detailed, complicated, and extensive.  descriptions are a maximum
+of sixty-five (65) characters, overflow and trailing spaces will be truncated.
+legal characters are letters, numbers, and most punctuation.
+
+   verb--- § ---description----------- § dur § ---label--- § ---functions--- §
+   SCRP    § (CFLOW) verify parsing    § ·   § ·           § ·               §
+
+i usually prefix the description with a reference to the c source-file being
+tested in all capitals, in this case "polymnia_cflow.c".  it just helps me
+focus more quickly under stress ;)
+
+.SH F) DURATION
+many unit tests can load extensive data or run complicated algorithms,
+so here i include a advisory duration in seconds (s), minutes (m), ....
+many prepatory tests are likely 0s ;) durations are a maximum of three (3)
+characters, overflow and trailing spaces will be truncated.  legal characters
+are [0-9] followed by my standard time-units [smhdwoyc].
+
+   verb--- § ---description----------- § dur § ---label--- § ---functions--- §
+   SCRP    § ·                         §  5s § ·           § ·               §
+
+.SH G) LABEL
+my vim-based ide (vide) picks up these labels to provide an index on the
+left-side of my editing window for rapid access.  labels are a maximum
+of fourteen (14) characters, overflow and trailing spaces will be truncated.
+legal characters are [a-zA-Z0-9_].  again, helps with my focus and speed.
+
+   verb--- § ---description----------- § dur § ---label--- § ---functions--- §
+   SCRP    § ·                         § ·   § parse       § ·               §
+
+.SH H) FOCUS
+this is a comma separated list of the primary functions under test for
+strictly advisory and reporting purposes.  the function list is a maximum of
+seventy-five (75) characters, overflow and trailing spaces will be truncated.
+legal characters are [a-zA-Z0-9_, ].
+
+   verb--- § ---description----------- § dur § ---label--- § ---functions--- §
+   SCRP    § ·                         § ·   § ·           § parse_handler   §
+
+.SH I) SEQUENCING
+koios and ouroboros can group unit-test scripts into a natural sequence where
+all dependencies are used to create a clean test order.  the seqencing is 
+appended to the SCRP verb and has there parts...
+   a) major = stage       [0-9]    highest ordering withint program
+   b) minor = wave        [a-z]    sub-order within stage
+   c) plus  = criticality [A-Za-z] pre-defined, specific options
+
+the final is six (6) characters, ex. "[1a/b]" surrounded by square brackets.
+
+   verb--------- § ---description----------- § ´´´
+   SCRP   [1a/b] § ·                         § ´´´
+
+this field is critical to maintaining massive code bases.
+
+.SH J) OUTPUT
+when the unit-test is run, two (2) specific outputs are generated for each
+script -- a header before its condent and a footer after.
+
+when a script is reached, the output will indicate a script start,
+that it is the 4th in the current unit-test, and that the source data is on
+line 315 of the unit test script.  the line mumber is very, very useful.
+it also shows the expected duration, label, and focus.
+
+   ===[[ NEW SCRIPT ]]======================================================
+   SCRP [04] (CFLOW) verify parsing ==========================[1a/b]=[00315]
+     5s  : parse          : parse_handler
+
+when all steps in a script are complete, a footer appears with script specific
+statistics.  PRCS is SCRP backward ;) the footer says their where 47 tests and
+45 passed with zero failures.  this line will also be "green" if all passed or
+"red" with any failed for fast visual scanning.
+
+   ···PRCS  ------- cond=10  test=47  [ pass=45  fail=0   badd=0   void=2  ]
+
+

@@ -4,6 +4,37 @@
 
 
 
+/*===[[ GNU GENERAL PUBLIC LICENSE (GPL) ]]===================================*/
+/*´´·········1·········2·········3·········4·········5·········6·········7·········8  */
+
+#define  P_COPYRIGHT   \
+   "copyright (c) 2016 robert.s.heatherly at balsashrike at gmail dot com"
+
+#define  P_LICENSE     \
+   "the only place you could have gotten this code is my github, my website,¦"   \
+   "or illegal sharing. given that, you should be aware that this is GPL licensed."
+
+#define  P_COPYLEFT    \
+   "the GPL COPYLEFT REQUIREMENT means any modifications or derivative works¦"   \
+   "must be released under the same GPL license, i.e, must be free and open."
+
+#define  P_INCLUDE     \
+   "the GPL DOCUMENTATION REQUIREMENT means that you must include the original¦" \
+   "copyright notice and the full licence text with any resulting anything."
+
+#define  P_AS_IS       \
+   "the GPL NO WARRANTY CLAUSE means the software is provided without any¦"      \
+   "warranty and the author cannot be held liable for damages."
+
+#define  P_THEFT    \
+   "if you knowingly violate the spirit of these ideas, i suspect you might¦"    \
+   "find any number of freedom-minded hackers may take it quite personally ;)"
+
+/*´´·········1·········2·········3·········4·········5·········6·········7·········8  */
+/*===[[ GNU GENERAL PUBLIC LICENSE (GPL) ]]===================================*/
+
+
+
 static int  s_cunit  = 0;
 static int  s_cscrp  = 0;
 static int  s_ccond  = 0;
@@ -1023,6 +1054,9 @@ CODE__step_add          (FILE *a_code, char a_runtype, char a_verb [LEN_LABEL], 
    else if (strcmp (a_verb, "file"  ) == 0)   CONV_printf (a_code, "      /*---(create test file)------------*/\n");
    else if (strcmp (a_verb, "append") == 0)   CONV_printf (a_code, "      /*---(append test file)------------*/\n");
    else if (strcmp (a_verb, "appvis") == 0)   CONV_printf (a_code, "      /*---(append test file)------------*/\n");
+   /*---(masking)------------------------*/
+   else if (strcmp (a_verb, "mask"  ) == 0)   CONV_printf (a_code, "      /*---(create masking)--------------*/\n");
+   else if (strcmp (a_verb, "unmask") == 0)   CONV_printf (a_code, "      /*---(clear masking)---------------*/\n");
    /*---(debugging)----------------------*/
    if (a_runtype == G_RUN_DEBUG && strcmp (a_verb, "global") != 0) {
       CONV_printf (a_code, "      %sUG_UNIT    %sOG_unitstep (myUNIT_RUN.origin, myUNIT_RUN.offset + mykoios_ncond, %3i, %4i, \"%s\");\n", "DEB", "yL", s_cstep, CODE__line (a_dittoing, a_nline, a_dline), a_desc);
@@ -1252,6 +1286,54 @@ CODE__system            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, F
    /*---(create)-------------------------*/
    CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
    CONV_printf     (a_code, "%s      yUNIT_system  (%4i, %3i, \"%s\", \"%s\", \"%s\", myUNIT_RUN.exec, '%c', '%c');\n", x_pre, CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, x_display, x_system, a_dittoing, *b_share);
+   CODE__select_end (a_code, a_verb, a_which, *b_share);
+   /*---(complete)-----------------------*/
+   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+CODE__mask              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rc          =    0;
+   char        x_pre       [LEN_TERSE] = "";
+   char        x_display   [LEN_RECD]  = "";
+   char        x_system    [LEN_RECD]  = "";
+   /*---(header)-------------------------*/
+   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
+   /*---(statistics)---------------------*/
+   yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VOID, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   /*---(prepare)------------------------*/
+   CODE__step_add   (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
+   /*---(create)-------------------------*/
+   CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
+   CONV_printf     (a_code, "   ++mykoios_nstep;\n");
+   CONV_printf     (a_code, "   yUNIT_mask    (%4i, %3i, \"%s\", %d, \"%s\");\n", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc, atoi (a_args), a_expect);
+   CODE__select_end (a_code, a_verb, a_which, *b_share);
+   /*---(complete)-----------------------*/
+   UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
+   return 0;
+}
+
+char
+CODE__unmask            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rc          =    0;
+   char        x_pre       [LEN_TERSE] = "";
+   char        x_display   [LEN_RECD]  = "";
+   char        x_system    [LEN_RECD]  = "";
+   /*---(header)-------------------------*/
+   UDEBUG_KOIOS   ylog_uenter  (__FUNCTION__);
+   /*---(statistics)---------------------*/
+   yUNIT_stats_step  (YUNIT_BUILD  , NULL, "", YUNIT_IS_VOID, a_verb, a_desc, a_dittoing, a_ditto, a_major, *b_share, &s_cunit, &s_cscrp, &s_ccond, &s_cstep);
+   /*---(prepare)------------------------*/
+   CODE__step_add   (a_code, a_runtype, a_verb, a_desc, a_dittoing, a_nline, a_dline);
+   /*---(create)-------------------------*/
+   CODE__select_beg (a_code, a_verb, a_which, *b_share, x_pre);
+   CONV_printf     (a_code, "   ++mykoios_nstep;\n");
+   CONV_printf     (a_code, "   yUNIT_unmask  (%4i, %3i, \"%s\");\n", CODE__line (a_dittoing, a_nline, a_dline), s_cstep, a_desc);
    CODE__select_end (a_code, a_verb, a_which, *b_share);
    /*---(complete)-----------------------*/
    UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);

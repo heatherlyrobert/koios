@@ -1,0 +1,98 @@
+
+.SH TABLE OF CONTENTS
+.nf  
+A) overview        general overview of conditions
+B) uses            three different types
+C) example         reasonable example
+D) verb            field one
+E) description     field two
+F) cond output     how conditions are reported
+G) sequencing      modification to field one
+H) ditto           short connection to DITTO verb
+F) ditto output    how dittos are reported
+
+.SH A) OVERVIEW
+conditions are technically unnecessary as they simply provide small break-points
+in testing steps.  they are like paragraphs, not manditory, but very useful
+for providing obvious structure, grouping, and navigation.  one key use is to
+identify repeating code as discussed under SEQUENCING and DITTO.
+
+.SH B) TECHNICAL
+conditions are translated as block of code within scripts and provide their
+own statistics to help guild testers to the problem.
+
+.SH C) EXAMPLE
+conditions are very simple with only two fields.  the leading spaces are changed
+to spacers (·) in this manual for clarity.
+
+   verb------ § ---description----------- §
+   ···COND    § verify function call      §
+
+.SH D) VERB
+COND is the verb and is expected to be indented three (3) characters off-estting
+it from SCRP and later steps.  the verb field are is twelve (12) characters,
+overflow and trailing spaces will be truncated.
+
+   verb------ § ---description----------- §
+   ··· COND   § ·                         §
+
+.SH E) DESCRIPTION
+it is very unhelpful to leave off a description as unit-testing is almost
+invariably detailed, complicated, and extensive.  descriptions are a maximum
+of sixty-five (65) characters, overflow and trailing spaces will be truncated.
+legal characters are letters, numbers, and most punctuation.
+
+   verb------ § ---description----------- §
+   ···COND    § verify function call      §
+
+
+.SH F) COND OUTPUT
+when the unit-test is run, two (2) specific lines are generated for each
+condition -- one before its steps and the other after.
+
+when a condition is reached, the output will indicate a condition start,
+that it is the 16th in the current script, and that the source data is on
+line 452 of the unit test script.  the line mumber is very, very useful.
+
+   ···COND [016] verify function call -- -- -- -- -- -- -- -- -- -- -[00452]
+
+when all steps in a condition are complete, a footer appears with condition
+specific statistics.  DNOC is COND backward ;) the footer says their where
+4 tests and 4 passed with zero failures.  this line will also be "green"
+if all passed or "red" with any failed for fast visual scanning.
+
+   ······DNOC  ----------------- test=4  [ pass=4  fail=0  badd=0  void=0  ]
+
+.SH G) SEQUENCING
+every script can have up to ten (01) reusable conditions, meaning reexection
+including all the steps under the condition.  the sequence markers are simply
+a open paren followed by [0-9] and a closed paren right after the COND verb.
+
+   verb--------- § ---description----------- §
+   ···COND  (3)  § verify function call      §
+
+additionally, sequence numbers can be overwritten in the same script for
+more flexibility.
+
+.SH H) DITTO
+COND reuse is so simple it will be covered here. to repeat a condition, simply
+use the DITTO verb with which every COND sequence number you want.  the
+DITTO only has one field.
+
+   verb--------- §
+   ···DITTO (3)  §
+
+.SH I) DITTO OUTPUT
+formatted exactly like the COND output, the DITTO output starts with DOND vs
+COND, labels it as the 31st condition executed in the current script, and
+that the ditto appears in the source file at 552.  it also show the DITTO
+sequence number (3) near the beginning.
+
+   ···DOND [031] (3) [[ verify function call ]]- -- -- -- -- -- -- -[00552]
+
+the summary line is exactly the same.
+
+   ······DNOC  ----------------- test=4  [ pass=4  fail=0  badd=0  void=0  ]
+
+NOTE: if the line number is [00555] is is in a specific unit test source file.
+if like å00555æ it is in a shared file -- unit_data.unit or unit_wide.unit.

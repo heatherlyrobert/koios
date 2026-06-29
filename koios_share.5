@@ -1,0 +1,138 @@
+
+.SH TABLE OF CONTENTS
+.nf  
+A) overview        general overview of shared code
+B) uses            three different types
+C) example         reasonable example
+D) verb            field one
+E) description     field two
+F) label           field three
+G) which           expanation of filtering
+H) legal           field four
+I) titles          field five
+J) reuse           short connection to REUSE verb
+
+.SH A) OVERVIEW
+unit-tests frequently use the same data or re-check the same results.
+simple situations are handled with DITTO (see koios_cond) within a single
+script, but across scripts and in complex situations requires shared code.
+each of these shared sequences is ultimately translated as a single c-language
+function, which in turn is called by scripts.
+
+.SH B) USES
+there are three types of shared code with their own identifiers depending on
+the scope of sharing.
+
+.SS SHARED
+.nf
+-- defined in any normal ".unit" file
+-- can ONLY be accessed in that file
+-- uses a [a-z] lower letter identifier
+-- can not call itself or any other shared code
+
+.SS GLOBAL
+.nf
+-- defined in either unit_wide.unit or unit_data.unit
+-- can be accessed from any unit test script
+-- uses a [A-Z] upper letter identifier
+-- can not call itself or any other shared code
+
+.SS CONFIG
+.nf
+-- defined in either unit_wide.unit or unit_data.unit
+-- can be accessed from any unit test script
+-- uses a [è-ÿ] greek letter identifier
+-- can not call itself or any other shared code
+
+i often use CONFIG for creating and evaluating large or complex data sets.
+typically, i use GLOBAL for useful shared code without major data.
+
+.SH C) EXAMPLE
+all unit testing shared code must begin with the one of the three verbs show
+in section B, and are a single, un-indented line containing five columns using
+ascii field-seperator (0x1c) delimited. these field delimiters will be shown
+here with the (§) character.
+
+   verb-- § -desc---- § -label- § -legal- § ---titles----------------------- §
+   CONFIG § set up    § yLOG    § åab···æ § a=dir-only·····, b=proj········· §
+
+.SH D) VERB
+SHARED, GLOBAL, or CONFIG are the verb and must have zero indentation.
+this field is a maximum of twelve (12) characters, overflow and trailing
+spaces will be truncated.
+
+   verb-- § -desc---- § -label- § -legal- § ---titles----------------------- §
+   CONFIG § ·         § ·       § ·       § ·                                §
+
+.SH E) DESCRIPTION
+it is very unhelpful to leave off a description as unit-testing almost
+invariably detailed, complicated, and extensive.  descriptions are a maximum
+of thirty-five (35) characters, overflow and trailing spaces will be truncated.
+legal characters are letters, numbers, and most punctuation.
+
+   verb-- § -desc---- § -label- § -legal- § ---titles----------------------- §
+   CONFIG § set up    § ·       § ·       § ·                                §
+
+.SH F) LABEL
+my vim-based ide (vide) picks up these labels to provide an index on the
+left-side of my editing window for rapid access.  labels are a maximum
+of fourteen (14) characters, overflow and trailing spaces will be truncated.
+legal characters are [a-zA-Z0-9_].
+
+   verb-- § -desc---- § -label- § -legal- § ---titles----------------------- §
+   CONFIG § ·         § yLOG    § ·       § ·                                §
+
+.SH G) FILTERING
+to maximize reuse, filtering allows a test to subtily or completely change
+depending on what filter is requested.  filters are [a-z] lower case letters
+that are later pre-pended on none, some, or all shared conditions and steps to
+define sub-sets (please see koios_reuse for details).
+
+.SH H) LEGAL
+this filed indicates which specific filter identifiers are allowed -- '*'
+means run everything and is always allowed.  legal is a maximumo of fourteen
+(14) characters, overflow and trailing spaces will be truncated.  the format
+is openning square brace, followed by [a-z·], and terminated by a closing
+square brace.
+
+   verb-- § -desc---- § -label- § -legal- § ---titles----------------------- §
+   CONFIG § ·         § ·       § [ab···] § ·                                §
+
+if only a '·' is provided, no legal filters are defined.
+
+.SH I) TITLES
+when running, filtered shared calls can be exceedingly ambiguous and
+confusing unless each legal filter is given a short title for interal and
+reporting purposes.  these are provided as a comma-seperated list.
+
+   single title format "#=title········, "
+
+where '#' is the filter identifier and title is a maximum thirteen (13)
+character title.  trailing '·' are truncated.
+
+   verb-- § -desc---- § -label- § -legal- § ---titles----------------------- §
+   CONFIG § ·         § ·       § ·       § a=dir-only·····, b=proj········· §
+
+.SH J) REUSE
+this is actually covered in koios_reuse, but a little explanation is useful
+here.  to call the shared code, use a REUSE verb.
+
+   REUSE -a- §          runs an entire local SHARED section
+   REUSE -B- §          runs an entire global GLOBAL section
+   REUSE -ê- §          runs an entire global CONFIG section
+
+   REUSE a/f §          runs just lines with 'f' filter in a SHARED section
+   REUSE B/z §          runs just lines with 'z' filter in a GLOBAL section
+   REUSE ê/b §          runs just lines with 'b' filter in a CONFIG section
+
+.SH K) OUTPUT
+normal reuse outputs for header and footer are shown below.  please refer to
+KOIOS_WHICH (5) for filtered versions.  the example beflow is for a CONFIG
+verb.
+
+   CONFIG (÷/*) ==-------   set up details for sample polymnia   ---------==
+
+      ´´´
+
+   GIFNOC (÷)--[ cond=56    test=16946 ]---( * >>>-- cond=56    test=16946 ]
+

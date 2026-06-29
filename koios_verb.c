@@ -1,6 +1,37 @@
 /*===============================[[ beg-code ]]===============================*/
 #include    "koios.h"        /* LOCAL  : main header                          */
 
+
+
+/*===[[ GNU GENERAL PUBLIC LICENSE (GPL) ]]===================================*/
+/*´´·········1·········2·········3·········4·········5·········6·········7·········8  */
+
+#define  P_COPYRIGHT   \
+   "copyright (c) 2016 robert.s.heatherly at balsashrike at gmail dot com"
+
+#define  P_LICENSE     \
+   "the only place you could have gotten this code is my github, my website,¦"   \
+   "or illegal sharing. given that, you should be aware that this is GPL licensed."
+
+#define  P_COPYLEFT    \
+   "the GPL COPYLEFT REQUIREMENT means any modifications or derivative works¦"   \
+   "must be released under the same GPL license, i.e, must be free and open."
+
+#define  P_INCLUDE     \
+   "the GPL DOCUMENTATION REQUIREMENT means that you must include the original¦" \
+   "copyright notice and the full licence text with any resulting anything."
+
+#define  P_AS_IS       \
+   "the GPL NO WARRANTY CLAUSE means the software is provided without any¦"      \
+   "warranty and the author cannot be held liable for damages."
+
+#define  P_THEFT    \
+   "if you knowingly violate the spirit of these ideas, i suspect you might¦"    \
+   "find any number of freedom-minded hackers may take it quite personally ;)"
+
+/*´´·········1·········2·········3·········4·········5·········6·········7·········8  */
+/*===[[ GNU GENERAL PUBLIC LICENSE (GPL) ]]===================================*/
+
 /*
  *
  * make all tables findable by
@@ -158,6 +189,10 @@ struct cVERB {
    { APPD, "append"       , 5  , "append data to temporary file"         , KOIOS_SCODE  , '-' , '-' , COND,     0,  0, CONV__append  , CODE__append  ,  'y'  ,  'y'  },
    { APPV, "appvis"       , 5  , "append data as visible characters"     , KOIOS_SCODE  , '-' , '-' , COND,     0,  0, CONV__append  , CODE__append  ,  'y'  ,  'y'  },
    { SPAC, "Ï>----´"      , 5  , "visual breaks between steps"           , KOIOS_SONE   , '-' , '-' , COND,     0,  0, CONV__spacer  , NULL          ,  '-'  ,  '-'  },
+   /*---  ---masking----- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
+   { '·' , ""             ,  0 , "masking"                               , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
+   { SMSK, "mask"         , 5  , "create a string testing mask"          , KOIOS_SEXEC  , '-' , '-' , COND,     0,  0, CONV__mask    , CODE__mask    ,  '-'  ,  'y'  },
+   { UMSK, "unmask"       , 5  , "clear all string testing masks"        , KOIOS_SEXEC  , '-' , '-' , COND,     0,  0, CONV__unmask  , CODE__unmask  ,  '-'  ,  'y'  },
    /*---  ---statistics-- ind   -----------description------------------  ---spec----    -loc- --is- -un--    cnt tot ----conv----    ----code----    --dit-  --sel-  */
    { '·' , ""             ,  0 , "statistics"                            , '-'          , '-' , '-' , '-' ,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },
    { PRCS, "PRCS"         , 3  , "script ending"                         , KOIOS_SAUDT  , NORM, AUDT, ANYT,     0,  0, NULL          , NULL          ,  '-'  ,  '-'  },

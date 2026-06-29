@@ -1,0 +1,25 @@
+
+.SH 
+=================================[[ common footer ]]=================================
+
+.SH GREEK HERITAGE
+koios-polos (axis of heaven) is the north-star and the titan of intelligence,
+curiosity, questioning, inquiry, and farsight.  his parents where the primordial
+gods gaia (earth) and uranus (sky).  when the titans overthrew the original,
+primordial greek gods, four brothers held uranus (the sky) in place -- hyperion
+(east), koios (north), crius (south), and iapetus (west).  koios is the
+grand-sire of apollo and artemis through is daughter leto.
+
+.SH BUGS and CONCERNS
+koios depends on proper formatting of the input meta-language file.  if the
+file lacks a double quote or delimiter in the correct place, the resulting
+errors when compiling the c source for the unit test can be difficult to
+track down.
+
+.SH AUTHOR
+jelloshrike at gmail dot com
+
+.SH COLOPHON
+this page is part of a documentation package meant to make use of the
+heatherly tools easier and faster.
+

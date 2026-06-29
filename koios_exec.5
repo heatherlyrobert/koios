@@ -1,0 +1,137 @@
+
+.SH TABLE OF CONTENTS
+.nf  
+A) overview        general overview of exec-steps
+B) technical       how it is handled
+C) example         reasonable example
+D) verb            field one
+E) description     field two
+F) function        field three
+G) params          field four
+H) test            field five
+I) expect          field six
+J) return          optional field seven
+K) output          how steps are reported
+
+.SH A) OVERVIEW
+executables (exec-steps) are the calling of functions for testing and reviewing
+the results.  these are the bread-and-butter of unit-testing.
+
+.SH B) TECHNICAL
+exec-steps are translated function calls, result evaluation, and statistic
+capture within a condition and script.
+
+.SH C) EXAMPLE
+exec-steps have six fields.  the leading spaces are changed to spacers (·)
+in this manual for clarity.
+
+   verb------ § desc § --function- § ---parms--- § --test-- § ---expect----- §
+   ·····exec  § run  § yLOG_enter  § "here"      § z_equal  § 0              §
+   ·····get   § chk  § ylog__unit  § "current"   § s_equal  § yLOG_enter     §
+   ·····echo  § ret  § - - - - - - § [[ s_str ]] § w_equal  § åyLOG_enteræ   §
+
+EXEC and GET work identically, they are separated to help statistics of actual
+function calls vs testing results.
+
+.SH D) VERB
+the verbs EXEC, GET, and ECHO and are is expected to be indented five (5)
+characters off-estting it from SCRP and later steps.  the verb field are
+is twelve (12) characters, overflow and trailing spaces will be truncated.
+
+   verb------ § desc § --function- § ---parms--- § --test-- § ---expect----- §
+   ·····exec  § ·    § ·           § ·           § ·        § ·              §
+   ·····get   § ·    § ·           § ·           § ·        § ·              §
+   ·····echo  § ·    § ·           § ·           § ·        § ·              §
+
+.SH E) DESCRIPTION
+it is very unhelpful to leave off a description as unit-testing is almost
+invariably detailed, complicated, and extensive.  descriptions are a maximum
+of thirty-five (35) characters, overflow and trailing spaces will be truncated.
+legal characters are letters, numbers, and most punctuation.
+
+since descriptions are demonstrated elsewhere, i have truncated them greatly
+to fit everything in the available space ;)
+
+   verb------ § desc § --function- § ---parms--- § --test-- § ---expect----- §
+   ·····exec  § run  § ·           § ·           § ·        § ·              §
+   ·····get   § chk  § ·           § ·           § ·        § ·              §
+   ·····echo  § ret  § ·           § ·           § ·        § ·              §
+
+.SH F) FUNCTION
+the third field is the actual function name to be called, except in ECHO it
+is blank.
+
+   verb------ § desc § --function- § ---parms--- § --test-- § ---expect----- §
+   ·····exec  § ·    § yLOG_enter  § ·           § ·        § ·              §
+   ·····get   § ·    § ylog__unit  § ·           § ·        § ·              §
+   ·····echo  § ·    § - - - - - - § ·           § ·        § ·              §
+
+.SH G) PARAMS
+the fourth field is the parameters to be passed to the function, formatted
+exactly as in a real call.  separate parameters with commas (,) exactly like
+real calls.  ECHO is a variable name (included in double square brackest)
+to be interrogated.
+
+   verb------ § desc § --function- § ---parms--- § --test-- § ---expect----- §
+   ·····exec  § ·    § ·           § "here"      § ·        § ·              §
+   ·····get   § ·    § ·           § "current"   § ·        § ·              §
+   ·····echo  § ·    § ·           § [[ s_str ]] § ·        § ·              §
+
+.SH H) TEST
+the fifth field is the method to test the result against the expect value.
+these are all provided by the yVAR library and are explained there.
+
+   verb------ § desc § --function- § ---parms--- § --test-- § ---expect----- §
+   ·····exec  § ·    § ·           § ·           § z_equal  § ·              §
+   ·····get   § ·    § ·           § ·           § s_equal  § ·              §
+   ·····echo  § ·    § ·           § ·           § w_equal  § ·              §
+
+refer to yVAR for all the possible tests, but the most common are...
+   i_equal        integer equality ==
+   i_lesser       integer lesser than <
+   i_greater      integer greater than >
+   r_equal        real/float equality ==
+   r_lesser       real/float lesser than <
+   r_greater      real/float greater than >
+   s_equal        string equality, plus many cool extras
+   w_equal        string equality, plus many cool extras with å...æ wrappers
+   s_not          string inequality (strcmp != 0)
+   p_null         pointer is grounded/NULL
+   p_exists       pointer is not grounded/NULL
+   u_round        rounding numbers inside a string (greybox)
+
+.SH I) EXPECT
+the sixth field is the expected results, no quotes are required for strings
+as the field will be interpreted based on the TEST requested.
+
+   verb------ § desc § --function- § ---parms--- § --test-- § ---expect----- §
+   ·····exec  § ·    § ·           § ·           § ·        § 0              §
+   ·····get   § ·    § ·           § ·           § ·        § yLOG_enter     §
+   ·····echo  § ·    § ·           § ·           § ·        § åyLOG_enteræ   §
+
+.SH J) RETURN (uncommon)
+an optional seventh field is a variable to capture the return value for use in
+later steps.  this is useful (especially pointers) to make sure a value changed
+from the previous setting even though the new value can not be predicted.
+
+   verb------ § desc § -function- § -parms- § -test- § -expect- § --return-- §
+   ·····exec  § ·    § ·          § ·       § ·      § ·        § x_string   §
+
+.SH K) OUTPUT
+when the unit-test is run, each step generates a block of output.  the output
+says it is the 3rd step in the condition (ac) and is generated by line 211 in
+the source code.  everything else is a reflection of input values.  this line
+will also be "green" and say PASS is it passed or be "red" and say FAIL if
+it failed for fast visual scanning.
+
+   ···ac) PASS   : call presort ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·[00211]
+   ·······method : yLOG_enter ("here")
+   ·······test   : z_equal    (rc =  101, test abbr = e)
+   ·······expect :   1å0æ
+   ·······actual :   1å0æ
+
+NOTE: this output can be much shorter or a little longer depending on how
+koios was called.
+
+NOTE: if the line number is [00555] is is in a specific unit test source file.
+if like å00555æ it is in a shared file -- unit_data.unit or unit_wide.unit.

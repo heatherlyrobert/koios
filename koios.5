@@ -1,42 +1,15 @@
-.TH koios 5 2016-May "linux" "structure of config, files, and streams"
-
-.SH NAME
-koios \- c language unit testing meta-language and parser
-
-.SH PATRON (roughly pronounced key-oh-s)
-.B koios-polos
-(axis of heaven), titan of intelligence and farsight
-
-.SH IMAGERY
-northern star around which all the other consellations revolve
-
-.SH SUMMARY
-koios is a meta-language and related parser to simplify, standardize, and
-make executable unit tests for the c language.  it is integrated with yUNIT,
-yVAR, and ouroborus (on a system-wide basis).
-
-.SH CAVEAT
-nobody will ever use my programs ;) they use my shared libraries (zero public),
-keyboard centric usage, one true language (c) focus, and experimental/crazy
-designs.  dedicated dog-fooder, no time to coddle.
-
-.SH DOCUMENTATION FILES
-.nf  
-koios (1)          command-line initiation, use, and options
-.B koios (5)··········structure of config, files, and streams
-koios (7)          decision rationale, scope, and objectives
 
 .SH TABLE OF CONTENTS
 .nf  
-a) example         simple example of file contents
-b) overview        general overview of unit test source
-c) files           preview of files used and produced
-d) units           guidelines for unit files
-e) scripts         usage and layout of script-level verbs
-f) conditions      usage and layout of condition-level verbs
-g) steps           usage and layout of step-level verbs
-h) specialty       usage and layout of specialty step verbs
-i) ouroborus       linkage to the ouroborus sequencing system
+A) example         simple example of file contents
+B) overview        general overview of unit test source
+C) files           preview of files used and produced
+D) units           guidelines for unit files
+E) scripts         usage and layout of script-level verbs
+F) conditions      usage and layout of condition-level verbs
+G) steps           usage and layout of step-level verbs
+H) specialty       usage and layout of specialty step verbs
+I) ouroborus       linkage to the ouroborus sequencing system
 
 .SH A) EXAMPLE
 the following is a simplisic, but workable unit testing example.
@@ -534,15 +507,3 @@ unit.  and, units are run in alphabetical order.
 
 for all other information about ouroboros, just see man ouroboros.
 
-.SH BUGS and CONCERNS
-koios depends on proper formatting of the input meta-language file.  if the
-file lacks a double quote or delimiter in the correct place, the resulting
-errors when compiling the c source for the unit test can be difficult to
-track down.
-
-.SH AUTHOR
-rsheatherly  can be reached at jelloshrke at gmail dot com
-
-.SH COLOPHON
-this page is part of a documentation package mean to make the use of the
-heatherly tools easier and faster

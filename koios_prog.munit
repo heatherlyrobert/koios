@@ -504,7 +504,7 @@ koios_prog_dusk  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("run dusk"                           , PROG_dusk  ('y', G_RUN_CREATE , '-', sm_nunit, &sm_scrp, sm_nline , sm_nmain, &sm_main, sm_nhead, &sm_head, sm_ncode, &sm_code, sm_nwave, &sm_wave, sm_nconv, &sm_conv, sm_share , sm_select) ,    0); 
    yUNIT_minval   ("check scrp lines"                   , yenv_ulines     (sm_nunit   )         ,    0);
    yUNIT_minval   ("check header line"                  , yenv_ulines     (sm_nhead   )         ,   -1);
-   yUNIT_minval   ("check code lines"                   , yenv_ulines     (sm_ncode   )         ,   96);
+   yUNIT_minval   ("check code lines"                   , yenv_ulines     (sm_ncode   )         ,  100);
    yUNIT_minval   ("check main lines"                   , yenv_ulines     (sm_nmain   )         ,   -1);
    yUNIT_minval   ("check conv lines"                   , yenv_ulines     (sm_nconv   )         ,   -1);
    yUNIT_minval   ("check old lines"                    , yenv_ulines     (sm_nold    )         ,   -1);
@@ -548,7 +548,7 @@ koios_prog_dusk  (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("run dusk"                           , PROG_dusk  ('y', G_RUN_DEBUG  , '-', sm_nunit, &sm_scrp, sm_nline , sm_nmain, &sm_main, sm_nhead, &sm_head, sm_ncode, &sm_code, sm_nwave, &sm_wave, sm_nconv, &sm_conv, sm_share , sm_select) ,    0); 
    yUNIT_minval   ("check scrp lines"                   , yenv_ulines     (sm_nunit   )         ,    0);
    yUNIT_minval   ("check header line"                  , yenv_ulines     (sm_nhead   )         ,   -1);
-   yUNIT_minval   ("check code lines"                   , yenv_ulines     (sm_ncode   )         ,   96);
+   yUNIT_minval   ("check code lines"                   , yenv_ulines     (sm_ncode   )         ,  100);
    yUNIT_minval   ("check main lines"                   , yenv_ulines     (sm_nmain   )         ,   -1);
    yUNIT_minval   ("check conv lines"                   , yenv_ulines     (sm_nconv   )         ,   -1);
    yUNIT_minval   ("check old lines"                    , yenv_ulines     (sm_nold    )         ,   -1);

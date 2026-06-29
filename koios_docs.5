@@ -1,0 +1,61 @@
+
+.SH TABLE OF CONTENTS
+.nf  
+A) overview        general overview of comments/docs
+B) technical       how it is handled
+C) koios           system generated
+D) saved           temporary save or comment out
+E) breaks          line spacers
+
+.SH A) OVERVIEW
+non-execution lines are added to space, structure, and inform; but do not
+alter execution in any way.
+
+.SH B) TECHNICAL
+none of these documentation or comment lines are carried over to code.
+
+.SH C) KOIOS
+koios provided comments all start with a hash (#)...
+
+   ---file-header-----------------------------------------------------------
+   #!/usr/local/bin/koios
+   #   koios-polos (axis of heaven) unit testing meta-language
+
+   ---between-scripts-------------------------------------------------------
+   #23456789-12 § 123456789-123456789-123456789-12345 § ´´´
+   #==(verb)=== § ===========(description)=========== § ´´´
+
+   ---file-footer-----------------------------------------------------------
+   # end-of-file.  done, finito, completare, whimper [Ï´···
+
+.SH D) SAVED
+to save lines through updates and conversions without them making it into
+the unit-text executable, start with (#>)...
+
+   ---general-note----------------------------------------------------------
+   #>  wave 0    01    is not dependent outside files/functions
+
+   ---temporarily-commented-out---------------------------------------------
+   #> local     § create working variable             § ´´´
+
+   ---temporarily-saving-a-macro--------------------------------------------
+   #> macro  @b  lllllllR-··¥··lllll.lllll.llllll
+
+.SH E) BREAKS
+in many data validation blocks, a huge number of steps build up without
+anything to visually give it structure.  a line break dose that for me.
+
+the verb is "Ï>----´".  the rest is system generated.  the verb must be
+indented by five (5) spaces.
+
+  ·····Ï>----´ § ´ - - - - - - - - - - - - - - - - ´ § ´ - - -   ´´´
+  ·····exec    § å········ijklæ call cursor          § FUNCS_by_cursor  ´´´
+  ·····echo    § å········ijklæ ... func header      § - - - -   ´´´
+  ·····Ï>----´ § ´ - - - - - - - - - - - - - - - - ´ § ´ - - -   ´´´
+  ·····exec    § å········ijklæ call cursor          § FUNCS_by_cursor  ´´´
+  ·····echo    § å········ijklæ ... func header      § - - - -   ´´´
+  ·····Ï>----´ § ´ - - - - - - - - - - - - - - - - ´ § ´ - - -   ´´´
+  ·····exec    § å········ijklæ call cursor          § FUNCS_by_cursor  ´´´
+  ·····echo    § å········ijklæ ... func header      § - - - -   ´´´
+  ·····Ï>----´ § ´ - - - - - - - - - - - - - - - - ´ § ´ - - -   ´´´
+

@@ -1,0 +1,78 @@
+
+.SH TABLE OF CONTENTS
+.nf  
+A) overview        general overview of exec-steps
+B) technical       how it is handled
+C) requests        who to request a filter
+D) filtering       how to filter COND and steps
+E) output          how this is reported
+
+.SH A) OVERVIEW
+all steps can be marked as conditionally run based on string of characters.
+BUT, the filtering is only be called by REUSE and is only active in SHARED,
+GLOBAL, and CONFIG; everywhere else, it will be ignored.  this ability creates
+some very powerful opportunities to consolidate data and review.
+
+.SH B) TECHNICAL
+using filters creates a decision around each individual condition-level and
+step-level verb -- run or skip.
+
+.SH C) REQUESTS
+REUSE filtering requests are based on a single, lower-case letter [a-z].
+the example below will call the SHARED code identified as "a" with a filtering
+request for the identifier "c".
+
+   verb-------- § ---desc-------------- §
+   ···REUSE a/c § call initial setep    §    runs SHARED "a" with filter "c"
+   ···REUSE M/a § call initial setep    §    runs GLOBAL "M" with filter "a"
+   ···REUSE ò/f § call initial setep    §    runs CONFIG "ò" with filter "f"
+
+to request everything run, just use a normal "REUSE a" without a criteria.
+
+.SH D) FILTERING
+selection filters are added to descriptions, usually prefixed and must be
+surrounded by test-braces "å···æ".  in this example, the spacers (·) are
+just spacers with no meaning.  if there is not selection filter, the condition
+or step will always run.
+
+as shown in KOIOS_SHARE (5), REUSE will only allow a filtering code explicitly
+allowed in the definition of SHARED, GLOBAL, or CONFIG.  assume for the example
+only a, b, and c are explicitly defined.
+
+   verb-------- § ---desc-------------- §
+   ···COND      § åabcæ condition       §    always runs
+   ·····exec    § åa··æ run something   §    runs only for a
+   ·····exec    § å·b·æ run same thing  §    runs only for b
+   ·····get     § åabcæ check result    §    always runs
+   ·····echo    § å·bcæ grab return     §    runs for either b or c
+
+the usefulness in this example is that calling with "a" will run one version
+and check the result.  whereas, calling with "b", will run a different version,
+do the same check, and the grab the result.  finally, "c" will only check
+and grab the result.
+
+NOTE:  if the condition only had åa·cæ, nothing would run for "b" as the
+entire condition would be skipped.
+
+.SH E) OUTPUT
+a first example shows a normal share request with out a fiter, and the second
+shows the same request with a filter of "a".
+
+  CONFIG (÷/*) ==-------   set up details for sample polymnia   ---------==
+  CONFIG (÷/a) ==-------   set up details for sample polymnia   ---------==
+
+if a specific filter is requested, they alter only slightly.  when the reuse
+is over, the footer for a normal run is the first example, and a run
+filtered for "a" is shown second.
+
+  GIFNOC (÷)--[ cond=56    test=16946 ]---( * >>>-- cond=56    test=16946 ]
+  GIFNOC (÷)--[ cond=26    test=14864 ]---( a >>>-- cond=56    test=16946 ]
+
+the first cond/test are what actual ran, the second cond/test are all available.
+
+for all the step filtering, since the filter string is in the description,
+it is easy to follow inclusions if necesssary.  BUT, for exclusions, there
+is no notice other than the headers.
+
+
+

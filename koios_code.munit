@@ -498,7 +498,7 @@ koios_code_header  (char a_scrp, char a_list, char a_unit)
 
    yUNIT_mincond  ("verify calling the footer");
    yUNIT_minval   ("call footer"                        , CODE_footer     ('y', sm_nunit, sm_nmain, &sm_main, sm_nhead, &sm_head, sm_ncode, &sm_code, sm_nwave, &sm_wave, 0, x_share, x_select, 'y'),    0);
-   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,   96);
+   yUNIT_minval   ("check output lines"                 , yenv_ulines     (sm_ncode   )         ,  100);
    yUNIT_minptr   ("... check main pointer"             , sm_main        , 0x0);
    yUNIT_minptr   ("... check header pointer"           , sm_head        , 0x0);
    yUNIT_minptr   ("... check code pointer"             , sm_code        , 0x0);

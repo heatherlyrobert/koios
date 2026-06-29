@@ -1,0 +1,62 @@
+
+.SH TABLE OF CONTENTS
+.nf  
+A) overview        general overview of prep
+B) technical       what is produced under the covers
+C) example         reasonable example
+D) verb            field one
+E) description     field two
+F) include         how to include headers
+G) globals         how to create global variables
+H) output          how preps are reported
+
+.SH A) OVERVIEW
+some things show be done or prepared for the whole unit-test, that is the
+purpose of PREP.  PREP can contain primarily header inclusions, global and
+local veriables
+
+.SH B) TECHNICAL
+PREP is typlically kept in "unit_head.unit" for what is request everywhere
+and a second PREP can be put into the unit-test itself.
+
+.SH C) EXAMPLE
+PREP has only two (2) fields.
+
+   verb--- § ---description----------- §
+   PREP    § unit test setup           §
+
+.SH D) VERB
+PREP is the verb and must have zero indentation.  this field is a maximum of
+twelve (12) characters, overflow and trailing spaces will be truncated.
+
+   verb--- § ---description----------- §
+   PREP    § ·                         §
+
+.SH E) DESCRIPTION
+it is very unhelpful to leave off a description as unit-testing is almost
+invariably detailed, complicated, and extensive.  descriptions are a maximum
+of sixty-five (65) characters, overflow and trailing spaces will be truncated.
+legal characters are letters, numbers, and most punctuation.
+
+   verb--- § ---description----------- §
+   PREP    § unit test setup           §
+
+.SH F) INCLUDE
+since unit tests are generated, the main, and potentially private, header files
+must be included, the "incl" verb is how that is done.
+
+   verb------ § ---description----------- § ---header--- §
+   ···incl    § include public header     § yLOG.h       §
+   ···incl    § include private header    § yLOG_priv.h  §
+
+.SH G) GLOBALS
+simply add global variable requests under PREP.
+
+   verb------- § desc § -func- § ---parms--------------------------------- §
+   ···global   § lrg  § - - -  § char *p = "testing";                      §
+
+while these are global, they are static to each unit test, meaning any
+updates do not travel between files.
+
+.SH H) OUTPUT
+there is no specific output for the PREP, include, or global variables verbs.

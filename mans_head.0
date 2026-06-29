@@ -1,0 +1,55 @@
+.TH koios_share·(5) 2016-May "linux" "end-user data files and data streams"
+.na
+
+.SH 
+=================================[[ common header ]]=================================
+
+.SH NAME
+koios \- provides a universal unit-testing framework for writing scripts
+
+.SH PATRON (see HERITAGE at bottom for more)
+koios-polos (axis of heaven) titan of intelligence, curiosity, and farsight
+
+.SH IMAGERY
+northern star around which all the other consellations revolve
+
+.SH SUMMARY
+koios is a meta-language, related parser, and c-language generator to simplify,
+standardize, and make executable unit-tests for c-language programs.  it is
+integrated with yUNIT, yVAR, and ouroborus (on a system-wide basis).
+
+.SH DISCLAIMER, CAVEAT, and SERIOUS FOREWARNING
+i am a crazy, selfish, dog-fooding c-programmer. my code tends to be
+experimental and constantly evolving. my point is NOT to be the best, it is to
+challenge myself, build from scratch, and allow fast problem solving.
+
+use this freely to learn, laugh, and make your own.  i don't encourage or
+make any concessions for users, i optimized for myself.  please, don't just
+use or copy this, build it better yourself and increase your skills ;)
+
+.SH DOCUMENTATION FILES
+.nf  
+---··---name----------··-··---description-------------------------------------
+· 1  koios              Ï  command-line initiation, use, and options
+
+· 5  koios              Ï  structure of config, files, and streams
+· 5     koios_scrp          á creating a script
+· 5     koios_share         á creating shared, global, and config
+· 5     koios_cond          á creating condition and ditto
+· 5     koios_exec          á creating exec, get, and echo
+· 5     koios_mask          á creatively comparing partial results
+· 5     koios_vars          á creating global and local vars
+· 5     koios_file          á creating input file, append, appvis, and load
+· 5     koios_code          á creating pure code lines
+· 5     koios_reuse         á calling reuse of dittoed or shared code
+· 5     koios_which         á filtering which steps to run in shares
+· 5     koios_docs          á creating comments and separators
+· 5     koios_prep          á creating prep and include
+
+· 7  koios              Ï  decision rationale, scope, and objectives
+---··---name----------··-··---description-------------------------------------
+NOTES ::   ° = current    Ï = main files    á = detail files
+
+.SH 
+================================[[ specific to file ]]=============================== 
+.SH 

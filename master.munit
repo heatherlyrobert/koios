@@ -324,6 +324,10 @@ KOIOS_code_verbs        (char A_FILE [LEN_TITLE], int A_LINE, int a_mark)
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "   printf (\"  file       =     0   create a temporary file\\n\");"              );
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "   printf (\"  append     =     0   append data to temporary file\\n\");"        );
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "   printf (\"  appvis     =     0   append data as visible characters\\n\");"    );
+   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "   printf (\"  Ï>----´    =     0   visual breaks between steps\\n\");"          );
+   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "   printf (\"\\nmasking...\\n\");"                                               );
+   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "   printf (\"  mask       =     0   create a string testing mask\\n\");"         );
+   yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "   printf (\"  unmask     =     0   clear all string testing masks\\n\");"       );
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "   printf (\"\\nstatistics...\\n\");"                                            );
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "   printf (\"  PRCS       =     0   script ending\\n\");"                        );
    yUNIT_minstr   ("... check result"                   , yenv_upeek      (sm_ncode   , '>')      , "   printf (\"  DERAHS     =     0   local shared code ending\\n\");"             );
@@ -2168,6 +2172,10 @@ KOIOS_dataset_encoded  (char a_file [LEN_FULL])
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   printf (\"  file       =     0   create a temporary file\\n\");");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   printf (\"  append     =     0   append data to temporary file\\n\");");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   printf (\"  appvis     =     0   append data as visible characters\\n\");");
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   printf (\"  Ï>----´    =     0   visual breaks between steps\\n\");"          );
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   printf (\"\\nmasking...\\n\");"                                               );
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   printf (\"  mask       =     0   create a string testing mask\\n\");"         );
+   yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   printf (\"  unmask     =     0   clear all string testing masks\\n\");"       );
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   printf (\"\\nstatistics...\\n\");");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   printf (\"  PRCS       =     0   script ending\\n\");");
    yUNIT_minstr   ("... check line"                     , yenv_upeek       (a_file     , '>')      , "   printf (\"  DERAHS     =     0   local shared code ending\\n\");");

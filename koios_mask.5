@@ -1,0 +1,115 @@
+
+.SH TABLE OF CONTENTS
+.nf  
+A) overview        general overview of exec-steps
+B) technical       how it is handled
+C) example         reasonable example
+D) verb            field one
+E) description     field two
+F) function        field three
+G) params          field four
+H) test            field five
+I) expect          field six
+J) usage           using in an actual comparision
+
+.SH A) OVERVIEW
+masking allows the same string comparision steps to check different parts of a
+string at different times increasing reuse rather than overlapping and unique
+tests.
+
+.SH B) TECHNICAL
+masks are simply saved strings that effect the finan string comparisions by
+greying-out areas not to be compared with greyboxes (¬).
+
+.SH C) EXAMPLE
+mask-steps have six fields, but do not use them all.  the leading spaces are
+changed to spacers (·) in this manual for clarity.
+
+   verb------- § desc- § --func-- § param § --test-- § ---expect------------ §
+   ·····mask   § set   § - - - -  § 1     § - - - -  § å·····¬¬¬¬¬·····¬æ    §
+   ·····get    § check § yLOG_out § 13    § w_mask/1 § åsix  31258 bot 5æ    §
+   ·····unmask § unset § - - - -  § ·     § - - - -  § ·                     §
+
+.SH D) VERB
+the verbs MASK and UNMASK are is expected to be indented five (5) characters
+off-estting it from COND and later steps.  the verb field are is twelve (12)
+characters, overflow and trailing spaces will be truncated.
+
+   verb------- § desc- § --func-- § param § --test-- § ---expect------------ §
+   ·····mask   § ·     § ·        § ·     § ·        § ·                     §
+   ·····unmask § ·     § ·        § ·     § ·        § ·                     §
+
+.SH E) DESCRIPTION
+it is very unhelpful to leave off a description as unit-testing is almost
+invariably detailed, complicated, and extensive.  descriptions are a maximum
+of thirty-five (35) characters, overflow and trailing spaces will be truncated.
+legal characters are letters, numbers, and most punctuation.
+
+since descriptions are demonstrated elsewhere, i have truncated them greatly
+to fit everything in the available space ;)
+
+   verb------- § desc- § --func-- § param § --test-- § ---expect------------ §
+   ·····mask   § set   § ·        § ·     § ·        § ·                     §
+   ·····unmask § unset § ·        § ·     § ·        § ·                     §
+
+.SH F) FUNCTION
+the third field, function is always blank.
+
+   verb------- § desc- § --func-- § param § --test-- § ---expect------------ §
+   ·····mask   § ·     § - - - -  § ·     § ·        § ·                     §
+   ·····unmask § ·     § - - - -  § ·     § ·        § ·                     §
+
+.SH G) PARAMS
+the fourth field is the parameters to be passed to the function.  the MASK
+verb uses a number [0-9] to indicate one of ten (10) potential masks.  UNMASK
+has no parameters.
+
+   verb------- § desc- § --func-- § param § --test-- § ---expect------------ §
+   ·····mask   § ·     § ·        § 1     § ·        § ·                     §
+   ·····unmask § ·     § ·        § ·     § ·        § ·                     §
+
+.SH H) TEST
+the third field, test is always blank.
+
+   verb------- § desc- § --func-- § param § --test-- § ---expect------------ §
+   ·····mask   § ·     § ·        § ·     § - - - -  § ·                     §
+   ·····unmask § ·     § ·        § ·     § - - - -  § ·                     §
+
+.SH I) EXPECT
+the sixth field is the expected results, in this case for MASK it is the
+actual masking to be overlain on the exected results when used.  each expected
+result can have greyboxes (¬) to mask columns and the mask is additive to that.
+any non-greybox in he mask field is ignored.  these other characters just help
+audit the masking by providing context.
+
+   verb------- § desc- § --func-- § param § --test-- § ---expect------------ §
+   ·····mask   § ·     § ·        § ·     § ·        § å·····¬¬¬¬¬·····¬æ    §
+   ·····unmask § ·     § ·        § ·     § ·        § ·                     §
+
+.SH J) USAGE
+masks are typically used in GET or ECHO comparisons, but can be about anywhere.
+to use one to replace s_equal or w_equal, use s_mask/# or w_mask/# as the test.
+
+   verb------- § desc- § --func-- § param § --test-- § ---expect------------ §
+   ·····mask   § set   § - - - -  § 1     § - - - -  § å·····¬¬¬¬¬·····¬æ    §
+   ·····get    § check § yLOG_out § 13    § w_mask/1 § åsix  31258 bot 5æ    §
+
+   the end results will then be compared to this --->  åsix  ¬¬¬¬¬ bot ¬æ
+
+.SH K) OUTPUT
+the result of the mask output is like most system calls, just a recitation
+of the facts with no scores.
+
+  ···ac) MASK   : set  ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·º18625»
+  ·······mask   :  18åå·····¬¬¬¬¬·····¬ææ
+
+the result of the comparision that used the mask is exactly as normal, but
+with the final masking overlain on the expected result.
+
+  ···cr) PASS   : check · ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·· ·º20387»
+  ·······method : yLOG_out (13)
+  ·······test   : s_equal    (rc =  101, test abbr = e)
+  ·······expect :  18ååsix  ¬¬¬¬¬ bot ¬ææ
+  ·······actual :  18ååsix  987 Q bot Xææ
+
+

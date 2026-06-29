@@ -1,30 +1,3 @@
-.TH koios 1 2016-May linux "command-line initiation, use, and options"
-
-.SH NAME
-koios \- c language unit testing meta-language and parser
-
-.SH PATRON
-.B koios-polos
-(axis of heaven) titan of intelligence and farsight
-
-.SH IMAGERY
-northern star around which all the other consellations revolve
-
-.SH SUMMARY
-koios is a meta-language and related parser to simplify, standardize, and
-make executable unit tests for the c language.  it is integrated with yUNIT,
-yVAR, and ouroborus (on a system-wide basis).
-
-.SH CAVEAT
-nobody else will likely ever use my programs or shared libraries ;) i focus
-on tracing, debugging, keyboard centric usage, the one true language (c),
-and experimental/crazy designs.  dedicated dog-fooder, no time to coddle.
-
-.SH DOCUMENTATION FILES
-.nf  
-.B koios (1)··········command-line initiation, use, and options
-koios (5)          structure of config, files, and streams
-koios (7)          decision rationale, scope, and objectives
 
 .SH TABLE OF CONTENTS
 .nf  
@@ -43,7 +16,7 @@ primary production version
 
 .B koios_debug [URGENTS] [BASENAME]
 .nf
-performs all production actions, but with debugging and tracing
+performs all production actions, but with standard debugging and tracing
 
 .SH B) VALIDATION
 koios can read unit test source description and validate it for quality.
@@ -54,10 +27,11 @@ include the file name, input line number, and a description to aid in debugging.
 this is not a perfect process, some unit tests can pass and yet not compile.
 buyer beware.
 
-.B koios --validate åexampleæ
+.B koios --verify example
 
-this will look for the file åexample.unitæ.  if åmaster.unitæ has not be
-processed before, all GLOBAL references will fail.
+this will look for the file åexample.unitæ.  if unit_wide.unit and
+unit_data.unit have not be processed before, all GLOBAL and CONFIG references
+will fail.
 
 .SH C) CONVERSION
 koios will read the unit test source description, validate as discussed above,
@@ -67,10 +41,11 @@ if the validation passes, the source file åexample.unitæ will be renamed
 åexample.unit.oldæ and the new, cleaned-up file uses the original name.
 if validation fails, the file is untouched.
 
-.B koios --convert åexampleæ
+.B koios --conv example
 
-this will look for the file åexample.unitæ.  if åmaster.unitæ has not be
-processed before, all GLOBAL references will fail.
+this will look for the file åexample.unitæ.  if unit_wide.unit and
+unit_data.unit have not be processed before, all GLOBAL and CONFIG references
+will fail.
 
 .SH D) GENERATION
 koios will read the unit test source descripion, validate as discussed above,
@@ -80,10 +55,11 @@ if the validation passes, the output c source file åexample_unit.csæ will
 be produced.  copy to åexample_unit.cæ and compile with gcc linked to
 -lyUNIT_debug and -lyVAR_debug.
 
-.B koios --generate åexampleæ
+.B koios --code example
 
-this will look for the file åexample.unitæ.  if åmaster.unitæ has not be
-processed before, all GLOBAL references will fail.
+this will look for the file åexample.unitæ.  if unit_wide.unit and
+unit_data.unit have not be processed before, all GLOBAL and CONFIG references
+will fail.
 
 .SH E) COMPILATION
 this is a very standard process using gcc.  my custom make framework does this
@@ -201,16 +177,3 @@ display list of all script and condition headers
 display list of all script and condition headers
 .RE
 
-.SH BUGS and CONCERNS
-koios depends on proper formatting of the input meta-language file.  if the
-file lacks a double quote or delimiter in the correct place, the resulting
-errors when compiling the c source for the unit test can be difficult to
-track down.
-
-.SH AUTHOR
-rsheatherly  can be reached at jelloshrke at gmail dot com
-
-.SH COLOPHON
-this page is part of a documentation package mean to make the use of the
-heatherly tools easier and faster.
-.pl

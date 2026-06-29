@@ -1,0 +1,113 @@
+
+.SH TABLE OF CONTENTS
+.nf  
+A) overview        general overview of file-steps
+B) technical       how it is handled
+C) example         reasonable example
+D) verb            field one
+E) description     field two
+F) function        field three
+G) params          field four
+H) output          how steps are reported
+
+.SH A) OVERVIEW
+file creation (file-steps) are the creation and loading of files, and possibly
+stdin or ncurses.  these are life-savers with programs as the data is then
+baked into the unit-test rather than trying to corral and maintain many
+separate input files.
+
+.SH B) TECHNICAL
+file-steps are simply turned into c-language code for the manipulation of files
+or interactive input.
+
+.SH C) EXAMPLE
+file-steps have four fields.  the leading spaces are changed to spacers (·)
+in this manual for clarity.
+
+   verb------- § desc § -func- § ---parms------------------------------------ §
+   ·····file   § new  § - - -  § /root/test.gyges                             §
+   ·····append § add  § - - -  § #!/usr/bin/gyges                             §
+   ·····appvis § add  § - - -  § cell    field     data                       §
+   ·····load   § char § stdin  § text placed into standard input file (0)     §
+
+APPEND and APPVIS work identically, but APPEND translates specific special
+characters into control characters (such as return or space) and APPVIS leaves
+them visible.  LOAD also translates them.
+
+.SH D) VERB
+the verbs FILE, APPEND, APPVIS, and LOAD are is expected to be indented five
+(5) characters off-setting it from COND.  the verb field are is twelve (12)
+characters, overflow and trailing spaces will be truncated.
+
+   verb------- § desc § -func- § ---parms---------------------------------- §
+   ·····file   § ·    § ·      § ·                                          §
+   ·····append § ·    § ·      § ·                                          §
+   ·····appvis § ·    § ·      § ·                                          §
+   ·····load   § ·    § ·      § ·                                          §
+
+.SH E) DESCRIPTION
+it is very unhelpful to leave off a description as unit-testing is almost
+invariably detailed, complicated, and extensive.  descriptions are a maximum
+of thirty-five (35) characters, overflow and trailing spaces will be truncated.
+legal characters are letters, numbers, and most punctuation.
+
+since descriptions are demonstrated elsewhere, i have truncated them greatly
+to fit everything in the available space ;)
+
+   verb------- § desc § -func- § ---parms---------------------------------- §
+   ·····file   § new  § ·      § ·                                          §
+   ·····append § add  § ·      § ·                                          §
+   ·····appvis § add  § ·      § ·                                          §
+   ·····load   § char § ·      § ·                                          §
+
+.SH F) FUNCTION
+the third field is left blank, except in the case of LOAD.  for LOAD, the
+options are STDIN or NCURSES.  STDIN clears and loads data into file (0).
+NCURSES is essentially the same, but the input stream is in curses.  in both
+cases, if mulitple lines must be added, load them in reverse order (LIFO).
+
+   verb------- § desc § -func- § ---parms---------------------------------- §
+   ·····file   § ·    § - - -  § ·                                          §
+   ·····append § ·    § - - -  § ·                                          §
+   ·····appvis § ·    § - - -  § ·                                          §
+   ·····load   § ·    § stdin  § ·                                          §
+
+.SH G) PARAMS
+the fourth field is the actual data to load, most things are just typed as
+you which to load them, except FILE where the data is the file name.  but,
+intentional leading/trailing spaces should be passed as spacers (·) as the
+input field is trimmed as the field is read.
+
+   verb------- § desc § -func- § ---parms---------------------------------- §
+   ·····file   § new  § - - -  § /root/test.gyges                           §
+   ·····append § add  § - - -  § #!/usr/bin/gyges                           §
+   ·····appvis § add  § - - -  § cell    field     data                     §
+   ·····load   § char § stdin  § text placed into standard input file (0)   §
+
+given the way koios parses the data, some characters must use their visible
+counter-part in order to be passed to the file.  remember APPVIS leaves
+visible version in input, but APPEND and LOAD convert them to control chars.
+
+   ·       ascii (0x20) space             used in leading/trailing spaces
+   ¦       ascii (0x0a) linefeed/return   using \\\\n is messy
+   ¥       ascii (0x1b) escape            using \\\\e is messy
+   ¶       ascii (0x22) double quote      using \\\\" is messy
+   µ       ascii (0x5c) backslash         using \\\\ is messy
+   §       ascii (0x1c) field separator
+   ¨       ascii (0x1d) group separator
+
+.SH H) OUTPUT
+when the unit-test is run, each file-step generates small block of output.
+the output says it is the 4th step in the condition (ad) and is generated by
+line 39015 in the source code.  everything else is a reflection of input values.
+this line will also be "green" and say PASS is it passed or be "red" and say
+FAIL if it failed for fast visual scanning.
+
+  ···ad) PASS   : å·····fghiæ read for writing ·· ·· ·· ·· ·· ·· ·· ·º39015»
+  ·······file   :  41å/tmp/little.small_sample_project/little.hæ
+
+  ···ae) PASS   : å·····fghiæ add a record  ·· ·· ·· ·· ·· ·· ·· ·· ·º39018»
+  ·······append :  22åchar ANY__free (void);æ
+
+NOTE: if the line number is [00555] is is in a specific unit test source file.
+if like å00555æ it is in a shared file -- unit_data.unit or unit_wide.unit.

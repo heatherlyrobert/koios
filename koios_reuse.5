@@ -1,0 +1,51 @@
+
+.SH TABLE OF CONTENTS
+.nf  
+A) overview        general overview of exec-steps
+B) technical       how it is handled
+C) example         reasonable example
+D) verb            field one
+E) description     field two
+F) filtering       passing filter code
+G) output          how this is reported
+
+.SH A) OVERVIEW
+shared code (SHARED, GLOBAL, and CONFIG verbs) are executed which requested
+using the REUSE verb.  this allows useful actions and checks to be created
+just once and executed a myriad.
+
+.SH B) TECHNICAL
+REUSE places a function call to the shared code in your script, nothing more.
+
+.SH C) EXAMPLE
+the REUSE verb is a single field, with a description, but that description
+will be overwritten when koios updates/converts the file.  REUSE is a single,
+un-indented line containing two (2) columns using ascii field-seperator (0x1c)
+delimiters. these field delimiters will be shown here with the (§) character.
+
+   verb-------- § ---desc-------------- §
+   ···REUSE -a- § call initial setep    §    runs SHARED "a"
+   ···REUSE -M- § call initial setep    §    runs GLOBAL "M"
+   ···REUSE -ò- § call initial setep    §    runs CONFIG "ò"
+
+.SH D) VERB
+REUSE is the verb and must have three (3) character indentation.  also,
+the share idenfitier must be suffixed with -#- where "#" is the identifing
+character.  this field is a maximum of twelve (12) characters, overflow and
+trailing spaces will be truncated.
+
+   verb-------- § ---desc-------------- §
+   ···REUSE -a- § call initial setep    §    runs SHARED "a"
+
+.SH E) DESCRIPTION
+while you can add a description, it will be automatically overwritten by
+the description of the share when koios source is updated/converted.
+
+.SH F) FILTERING
+reuse can pass specific filter requests, please refer to KOIOS_WHICH (5).
+
+.SH G) OUTPUT
+there is no specific output for the REUSE verb.  when it runs the share
+header is shown and this can only happen if a REUSE exists.  nuff said.
+
+

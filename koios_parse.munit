@@ -970,7 +970,7 @@ koios_parse_field       (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  3, "30M"                                   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
    yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  3, "100s"                                  , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
    yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  3, "?m"                                    , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
-   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  4, "two2"                                  , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
+   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  4, "two)"                                  , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
    yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  4, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
    yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  4, "testing_lengthy"                       , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
    yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 109, "SCRP"   , KOIOS_SSCRP,  5, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which),    1);
@@ -1050,7 +1050,6 @@ koios_parse_field       (char a_scrp, char a_list, char a_unit)
    yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  3, "PARSE_è"                               , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
    yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  5, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
    yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  5, "Z_equal"                               , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
-   yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  6, ""                                      , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
    yUNIT_minval   ("call field handler"                 , PARSE__field    (x_name, 111, "exec"   , KOIOS_SEXEC,  7, "x_é"                                   , x_desc, x_meth, x_args, x_test, x_expe, x_retn, x_which), -999);
    yUNIT_mindnoc  ();
 
