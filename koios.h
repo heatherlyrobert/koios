@@ -38,7 +38,7 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_FOCUS     "PS (programming support)"
 #define     P_NICHE     "st (string testing)"
-#define     P_SUBJECT   "unit testing meta-language"
+#define     P_SUBJECT   "unit-testing meta-language"
 #define     P_PURPOSE   "provide simple unit testing framework for writing scripts"
 /*········· ··········· ´·····························´········································*/
 #define     P_NAMESAKE  "koios-polos (axis of heaven)"
@@ -68,8 +68,8 @@
 /*········· ··········· ´·····························´········································*/
 #define     P_VERMAJOR  "2.-- production on stress test datasets"
 #define     P_VERMINOR  "2.1- improving to support mass-testing like polymnia"
-#define     P_VERNUM    "2.1b"
-#define     P_VERTXT    "added comments and masks, re-unit tested, lots of mans"
+#define     P_VERNUM    "2.1c"
+#define     P_VERTXT    "added yVAR_ullong and yUNIT_ullong support to assist ySTR format conversion unit testing"
 /*········· ··········· ´·····························´········································*/
 
 /*
@@ -357,6 +357,7 @@
 /*---(number types)---------*/
 #define     KOIOS_CHAR    'c'
 #define     KOIOS_INT     'i'
+#define     KOIOS_ULLONG  'l'
 #define     KOIOS_NUM     'z'
 #define     KOIOS_REAL    'r'
 /*---(other types)----------*/
@@ -695,6 +696,7 @@ char        CODE__code              (char a_nscrp [LEN_TITLE], FILE *a_main, FIL
 char        CODE__gvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 char        CODE__lvar              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 char        CODE__system            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
+char        CODE__spacer            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select);
 char        CODE__mask              (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 char        CODE__unmask            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *r_share, char *b_select);
 /*---(driver)---------------*/

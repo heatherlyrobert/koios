@@ -873,6 +873,9 @@ CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN
       case KOIOS_INT    : case KOIOS_CHAR   : case KOIOS_NUM    :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  myUNIT_RUN.i_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
+      case KOIOS_ULLONG :
+         CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  myUNIT_RUN.u_rc = %s (%s);\n", a_pre, a_method , a_system);
+         break;
       case KOIOS_REAL   :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  myUNIT_RUN.r_rc = %s (%s);\n", a_pre, a_method , a_system);
          break;
@@ -890,6 +893,7 @@ CODE__prefix            (FILE *a_code, char a_verb [LEN_LABEL], char a_desc [LEN
    case KOIOS_NUM    : strlcpy (x_func, "yUNIT_num"      , LEN_FULL);    break;
    case KOIOS_CHAR   : strlcpy (x_func, "yUNIT_char"     , LEN_FULL);    break;
    case KOIOS_INT    : strlcpy (x_func, "yUNIT_int"      , LEN_FULL);    break;
+   case KOIOS_ULLONG : strlcpy (x_func, "yUNIT_ullong"   , LEN_FULL);    break;
    case KOIOS_REAL   : strlcpy (x_func, "yUNIT_real"     , LEN_FULL);    break;
    case KOIOS_POINT  : strlcpy (x_func, "yUNIT_point"    , LEN_FULL);    break;
    default   : strlcpy (x_func, "yUNIT_unknown"  , LEN_FULL);    break;
@@ -932,7 +936,7 @@ CODE__expect            (FILE *a_code, char a_test [LEN_LABEL], char a_expect [L
          CONV_printf (a_code, "\"%s\", " , a_expect);
          break;
       case KOIOS_INT    : case KOIOS_POINT  : case KOIOS_REAL   :      /* numberish   */
-      case KOIOS_CHAR   : case KOIOS_NUM    :                 /* character   */
+      case KOIOS_CHAR   : case KOIOS_NUM    : case KOIOS_ULLONG :      /* character   */
          CONV_printf (a_code, "%s, "     , a_expect);
          break;
       default  :
@@ -972,6 +976,9 @@ CODE__suffix            (FILE *a_code, char a_verb [LEN_LABEL], char a_test [LEN
       case KOIOS_INT    : case KOIOS_CHAR   : case KOIOS_NUM    :
          CONV_printf (a_code, "myUNIT_RUN.i_rc, myUNIT_RUN.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
+      case KOIOS_ULLONG :
+         CONV_printf (a_code, "myUNIT_RUN.u_rc, myUNIT_RUN.exec, '%c', '%c');\n", a_dittoing, a_share);
+         break;
       case KOIOS_REAL   :
          CONV_printf (a_code, "myUNIT_RUN.r_rc, myUNIT_RUN.exec, '%c', '%c');\n", a_dittoing, a_share);
          break;
@@ -988,6 +995,9 @@ CODE__suffix            (FILE *a_code, char a_verb [LEN_LABEL], char a_test [LEN
          break;
       case KOIOS_INT    : case KOIOS_CHAR   : case KOIOS_NUM    :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  %s = myUNIT_RUN.i_rc;\n", a_pre, a_return);
+         break;
+      case KOIOS_ULLONG :
+         CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  %s = myUNIT_RUN.u_rc;\n", a_pre, a_return);
          break;
       case KOIOS_REAL   :
          CONV_printf (a_code, "%s      if (myUNIT_RUN.exec)  %s = myUNIT_RUN.r_rc;\n", a_pre, a_return);
@@ -1290,6 +1300,11 @@ CODE__system            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, F
    /*---(complete)-----------------------*/
    UDEBUG_KOIOS   ylog_uexit   (__FUNCTION__);
    return 0;
+}
+char
+CODE__spacer            (char a_nscrp [LEN_TITLE], FILE *a_main, FILE *a_head, FILE *a_code, FILE *a_wave, char a_runtype, char a_last [LEN_LABEL], int a_nline, char a_verb [LEN_LABEL], char a_desc [LEN_LONG], char a_method [LEN_HUND], char a_args [LEN_FULL], char a_test [LEN_LABEL], char a_expect [LEN_RECD], char a_return [LEN_FULL], char a_stage [LEN_SHORT], char a_which [LEN_TITLE], char a_ditto, char a_dittoing, char a_dtarget, int a_dline, char a_major, char a_minor, char *b_share, char *b_select)
+{
+   return CONV_printf (a_code, "   yUNIT_spacer ();\n");
 }
 
 char
